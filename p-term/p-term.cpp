@@ -69,12 +69,16 @@
 
 #include <iostream>
 #include <string>
+#include <Windows.h>
+#include <io.h>
+#include <fcntl.h>
 
 // #include "compile-command.h"
 // #include "linoise.hpp"
 
 std::string command;
 
+/*
 class env_akv_st
 {
 
@@ -114,19 +118,40 @@ public:
     }
 };
 
-void current_directory()
-{
-    std::cout << "\n\033[32m┌──(\033[0m" << "\033[34m" << "{getpass.getuser()}㉿Peharge\033[0m" << "\033[32m)-[\033[0m" << "{current_dir}" << "\033[32m]-\033[0m" << "{env_indicator}\n" << "{\033[32m}└─\033[0m" << "\033[34m#\033[0m";
-    std::cin >> command;
+*/
+
+void setup_console() {
+    SetConsoleCP(CP_UTF8);
+    SetConsoleOutputCP(CP_UTF8);
+
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    DWORD dwMode = 0;
+    if (GetConsoleMode(hConsole, &dwMode)) {
+        dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+        SetConsoleMode(hConsole, dwMode);
+    }
+}
+
+void current_directory() {
+    std::cout << u8"\n\033[32m\u250C\u2500\u2500(\033[0m"
+        << u8"\033[34m{getpass.getuser()}\u327FPeharge\033[0m"
+        << u8"\033[32m)\u2500[\033[0m"
+        << u8"\033[34m{current_dir}\033[0m"
+        << u8"\033[32m]\u2500\033[0m"
+        << u8"{env_indicator}\n"
+        << u8"\033[32m\u2514\u2500\033[0m#";
+
+	std::cin >> command;
 }
 
 int main()
 {
+    setup_console();
 
     std::cout << "Welcome To Peharge Terminal" << std::endl;
 
     current_directory();
 
-    system("PAUSE");
+    system("pause");
     return 0;
 }
