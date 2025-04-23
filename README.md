@@ -1,7 +1,7 @@
 <p align="center">
- <img width="800" src="./icons/p-term-icon-3.png" alt="peharge"/>
+ <img width="400" src="./icons/p-term-icon-3.png" alt="peharge"/>
 </p>
 
-# **_p-terminal_**
+# **_P-Terminal_**
 
 In development: Peharge Terminal: The fastest terminal in the world
