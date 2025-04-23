@@ -233,7 +233,7 @@ def main():
             raise EnvironmentError("This installation script is intended for Windows only.")
 
         username = getpass.getuser()
-        project_root = os.path.join("C:\\Users", username, "p-terminal", "p-terminal")
+        project_root = os.path.join("C:\\Users", username, "p-terminal", "p-term")
         # Der Zielordner für den "Compiler" wird hier angelegt:
         compiler_dir = os.path.join(project_root, "peharge-cpp-compier")
         os.makedirs(compiler_dir, exist_ok=True)
