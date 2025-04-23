@@ -67,93 +67,20 @@
    Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 */
 
-#include <iostream>
-#include <string>
-#include <Windows.h>
-#include <io.h>
-#include <fcntl.h>
-
 #include "p-command.h"
-// #include "linoise.hpp"
 
-std::string command;
-
-/*
-class env_akv_st
-{
-
-public:
-    virtual void env_status() const {
-        std::cout << "env_status: 0" << std::endl;
+void process_command(const std::string& command) {
+    if (command == "exit") {
+        std::cout << "Exiting terminal...\n";
+        exit(0);
     }
-
-    virtual ~env_akv_st() {}
-};
-
-class env_de_akv : public env_akv_st
-{
-
-private:
-    std::string env_status;
-
-public:
-    env_de_akv(std::string e) : env_status(e) {}
-
-    void env_status() const override {
-        std::cout << "\033[32m[\033[0m" << "\033[31m.\\p_term\\.env\033[0m" << "\033[32m]\033[0m" << std::endl;
+    else if (command == "ls") {
+        system("ls");
     }
-};
-
-class env_akv : public env_akv_st
-{
-
-private:
-    std::string env_status;
-
-public:
-    env_akv(std::string e) : env_status(e) {}
-
-    void env_status() const override {
-        std::cout << "\033[32m[\033[0m" << ".\\p_term\\.env" << "\033[32m]\033[0m" << std::endl;
+    else if (command == "clear") {
+        system("clear");
     }
-};
-
-*/
-
-void setup_console() {
-    SetConsoleCP(CP_UTF8);
-    SetConsoleOutputCP(CP_UTF8);
-
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    DWORD dwMode = 0;
-    if (GetConsoleMode(hConsole, &dwMode)) {
-        dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-        SetConsoleMode(hConsole, dwMode);
+    else {
+        std::cout << "Unknown command: " << command << "\n";
     }
-}
-
-void current_directory() {
-    std::cout << u8"\n\033[32m\u250C\u2500\u2500(\033[0m"
-        << u8"\033[34m{getpass.getuser()}\u327FPeharge\033[0m"
-        << u8"\033[32m)\u2500[\033[0m"
-        << u8"\033[34m{current_dir}\033[0m"
-        << u8"\033[32m]\u2500\033[0m"
-        << u8"{env_indicator}\n"
-        << u8"\033[32m\u2514\u2500\033[0m# ";
-
-    std::cin >> command;
-
-    process_command(command);
-}
-
-int main()
-{
-    setup_console();
-
-    std::cout << "Welcome To Peharge Terminal" << std::endl;
-
-    current_directory();
-
-    system("pause");
-    return 0;
 }

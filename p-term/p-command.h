@@ -67,3 +67,12 @@
    Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 */
 
+#ifndef P_COMMAND_H
+#define P_COMMAND_H
+
+#include <string>
+#include <iostream>
+
+void process_command(const std::string& command);
+
+#endif
