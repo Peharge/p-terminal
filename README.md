@@ -5,8 +5,10 @@
 # **_P-Terminal_**
 
 <p align="left">
- <img width="80" src="./icons/p-term-banner-3.svg" alt="peharge"/>
- <img width="80" src="./icons/peharge-banner-3.svg" alt="peharge"/>
+ <img src="./icons/p-term-banner-3.svg" alt="peharge"/>
+ <img src="./icons/peharge-banner-3.svg" alt="peharge"/>
+<img alt="c++" src="https://img.shields.io/badge/-C++-555555?style=flat&logo=cplusplus">
+<img alt="c" src="https://img.shields.io/badge/C-555555?logo=C&logoColor=white">
 </p>
 
 In development: Peharge Terminal: The fastest terminal in the world
