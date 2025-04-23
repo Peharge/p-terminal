@@ -17,3 +17,10 @@ Start of development: 23.04.2025
 `ubuntu` - Ubuntu command
 
 etc.
+
+# Problems
+
+| **Problem description** | **Cause**                                                                            | **Solution** | **Status** |
+|-------------------------|--------------------------------------------------------------------------------------|--------------|------------|
+| p-term.bat              | Die .bat soll muss eien .env erstlenen um `./install/cpp/install-vs.py` erstellen!!! | morgen       | X          |
+
