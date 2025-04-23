@@ -34,6 +34,6 @@ etc.
 
 # Problems
 
-| **Problem description** | **Cause**                                                                            | **Solution** | **Status** |
-|-------------------------|--------------------------------------------------------------------------------------|--------------|------------|
-| p-term.bat              | Die .bat soll muss eien .env erstlenen um `./install/cpp/install-vs.py` erstellen!!! | morgen       | X          |
+| **Problem description** | **Cause**                                                                          | **Solution** | **Status** |
+|-------------------------|------------------------------------------------------------------------------------|--------------|------------|
+| p-term.bat              | Die .bat  muss eine .env erstellen um `./install/cpp/install-vs.py` auszuführen!!! | morgen       | X          |
