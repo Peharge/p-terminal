@@ -70,11 +70,11 @@
 #include <iostream>
 #include <string>
 #include <Windows.h>
-#include <io.h>
+// #include <io.h> // soon wen Funktion existiert
 #include <fcntl.h>
 
-#include "p-command.h"
-// #include "linoise.hpp"
+// #include "p-command.h" // soon wen Funktion existiert
+// #include "linoise.hpp" // soon wen Funktion existiert
 
 std::string command;
 
@@ -143,7 +143,7 @@ void current_directory() {
 
     std::cin >> command;
 
-    process_command(command);
+	// process_command(command); // soon wen Funktion existiert
 }
 
 int main()
