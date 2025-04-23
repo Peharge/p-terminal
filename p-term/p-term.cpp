@@ -68,15 +68,61 @@
 */
 
 #include <iostream>
+#include <string>
+
 #include "compile-command.h"
 
-void current_directory() {
+class env_akv_st
+{
 
+   public:
+      virtual void env_status() const {
+         std::cout << "env_status: 0" << std::endl;
+      }
+
+      virtual ~env_akv_st() {}
+};
+
+class env_de_akv : public env_akv_st
+{
+
+   private:
+      std::string env_status;
+
+   public:
+      env_de_akv(std::string e) : env_akv_st(e) {}
+
+      void env_status() const override {
+         std::cout << "\033[32m[\033[0m" << "\033[31m.\\p_term\\.env\033[0m" << "\033[32m]\033[0m" << std::endl;
+      }
+};
+
+class env_akv : public env_akv_st
+{
+
+   private:
+   std::string env_status;
+
+   public:
+   env_de_akv(std::string e) : env_akv_st(e) {}
+
+      void env_status() const override {
+         std::cout << "\033[32m[\033[0m" << ".\\p_term\\.env" << "\033[32m]\033[0m" << std::endl;
+      }
+};
+
+void current_directory()
+{
+   std::cout << "\n\033[32m┌──(\033[0m" << "\033[34m" << "{getpass.getuser()}㉿Peharge\033[0m" << "\033[32m)-[\033[0m" << "{current_dir}" << "\033[32m]-\033[0m" << "{env_indicator}\n" << "{\033[32m}└─\033[0m" << "\033[34m#\033[0m";
+   std::cin >> command;
 }
 
-int main() {
+int main()
+{
 
    std::cout << "Welcome To Peharge Terminal" << std::endl;
+
+   current_directory();
 
    system("PAUSE");
    return 0;
