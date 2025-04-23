@@ -67,11 +67,13 @@
    Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 */
 
-#include <iosream>
+#include <iostream>
+
+
 
 int main() {
 
-   std::cout << "Hello World!" << std::endl;
+   std::cout << "Welcome To Peharge Terminal" << std::endl;
 
    system("PAUSE");
    return 0;
