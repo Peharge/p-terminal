@@ -67,17 +67,3 @@
    Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 */
 
-#include <iostream>
-#include "compile-command.h"
-
-void current_directory() {
-
-}
-
-int main() {
-
-   std::cout << "Welcome To Peharge Terminal" << std::endl;
-
-   system("PAUSE");
-   return 0;
-}
