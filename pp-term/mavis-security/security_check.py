@@ -89,7 +89,7 @@ def get_user_input():
 
 def execute_installation():
     try:
-        subprocess.run([sys.executable, "security/run-security-check.py"], check=True)
+        subprocess.run([sys.executable, "mavis-security/run-security-check.py"], check=True)
         print(f"{blue}{bold}MAVIS Security check completed successfully.{reset}")
     except subprocess.CalledProcessError:
         print(f"{red}{bold}An error occurred while running the Security check script.{reset}")
