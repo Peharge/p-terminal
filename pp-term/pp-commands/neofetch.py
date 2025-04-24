@@ -320,17 +320,17 @@ def print_system_info(system_info: dict):
     print(f"""
                    ██████      
                 ████████████    
-             ██████████████████                                        {blue}PP-Terminal - {os.getlogin()}{reset}
-          ████████████████████████                                     {blue}P-Terminal Version{reset}: 1.1
-       ██████████████████████████████                                  {blue}PP-Terminal Version{reset}: 1.1
-       █████████████████████████████████                               {blue}Peharge C Compiler Version{reset}: 1.1
-       ████████████████████████████████████                             {blue}Peharge C++ Compiler Version{reset}: 1.1
-       ███████████████████████████████████████                          {blue}P-Terminal License{reset}: MIT
-       ██████████████████████████████████████████                       {blue}MAVIS Version{reset}: 4.3
-       █████████████████████████████████████████████                    {blue}MAVIS Installer Version{reset}: 4
-       ████████████       █████████████████████████████                 {blue}MAVIS Terminal Version{reset}: 5
-       █████████             █████████████████████████████              {blue}MAVIS License{reset}: MIT
-       ██████                   █████████████████████████████           {blue}OS{reset}: {system_info['os_name']} {system_info['os_release']}    
+             ██████████████████                                          {blue}PP-Terminal - {os.getlogin()}{reset}
+          ████████████████████████                                       {blue}P-Terminal Version{reset}: 1.1
+       ██████████████████████████████                                    {blue}PP-Terminal Version{reset}: 1.1
+       █████████████████████████████████                                 {blue}Peharge C Compiler Version{reset}: 1.1
+       ████████████████████████████████████                              {blue}Peharge C++ Compiler Version{reset}: 1.1
+       ███████████████████████████████████████                           {blue}P-Terminal License{reset}: MIT
+       ██████████████████████████████████████████                        {blue}MAVIS Version{reset}: 4.3
+       █████████████████████████████████████████████                     {blue}MAVIS Installer Version{reset}: 4
+       ████████████       █████████████████████████████                  {blue}MAVIS Terminal Version{reset}: 5
+       █████████             █████████████████████████████               {blue}MAVIS License{reset}: MIT
+       ██████                   █████████████████████████████            {blue}OS{reset}: {system_info['os_name']} {system_info['os_release']}    
         ███           █████         ████████████████████████████╗        {blue}Version{reset}: {system_info['os_version']}      
                    ██████████         ██████████████████████████║        {blue}Architecture{reset}: {system_info['os_arch']}       
                 ████████████████         ███████████████████████║        {blue}Hostname{reset}: {system_info['hostname']}          
