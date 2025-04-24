@@ -248,10 +248,10 @@ def handle_special_commands(user_input):
     user_input = user_input.strip()
 
     # Lade die .env-Datei
-    load_dotenv(dotenv_path=f"C:\\Users\\{os.getlogin()}\\p-terminal\\p-term\\.env")
+    load_dotenv(dotenv_path=f"C:\\Users\\{os.getlogin()}\\p-terminal\\pp-term\\.env")
 
     # Der Pfad zum Python-Interpreter in der .env
-    python_path = f"C:\\Users\\{os.getlogin()}\\p-terminal\\p-term\\.env\\Scripts\\python.exe"
+    python_path = f"C:\\Users\\{os.getlogin()}\\p-terminal\\pp-term\\.env\\Scripts\\python.exe"
 
     commands = {
         "env install": "mavis-install\\install-info-mavis-4.py",
