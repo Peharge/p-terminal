@@ -187,7 +187,7 @@ Thank you so much for using PP-Term. We truly appreciate your support ❤️""")
     print("")
 
 def set_python_path():
-    python_path = f"C:\\Users\\{os.getlogin()}\\p-terminal\\p-term\\.env\\Scripts\\python.exe"
+    python_path = f"C:\\Users\\{os.getlogin()}\\p-terminal\\pp-term\\.env\\Scripts\\python.exe"
     os.environ["PYTHON_PATH"] = python_path
 
 
