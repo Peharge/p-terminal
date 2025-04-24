@@ -33,6 +33,9 @@ Start of development: 23.04.2025
 `ps` - Peharge search command  
 `lx` - Linux command  
 `ubuntu` - Ubuntu command
+`debian` - Ubuntu command
+`kali` - Ubuntu command
+`arch` - Ubuntu command
 
 etc.
 
