@@ -7,9 +7,9 @@
 <p align="left">
     <img src="./icons/p-term-banner-3.svg" alt="peharge"/>
     <img src="./icons/peharge-banner-3.svg" alt="peharge"/>
-    <img alt="mavis" src="https://github.com/Peharge/MAVIS-images/blob/main/mavis-img-main/MAVIS-icon-banner-3.svg">
-    <img alt="mavis-launcher" src="https://github.com/Peharge/MAVIS-images/blob/main/mavis-img-main/MAVIS-launcher-icon-banner-3.svg">
-    <img alt="mavis-terminal" src="https://github.com/Peharge/MAVIS-images/blob/main/mavis-img-main/MAVIS-terminal-icon-banner-3.svg">
+    <img src="./icons/MAVIS-icon-banner-3.svg" alt="mavis">
+    <img src="./icons/MAVIS-launcher-icon-banner-3.svg" alt="mavis-launcher">
+    <img src="./icons/MAVIS-terminal-icon-banner-3.svg" alt="mavis-terminal">
     <img alt="c++" src="https://img.shields.io/badge/-C++-555555?style=flat&logo=cplusplus">
     <img alt="c" src="https://img.shields.io/badge/C-555555?logo=C&logoColor=white">
     <img alt="rust" src="https://img.shields.io/badge/Rust-555555?logo=rust&logoColor=white">
