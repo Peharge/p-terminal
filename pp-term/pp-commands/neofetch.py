@@ -61,4 +61,326 @@
 #
 # Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 
-# soon
+import sys
+import getpass
+import subprocess
+import threading
+import time
+import importlib.util
+import os
+
+required_packages = [
+    "requests", "py-cpuinfo", "psutil"
+]
+
+
+def activate_virtualenv(venv_path):
+    """Aktiviert eine bestehende virtuelle Umgebung."""
+    activate_script = os.path.join(venv_path, "Scripts", "activate") if os.name == "nt" else os.path.join(venv_path,
+                                                                                                          "bin",
+                                                                                                          "activate")
+
+    if not os.path.exists(activate_script):
+        print(f"Error: Virtual environment not found at {venv_path}.")
+        sys.exit(1)
+
+    os.environ["VIRTUAL_ENV"] = venv_path
+    os.environ["PATH"] = os.path.join(venv_path, "Scripts") + os.pathsep + os.environ["PATH"]
+    print(f"Virtual environment {venv_path} activated.")
+
+
+def ensure_packages_installed(packages):
+    """Installiert fehlende Pakete effizient."""
+    to_install = [pkg for pkg in packages if importlib.util.find_spec(pkg) is None]
+
+    if to_install:
+        print(f"Installing missing packages: {', '.join(to_install)}...")
+        subprocess.run([sys.executable, "-m", "pip", "install"] + to_install, check=True, stdout=subprocess.DEVNULL,
+                       stderr=subprocess.DEVNULL)
+        print("All missing packages installed.")
+    else:
+        print("All required packages are already installed.")
+
+
+# Virtuelle Umgebung aktivieren und Pakete sicherstellen
+venv_path = f"C:\\Users\\{os.getlogin()}\\p-terminal\\pp-term\\.env"
+activate_virtualenv(venv_path)
+ensure_packages_installed(required_packages)
+
+from cgitb import strong
+from dotenv import load_dotenv
+from subprocess import run
+
+import os
+import platform
+import cpuinfo
+import psutil
+import shutil
+import time
+import socket
+from typing import Tuple
+import pip
+import subprocess
+
+# Farbcodes definieren
+red = "\033[91m"
+green = "\033[92m"
+yellow = "\033[93m"
+blue = "\033[94m"
+magenta = "\033[95m"
+cyan = "\033[96m"
+white = "\033[97m"
+black = "\033[30m"
+orange = "\033[38;5;214m"
+reset = "\033[0m"
+bold = "\033[1m"
+
+
+def format_bytes(byte_value: int) -> float:
+    """Hilfsfunktion, um Bytes in GB umzuwandeln"""
+    return round(byte_value / (1024 ** 3), 2)
+
+
+def get_system_info() -> dict:
+    """Funktion, um alle Systeminformationen zu sammeln"""
+    system_info = {}
+
+    # OS-Informationen
+    system_info['os_name'] = platform.system()
+    system_info['os_version'] = platform.version()
+    system_info['os_release'] = platform.release()
+    system_info['os_arch'] = platform.architecture()[0]
+
+    # CPU-Informationen
+    cpu_info = cpuinfo.get_cpu_info()
+    system_info['cpu_model'] = cpu_info.get("brand_raw", "N/A")
+    system_info['cpu_arch'] = cpu_info.get("arch", "N/A")
+    system_info['cpu_cores'] = psutil.cpu_count(logical=False)
+    system_info['cpu_threads'] = psutil.cpu_count(logical=True)
+    system_info['cpu_freq'] = psutil.cpu_freq().max if psutil.cpu_freq() else "N/A"
+
+    # RAM Informationen
+    ram = psutil.virtual_memory()
+    system_info['ram_total'] = format_bytes(ram.total)
+    system_info['ram_used'] = format_bytes(ram.used)
+    system_info['ram_free'] = format_bytes(ram.available)
+    system_info['ram_usage'] = ram.percent
+
+    # Swap Informationen
+    swap = psutil.swap_memory()
+    system_info['swap_total'] = format_bytes(swap.total)
+    system_info['swap_used'] = format_bytes(swap.used)
+    system_info['swap_free'] = format_bytes(swap.free)
+
+    # Festplatteninformationen
+    total_storage, used_storage, free_storage = shutil.disk_usage("/")
+    system_info['storage_total'] = format_bytes(total_storage)
+    system_info['storage_used'] = format_bytes(used_storage)
+    system_info['storage_free'] = format_bytes(free_storage)
+
+    # Netzwerkinformationen
+    system_info['hostname'] = socket.gethostname()
+    system_info['ip_address'] = socket.gethostbyname(system_info['hostname'])
+
+    # Netzwerk-Interfaces
+    network_interfaces = psutil.net_if_addrs()
+    interfaces_info = {}
+    for interface, addresses in network_interfaces.items():
+        interface_details = {}
+        for address in addresses:
+            if address.family == socket.AF_INET:
+                interface_details['IPv4'] = address.address
+            elif address.family == socket.AF_INET6:
+                interface_details['IPv6'] = address.address
+            elif address.family == psutil.AF_LINK:
+                interface_details['MAC'] = address.address
+        interfaces_info[interface] = interface_details
+    system_info['network_interfaces'] = interfaces_info
+
+    # Load Average
+    if system_info['os_name'] == "Windows":
+        system_info['load_avg'] = f"CPU Usage: {psutil.cpu_percent(interval=1)}%"
+    else:
+        try:
+            load_avg_values = os.getloadavg()
+            system_info['load_avg'] = {
+                "1m": load_avg_values[0],
+                "5m": load_avg_values[1],
+                "15m": load_avg_values[2]
+            }
+        except OSError:
+            system_info['load_avg'] = "Not available"
+
+    # Uptime des Systems
+    uptime_seconds = time.time() - psutil.boot_time()
+    system_info['uptime'] = time.strftime("%H:%M:%S", time.gmtime(uptime_seconds))
+
+    # Benutzerinformationen
+    user_info = psutil.users()
+    system_info['user_info'] = [{
+        'user': user.name,
+        'terminal': user.terminal or 'N/A',
+        'started': time.ctime(user.started)
+    } for user in user_info]
+
+    return system_info
+
+def get_powershell_version():
+    try:
+        result = subprocess.run(
+            ["powershell", "-Command", "$PSVersionTable.PSVersion.ToString()"],
+            capture_output=True, text=True, check=True
+        )
+        return result.stdout.strip()
+    except subprocess.CalledProcessError:
+        return "Fehler beim Abrufen der PowerShell-Version."
+    except FileNotFoundError:
+        return "PowerShell ist nicht installiert oder nicht im PATH."
+
+def get_wsl_version():
+    try:
+        result = subprocess.run(
+            ["wsl", "--version"],
+            capture_output=True, text=True, check=True
+        )
+        version = result.stdout.strip().split("\n")[0]  # WSL-Version extrahieren
+        return version
+    except subprocess.CalledProcessError:
+        return "Fehler beim Abrufen der WSL-Version."
+    except FileNotFoundError:
+        return "WSL ist nicht installiert oder nicht im PATH."
+
+def get_kernel_version():
+    try:
+        result = subprocess.run(
+            ["wsl", "uname", "-r"],
+            capture_output=True, text=True, check=True
+        )
+        kernel_version = result.stdout.strip()
+        return kernel_version
+    except subprocess.CalledProcessError:
+        return "Fehler beim Abrufen der Kernel-Version."
+    except FileNotFoundError:
+        return "WSL ist nicht installiert oder nicht im PATH."
+
+def get_wslg_version():
+    try:
+        result = subprocess.run(
+            ["wsl", "--version"],
+            capture_output=True, text=True, check=True
+        )
+        version = result.stdout.strip().split("\n")[4]  # 5. Zeile extrahieren
+        return version
+    except subprocess.CalledProcessError:
+        return "Fehler beim Abrufen der WSL-Version."
+    except FileNotFoundError:
+        return "WSL ist nicht installiert oder nicht im PATH."
+
+def get_msrpc_version():
+    try:
+        result = subprocess.run(
+            ["wsl", "--version"],
+            capture_output=True, text=True, check=True
+        )
+        version = result.stdout.strip().split("\n")[6]  # 7. Zeile extrahieren
+        return version
+    except subprocess.CalledProcessError:
+        return "Fehler beim Abrufen der WSL-Version."
+    except FileNotFoundError:
+        return "WSL ist nicht installiert oder nicht im PATH."
+
+def get_direct3d_version():
+    try:
+        result = subprocess.run(
+            ["wsl", "--version"],
+            capture_output=True, text=True, check=True
+        )
+        version = result.stdout.strip().split("\n")[8]  # 9. Zeile extrahieren
+        return version
+    except subprocess.CalledProcessError:
+        return "Fehler beim Abrufen der WSL-Version."
+    except FileNotFoundError:
+        return "WSL ist nicht installiert oder nicht im PATH."
+
+def get_dxcore_version():
+    try:
+        result = subprocess.run(
+            ["wsl", "--version"],
+            capture_output=True, text=True, check=True
+        )
+        version = result.stdout.strip().split("\n")[10]  # 11. Zeile extrahieren
+        return version
+    except subprocess.CalledProcessError:
+        return "Fehler beim Abrufen der WSL-Version."
+    except FileNotFoundError:
+        return "WSL ist nicht installiert oder nicht im PATH."
+
+def print_system_info(system_info: dict):
+    """Funktion, um die Systeminformationen im Terminal auszugeben"""
+    print(f"""
+                            ██████      
+                         ████████████    
+                      ██████████████████                                        {blue}PP-Terminal - {os.getlogin()}{reset}
+                   ████████████████████████                                     {blue}P-Terminal Version{reset}: 1.1
+                ██████████████████████████████                                  {blue}PP-Terminal Version{reset}: 1.1
+                █████████████████████████████████                               {blue}Peharge C Compiler Version{reset}: 1.1
+                ████████████████████████████████████                             {blue}Peharge C++ Compiler Version{reset}: 1.1
+                ███████████████████████████████████████                          {blue}P-Terminal License{reset}: MIT
+                ██████████████████████████████████████████                       {blue}MAVIS Version{reset}: 4.3
+                █████████████████████████████████████████████                    {blue}MAVIS Installer Version{reset}: 4
+                ████████████       █████████████████████████████                 {blue}MAVIS Terminal Version{reset}: 5
+                █████████             █████████████████████████████              {blue}MAVIS License{reset}: MIT
+                ██████                   █████████████████████████████           {blue}OS{reset}: {system_info['os_name']} {system_info['os_release']}    
+                ███           █████         ████████████████████████████╗        {blue}Version{reset}: {system_info['os_version']}      
+                           ██████████         ██████████████████████████║        {blue}Architecture{reset}: {system_info['os_arch']}       
+                        ████████████████         ███████████████████████║        {blue}Hostname{reset}: {system_info['hostname']}          
+                     ██████████████████████         ████████████████████║        {blue}IP Address{reset}: {system_info['ip_address']}          
+                  ████████████████████████████╗        █████████████████║        {blue}CPU{reset}: {system_info['cpu_model']}        
+                █████████████████████████████╔╝        █████████████████║        {blue}Architecture{reset}: {system_info['cpu_arch']}         
+               ███████████████████████████╔══╝      ████████████████████║        {blue}Max Frequency{reset}: {system_info['cpu_freq']} MHz      
+               ████████████████████████╔══╝      ███████████████████████║        {blue}RAM Usage{reset}: {system_info['ram_usage']}%     
+                ████████████████████╔══╝     ███████████████████████████║        {blue}RAM Total{reset}: {system_info['ram_total']} GB        
+                █████████████████╔══╝     █████████████████████████████╔╝        {blue}PIP Version{reset}: {pip.__version__}      
+                ███████████████╔═╝     █████████████████████████████╔══╝         {blue}PowerShell-Version{reset}: {get_powershell_version()}
+                ███████████████║    █████████████████████████████╔══╝            {blue}WSL-Version{reset}: {get_wsl_version()}
+                ███████████████║    ██████████████████████████╔══╝               {blue}Kernelversion{reset}: {get_kernel_version()}
+                ███████████████║    ███████████████████████╔══╝                  {blue}WSLg-Version{reset}: {get_wslg_version()}
+                ███████████████║    ████████████████████╔══╝                     {blue}MSRDC-Version{reset}: {get_msrpc_version()}
+                ███████████████║    █████████████████╔══╝                        {blue}Direct3D-Version{reset}: {get_direct3d_version()}
+                ███████████████║    ██████████████╔══╝                           {blue}DXCore-Version{reset}: {get_dxcore_version()}
+                ███████████████║    ███████████╔══╝        
+                ███████████████║    ████████╔══╝                                     
+                ███████████████║    █████╔══╝                   
+                ███████████████║    ██╔══╝                                      {show_color_palette_1()}
+                ███████████████╚═╗  ╚═╝                                         {show_color_palette_3()}
+                █████████████████╚╗                              
+                ██████████████████║                             
+                █████████████╔════╝                                
+                ██████████╔══╝                               
+                ██████╔═══╝                             
+                ███╔══╝
+                ╚══╝
+""")
+
+def show_color_palette_1():
+    """Funktion zur Anzeige der 16 Farbpaletten ohne Abstände und Zahlen"""
+    palette = ""
+
+    # Anzeige der Farben (0-7)
+    for i in range(8):
+        palette += f"\033[48;5;{i}m  \033[0m"  # Farben ohne Zahlen und ohne Abstände
+
+    return palette
+
+def show_color_palette_3():
+    palette = ""
+    # Anzeige der helleren Farben (8-15)
+    for i in range(8, 16):
+        palette += f"\033[48;5;{i}m  \033[0m"  # Farben ohne Zahlen und ohne Abstände
+
+    # Noch ein Zeilenumbruch am Ende
+    return palette
+
+if __name__ == "__main__":
+    system_info = get_system_info()
+    print_system_info(system_info)
