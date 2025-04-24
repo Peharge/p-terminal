@@ -163,6 +163,7 @@ Developed by Peharge and JK (Peharge Projects 2025)
 Thank you so much for using PP-Term. We truly appreciate your support ❤️""")
 
     print(f"""
+{blue}P-Terminal Version{reset}: 1.1
 {blue}PP-Terminal Version{reset}: 1.1
 {blue}Peharge C compiler Version{reset}: 1.1
 {blue}Peharge C++ compiler Version{reset}: 1.1
