@@ -318,48 +318,48 @@ def get_dxcore_version():
 def print_system_info(system_info: dict):
     """Funktion, um die Systeminformationen im Terminal auszugeben"""
     print(f"""
-                            ██████      
-                         ████████████    
-                      ██████████████████                                        {blue}PP-Terminal - {os.getlogin()}{reset}
-                   ████████████████████████                                     {blue}P-Terminal Version{reset}: 1.1
-                ██████████████████████████████                                  {blue}PP-Terminal Version{reset}: 1.1
-                █████████████████████████████████                               {blue}Peharge C Compiler Version{reset}: 1.1
-                ████████████████████████████████████                             {blue}Peharge C++ Compiler Version{reset}: 1.1
-                ███████████████████████████████████████                          {blue}P-Terminal License{reset}: MIT
-                ██████████████████████████████████████████                       {blue}MAVIS Version{reset}: 4.3
-                █████████████████████████████████████████████                    {blue}MAVIS Installer Version{reset}: 4
-                ████████████       █████████████████████████████                 {blue}MAVIS Terminal Version{reset}: 5
-                █████████             █████████████████████████████              {blue}MAVIS License{reset}: MIT
-                ██████                   █████████████████████████████           {blue}OS{reset}: {system_info['os_name']} {system_info['os_release']}    
-                ███           █████         ████████████████████████████╗        {blue}Version{reset}: {system_info['os_version']}      
-                           ██████████         ██████████████████████████║        {blue}Architecture{reset}: {system_info['os_arch']}       
-                        ████████████████         ███████████████████████║        {blue}Hostname{reset}: {system_info['hostname']}          
-                     ██████████████████████         ████████████████████║        {blue}IP Address{reset}: {system_info['ip_address']}          
-                  ████████████████████████████╗        █████████████████║        {blue}CPU{reset}: {system_info['cpu_model']}        
-                █████████████████████████████╔╝        █████████████████║        {blue}Architecture{reset}: {system_info['cpu_arch']}         
-               ███████████████████████████╔══╝      ████████████████████║        {blue}Max Frequency{reset}: {system_info['cpu_freq']} MHz      
-               ████████████████████████╔══╝      ███████████████████████║        {blue}RAM Usage{reset}: {system_info['ram_usage']}%     
-                ████████████████████╔══╝     ███████████████████████████║        {blue}RAM Total{reset}: {system_info['ram_total']} GB        
-                █████████████████╔══╝     █████████████████████████████╔╝        {blue}PIP Version{reset}: {pip.__version__}      
-                ███████████████╔═╝     █████████████████████████████╔══╝         {blue}PowerShell-Version{reset}: {get_powershell_version()}
-                ███████████████║    █████████████████████████████╔══╝            {blue}WSL-Version{reset}: {get_wsl_version()}
-                ███████████████║    ██████████████████████████╔══╝               {blue}Kernelversion{reset}: {get_kernel_version()}
-                ███████████████║    ███████████████████████╔══╝                  {blue}WSLg-Version{reset}: {get_wslg_version()}
-                ███████████████║    ████████████████████╔══╝                     {blue}MSRDC-Version{reset}: {get_msrpc_version()}
-                ███████████████║    █████████████████╔══╝                        {blue}Direct3D-Version{reset}: {get_direct3d_version()}
-                ███████████████║    ██████████████╔══╝                           {blue}DXCore-Version{reset}: {get_dxcore_version()}
-                ███████████████║    ███████████╔══╝        
-                ███████████████║    ████████╔══╝                                     
-                ███████████████║    █████╔══╝                   
-                ███████████████║    ██╔══╝                                      {show_color_palette_1()}
-                ███████████████╚═╗  ╚═╝                                         {show_color_palette_3()}
-                █████████████████╚╗                              
-                ██████████████████║                             
-                █████████████╔════╝                                
-                ██████████╔══╝                               
-                ██████╔═══╝                             
-                ███╔══╝
-                ╚══╝
+                   ██████      
+                ████████████    
+             ██████████████████                                        {blue}PP-Terminal - {os.getlogin()}{reset}
+          ████████████████████████                                     {blue}P-Terminal Version{reset}: 1.1
+       ██████████████████████████████                                  {blue}PP-Terminal Version{reset}: 1.1
+       █████████████████████████████████                               {blue}Peharge C Compiler Version{reset}: 1.1
+       ████████████████████████████████████                             {blue}Peharge C++ Compiler Version{reset}: 1.1
+       ███████████████████████████████████████                          {blue}P-Terminal License{reset}: MIT
+       ██████████████████████████████████████████                       {blue}MAVIS Version{reset}: 4.3
+       █████████████████████████████████████████████                    {blue}MAVIS Installer Version{reset}: 4
+       ████████████       █████████████████████████████                 {blue}MAVIS Terminal Version{reset}: 5
+       █████████             █████████████████████████████              {blue}MAVIS License{reset}: MIT
+       ██████                   █████████████████████████████           {blue}OS{reset}: {system_info['os_name']} {system_info['os_release']}    
+        ███           █████         ████████████████████████████╗        {blue}Version{reset}: {system_info['os_version']}      
+                   ██████████         ██████████████████████████║        {blue}Architecture{reset}: {system_info['os_arch']}       
+                ████████████████         ███████████████████████║        {blue}Hostname{reset}: {system_info['hostname']}          
+             ██████████████████████         ████████████████████║        {blue}IP Address{reset}: {system_info['ip_address']}          
+          ████████████████████████████╗        █████████████████║        {blue}CPU{reset}: {system_info['cpu_model']}        
+        █████████████████████████████╔╝        █████████████████║        {blue}Architecture{reset}: {system_info['cpu_arch']}         
+       ███████████████████████████╔══╝      ████████████████████║        {blue}Max Frequency{reset}: {system_info['cpu_freq']} MHz      
+       ████████████████████████╔══╝      ███████████████████████║        {blue}RAM Usage{reset}: {system_info['ram_usage']}%     
+        ████████████████████╔══╝     ███████████████████████████║        {blue}RAM Total{reset}: {system_info['ram_total']} GB        
+        █████████████████╔══╝     █████████████████████████████╔╝        {blue}PIP Version{reset}: {pip.__version__}      
+        ███████████████╔═╝     █████████████████████████████╔══╝         {blue}PowerShell-Version{reset}: {get_powershell_version()}
+        ███████████████║    █████████████████████████████╔══╝            {blue}WSL-Version{reset}: {get_wsl_version()}
+        ███████████████║    ██████████████████████████╔══╝               {blue}Kernelversion{reset}: {get_kernel_version()}
+        ███████████████║    ███████████████████████╔══╝                  {blue}WSLg-Version{reset}: {get_wslg_version()}
+        ███████████████║    ████████████████████╔══╝                     {blue}MSRDC-Version{reset}: {get_msrpc_version()}
+        ███████████████║    █████████████████╔══╝                        {blue}Direct3D-Version{reset}: {get_direct3d_version()}
+        ███████████████║    ██████████████╔══╝                           {blue}DXCore-Version{reset}: {get_dxcore_version()}
+        ███████████████║    ███████████╔══╝        
+        ███████████████║    ████████╔══╝                                     
+        ███████████████║    █████╔══╝                   
+        ███████████████║    ██╔══╝                                      {show_color_palette_1()}
+        ███████████████╚═╗  ╚═╝                                         {show_color_palette_3()}
+        █████████████████╚╗                              
+        ██████████████████║                             
+        █████████████╔════╝                                
+        ██████████╔══╝                               
+        ██████╔═══╝                             
+        ███╔══╝
+        ╚══╝
 """)
 
 def show_color_palette_1():
