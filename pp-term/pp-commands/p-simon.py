@@ -336,7 +336,7 @@ class MainWindow(QMainWindow):
     def simon_github(self):
         try:
             user_folder = os.path.expanduser("~")  # Plattformunabhängig
-            script_path = os.path.join(user_folder, "PycharmProjects", "MAVIS", "mavis-terminal", "m-simon-git.py")
+            script_path = os.path.join(user_folder, "PycharmProjects", "MAVIS", "mavis-terminal", "p-simon-git.py")
 
             if not os.path.exists(script_path):
                 print(f"Script nicht gefunden: {script_path}")

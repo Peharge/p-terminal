@@ -85,13 +85,13 @@ sys.stdout.reconfigure(encoding='utf-8')
 # user_name = getpass.getuser()
 
 # Lokale JSON-Datei, in der das Datum gespeichert wird
-DATA_FILE = os.path.join(os.path.expanduser("~"), "PycharmProjects", "MAVIS", "update", "last_update.json")
+DATA_FILE = os.path.join(os.path.expanduser("~"), "p-terminal", "pp-term", "update", "last_update.json")
 
 print(f"{DATA_FILE}")
 
 # Pfad zum Batch-Skript
-image_dir = os.path.join(os.path.expanduser("~"), "PycharmProjects", "MAVIS", "update")
-batch_file = os.path.join(image_dir, "update-mavis-repository.bat")
+image_dir = os.path.join(os.path.expanduser("~"), "p-terminal", "pp-term", "update")
+batch_file = os.path.join(image_dir, "update-p-terminal-repository.bat")
 
 
 def read_last_update():
@@ -136,15 +136,15 @@ def perform_update():
 
 
 def main():
-    print("\nMAVIS Repository Update (experimental):")
+    print("\nP-Terminal Repository Update (experimental):")
     print("---------------------------------------")
-    print("Please note that this update function is not yet 100% reliable and errors may occur. \nTherefore, we recommend using the git pull https://github.com/Peharge/MAVIS.git command instead. \nHowever, if this is not possible...\n")
+    print("Please note that this update function is not yet 100% reliable and errors may occur. \nTherefore, we recommend using the git pull https://github.com/Peharge/p-terminal.git command instead. \nHowever, if this is not possible...\n")
 
     last_update = read_last_update()
     if last_update:
-        print(f"{blue}MAVIS - Last update{reset}: {last_update}")
+        print(f"{blue}P-Terminal - Last update{reset}: {last_update}")
     else:
-        print(f"{yellow}MAVIS - No update date found.{reset}")
+        print(f"{yellow}P-Terminal - No update date found.{reset}")
 
     if prompt_for_update():
         perform_update()

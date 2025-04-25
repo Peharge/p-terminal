@@ -65,6 +65,8 @@ import os
 import json
 import subprocess
 from datetime import datetime
+import sys
+# import getpass
 
 # Farbcodes definieren
 red = "\033[91m"
@@ -79,13 +81,18 @@ orange = "\033[38;5;214m"
 reset = "\033[0m"
 bold = "\033[1m"
 
+sys.stdout.reconfigure(encoding='utf-8')
+# user_name = getpass.getuser()
+
 # Lokale JSON-Datei, in der das Datum gespeichert wird
-DATA_FILE = os.path.join(os.path.dirname(__file__), "last_update.json")
+DATA_FILE = os.path.join(os.path.expanduser("~"), "PycharmProjects", "MAVIS", "update", "last_update.json")
+
+print(f"{DATA_FILE}")
+
 # Pfad zum Batch-Skript
-image_dir = os.path.join(os.path.expanduser("~"), "p-terminal", "pp-term", "mavis-update")
+image_dir = os.path.join(os.path.expanduser("~"), "PycharmProjects", "MAVIS", "update")
 batch_file = os.path.join(image_dir, "update-mavis-repository.bat")
-python_file = os.path.join(image_dir, "p-git.py")
-python_env = os.path.join(os.path.expanduser("~"), "p-terminal", "pp-term", ".env", "Scripts", "python.exe")
+
 
 def read_last_update():
     """Liest das letzte gespeicherte Datum aus der JSON-Datei."""
@@ -108,17 +115,13 @@ def write_last_update():
 def prompt_for_update():
     """Fragt den Benutzer, ob ein Update durchgeführt werden soll."""
     while True:
-        choice = input(f"Would you like to perform an update? For more information, type 'p help' or 'p git' [y/n]:").strip().lower()
+        choice = input(f"Would you like to perform an update? [y/n]:").strip().lower()
         if choice in {"y", "yes"}:
             return True
         elif choice in {"n", "no"}:
             return False
-        if choice == "p help":
-            subprocess.run(f'"{python_env}" {python_file}', shell=True)
-        elif choice == "p git":
-            subprocess.run(f'"{python_env}" {python_file}', shell=True)
         else:
-            print(f"{yellow}Invalid input. Please enter 'y', 'n' or 'help'.{reset}")
+            print(f"{yellow}Invalid input. Please enter 'y' or 'n'.{reset}")
 
 
 def perform_update():
@@ -132,24 +135,6 @@ def perform_update():
         print(f"{red}Batch file not found{reset}: {batch_file}")
 
 
-def get_unpulled_commits():
-    """Gibt die Anzahl der Commits zurück, die noch nicht gepullt wurden."""
-    try:
-        result = subprocess.run(
-            ["git", "fetch", "--dry-run"],
-            capture_output=True,
-            text=True,
-            cwd=image_dir
-        )
-        output = result.stdout
-        if "From" in output:
-            return output.count("commit")
-        return 0
-    except Exception as e:
-        print(f"{red}Error checking for unpulled commits: {e}{reset}")
-        return -1
-
-
 def main():
     print("\nMAVIS Repository Update (experimental):")
     print("---------------------------------------")
@@ -160,12 +145,6 @@ def main():
         print(f"{blue}MAVIS - Last update{reset}: {last_update}")
     else:
         print(f"{yellow}MAVIS - No update date found.{reset}")
-
-    unpulled_commits = get_unpulled_commits()
-    if unpulled_commits > 0:
-        print(f"{magenta}There are {unpulled_commits} commits that have not been pulled yet.{reset}")
-    elif unpulled_commits == 0:
-        print(f"{green}Your local repository is up-to-date.{reset}")
 
     if prompt_for_update():
         perform_update()

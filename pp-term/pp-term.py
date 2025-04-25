@@ -268,34 +268,26 @@ def handle_special_commands(user_input):
         "update env": "mavis-install\\install-info-mavis-4.py",
         "mavis env update": "mavis-install\\install-info-mavis-4.py",
         "update mavis env": "mavis-install\\install-info-mavis-4.py",
-        "update": "mavis-update\\update-repository-windows.py",
-        "mavis update": "mavis-update\\update-repository-windows.py",
-        "update mavis": "mavis-update\\update-repository-windows.py",
+        "mavis update": "mavis-update\\update-mavis-repository-windows.py",
+        "update mavis": "mavis-update\\update-mavis-repository-windows.py",
         "security": "security\\security_check-mavis-4.py",
         "p-terminal security": "security\\security_check-mavis-4.py",
         "securitycheck": "security\\security_check-mavis-4.py",
-
         "info": "pp-commands\\info.py",
         "mavis info": "pp-commands\\info.py",
         "info mavis": "pp-commands\\info.py",
         "neofetch": "pp-commands\\neofetch.py",
         "fastfetch": "pp-commands\\neofetch.py", # new
         "screenfetch": "pp-commands\\neofetch.py", # new
-
         "jupyter": "mavis-run-jup\\run-jup.py",
         "run jupyter": "mavis-run-jup\\run-jup.py",
         "run ju": "mavis-run-jup\\run-jup.py", # new
-
         "run mavis-4": "pp-commands\\run-mavis-4.py", # new
         "run mavis-4-3": "pp-commands\\run-mavis-4-3.py", # new
-
         "run mavis-4-fast": "mavis-4-main.py",  # new
         "run mavis-4-3-fast": "mavis-4-3-main.py",  # new
-
         "run mavis-launcher-4": "pp-commands\\run-launcher-4.py",  # new
-
         "run ollama mavis-4": "install\\install-ollama-mavis-4.py",  # new
-
         "install ollama mavis-4": "mavis-install\\install-ollama-mavis-4.py",  # new
         "change models mavis-4": "mavis-install\\install-ollama-mavis-4.py",  # new
         "change models": "mavis-install\\install-ollama-mavis-4.py",  # new
@@ -303,7 +295,6 @@ def handle_special_commands(user_input):
         "run grafana": "mavis-run-grafana\\run-grafana.py",
         "install grafana": "mavis-run-grafana\\run-grafana.py",
         "account": "mavis-account\\account.py",
-
         "run deepseek-r1:1.5b": "pp-commands\\deepseek-r1-1-5b.py",
         "run deepseek-r1:7b": "pp-commands\\deepseek-r1-7b.py",
         "run deepseek-r1:8b": "pp-commands\\deepseek-r1-8b.py",
@@ -359,7 +350,6 @@ def handle_special_commands(user_input):
         "run deepcoder:1.5b": "pp-commands\\deepcoder-1-5b.py",  # new
         "run deepcoder:14b": "pp-commands\\deepcoder-14b.py", # new
         "run mistral-small3.1": "pp-commands\\mistral-small-3-1.py",  # new
-
         "install deepseek-r1:1.5b": "pp-commands\\deepseek-r1-1-5b.py",
         "install deepseek-r1:7b": "pp-commands\\deepseek-r1-7b.py",
         "install deepseek-r1:8b": "pp-commands\\deepseek-r1-8b.py",
@@ -415,84 +405,81 @@ def handle_special_commands(user_input):
         "install deepcoder:1.5b": "pp-commands\\deepcoder-1-5b.py",  # new
         "install deepcoder:14b": "pp-commands\\deepcoder-14b.py",  # new
         "install mistral-small3.1": "pp-commands\\mistral-small-3-1.py",  # new
-
         "help": "pp-commands\\help.py",
         "image generation": "pp-commands\\stable-diffusion-3-5-large-turbo.py",
         "video generation": "pp-commands\\wan-2-1-t2v-14b.py",
         "run mavis": "mavis-installer-3-main-windows.py",
-        "p run all": "pp-commands\\m-run-all.py", # new
-        "p htop": "pp-commands\\m-htop.py", # new
-        "p run gemma3": "pp-commands\\m-gemma-3.py", # new
-        "p run deepseek-r1": "pp-commands\\m-deepseek-r1.py", # new
-        "p run qwen2.5": "pp-commands\\m-qwen-2-5.py", # new
-        "p run qwen2.5-coder": "pp-commands\\m-qwen-2-5-coder.py", # new
-        "p python frameworks": "pp-commands\\m-python-frameworks.py", # new
-        "p pip list": "pp-commands\\m-python-frameworks.py", # new
-        "p pip ls": "pp-commands\\m-python-frameworks.py",  # new
-        "p git ls": "pp-commands\\m-git.py", # new
-        "p git": "pp-commands\\m-git.py",  # new
-        "p ls": "pp-commands\\m-ls.py", # new
+        "p run all": "pp-commands\\p-run-all.py", # new
+        "p htop": "pp-commands\\p-htop.py", # new
+        "p run gemma3": "pp-commands\\p-gemma-3.py", # new
+        "p run deepseek-r1": "pp-commands\\p-deepseek-r1.py", # new
+        "p run qwen2.5": "pp-commands\\p-qwen-2-5.py", # new
+        "p run qwen2.5-coder": "pp-commands\\p-qwen-2-5-coder.py", # new
+        "p python frameworks": "pp-commands\\p-python-frameworks.py", # new
+        "p pip list": "pp-commands\\p-python-frameworks.py", # new
+        "p pip ls": "pp-commands\\p-python-frameworks.py",  # new
+        "p git ls": "pp-commands\\p-git.py", # new
+        "p git": "pp-commands\\p-git.py",  # new
+        "p ls": "pp-commands\\p-ls.py", # new
         "models": "pp-commands\\models-ls.py",  # new
         "models ls": "pp-commands\\models-ls.py",  # new
-        "p models": "pp-commands\\m-models-ls.py",  # new
-        "p models ls": "pp-commands\\m-models-ls.py",  # new
-        "p github mavis": "pp-commands\\m-github-mavis.py",  # new
-        "p github commits": "pp-commands\\m-github-commits.py",  # new
-        "p github issues": "pp-commands\\m-github-issues.py",  # new
-        "p github peharge": "pp-commands\\m-github-peharge.py",  # new
-        "p github pulls": "pp-commands\\m-github-pulls.py",  # new
-        "p github readme": "pp-commands\\m-github-readme.py",  # new
-        "p github releases": "pp-commands\\m-github-releases.py",  # new
-        "p github": "pp-commands\\m-github.py",  # new
-        "p search": "pp-commands\\m-search.py",  # new
-        "p google": "pp-commands\\m-google.py",  # new
-        "p ollama": "pp-commands\\m-ollama.py",  # new
-        "p huggingface": "pp-commands\\m-huggingface.py",  # new
-        "p github.com": "pp-commands\\m-github.py",  # new
-        "p kali.com": "pp-commands\\m-kali.py",  # new
-        "p mint.com": "pp-commands\\m-mint.py",  # new
-        "p monai.com": "pp-commands\\m-monai.py",  # new
-        "p monai-github.com": "pp-commands\\m-monai-git.py",  # new
-        "p python.com": "pp-commands\\m-python.py",  # new
-        "p pytorch.com": "pp-commands\\m-pytorch.py",  # new
-        "p pytorch-github.com": "pp-commands\\m-pytorch-git.py",  # new
-        "p ubuntu.com": "pp-commands\\m-ubuntu.py",  # new
-        "p 3dslicer-github.com": "pp-commands\\m-3dslicer-git.py",  # new
-        "p 3dslicer.com": "pp-commands\\m-3dslicer-web.py",  # new
-        "p arch.com": "pp-commands\\m-arch.py",  # new
-        "p debian.com": "pp-commands\\m-debian.py",  # new
-        "p google.com": "pp-commands\\m-google.py",  # new
-        "p ollama.com": "pp-commands\\m-ollama.py",  # new
-        "p huggingface.com": "pp-commands\\m-huggingface.py",  # new
-        "p mavis": "pp-commands\\m-mavis-git.py",  # new
-        "p mavis.com": "pp-commands\\m-mavis.py",  # new
-        "p simon": "pp-commands\\m-simon.py",  # new
-        "p simon.com": "pp-commands\\m-simon-git.py", # new
+        "p models": "pp-commands\\p-models-ls.py",  # new
+        "p models ls": "pp-commands\\p-models-ls.py",  # new
+        "p github mavis": "pp-commands\\p-github-mavis.py",  # new
+        "p github commits": "pp-commands\\p-github-commits.py",  # new
+        "p github issues": "pp-commands\\p-github-issues.py",  # new
+        "p github peharge": "pp-commands\\p-github-peharge.py",  # new
+        "p github pulls": "pp-commands\\p-github-pulls.py",  # new
+        "p github readme": "pp-commands\\p-github-readme.py",  # new
+        "p github releases": "pp-commands\\p-github-releases.py",  # new
+        "p github": "pp-commands\\p-github.py",  # new
+        "p search": "pp-commands\\p-search.py",  # new
+        "p google": "pp-commands\\p-google.py",  # new
+        "p ollama": "pp-commands\\p-ollama.py",  # new
+        "p huggingface": "pp-commands\\p-huggingface.py",  # new
+        "p github.com": "pp-commands\\p-github.py",  # new
+        "p kali.com": "pp-commands\\p-kali.py",  # new
+        "p mint.com": "pp-commands\\p-mint.py",  # new
+        "p monai.com": "pp-commands\\p-monai.py",  # new
+        "p monai-github.com": "pp-commands\\p-monai-git.py",  # new
+        "p python.com": "pp-commands\\p-python.py",  # new
+        "p pytorch.com": "pp-commands\\p-pytorch.py",  # new
+        "p pytorch-github.com": "pp-commands\\p-pytorch-git.py",  # new
+        "p ubuntu.com": "pp-commands\\p-ubuntu.py",  # new
+        "p 3dslicer-github.com": "pp-commands\\p-3dslicer-git.py",  # new
+        "p 3dslicer.com": "pp-commands\\p-3dslicer-web.py",  # new
+        "p arch.com": "pp-commands\\p-arch.py",  # new
+        "p debian.com": "pp-commands\\p-debian.py",  # new
+        "p google.com": "pp-commands\\p-google.py",  # new
+        "p ollama.com": "pp-commands\\p-ollama.py",  # new
+        "p huggingface.com": "pp-commands\\p-huggingface.py",  # new
+        "p mavis": "pp-commands\\p-mavis-git.py",  # new
+        "p mavis.com": "pp-commands\\p-mavis.py",  # new
+        "p simon": "pp-commands\\p-simon.py",  # new
+        "p simon.com": "pp-commands\\p-simon-git.py", # new
         "wsl info": "pp-commands\\wsl-info.py",  # new
-        "p wsl": "pp-commands\\m-wsl.py", # new
-        "p pip": "pp-commands\\m-pip.py",  # new
-        "p ubuntu": "pp-commands\\m-wsl-ubuntu.py",  # new
-        "p debian": "pp-commands\\m-wsl-debian.py",  # new
-        "p kali": "pp-commands\\m-wsl-kali.py",  # new
-        "p arch": "pp-commands\\m-wsl-arch.py",  # new
-        "p mint": "pp-commands\\m-wsl-mint.py",  # new
-        "p opensuse": "pp-commands\\m-wsl-opensuse.py",  # new
-        "p fedora": "pp-commands\\m-wsl-fedora.py",  # new
-        "p redhat": "pp-commands\\m-wsl-redhat.py",  # new
-        "p alpine": "pp-commands\\m-wsl-alpine.py",  # new
-        "p clear": "pp-commands\\m-wsl-clearlinux.py",  # new
-        "p oracle": "pp-commands\\m-wsl-oracle.py",  # new
-        "p pengwin": "pp-commands\\m-wsl-pengwin.py",  # new
-        "p sles": "pp-commands\\m-wsl-sles.py",  # new
-        "p neofetch": "pp-commands\\m-neofetch.py",  # new
-        "p fastfetch": "pp-commands\\m-neofetch.py",  # new
-        "p screenfetch": "pp-commands\\m-neofetch.py",  # new
-
+        "p wsl": "pp-commands\\p-wsl.py", # new
+        "p pip": "pp-commands\\p-pip.py",  # new
+        "p ubuntu": "pp-commands\\p-wsl-ubuntu.py",  # new
+        "p debian": "pp-commands\\p-wsl-debian.py",  # new
+        "p kali": "pp-commands\\p-wsl-kali.py",  # new
+        "p arch": "pp-commands\\p-wsl-arch.py",  # new
+        "p mint": "pp-commands\\p-wsl-mint.py",  # new
+        "p opensuse": "pp-commands\\p-wsl-opensuse.py",  # new
+        "p fedora": "pp-commands\\p-wsl-fedora.py",  # new
+        "p redhat": "pp-commands\\p-wsl-redhat.py",  # new
+        "p alpine": "pp-commands\\p-wsl-alpine.py",  # new
+        "p clear": "pp-commands\\p-wsl-clearlinux.py",  # new
+        "p oracle": "pp-commands\\p-wsl-oracle.py",  # new
+        "p pengwin": "pp-commands\\p-wsl-pengwin.py",  # new
+        "p sles": "pp-commands\\p-wsl-sles.py",  # new
+        "p neofetch": "pp-commands\\p-neofetch.py",  # new
+        "p fastfetch": "pp-commands\\p-neofetch.py",  # new
+        "p screenfetch": "pp-commands\\p-neofetch.py",  # new
         "install 3d-slicer": "mavis-run\\simon\\3d-slicer\\install-3d-slicer.py", # new
         "run 3d-slicer": "mavis-run\\simon\\3d-slicer\\run-3d-slicer.py",  # new
         "install simon": "mavis-run\\simon\\install-simon-1.py",  # new
         "run simon": "mavis-run-jup\\run-jup.py",  # new
-
         "jupyter --version": "pp-commands\\jupyter-version.py", # new
         "grafana --version": "pp-commands\\grafana-version.py",  # new
         "3d-slicer --version": "pp-commands\\3d-slicer-version.py",  # new

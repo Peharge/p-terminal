@@ -61,10 +61,10 @@
 #
 # Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 
-import os
-import json
 import subprocess
-from datetime import datetime
+import requests
+import sys
+import os
 
 # Farbcodes definieren
 red = "\033[91m"
@@ -79,98 +79,91 @@ orange = "\033[38;5;214m"
 reset = "\033[0m"
 bold = "\033[1m"
 
-# Lokale JSON-Datei, in der das Datum gespeichert wird
-DATA_FILE = os.path.join(os.path.dirname(__file__), "last_update.json")
-# Pfad zum Batch-Skript
-image_dir = os.path.join(os.path.expanduser("~"), "p-terminal", "pp-term", "mavis-update")
-batch_file = os.path.join(image_dir, "update-mavis-repository.bat")
-python_file = os.path.join(image_dir, "p-git.py")
-python_env = os.path.join(os.path.expanduser("~"), "p-terminal", "pp-term", ".env", "Scripts", "python.exe")
-
-def read_last_update():
-    """Liest das letzte gespeicherte Datum aus der JSON-Datei."""
-    if os.path.exists(DATA_FILE):
-        with open(DATA_FILE, "r") as file:
-            data = json.load(file)
-            return data.get("last_update")
-    return None
+# Die URL des GitHub-Repositories
+repo_url = "https://github.com/Peharge/p-terminal.git"
+repo_name = "p-terminal"
 
 
-def write_last_update():
-    """Speichert das aktuelle Datum in die JSON-Datei."""
-    current_date = datetime.now().strftime("%d.%m.%Y")
-    data = {"last_update": current_date}
-    with open(DATA_FILE, "w") as file:
-        json.dump(data, file)
-    return current_date
-
-
-def prompt_for_update():
-    """Fragt den Benutzer, ob ein Update durchgeführt werden soll."""
-    while True:
-        choice = input(f"Would you like to perform an update? For more information, type 'p help' or 'p git' [y/n]:").strip().lower()
-        if choice in {"y", "yes"}:
-            return True
-        elif choice in {"n", "no"}:
-            return False
-        if choice == "p help":
-            subprocess.run(f'"{python_env}" {python_file}', shell=True)
-        elif choice == "p git":
-            subprocess.run(f'"{python_env}" {python_file}', shell=True)
-        else:
-            print(f"{yellow}Invalid input. Please enter 'y', 'n' or 'help'.{reset}")
-
-
-def perform_update():
-    """Führt das Update durch, indem das Batch-Skript ausgeführt wird."""
-    if os.path.exists(batch_file):
-        print(f"{green}Start update...{reset}")
-        subprocess.run(batch_file, shell=True)  # Führt das Skript aus
-        print(f"{green}Update completed.{reset}")
-        write_last_update()  # Aktualisiert das Datum auf heute
-    else:
-        print(f"{red}Batch file not found{reset}: {batch_file}")
-
-
-def get_unpulled_commits():
-    """Gibt die Anzahl der Commits zurück, die noch nicht gepullt wurden."""
+# Funktion, um die neuesten Commits von GitHub zu holen
+def get_latest_commits():
     try:
-        result = subprocess.run(
-            ["git", "fetch", "--dry-run"],
-            capture_output=True,
-            text=True,
-            cwd=image_dir
-        )
-        output = result.stdout
-        if "From" in output:
-            return output.count("commit")
-        return 0
+        github_api_url = f"https://api.github.com/repos/Peharge/p-terminal/commits"
+        response = requests.get(github_api_url)
+        response.raise_for_status()  # Überprüft auf HTTP-Fehler
+
+        commits = response.json()
+        print(f"\n{cyan}Latest commits on GitHub: {reset}")
+        for commit in commits[:5]:  # Zeige die letzten 5 Commits an
+            print(
+                f"{blue}Commit {commit['sha'][:7]}:{reset} {commit['commit']['message']} ({magenta}Autor: {commit['commit']['author']['name']}{reset})")
+    except requests.exceptions.RequestException as e:
+        print(f"{red}Error retrieving commits from GitHub: {e}{reset}")
+
+
+# Funktion, um ein Git-Repository zu aktualisieren
+def update_repo():
+    try:
+        print(f"\n{yellow}Start pull process...{reset}")
+        result = subprocess.run(["git", "pull"], capture_output=True, text=True)
+
+        if result.returncode == 0:
+            print(f"{green}Repository has been successfully updated!{reset}")
+        else:
+            print(f"{red}Error updating repository: {reset}")
+            print(result.stderr)
+    except subprocess.CalledProcessError as e:
+        print(f"{red}Error running git pull: {e}{reset}")
     except Exception as e:
-        print(f"{red}Error checking for unpulled commits: {e}{reset}")
-        return -1
+        print(f"{red}Unknown error updating repository: {e}{reset}")
 
 
+# Funktion, um zu überprüfen, ob das Verzeichnis ein Git-Repository ist
+def is_git_repo():
+    try:
+        result = subprocess.run(["git", "status"], capture_output=True, text=True)
+        if "fatal: not a git repository" in result.stderr:
+            return False
+        return True
+    except subprocess.CalledProcessError:
+        return False
+
+
+# Hauptprogramm
 def main():
-    print("\nMAVIS Repository Update (experimental):")
-    print("---------------------------------------")
-    print("Please note that this update function is not yet 100% reliable and errors may occur. \nTherefore, we recommend using the git pull https://github.com/Peharge/MAVIS.git command instead. \nHowever, if this is not possible...\n")
+    print("\nRepository Information:\n-----------------------")
+    # Sicherstellen, dass das Skript im richtigen Verzeichnis ausgeführt wird
+    if not is_git_repo():
+        print(f"{red}The current directory is not a Git repository!{reset}")
+        sys.exit(1)
 
-    last_update = read_last_update()
-    if last_update:
-        print(f"{blue}MAVIS - Last update{reset}: {last_update}")
+    # Überprüfen, ob ein Update verfügbar ist
+    try:
+        result = subprocess.run(["git", "fetch"], capture_output=True, text=True)
+        if result.returncode != 0:
+            print(f"{red}Error retrieving changes!{reset}")
+            sys.exit(1)
+    except subprocess.CalledProcessError as e:
+        print(f"{red}Error running git fetch: {e}{reset}")
+        sys.exit(1)
+
+    # Überprüfen, ob Updates verfügbar sind
+    result = subprocess.run(["git", "status"], capture_output=True, text=True)
+    if "Your branch is up to date" in result.stdout:
+        print(f"{green}The repository is already up to date.{reset}")
+        sys.exit(0)
+
+    # Frage, ob der Benutzer die neuesten Commits auf GitHub sehen möchte
+    show_commits = input(f"\n{blue}Want to see the latest commits on GitHub? [y/n]: {reset}").strip().lower()
+    if show_commits in ['y', 'yes']:
+        get_latest_commits()
+
+    # Frage, ob der Benutzer das Repository aktualisieren möchte
+    update = input(f"\n{cyan}Do you want to update the repository now? [y/n]: {reset}").strip().lower()
+    if update in ['y', 'yes']:
+        update_repo()
     else:
-        print(f"{yellow}MAVIS - No update date found.{reset}")
+        print(f"{yellow}Update canceled!{reset}")
 
-    unpulled_commits = get_unpulled_commits()
-    if unpulled_commits > 0:
-        print(f"{magenta}There are {unpulled_commits} commits that have not been pulled yet.{reset}")
-    elif unpulled_commits == 0:
-        print(f"{green}Your local repository is up-to-date.{reset}")
-
-    if prompt_for_update():
-        perform_update()
-    else:
-        print(f"{blue}Update aborted.{reset}")
 
 if __name__ == "__main__":
     main()
