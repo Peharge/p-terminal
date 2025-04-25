@@ -50,7 +50,7 @@ Download the [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-te
 `ubuntu` - Ubuntu command  
 `debian` - Ubuntu command  
 `kali` - Ubuntu command  
-`arch` - Ubuntu command
+`arch` - Ubuntu command  
 etc.
 
 # Problems
