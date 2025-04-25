@@ -285,7 +285,7 @@ def handle_special_commands(user_input):
         "run mavis-4-fast": "mavis-4-main.py",  # new
         "run mavis-4-3-fast": "mavis-4-3-main.py",  # new
         "run mavis-launcher-4": "pp-commands\\run-launcher-4.py",  # new
-        "run ollama mavis-4": "install\\install-ollama-mavis-4.py",  # new
+        "run ollama mavis-4": "mavis-install\\install-ollama-mavis-4.py",  # new
         "install ollama mavis-4": "mavis-install\\install-ollama-mavis-4.py",  # new
         "change models mavis-4": "mavis-install\\install-ollama-mavis-4.py",  # new
         "change models": "mavis-install\\install-ollama-mavis-4.py",  # new
