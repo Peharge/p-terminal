@@ -66,7 +66,7 @@ import sys
 
 def run_alpine_python_command(command):
     if isinstance(command, str):
-        command = f"wsl -d Arch {command}"
+        command = f"wsl {command}"
 
     try:
         process = subprocess.Popen(
@@ -88,14 +88,14 @@ def run_alpine_python_command(command):
 
 if __name__ == "__main__":
     commands = [
-        'sudo pacman -S --noconfirm sl',
-        'sudo pacman -S --noconfirm cowsay',
-        'sudo pacman -S --noconfirm fortune-mod',
-        'sudo pacman -S --noconfirm ponysay',
-        'sudo pacman -S --noconfirm asciiquarium',
-        'sudo pacman -S --noconfirm cmatrix',
-        'sudo pacman -S --noconfirm figlet',
-        'sudo pacman -S --noconfirm libaa aafire',
+        'sudo apt install --noconfirm sl',
+        'sudo apt install --noconfirm cowsay',
+        'sudo apt install --noconfirm fortune-mod',
+        'sudo apt install --noconfirm ponysay',
+        'sudo apt install --noconfirm asciiquarium',
+        'sudo apt install --noconfirm cmatrix',
+        'sudo apt install --noconfirm figlet',
+        'sudo apt install --noconfirm libaa aafire',
     ]
 
     for cmd in commands:
