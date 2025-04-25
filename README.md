@@ -22,7 +22,7 @@
     <img alt="bash" src="https://img.shields.io/badge/RustRover-555555?logo=rustrover">
 </p>
 
-In development: Peharge Terminal: The fastest terminal in the world
+In development: Peharge Terminal: The fastest terminal in the world - More [p-terminal.com](https://peharge.github.io/MAVIS-web/p-term.html).
 
 Start of development: 23.04.2025
 

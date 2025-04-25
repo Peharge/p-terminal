@@ -569,7 +569,7 @@ def setup_autocomplete():
     readline.set_completer(lambda text, state: [cmd for cmd in commands if cmd.startswith(text)][state] if state < len(
         [cmd for cmd in commands if cmd.startswith(text)]) else None)
     readline.parse_and_bind("tab: complete")
-
+    
 def search_websites(command):
     """Searches for websites related to the keyword using DuckDuckGo and returns links"""
     url = "https://html.duckduckgo.com/html/"
