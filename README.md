@@ -30,6 +30,7 @@ Start of development: 23.04.2025
 
 - **[23.04.2025]** Developmentstart of P-Term and PP-Ptem!!!
 - **[24.04.2025]** PP-Term EAP release: [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat)!!!
+- **[01.05.2025]** PP-Term release!!!
 - **[01.06.2025]** P-Term release!!!
 
 # Comands
@@ -38,11 +39,10 @@ Start of development: 23.04.2025
 `pp` - Peharge permission command  
 `ps` - Peharge search command  
 `lx` - Linux command  
-`ubuntu` - Ubuntu command
-`debian` - Ubuntu command
-`kali` - Ubuntu command
+`ubuntu` - Ubuntu command  
+`debian` - Ubuntu command  
+`kali` - Ubuntu command  
 `arch` - Ubuntu command
-
 etc.
 
 # Problems
