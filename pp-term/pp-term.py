@@ -483,8 +483,23 @@ def handle_special_commands(user_input):
         "jupyter --version": "pp-commands\\jupyter-version.py", # new
         "grafana --version": "pp-commands\\grafana-version.py",  # new
         "3d-slicer --version": "pp-commands\\3d-slicer-version.py",  # new
-        "doctor": "pp-commands\\doctor.py," # new
-        "fun": "pp-commands\\fun.py"  # new
+        "doctor": "pp-commands\\doctor.py", # new
+        "fun": "pp-commands\\fun.py",  # new
+        "fun aafire": "pp-commands\\fun-aafire.py",  # new
+        "fun cmatrix": "pp-commands\\fun-cmatrix.py",  # new
+        "fun cow": "pp-commands\\fun-cow.py",  # new
+        "fun dragon": "pp-commands\\fun-dragon.py",  # new
+        "fun figlet": "pp-commands\\fun-figlet.py",  # new
+        "fun fortune": "pp-commands\\fun-fortune.py",  # new
+        "fun install": "pp-commands\\fun-install.py",  # new
+        "fun ponysay": "pp-commands\\fun-ponysay.py",  # new
+        "fun telnet": "pp-commands\\fun-telnet.py",  # new
+        "fun train": "pp-commands\\fun-train.py",  # new
+        "fun train a": "pp-commands\\fun-train-a.py",  # new
+        "fun train F": "pp-commands\\fun-train-F.py",  # new
+        "fun train l": "pp-commands\\fun-train-l.py",  # new
+        "fun train S": "pp-commands\\fun-train-S.py",  # new
+        "fun train t": "pp-commands\\fun-train-t.py"  # new
     }
 
     if user_input in commands:
