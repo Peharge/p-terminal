@@ -61,4 +61,369 @@
 #
 # Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 
-# soon
+import sys
+import os
+import platform
+import cpuinfo
+import psutil
+import shutil
+import time
+import socket
+import subprocess
+import logging
+
+from PyQt6 import QtWidgets, QtGui, QtCore
+from PyQt6.QtGui import QIcon
+
+# Configure logging
+logging.basicConfig(level=logging.INFO,
+                    format='[%(asctime)s] %(levelname)s: %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S')
+
+# p-terminal Static Versions
+P_Terminal_VERSION = "1.1"
+PP_Terminal_VERSION = "1.1"
+Peharge_C_COMP_VERSION = "1.1"
+Peharge_CPP_COMP_VERSION = "1.1"
+P_Terminal_License = "MIT"
+
+# Inline QSS Stylesheet
+INLINE_QSS = r"""
+/* P-Terminal Neofetch Stylesheet */
+
+QWidget {
+    background-color: qlineargradient(x1:0, y1:0, x2:1, y2:1,
+                                      stop:0 #1b2631, stop:1 #0f1626);
+    color: #FFFFFF;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;
+}
+
+QLineEdit {
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                      stop:0 #2c3e50, stop:1 #1c2833);
+    border: 1px solid #778899;
+    border-radius: 5px;
+    padding: 5px;
+    color: #FFFFFF;
+}
+
+QLabel#HeaderLabel {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 8px;
+}
+
+QPlainTextEdit {
+    background-color: transparent;
+    font-family: 'Consolas', monospace;
+    color: #FFFFFF;
+    border: none;
+}
+
+QPushButton {
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                      stop:0 #2c3e50, stop:1 #1c2833);
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    color: #FFFFFF;
+}
+
+QPushButton:hover {
+    background-color: #1c2833;
+}
+
+QTabWidget::pane {
+    border: 1px solid #778899;
+    border-radius: 8px;
+}
+
+QTabBar::tab {
+    background: transparent;
+    padding: 8px;
+    margin: 2px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
+QTabBar::tab:selected {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #34495e, stop:1 #1c2833);
+    color: #FFFFFF;
+}
+
+QStatusBar {
+    background-color: #1b2631;
+    padding: 4px;
+    color: #FFFFFF;
+}
+
+QScrollArea {
+    border: none;
+    background-color: transparent;
+}
+
+QScrollBar:vertical {
+    background-color: transparent;
+    width: 10px;
+    border-radius: 5px;
+}
+
+QScrollBar::handle:vertical {
+    background-color: #FFFFFF;
+    min-height: 20px;
+    border-radius: 5px;
+}
+
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical,
+QScrollBar::up-arrow:vertical,
+QScrollBar::down-arrow:vertical,
+QScrollBar::add-page:vertical,
+QScrollBar::sub-page:vertical {
+    background: transparent;
+}
+
+QScrollBar:horizontal {
+    background-color: transparent;
+    height: 10px;
+    border-radius: 5px;
+}
+
+QScrollBar::handle:horizontal {
+    background-color: #FFFFFF;
+    min-width: 20px;
+    border-radius: 5px;
+}
+
+QScrollBar::add-line:horizontal,
+QScrollBar::sub-line:horizontal,
+QScrollBar::left-arrow:horizontal,
+QScrollBar::right-arrow:horizontal,
+QScrollBar::add-page:horizontal,
+QScrollBar::sub-page:horizontal {
+    background: transparent;
+}
+
+QTextEdit {
+    background-color: transparent;
+    border: 1px solid #778899;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    padding: 8px;
+}
+
+QLabel {
+    font-size: 16px;
+    padding: 4px;
+}
+"""
+
+
+def format_bytes(byte_value: int) -> float:
+    """Helper function to convert bytes to gigabytes."""
+    return round(byte_value / (1024 ** 3), 2)
+
+
+def run_subprocess(cmd: list[str]) -> str:
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+        return result.stdout.strip()
+    except subprocess.CalledProcessError as e:
+        logging.warning(f"Command failed {cmd}: {e}")
+    except FileNotFoundError:
+        logging.warning(f"Command not found: {cmd[0]}")
+    return "Not available"
+
+
+_wsl_info_lines = run_subprocess(["wsl", "--version"]).splitlines()
+
+
+def get_powershell_version() -> str:
+    return run_subprocess(["powershell", "-Command", "$PSVersionTable.PSVersion.ToString()"])
+
+
+def get_wsl_version() -> str:
+    return _wsl_info_lines[0] if _wsl_info_lines else "Not available"
+
+
+def get_kernel_version() -> str:
+    return run_subprocess(["wsl", "uname", "-r"])
+
+
+def get_wslg_version() -> str:
+    return _wsl_info_lines[4] if len(_wsl_info_lines) > 4 else "Not available"
+
+
+def get_msrpc_version() -> str:
+    return _wsl_info_lines[6] if len(_wsl_info_lines) > 6 else "Not available"
+
+
+def get_direct3d_version() -> str:
+    return _wsl_info_lines[8] if len(_wsl_info_lines) > 8 else "Not available"
+
+
+def get_dxcore_version() -> str:
+    return _wsl_info_lines[10] if len(_wsl_info_lines) > 10 else "Not available"
+
+
+def get_system_info() -> dict:
+    info = {}
+    try:
+        # P-Terminal-specific static versions
+        info['P-Terminal Version'] = P_Terminal_VERSION
+        info['PP-Terminal Version'] = PP_Terminal_VERSION
+        info['Peharge C Compiler Version'] = Peharge_C_COMP_VERSION
+        info['Peharge C++ Compiler Version'] = Peharge_CPP_COMP_VERSION
+        info['P-Terminal License'] = P_Terminal_License
+
+        info['Operating System'] = f"{platform.system()} {platform.release()} ({platform.version()})"
+        info['Architecture'] = platform.architecture()[0]
+
+        cpu = cpuinfo.get_cpu_info()
+        info['CPU Model'] = cpu.get('brand_raw', 'N/A')
+        info['Cores'] = psutil.cpu_count(logical=False)
+        info['Threads'] = psutil.cpu_count(logical=True)
+        freq = psutil.cpu_freq()
+        info['Max Frequency'] = f"{freq.max:.2f} MHz" if freq else 'N/A'
+
+        vm = psutil.virtual_memory()
+        info['Total RAM'] = f"{format_bytes(vm.total)} GB"
+        info['Used RAM'] = f"{format_bytes(vm.used)} GB"
+        info['Free RAM'] = f"{format_bytes(vm.available)} GB"
+        info['RAM Usage'] = f"{vm.percent}%"
+
+        sw = psutil.swap_memory()
+        info['Total Swap'] = f"{format_bytes(sw.total)} GB"
+        info['Used Swap'] = f"{format_bytes(sw.used)} GB"
+        info['Free Swap'] = f"{format_bytes(sw.free)} GB"
+
+        total, used, free = shutil.disk_usage(os.path.expanduser('~'))
+        info['Total Storage'] = f"{format_bytes(total)} GB"
+        info['Used Storage'] = f"{format_bytes(used)} GB"
+        info['Free Storage'] = f"{format_bytes(free)} GB"
+
+        host = socket.gethostname()
+        info['Hostname'] = host
+        try:
+            info['IP Address'] = socket.gethostbyname(host)
+        except Exception:
+            info['IP Address'] = 'N/A'
+
+        if platform.system() == 'Windows':
+            info['CPU Usage'] = f"{psutil.cpu_percent(interval=1)}%"
+        else:
+            try:
+                la = os.getloadavg()
+                info['Load Average'] = f"1m:{la[0]:.2f}, 5m:{la[1]:.2f}, 15m:{la[2]:.2f}"
+            except Exception:
+                info['Load Average'] = 'Not available'
+
+        secs = time.time() - psutil.boot_time()
+        info['Uptime'] = time.strftime('%H:%M:%S', time.gmtime(secs))
+
+        users = psutil.users()
+        info['Users'] = ', '.join(
+            f"{u.name} (term:{u.terminal or 'N/A'}, start:{time.ctime(u.started)})" for u in users
+        )
+
+        pip_ver = run_subprocess([sys.executable, '-m', 'pip', '--version']).split()[1]
+        info.update({
+            'PIP Version': pip_ver,
+            'PowerShell Version': get_powershell_version(),
+            'WSL Version': get_wsl_version(),
+            'Kernel Version': get_kernel_version(),
+            'WSLg Version': get_wslg_version(),
+            'MSRDC Version': get_msrpc_version(),
+            'Direct3D Version': get_direct3d_version(),
+            'DXCore Version': get_dxcore_version()
+        })
+
+    except Exception as e:
+        logging.error(f"Failed gathering system info: {e}")
+        info['Error'] = str(e)
+    return info
+
+
+class InfoWorker(QtCore.QThread):
+    updated = QtCore.pyqtSignal(dict)
+
+    def run(self):
+        while True:
+            self.updated.emit(get_system_info())
+            time.sleep(5)
+
+
+class NeofetchWindow(QtWidgets.QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("P-Term Neofetch")
+        self.resize(900, 600)
+        self.init_ui()
+
+        # Initial info display
+        self.update_system_info(get_system_info())
+
+        self.worker = InfoWorker()
+        self.worker.updated.connect(self.update_system_info)
+        self.worker.start()
+
+        # Dynamically set the application icon
+        user = os.getenv("USERNAME") or os.getenv("USER")
+        icon_path = f"C:/Users/{user}/p-terminal/pp-term/icons/p-term-logo-5.ico"
+        if os.path.exists(icon_path):
+            self.setWindowIcon(QIcon(icon_path))
+
+    def init_ui(self):
+        splitter = QtWidgets.QSplitter(QtCore.Qt.Orientation.Horizontal)
+        self.setCentralWidget(splitter)
+
+        user = os.getenv('USERNAME') or os.getenv('USER')
+        base = os.path.dirname(__file__)
+        icon_path = os.path.join(base, 'icons', 'p-term-logo-5.ico')
+        if os.path.exists(icon_path):
+            self.setWindowIcon(QIcon(icon_path))
+        else:
+            logging.warning(f"Icon not found: {icon_path}")
+
+        self.image_label = QtWidgets.QLabel(alignment=QtCore.Qt.AlignmentFlag.AlignCenter)
+        img_path = f"C:/Users/{user}/p-terminal/pp-term/icons/p-term-logo-5.png"
+        pix = QtGui.QPixmap(img_path)
+        if not pix.isNull():
+            self.image_label.setPixmap(pix.scaled(400, 600,
+                                                  QtCore.Qt.AspectRatioMode.KeepAspectRatio,
+                                                  QtCore.Qt.TransformationMode.SmoothTransformation))
+        else:
+            self.image_label.setText("No image found. Place '/p-term-logo-5.ico' in icons/.")
+        splitter.addWidget(self.image_label)
+
+        self.info_text = QtWidgets.QTextEdit(readOnly=True)
+        font = QtGui.QFont("Courier New", 10)
+        self.info_text.setFont(font)
+        splitter.addWidget(self.info_text)
+
+    @QtCore.pyqtSlot(dict)
+    def update_system_info(self, info: dict):
+        html = ['<html><body style="font-family:Courier New; font-size:10pt;">',
+                '<h2 style="color:#ffffff;">System Information</h2>',
+                '<table width="100%" cellpadding="4">']
+        for k, v in info.items():
+            html.append(f'<tr><th align="left">{k}</th><td>{v}</td></tr>')
+        html.append('</table></body></html>')
+        self.info_text.setHtml("".join(html))
+
+
+def main():
+    app = QtWidgets.QApplication(sys.argv)
+    # Apply inline stylesheet
+    app.setStyleSheet(INLINE_QSS)
+
+    win = NeofetchWindow()
+    win.show()
+    sys.exit(app.exec())
+
+
+if __name__ == '__main__':
+    main()
