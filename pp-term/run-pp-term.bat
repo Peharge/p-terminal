@@ -724,6 +724,7 @@ set "PYCHARM_PROJECTS=%USERPROFILE%\p-terminal"
 set "PP_DIR=%PYCHARM_PROJECTS%\pp-term"
 set "PP_ENV_FILE=%PP_DIR%\.env"
 set "PP_RUN_FILE=%PP_DIR%\pp-term.bat"
+set "EXPECTED_PYTHON_VERSION=3.12"
 
 :: Ensure PyCharm Projects directory exists
 if not exist "%PYCHARM_PROJECTS%" (
@@ -835,6 +836,7 @@ if not exist "%PP_ENV_FILE%" (
     (
         echo # Environment variables for P-terminal
         echo PYTHONPATH=%PP_DIR%
+        echo PYTHON_VERSION=%EXPECTED_PYTHON_VERSION%
     ) > "%PP_ENV_FILE%"
 
     :: Verify file was created and is not empty
