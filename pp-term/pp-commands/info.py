@@ -61,6 +61,52 @@
 #
 # Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 
+import sys
+import getpass
+import subprocess
+import threading
+import time
+import importlib.util
+import os
+
+required_packages = [
+    "requests", "py-cpuinfo", "psutil", "GPUtil"
+]
+
+
+def activate_virtualenv(venv_path):
+    """Aktiviert eine bestehende virtuelle Umgebung."""
+    activate_script = os.path.join(venv_path, "Scripts", "activate") if os.name == "nt" else os.path.join(venv_path,
+                                                                                                          "bin",
+                                                                                                          "activate")
+
+    if not os.path.exists(activate_script):
+        print(f"Error: Virtual environment not found at {venv_path}.")
+        sys.exit(1)
+
+    os.environ["VIRTUAL_ENV"] = venv_path
+    os.environ["PATH"] = os.path.join(venv_path, "Scripts") + os.pathsep + os.environ["PATH"]
+    print(f"Virtual environment {venv_path} activated.")
+
+
+def ensure_packages_installed(packages):
+    """Installiert fehlende Pakete effizient."""
+    to_install = [pkg for pkg in packages if importlib.util.find_spec(pkg) is None]
+
+    if to_install:
+        print(f"Installing missing packages: {', '.join(to_install)}...")
+        subprocess.run([sys.executable, "-m", "pip", "install"] + to_install, check=True, stdout=subprocess.DEVNULL,
+                       stderr=subprocess.DEVNULL)
+        print("All missing packages installed.")
+    else:
+        print("All required packages are already installed.")
+
+
+# Virtuelle Umgebung aktivieren und Pakete sicherstellen
+venv_path = f"C:\\Users\\{os.getlogin()}\\p-terminal\\pp-term\\.env"
+activate_virtualenv(venv_path)
+ensure_packages_installed(required_packages)
+
 import os
 import subprocess
 import re

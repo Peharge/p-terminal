@@ -107,10 +107,6 @@ venv_path = f"C:\\Users\\{os.getlogin()}\\p-terminal\\pp-term\\.env"
 activate_virtualenv(venv_path)
 ensure_packages_installed(required_packages)
 
-from cgitb import strong
-from dotenv import load_dotenv
-from subprocess import run
-
 import os
 import platform
 import cpuinfo
