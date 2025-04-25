@@ -3511,7 +3511,7 @@ def main():
             # Prompt-Design
             prompt = (
                 f"\n{green}┌──({reset}{blue}{getpass.getuser()}@Peharge{reset}{green})-[{reset}{current_dir}{green}]-{reset}{env_indicator}"
-                f"\n{green}└─{reset}{blue}#{reset}"
+                f"\n{green}└─{reset}{blue}${reset} "
             )
 
             print(prompt, end='')
@@ -3519,6 +3519,7 @@ def main():
 
             if handle_special_commands(user_input):
                 continue
+
             elif user_input.startswith("pp "):
                 user_input = user_input[3:]
                 run_command_with_admin_privileges(user_input)
