@@ -117,6 +117,7 @@ import socket
 from typing import Tuple
 import pip
 import subprocess
+import winreg
 
 # Farbcodes definieren
 red = "\033[91m"
@@ -177,6 +178,13 @@ def get_system_info() -> dict:
     # Netzwerkinformationen
     system_info['hostname'] = socket.gethostname()
     system_info['ip_address'] = socket.gethostbyname(system_info['hostname'])
+
+    # Python und Pip Version
+    system_info['python_version'] = platform.python_version()
+    try:
+        system_info['pip_version'] = subprocess.check_output(['pip', '--version'], text=True).split()[1]
+    except Exception as e:
+        system_info['pip_version'] = f'Error: {e}'
 
     # Netzwerk-Interfaces
     network_interfaces = psutil.net_if_addrs()
@@ -311,12 +319,42 @@ def get_dxcore_version():
     except FileNotFoundError:
         return "WSL ist nicht installiert oder nicht im PATH."
 
+def get_visual_studio_version():
+    try:
+        # Open the registry key for Visual Studio
+        registry_path = r"SOFTWARE\Microsoft\VisualStudio\14.0\Setup\VisualStudio"  # for Visual Studio 2015 (adjust the version accordingly)
+        with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, registry_path) as key:
+            version, _ = winreg.QueryValueEx(key, "Version")
+            return version
+    except FileNotFoundError:
+        return "Visual Studio not found"
+
+def get_ollama_version():
+    # First attempt: Query version
+    try:
+        return subprocess.check_output(['ollama', '--version'], text=True).strip()
+    except subprocess.CalledProcessError:
+        # If no running instance: Start Ollama
+        try:
+            subprocess.check_output(['ollama', 'start'], text=True)
+        except subprocess.CalledProcessError:
+            return "Warning: Could not start Ollama."
+        # Second attempt: Query version again
+        try:
+            return subprocess.check_output(['ollama', '--version'], text=True).strip()
+        except subprocess.CalledProcessError:
+            return "Warning: Could not connect to a running Ollama instance."
+
 def print_system_info(system_info: dict):
     """Funktion, um die Systeminformationen im Terminal auszugeben"""
+
+    title = f"PP-Terminal - {os.getlogin()}"
+    line = "-" * len(title)
+
     print(f"""
                    ██████      
-                ████████████    
-             ██████████████████                                          {blue}PP-Terminal - {os.getlogin()}{reset}
+                ████████████                                             {blue}{title}{reset}
+             ██████████████████                                          {line}
           ████████████████████████                                       {blue}P-Terminal Version{reset}: 1.1
        ██████████████████████████████                                    {blue}PP-Terminal Version{reset}: 1.1
        █████████████████████████████████                                 {blue}Peharge C Compiler Version{reset}: 1.1
@@ -337,21 +375,21 @@ def print_system_info(system_info: dict):
        ████████████████████████╔══╝      ███████████████████████║        {blue}RAM Usage{reset}: {system_info['ram_usage']}%     
         ████████████████████╔══╝     ███████████████████████████║        {blue}RAM Total{reset}: {system_info['ram_total']} GB        
         █████████████████╔══╝     █████████████████████████████╔╝        {blue}PIP Version{reset}: {pip.__version__}      
-        ███████████████╔═╝     █████████████████████████████╔══╝         {blue}PowerShell-Version{reset}: {get_powershell_version()}
-        ███████████████║    █████████████████████████████╔══╝            {blue}WSL-Version{reset}: {get_wsl_version()}
+        ███████████████╔═╝     █████████████████████████████╔══╝         {blue}PowerShell Version{reset}: {get_powershell_version()}
+        ███████████████║    █████████████████████████████╔══╝            {blue}WSL Version{reset}: {get_wsl_version()}
         ███████████████║    ██████████████████████████╔══╝               {blue}Kernelversion{reset}: {get_kernel_version()}
-        ███████████████║    ███████████████████████╔══╝                  {blue}WSLg-Version{reset}: {get_wslg_version()}
-        ███████████████║    ████████████████████╔══╝                     {blue}MSRDC-Version{reset}: {get_msrpc_version()}
-        ███████████████║    █████████████████╔══╝                        {blue}Direct3D-Version{reset}: {get_direct3d_version()}
-        ███████████████║    ██████████████╔══╝                           {blue}DXCore-Version{reset}: {get_dxcore_version()}
-        ███████████████║    ███████████╔══╝        
-        ███████████████║    ████████╔══╝                                     
-        ███████████████║    █████╔══╝                   
-        ███████████████║    ██╔══╝                                      {show_color_palette_1()}
-        ███████████████╚═╗  ╚═╝                                         {show_color_palette_3()}
+        ███████████████║    ███████████████████████╔══╝                  {blue}WSLg Version{reset}: {get_wslg_version()}
+        ███████████████║    ████████████████████╔══╝                     {blue}MSRDC Version{reset}: {get_msrpc_version()}
+        ███████████████║    █████████████████╔══╝                        {blue}Direct3D Version{reset}: {get_direct3d_version()}
+        ███████████████║    ██████████████╔══╝                           {blue}DXCore Version{reset}: {get_dxcore_version()}
+        ███████████████║    ███████████╔══╝                              {blue}Python Version{reset}: {system_info['python_version']}
+        ███████████████║    ████████╔══╝                                 {blue}PowerShell Version{reset}: {subprocess.check_output(['git', '--version'], text=True).strip()}
+        ███████████████║    █████╔══╝                                    {blue}Ollama Version{reset}: {get_ollama_version()}
+        ███████████████║    ██╔══╝                                       {blue}Visual Studio Version{reset}: {get_visual_studio_version()}
+        ███████████████╚═╗  ╚═╝                                          {blue}Rust Version{reset}: {subprocess.check_output(['rustc', '--version'], text=True).strip()}
         █████████████████╚╗                              
-        ██████████████████║                             
-        █████████████╔════╝                                
+        ██████████████████║                                              {show_color_palette_1()}
+        █████████████╔════╝                                              {show_color_palette_3()}
         ██████████╔══╝                               
         ██████╔═══╝                             
         ███╔══╝
