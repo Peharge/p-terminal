@@ -474,9 +474,9 @@ def handle_special_commands(user_input):
         "p neofetch": "pp-commands\\p-neofetch.py",  # new
         "p fastfetch": "pp-commands\\p-neofetch.py",  # new
         "p screenfetch": "pp-commands\\p-neofetch.py",  # new
-        "install 3d-slicer": "mavis-run\\simon\\3d-slicer\\install-3d-slicer.py", # new
-        "run 3d-slicer": "mavis-run\\simon\\3d-slicer\\run-3d-slicer.py",  # new
-        "install simon": "mavis-run\\simon\\install-simon-1.py",  # new
+        "install 3d-slicer": "run\\simon\\3d-slicer\\install-3d-slicer.py", # new
+        "run 3d-slicer": "run\\simon\\3d-slicer\\run-3d-slicer.py",  # new
+        "install simon": "run\\simon\\install-simon-1.py",  # new
         "run simon": "mavis-run-jup\\run-jup.py",  # new
         "jupyter --version": "pp-commands\\jupyter-version.py", # new
         "grafana --version": "pp-commands\\grafana-version.py",  # new
