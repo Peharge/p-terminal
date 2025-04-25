@@ -431,6 +431,8 @@ def handle_special_commands(user_input):
         "p github readme": "pp-commands\\p-github-readme.py",  # new
         "p github releases": "pp-commands\\p-github-releases.py",  # new
         "p github": "pp-commands\\p-github.py",  # new
+        "p p-terminal": "pp-commands\\p-p-terminal.py",  # new
+        "p p-terminal.com": "pp-commands\\p-p-terminal-com.py",  # new
         "p search": "pp-commands\\p-search.py",  # new
         "p google": "pp-commands\\p-google.py",  # new
         "p ollama": "pp-commands\\p-ollama.py",  # new
