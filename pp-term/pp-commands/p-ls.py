@@ -295,7 +295,7 @@ class FileExplorer(QWidget):
         while parent:
             path = os.path.join(parent.text(0), path)
             parent = parent.parent()
-        return os.path.join(f"C:\\Users\\{os.getlogin()}\\p-terminal\\p-term\\", path)
+        return os.path.join(f"C:\\Users\\{os.getlogin()}\\p-terminal\\pp-term\\", path)
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
