@@ -483,7 +483,8 @@ def handle_special_commands(user_input):
         "jupyter --version": "pp-commands\\jupyter-version.py", # new
         "grafana --version": "pp-commands\\grafana-version.py",  # new
         "3d-slicer --version": "pp-commands\\3d-slicer-version.py",  # new
-        "doctor": "pp-commands\\doctor.py" # new
+        "doctor": "pp-commands\\doctor.py," # new
+        "fun": "pp-commands\\fun.py"  # new
     }
 
     if user_input in commands:
