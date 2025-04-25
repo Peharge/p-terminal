@@ -65,30 +65,41 @@ import subprocess
 import sys
 
 def run_alpine_python_command(command):
-    # Sicherstellen, dass der Befehl als String vorliegt
     if isinstance(command, str):
-        command = f"wsl {command}"  # Kommando für WSL einbetten
-
-    # Starten des Prozesses
-    process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        command = f"wsl -d Arch {command}"
 
     try:
-        # Warten auf den Abschluss des Prozesses
+        process = subprocess.Popen(
+            command,
+            stdin=subprocess.DEVNULL,  # no user input expected
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            shell=True,
+            text=True
+        )
         process.wait()
     except KeyboardInterrupt:
-        # Wenn der Benutzer den Prozess mit Ctrl+C unterbricht
         process.terminate()
-        print("\nProcess was interrupted and terminated.")
+        print("\nProcess interrupted by user.")
+        sys.exit(1)
+    except Exception as e:
+        print(f"\nError while executing: {command}\n{e}")
+        sys.exit(1)
 
-    print("Command was executed and the code exits.")
+if __name__ == "__main__":
+    commands = [
+        'sudo pacman -S --noconfirm sl',
+        'sudo pacman -S --noconfirm cowsay',
+        'sudo pacman -S --noconfirm fortune-mod',
+        'sudo pacman -S --noconfirm ponysay',
+        'sudo pacman -S --noconfirm asciiquarium',
+        'sudo pacman -S --noconfirm cmatrix',
+        'sudo pacman -S --noconfirm figlet',
+        'sudo pacman -S --noconfirm libaa aafire',
+    ]
 
+    for cmd in commands:
+        print(f"\nExecuting: {cmd}")
+        run_alpine_python_command(cmd)
 
-# Beispielbefehl
-run_alpine_python_command('sudo pacman -S sl')
-run_alpine_python_command('sudo pacman -S cowsay')
-run_alpine_python_command('sudo pacman -S fortune-mod')
-run_alpine_python_command('sudo pacman -S ponysay')
-run_alpine_python_command('sudo pacman -S asciiquarium')
-run_alpine_python_command('sudo pacman -S cmatrix')
-run_alpine_python_command('sudo pacman -S figlet')
-run_alpine_python_command('sudo pacman -S libaa aafire')
+    print("\nAll commands were executed successfully. Exiting script.")
