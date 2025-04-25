@@ -1316,7 +1316,7 @@ def run_linux_python_command(command):
 
 # --- lx-co command---
 
-def run_linux_co_python_command(command):
+def run_linux_co_command(command):
     if isinstance(command, str):
         command = f"wsl -c {command}"
 
