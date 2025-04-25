@@ -104,6 +104,19 @@ echo Initializing PP-Terminal
 echo Gooo...
 echo.
 
+rem Get Windows version info
+for /f "tokens=3 delims= " %%i in ('reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v ProductName 2^>nul') do (
+    set "ProductName=%%i"
+)
+
+rem Check if it contains 'Windows 11'
+reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v ProductName | findstr /i "Windows 11" >nul
+if %errorlevel%==0 (
+    echo ✅ Windows 11 is in use.
+) else (
+    echo ❌ This is not Windows 11.
+)
+
 REM Get local IP address
 for /f "tokens=2 delims=:" %%i in ('ipconfig ^| findstr /i "IPv4"') do set "LOCAL_IP=%%i"
 echo Lokale IP: %LOCAL_IP%
