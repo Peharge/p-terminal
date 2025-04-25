@@ -88,14 +88,14 @@ def run_alpine_python_command(command):
 
 if __name__ == "__main__":
     commands = [
-        'sudo apt install --noconfirm sl',
-        'sudo apt install --noconfirm cowsay',
-        'sudo apt install --noconfirm fortune-mod',
-        'sudo apt install --noconfirm ponysay',
-        'sudo apt install --noconfirm asciiquarium',
-        'sudo apt install --noconfirm cmatrix',
-        'sudo apt install --noconfirm figlet',
-        'sudo apt install --noconfirm libaa aafire',
+        'sudo apt install -y sl',
+        'sudo apt install -y cowsay',
+        'sudo apt install -y fortune-mod',
+        'sudo apt install -y ponysay',
+        'sudo apt install -y asciiquarium',
+        'sudo apt install -y cmatrix',
+        'sudo apt install -y figlet',
+        'sudo apt install -y libaa aafire',
     ]
 
     for cmd in commands:
