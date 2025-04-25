@@ -1,25 +1,22 @@
     commands = {
-        "env install": "mavis-install\\install-info-mavis-4.py",
-        "install env": "mavis-install\\install-info-mavis-4.py",
+        "mavis env install": "mavis-install\\install-info-mavis-4.py",
+        "install mavis env": "mavis-install\\install-info-mavis-4.py",
         "install mavis3": "mavis-install\\install-info-mavis-4.py", # new
         "install mavis3.3": "mavis-install\\install-info-mavis-4.py", # new
         "install mavis4": "mavis-install\\install-info-mavis-4.py", # new
         "install mavis4.3": "mavis-install\\install-info-mavis-4.py", # new
-        "mavis env install": "mavis-install\\install-info-mavis-4.py",
-        "install mavis env": "mavis-install\\install-info-mavis-4.py",
-        "env update": "mavis-install\\install-info-mavis-4.py",
-        "update env": "mavis-install\\install-info-mavis-4.py",
         "mavis env update": "mavis-install\\install-info-mavis-4.py",
         "update mavis env": "mavis-install\\install-info-mavis-4.py",
-        "update": "mavis-update\\update-repository-windows.py",
-        "mavis update": "mavis-update\\update-repository-windows.py",
-        "update mavis": "mavis-update\\update-repository-windows.py",
+        "mavis update": "mavis-update\\update-mavis-repository-windows.py",
+        "update mavis": "mavis-update\\update-mavis-repository-windows.py",
         "security": "security\\security_check-mavis-4.py",
         "p-terminal security": "security\\security_check-mavis-4.py",
         "securitycheck": "security\\security_check-mavis-4.py",
         "info": "pp-commands\\info.py",
         "mavis info": "pp-commands\\info.py",
         "info mavis": "pp-commands\\info.py",
+        "p-term info": "pp-commands\\info.py",
+        "info p-term": "pp-commands\\info.py",
         "neofetch": "pp-commands\\neofetch.py",
         "fastfetch": "pp-commands\\neofetch.py", # new
         "screenfetch": "pp-commands\\neofetch.py", # new
@@ -227,5 +224,21 @@
         "jupyter --version": "pp-commands\\jupyter-version.py", # new
         "grafana --version": "pp-commands\\grafana-version.py",  # new
         "3d-slicer --version": "pp-commands\\3d-slicer-version.py",  # new
-        "doctor": "pp-commands\\doctor.py" # new
+        "doctor": "pp-commands\\doctor.py", # new
+        "fun": "pp-commands\\fun.py",  # new
+        "fun aafire": "pp-commands\\fun-aafire.py",  # new
+        "fun cmatrix": "pp-commands\\fun-cmatrix.py",  # new
+        "fun cow": "pp-commands\\fun-cow.py",  # new
+        "fun dragon": "pp-commands\\fun-dragon.py",  # new
+        "fun figlet": "pp-commands\\fun-figlet.py",  # new
+        "fun fortune": "pp-commands\\fun-fortune.py",  # new
+        "fun install": "pp-commands\\fun-install.py",  # new
+        "fun ponysay": "pp-commands\\fun-ponysay.py",  # new
+        "fun telnet": "pp-commands\\fun-telnet.py",  # new
+        "fun train": "pp-commands\\fun-train.py",  # new
+        "fun train a": "pp-commands\\fun-train-a.py",  # new
+        "fun train F": "pp-commands\\fun-train-F.py",  # new
+        "fun train l": "pp-commands\\fun-train-l.py",  # new
+        "fun train S": "pp-commands\\fun-train-S.py",  # new
+        "fun train t": "pp-commands\\fun-train-t.py"  # new
     }

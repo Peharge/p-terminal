@@ -256,16 +256,12 @@ def handle_special_commands(user_input):
     python_path = f"C:\\Users\\{os.getlogin()}\\p-terminal\\pp-term\\.env\\Scripts\\python.exe"
 
     commands = {
-        "env install": "mavis-install\\install-info-mavis-4.py",
-        "install env": "mavis-install\\install-info-mavis-4.py",
+        "mavis env install": "mavis-install\\install-info-mavis-4.py",
+        "install mavis env": "mavis-install\\install-info-mavis-4.py",
         "install mavis3": "mavis-install\\install-info-mavis-4.py", # new
         "install mavis3.3": "mavis-install\\install-info-mavis-4.py", # new
         "install mavis4": "mavis-install\\install-info-mavis-4.py", # new
         "install mavis4.3": "mavis-install\\install-info-mavis-4.py", # new
-        "mavis env install": "mavis-install\\install-info-mavis-4.py",
-        "install mavis env": "mavis-install\\install-info-mavis-4.py",
-        "env update": "mavis-install\\install-info-mavis-4.py",
-        "update env": "mavis-install\\install-info-mavis-4.py",
         "mavis env update": "mavis-install\\install-info-mavis-4.py",
         "update mavis env": "mavis-install\\install-info-mavis-4.py",
         "mavis update": "mavis-update\\update-mavis-repository-windows.py",
@@ -276,6 +272,8 @@ def handle_special_commands(user_input):
         "info": "pp-commands\\info.py",
         "mavis info": "pp-commands\\info.py",
         "info mavis": "pp-commands\\info.py",
+        "p-term info": "pp-commands\\info.py",
+        "info p-term": "pp-commands\\info.py",
         "neofetch": "pp-commands\\neofetch.py",
         "fastfetch": "pp-commands\\neofetch.py", # new
         "screenfetch": "pp-commands\\neofetch.py", # new
