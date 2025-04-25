@@ -14,9 +14,9 @@
         "update": "mavis-update\\update-repository-windows.py",
         "mavis update": "mavis-update\\update-repository-windows.py",
         "update mavis": "mavis-update\\update-repository-windows.py",
-        "security": "mavis-security\\security_check-mavis-4.py",
-        "mavis security": "mavis-security\\security_check-mavis-4.py",
-        "securitycheck": "mavis-security\\security_check-mavis-4.py",
+        "security": "security\\security_check-mavis-4.py",
+        "p-terminal security": "security\\security_check-mavis-4.py",
+        "securitycheck": "security\\security_check-mavis-4.py",
 
         "info": "pp-commands\\info.py",
         "mavis info": "pp-commands\\info.py",
@@ -38,7 +38,6 @@
         "run mavis-launcher-4": "pp-commands\\run-launcher-4.py",  # new
 
         "run ollama mavis-4": "install\\install-ollama-mavis-4.py",  # new
-
 
         "install ollama mavis-4": "mavis-install\\install-ollama-mavis-4.py",  # new
         "change models mavis-4": "mavis-install\\install-ollama-mavis-4.py",  # new
