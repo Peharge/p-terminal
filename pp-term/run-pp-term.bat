@@ -72,7 +72,11 @@ echo.
 powershell -Command "& {Write-Host '██╗      █████╗ ██╗   ██╗███╗   ██╗ ██████╗██╗  ██╗███████╗██████╗' -ForegroundColor White; Write-Host '██║     ██╔══██╗██║   ██║████╗  ██║██╔════╝██║  ██║██╔════╝██╔══██╗' -ForegroundColor White; Write-Host '██║     ███████║██║   ██║██╔██╗ ██║██║     ███████║█████╗  ██████╔╝' -ForegroundColor White; Write-Host '██║     ██╔══██║██║   ██║██║╚██╗██║██║     ██╔══██║██╔══╝  ██╔══██╗' -ForegroundColor White; Write-Host '███████╗██║  ██║╚██████╔╝██║ ╚████║╚██████╗██║  ██║███████╗██║  ██║' -ForegroundColor White; Write-Host '╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝' -ForegroundColor White;}"
 echo.
 echo Initiating high-tech installation...
-echo Prepare for the next level!
+echo [*] Prepare for the next level...
+echo.
+echo [Time Stamp]   %date% %time%
+echo [Hostname]     %COMPUTERNAME%
+echo [User]         %USERNAME%
 echo.
 echo MIT License
 echo Copyright (c) 2025
@@ -99,6 +103,20 @@ echo.
 echo Initializing PP-Terminal
 echo Gooo...
 echo.
+
+REM Get local IP address
+for /f "tokens=2 delims=:" %%i in ('ipconfig ^| findstr /i "IPv4"') do set "LOCAL_IP=%%i"
+echo Lokale IP: %LOCAL_IP%
+
+REM Check connection to Google DNS
+ping -n 1 8.8.8.8 >nul
+if %errorlevel%==0 (
+    echo ✅ Internet connection exists.
+) else (
+    echo ❌ No internet connection!
+)
+
+timeout /t 5 >nul
 
 :: Check if Python is already installed
 python --version >nul 2>&1
@@ -811,6 +829,7 @@ cd /d "%PP_DIR%" || (
 )
 
 :: Ensure .env file exists and is correctly configured
+echo Checking for existing .env file at: "%PP_ENV_FILE%"
 if not exist "%PP_ENV_FILE%" (
     echo Creating .env file...
     (
@@ -818,14 +837,23 @@ if not exist "%PP_ENV_FILE%" (
         echo PYTHONPATH=%PP_DIR%
     ) > "%PP_ENV_FILE%"
 
-    if %errorlevel% neq 0 (
-        echo ❌ Error: Could not create .env file!
-        exit /b 1
+    :: Verify file was created and is not empty
+    if exist "%PP_ENV_FILE%" (
+        for %%A in ("%PP_ENV_FILE%") do (
+            if %%~zA gtr 0 (
+                echo ✅ .env file created successfully at "%PP_ENV_FILE%"
+            ) else (
+                echo ❌ Error: .env file was created but is empty!
+                del "%PP_ENV_FILE%" >nul 2>&1
+                exit /b 1
+            )
+        )
     ) else (
-        echo ✅ .env file created successfully!
+        echo ❌ Error: Failed to create .env file!
+        exit /b 1
     )
 ) else (
-    echo ✅ .env file already exists.
+    echo ✅ .env file already exists at "%PP_ENV_FILE%"
 )
 
 :: Define the username variable dynamically
