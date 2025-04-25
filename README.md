@@ -33,6 +33,14 @@ Start of development: 23.04.2025
 - **[01.05.2025]** PP-Term release!!!
 - **[01.06.2025]** P-Term release!!!
 
+# Install
+
+P-Terminal:
+soon
+
+PP-Terminal:
+Download the [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) file and double-click it. You're ready to go! Have fun with pp-terminal!
+
 # Comands
 
 `p` - Peharge command  
