@@ -72,6 +72,9 @@ if not exist "%PYTHON_PATH%" (
     exit /B 1
 )
 
+rem Setze das Arbeitsverzeichnis auf C:\Users\%USERNAME%
+cd /d C:\Users\%USERNAME%
+
 if not exist "%SCRIPT_PATH_1%" (
     echo Error: Script not found: %SCRIPT_PATH_1%
     exit /B 1

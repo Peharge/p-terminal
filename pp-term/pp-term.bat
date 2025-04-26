@@ -114,6 +114,9 @@ if not exist "%PEHARGE_PATH_C%" (
 
 echo ✅ Peharge C Compiler available and the folder "%PEHARGE_PATH_C%" exists.
 
+rem Setze das Arbeitsverzeichnis auf C:\Users\%USERNAME%
+cd /d C:\Users\%USERNAME%
+
 if not exist "%SCRIPT_PATH_1%" (
     echo Error: Script not found: %SCRIPT_PATH_1%
     exit /B 1
