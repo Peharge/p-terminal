@@ -43,14 +43,67 @@ Download the [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-te
 
 # Comands
 
-`p` - Peharge command  
-`pp` - Peharge permission command  
-`ps` - Peharge search command  
-`lx` - Linux command  
-`ubuntu` - Ubuntu command  
-`debian` - Ubuntu command  
-`kali` - Ubuntu command  
-`arch` - Ubuntu command  
+- `p` - Peharge command  
+- `pp` - Peharge permission command  
+- `ps` - Peharge search command  
+- `lx` - Linux command  
+- `ubuntu` - Ubuntu command  
+- `debian` - Ubuntu command  
+- `kali` - Ubuntu command  
+- `arch` - Ubuntu command  
+- `cd` - Change directory  
+- `cls` - Clear screen (Windows)  
+- `clear` - Clear screen (Linux)  
+- `dir` - List directory contents (Windows)  
+- `ls` - List directory contents (Linux)  
+- `mkdir` - Create a new directory  
+- `rmdir` - Remove a directory  
+- `del` - Delete a file (Windows)  
+- `rm` - Remove a file (Linux)  
+- `echo` - Print text  
+- `type` - Display contents of a file (Windows)  
+- `cat` - Display contents of a file (Linux)  
+- `exit` - Exit application  
+- `alpine` - Alpine Linux command  
+- `hack` - Hack command (functionality-specific)  
+- `opensuse` - openSUSE Linux command  
+- `mint` - Linux Mint command  
+- `fedora` - Fedora Linux command  
+- `redhat` - Red Hat Linux command  
+- `sles` - SUSE Linux Enterprise Server command  
+- `pengwin` - Pengwin WSL Linux command  
+- `oracle` - Oracle Linux command  
+- `speedtest` - Internet speed test  
+- `kill` - Kill a process  
+- `download` - Download a file  
+- `cputemp` - Show CPU temperature  
+- `chucknorris` - Display Chuck Norris jokes  
+- `theme` - Change theme  
+- `cleantemp` - Clean temporary files  
+- `selfupdate` - Update the application  
+- `tree` - Display directory tree view  
+- `py` - Execute Python code  
+- `ask` - Ask a question (AI functionality)  
+- `weather` - Show weather information  
+- `whoami` - Show current user  
+- `hostname` - Show machine hostname  
+- `ip` - Show IP address  
+- `os` - Show operating system information  
+- `time` - Show current time  
+- `date` - Show current date  
+- `open` - Open a file or application  
+- `fortune` - Display a random fortune message  
+- `history` - Show command history  
+- `search` - Search files or commands  
+- `zip` - Compress files into a zip archive  
+- `unzip` - Extract files from a zip archive  
+- `sysinfo` - Show system information  
+- `clip set` - Set clipboard content  
+- `clip get` - Get clipboard content  
+- `ping` - Ping a network address  
+- `emptytrash` - Empty the trash  
+- `launch` - Launch an application  
+
 etc.
 
 # Problems
