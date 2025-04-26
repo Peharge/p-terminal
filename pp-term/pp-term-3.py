@@ -616,7 +616,7 @@ def handle_special_commands(user_input):
         try:
             hostname = socket.gethostname()
             ip_address = socket.gethostbyname(hostname)
-            print(f"{bleu}IP Address:{reset} {ip_address}")
+            print(f"{blue}IP Address:{reset} {ip_address}")
         except:
             print(f"{red}Could not retrieve IP address{reset}")
         return True
@@ -636,13 +636,18 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "weather":
-        print("Fetching weather for Berlin... (Demo)")
+        print("Fetching detailed weather for Berlin... (Demo)")
         try:
-            url = "https://wttr.in/Berlin?format=3"
+            # Fetch weather data in a more detailed format
+            url = "https://wttr.in/Berlin?format=%C+%t+%h+%w+%m+%p+%l+%T"
+
             response = requests.get(url)
-            print(response.text)
+            if response.status_code == 200:
+                print(f"Weather Details: {response.text}")
+            else:
+                print(f"Failed to retrieve weather data. Status code: {response.status_code}")
         except Exception as e:
-            print(f"{red}Error fetching weather:{reset} {str(e)}")
+            print(f"Error fetching weather: {str(e)}")
         return True
 
     if user_input.startswith("open "):
