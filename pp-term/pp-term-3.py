@@ -4175,7 +4175,7 @@ def main():
 
             # Prompt-Design
             prompt = (
-                f"\n{green}┌──({reset}{blue}{getpass.getuser()}@Peharge{reset}{green})-[{reset}{current_dir}{green}]-{reset}{env_indicator}"
+                f"\n{green}┌──({reset}{blue}{getpass.getuser()}\033[1m㋐\033[0m{blue}Peharge{reset}{green})-[{reset}{current_dir}{green}]-{reset}{env_indicator}"
                 f"\n{green}└─{reset}{blue}${reset} "
             )
 
