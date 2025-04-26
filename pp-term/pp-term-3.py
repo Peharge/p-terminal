@@ -747,13 +747,31 @@ def handle_special_commands(user_input):
 
     # Speedtest
     if user_input.lower() == "speedtest":
-        loading_bar("Running speedtest", 5)
-        st = speedtest.Speedtest()
-        download = st.download() / 1_000_000
-        upload = st.upload() / 1_000_000
-        print(f"{blue}Download:{reset} {download:.2f} Mbps")
-        print(f"{blue}Upload:{reset} {upload:.2f} Mbps")
-        return True
+        try:
+            # Loading bar while the speedtest is running
+            loading_bar("Running speedtest", 5)
+
+            # Speedtest instance
+            st = speedtest.Speedtest()
+
+            # Download and upload speeds in Mbps
+            download = st.download() / 1_000_000  # Convert from bits to Mbps
+            upload = st.upload() / 1_000_000  # Convert from bits to Mbps
+
+            # Get ping (latency)
+            ping = st.results.ping
+
+            # Print out results in a cool format
+            print(f"{blue}Download:{reset} {download:.2f} Mbps")
+            print(f"{blue}Upload:{reset} {upload:.2f} Mbps")
+            print(f"{blue}Ping:{reset} {ping} ms")
+
+            return True
+
+        except Exception as e:
+            # If something goes wrong, show the error
+            print(f"{red}Whoops, something went wrong with the speedtest:{reset} {e}")
+            return False
 
     # Prozessliste
     if user_input.lower() == "ps":
