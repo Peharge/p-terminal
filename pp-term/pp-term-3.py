@@ -616,7 +616,7 @@ def handle_special_commands(user_input):
         try:
             hostname = socket.gethostname()
             ip_address = socket.gethostbyname(hostname)
-            print(f"{blau}IP Address:{reset} {ip_address}")
+            print(f"{bleu}IP Address:{reset} {ip_address}")
         except:
             print(f"{red}Could not retrieve IP address{reset}")
         return True
