@@ -287,6 +287,8 @@ def handle_special_commands(user_input):
     import webbrowser
     import random
     import requests
+    import shlex
+    import logging
 
     user_input = user_input.strip()
 
@@ -737,13 +739,30 @@ def handle_special_commands(user_input):
 
         # Programm starten
     if user_input.startswith("launch "):
-        program = user_input[len("launch "):]
-        try:
-            subprocess.Popen(program)
-            print(f"{green}Launched {program}!{reset}")
-        except Exception as e:
-            print(f"{red}Error launching program:{reset} {str(e)}")
-        return True
+        command_str = user_input[len("launch "):].strip()
+
+        # 3. Catch empty input
+        if not command_str:
+            logging.error("No program specified after 'launch'.")
+        else:
+            try:
+                if sys.platform == "win32":
+                    # On Windows: use 'start' in shell mode
+                    # "" = window title, shlex.quote protects against special characters
+                    safe_cmd = f'start "" {shlex.quote(command_str)}'
+                    subprocess.Popen(safe_cmd, shell=True)
+                else:
+                    # For Unix/macOS: parse program + arguments directly
+                    args = shlex.split(command_str)
+                    subprocess.Popen(args)
+
+                logging.info("Program launched: %s", command_str)
+            except FileNotFoundError:
+                logging.error("Program not found: %s", command_str)
+            except Exception:
+                logging.exception("Error launching %s", command_str)
+
+            return True
 
     # Speedtest
     if user_input.lower() == "speedtest":
