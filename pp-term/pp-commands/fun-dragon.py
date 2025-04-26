@@ -84,4 +84,4 @@ def run_alpine_python_command(command):
 
 
 # Beispielbefehl
-run_alpine_python_command('cowsay -f dragon "I am a dragon!"')
+run_alpine_python_command('cowsay -f dragon "Hello, I am a dragon!"')
