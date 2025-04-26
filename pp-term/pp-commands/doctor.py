@@ -397,17 +397,21 @@ class Report:
     def summary(self) -> None:
         print(f"\n{C.BOLD}Doctor Script Summary{C.RESET}")
         print(f"{C.BLUE}{'-'*60}{C.RESET}")
+        print(f"{C.BLUE}Passed Checks:{C.RESET}")
+
+        for idx, message in enumerate(self.passes, 1):
+            print(f"  {idx}. {message}")
+
+        print(f"{C.BLUE}{'-'*60}{C.RESET}")
+
         if self.issues:
             print(f"{C.RED}Issues Detected:{C.RESET}")
             for idx, message in enumerate(self.issues, 1):
                 print(f"  {idx}. {message}")
         else:
             print(f"{C.GREEN}No issues detected!{C.RESET}")
-        print(f"{C.BLUE}{'-'*60}{C.RESET}")
-        print(f"{C.BLUE}Passed Checks:{C.RESET}")
-        for idx, message in enumerate(self.passes, 1):
-            print(f"  {idx}. {message}")
-        print(f"{C.BLUE}{'-'*60}{C.RESET}")
+
+        print(f"{C.BLUE}{'-' * 60}{C.RESET}")
 
 # File and Tool Check Functions
 def check_file(path: Path, report: Report) -> bool:
