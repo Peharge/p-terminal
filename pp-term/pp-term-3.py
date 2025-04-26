@@ -285,6 +285,7 @@ def handle_special_commands(user_input):
     import platform
     import webbrowser
     import random
+    import requests
 
     user_input = user_input.strip()
 
