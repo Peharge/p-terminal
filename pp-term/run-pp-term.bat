@@ -100,11 +100,14 @@ echo Time Stamp: %date% %time%
 echo Hostname: %COMPUTERNAME%
 echo User: %USERNAME%
 echo Domain: %USERDOMAIN%
+echo.
 echo IP Address(es):
 ipconfig | findstr /R /C:"IPv4"
-echo Operating System:
-ver
+echo.
+for /f "delims=" %%i in ('ver') do echo Operating System: %%i
+echo.
 echo Current Directory: %cd%
+echo.
 echo Drives:
 wmic logicaldisk get name, description, filesystem, size, freespace
 echo Logged in Users:
