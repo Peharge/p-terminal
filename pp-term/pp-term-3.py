@@ -782,16 +782,32 @@ def handle_special_commands(user_input):
 
     # Datei herunterladen
     if user_input.startswith("download "):
+        from pathlib import Path
+        import requests
+
         try:
-            url = user_input.split(maxsplit=1)[1]
-            filename = url.split("/")[-1]
-            loading_bar("Downloading", 4)
-            r = requests.get(url)
-            with open(filename, "wb") as f:
-                f.write(r.content)
-            print(f"{green}Downloaded {filename}{reset}")
-        except Exception as e:
-            print(f"{red}Download failed:{reset} {str(e)}")
+            # Extract URL from input
+            _, url = user_input.split(maxsplit=1)
+            file_name = Path(url).name
+
+            # Download with progress feedback
+            loading_bar(f"Downloading {file_name}", 4)
+            response = requests.get(url, stream=True, timeout=10)
+            response.raise_for_status()
+
+            # Write content in chunks
+            with open(file_name, "wb") as file:
+                for chunk in response.iter_content(chunk_size=8192):
+                    if chunk:
+                        file.write(chunk)
+
+            print(f"{green}Downloaded {file_name}{reset}")
+        except requests.HTTPError as http_err:
+            print(f"{red}HTTP error during download:{reset} {http_err}")
+        except requests.RequestException as req_err:
+            print(f"{red}Request error during download:{reset} {req_err}")
+        except Exception as err:
+            print(f"{red}Unexpected error:{reset} {err}")
         return True
 
     # CPU Temperatur
