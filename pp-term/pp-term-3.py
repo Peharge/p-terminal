@@ -218,8 +218,6 @@ Thank you so much for using PP-Terminal. We truly appreciate your support ❤️
     # Aufruf der Funktion, um die Farbpalette zu zeigen
     show_color_palette()
 
-    print("")
-
 
 def set_python_path():
     python_path = f"C:\\Users\\{os.getlogin()}\\p-terminal\\pp-term\\.env\\Scripts\\python.exe"
