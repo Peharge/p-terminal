@@ -108,6 +108,6 @@ etc.
 
 # Problems
 
-| **Problem description** | **Cause**                                                                          | **Solution** | **Status** |
-|-------------------------|------------------------------------------------------------------------------------|--------------|------------|
-| p-term.bat              | Die .bat  muss eine .env erstellen um `./install/cpp/install-vs.py` auszuführen!!! | morgen       | X          |
+| **Terminal** | **Problem description** | **Cause**                                                                          | **Solution** | **Status** |
+|--------------|-------------------------|------------------------------------------------------------------------------------|--------------|------------|
+| P-Term       | p-term.bat       | Die .bat  muss eine .env erstellen um `./install/cpp/install-vs.py` auszuführen!!! | morgen       | X          |
