@@ -737,32 +737,34 @@ def handle_special_commands(user_input):
             print(f"{red}Error emptying trash:{reset} {str(e)}")
         return True
 
-        # Programm starten
     if user_input.startswith("launch "):
         command_str = user_input[len("launch "):].strip()
 
         # 3. Catch empty input
         if not command_str:
             logging.error("No program specified after 'launch'.")
-        else:
-            try:
-                if sys.platform == "win32":
-                    # On Windows: use 'start' in shell mode
-                    # "" = window title, shlex.quote protects against special characters
-                    safe_cmd = f'start "" {shlex.quote(command_str)}'
-                    subprocess.Popen(safe_cmd, shell=True)
-                else:
-                    # For Unix/macOS: parse program + arguments directly
-                    args = shlex.split(command_str)
-                    subprocess.Popen(args)
+            return False  # Frühzeitige Rückgabe, falls kein Programmname angegeben wurde
 
-                logging.info("Program launched: %s", command_str)
-            except FileNotFoundError:
-                logging.error("Program not found: %s", command_str)
-            except Exception:
-                logging.exception("Error launching %s", command_str)
+        try:
+            # Platform-spezifische Befehlsausführung
+            if sys.platform == "win32":
+                # Auf Windows: Verwende 'start' im Shell-Modus
+                safe_cmd = f'start "" {shlex.quote(command_str)}'
+                subprocess.Popen(safe_cmd, shell=True)
+            else:
+                # Für Unix/macOS: Parsen des Programms und der Argumente direkt
+                args = shlex.split(command_str)
+                subprocess.Popen(args)
 
-            return True
+            logging.info("Program launched: %s", command_str)
+            return True  # Erfolgreiche Ausführung, Rückgabe True
+
+        except FileNotFoundError:
+            logging.error("Program not found: %s", command_str)
+        except Exception as e:
+            logging.exception("Error launching %s: %s", command_str, str(e))
+
+        return False
 
     # Speedtest
     if user_input.lower() == "speedtest":
