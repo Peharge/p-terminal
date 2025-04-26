@@ -106,7 +106,7 @@ echo Operating System:
 ver
 echo Current Directory: %cd%
 echo Drives:
-wmic logicaldisk get name
+wmic logicaldisk get name, description, filesystem, size, freespace
 echo Logged in Users:
 query user
 echo System Uptime:
