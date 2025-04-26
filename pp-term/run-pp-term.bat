@@ -109,8 +109,7 @@ echo Drives:
 wmic logicaldisk get name, description, filesystem, size, freespace
 echo Logged in Users:
 query user
-echo System Uptime:
-net stats srv | find "Statistics since"
+echo.
 echo Initializing PP-Terminal
 echo Gooo...
 echo.
