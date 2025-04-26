@@ -989,7 +989,7 @@ def is_tool_installed(tool_name):
 # Liste aller verfügbaren Befehle
 COMMANDS = [
     "cd", "cls", "clear", "dir", "ls", "mkdir", "rmdir", "del", "rm", "echo", "type", "cat", "exit",
-    "lx", "p", "pp", "ps", "alpine", "ubuntu", "debian", "kali", "hack", "arch", "opensuse", "mint",
+    "lx", "p", "pp", "ps", "pa", "alpine", "ubuntu", "debian", "kali", "hack", "arch", "opensuse", "mint",
     "fedora", "redhat", "sles", "pengwin", "oracle",
     "speedtest", "kill", "download", "cputemp", "chucknorris", "theme", "cleantemp", "selfupdate",
     "tree", "py", "ask", "weather", "whoami", "hostname", "ip", "os", "time", "date", "open", "fortune",
