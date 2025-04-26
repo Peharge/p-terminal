@@ -639,7 +639,7 @@ if not defined found_distro (
 )
 
 :DistroFound
-echo ✅ WSL is already set up with the distribution: "!found_distro!"
+echo ✅ WSL is already set up with the distribution: "!found_distro!".
 goto Continue
 
 :AskInstall
