@@ -616,7 +616,7 @@ def handle_special_commands(user_input):
         try:
             hostname = socket.gethostname()
             ip_address = socket.gethostbyname(hostname)
-            print(f"{cyan}IP Address:{reset} {ip_address}")
+            print(f"{blau}IP Address:{reset} {ip_address}")
         except:
             print(f"{red}Could not retrieve IP address{reset}")
         return True
@@ -708,8 +708,8 @@ def handle_special_commands(user_input):
 
         # RAM und CPU Status
     if user_input.lower() == "sysinfo":
-        print(f"{cyan}CPU Usage:{reset} {psutil.cpu_percent()}%")
-        print(f"{cyan}RAM Usage:{reset} {psutil.virtual_memory().percent}%")
+        print(f"{blue}CPU Usage:{reset} {psutil.cpu_percent()}%")
+        print(f"{blue}RAM Usage:{reset} {psutil.virtual_memory().percent}%")
         return True
 
         # Zwischenablage setzen
@@ -755,8 +755,8 @@ def handle_special_commands(user_input):
         st = speedtest.Speedtest()
         download = st.download() / 1_000_000
         upload = st.upload() / 1_000_000
-        print(f"{Fore.CYAN}Download:{Style.RESET_ALL} {download:.2f} Mbps")
-        print(f"{Fore.CYAN}Upload:{Style.RESET_ALL} {upload:.2f} Mbps")
+        print(f"{blue}Download:{reset} {download:.2f} Mbps")
+        print(f"{blue}Upload:{reset} {upload:.2f} Mbps")
         return True
 
     # Prozessliste
@@ -770,9 +770,9 @@ def handle_special_commands(user_input):
             pid = int(user_input.split(maxsplit=1)[1])
             p = psutil.Process(pid)
             p.terminate()
-            print(f"{Fore.GREEN}Killed process {pid}{Style.RESET_ALL}")
+            print(f"{green}Killed process {pid}{reset}")
         except Exception as e:
-            print(f"{Fore.RED}Error killing process:{Style.RESET_ALL} {str(e)}")
+            print(f"{red}Error killing process:{reset} {str(e)}")
         return True
 
     # Datei herunterladen
@@ -784,23 +784,23 @@ def handle_special_commands(user_input):
             r = requests.get(url)
             with open(filename, "wb") as f:
                 f.write(r.content)
-            print(f"{Fore.GREEN}Downloaded {filename}{Style.RESET_ALL}")
+            print(f"{green}Downloaded {filename}{reset}")
         except Exception as e:
-            print(f"{Fore.RED}Download failed:{Style.RESET_ALL} {str(e)}")
+            print(f"{red}Download failed:{reset} {str(e)}")
         return True
 
     # CPU Temperatur
     if user_input.lower() == "cputemp":
-        print(f"{Fore.YELLOW}Feature not fully supported on Windows without third party libs!{Style.RESET_ALL}")
+        print(f"{yellow}Feature not fully supported on Windows without third party libs!{reset}")
         return True
 
     # Chuck Norris Joke
     if user_input.lower() == "chucknorris":
         try:
             joke = requests.get("https://api.chucknorris.io/jokes/random").json()['value']
-            print(f"{Fore.MAGENTA}Chuck Norris says:{Style.RESET_ALL} {joke}")
+            print(f"{green}Chuck Norris says:{reset} {joke}")
         except:
-            print(f"{Fore.RED}Couldn't fetch Chuck Norris joke!{Style.RESET_ALL}")
+            print(f"{red}Couldn't fetch Chuck Norris joke!{reset}")
         return True
 
     # Theme Wechsel
@@ -808,23 +808,23 @@ def handle_special_commands(user_input):
         theme_choice = user_input.split()[1]
         if theme_choice in ["dark", "light"]:
             current_theme = theme_choice
-            print(f"{Fore.GREEN}Theme switched to {current_theme}!{Style.RESET_ALL}")
+            print(f"{green}Theme switched to {current_theme}!{reset}")
         else:
-            print(f"{Fore.RED}Unknown theme!{Style.RESET_ALL}")
+            print(f"{red}Unknown theme!{reset}")
         return True
 
     # Temp Dateien löschen
     if user_input.lower() == "cleantemp":
         temp = os.getenv('TEMP')
         shutil.rmtree(temp, ignore_errors=True)
-        print(f"{Fore.GREEN}Temporary files cleaned!{Style.RESET_ALL}")
+        print(f"{green}Temporary files cleaned!{reset}")
         return True
 
     # Selbst Update (Demo)
     if user_input.lower() == "selfupdate":
-        print(f"{Fore.CYAN}Checking for updates...{Style.RESET_ALL}")
+        print(f"{blue}Checking for updates...{reset}")
         loading_bar("Updating", 4)
-        print(f"{Fore.GREEN}PP-Terminal updated! (demo mode){Style.RESET_ALL}")
+        print(f"{green}PP-Terminal updated! (demo mode){reset}")
         return True
 
     # Directory Baumansicht
@@ -840,7 +840,7 @@ def handle_special_commands(user_input):
 
     # Python REPL starten
     if user_input.lower() == "py":
-        print(f"{Fore.CYAN}Starting Python REPL. Type 'exit()' to quit.{Style.RESET_ALL}")
+        print(f"{blue}Starting Python REPL. Type 'exit()' to quit.{reset}")
         import code
         code.interact(local=dict(globals(), **locals()))
         return True
