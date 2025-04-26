@@ -46,6 +46,7 @@ Download the [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-te
 - `p` - Peharge command  
 - `pp` - Peharge permission command  
 - `ps` - Peharge search command  
+- `pa` - Peharge AI command: Ask a question (AI functionality) -> deepcoder:14b
 - `lx` - Linux command  
 - `ubuntu` - Ubuntu command  
 - `debian` - Ubuntu command  
@@ -82,8 +83,7 @@ Download the [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-te
 - `cleantemp` - Clean temporary files  
 - `selfupdate` - Update the application  
 - `tree` - Display directory tree view  
-- `py` - Execute Python code  
-- `ask` - Ask a question (AI functionality)  
+- `py` - Execute Python code
 - `weather` - Show weather information  
 - `whoami` - Show current user  
 - `hostname` - Show machine hostname  
