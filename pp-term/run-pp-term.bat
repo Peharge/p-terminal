@@ -181,7 +181,7 @@ timeout /t 5 >nul
 python --version >nul 2>&1
 if %errorlevel% neq 0 (
     echo Python 3.12 is not installed.
-    set /p install_python="Would you like to install Python 3.12? [y/n]:"
+    set /p install_python="Would you like to install Python 3.12? [y/n]: "
 
     if /i "%install_python%"=="y" (
         echo Downloading Python 3.12 installer...
@@ -251,7 +251,7 @@ if %errorlevel% neq 0 (
 git --version >nul 2>&1
 if %errorlevel% neq 0 (
     echo Git is not installed.
-    set /p install_git="Would you like to install Git? [y/n]:"
+    set /p install_git="Would you like to install Git? [y/n]: "
 
     if /i "%install_git%"=="y" (
         echo Downloading Git installer...
@@ -321,7 +321,7 @@ if %errorlevel% neq 0 (
 ollama --version >nul 2>&1
 if %errorlevel% neq 0 (
     echo Ollama is not installed.
-    set /p install_ollama="Would you like to install Ollama? [y/n]:"
+    set /p install_ollama="Would you like to install Ollama? [y/n]: "
 
     if /i "%install_ollama%"=="y" (
         echo Downloading Ollama installer...
@@ -391,7 +391,7 @@ if %errorlevel% neq 0 (
 ffmpeg -version >nul 2>&1
 if %errorlevel% neq 0 (
     echo FFmpeg is not installed.
-    set /p install_ffmpeg="Would you like to install FFmpeg? [y/n]:"
+    set /p install_ffmpeg="Would you like to install FFmpeg? [y/n]: "
 
     if /i "%install_ffmpeg%"=="y" (
         echo Downloading FFmpeg installer...
@@ -464,7 +464,7 @@ set SCRIPT_install_rustup=C:\Users\%USERNAME%\p-terminal\pp-term\run\rust\instal
 rustup --version >nul 2>&1
 if %errorlevel% neq 0 (
     echo Rustup is not installed.
-    set /p install_rustup="Would you like to install Rustup? [y/n]:"
+    set /p install_rustup="Would you like to install Rustup? [y/n]: "
 
     if /i "%install_rustup%"=="y" (
         echo Downloading Rustup installer...
@@ -532,7 +532,7 @@ if %errorlevel% neq 0 (
 powershell -Command "$PSVersionTable.PSVersion" >nul 2>&1
 if %errorlevel% neq 0 (
     echo PowerShell 7 is not installed.
-    set /p install_powershell="Would you like to install PowerShell 7? [y/n]:"
+    set /p install_powershell="Would you like to install PowerShell 7? [y/n]: "
 
     if /i "%install_powershell%"=="y" (
         echo Downloading PowerShell 7 installer...
