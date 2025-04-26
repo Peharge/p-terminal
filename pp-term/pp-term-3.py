@@ -172,8 +172,9 @@ orange = "\033[38;5;214m"
 reset = "\033[0m"
 bold = "\033[1m"
 
-def loading_bar(text="Processing", duration=3):
-    print(f"{Fore.CYAN}{text} ", end="")
+def loading_bar(text: str = "Processing", duration: int = 3, color: str = "") -> None:
+
+    print(f"{color}{text} ", end="", flush=True)
     for _ in range(duration):
         print(".", end="", flush=True)
         time.sleep(0.5)
@@ -637,18 +638,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "weather":
-        print("Fetching detailed weather for Berlin... (Demo)")
-        try:
-            # Fetch weather data in a more detailed format
-            url = "https://wttr.in/Berlin?format=%C+%t+%h+%w+%m+%p+%l+%T"
-
-            response = requests.get(url)
-            if response.status_code == 200:
-                print(f"Weather Details: {response.text}")
-            else:
-                print(f"Failed to retrieve weather data. Status code: {response.status_code}")
-        except Exception as e:
-            print(f"Error fetching weather: {str(e)}")
+        get_weather()
         return True
 
     if user_input.startswith("open "):
@@ -888,6 +878,59 @@ def handle_special_commands(user_input):
         return True
 
     return False
+
+
+def get_weather():
+    print("🌦Fetching detailed weather for Berlin... (Demo)\n")
+    time.sleep(1)  # kleiner Effekt für Coolness
+
+    weather_icons = {
+        "Sunny": "☀️",
+        "Clear": "🌕",
+        "Partly cloudy": "⛅",
+        "Cloudy": "☁️",
+        "Overcast": "☁️",
+        "Mist": "🌫️",
+        "Patchy rain": "🌦️",
+        "Light rain": "🌧️",
+        "Heavy rain": "🌧️🌧️",
+        "Thunderstorm": "⛈️",
+        "Snow": "❄️",
+        "Fog": "🌁",
+    }
+
+    try:
+        url = "https://wttr.in/Berlin?format=%C+%t+%h+%w+%m+%p+%l+%T"
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            weather_data = response.text.split()
+            condition = weather_data[0]
+            temperature = weather_data[1]
+            humidity = weather_data[2]
+            wind = weather_data[3]
+            moon_phase = weather_data[4]
+            precipitation = weather_data[5]
+            location = weather_data[6]
+            observation_time = weather_data[7]
+
+            # Passendes Icon suchen
+            icon = weather_icons.get(condition, "🌈")
+
+            # Coole Ausgabe
+            print(f"Location: {location}")
+            print(f"Time: {observation_time}")
+            print(f"{icon} Condition: {condition}")
+            print(f"Temperature: {temperature}")
+            print(f"Humidity: {humidity}")
+            print(f"Wind: {wind}")
+            print(f"Moon Phase: {moon_phase}")
+            print(f"Precipitation: {precipitation}\n")
+        else:
+            print(f"Failed to retrieve weather data. Status code: {response.status_code}")
+    except Exception as e:
+        print(f"Error fetching weather: {str(e)}")
+
 
 def type_out_text(text, delay=0.05):
     """Tippt den Text langsam aus."""
