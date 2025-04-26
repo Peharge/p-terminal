@@ -190,7 +190,7 @@ def print_banner():
 {blue}██║     ██║     {reset}{white}      ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗{reset}
 {blue}╚═╝     ╚═╝     {reset}{white}      ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝{reset}
 """)
-    print(f"""A warm welcome, {blue}{user_name}{reset}, to Peharge Python Terminal
+    print(f"""A warm welcome, {blue}{user_name}{reset}, to Peharge Python Terminal!
 Developed by Peharge and JK (Peharge Projects 2025)
 Thank you so much for using PP-Terminal. We truly appreciate your support ❤️""")
 
