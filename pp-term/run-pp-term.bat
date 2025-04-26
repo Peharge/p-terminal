@@ -115,14 +115,14 @@ echo Initializing PP-Terminal
 echo Gooo...
 echo.
 
-rem -- Get Windows Build number --
+:: Get Windows Build number
 for /f "tokens=3" %%a in ('reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v CurrentBuildNumber 2^>nul') do (
     set "BuildNumber=%%a"
 )
 
 echo Detected Windows Build Number: !BuildNumber!
 
-rem -- Check if BuildNumber is >= 22000 (Windows 11 starts with build 22000) --
+:: Check if BuildNumber is >= 22000 (Windows 11 starts with build 22000)
 if not defined BuildNumber (
     echo ❌ Failed to detect Windows Build Number.
     goto :end
@@ -136,7 +136,7 @@ if !CheckBuild! GEQ 22000 (
     echo ❌ This is not Windows 11.
 )
 
-rem -- Check if Windows Defender is active --
+:: Check if Windows Defender is active
 sc query windefend | findstr /i "RUNNING" >nul
 if !errorlevel! equ 0 (
     echo ✅ Windows Defender is active.
@@ -144,24 +144,26 @@ if !errorlevel! equ 0 (
     echo ❌ Windows Defender is NOT active.
 )
 
-rem -- Check if running inside a Virtual Machine --
+:: Check if running inside a Virtual Machine
 systeminfo | findstr /i "Virtual" "VMware" "Hyper-V" "VirtualBox" >nul
 if !errorlevel! equ 0 (
     echo ❌ Virtual Machine or Hypervisor detected!
+    echo The terminal will be closed for security reasons.
+    exit
 ) else (
     echo ✅ No Virtual Machine detected.
 )
 
-REM Get local IP address
+:: Get local IP address
 for /f "tokens=2 delims=:" %%i in ('ipconfig ^| findstr /i "IPv4"') do set "LOCAL_IP=%%i"
 echo Lokale IP: %LOCAL_IP%
 
-REM Check basic internet connection via ping to Google DNS
+:: Check basic internet connection via ping to Google DNS
 ping -n 1 8.8.8.8 >nul
 if %errorlevel%==0 (
     echo ✅ Internet connection exists.
 
-    REM Check if a secure website is reachable (needs curl installed)
+    :: Check if a secure website is reachable (needs curl installed)
     curl --silent --head https://www.google.com | findstr /i "HTTP/1.1 200" >nul
     if %errorlevel%==0 (
         echo ✅ Secure Internet access verified.
