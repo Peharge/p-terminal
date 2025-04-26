@@ -72,7 +72,7 @@ import os
 required_packages = [
     "requests", "ollama", "transformers", "numpy", "pandas", "python-dotenv", "beautifulsoup4",
     "PyQt6", "PyQt6-sip", "PyQt6-Charts", "PyQt6-WebEngine", "PyQt6-Charts", "keyboard", "pyreadline3",
-    "requests", "psutil", "speedtest-cli", "colorama", "pyperclip"
+    "requests", "psutil", "speedtest-cli", "colorama", "pyperclip", "termcolor"
 ]
 
 
@@ -143,6 +143,7 @@ import colorama
 from colorama import Fore, Style, Back
 import time
 import ollama
+from termcolor import colored
 
 colorama.init()
 
@@ -4158,7 +4159,6 @@ def run_winget_command(command):
     except KeyboardInterrupt:
         process.terminate()
 
-
 def main():
     print_banner()
     set_python_path()
@@ -4175,7 +4175,7 @@ def main():
 
             # Prompt-Design
             prompt = (
-                f"\n{green}┌──({reset}{blue}{getpass.getuser()}\033[1m㋐\033[0m{blue}Peharge{reset}{green})-[{reset}{current_dir}{green}]-{reset}{env_indicator}"
+                f"\n{green}┌──({reset}{blue}{getpass.getuser()}" + colored("㋐", attrs=["bold"]) + f"{blue}Peharge{reset}{green})-[{reset}{current_dir}{green}]-{reset}{env_indicator}"
                 f"\n{green}└─{reset}{blue}${reset} "
             )
 
