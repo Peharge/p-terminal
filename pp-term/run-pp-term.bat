@@ -74,10 +74,6 @@ echo.
 echo Initiating high-tech installation...
 echo [*] Prepare for the next level...
 echo.
-echo [Time Stamp]   %date% %time%
-echo [Hostname]     %COMPUTERNAME%
-echo [User]         %USERNAME%
-echo.
 echo MIT License
 echo Copyright (c) 2025
 echo Peharge
@@ -100,6 +96,21 @@ echo LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FRO
 echo OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 echo SOFTWARE.
 echo.
+echo Time Stamp: %date% %time%
+echo Hostname: %COMPUTERNAME%
+echo User: %USERNAME%
+echo Domain: %USERDOMAIN%
+echo IP Address(es):
+ipconfig | findstr /R /C:"IPv4"
+echo Operating System:
+ver
+echo Current Directory: %cd%
+echo Drives:
+wmic logicaldisk get name
+echo Logged in Users:
+query user
+echo System Uptime:
+net stats srv | find "Statistics since"
 echo Initializing PP-Terminal
 echo Gooo...
 echo.
