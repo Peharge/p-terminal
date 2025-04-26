@@ -115,27 +115,60 @@ echo Initializing PP-Terminal
 echo Gooo...
 echo.
 
-rem Get Windows version info
-for /f "tokens=3 delims= " %%i in ('reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v ProductName 2^>nul') do (
-    set "ProductName=%%i"
+rem -- Get Windows Build number --
+for /f "tokens=3" %%a in ('reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v CurrentBuildNumber 2^>nul') do (
+    set "BuildNumber=%%a"
 )
 
-rem Check if it contains 'Windows 11'
-reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v ProductName | findstr /i "Windows 11" >nul
-if %errorlevel%==0 (
+echo Detected Windows Build Number: !BuildNumber!
+
+rem -- Check if BuildNumber is >= 22000 (Windows 11 starts with build 22000) --
+if not defined BuildNumber (
+    echo ❌ Failed to detect Windows Build Number.
+    goto :end
+)
+
+set /a CheckBuild=!BuildNumber!
+
+if !CheckBuild! GEQ 22000 (
     echo ✅ Windows 11 is in use.
 ) else (
     echo ❌ This is not Windows 11.
+)
+
+rem -- Check if Windows Defender is active --
+sc query windefend | findstr /i "RUNNING" >nul
+if !errorlevel! equ 0 (
+    echo ✅ Windows Defender is active.
+) else (
+    echo ❌ Windows Defender is NOT active.
+)
+
+rem -- Check if running inside a Virtual Machine --
+systeminfo | findstr /i "Virtual" "VMware" "Hyper-V" "VirtualBox" >nul
+if !errorlevel! equ 0 (
+    echo ❌ Virtual Machine or Hypervisor detected!
+) else (
+    echo ✅ No Virtual Machine detected.
 )
 
 REM Get local IP address
 for /f "tokens=2 delims=:" %%i in ('ipconfig ^| findstr /i "IPv4"') do set "LOCAL_IP=%%i"
 echo Lokale IP: %LOCAL_IP%
 
-REM Check connection to Google DNS
+REM Check basic internet connection via ping to Google DNS
 ping -n 1 8.8.8.8 >nul
 if %errorlevel%==0 (
     echo ✅ Internet connection exists.
+
+    REM Check if a secure website is reachable (needs curl installed)
+    curl --silent --head https://www.google.com | findstr /i "HTTP/1.1 200" >nul
+    if %errorlevel%==0 (
+        echo ✅ Secure Internet access verified.
+    ) else (
+        echo ❌ Secure website not reachable! Possible issues with HTTPS or DNS.
+    )
+
 ) else (
     echo ❌ No internet connection!
 )
