@@ -70,7 +70,7 @@ set SCRIPT_install_vs_c=C:\Users\%USERNAME%\p-terminal\pp-term\run\c\install-vs.
 set "VCVARS_PATH=C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat"
 set "PEHARGE_PATH_CPP=C:\Users\%USERNAME%\p-terminal\pp-term\peharge-cpp-compier"
 set "PEHARGE_PATH_C=C:\Users\%USERNAME%\p-terminal\pp-term\peharge-c-compiler"
-set SCRIPT_PATH_1=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term.py
+set SCRIPT_PATH_1=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-3.py
 
 if not exist "%PYTHON_PATH%" (
     echo Error: Python interpreter not found: %PYTHON_PATH%

@@ -71,7 +71,8 @@ import os
 
 required_packages = [
     "requests", "ollama", "transformers", "numpy", "pandas", "python-dotenv", "beautifulsoup4",
-    "PyQt6", "PyQt6-sip", "PyQt6-Charts", "PyQt6-WebEngine", "PyQt6-Charts", "keyboard", "pyreadline3"
+    "PyQt6", "PyQt6-sip", "PyQt6-Charts", "PyQt6-WebEngine", "PyQt6-Charts", "keyboard", "pyreadline3",
+    "requests", "psutil", "speedtest-cli", "colorama", "pyperclip"
 ]
 
 
@@ -123,6 +124,29 @@ import logging
 import shutil
 import requests
 from bs4 import BeautifulSoup
+import os
+import sys
+import datetime
+import socket
+import platform
+import webbrowser
+import random
+import shutil
+import zipfile
+import requests
+import psutil
+import pyperclip
+import ctypes
+import subprocess
+import speedtest
+import colorama
+from colorama import Fore, Style, Back
+import time
+
+colorama.init()
+
+# Globales Theme
+current_theme = "dark"
 
 logging.basicConfig(
     level=logging.INFO,
@@ -147,6 +171,12 @@ orange = "\033[38;5;214m"
 reset = "\033[0m"
 bold = "\033[1m"
 
+def loading_bar(text="Processing", duration=3):
+    print(f"{Fore.CYAN}{text} ", end="")
+    for _ in range(duration):
+        print(".", end="", flush=True)
+        time.sleep(0.5)
+    print(Style.RESET_ALL)
 
 def print_banner():
     print(f"""
@@ -249,21 +279,26 @@ def change_directory(path):
 
 
 def handle_special_commands(user_input):
+    import datetime
+    import socket
+    import platform
+    import webbrowser
+    import random
+
     user_input = user_input.strip()
 
-    # Lade die .env-Datei
+    # Lade Umgebungsvariablen
     load_dotenv(dotenv_path=f"C:\\Users\\{os.getlogin()}\\p-terminal\\pp-term\\.env")
-
-    # Der Pfad zum Python-Interpreter in der .env
     python_path = f"C:\\Users\\{os.getlogin()}\\p-terminal\\pp-term\\.env\\Scripts\\python.exe"
 
+    # Spezielle Scripts
     commands = {
         "mavis env install": "mavis-install\\install-info-mavis-4.py",
         "install mavis env": "mavis-install\\install-info-mavis-4.py",
-        "install mavis3": "mavis-install\\install-info-mavis-4.py",  # new
-        "install mavis3.3": "mavis-install\\install-info-mavis-4.py",  # new
-        "install mavis4": "mavis-install\\install-info-mavis-4.py",  # new
-        "install mavis4.3": "mavis-install\\install-info-mavis-4.py",  # new
+        "install mavis3": "mavis-install\\install-info-mavis-4.py", # new
+        "install mavis3.3": "mavis-install\\install-info-mavis-4.py", # new
+        "install mavis4": "mavis-install\\install-info-mavis-4.py", # new
+        "install mavis4.3": "mavis-install\\install-info-mavis-4.py", # new
         "mavis env update": "mavis-install\\install-info-mavis-4.py",
         "update mavis env": "mavis-install\\install-info-mavis-4.py",
         "mavis update": "mavis-update\\update-mavis-repository-windows.py",
@@ -277,13 +312,13 @@ def handle_special_commands(user_input):
         "p-term info": "pp-commands\\info.py",
         "info p-term": "pp-commands\\info.py",
         "neofetch": "pp-commands\\neofetch.py",
-        "fastfetch": "pp-commands\\neofetch.py",  # new
-        "screenfetch": "pp-commands\\neofetch.py",  # new
+        "fastfetch": "pp-commands\\neofetch.py", # new
+        "screenfetch": "pp-commands\\neofetch.py", # new
         "jupyter": "mavis-run-jup\\run-jup.py",
         "run jupyter": "mavis-run-jup\\run-jup.py",
-        "run ju": "mavis-run-jup\\run-jup.py",  # new
-        "run mavis-4": "pp-commands\\run-mavis-4.py",  # new
-        "run mavis-4-3": "pp-commands\\run-mavis-4-3.py",  # new
+        "run ju": "mavis-run-jup\\run-jup.py", # new
+        "run mavis-4": "pp-commands\\run-mavis-4.py", # new
+        "run mavis-4-3": "pp-commands\\run-mavis-4-3.py", # new
         "run mavis-4-fast": "mavis-4-main.py",  # new
         "run mavis-4-3-fast": "mavis-4-3-main.py",  # new
         "run mavis-launcher-4": "pp-commands\\run-launcher-4.py",  # new
@@ -312,11 +347,11 @@ def handle_special_commands(user_input):
         "run llama3:8b": "pp-commands\\llama-3-8b.py",
         "run llama3:70b": "pp-commands\\llama-3-70b.py",
         "run mistral": "pp-commands\\mistral.py",
-        "run mistral-large": "pp-commands\\mistral-large.py",  # new
-        "run mistral-nemo": "pp-commands\\mistral-nemo.py",  # new
-        "run mistral-openorca": "pp-commands\\mistral-openorca.py",  # new
-        "run mistral-small:22b": "pp-commands\\mistral-small-22b.py",  # new
-        "run mistral-small:24b": "pp-commands\\mistral-small-24b.py",  # new
+        "run mistral-large": "pp-commands\\mistral-large.py", #new
+        "run mistral-nemo": "pp-commands\\mistral-nemo.py", #new
+        "run mistral-openorca": "pp-commands\\mistral-openorca.py", #new
+        "run mistral-small:22b": "pp-commands\\mistral-small-22b.py", #new
+        "run mistral-small:24b": "pp-commands\\mistral-small-24b.py", #new
         "run phi4": "pp-commands\\phi-4.py",
         "run qwen2.5:0.5b": "pp-commands\\qwen-2-5-0.5b.py",
         "run qwen2.5:1.5b": "pp-commands\\qwen-2-5-1.5b.py",
@@ -331,16 +366,16 @@ def handle_special_commands(user_input):
         "run qwen2.5-coder:7b": "pp-commands\\qwen-2-5-coder-0.5b.py",
         "run qwen2.5-coder:14b": "pp-commands\\qwen-2-5-coder-0.5b.py",
         "run qwen2.5-coder:32b": "pp-commands\\qwen-2-5-coder-0.5b.py",
-        "run gemma3:1b": "pp-commands\\gemma-3-1b.py",  # new
-        "run gemma3:4b": "pp-commands\\gemma-3-4b.py",  # new
-        "run gemma3:12b": "pp-commands\\gemma-3-12b.py",  # new
-        "run gemma3:27b": "pp-commands\\gemma-3-27b.py",  # new
-        "run qwq": "pp-commands\\qwq.py",  # new
-        "run command-a": "pp-commands\\command-a.py",  # new
-        "run phi4-mini": "pp-commands\\phi-4-mini.py",  # new
-        "run granite3.2:8b": "pp-commands\\granite-3-2-8b.py",  # new
-        "run granite3.2:2b": "pp-commands\\granite-3-2-2b.py",  # new
-        "run granite3.2-vision:2b": "pp-commands\\granite-3-2-2b-vision.py",  # new
+        "run gemma3:1b": "pp-commands\\gemma-3-1b.py", # new
+        "run gemma3:4b": "pp-commands\\gemma-3-4b.py", # new
+        "run gemma3:12b": "pp-commands\\gemma-3-12b.py", # new
+        "run gemma3:27b": "pp-commands\\gemma-3-27b.py", # new
+        "run qwq": "pp-commands\\qwq.py", # new
+        "run command-a": "pp-commands\\command-a.py", #new
+        "run phi4-mini": "pp-commands\\phi-4-mini.py", #new
+        "run granite3.2:8b": "pp-commands\\granite-3-2-8b.py", # new
+        "run granite3.2:2b": "pp-commands\\granite-3-2-2b.py", # new
+        "run granite3.2-vision:2b": "pp-commands\\granite-3-2-2b-vision.py", # new
         "run qwen-2-5-omni:7b": "pp-commands\\qwen-2-5-omni-7b.py",  # new
         "run qvq:72b": "pp-commands\\qvq-72b.py",  # new
         "run qwen-2-5-vl:32b": "pp-commands\\qwen-2-5-vl-32b.py",  # new
@@ -348,7 +383,7 @@ def handle_special_commands(user_input):
         "run llama-4-maverick:17b": "pp-commands\\llama-4-maverick-17b.py",  # new
         "run llama-4-scout:17b": "pp-commands\\llama-4-scout-17b.py",  # new
         "run deepcoder:1.5b": "pp-commands\\deepcoder-1-5b.py",  # new
-        "run deepcoder:14b": "pp-commands\\deepcoder-14b.py",  # new
+        "run deepcoder:14b": "pp-commands\\deepcoder-14b.py", # new
         "run mistral-small3.1": "pp-commands\\mistral-small-3-1.py",  # new
         "install deepseek-r1:1.5b": "pp-commands\\deepseek-r1-1-5b.py",
         "install deepseek-r1:7b": "pp-commands\\deepseek-r1-7b.py",
@@ -367,11 +402,11 @@ def handle_special_commands(user_input):
         "install llama3:8b": "pp-commands\\llama-3-8b.py",
         "install llama3:70b": "pp-commands\\llama-3-70b.py",
         "install mistral": "pp-commands\\mistral.py",
-        "install mistral-large": "pp-commands\\mistral-large.py",  # new
-        "install mistral-nemo": "pp-commands\\mistral-nemo.py",  # new
-        "install mistral-openorca": "pp-commands\\mistral-openorca.py",  # new
-        "install mistral-small:22b": "pp-commands\\mistral-small-22b.py",  # new
-        "install mistral-small:24b": "pp-commands\\mistral-small-24b.py",  # new
+        "install mistral-large": "pp-commands\\mistral-large.py", #new
+        "install mistral-nemo": "pp-commands\\mistral-nemo.py", #new
+        "install mistral-openorca": "pp-commands\\mistral-openorca.py", #new
+        "install mistral-small:22b": "pp-commands\\mistral-small-22b.py", #new
+        "install mistral-small:24b": "pp-commands\\mistral-small-24b.py", #new
         "install phi4": "pp-commands\\phi-4.py",
         "install qwen2.5:0.5b": "pp-commands\\qwen-2-5-0.5b.py",
         "install qwen2.5:1.5b": "pp-commands\\qwen-2-5-1.5b.py",
@@ -386,16 +421,16 @@ def handle_special_commands(user_input):
         "install qwen2.5-coder:7b": "pp-commands\\qwen-2-5-coder-0.5b.py",
         "install qwen2.5-coder:14b": "pp-commands\\qwen-2-5-coder-0.5b.py",
         "install qwen2.5-coder:32b": "pp-commands\\qwen-2-5-coder-0.5b.py",
-        "install gemma3:1b": "pp-commands\\gemma-3-1b.py",  # new
-        "install gemma3:4b": "pp-commands\\gemma-3-4b.py",  # new
-        "install gemma3:12b": "pp-commands\\gemma-3-12b.py",  # new
-        "install gemma3:27b": "pp-commands\\gemma-3-27b.py",  # new
-        "install qwq": "pp-commands\\qwq.py",  # new
-        "install command-a": "pp-commands\\command-a.py",  # new
-        "install phi4-mini": "pp-commands\\phi-4-mini.py",  # new
-        "install granite3.2:8b": "pp-commands\\granite-3-2-8b.py",  # new
-        "install granite3.2:2b": "pp-commands\\granite-3-2-2b.py",  # new
-        "install granite3.2-vision:2b": "pp-commands\\granite-3-2-2b-vision.py",  # new
+        "install gemma3:1b": "pp-commands\\gemma-3-1b.py", # new
+        "install gemma3:4b": "pp-commands\\gemma-3-4b.py", # new
+        "install gemma3:12b": "pp-commands\\gemma-3-12b.py", # new
+        "install gemma3:27b": "pp-commands\\gemma-3-27b.py", # new
+        "install qwq": "pp-commands\\qwq.py", # new
+        "install command-a": "pp-commands\\command-a.py", # new
+        "install phi4-mini": "pp-commands\\phi-4-mini.py", # new
+        "install granite3.2:8b": "pp-commands\\granite-3-2-8b.py", # new
+        "install granite3.2:2b": "pp-commands\\granite-3-2-2b.py", # new
+        "install granite3.2-vision:2b": "pp-commands\\granite-3-2-2b-vision.py", # new
         "install qwen-2-5-omni:7b": "pp-commands\\qwen-2-5-omni-7b.py",  # new
         "install qvq:72b": "pp-commands\\qvq-72b.py",  # new
         "install qwen-2-5-vl:32b": "pp-commands\\qwen-2-5-vl-32b.py",  # new
@@ -409,18 +444,18 @@ def handle_special_commands(user_input):
         "image generation": "pp-commands\\stable-diffusion-3-5-large-turbo.py",
         "video generation": "pp-commands\\wan-2-1-t2v-14b.py",
         "run mavis": "mavis-installer-3-main-windows.py",
-        "p run all": "pp-commands\\p-run-all.py",  # new
-        "p htop": "pp-commands\\p-htop.py",  # new
-        "p run gemma3": "pp-commands\\p-gemma-3.py",  # new
-        "p run deepseek-r1": "pp-commands\\p-deepseek-r1.py",  # new
-        "p run qwen2.5": "pp-commands\\p-qwen-2-5.py",  # new
-        "p run qwen2.5-coder": "pp-commands\\p-qwen-2-5-coder.py",  # new
-        "p python frameworks": "pp-commands\\p-python-frameworks.py",  # new
-        "p pip list": "pp-commands\\p-python-frameworks.py",  # new
+        "p run all": "pp-commands\\p-run-all.py", # new
+        "p htop": "pp-commands\\p-htop.py", # new
+        "p run gemma3": "pp-commands\\p-gemma-3.py", # new
+        "p run deepseek-r1": "pp-commands\\p-deepseek-r1.py", # new
+        "p run qwen2.5": "pp-commands\\p-qwen-2-5.py", # new
+        "p run qwen2.5-coder": "pp-commands\\p-qwen-2-5-coder.py", # new
+        "p python frameworks": "pp-commands\\p-python-frameworks.py", # new
+        "p pip list": "pp-commands\\p-python-frameworks.py", # new
         "p pip ls": "pp-commands\\p-python-frameworks.py",  # new
-        "p git ls": "pp-commands\\p-git.py",  # new
+        "p git ls": "pp-commands\\p-git.py", # new
         "p git": "pp-commands\\p-git.py",  # new
-        "p ls": "pp-commands\\p-ls.py",  # new
+        "p ls": "pp-commands\\p-ls.py", # new
         "models": "pp-commands\\models-ls.py",  # new
         "models ls": "pp-commands\\models-ls.py",  # new
         "p models": "pp-commands\\p-models-ls.py",  # new
@@ -458,9 +493,9 @@ def handle_special_commands(user_input):
         "p mavis": "pp-commands\\p-mavis-git.py",  # new
         "p mavis.com": "pp-commands\\p-mavis.py",  # new
         "p simon": "pp-commands\\p-simon.py",  # new
-        "p simon.com": "pp-commands\\p-simon-git.py",  # new
+        "p simon.com": "pp-commands\\p-simon-git.py", # new
         "wsl info": "pp-commands\\wsl-info.py",  # new
-        "p wsl": "pp-commands\\p-wsl.py",  # new
+        "p wsl": "pp-commands\\p-wsl.py", # new
         "p pip": "pp-commands\\p-pip.py",  # new
         "p ubuntu": "pp-commands\\p-wsl-ubuntu.py",  # new
         "p debian": "pp-commands\\p-wsl-debian.py",  # new
@@ -478,14 +513,14 @@ def handle_special_commands(user_input):
         "p neofetch": "pp-commands\\p-neofetch.py",  # new
         "p fastfetch": "pp-commands\\p-neofetch.py",  # new
         "p screenfetch": "pp-commands\\p-neofetch.py",  # new
-        "install 3d-slicer": "run\\simon\\3d-slicer\\install-3d-slicer.py",  # new
+        "install 3d-slicer": "run\\simon\\3d-slicer\\install-3d-slicer.py", # new
         "run 3d-slicer": "run\\simon\\3d-slicer\\run-3d-slicer.py",  # new
         "install simon": "run\\simon\\install-simon-1.py",  # new
         "run simon": "mavis-run-jup\\run-jup.py",  # new
-        "jupyter --version": "pp-commands\\jupyter-version.py",  # new
+        "jupyter --version": "pp-commands\\jupyter-version.py", # new
         "grafana --version": "pp-commands\\grafana-version.py",  # new
         "3d-slicer --version": "pp-commands\\3d-slicer-version.py",  # new
-        "doctor": "pp-commands\\doctor.py",  # new
+        "doctor": "pp-commands\\doctor.py", # new
         "fun": "pp-commands\\fun.py",  # new
         "fun aafire": "pp-commands\\fun-aafire.py",  # new
         "fun cmatrix": "pp-commands\\fun-cmatrix.py",  # new
@@ -504,62 +539,318 @@ def handle_special_commands(user_input):
         "fun train t": "pp-commands\\fun-train-t.py"  # new
     }
 
+    # Custom command launcher
     if user_input in commands:
         script_path = f"C:\\Users\\{os.getlogin()}\\p-terminal\\pp-term\\{commands[user_input]}"
-
-        # Prüfen, ob es eine Python-Datei oder eine Batch-Datei ist
         if not user_input.endswith(".bat"):
-            # Führe das Skript mit dem Python-Interpreter aus der .env-Umgebung aus
             run([python_path, script_path], shell=True)
         else:
-            # Wenn es eine Batch-Datei ist, führe sie direkt aus
             run([script_path], shell=True)
+        return True
 
+    # Built-in Commands Erweiterung:
+    if user_input.lower() in ["cls", "clear"]:
+        os.system("cls" if os.name == "nt" else "clear")
         return True
 
     if user_input.startswith("cd "):
         path = user_input[3:].strip()
         change_directory(path)
         return True
-    elif user_input.lower() in ["cls", "clear"]:
-        os.system("cls" if os.name == "nt" else "clear")
-        return True
-    elif user_input.lower() in ["dir", "ls"]:
+
+    if user_input.lower() in ["dir", "ls"]:
         run_command("dir" if os.name == "nt" else "ls -la", shell=True)
         return True
-    elif user_input.startswith("mkdir "):
+
+    if user_input.startswith("mkdir "):
         os.makedirs(user_input[6:].strip(), exist_ok=True)
         return True
-    elif user_input.startswith("rmdir "):
+
+    if user_input.startswith("rmdir "):
         try:
             os.rmdir(user_input[6:].strip())
         except Exception as e:
-            print(f"Error: {str(e)}", file=sys.stderr)
+            print(f"{red}Error:{reset} {str(e)}", file=sys.stderr)
         return True
-    elif user_input.startswith("del ") or user_input.startswith("rm "):
+
+    if user_input.startswith(("del ", "rm ")):
         try:
             os.remove(user_input.split(maxsplit=1)[1].strip())
         except Exception as e:
-            print(f"Error: {str(e)}", file=sys.stderr)
+            print(f"{red}Error:{reset} {str(e)}", file=sys.stderr)
         return True
-    elif user_input.startswith("echo "):
+
+    if user_input.startswith("echo "):
         print(user_input[5:].strip())
         return True
-    elif "=" in user_input:
+
+    if "=" in user_input:
         var, value = map(str.strip, user_input.split("=", 1))
         os.environ[var] = value
+        print(f"{green}Environment variable set:{reset} {var}={value}")
         return True
-    elif user_input.startswith("type ") or user_input.startswith("cat "):
-        try:
-            with open(user_input.split(maxsplit=1)[1].strip(), "r", encoding="utf-8") as file:
-                print(file.read())
-        except Exception as e:
-            print(f"Error: {str(e)}", file=sys.stderr)
-        return True
-    elif user_input.lower() == "exit":
-        sys.exit(0)
-    return False
 
+    if user_input.startswith(("type ", "cat ")):
+        try:
+            with open(user_input.split(maxsplit=1)[1].strip(), "r", encoding="utf-8") as f:
+                print(f.read())
+        except Exception as e:
+            print(f"{red}Error:{reset} {str(e)}", file=sys.stderr)
+        return True
+
+    if user_input.lower() == "exit":
+        print(f"{yellow}Exiting PP-Terminal... Goodbye {user_name}!{reset}")
+        sys.exit(0)
+
+    # Zusätzliche Luxus-Funktionen:
+    if user_input.lower() == "whoami":
+        print(user_name)
+        return True
+
+    if user_input.lower() == "hostname":
+        print(socket.gethostname())
+        return True
+
+    if user_input.lower() == "ip":
+        try:
+            hostname = socket.gethostname()
+            ip_address = socket.gethostbyname(hostname)
+            print(f"{cyan}IP Address:{reset} {ip_address}")
+        except:
+            print(f"{red}Could not retrieve IP address{reset}")
+        return True
+
+    if user_input.lower() == "os":
+        print(f"{green}OS:{reset} {platform.system()} {platform.release()}")
+        return True
+
+    if user_input.lower() == "time":
+        now = datetime.datetime.now()
+        print(now.strftime("%H:%M:%S"))
+        return True
+
+    if user_input.lower() == "date":
+        today = datetime.date.today()
+        print(today.strftime("%Y-%m-%d"))
+        return True
+
+    if user_input.lower() == "weather":
+        print("Fetching weather for Berlin... (Demo)")
+        try:
+            url = "https://wttr.in/Berlin?format=3"
+            response = requests.get(url)
+            print(response.text)
+        except Exception as e:
+            print(f"{red}Error fetching weather:{reset} {str(e)}")
+        return True
+
+    if user_input.startswith("open "):
+        site = user_input[5:].strip()
+        if not site.startswith("http"):
+            site = "https://" + site
+        webbrowser.open(site)
+        print(f"{blue}Opening {site}...{reset}")
+        return True
+
+    if user_input.lower() == "fortune":
+        fortunes = [
+            "You will code something amazing today!",
+            "Trust your debugging skills!",
+            "Error 404: Worries not found!",
+            "Take a coffee break ☕️",
+            "One commit a day keeps the bugs away!"
+        ]
+        print(random.choice(fortunes))
+        return True
+
+    if user_input.lower() == "history":
+        try:
+            hist_len = readline.get_current_history_length()
+            for i in range(1, hist_len + 1):
+                print(f"{i}: {readline.get_history_item(i)}")
+        except Exception as e:
+            print(f"{red}Error reading history:{reset} {str(e)}")
+        return True
+
+    if user_input.startswith("search "):
+        try:
+            _, filename, keyword = user_input.split(maxsplit=2)
+            with open(filename, "r", encoding="utf-8") as f:
+                lines = f.readlines()
+            matches = [line.strip() for line in lines if keyword.lower() in line.lower()]
+            for match in matches:
+                print(match)
+        except Exception as e:
+            print(f"{red}Error searching:{reset} {str(e)}")
+        return True
+
+        # Zip-Ordner erstellen
+    if user_input.startswith("zip "):
+        try:
+            _, folder = user_input.split(maxsplit=1)
+            shutil.make_archive(folder, 'zip', folder)
+            print(f"{green}Folder zipped successfully!{reset}")
+        except Exception as e:
+            print(f"{red}Error zipping folder:{reset} {str(e)}")
+        return True
+
+        # Zip-Archiv entpacken
+    if user_input.startswith("unzip "):
+        try:
+            _, zip_path = user_input.split(maxsplit=1)
+            with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+                zip_ref.extractall(os.path.splitext(zip_path)[0])
+            print(f"{green}Archive extracted!{reset}")
+        except Exception as e:
+            print(f"{red}Error unzipping:{reset} {str(e)}")
+        return True
+
+        # RAM und CPU Status
+    if user_input.lower() == "sysinfo":
+        print(f"{cyan}CPU Usage:{reset} {psutil.cpu_percent()}%")
+        print(f"{cyan}RAM Usage:{reset} {psutil.virtual_memory().percent}%")
+        return True
+
+        # Zwischenablage setzen
+    if user_input.startswith("clip set "):
+        text = user_input[len("clip set "):]
+        pyperclip.copy(text)
+        print(f"{green}Text copied to clipboard!{reset}")
+        return True
+
+        # Zwischenablage lesen
+    if user_input.lower() == "clip get":
+        print(pyperclip.paste())
+        return True
+
+        # Ping Befehl
+    if user_input.startswith("ping "):
+        target = user_input.split(maxsplit=1)[1]
+        os.system(f"ping {target}")
+        return True
+
+        # Papierkorb leeren
+    if user_input.lower() == "emptytrash":
+        try:
+            ctypes.windll.shell32.SHEmptyRecycleBinW(None, None, 0x00000001)
+            print(f"{green}Recycle Bin emptied!{reset}")
+        except Exception as e:
+            print(f"{red}Error emptying trash:{reset} {str(e)}")
+        return True
+
+        # Programm starten
+    if user_input.startswith("launch "):
+        program = user_input[len("launch "):]
+        try:
+            subprocess.Popen(program)
+            print(f"{green}Launched {program}!{reset}")
+        except Exception as e:
+            print(f"{red}Error launching program:{reset} {str(e)}")
+        return True
+
+    # Speedtest
+    if user_input.lower() == "speedtest":
+        loading_bar("Running speedtest", 5)
+        st = speedtest.Speedtest()
+        download = st.download() / 1_000_000
+        upload = st.upload() / 1_000_000
+        print(f"{Fore.CYAN}Download:{Style.RESET_ALL} {download:.2f} Mbps")
+        print(f"{Fore.CYAN}Upload:{Style.RESET_ALL} {upload:.2f} Mbps")
+        return True
+
+    # Prozessliste
+    if user_input.lower() == "ps":
+        for proc in psutil.process_iter(['pid', 'name']):
+            print(f"PID {proc.info['pid']}: {proc.info['name']}")
+        return True
+
+    if user_input.startswith("kill "):
+        try:
+            pid = int(user_input.split(maxsplit=1)[1])
+            p = psutil.Process(pid)
+            p.terminate()
+            print(f"{Fore.GREEN}Killed process {pid}{Style.RESET_ALL}")
+        except Exception as e:
+            print(f"{Fore.RED}Error killing process:{Style.RESET_ALL} {str(e)}")
+        return True
+
+    # Datei herunterladen
+    if user_input.startswith("download "):
+        try:
+            url = user_input.split(maxsplit=1)[1]
+            filename = url.split("/")[-1]
+            loading_bar("Downloading", 4)
+            r = requests.get(url)
+            with open(filename, "wb") as f:
+                f.write(r.content)
+            print(f"{Fore.GREEN}Downloaded {filename}{Style.RESET_ALL}")
+        except Exception as e:
+            print(f"{Fore.RED}Download failed:{Style.RESET_ALL} {str(e)}")
+        return True
+
+    # CPU Temperatur
+    if user_input.lower() == "cputemp":
+        print(f"{Fore.YELLOW}Feature not fully supported on Windows without third party libs!{Style.RESET_ALL}")
+        return True
+
+    # Chuck Norris Joke
+    if user_input.lower() == "chucknorris":
+        try:
+            joke = requests.get("https://api.chucknorris.io/jokes/random").json()['value']
+            print(f"{Fore.MAGENTA}Chuck Norris says:{Style.RESET_ALL} {joke}")
+        except:
+            print(f"{Fore.RED}Couldn't fetch Chuck Norris joke!{Style.RESET_ALL}")
+        return True
+
+    # Theme Wechsel
+    if user_input.startswith("theme "):
+        theme_choice = user_input.split()[1]
+        if theme_choice in ["dark", "light"]:
+            current_theme = theme_choice
+            print(f"{Fore.GREEN}Theme switched to {current_theme}!{Style.RESET_ALL}")
+        else:
+            print(f"{Fore.RED}Unknown theme!{Style.RESET_ALL}")
+        return True
+
+    # Temp Dateien löschen
+    if user_input.lower() == "cleantemp":
+        temp = os.getenv('TEMP')
+        shutil.rmtree(temp, ignore_errors=True)
+        print(f"{Fore.GREEN}Temporary files cleaned!{Style.RESET_ALL}")
+        return True
+
+    # Selbst Update (Demo)
+    if user_input.lower() == "selfupdate":
+        print(f"{Fore.CYAN}Checking for updates...{Style.RESET_ALL}")
+        loading_bar("Updating", 4)
+        print(f"{Fore.GREEN}PP-Terminal updated! (demo mode){Style.RESET_ALL}")
+        return True
+
+    # Directory Baumansicht
+    if user_input.lower() == "tree":
+        def print_tree(startpath, prefix=""):
+            for item in os.listdir(startpath):
+                path = os.path.join(startpath, item)
+                print(prefix + "|-- " + item)
+                if os.path.isdir(path):
+                    print_tree(path, prefix + "|   ")
+        print_tree(os.getcwd())
+        return True
+
+    # Python REPL starten
+    if user_input.lower() == "py":
+        print(f"{Fore.CYAN}Starting Python REPL. Type 'exit()' to quit.{Style.RESET_ALL}")
+        import code
+        code.interact(local=dict(globals(), **locals()))
+        return True
+
+    # Mini KI Antwort
+    if user_input.startswith("ask "):
+        question = user_input[len("ask "):]
+        print(f"{Fore.YELLOW}🤖 AI says:{Style.RESET_ALL} Sorry, AI-Module not connected yet! (Placeholder)")
+        return True
+
+    return False
 
 def is_tool_installed(tool_name):
     """Check if a tool is installed."""
@@ -567,13 +858,25 @@ def is_tool_installed(tool_name):
     return result.returncode == 0
 
 
+# Liste aller verfügbaren Befehle
+COMMANDS = [
+    "cd", "cls", "clear", "dir", "ls", "mkdir", "rmdir", "del", "rm", "echo", "type", "cat", "exit",
+    "lx", "p", "pp", "ps", "alpine", "ubuntu", "debian", "kali", "hack", "arch", "opensuse", "mint",
+    "fedora", "redhat", "sles", "pengwin", "oracle",
+    "speedtest", "kill", "download", "cputemp", "chucknorris", "theme", "cleantemp", "selfupdate",
+    "tree", "py", "ask", "weather", "whoami", "hostname", "ip", "os", "time", "date", "open", "fortune",
+    "history", "search", "zip", "unzip", "sysinfo", "clip set", "clip get", "ping", "emptytrash", "launch"
+]
+
+def completer(text, state):
+    matches = [cmd for cmd in COMMANDS if cmd.startswith(text)]
+    if state < len(matches):
+        return matches[state]
+    else:
+        return None
+
 def setup_autocomplete():
-    commands = ["cd", "cls", "clear", "dir", "ls", "mkdir", "rmdir", "del", "rm", "echo", "type", "cat", "exit", "lx",
-                "p", "pp", "ps", "alpine",
-                "ubuntu", "debian", "kali", "hack", "arch", "opensuse", "mint", "fedora", "redhat", "sles", "pengwin",
-                "oracle", "alpine", "etc."]
-    readline.set_completer(lambda text, state: [cmd for cmd in commands if cmd.startswith(text)][state] if state < len(
-        [cmd for cmd in commands if cmd.startswith(text)]) else None)
+    readline.set_completer(completer)
     readline.parse_and_bind("tab: complete")
 
 
