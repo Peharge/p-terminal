@@ -825,7 +825,7 @@ def handle_special_commands(user_input):
             print(f"{red}Couldn't fetch Chuck Norris joke!{reset}")
         return True
 
-    # Theme Wechsel
+    # Theme Wechsel - soon
     if user_input.startswith("theme "):
         theme_choice = user_input.split()[1]
         if theme_choice in ["dark", "light"]:
