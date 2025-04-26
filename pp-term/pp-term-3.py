@@ -83,7 +83,7 @@ def activate_virtualenv(venv_path):
                                                                                                           "activate")
 
     if not os.path.exists(activate_script):
-        print(f"Error: Virtual environment not found at {venv_path}.")
+        print(f"❌ Error: Virtual environment not found at {venv_path}.")
         sys.exit(1)
 
     os.environ["VIRTUAL_ENV"] = venv_path
@@ -99,9 +99,9 @@ def ensure_packages_installed(packages):
         print(f"Installing missing packages: {', '.join(to_install)}...")
         subprocess.run([sys.executable, "-m", "pip", "install"] + to_install, check=True, stdout=subprocess.DEVNULL,
                        stderr=subprocess.DEVNULL)
-        print("All missing packages installed.")
+        print("✅ All missing packages installed.")
     else:
-        print("All required packages are already installed.")
+        print("✅ All required packages are already installed.")
 
 
 # Virtuelle Umgebung aktivieren und Pakete sicherstellen
@@ -179,14 +179,16 @@ def loading_bar(text="Processing", duration=3):
     print(Style.RESET_ALL)
 
 def print_banner():
-    print(f"""
 
-{white}██████╗ ██████╗    ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗     {reset}
-{white}██╔══██╗██╔══██╗   ╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║     {reset}
-{white}██████╔╝██████╔╝█████╗██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║     {reset}
-{white}██╔═══╝ ██╔═══╝ ╚════╝██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║██║     {reset}
-{white}██║     ██║           ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗{reset}
-{white}╚═╝     ╚═╝           ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝{reset}
+    print("✅ All tasks were completed successfully!")
+
+    print(f"""
+{blue}██████╗ ██████╗{reset}{white}    ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗     {reset}
+{blue}██╔══██╗██╔══██╗{reset}{white}   ╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║     {reset}
+{blue}██████╔╝██████╔╝{reset}{white}█████╗██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║     {reset}
+{blue}██╔═══╝ ██╔═══╝ {reset}{white}╚════╝██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║██║     {reset}
+{blue}██║     ██║     {reset}{white}      ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗{reset}
+{blue}╚═╝     ╚═╝     {reset}{white}      ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝{reset}
 """)
     print(f"""A warm welcome, {blue}{user_name}{reset}, to Peharge Python Terminal
 Developed by Peharge and JK (Peharge Projects 2025)
