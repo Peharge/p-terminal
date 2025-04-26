@@ -142,7 +142,6 @@ import speedtest
 import colorama
 from colorama import Fore, Style, Back
 import time
-import ollama
 
 colorama.init()
 
@@ -847,6 +846,8 @@ def handle_special_commands(user_input):
 
     # Mini KI Antwort - soon
     if user_input.startswith("pa "):
+        import ollama
+
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
             print(f"{green}Ollama is installed.{reset}")
@@ -857,36 +858,19 @@ def handle_special_commands(user_input):
         check_ollama_update()
 
         question = user_input[len("pa "):]
+        response = ollama.chat(
+            model="deepcoder:14b",
+            messages=[{
+                'role': 'user',
+                'content': question
+            }]
+        )
 
-        response = get_response_from_ollama(user_input, ollama)
-
-        print(f"{blue}🤖 AI says:{reset}", end=" ")
-        type_out_text(response)
-
+        response_content = response['message']['content']
+        print(f"{blue}🤖 AI says{reset}:{response_content}")
         return True
 
     return False
-
-def type_out_text(text, delay=0.05):
-    """Tippt den Text langsam aus."""
-    for char in text:
-        sys.stdout.write(char)
-        sys.stdout.flush()
-        time.sleep(delay)
-    print()
-
-
-def get_response_from_ollama(user_message, ollama):
-    """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
-    try:
-        response = ollama.chat(
-            model="deepcoder:14b",  # Modellname
-            messages=[{"role": "user", "content": user_message}]
-        )
-        return response['message']['content']
-    except Exception as e:
-        return f"ERROR: {e}"
-
 
 def check_ollama_update():
     """
@@ -915,7 +899,6 @@ def check_ollama_update():
 
     except Exception as e:
         print(f"{red}Error checking for updates: {e}{reset}")
-
 
 def find_ollama_path():
     """
