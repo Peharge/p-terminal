@@ -934,7 +934,7 @@ def handle_special_commands(user_input):
 
 
 def get_weather():
-    print("🌦Fetching detailed weather for Berlin... (Demo)\n")
+    print("⛅ Fetching detailed weather for Berlin... (Demo)\n")
     time.sleep(1)  # kleiner Effekt für Coolness
 
     weather_icons = {
