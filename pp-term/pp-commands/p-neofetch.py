@@ -128,9 +128,9 @@ logging.basicConfig(level=logging.INFO,
 
 # p-terminal Static Versions
 P_Terminal_VERSION = "1.1"
-PP_Terminal_VERSION = "1.1"
-Peharge_C_COMP_VERSION = "1.1"
-Peharge_CPP_COMP_VERSION = "1.1"
+PP_Terminal_VERSION = "3"
+Peharge_C_COMP_VERSION = "3"
+Peharge_CPP_COMP_VERSION = "3"
 P_Terminal_License = "MIT"
 
 # Inline QSS Stylesheet
