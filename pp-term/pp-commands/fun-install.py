@@ -69,14 +69,7 @@ def run_alpine_python_command(command):
         command = f"wsl {command}"
 
     try:
-        process = subprocess.Popen(
-            command,
-            stdin=subprocess.DEVNULL,  # no user input expected
-            stdout=sys.stdout,
-            stderr=sys.stderr,
-            shell=True,
-            text=True
-        )
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
         process.wait()
     except KeyboardInterrupt:
         process.terminate()
