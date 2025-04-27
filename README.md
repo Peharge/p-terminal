@@ -32,7 +32,7 @@ Start of development: 23.04.2025
 - **[23.04.2025]** Developmentstart of P-Term and PP-Ptem!!!
 - **[24.04.2025]** PP-Term EAP release: [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat)!!!
 - **[28.08.2025]** PP-Term 1 release!!!
-- **[01.06.2025]** P-Term release!!!
+- **[01.06.2025]** P-Term 1.1 release!!!
 - **[01.06.2025]** PP-Term 3 release!!!
 
 # Install
