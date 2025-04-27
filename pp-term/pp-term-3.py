@@ -961,7 +961,7 @@ def handle_special_commands(user_input):
     if user_input.lower() == "chucknorris":
         try:
             joke = requests.get("https://api.chucknorris.io/jokes/random").json()['value']
-            print(f"{green}Chuck Norris says{reset}: {joke}")
+            print(f"{blue}Chuck Norris says{reset}: {joke}")
         except:
             print(f"{red}Couldn't fetch Chuck Norris joke!{reset}")
         return True
