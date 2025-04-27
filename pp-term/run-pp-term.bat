@@ -393,7 +393,7 @@ if %errorlevel% neq 0 (
 ffmpeg -version >nul 2>&1
 if %errorlevel% neq 0 (
     echo FFmpeg is not installed.
-    set /p install_ffmpeg="Would you like to install FFmpeg? [y/n]: "
+    set /p install_ffmpeg="Installing FFmpeg is not required to run pp-term. However, installing FFmpeg is mandatory for using MAVIS Voice Assistant! Would you like to install FFmpeg? [y/n]: "
 
     if /i "%install_ffmpeg%"=="y" (
         echo Downloading FFmpeg installer...
@@ -573,6 +573,79 @@ if %errorlevel% neq 0 (
     )
 ) else (
     echo ✅ PowerShell 7 is already installed.
+)
+
+:: Set the installation path for 3D Slicer
+set "SLICER_PATH=C:\Users\%USERNAME%\AppData\Local\slicer.org\Slicer 5.6.2\Slicer.exe"
+
+:: Check if 3D Slicer is already installed
+if exist "%SLICER_PATH%" (
+    echo ✅ 3D Slicer is already installed.
+) else (
+    echo ❌ 3D Slicer is not installed.
+    set /p install_slicer="Installing 3D Slicer isn't required to run pp-term. However, if you plan to use SIMON, installing 3D Slicer is mandatory. If you encounter any problems during installation, simply run the 'Install 3d-slicer' command in the pp terminal. This installation method is significantly more secure! Would you like to install 3D Slicer? [y/n]: "
+
+    if /i "%install_slicer%"=="y" (
+        echo Downloading the 3D Slicer installer...
+
+        set "SLICER_URL=https://download.slicer.org/bitstream/302208"
+        set "SLICER_INSTALLER=%TEMP%\Slicer-Installer.exe"
+
+        :: Securely download 3D Slicer using PowerShell (TLS 1.2)
+        powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri '%SLICER_URL%' -OutFile '%SLICER_INSTALLER%'"
+
+        if exist "%SLICER_INSTALLER%" (
+            echo Starting the 3D Slicer installer...
+
+            :: Run the installer (silent installation)
+            start /wait %SLICER_INSTALLER% /SILENT
+
+            :: Check if 3D Slicer was successfully installed
+            if exist "%SLICER_PATH%" (
+                echo ✅ 3D Slicer was successfully installed!
+            ) else (
+                echo ❌ Error: Installation failed! Retrying...
+                del "%SLICER_INSTALLER%"
+                start /wait %SLICER_INSTALLER% /SILENT
+
+                if exist "%SLICER_PATH%" (
+                    echo ✅ 3D Slicer was successfully installed!
+                ) else (
+                    echo ❌ Second installation attempt failed! Trying ZIP method...
+                    del "%SLICER_INSTALLER%"
+                    set "SLICER_ZIP_URL=https://download.slicer.org/bitstream/302209"
+                    set "SLICER_ZIP=%TEMP%\Slicer.zip"
+                    set "SLICER_DIR=C:\Slicer"
+
+                    powershell -Command "Invoke-WebRequest -Uri '%SLICER_ZIP_URL%' -OutFile '%SLICER_ZIP%'"
+
+                    if exist "%SLICER_ZIP%" (
+                        mkdir "%SLICER_DIR%"
+                        powershell -Command "Expand-Archive -Path '%SLICER_ZIP%' -DestinationPath '%SLICER_DIR%'"
+                        del "%SLICER_ZIP%"
+
+                        :: Add Slicer to the PATH
+                        setx PATH "%SLICER_DIR%;%PATH%" /M
+
+                        :: Check if 3D Slicer works
+                        if exist "%SLICER_PATH%" (
+                            echo ✅ 3D Slicer was successfully installed via ZIP method!
+                        ) else (
+                            echo ❌ ZIP installation failed! Cleaning up...
+                            rmdir /s /q "%SLICER_DIR%"
+                            echo Manual installation required: https://download.slicer.org
+                        )
+                    ) else (
+                        echo ❌ ZIP download failed! Manual installation required.
+                    )
+                )
+            )
+        ) else (
+            echo ❌ Error: The 3D Slicer installer could not be downloaded!
+        )
+    ) else (
+        echo Installation canceled. Please install 3D Slicer manually: https://download.slicer.org
+    )
 )
 
 set "USERNAME=%USERNAME%"
