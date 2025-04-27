@@ -971,14 +971,14 @@ def get_weather():
             icon = weather_icons.get(condition, "🌈")
 
             # Coole Ausgabe
-            print(f"Location: {location}")
-            print(f"Time: {observation_time}")
-            print(f"{icon} Condition: {condition}")
-            print(f"Temperature: {temperature}")
-            print(f"Humidity: {humidity}")
-            print(f"Wind: {wind}")
-            print(f"Moon Phase: {moon_phase}")
-            print(f"Precipitation: {precipitation}\n")
+            print(f"{blue}Location{reset}: {location}")
+            print(f"{blue}Time{reset}: {observation_time}")
+            print(f"{blue}Condition{reset}: {icon} {condition}")
+            print(f"{blue}Temperature{reset}: {temperature}")
+            print(f"{blue}Humidity{reset}: {humidity}")
+            print(f"{blue}Wind{reset}: {wind}")
+            print(f"{blue}Moon Phase{reset}: {moon_phase}")
+            print(f"{blue}Precipitation{reset}: {precipitation}\n")
         else:
             print(f"Failed to retrieve weather data. Status code: {response.status_code}")
     except Exception as e:
