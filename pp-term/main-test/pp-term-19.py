@@ -274,45 +274,28 @@ def run_command(command, shell=False, cwd=None, extra_env=None):
         int: Exit-Code des Prozesses.
     """
 
-    # 1) Aktuelles Virtual Environment ermitteln (Pfad und optionale Env-Variablen)
-    active = find_active_env()
-    # Erwarte entweder ein Tuple(path, env_dict) oder nur den Pfad als String
-    if isinstance(active, tuple) and len(active) == 2 and isinstance(active[1], dict):
-        active_env, venv_env = active
-    else:
-        active_env = active
-        venv_env = {}
-
-    # Unter Windows nutzen wir python.exe, sonst python
-    python_name = "python.exe" if os.name == "nt" else "python"
+    # 1) Aktuellen Python-Interpreter ermitteln (für pip/python)
+    active_env = find_active_env()
     python_exe = os.path.join(
         active_env,
         "Scripts" if os.name == "nt" else "bin",
-        python_name
+        "python"
     )
 
     # 2) command in Liste umwandeln (nur wenn shell=False und command ist str)
     if isinstance(command, str) and not shell:
         command = shlex.split(command, posix=(os.name != "nt"))
 
-    # 3) pip- und python-Wrapper
+    # 3) pip-Wrapper
     if isinstance(command, list) and command:
         base = os.path.basename(command[0]).lower()
         if base == "pip" or base.startswith("pip"):
             command = [python_exe, "-m", "pip"] + command[1:]
-        elif base == "python" or base.startswith("python"):
-            command = [python_exe] + command[1:]
+        # elif base.startswith("python"):
+        #     command = [python_exe] + command[1:]
 
-    # 4) Umgebung zusammenbauen: zuerst das Venv-Env, dann System-Env, dann extra_env
-    env = {}
-    env.update(venv_env)
-    env.update(os.environ)
-    # Setze VIRTUAL_ENV und passe PATH an, falls nicht bereits gesetzt
-    env.setdefault("VIRTUAL_ENV", active_env)
-    venv_bin = os.path.join(active_env, "Scripts" if os.name == "nt" else "bin")
-    # Pfad voranstellen
-    original_path = env.get("PATH", "")
-    env["PATH"] = venv_bin + os.pathsep + original_path
+    # 4) Umgebung zusammenbauen
+    env = os.environ.copy()
     if extra_env:
         env.update(extra_env)
 
