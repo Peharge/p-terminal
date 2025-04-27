@@ -4208,7 +4208,7 @@ def main():
 
             # Anzeige schöner machen
             if active_env_path.startswith(current_dir):
-                display_env_path = "." + active_env_path[len(current_dir):].replace("\\", "/")
+                display_env_path = "." + active_env_path[len(current_dir):]
             else:
                 display_env_path = active_env_path.replace("\\", "/")
 
