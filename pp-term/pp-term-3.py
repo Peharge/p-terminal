@@ -164,6 +164,8 @@ import time
 import ollama
 from termcolor import colored
 import venv
+import selectors
+import signal
 
 colorama.init()
 
@@ -257,51 +259,109 @@ def set_python_path():
 
     os.environ["PYTHON_PATH"] = python_executable
 
-def run_command(command, shell=False):
+
+def run_command(command, shell=False, cwd=None, extra_env=None):
+    """
+    Führt einen externen Befehl aus und leitet stdout/stderr interaktiv ans Terminal weiter.
+
+    Args:
+        command (str | List[str]): Der auszuführende Befehl.
+        shell (bool): Wenn True, über die Shell ausführen und direkte Weiterleitung an stdout/stderr.
+        cwd (str | None): Arbeitsverzeichnis.
+        extra_env (dict | None): Zusätzliche Umgebungsvariablen.
+
+    Returns:
+        int: Exit-Code des Prozesses.
+    """
+
+    # 1) Aktuellen Python-Interpreter ermitteln (für pip/python)
     active_env = find_active_env()
+    python_exe = os.path.join(
+        active_env,
+        "Scripts" if os.name == "nt" else "bin",
+        "python"
+    )
 
-    python_path = os.path.join(active_env, "Scripts", "python.exe")
+    # 2) command in Liste umwandeln (nur wenn shell=False und command ist str)
+    if isinstance(command, str) and not shell:
+        command = shlex.split(command, posix=(os.name != "nt"))
 
-    if isinstance(command, str):
-        command = shlex.split(command)
+    # 3) pip-Wrapper
+    if isinstance(command, list) and command:
+        base = os.path.basename(command[0]).lower()
+        if base == "pip" or base.startswith("pip"):
+            command = [python_exe, "-m", "pip"] + command[1:]
+        # elif base.startswith("python"):
+        #     command = [python_exe] + command[1:]
 
-    if "pip" in command:
-        command = [python_path, "-m", "pip"] + command[1:]
+    # 4) Umgebung zusammenbauen
+    env = os.environ.copy()
+    if extra_env:
+        env.update(extra_env)
 
-    """
-    elif "python" in command:
-        command = [python_path] + command[1:]
-    """
+    # 5) Wenn shell=True: einfache Ausführung mit direktem Stream-Passing
+    if shell:
+        proc = subprocess.Popen(
+            command,
+            shell=True,
+            cwd=cwd,
+            env=env,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            text=True
+        )
+        try:
+            return proc.wait()
+        except KeyboardInterrupt:
+            proc.send_signal(signal.SIGINT)
+            return proc.wait()
 
-    process = subprocess.Popen(command, shell=shell, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                               text=True)  # encoding='utf-8'
+    # 6) Ansonsten: non-shell mit PIPEs und selectors für Zeilen-Output
+    proc = subprocess.Popen(
+        command,
+        shell=False,
+        cwd=cwd,
+        env=env,
+        stdin=sys.stdin,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        bufsize=1,  # Zeilenweises Buffering
+        text=True
+    )
 
-    def read_stream(stream, output_list):
-        for line in iter(stream.readline, ''):
-            output_list.append(line)
-        stream.close()
+    sel = selectors.DefaultSelector()
+    sel.register(proc.stdout, selectors.EVENT_READ)
+    sel.register(proc.stderr, selectors.EVENT_READ)
 
-    stdout_lines = []
-    stderr_lines = []
-    stdout_thread = threading.Thread(target=read_stream, args=(process.stdout, stdout_lines), daemon=True)
-    stderr_thread = threading.Thread(target=read_stream, args=(process.stderr, stderr_lines), daemon=True)
-    stdout_thread.start()
-    stderr_thread.start()
+    # SIGINT sauber weiterleiten
+    def _handle_sigint(signum, frame):
+        proc.send_signal(signal.SIGINT)
 
-    while process.poll() is None or stdout_lines or stderr_lines:
-        while stdout_lines:
-            print(stdout_lines.pop(0), end='', flush=True)
-        while stderr_lines:
-            print(stderr_lines.pop(0), end='', flush=True, file=sys.stderr)
-        time.sleep(1 / 24)
+    old_handler = signal.signal(signal.SIGINT, _handle_sigint)
 
-    stdout_thread.join()
-    stderr_thread.join()
+    try:
+        # Loop, bis Prozess fertig und alle Streams EOF
+        while True:
+            events = sel.select(timeout=0.1)
+            for key, _ in events:
+                line = key.fileobj.readline()
+                if not line:
+                    sel.unregister(key.fileobj)
+                    continue
+                if key.fileobj is proc.stdout:
+                    print(line, end='', flush=True)
+                else:
+                    print(line, end='', file=sys.stderr, flush=True)
 
-    while stdout_lines:
-        print(stdout_lines.pop(0), end='', flush=True)
-    while stderr_lines:
-        print(stderr_lines.pop(0), end='', flush=True, file=sys.stderr)
+            if proc.poll() is not None and not sel.get_map():
+                break
+    finally:
+        signal.signal(signal.SIGINT, old_handler)
+        sel.close()
+        proc.wait()
+
+    return proc.returncode
 
 
 def change_directory(path):
