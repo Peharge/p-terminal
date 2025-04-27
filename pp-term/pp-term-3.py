@@ -237,8 +237,6 @@ def set_python_path():
         python_executable = os.path.abspath(DEFAULT_PYTHON_EXECUTABLE)
 
     os.environ["PYTHON_PATH"] = python_executable
-    print(f"{green}PYTHON_PATH gesetzt auf: {python_executable}{reset}")
-
 
 def run_command(command, shell=False):
     active_env = find_active_env()
