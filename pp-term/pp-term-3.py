@@ -548,6 +548,7 @@ def handle_special_commands(user_input):
         "fun figlet": "pp-commands\\fun-figlet.py",  # new
         "fun fortune": "pp-commands\\fun-fortune.py",  # new
         "fun install": "pp-commands\\fun-install.py",  # new
+        "install fun": "pp-commands\\fun-install.py",  # new
         "fun ponysay": "pp-commands\\fun-ponysay.py",  # new
         "fun telnet": "pp-commands\\fun-telnet.py",  # new
         "fun train": "pp-commands\\fun-train.py",  # new
