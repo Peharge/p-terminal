@@ -241,9 +241,7 @@ def set_python_path():
 
 
 def run_command(command, shell=False):
-    active_env = find_active_env()
-
-    python_path = os.path.join(active_env, "Scripts", "python.exe")
+    python_path = os.environ.get("PYTHON_PATH")
 
     if isinstance(command, str):
         command = shlex.split(command)

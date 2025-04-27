@@ -144,12 +144,8 @@ from colorama import Fore, Style, Back
 import time
 import ollama
 from termcolor import colored
-import venv
 
 colorama.init()
-
-DEFAULT_ENV_DIR = os.path.join("p-terminal", "pp-term", ".env")
-DEFAULT_PYTHON_EXECUTABLE = os.path.join(DEFAULT_ENV_DIR, "Scripts", "python.exe")
 
 # Globales Theme
 current_theme = "dark"
@@ -227,23 +223,12 @@ Thank you so much for using PP-Terminal. We truly appreciate your support ❤️
 
 
 def set_python_path():
-    """Setzt PYTHON_PATH basierend auf dem gefundenen Environment."""
-    active_env = find_active_env()
-
-    python_executable = os.path.join(active_env, "Scripts", "python.exe")
-
-    if not os.path.exists(python_executable):
-        # Fallback auf default
-        python_executable = os.path.abspath(DEFAULT_PYTHON_EXECUTABLE)
-
-    os.environ["PYTHON_PATH"] = python_executable
-    print(f"{green}PYTHON_PATH gesetzt auf: {python_executable}{reset}")
+    python_path = f"C:\\Users\\{os.getlogin()}\\p-terminal\\pp-term\\.env\\Scripts\\python.exe"
+    os.environ["PYTHON_PATH"] = python_path
 
 
 def run_command(command, shell=False):
-    active_env = find_active_env()
-
-    python_path = os.path.join(active_env, "Scripts", "python.exe")
+    python_path = os.environ.get("PYTHON_PATH")
 
     if isinstance(command, str):
         command = shlex.split(command)
@@ -4174,24 +4159,6 @@ def run_winget_command(command):
     except KeyboardInterrupt:
         process.terminate()
 
-def find_active_env():
-    """Suche ein Environment im aktuellen Verzeichnis."""
-    current_dir = os.getcwd()
-
-    # Suche alle Ordner im current_dir
-    for item in os.listdir(current_dir):
-        item_path = os.path.join(current_dir, item)
-
-        # Prüfen ob Ordner und Scripts/activate vorhanden ist
-        if os.path.isdir(item_path):
-            activate_script = os.path.join(item_path, "Scripts", "activate")
-            if os.path.exists(activate_script):
-                # Treffer: Dies ist ein Environment
-                return item_path
-
-    # Nichts gefunden ➔ fallback
-    return os.path.abspath(DEFAULT_ENV_DIR)
-
 def main():
     print_banner()
     set_python_path()
@@ -4200,23 +4167,11 @@ def main():
     while True:
         try:
             current_dir = os.getcwd()
+            # Prüfen, ob eine .env-Datei existiert und geladen ist
+            env_active = os.getenv('VIRTUAL_ENV') or os.path.exists('.env')
 
-            # Aktives Env suchen
-            active_env_path = find_active_env()
-            python_path = os.path.join(active_env_path, "Scripts", "python.exe")
-            env_active = os.path.exists(python_path)
-
-            # Anzeige schöner machen
-            if active_env_path.startswith(current_dir):
-                display_env_path = "." + active_env_path[len(current_dir):].replace("\\", "/")
-            else:
-                display_env_path = active_env_path.replace("\\", "/")
-
-            env_indicator = (
-                f"{green}[{reset}{display_env_path}{green}]{reset}"
-                if env_active else
-                f"{green}[{reset}{red}{display_env_path}{reset}{green}]{reset}"
-            )
+            # .env-Indikator
+            env_indicator = f"{green}[{reset}.\\p-terminal\\pp-term\\.env{green}]{reset}" if env_active else f"{green}[{reset}{red}.\\p-terminal\\pp-term\\.env{reset}{green}]{reset}"
 
             # Prompt-Design
             prompt = (
