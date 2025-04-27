@@ -4210,7 +4210,7 @@ def main():
             if active_env_path.startswith(current_dir):
                 display_env_path = "." + active_env_path[len(current_dir):]
             else:
-                display_env_path = active_env_path.replace("\\", "/")
+                display_env_path = active_env_path
 
             env_indicator = (
                 f"{green}[{reset}{display_env_path}{green}]{reset}"
