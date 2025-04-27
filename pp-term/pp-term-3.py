@@ -589,14 +589,14 @@ def handle_special_commands(user_input):
         try:
             os.rmdir(user_input[6:].strip())
         except Exception as e:
-            print(f"{red}Error:{reset} {str(e)}", file=sys.stderr)
+            print(f"{red}Error{reset}: {str(e)}", file=sys.stderr)
         return True
 
     if user_input.startswith(("del ", "rm ")):
         try:
             os.remove(user_input.split(maxsplit=1)[1].strip())
         except Exception as e:
-            print(f"{red}Error:{reset} {str(e)}", file=sys.stderr)
+            print(f"{red}Error{reset}: {str(e)}", file=sys.stderr)
         return True
 
     if user_input.startswith("echo "):
@@ -606,7 +606,7 @@ def handle_special_commands(user_input):
     if "=" in user_input:
         var, value = map(str.strip, user_input.split("=", 1))
         os.environ[var] = value
-        print(f"{green}Environment variable set:{reset} {var}={value}")
+        print(f"{green}Environment variable set{reset}: {var}={value}")
         return True
 
     if user_input.startswith(("type ", "cat ")):
@@ -614,7 +614,7 @@ def handle_special_commands(user_input):
             with open(user_input.split(maxsplit=1)[1].strip(), "r", encoding="utf-8") as f:
                 print(f.read())
         except Exception as e:
-            print(f"{red}Error:{reset} {str(e)}", file=sys.stderr)
+            print(f"{red}Error{reset}: {str(e)}", file=sys.stderr)
         return True
 
     if user_input.lower() == "exit":
@@ -634,13 +634,13 @@ def handle_special_commands(user_input):
         try:
             hostname = socket.gethostname()
             ip_address = socket.gethostbyname(hostname)
-            print(f"{blue}IP Address:{reset} {ip_address}")
+            print(f"{blue}IP Address{reset}: {ip_address}")
         except:
             print(f"{red}Could not retrieve IP address{reset}")
         return True
 
     if user_input.lower() == "os":
-        print(f"{green}OS:{reset} {platform.system()} {platform.release()}")
+        print(f"{blue}OS{reset}: {platform.system()} {platform.release()}")
         return True
 
     if user_input.lower() == "time":
@@ -682,7 +682,7 @@ def handle_special_commands(user_input):
             for i in range(1, hist_len + 1):
                 print(f"{i}: {readline.get_history_item(i)}")
         except Exception as e:
-            print(f"{red}Error reading history:{reset} {str(e)}")
+            print(f"{red}Error reading history{reset}: {str(e)}")
         return True
 
     if user_input.startswith("search "):
@@ -694,7 +694,7 @@ def handle_special_commands(user_input):
             for match in matches:
                 print(match)
         except Exception as e:
-            print(f"{red}Error searching:{reset} {str(e)}")
+            print(f"{red}Error searching{reset}: {str(e)}")
         return True
 
         # Zip-Ordner erstellen
@@ -704,7 +704,7 @@ def handle_special_commands(user_input):
             shutil.make_archive(folder, 'zip', folder)
             print(f"{green}Folder zipped successfully!{reset}")
         except Exception as e:
-            print(f"{red}Error zipping folder:{reset} {str(e)}")
+            print(f"{red}Error zipping folder{reset}: {str(e)}")
         return True
 
         # Zip-Archiv entpacken
@@ -715,13 +715,13 @@ def handle_special_commands(user_input):
                 zip_ref.extractall(os.path.splitext(zip_path)[0])
             print(f"{green}Archive extracted!{reset}")
         except Exception as e:
-            print(f"{red}Error unzipping:{reset} {str(e)}")
+            print(f"{red}Error unzipping{reset}: {str(e)}")
         return True
 
         # RAM und CPU Status
     if user_input.lower() == "sysinfo":
-        print(f"{blue}CPU Usage:{reset} {psutil.cpu_percent()}%")
-        print(f"{blue}RAM Usage:{reset} {psutil.virtual_memory().percent}%")
+        print(f"{blue}CPU Usage{reset}: {psutil.cpu_percent()}%")
+        print(f"{blue}RAM Usage{reset}: {psutil.virtual_memory().percent}%")
         return True
 
         # Zwischenablage setzen
@@ -748,7 +748,7 @@ def handle_special_commands(user_input):
             ctypes.windll.shell32.SHEmptyRecycleBinW(None, None, 0x00000001)
             print(f"{green}Recycle Bin emptied!{reset}")
         except Exception as e:
-            print(f"{red}Error emptying trash:{reset} {str(e)}")
+            print(f"{red}Error emptying trash{reset}: {str(e)}")
         return True
 
     if user_input.startswith("launch "):
@@ -797,15 +797,15 @@ def handle_special_commands(user_input):
             ping = st.results.ping
 
             # Print out results in a cool format
-            print(f"{blue}Download:{reset} {download:.2f} Mbps")
-            print(f"{blue}Upload:{reset} {upload:.2f} Mbps")
-            print(f"{blue}Ping:{reset} {ping} ms")
+            print(f"{blue}Download{reset}: {download:.2f} Mbps")
+            print(f"{blue}Upload{reset}: {upload:.2f} Mbps")
+            print(f"{blue}Ping{reset}: {ping} ms")
 
             return True
 
         except Exception as e:
             # If something goes wrong, show the error
-            print(f"{red}Whoops, something went wrong with the speedtest:{reset} {e}")
+            print(f"{red}Whoops, something went wrong with the speedtest{reset}: {e}")
             return False
 
     # Prozessliste
@@ -821,7 +821,7 @@ def handle_special_commands(user_input):
             p.terminate()
             print(f"{green}Killed process {pid}{reset}")
         except Exception as e:
-            print(f"{red}Error killing process:{reset} {str(e)}")
+            print(f"{red}Error killing process{reset}: {str(e)}")
         return True
 
     # Datei herunterladen
@@ -847,11 +847,11 @@ def handle_special_commands(user_input):
 
             print(f"{green}Downloaded {file_name}{reset}")
         except requests.HTTPError as http_err:
-            print(f"{red}HTTP error during download:{reset} {http_err}")
+            print(f"{red}HTTP error during download{reset}: {http_err}")
         except requests.RequestException as req_err:
-            print(f"{red}Request error during download:{reset} {req_err}")
+            print(f"{red}Request error during download{reset}: {req_err}")
         except Exception as err:
-            print(f"{red}Unexpected error:{reset} {err}")
+            print(f"{red}Unexpected error{reset}: {err}")
         return True
 
     # CPU Temperatur
@@ -863,7 +863,7 @@ def handle_special_commands(user_input):
     if user_input.lower() == "chucknorris":
         try:
             joke = requests.get("https://api.chucknorris.io/jokes/random").json()['value']
-            print(f"{green}Chuck Norris says:{reset} {joke}")
+            print(f"{green}Chuck Norris says{reset}: {joke}")
         except:
             print(f"{red}Couldn't fetch Chuck Norris joke!{reset}")
         return True
@@ -925,7 +925,7 @@ def handle_special_commands(user_input):
 
         response = get_response_from_ollama(user_input, ollama)
 
-        print(f"{blue}🤖 AI says:{reset}", end=" ")
+        print(f"{blue}🤖 AI says{reset}:", end=" ")
         type_out_text(response)
 
         return True
