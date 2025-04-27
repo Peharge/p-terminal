@@ -111,4 +111,4 @@ etc.
 | **Terminal** | **Problem description** | **Cause**                                                                          | **Solution** | **Status** |
 |--------------|-------------------------|------------------------------------------------------------------------------------|--------------|------------|
 | P-Term       | p-term.bat              | Die .bat  muss eine .env erstellen um `./install/cpp/install-vs.py` auszuführen!!! | morgen...    | X          |
-| pp-Term      | pp-term-3.py            | andere .env und .venv activiren                                                    | moregn...    | X          |
+| pp-Term      | pp-term-3.py            | andere .env und .venv activiren                                                    | moregn...    | ✔          |
