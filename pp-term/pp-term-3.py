@@ -68,11 +68,12 @@ import threading
 import time
 import importlib.util
 import os
+import logging
 
 required_packages = [
     "requests", "ollama", "transformers", "numpy", "pandas", "python-dotenv", "beautifulsoup4",
     "PyQt6", "PyQt6-sip", "PyQt6-Charts", "PyQt6-WebEngine", "PyQt6-Charts", "keyboard", "pyreadline3",
-    "requests", "psutil", "speedtest-cli", "colorama", "pyperclip", "termcolor"
+    "requests", "psutil", "speedtest-cli", "colorama", "pyperclip", "termcolor", "docker", "flask"
 ]
 
 
@@ -91,17 +92,35 @@ def activate_virtualenv(venv_path):
     print(f"Virtual environment {venv_path} activated.")
 
 
-def ensure_packages_installed(packages):
-    """Installiert fehlende Pakete effizient."""
-    to_install = [pkg for pkg in packages if importlib.util.find_spec(pkg) is None]
+def ensure_packages_installed(packages: list[str]) -> None:
+    """
+    Ensures that the specified Python packages are installed.
 
-    if to_install:
-        print(f"Installing missing packages: {', '.join(to_install)}...")
-        subprocess.run([sys.executable, "-m", "pip", "install"] + to_install, check=True, stdout=subprocess.DEVNULL,
-                       stderr=subprocess.DEVNULL)
-        print("✅ All missing packages installed.")
-    else:
-        print("✅ All required packages are already installed.")
+    Installs only missing packages. Silent, fast, and robust.
+    """
+    # Configure logging to exclude log level name (e.g. [INFO])
+    logging.basicConfig(level=logging.INFO, format='%(message)s')
+
+    missing = [pkg for pkg in packages if importlib.util.find_spec(pkg) is None]
+
+    if not missing:
+        logging.info("✅ All required packages are already installed.")
+        return
+
+    logging.info(f"Installing missing packages: {', '.join(missing)}")
+
+    try:
+        subprocess.run(
+            [
+                sys.executable, "-m", "pip", "install", "--quiet", "--disable-pip-version-check",
+                *missing
+            ],
+            check=True
+        )
+        logging.info("✅ Missing packages installed successfully.")
+    except subprocess.CalledProcessError as e:
+        logging.error("❌ Failed to install required packages.")
+        logging.debug(f"Error details: {e}")
 
 
 # Virtuelle Umgebung aktivieren und Pakete sicherstellen
