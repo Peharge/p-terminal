@@ -700,11 +700,12 @@ def handle_special_commands(user_input):
         print(user_input[5:].strip())
         return True
 
-    if "=" in user_input:
+    '''if "=" in user_input:
         var, value = map(str.strip, user_input.split("=", 1))
         os.environ[var] = value
-        print(f"{green}Environment variable set{reset}: {var}={value}")
+        print(f"{blue}Environment variable set{reset}: {var}={value}")
         return True
+    '''
 
     if user_input.startswith(("type ", "cat ")):
         try:
