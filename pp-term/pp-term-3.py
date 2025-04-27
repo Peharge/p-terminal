@@ -4310,7 +4310,7 @@ def main():
             env_indicator = (
                 f"{green}[{reset}{display_env_path}{green}]{reset}"
                 if env_active else
-                f"{green}[{reset}{red}no venv recorded{reset}{green}]{reset}"
+                f"{green}[{reset}{red}./p-terminal/pp-term/.env{reset}{green}]{reset}"
             )
 
             # Prompt-Design
