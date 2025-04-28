@@ -260,6 +260,8 @@ Download the [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-te
 - `jupyter --version` - Display Jupyter version
 - `grafana --version` - Display Grafana version
 - `3d-slicer --version` - Display 3D Slicer version  
+- `pin-evil` - evil mode
+- `pin-main` - main mode
 etc.  
 
 # Problems
