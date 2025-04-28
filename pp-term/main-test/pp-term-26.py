@@ -4770,25 +4770,7 @@ def find_active_env():
     # Nichts gefunden ➔ fallback
     return os.path.abspath(DEFAULT_ENV_DIR)
 
-def get_main_pin(current_dir, env_indicator):
-    return (
-        f"\n{green}┌──({reset}{blue}{getpass.getuser()}"
-        + colored("㋐", attrs=["bold"])
-        + f"{blue}Peharge{reset}{green})-[{reset}{current_dir}{green}]-{reset}{env_indicator}"
-        f"\n{green}└─{reset}{blue}${reset} "
-    )
-
-def get_evel_pin(current_dir, env_indicator):
-    return (
-        f"\n{blue}┌──({reset}{red}{getpass.getuser()}"
-        + colored("㋐", attrs=["bold"])
-        + f"{red}Peharge{reset}{blue})-[{reset}{current_dir}{blue}]-{reset}{env_indicator}"
-        f"\n{blue}└─{reset}{red}#{reset} "
-    )
-
 def main():
-    state = "main"
-
     print_banner()
     set_python_path()
     setup_autocomplete()
@@ -4814,10 +4796,13 @@ def main():
                 f"{green}[{reset}{red}no venv recorded{reset}{green}]{reset}"
             )
 
-            # PIN-Design je nach state
-            pin = get_main_pin(current_dir, env_indicator) if state == "main" else get_evel_pin(current_dir, env_indicator)
+            # Prompt-Design
+            prompt = (
+                f"\n{green}┌──({reset}{blue}{getpass.getuser()}" + colored("㋐", attrs=["bold"]) + f"{blue}Peharge{reset}{green})-[{reset}{current_dir}{green}]-{reset}{env_indicator}"
+                f"\n{green}└─{reset}{blue}${reset} "
+            )
 
-            print(pin, end='')
+            print(prompt, end='')
             user_input = input().strip()
 
             if handle_special_commands(user_input):
@@ -4826,14 +4811,6 @@ def main():
             elif user_input.startswith("pp "):
                 user_input = user_input[3:]
                 run_command_with_admin_privileges(user_input)
-
-            elif user_input.lower() == "pin-main":
-                state = "main"
-                continue
-
-            elif user_input.lower() == "pin-evil":
-                state = "evel"
-                continue
 
             elif user_input.startswith("pp-cpp "):
                 user_input = user_input[7:]
