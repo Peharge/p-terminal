@@ -406,6 +406,7 @@ def handle_special_commands(user_input):
     import requests
     import shlex
     import logging
+    import json
 
     user_input = user_input.strip()
 
@@ -1053,12 +1054,32 @@ def handle_special_commands(user_input):
 
     # Theme Wechsel - soon
     if user_input.startswith("theme "):
-        theme_choice = user_input.split()[1]
-        if theme_choice in ["dark", "light"]:
-            current_theme = theme_choice
-            print(f"{green}Theme switched to {current_theme}!{reset}")
+        _, theme_choice = user_input.split(maxsplit=1)
+        theme_choice = theme_choice.lower()
+
+        settings_path = os.path.expandvars(
+            r"%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json")
+
+        if theme_choice in ("dark", "light"):
+            try:
+                with open(settings_path, "r", encoding="utf-8") as f:
+                    settings = json.load(f)
+
+                settings["theme"] = theme_choice
+
+                with open(settings_path, "w", encoding="utf-8") as f:
+                    json.dump(settings, f, indent=4)
+
+                print(
+                    f"{green}Theme switched to {theme_choice}! Please restart Windows Terminal to apply changes.{reset}")
+
+                # Option: Windows Terminal sofort neu starten
+                # subprocess.run(["wt", "new-tab"])
+
+            except Exception as e:
+                print(f"{red}Failed to change theme: {e}{reset}")
         else:
-            print(f"{red}Unknown theme!{reset}")
+            print(f"{red}Unknown theme '{theme_choice}'!{reset}")
         return True
 
     # Temp Dateien löschen
