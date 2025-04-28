@@ -166,6 +166,13 @@ from termcolor import colored
 import venv
 import selectors
 import signal
+import logging
+import subprocess
+import shutil
+import shlex
+import time
+import logging
+from typing import Union, List, Optional
 
 colorama.init()
 
@@ -785,62 +792,140 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("search "):
         try:
-            _, filename, keyword = user_input.split(maxsplit=2)
-            with open(filename, "r", encoding="utf-8") as f:
-                lines = f.readlines()
-            matches = [line.strip() for line in lines if keyword.lower() in line.lower()]
-            for match in matches:
-                print(match)
+            # Split the input into command, filename, and keyword
+            parts = user_input.split(maxsplit=2)
+            if len(parts) < 3:
+                print("Usage: search <filename> <keyword>")
+                return True
+
+            _, filename, keyword = parts
+
+            # Open the file with UTF-8 encoding
+            with open(filename, "r", encoding="utf-8") as file:
+                lines = file.readlines()
+
+            # Search for the keyword in each line, case insensitive
+            matches = []
+            for i, line in enumerate(lines, start=1):
+                if keyword.lower() in line.lower():
+                    matches.append(f"Line {i}: {line.rstrip()}")
+
+            # Output the results or a corresponding message if no matches are found
+            if matches:
+                print("\n".join(matches))
+            else:
+                print("No matches found.")
+
+        except FileNotFoundError:
+            print(f"{red}File not found{reset}: {filename}")
+        except PermissionError:
+            print(f"{red}No permission to read{reset}: {filename}")
         except Exception as e:
-            print(f"{red}Error searching{reset}: {str(e)}")
+            print(f"{red}Error during search{reset}: {str(e)}")
         return True
 
-        # Zip-Ordner erstellen
+    # Create a zip folder (optimized for Windows)
     if user_input.startswith("zip "):
         try:
-            _, folder = user_input.split(maxsplit=1)
-            shutil.make_archive(folder, 'zip', folder)
-            print(f"{green}Folder zipped successfully!{reset}")
+            # Extract command and folder from input
+            parts = user_input.split(maxsplit=1)
+            if len(parts) < 2:
+                print("Usage: zip <folder>")
+                return True
+
+            _, folder = parts
+            # Normalize the path, especially useful on Windows
+            folder_path = os.path.normpath(folder)
+
+            # Check if the folder exists
+            if not os.path.isdir(folder_path):
+                print(f"{red}Error: Folder does not exist{reset}: {folder_path}")
+                return True
+
+            # Create the archive. The archive name matches the folder name without an extension.
+            shutil.make_archive(folder_path, 'zip', folder_path)
+            print(f"{green}Folder successfully zipped!{reset}")
+
+        except FileNotFoundError:
+            print(f"{red}Error: Folder not found{reset}: {folder_path}")
+        except PermissionError:
+            print(f"{red}Error: No permission to access the folder{reset}: {folder_path}")
         except Exception as e:
-            print(f"{red}Error zipping folder{reset}: {str(e)}")
+            print(f"{red}Error while zipping the folder{reset}: {str(e)}")
         return True
 
-        # Zip-Archiv entpacken
+    # Unzip an archive (optimized for Windows with enhanced checks)
     if user_input.startswith("unzip "):
         try:
-            _, zip_path = user_input.split(maxsplit=1)
+            # Extract command and zip file from input
+            parts = user_input.split(maxsplit=1)
+            if len(parts) < 2:
+                print("Usage: unzip <zip_file_path>")
+                return True
+
+            _, zip_path = parts
+            # Normalize the path, especially useful on Windows
+            zip_path = os.path.normpath(zip_path)
+
+            # Check if the zip file exists and is a file
+            if not os.path.isfile(zip_path):
+                print(f"{red}Error:{reset} File does not exist: {zip_path}")
+                return True
+
+            # Determine the target directory based on the filename without extension
+            extract_dir = os.path.splitext(zip_path)[0]
+
+            # Open and extract the zip archive
             with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-                zip_ref.extractall(os.path.splitext(zip_path)[0])
-            print(f"{green}Archive extracted!{reset}")
+                zip_ref.extractall(extract_dir)
+
+            print(f"{green}Archive successfully extracted to:{reset} {extract_dir}")
+
+        except zipfile.BadZipFile:
+            print(f"{red}Error:{reset} Invalid zip archive: {zip_path}")
+        except PermissionError:
+            print(f"{red}Error:{reset} No permission to access the file: {zip_path}")
         except Exception as e:
-            print(f"{red}Error unzipping{reset}: {str(e)}")
+            print(f"{red}Error while extracting:{reset} {str(e)}")
         return True
 
-        # RAM und CPU Status
+    # RAM and CPU status
     if user_input.lower() == "sysinfo":
         print(f"{blue}CPU Usage{reset}: {psutil.cpu_percent()}%")
         print(f"{blue}RAM Usage{reset}: {psutil.virtual_memory().percent}%")
         return True
 
-        # Zwischenablage setzen
+    # Set clipboard content (improved with extended validation and error handling)
     if user_input.startswith("clip set "):
-        text = user_input[len("clip set "):]
-        pyperclip.copy(text)
-        print(f"{green}Text copied to clipboard!{reset}")
+        try:
+            # Extract the text to be copied, removing leading and trailing whitespace
+            text = user_input[len("clip set "):].strip()
+            if not text:
+                print("Usage: clip set <text>")
+                return True
+
+            # Copy text to clipboard
+            pyperclip.copy(text)
+            print(f"{green}Text successfully copied to clipboard!{reset}")
+        except ImportError:
+            print(
+                f"{red}Error:{reset} pyperclip module is not installed. Please install it with 'pip install pyperclip'")
+        except Exception as e:
+            print(f"{red}Error while copying to clipboard{reset}: {str(e)}")
         return True
 
-        # Zwischenablage lesen
+    # Zwischenablage lesen
     if user_input.lower() == "clip get":
         print(pyperclip.paste())
         return True
 
-        # Ping Befehl
+    # Ping Befehl
     if user_input.startswith("ping "):
         target = user_input.split(maxsplit=1)[1]
         os.system(f"ping {target}")
         return True
 
-        # Papierkorb leeren
+    # Papierkorb leeren
     if user_input.lower() == "emptytrash":
         try:
             ctypes.windll.shell32.SHEmptyRecycleBinW(None, None, 0x00000001)
@@ -4389,40 +4474,282 @@ def run_clear_python_command(command):
         process.terminate()
 
 
-def run_scoop_command(command):
-    if isinstance(command, str):
-        command = f"scoop {command}"
+def run_scoop_command(
+    command: Union[str, List[str]],
+    timeout: Optional[int] = None,
+    capture_output: bool = False,
+    retries: int = 2,
+    retry_delay: float = 1.0,
+    logger: Optional[logging.Logger] = None
+) -> subprocess.CompletedProcess:
+    """
+    Executes a Scoop command – super-fast, stable, and with robust logger fallback.
 
-    process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+    Args:
+        command: Scoop command as a string or list.
+        timeout: Max runtime in seconds.
+        capture_output: Returns stdout/stderr if True.
+        retries: Number of retries on exit errors.
+        retry_delay: Base delay (seconds) for exponential backoff.
+        logger: Optional logger; if None, a default logger is configured.
 
-    try:
-        process.wait()
-    except KeyboardInterrupt:
-        process.terminate()
+    Returns:
+        subprocess.CompletedProcess with .stdout/.stderr if capture_output.
+
+    Raises:
+        RuntimeError: if scoop.exe is not found.
+        subprocess.CalledProcessError: on exit code ≠ 0 (after retries).
+        subprocess.TimeoutExpired: on timeout.
+        KeyboardInterrupt: on user interruption.
+    """
+    # --- Logger fallback and configuration ---
+    if logger is None:
+        logger = logging.getLogger("run_scoop_command")
+    if not logger.handlers:
+        # If no handler exists: add default stream handler
+        handler = logging.StreamHandler()
+        fmt = logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+        handler.setFormatter(fmt)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
+
+    # --- Caching the scoop path ---
+    if not hasattr(run_scoop_command, "_scoop_path"):
+        path = shutil.which("scoop")
+        if not path:
+            msg = "Scoop not found – please install and check PATH."
+            logger.error(msg)
+            raise RuntimeError(msg)
+        run_scoop_command._scoop_path = path
+    scoop_path = run_scoop_command._scoop_path
+
+    # --- Tokenizing ---
+    args = command if isinstance(command, list) else shlex.split(command)
+    cmd = [scoop_path] + args
+
+    logger.debug(f"Starting Scoop: {' '.join(cmd)} (timeout={timeout}, retries={retries})")
+
+    # --- Execution with retries ---
+    attempt = 0
+    while True:
+        attempt += 1
+        try:
+            start = time.perf_counter()
+            result = subprocess.run(
+                cmd,
+                shell=False,
+                stdout=subprocess.PIPE if capture_output else None,
+                stderr=subprocess.PIPE if capture_output else None,
+                text=True,
+                timeout=timeout,
+                check=True
+            )
+            duration = time.perf_counter() - start
+            logger.info(f"Scoop succeeded in {duration:.2f}s (attempt {attempt})")
+            return result
+
+        except subprocess.CalledProcessError as e:
+            stderr = (e.stderr or "").strip() or "<no stderr>"
+            logger.error(f"Exit code {e.returncode} (attempt {attempt}): {stderr}")
+            if attempt <= retries:
+                wait = retry_delay * (2 ** (attempt - 1))
+                logger.warning(f"Retrying in {wait:.1f}s…")
+                time.sleep(wait)
+                continue
+            raise  # After retries, propagate the CalledProcessError
+
+        except subprocess.TimeoutExpired as e:
+            logger.error(f"Timeout after {timeout}s (attempt {attempt})")
+            raise
+
+        except KeyboardInterrupt:
+            logger.warning("Aborted by user")
+            raise
+
+def run_choco_command(
+    command: Union[str, List[str]],
+    timeout: Optional[int] = None,
+    capture_output: bool = False,
+    retries: int = 2,
+    retry_delay: float = 1.0,
+    logger: Optional[logging.Logger] = None
+) -> subprocess.CompletedProcess:
+    """
+    Executes a Chocolatey command – super-fast, stable, and with robust logger fallback.
+
+    Args:
+        command: Chocolatey command as a string or list.
+        timeout: Maximum runtime in seconds.
+        capture_output: Returns stdout and stderr if True.
+        retries: Number of retries on exit errors.
+        retry_delay: Base delay (in seconds) for exponential backoff.
+        logger: Optional logger; if None, a default logger is configured.
+
+    Returns:
+        subprocess.CompletedProcess with .stdout and .stderr (if capture_output is True).
+
+    Raises:
+        RuntimeError: If choco.exe is not found.
+        subprocess.CalledProcessError: On exit code ≠ 0 (after retries).
+        subprocess.TimeoutExpired: On timeout.
+        KeyboardInterrupt: On user interruption.
+    """
+    # --- Logger fallback and configuration ---
+    if logger is None:
+        logger = logging.getLogger("run_choco_command")
+    if not logger.handlers:
+        # Add default stream handler if none exists
+        handler = logging.StreamHandler()
+        fmt = logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+        handler.setFormatter(fmt)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
+
+    # --- Caching the choco path ---
+    if not hasattr(run_choco_command, "_choco_path"):
+        path = shutil.which("choco")
+        if not path:
+            msg = "Chocolatey (choco) not found – please install and check PATH."
+            logger.error(msg)
+            raise RuntimeError(msg)
+        run_choco_command._choco_path = path
+    choco_path = run_choco_command._choco_path
+
+    # --- Tokenizing the command ---
+    args = command if isinstance(command, list) else shlex.split(command)
+    cmd = [choco_path] + args
+
+    logger.debug(f"Starting Chocolatey: {' '.join(cmd)} (timeout={timeout}, retries={retries})")
+
+    # --- Execution with retries ---
+    attempt = 0
+    while True:
+        attempt += 1
+        try:
+            start = time.perf_counter()
+            result = subprocess.run(
+                cmd,
+                shell=False,
+                stdout=subprocess.PIPE if capture_output else None,
+                stderr=subprocess.PIPE if capture_output else None,
+                text=True,
+                timeout=timeout,
+                check=True
+            )
+            duration = time.perf_counter() - start
+            logger.info(f"Chocolatey succeeded in {duration:.2f}s (attempt {attempt})")
+            return result
+
+        except subprocess.CalledProcessError as e:
+            stderr = (e.stderr or "").strip() or "<no stderr>"
+            logger.error(f"Exit code {e.returncode} (attempt {attempt}): {stderr}")
+            if attempt <= retries:
+                wait = retry_delay * (2 ** (attempt - 1))
+                logger.warning(f"Retrying in {wait:.1f}s…")
+                time.sleep(wait)
+                continue
+            raise  # Pass the error after retries
+
+        except subprocess.TimeoutExpired as e:
+            logger.error(f"Timeout after {timeout}s (attempt {attempt})")
+            raise
+
+        except KeyboardInterrupt:
+            logger.warning("Aborted by user")
+            raise
 
 
-def run_choco_command(command):
-    if isinstance(command, str):
-        command = f"choco {command}"
+def run_winget_command(
+    command: Union[str, List[str]],
+    timeout: Optional[int] = None,
+    capture_output: bool = False,
+    retries: int = 2,
+    retry_delay: float = 1.0,
+    logger: Optional[logging.Logger] = None
+) -> subprocess.CompletedProcess:
+    """
+    Executes a winget command – super-fast, stable, and with robust logger fallback.
 
-    process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+    Args:
+        command: Winget command as a string or list.
+        timeout: Maximum runtime in seconds.
+        capture_output: Returns stdout and stderr if True.
+        retries: Number of retries on exit errors.
+        retry_delay: Base delay (in seconds) for exponential backoff.
+        logger: Optional logger; if None, a default logger is configured.
 
-    try:
-        process.wait()
-    except KeyboardInterrupt:
-        process.terminate()
+    Returns:
+        subprocess.CompletedProcess with .stdout and .stderr (if capture_output is True).
 
+    Raises:
+        RuntimeError: If winget is not found.
+        subprocess.CalledProcessError: On exit code ≠ 0 (after retries).
+        subprocess.TimeoutExpired: On timeout.
+        KeyboardInterrupt: On user interruption.
+    """
+    # --- Logger fallback and configuration ---
+    if logger is None:
+        logger = logging.getLogger("run_winget_command")
+    if not logger.handlers:
+        handler = logging.StreamHandler()
+        fmt = logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+        handler.setFormatter(fmt)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
 
-def run_winget_command(command):
-    if isinstance(command, str):
-        command = f"winget {command}"
+    # --- Caching the winget path ---
+    if not hasattr(run_winget_command, "_winget_path"):
+        path = shutil.which("winget")
+        if not path:
+            msg = "winget not found – please install and check PATH."
+            logger.error(msg)
+            raise RuntimeError(msg)
+        run_winget_command._winget_path = path
+    winget_path = run_winget_command._winget_path
 
-    process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+    # --- Tokenizing the command ---
+    args = command if isinstance(command, list) else shlex.split(command)
+    cmd = [winget_path] + args
 
-    try:
-        process.wait()
-    except KeyboardInterrupt:
-        process.terminate()
+    logger.debug(f"Starting winget: {' '.join(cmd)} (timeout={timeout}, retries={retries})")
+
+    # --- Execution with retries ---
+    attempt = 0
+    while True:
+        attempt += 1
+        try:
+            start = time.perf_counter()
+            result = subprocess.run(
+                cmd,
+                shell=False,
+                stdout=subprocess.PIPE if capture_output else None,
+                stderr=subprocess.PIPE if capture_output else None,
+                text=True,
+                timeout=timeout,
+                check=True
+            )
+            duration = time.perf_counter() - start
+            logger.info(f"winget succeeded in {duration:.2f}s (attempt {attempt})")
+            return result
+
+        except subprocess.CalledProcessError as e:
+            stderr = (e.stderr or "").strip() or "<no stderr>"
+            logger.error(f"Exit code {e.returncode} (attempt {attempt}): {stderr}")
+            if attempt <= retries:
+                wait = retry_delay * (2 ** (attempt - 1))
+                logger.warning(f"Retrying in {wait:.1f}s…")
+                time.sleep(wait)
+                continue
+            raise  # Pass the error after retries
+
+        except subprocess.TimeoutExpired as e:
+            logger.error(f"Timeout after {timeout}s (attempt {attempt})")
+            raise
+
+        except KeyboardInterrupt:
+            logger.warning("Aborted by user")
+            raise
+
 
 def find_active_env():
     """Suche ein Environment im aktuellen Verzeichnis."""
@@ -4936,28 +5263,29 @@ def main():
                     run_clear_python_command(user_input)
 
             elif user_input.startswith("sc "):
+                user_input = user_input[3:].strip()
+                print(f"Executing the following command with scoop: {user_input}")
+                run_scoop_command(user_input)
+
+            elif user_input.startswith("scoop "):
                 user_input = user_input[6:].strip()
-                if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
-                else:
-                    print(f"Executing the following command with scoop: {user_input}")
-                    run_scoop_command(user_input)
+                print(f"Executing the following command with scoop: {user_input}")
+                run_scoop_command(user_input)
 
             elif user_input.startswith("cho "):
+                user_input = user_input[4:].strip()
+                print(f"Executing the following command with choco: {user_input}")
+                run_choco_command(user_input)
+
+            elif user_input.startswith("choco "):
                 user_input = user_input[6:].strip()
-                if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
-                else:
-                    print(f"Executing the following command with choco: {user_input}")
-                    run_choco_command(user_input)
+                print(f"Executing the following command with choco: {user_input}")
+                run_choco_command(user_input)
 
             elif user_input.startswith("winget "):
                 user_input = user_input[6:].strip()
-                if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
-                else:
-                    print(f"Executing the following command with winget : {user_input}")
-                    run_winget_command(user_input)
+                print(f"Executing the following command with winget : {user_input}")
+                run_winget_command(user_input)
 
             else:
                 run_command(user_input, shell=True)
