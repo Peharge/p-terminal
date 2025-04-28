@@ -173,6 +173,7 @@ import shlex
 import time
 import logging
 from typing import Union, List, Optional
+import json
 
 colorama.init()
 
@@ -406,7 +407,6 @@ def handle_special_commands(user_input):
     import requests
     import shlex
     import logging
-    import json
 
     user_input = user_input.strip()
 
@@ -1054,32 +1054,7 @@ def handle_special_commands(user_input):
 
     # Theme Wechsel - soon
     if user_input.startswith("theme "):
-        _, theme_choice = user_input.split(maxsplit=1)
-        theme_choice = theme_choice.lower()
-
-        settings_path = os.path.expandvars(
-            r"%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json")
-
-        if theme_choice in ("dark", "light"):
-            try:
-                with open(settings_path, "r", encoding="utf-8") as f:
-                    settings = json.load(f)
-
-                settings["theme"] = theme_choice
-
-                with open(settings_path, "w", encoding="utf-8") as f:
-                    json.dump(settings, f, indent=4)
-
-                print(
-                    f"{green}Theme switched to {theme_choice}! Please restart Windows Terminal to apply changes.{reset}")
-
-                # Option: Windows Terminal sofort neu starten
-                # subprocess.run(["wt", "new-tab"])
-
-            except Exception as e:
-                print(f"{red}Failed to change theme: {e}{reset}")
-        else:
-            print(f"{red}Unknown theme '{theme_choice}'!{reset}")
+        switch_theme(user_input)
         return True
 
     # Temp Dateien löschen
@@ -1136,6 +1111,174 @@ def handle_special_commands(user_input):
 
     return False
 
+import os
+import shutil
+import subprocess
+import json
+
+# Configuration
+SETTINGS_PATH = os.path.expandvars(
+    r"%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
+)
+BACKUP_SUFFIX = ".bak"
+
+# Predefined color schemes
+COLOR_SCHEMES = {
+    "dark": {
+        "name": "Dark",
+        "background": "#0C0C0C",
+        "foreground": "#F2F2F2",
+        "black":       "#0C0C0C",
+        "red":         "#C50F1F",
+        "green":       "#13A10E",
+        "yellow":      "#C19C00",
+        "blue":        "#0037DA",
+        "purple":      "#881798",
+        "cyan":        "#3A96DD",
+        "white":       "#CCCCCC",
+        "brightBlack":   "#767676",
+        "brightRed":     "#E74856",
+        "brightGreen":   "#16C60C",
+        "brightYellow":  "#F9F1A5",
+        "brightBlue":    "#3B78FF",
+        "brightPurple":  "#B4009E",
+        "brightCyan":    "#61D6D6",
+        "brightWhite":   "#F2F2F2"
+    },
+    "light": {
+        "name": "Light",
+        "background": "#FFFFFF",
+        "foreground": "#333333",
+        "black":       "#000000",
+        "red":         "#C50F1F",
+        "green":       "#13A10E",
+        "yellow":      "#C19C00",
+        "blue":        "#0037DA",
+        "purple":      "#881798",
+        "cyan":        "#3A96DD",
+        "white":       "#CCCCCC",
+        "brightBlack":   "#767676",
+        "brightRed":     "#E74856",
+        "brightGreen":   "#16C60C",
+        "brightYellow":  "#F9F1A5",
+        "brightBlue":    "#3B78FF",
+        "brightPurple":  "#B4009E",
+        "brightCyan":    "#61D6D6",
+        "brightWhite":   "#F2F2F2"
+    },
+    "hackerman": {},
+    "kayla_cinnamon": {},
+    "middle_machine": {},
+    "ubuntu": {
+        "name": "Ubuntu",
+        "background": "#300A24",
+        "foreground": "#F2F2F2",
+        "black":       "#300A24",
+        "red":         "#CE5C00",
+        "green":       "#8ABEB7",
+        "yellow":      "#F0C674",
+        "blue":        "#81A2BE",
+        "purple":      "#B294BB",
+        "cyan":        "#8ABEB7",
+        "white":       "#EEEEEC",
+        "brightBlack":   "#1E161B",
+        "brightRed":     "#FF6E67",
+        "brightGreen":   "#5FEBA6",
+        "brightYellow":  "#F4BF75",
+        "brightBlue":    "#8AB8FE",
+        "brightPurple":  "#D7A0FF",
+        "brightCyan":    "#BDF5F2",
+        "brightWhite":   "#FFFFFF",
+        "cursorColor": "#000000",
+    },
+}
+
+# Theme-specific defaults mapping
+THEME_DEFAULTS = {
+    "hackerman": {
+        "defaults": {
+            "colorScheme": "One Half Dark",
+            "useAcrylic": True,
+            "acrylicOpacity": 0.4,
+            "backgroundImage": "ms-appdata:///roaming/xNmzL9d.png",
+            "backgroundImageStretchMode": "none",
+            "backgroundImageAlignment": "bottomRight",
+            "backgroundImageOpacity": 0.8,
+            "cursorColor": "#ffffff"
+        }
+    },
+    "kayla_cinnamon": {
+        "defaults": {
+            "fontFace": "CaskaydiaCove Nerd Font",
+            "backgroundImageOpacity": 0.75,
+            "colorScheme": "Build"
+        }
+    },
+    "middle_machine": {
+        "defaults": {
+            "fontFace": "CaskaydiaCove Nerd Font",
+            "backgroundImageOpacity": 0.75
+        }
+    },
+    "ubuntu": {
+        "defaults": {
+            "cursorColor": "#000000",
+        }
+    }
+}
+
+def switch_theme(user_input: str) -> bool:
+    if not user_input.lower().startswith("theme "):
+        return False
+
+    _, choice = user_input.split(maxsplit=1)
+    key = choice.lower().replace('-', '_')
+
+    # Validate theme
+    if key not in COLOR_SCHEMES and key not in THEME_DEFAULTS:
+        print(f"Unknown theme '{choice}'. Available: {', '.join(list(COLOR_SCHEMES.keys()) + list(THEME_DEFAULTS.keys()))}")
+        return True
+
+    try:
+        # Backup settings
+        bak = SETTINGS_PATH + BACKUP_SUFFIX
+        shutil.copy2(SETTINGS_PATH, bak)
+        print(f"Backup created: {bak}")
+
+        # Load settings
+        with open(SETTINGS_PATH, 'r', encoding='utf-8') as f:
+            settings = json.load(f)
+
+        # Apply color scheme if defined
+        if key in COLOR_SCHEMES:
+            scheme = COLOR_SCHEMES[key]
+            if scheme:
+                settings.setdefault('schemes', [])
+                settings['schemes'] = [s for s in settings['schemes'] if s.get('name') != scheme.get('name')]
+                settings['schemes'].append(scheme)
+                for profile in settings.get('profiles', {}).get('list', []):
+                    profile['colorScheme'] = scheme.get('name')
+                settings['theme'] = 'dark' if 'dark' in key else 'light'
+                print(f"Applied colorscheme: {scheme.get('name')}")
+
+        # **Korrekte Anwendung der Defaults innerhalb von profiles**
+        if key in THEME_DEFAULTS:
+            settings.setdefault('profiles', {})  # ensure the profiles object exists
+            settings['profiles']['defaults'] = THEME_DEFAULTS[key]['defaults']
+            print(f"Applied defaults for: {key}")
+
+        # Save changes
+        with open(SETTINGS_PATH, 'w', encoding='utf-8') as f:
+            json.dump(settings, f, indent=4)
+        print(f"Theme '{choice}' applied successfully.")
+
+        # Restart Terminal (new tab)
+        subprocess.run(["wt.exe", "new-tab"], check=False)
+
+    except Exception as e:
+        print(f"Error applying theme '{choice}': {e}")
+
+    return True
 
 def get_weather():
     print("⛅ Fetching detailed weather for Berlin... (Demo)\n")
