@@ -46,14 +46,68 @@ Download the [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-te
 # Comands
 
 - `p` - Peharge command  
+	- `p git` - Peharge git command - Opens a P-Term Commit Explorer  
+	- `p htop` - Peharge git command - Opens a P-Term Taskmanager  
+	- `p ls` - Peharge git command - Opens a P-Term File Explorer  
+	- `p simon` - Peharge git command - Opens a P-Term SIMON Explorer
+	- `p wsl` - Peharge git command - Opens a P-Term WSL Explorer  
+	- `p pip` - Peharge git command - Opens a P-Term PIP Explorer  
+	- `p models` - Peharge git command - Opens a P-Term MAVIS Models Explorer  
+	- `p ubuntu` - Peharge git command - Opens a P-Term Ubuntu Explorer  
+	etc.  
+  
 - `pp` - Peharge permission command  
+- `pp-c` - Peharge permission compile command  
+- `pp-p` - Peharge permission publish command  
 - `ps` - Peharge search command  
-- `pa` - Peharge AI command: Ask a question (AI functionality) -> deepcoder:14b
+	- `ps-github` - Peharge GitHub search command  
+	- `ps-huggingface` - Huggingface GitHub search command  
+	- `ps-ollama` - Peharge Ollama search command    
+	- `ps-stackoverflow` - Stack Overflow GitHub search command  
+	- `ps-arxiv` - Peharge ArXiv search command  
+	etc.  
+  
+- `pa` - Peharge AI command: Ask a question (AI functionality) -> deepcoder:14b  
 - `lx` - Linux command  
+- `lx-c` - Linux command with Peharge C compiler 
+- `lx-p` - Linux command with Python 
+- `lx-cpp-c` - Linux command with Peharge C++ compiler  
+- `lx-c-c` - Linux command with Peharge C compiler 
+- `lx-p-c` - Linux command with Python
 - `ubuntu` - Ubuntu command  
-- `debian` - Ubuntu command  
-- `kali` - Ubuntu command  
-- `arch` - Ubuntu command  
+- `ubuntu-c` - Ubuntu command with Peharge C compiler 
+- `ubuntu-p` - Ubuntu command with Python 
+- `debian` - Debian command  
+- `debian-c` - Debian command with Peharge C compiler 
+- `debian-p` - Debian command with Python 
+- `kali` - Kali Linux command  
+- `kali-c` - Kali command with Peharge C compiler 
+- `kali-p` - Kali command with Python 
+- `hack` - Hack command (functionality-specific)  
+- `arch` - Arch Linux command  
+- `arch-c` - Arch command with Peharge C compiler 
+- `arch-p` - Arch command with Python 
+- `opensuse` - openSUSE Linux command  
+- `opensuse-c` - openSUSE command with Peharge C compiler 
+- `opensuse-p` - openSUSE command with Python 
+- `mint` - Linux Mint command  
+- `mint-c` - Linux Mint command with Peharge C compiler 
+- `mint-p` - Linux Mint command with Python 
+- `fedora` - Fedora Linux command  
+- `fedora-c` - Fedora command with Peharge C compiler 
+- `fedora-p` - Fedora command with Python 
+- `redhat` - Red Hat Linux command  
+- `redhat-c` - Red Hat Linux command with Peharge C compiler 
+- `redhat-p` - Red Hat Linux command with Python 
+- `sles` - SUSE Linux Enterprise Server command  
+- `sles-c` - SUSE Linux command with Peharge C compiler 
+- `sles-p` - SUSE Linux command with Python 
+- `pengwin` - Pengwin WSL Linux command  
+- `pengwin-c` - Pengwin WSL Linux command with Peharge C compiler 
+- `pengwin-p` - Pengwin WSL Linux command with Python 
+- `oracle` - Oracle Linux command  
+- `oracle-c` - Oracle Linux command with Peharge C compiler 
+- `oracle-p` - Oracle Linux command with Python 
 - `cd` - Change directory  
 - `cls` - Clear screen (Windows)  
 - `clear` - Clear screen (Linux)  
@@ -63,48 +117,44 @@ Download the [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-te
 - `rmdir` - Remove a directory  
 - `del` - Delete a file (Windows)  
 - `rm` - Remove a file (Linux)  
-- `echo` - Print text  
+- `echo` - Print text to output  
 - `type` - Display contents of a file (Windows)  
 - `cat` - Display contents of a file (Linux)  
 - `exit` - Exit application  
 - `alpine` - Alpine Linux command  
-- `hack` - Hack command (functionality-specific)  
-- `opensuse` - openSUSE Linux command  
-- `mint` - Linux Mint command  
-- `fedora` - Fedora Linux command  
-- `redhat` - Red Hat Linux command  
-- `sles` - SUSE Linux Enterprise Server command  
-- `pengwin` - Pengwin WSL Linux command  
-- `oracle` - Oracle Linux command  
-- `speedtest` - Internet speed test  
-- `kill` - Kill a process  
-- `download` - Download a file  
-- `cputemp` - Show CPU temperature  
-- `chucknorris` - Display Chuck Norris jokes  
-- `theme` - Change theme  
+- `scoop` - Manage apps via Scoop package manager (Windows)  
+- `choco` - Manage apps via Chocolatey package manager (Windows)  
+- `winget` - Manage apps via Winget package manager (Windows)  
+- `speedtest` - Run internet speed test  
+- `kill` - Kill a running process  
+- `download` - Download a file from a URL  
+- `cputemp` - Display CPU temperature  
+- `chucknorris` - Show Chuck Norris jokes  
+- `theme` - Change the application's theme  
 - `cleantemp` - Clean temporary files  
-- `selfupdate` - Update the application  
-- `tree` - Display directory tree view  
-- `py` - Execute Python code
-- `weather` - Show weather information  
-- `whoami` - Show current user  
-- `hostname` - Show machine hostname  
-- `ip` - Show IP address  
-- `os` - Show operating system information  
-- `time` - Show current time  
-- `date` - Show current date  
+- `selfupdate` - Update the application to latest version  
+- `tree` - Display directory tree structure  
+- `py` - Execute Python code  
+- `ask` - Ask a question (AI interaction)  
+- `weather` - Show current weather information  
+- `whoami` - Display current user information  
+- `hostname` - Display machine hostname  
+- `ip` - Display IP address information  
+- `os` - Display operating system information  
+- `time` - Display current time  
+- `date` - Display current date  
 - `open` - Open a file or application  
-- `fortune` - Display a random fortune message  
+- `fortune` - Display a random fortune quote  
 - `history` - Show command history  
-- `search` - Search files or commands  
+- `search` - Search for files or commands  
 - `zip` - Compress files into a zip archive  
 - `unzip` - Extract files from a zip archive  
 - `sysinfo` - Show system information  
 - `clip set` - Set clipboard content  
 - `clip get` - Get clipboard content  
 - `ping` - Ping a network address  
-- `emptytrash` - Empty the trash  
-- `launch` - Launch an application  
+- `emptytrash` - Empty the trash/recycle bin  
+- `launch` - Launch an application
 
 etc.
 
