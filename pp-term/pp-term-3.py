@@ -1918,6 +1918,83 @@ def run_linux_command(command):
     except KeyboardInterrupt:
         logging.warning("Cancellation by user.")
 
+# --- lx-cpp-c command---
+
+def get_project_cpp_c_paths_lx():
+    """
+    Ermittelt das P-terminal-Projektverzeichnis, den Ordner 'p-terminal',
+    sowie die Pfade zur C++-Quelle und zur Executable.
+    """
+    username = getpass.getuser()
+    base_dir = os.path.join("C:\\Users", username, "p-terminal", "pp-term")
+    terminal_dir = os.path.join(base_dir, "pp-commands")
+    lx_cpp_c_file = os.path.join(terminal_dir, "run_lx_c_command.cpp")
+    lx_exe_c_file = os.path.join(terminal_dir, "run_cpp_lx_c_command.exe")
+    return lx_cpp_c_file, lx_exe_c_file, terminal_dir
+
+
+def compile_lx_cpp_c_with_vs(lx_cpp_c_file, lx_exe_c_file):
+    """
+    Kompiliert run_command.cpp mit cl.exe über die Visual Studio-Umgebung.
+    Die Ausgabe wird im UTF-8 Format eingelesen – ungültige Zeichen werden ersetzt.
+    """
+    logging.info("Compile run_lx_c_command.cpp with Visual Studio C++...")
+    vcvarsall = find_vcvarsall()
+    # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
+    command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{lx_cpp_c_file}" /Fe:"{lx_exe_c_file}"'
+
+    result = subprocess.run(
+        command,
+        shell=True,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace"
+    )
+
+    if result.returncode != 0:
+        logging.error("Compilation failed.")
+        logging.error(result.stdout)
+        logging.error(result.stderr)
+        return False
+
+    logging.info("Compilation successful.")
+    return True
+
+
+def run_linux_cpp_c_command(command):
+    """
+    Führt einen Linux-Befehl interaktiv über den C++-Wrapper aus.
+
+    Falls run_lx_command.exe noch nicht existiert, wird das C++-Programm kompiliert.
+    Der C++-Code öffnet dann ein neues Terminalfenster, in dem WSL interaktiv gestartet wird.
+    """
+    lx_cpp_c_file, lx_exe_c_file, _ = get_project_cpp_c_paths_lx()
+
+    if not os.path.isfile(lx_exe_c_file):
+        if not compile_lx_cpp_c_with_vs(lx_cpp_c_file, lx_exe_c_file):
+            logging.error("Abort: C++ compilation was unsuccessful.")
+            return
+
+    # Erstelle die Befehlsliste. Bei mehreren Argumenten werden diese getrennt übertragen.
+    if isinstance(command, str):
+        # Zerlege die Eingabe (z.B. "nano test.py") in Parameter, falls möglich
+        args = command.split()  # Achtung: Bei komplexen Befehlen mit Leerzeichen evtl. anders behandeln!
+    else:
+        args = command
+
+    # Baue die Kommandozeile, ohne zusätzliche Anführungszeichen – das übernimmt der C++-Code
+    cmd = [lx_exe_c_file] + args
+
+    try:
+        logging.info(f"Execute: {' '.join(cmd)}")
+        # Der C++-Wrapper startet ein neues Terminalfenster, in dem der Befehl interaktiv ausgeführt wird.
+        subprocess.run(cmd, check=True)
+    except subprocess.CalledProcessError as e:
+        logging.error(f"Command failed: {e}")
+    except KeyboardInterrupt:
+        logging.warning("Cancellation by user.")
+
 
 # --- lx-c command---
 
@@ -1930,15 +2007,15 @@ def get_project_paths_lx_c():
     base_dir = os.path.join("C:\\Users", username, "p-terminal", "pp-term")
     terminal_dir = os.path.join(base_dir, "pp-commands")
     lx_c_file = os.path.join(terminal_dir, "run_lx_command.c")
-    lx_c_exe_file = os.path.join(terminal_dir, "run_lx_c_command.exe")
+    lx_c_exe_file = os.path.join(terminal_dir, "run_c_lx_command.exe")
     return lx_c_file, lx_c_exe_file, terminal_dir
 
 
 def compile_lx_c_with_vs(lx_c_file, lx_c_exe_file):
     """
-    Kompiliert run_lx_command.c mit cl.exe über die Visual Studio-Umgebung.
+    Kompiliert run_lx_c_command.c mit cl.exe über die Visual Studio-Umgebung.
     """
-    logging.info("Compiling run_lx_command.c with Visual Studio...")
+    logging.info("Compiling run_lx_c_command.c with Visual Studio...")
     vcvarsall = find_vcvarsall_c()
 
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
@@ -1996,6 +2073,83 @@ def run_linux_c_command(command):
     except KeyboardInterrupt:
         logging.warning("Cancellation by user.")
 
+# --- lx-c-c command---
+
+def get_project_paths_lx_c_c():
+    """
+    Ermittelt das P-terminal-Projektverzeichnis, den Ordner 'p-terminal',
+    sowie die Pfade zur C-Quelle und zur Executable.
+    """
+    username = getpass.getuser()
+    base_dir = os.path.join("C:\\Users", username, "p-terminal", "pp-term")
+    terminal_dir = os.path.join(base_dir, "pp-commands")
+    lx_c_c_file = os.path.join(terminal_dir, "run_lx_c_command.c")
+    lx_c_c_exe_file = os.path.join(terminal_dir, "run_c_lx_c_command.exe")
+    return lx_c_c_file, lx_c_c_exe_file, terminal_dir
+
+
+def compile_lx_c_c_with_vs(lx_c_c_file, lx_c_c_exe_file):
+    """
+    Kompiliert run_lx_c_command.c mit cl.exe über die Visual Studio-Umgebung.
+    """
+    logging.info("Compiling run_lx_c_command.c with Visual Studio...")
+    vcvarsall = find_vcvarsall_c()
+
+    # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
+    command = f'"{vcvarsall}" x64 && cl.exe "{lx_c_c_file}" /Fe:"{lx_c_c_exe_file}"'
+
+    result = subprocess.run(
+        command,
+        shell=True,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace"
+    )
+
+    if result.returncode != 0:
+        logging.error("Compilation failed.")
+        logging.error(result.stdout)
+        logging.error(result.stderr)
+        return False
+
+    logging.info("Compilation successful.")
+    return True
+
+
+def run_linux_c_c_command(command):
+    """
+    Führt einen Linux-Befehl interaktiv über den C-Wrapper aus.
+
+    Falls run_lx_command.exe noch nicht existiert, wird das C-Programm kompiliert.
+    Der C-Code öffnet dann ein neues Terminalfenster, in dem WSL interaktiv gestartet wird.
+    """
+    lx_c_c_file, lx_c_c_exe_file, _ = get_project_paths_lx_c_c()
+
+    if not os.path.isfile(lx_c_c_exe_file):
+        if not compile_lx_c_c_with_vs(lx_c_c_file, lx_c_c_exe_file):
+            logging.error("Abort: C compilation was unsuccessful.")
+            return
+
+    # Erstelle die Befehlsliste. Bei mehreren Argumenten werden diese getrennt übertragen.
+    if isinstance(command, str):
+        # Zerlege die Eingabe (z.B. "nano test.py") in Parameter, falls möglich
+        args = command.split()  # Achtung: Bei komplexen Befehlen mit Leerzeichen evtl. anders behandeln!
+    else:
+        args = command
+
+    # Baue die Kommandozeile, ohne zusätzliche Anführungszeichen – das übernimmt der C-Code
+    cmd = [lx_c_c_exe_file] + args
+
+    try:
+        logging.info(f"Execute: {' '.join(cmd)}")
+        # Der C-Wrapper startet ein neues Terminalfenster, in dem der Befehl interaktiv ausgeführt wird.
+        subprocess.run(cmd, check=True)
+    except subprocess.CalledProcessError as e:
+        logging.error(f"Command failed: {e}")
+    except KeyboardInterrupt:
+        logging.warning("Cancellation by user.")
+
 
 # --- lx-p command---
 
@@ -2011,9 +2165,9 @@ def run_linux_python_command(command):
         process.terminate()
 
 
-# --- lx-co command---
+# --- lx-p-c command---
 
-def run_linux_co_command(command):
+def run_linux_p_c_command(command):
     if isinstance(command, str):
         command = f"wsl -c {command}"
 
@@ -4413,6 +4567,14 @@ def main():
                     print(f"Executing the following command on Linux: {user_input}")
                     run_linux_command(user_input)
 
+            elif user_input.startswith("lx-cpp-c "):
+                user_input = user_input[9:].strip()
+                if not is_wsl_installed():
+                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"Executing the following command on Linux: {user_input}")
+                    run_linux_cpp_c_command(user_input)
+
             elif user_input.startswith("lx-c "):
                 user_input = user_input[5:].strip()
                 if not is_wsl_installed():
@@ -4420,6 +4582,14 @@ def main():
                 else:
                     print(f"Executing the following command on Linux: {user_input}")
                     run_linux_c_command(user_input)
+
+            elif user_input.startswith("lx-c-c "):
+                user_input = user_input[7:].strip()
+                if not is_wsl_installed():
+                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"Executing the following command on Linux: {user_input}")
+                    run_linux_c_c_command(user_input)
 
             elif user_input.startswith("lx-p "):
                 user_input = user_input[5:].strip()
@@ -4429,13 +4599,13 @@ def main():
                     print(f"Executing the following command on Linux: {user_input}")
                     run_linux_python_command(user_input)
 
-            elif user_input.startswith("lx-co "):
+            elif user_input.startswith("lx-p-c "):
                 user_input = user_input[6:].strip()
                 if not is_wsl_installed():
                     print("WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"Executing the following command on Linux: {user_input}")
-                    run_linux_co_command(user_input)
+                    run_linux_p_c_command(user_input)
 
             elif user_input.startswith("linux "):
                 user_input = user_input[6:].strip()
