@@ -259,7 +259,7 @@ Download the [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-te
 - `run simon` - Run Simon
 - `jupyter --version` - Display Jupyter version
 - `grafana --version` - Display Grafana version
-- `3d-slicer --version` - Display 3D Slicer version
+- `3d-slicer --version` - Display 3D Slicer version  
 etc.  
 
 # Problems
