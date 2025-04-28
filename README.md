@@ -155,8 +155,112 @@ Download the [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-te
 - `ping` - Ping a network address  
 - `emptytrash` - Empty the trash/recycle bin  
 - `launch` - Launch an application
-
-etc.
+- `doctor` - Run system doctor check
+- `mavis env install` - Install Mavis environment
+- `install mavis env` - Install Mavis environment
+- `install mavis3` - Install Mavis version 3
+- `install mavis3.3` - Install Mavis version 3.3
+- `install mavis4` - Install Mavis version 4
+- `install mavis4.3` - Install Mavis version 4.3
+- `mavis env update` - Update Mavis environment
+- `update mavis env` - Update Mavis environment
+- `mavis update` - Update Mavis repository
+- `update mavis` - Update Mavis repository
+- `security` - Run security check
+- `p-terminal security` - Run security check in terminal
+- `securitycheck` - Run security check
+- `info` - Show general information
+- `mavis info` - Show Mavis information
+- `info mavis` - Show Mavis information
+- `p-term info` - Show terminal information
+- `info p-term` - Show terminal information
+- `neofetch` - Display system information
+- `fastfetch` - Display system information quickly
+- `screenfetch` - Display system information
+- `jupyter` - Run Jupyter
+- `run jupyter` - Run Jupyter
+- `run ju` - Run Jupyter
+- `run mavis-4` - Run Mavis version 4
+- `run mavis-4-3` - Run Mavis version 4.3
+- `run mavis-4-fast` - Run Mavis version 4 fast
+- `run mavis-4-3-fast` - Run Mavis version 4.3 fast
+- `run mavis-launcher-4` - Run Mavis launcher
+- `run ollama mavis-4` - Install Ollama Mavis version 4
+- `install ollama mavis-4` - Install Ollama Mavis version 4
+- `change models mavis-4` - Change models for Mavis version 4
+- `change models` - Change models
+- `grafana` - Run Grafana
+- `run grafana` - Run Grafana
+- `install grafana` - Install Grafana
+- `account` - Manage Mavis account
+- `run deepseek-r1:1.5b` - Run DeepSeek model version 1.5b
+- `run deepseek-r1:7b` - Run DeepSeek model version 7b
+- `run deepseek-r1:8b` - Run DeepSeek model version 8b
+- `run deepseek-r1:14b` - Run DeepSeek model version 14b
+- `run deepseek-r1:32b` - Run DeepSeek model version 32b
+- `run deepseek-r1:70b` - Run DeepSeek model version 70b
+- `run deepseek-r1:671b` - Run DeepSeek model version 671b
+- `run deepscaler` - Run DeepScaler
+- `run llama3.1:8b` - Run Llama3.1 model version 8b
+- `run llama3.1:70b` - Run Llama3.1 model version 70b
+- `run llama3.1:405` - Run Llama3.1 model version 405b
+- `run llama3.2:1b` - Run Llama3.2 model version 1b
+- `run llama3.2:3b` - Run Llama3.2 model version 3b
+- `run llama3.3` - Run Llama3.3 model
+- `run llama3:8b` - Run Llama3 model version 8b
+- `run llama3:70b` - Run Llama3 model version 70b
+- `run mistral` - Run Mistral model
+- `run mistral-large` - Run Mistral large model
+- `run mistral-nemo` - Run Mistral Nemo model
+- `run mistral-openorca` - Run Mistral OpenOrca model
+- `run mistral-small:22b` - Run Mistral small model version 22b
+- `run mistral-small:24b` - Run Mistral small model version 24b
+- `run phi4` - Run Phi4 model
+- `run qwen2.5:0.5b` - Run Qwen2.5 model version 0.5b
+- `run qwen2.5:1.5b` - Run Qwen2.5 model version 1.5b
+- `run qwen2.5:3b` - Run Qwen2.5 model version 3b
+- `run qwen2.5:7b` - Run Qwen2.5 model version 7b
+- `run qwen2.5:14b` - Run Qwen2.5 model version 14b
+- `run qwen2.5:32b` - Run Qwen2.5 model version 32b
+- `run qwen2.5:72b` - Run Qwen2.5 model version 72b
+- `run qwen2.5-coder:0.5b` - Run Qwen2.5 Coder model version 0.5b
+- `run qwen2.5-coder:1.5b` - Run Qwen2.5 Coder model version 1.5b
+- `run qwen2.5-coder:3b` - Run Qwen2.5 Coder model version 3b
+- `run qwen2.5-coder:7b` - Run Qwen2.5 Coder model version 7b
+- `run qwen2.5-coder:14b` - Run Qwen2.5 Coder model version 14b
+- `run qwen2.5-coder:32b` - Run Qwen2.5 Coder model version 32b
+- `run gemma3:1b` - Run Gemma3 model version 1b
+- `run gemma3:4b` - Run Gemma3 model version 4b
+- `run gemma3:12b` - Run Gemma3 model version 12b
+- `run gemma3:27b` - Run Gemma3 model version 27b
+- `run qwq` - Run QwQ model
+- `run command-a` - Run Command-A
+- `run phi4-mini` - Run Phi4 mini model
+- `run granite3.2:8b` - Run Granite3.2 model version 8b
+- `run granite3.2:2b` - Run Granite3.2 model version 2b
+- `run granite3.2-vision:2b` - Run Granite3.2 Vision model version 2b
+- `run qwen-2-5-omni:7b` - Run Qwen-2.5 Omni model version 7b
+- `run qvq:72b` - Run QVQ model version 72b
+- `run qwen-2-5-vl:32b` - Run Qwen-2.5 VL model version 32b
+- `run qwen-2-5-vl:72b` - Run Qwen-2.5 VL model version 72b
+- `run llama-4-maverick:17b` - Run Llama-4 Maverick model version 17b
+- `run llama-4-scout:17b` - Run Llama-4 Scout model version 17b
+- `run deepcoder:1.5b` - Run DeepCoder model version 1.5b
+- `run deepcoder:14b` - Run DeepCoder model version 14b
+- `run mistral-small3.1` - Run Mistral small model version 3.1
+- `help` - Display help information
+- `image generation` - Generate images
+- `video generation` - Generate videos
+- `models` - List available models
+- `models ls` - List available models
+- `install 3d-slicer` - Install 3D Slicer
+- `run 3d-slicer` - Run 3D Slicer
+- `install simon` - Install Simon
+- `run simon` - Run Simon
+- `jupyter --version` - Display Jupyter version
+- `grafana --version` - Display Grafana version
+- `3d-slicer --version` - Display 3D Slicer version
+etc.  
 
 # Problems
 
