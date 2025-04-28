@@ -1111,11 +1111,6 @@ def handle_special_commands(user_input):
 
     return False
 
-import os
-import shutil
-import subprocess
-import json
-
 # Configuration
 SETTINGS_PATH = os.path.expandvars(
     r"%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
