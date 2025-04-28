@@ -11,6 +11,11 @@
             "cursorColor": "#ffffff"
         }
     },
+    "nord": {
+        "defaults": {
+            "cursorColor": "#ffffff"
+        }
+    },
     "aptscience": {
         "defaults": {
             "name": "aptscience",
