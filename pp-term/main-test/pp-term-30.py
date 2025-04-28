@@ -1213,7 +1213,7 @@ COLOR_SCHEMES = {
         "brightCyan": "#61D6D6",
         "brightWhite": "#F2F2F2"
     },
-    "Cyberlife": {
+    "cyberlife": {
         "name": "Cyberlife",
         "background": "#0C0C0C",
         "foreground": "#F2F2F2",
