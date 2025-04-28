@@ -33,7 +33,7 @@
             "backgroundImageStretchMode": "none"
         }
     },
-    "Cyberlife": {
+    "cyberlife": {
         "defaults": {
             "name": "Cyberlife",
             "hidden": false,

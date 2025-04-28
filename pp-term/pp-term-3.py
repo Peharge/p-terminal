@@ -937,6 +937,7 @@ def handle_special_commands(user_input):
 
     if user_input.lower() == "theme-ls":
         print("dark, light, hackerman, aptscience, Cyberlife, ubuntu, nord, dracula, solarized_dark")
+        return True
 
     if user_input.startswith("launch "):
         command_str = user_input[len("launch "):].strip()
