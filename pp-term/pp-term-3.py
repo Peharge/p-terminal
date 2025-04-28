@@ -1290,8 +1290,9 @@ def is_tool_installed(tool_name):
 # Liste aller verfügbaren Befehle
 COMMANDS = [
     "cd", "cls", "clear", "dir", "ls", "mkdir", "rmdir", "del", "rm", "echo", "type", "cat", "exit",
-    "lx", "p", "pp", "ps", "pa", "alpine", "ubuntu", "debian", "kali", "hack", "arch", "opensuse", "mint",
-    "fedora", "redhat", "sles", "pengwin", "oracle",
+    "p", "pp", "pp", "pp-c", "pp-p", "ps", "pa", "alpine", "scoop", "choco", "winget", "lx", "lx-c",
+    "lx-p", "lx-cpp-c", "lx-c-c", "lx-p-c", "ubuntu", "ubuntu-c", "ubuntu-p",  "debian", "kali", "hack",
+    "arch", "opensuse", "mint", "fedora", "redhat", "sles", "pengwin", "oracle",
     "speedtest", "kill", "download", "cputemp", "chucknorris", "theme", "cleantemp", "selfupdate",
     "tree", "py", "ask", "weather", "whoami", "hostname", "ip", "os", "time", "date", "open", "fortune",
     "history", "search", "zip", "unzip", "sysinfo", "clip set", "clip get", "ping", "emptytrash", "launch"
@@ -4809,6 +4810,10 @@ def main():
 
             elif user_input.startswith("pp "):
                 user_input = user_input[3:]
+                run_command_with_admin_privileges(user_input)
+
+            elif user_input.startswith("pp-cpp "):
+                user_input = user_input[7:]
                 run_command_with_admin_privileges(user_input)
 
             elif user_input.startswith("pp-c "):
