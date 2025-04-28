@@ -1,0 +1,51 @@
+{
+    "hackerman": {
+        "defaults": {
+            "colorScheme": "One Half Dark",
+            "useAcrylic": true,
+            "acrylicOpacity": 0.4,
+            "backgroundImage": "ms-appdata:///roaming/xNmzL9d.png",
+            "backgroundImageStretchMode": "none",
+            "backgroundImageAlignment": "bottomRight",
+            "backgroundImageOpacity": 0.8,
+            "cursorColor": "#ffffff"
+        }
+    },
+    "aptscience": {
+        "defaults": {
+            "name": "aptscience",
+            "hidden": false,
+            "tabTitle": "Aperture science",
+            "colorScheme": "aptscience",
+            "backgroundImage": "ms-appdata:///roaming/Aperture Science-txt-smallened.png",
+            "icon": "https://www.kindpng.com/picc/m/235-2355356_aperture-science-icon-png-transparent-png.png",
+            "cursorShape": "filledBox",
+            "cursorColor": "#A66900",
+            "experimental.retroTerminalEffect": true,
+            "acrylicOpacity": 0.8,
+            "backgroundImageOpacity": 0.8,
+            "backgroundImageAlignment": "bottomRight",
+            "backgroundImageStretchMode": "none"
+        }
+    },
+    "Cyberlife": {
+        "defaults": {
+            "name": "Cyberlife",
+            "hidden": false,
+            "tabTitle": "Cyberlife Industries",
+            "colorScheme": "Cyberlife",
+            "backgroundImage": "ms-appdata:///roaming/Cyberlife_console_background.png",
+            "icon": "ms-appdata:///roaming/LED_-_Detroit.png",
+            "cursorShape": "filledBox",
+            "cursorColor": "#6AE4F1",
+            "experimental.retroTerminalEffect": true,
+            "acrylicOpacity": 0.8,
+            "backgroundImageOpacity": 0.6
+        }
+    },
+    "ubuntu": {
+        "defaults": {
+            "cursorColor": "#000000"
+        }
+    }
+}

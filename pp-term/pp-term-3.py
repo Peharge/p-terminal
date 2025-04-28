@@ -1111,11 +1111,17 @@ def handle_special_commands(user_input):
 
     return False
 
-# Configuration
+import os
+import json
+import shutil
+import subprocess
+
+# Constants
 SETTINGS_PATH = os.path.expandvars(
     r"%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
 )
 BACKUP_SUFFIX = ".bak"
+THEMES_PATH = f'C:\\Users\\{os.getlogin()}\\p-terminal\\pp-term\\themes.json'
 
 # Predefined color schemes
 COLOR_SCHEMES = {
@@ -1123,104 +1129,175 @@ COLOR_SCHEMES = {
         "name": "Dark",
         "background": "#0C0C0C",
         "foreground": "#F2F2F2",
-        "black":       "#0C0C0C",
-        "red":         "#C50F1F",
-        "green":       "#13A10E",
-        "yellow":      "#C19C00",
-        "blue":        "#0037DA",
-        "purple":      "#881798",
-        "cyan":        "#3A96DD",
-        "white":       "#CCCCCC",
-        "brightBlack":   "#767676",
-        "brightRed":     "#E74856",
-        "brightGreen":   "#16C60C",
-        "brightYellow":  "#F9F1A5",
-        "brightBlue":    "#3B78FF",
-        "brightPurple":  "#B4009E",
-        "brightCyan":    "#61D6D6",
-        "brightWhite":   "#F2F2F2"
+        "black": "#0C0C0C",
+        "red": "#C50F1F",
+        "green": "#13A10E",
+        "yellow": "#C19C00",
+        "blue": "#0037DA",
+        "purple": "#881798",
+        "cyan": "#3A96DD",
+        "white": "#CCCCCC",
+        "brightBlack": "#767676",
+        "brightRed": "#E74856",
+        "brightGreen": "#16C60C",
+        "brightYellow": "#F9F1A5",
+        "brightBlue": "#3B78FF",
+        "brightPurple": "#B4009E",
+        "brightCyan": "#61D6D6",
+        "brightWhite": "#F2F2F2"
     },
     "light": {
         "name": "Light",
         "background": "#FFFFFF",
         "foreground": "#333333",
-        "black":       "#000000",
-        "red":         "#C50F1F",
-        "green":       "#13A10E",
-        "yellow":      "#C19C00",
-        "blue":        "#0037DA",
-        "purple":      "#881798",
-        "cyan":        "#3A96DD",
-        "white":       "#CCCCCC",
-        "brightBlack":   "#767676",
-        "brightRed":     "#E74856",
-        "brightGreen":   "#16C60C",
-        "brightYellow":  "#F9F1A5",
-        "brightBlue":    "#3B78FF",
-        "brightPurple":  "#B4009E",
-        "brightCyan":    "#61D6D6",
-        "brightWhite":   "#F2F2F2"
+        "black": "#000000",
+        "red": "#C50F1F",
+        "green": "#13A10E",
+        "yellow": "#C19C00",
+        "blue": "#0037DA",
+        "purple": "#881798",
+        "cyan": "#3A96DD",
+        "white": "#CCCCCC",
+        "brightBlack": "#767676",
+        "brightRed": "#E74856",
+        "brightGreen": "#16C60C",
+        "brightYellow": "#F9F1A5",
+        "brightBlue": "#3B78FF",
+        "brightPurple": "#B4009E",
+        "brightCyan": "#61D6D6",
+        "brightWhite": "#F2F2F2"
     },
-    "hackerman": {},
-    "kayla_cinnamon": {},
-    "middle_machine": {},
+    "hackerman": {
+        "name": "hackerman",
+        "background": "#0C0C0C",
+        "foreground": "#F2F2F2",
+        "black": "#0C0C0C",
+        "red": "#C50F1F",
+        "green": "#13A10E",
+        "yellow": "#C19C00",
+        "blue": "#0037DA",
+        "purple": "#881798",
+        "cyan": "#3A96DD",
+        "white": "#CCCCCC",
+        "brightBlack": "#767676",
+        "brightRed": "#E74856",
+        "brightGreen": "#16C60C",
+        "brightYellow": "#F9F1A5",
+        "brightBlue": "#3B78FF",
+        "brightPurple": "#B4009E",
+        "brightCyan": "#61D6D6",
+        "brightWhite": "#F2F2F2"
+    },
+    "aptscience": {
+        "name": "aptscience",
+        "background": "#0C0C0C",
+        "foreground": "#F2F2F2",
+        "black": "#0C0C0C",
+        "red": "#C50F1F",
+        "green": "#13A10E",
+        "yellow": "#C19C00",
+        "blue": "#0037DA",
+        "purple": "#881798",
+        "cyan": "#3A96DD",
+        "white": "#CCCCCC",
+        "brightBlack": "#767676",
+        "brightRed": "#E74856",
+        "brightGreen": "#16C60C",
+        "brightYellow": "#F9F1A5",
+        "brightBlue": "#3B78FF",
+        "brightPurple": "#B4009E",
+        "brightCyan": "#61D6D6",
+        "brightWhite": "#F2F2F2"
+    },
+    "Cyberlife": {
+        "name": "Cyberlife",
+        "background": "#0C0C0C",
+        "foreground": "#F2F2F2",
+        "black": "#0C0C0C",
+        "red": "#C50F1F",
+        "green": "#13A10E",
+        "yellow": "#C19C00",
+        "blue": "#0037DA",
+        "purple": "#881798",
+        "cyan": "#3A96DD",
+        "white": "#CCCCCC",
+        "brightBlack": "#767676",
+        "brightRed": "#E74856",
+        "brightGreen": "#16C60C",
+        "brightYellow": "#F9F1A5",
+        "brightBlue": "#3B78FF",
+        "brightPurple": "#B4009E",
+        "brightCyan": "#61D6D6",
+        "brightWhite": "#F2F2F2"
+    },
     "ubuntu": {
         "name": "Ubuntu",
         "background": "#300A24",
         "foreground": "#F2F2F2",
-        "black":       "#300A24",
-        "red":         "#CE5C00",
-        "green":       "#8ABEB7",
-        "yellow":      "#F0C674",
-        "blue":        "#81A2BE",
-        "purple":      "#B294BB",
-        "cyan":        "#8ABEB7",
-        "white":       "#EEEEEC",
-        "brightBlack":   "#1E161B",
-        "brightRed":     "#FF6E67",
-        "brightGreen":   "#5FEBA6",
-        "brightYellow":  "#F4BF75",
-        "brightBlue":    "#8AB8FE",
-        "brightPurple":  "#D7A0FF",
-        "brightCyan":    "#BDF5F2",
-        "brightWhite":   "#FFFFFF",
-        "cursorColor": "#000000",
-    },
-}
-
-# Theme-specific defaults mapping
-THEME_DEFAULTS = {
-    "hackerman": {
-        "defaults": {
-            "colorScheme": "One Half Dark",
-            "useAcrylic": True,
-            "acrylicOpacity": 0.4,
-            "backgroundImage": "ms-appdata:///roaming/xNmzL9d.png",
-            "backgroundImageStretchMode": "none",
-            "backgroundImageAlignment": "bottomRight",
-            "backgroundImageOpacity": 0.8,
-            "cursorColor": "#ffffff"
-        }
-    },
-    "kayla_cinnamon": {
-        "defaults": {
-            "fontFace": "CaskaydiaCove Nerd Font",
-            "backgroundImageOpacity": 0.75,
-            "colorScheme": "Build"
-        }
-    },
-    "middle_machine": {
-        "defaults": {
-            "fontFace": "CaskaydiaCove Nerd Font",
-            "backgroundImageOpacity": 0.75
-        }
-    },
-    "ubuntu": {
-        "defaults": {
-            "cursorColor": "#000000",
-        }
+        "black": "#300A24",
+        "red": "#CE5C00",
+        "green": "#8ABEB7",
+        "yellow": "#F0C674",
+        "blue": "#81A2BE",
+        "purple": "#B294BB",
+        "cyan": "#8ABEB7",
+        "white": "#EEEEEC",
+        "brightBlack": "#1E161B",
+        "brightRed": "#FF6E67",
+        "brightGreen": "#5FEBA6",
+        "brightYellow": "#F4BF75",
+        "brightBlue": "#8AB8FE",
+        "brightPurple": "#D7A0FF",
+        "brightCyan": "#BDF5F2",
+        "brightWhite": "#FFFFFF",
+        "cursorColor": "#000000"
     }
 }
+
+# Load theme-specific defaults
+try:
+    with open(THEMES_PATH, 'r', encoding='utf-8') as f:
+        THEME_DEFAULTS = json.load(f)
+except (FileNotFoundError, json.JSONDecodeError) as e:
+    print(f"Error loading themes.json: {e}")
+    THEME_DEFAULTS = {}
+
+def create_backup(file_path: str) -> str:
+    backup_path = file_path + BACKUP_SUFFIX
+    shutil.copy2(file_path, backup_path)
+    print(f"Backup created at: {backup_path}")
+    return backup_path
+
+def load_settings(file_path: str) -> dict:
+    with open(file_path, 'r', encoding='utf-8') as f:
+        return json.load(f)
+
+def save_settings(file_path: str, settings: dict) -> None:
+    with open(file_path, 'w', encoding='utf-8') as f:
+        json.dump(settings, f, indent=4)
+    print(f"Settings saved to {file_path}")
+
+def apply_color_scheme(settings: dict, scheme_name: str) -> None:
+    scheme = COLOR_SCHEMES.get(scheme_name)
+    if scheme:
+        settings.setdefault('schemes', [])
+        settings['schemes'] = [s for s in settings['schemes'] if s.get('name') != scheme.get('name')]
+        settings['schemes'].append(scheme)
+        for profile in settings.get('profiles', {}).get('list', []):
+            profile['colorScheme'] = scheme.get('name')
+        settings['theme'] = 'dark' if 'dark' in scheme_name else 'light'
+        print(f"Applied color scheme: {scheme.get('name')}")
+
+def apply_theme_defaults(settings: dict, theme_name: str) -> None:
+    defaults = THEME_DEFAULTS.get(theme_name, {}).get('defaults')
+    if defaults:
+        settings.setdefault('profiles', {})
+        settings['profiles']['defaults'] = defaults
+        print(f"Applied theme defaults for: {theme_name}")
+
+def restart_terminal() -> None:
+    subprocess.run(["wt.exe", "new-tab"], check=False)
+    print("Terminal restarted with new tab.")
 
 def switch_theme(user_input: str) -> bool:
     if not user_input.lower().startswith("theme "):
@@ -1229,51 +1306,30 @@ def switch_theme(user_input: str) -> bool:
     _, choice = user_input.split(maxsplit=1)
     key = choice.lower().replace('-', '_')
 
-    # Validate theme
     if key not in COLOR_SCHEMES and key not in THEME_DEFAULTS:
-        print(f"Unknown theme '{choice}'. Available: {', '.join(list(COLOR_SCHEMES.keys()) + list(THEME_DEFAULTS.keys()))}")
+        print(f"Unknown theme '{choice}'. Available: {', '.join(sorted(set(COLOR_SCHEMES) | set(THEME_DEFAULTS)))}")
         return True
 
     try:
-        # Backup settings
-        bak = SETTINGS_PATH + BACKUP_SUFFIX
-        shutil.copy2(SETTINGS_PATH, bak)
-        print(f"Backup created: {bak}")
+        create_backup(SETTINGS_PATH)
+        settings = load_settings(SETTINGS_PATH)
 
-        # Load settings
-        with open(SETTINGS_PATH, 'r', encoding='utf-8') as f:
-            settings = json.load(f)
-
-        # Apply color scheme if defined
         if key in COLOR_SCHEMES:
-            scheme = COLOR_SCHEMES[key]
-            if scheme:
-                settings.setdefault('schemes', [])
-                settings['schemes'] = [s for s in settings['schemes'] if s.get('name') != scheme.get('name')]
-                settings['schemes'].append(scheme)
-                for profile in settings.get('profiles', {}).get('list', []):
-                    profile['colorScheme'] = scheme.get('name')
-                settings['theme'] = 'dark' if 'dark' in key else 'light'
-                print(f"Applied colorscheme: {scheme.get('name')}")
+            apply_color_scheme(settings, key)
 
-        # **Korrekte Anwendung der Defaults innerhalb von profiles**
         if key in THEME_DEFAULTS:
-            settings.setdefault('profiles', {})  # ensure the profiles object exists
-            settings['profiles']['defaults'] = THEME_DEFAULTS[key]['defaults']
-            print(f"Applied defaults for: {key}")
+            apply_theme_defaults(settings, key)
 
-        # Save changes
-        with open(SETTINGS_PATH, 'w', encoding='utf-8') as f:
-            json.dump(settings, f, indent=4)
+        save_settings(SETTINGS_PATH, settings)
         print(f"Theme '{choice}' applied successfully.")
 
-        # Restart Terminal (new tab)
-        subprocess.run(["wt.exe", "new-tab"], check=False)
+        restart_terminal()
 
     except Exception as e:
-        print(f"Error applying theme '{choice}': {e}")
+        print(f"Failed to apply theme '{choice}': {e}")
 
     return True
+
 
 def get_weather():
     print("⛅ Fetching detailed weather for Berlin... (Demo)\n")
