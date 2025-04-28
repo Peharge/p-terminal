@@ -25,8 +25,6 @@
 
 In development: Peharge Terminal: The fastest terminal in the world - More [p-terminal.com](https://peharge.github.io/MAVIS-web/p-term.html).
 
-Start of development: 23.04.2025
-
 # NEWS
 
 - **[23.04.2025]** Developmentstart of P-Term and PP-Ptem!!!
