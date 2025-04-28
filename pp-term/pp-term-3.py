@@ -4827,11 +4827,11 @@ def main():
                 user_input = user_input[3:]
                 run_command_with_admin_privileges(user_input)
 
-            elif user_input.lower() == "pin-main":
+            elif user_input.lower() == "pin main":
                 state = "main"
                 continue
 
-            elif user_input.lower() == "pin-evil":
+            elif user_input.lower() == "pin evil":
                 state = "evel"
                 continue
 
