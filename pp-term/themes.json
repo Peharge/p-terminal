@@ -52,5 +52,50 @@
         "defaults": {
             "cursorColor": "#000000"
         }
+    },
+    "dracula": {
+        "defaults": {
+            "cursorColor": "#000000"
+        }
+    },
+    "solarized_dark": {
+        "defaults": {
+            "cursorColor": "#000000"
+        }
+    },
+    "gruvbox_dark": {
+        "defaults": {
+            "cursorColor": "#FE8019"
+        }
+    },
+    "monokai": {
+        "defaults": {
+            "cursorColor": "#F8F8F0"
+        }
+    },
+    "one_dark": {
+        "defaults": {
+            "cursorColor": "#528BFF"
+        }
+    },
+    "material_dark": {
+        "defaults": {
+            "cursorColor": "#FFCB6B"
+        }
+    },
+    "tokyo_night": {
+        "defaults": {
+            "cursorColor": "#7AA2F7"
+        }
+    },
+    "arc_dark": {
+        "defaults": {
+            "cursorColor": "#82AAFF"
+        }
+    },
+    "ayu_mirage": {
+        "defaults": {
+            "cursorColor": "#FFA759"
+        }
     }
 }
