@@ -936,7 +936,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "theme-ls":
-        print("dark, light, hackerman, aptscience, Cyberlife, ubuntu, nord, dracula, solarized_dark")
+        print("dark, light, hackerman, aptscience, cyberlife, ubuntu, nord, dracula, solarized_dark")
         return True
 
     if user_input.startswith("launch "):
