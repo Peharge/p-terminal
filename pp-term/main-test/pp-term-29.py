@@ -89,7 +89,7 @@ def activate_virtualenv(venv_path):
 
     os.environ["VIRTUAL_ENV"] = venv_path
     os.environ["PATH"] = os.path.join(venv_path, "Scripts") + os.pathsep + os.environ["PATH"]
-    print(f"Virtual environment {venv_path} activated.")
+    print(f"✅ Virtual environment {venv_path} activated.")
 
 
 def ensure_packages_installed(packages: list[str]) -> None:
