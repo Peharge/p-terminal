@@ -4780,7 +4780,7 @@ def get_main_pin(current_dir, env_indicator):
 
 def get_evel_pin(current_dir, env_indicator):
     return (
-        f"\n{blue}┌──({reset}{red}{getpass.getuser()}"
+        f"\n{blue}┌──({reset}{red}root"
         + colored("㋐", attrs=["bold"])
         + f"{red}Peharge{reset}{blue})-[{reset}{current_dir}{blue}]-{reset}{env_indicator}"
         f"\n{blue}└─{reset}{red}#{reset} "
