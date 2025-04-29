@@ -1707,7 +1707,7 @@ def apply_color_scheme(settings: dict, scheme_name: str) -> None:
         settings['schemes'].append(scheme)
         for profile in settings.get('profiles', {}).get('list', []):
             profile['colorScheme'] = scheme.get('name')
-        settings['theme'] = 'dark' if 'dark' in scheme_name else 'light'
+        settings['theme'] = 'light' if 'light' in scheme_name else 'dark'
         print(f"Applied color scheme: {scheme.get('name')}")
 
 def apply_theme_defaults(settings: dict, theme_name: str) -> None:
