@@ -671,12 +671,12 @@ def handle_special_commands(user_input):
         "fun train t": "pp-commands\\fun-train-t.py",  # new
         "fun install games": "pp-commands\\fun-install-games.py",  # new
         "fun bastet": "pp-commands\\fun-bashtet.py",  # new
-        "fun gnuchess": "pp-commands\\fun-gnuchess.py",  # new
+        "fun chess": "pp-commands\\fun-gnuchess.py",  # new
         "fun moon-buggy": "pp-commands\\fun-moon-buggy.py",  # new
-        "fun nethack-console": "pp-commands\\fun-nethack-console.py",  # new
+        "fun nethack": "pp-commands\\fun-nethack-console.py",  # new
         "fun nsnake": "pp-commands\\fun-nsnake.py",  # new
-        "fun pacman4console": "pp-commands\\fun-pacman4console.py",  # new
-        "fun tictactoe-ng": "pp-commands\\fun-tictactoe-ng.py",  # new
+        "fun pacman": "pp-commands\\fun-pacman4console.py",  # new
+        "fun tictactoe": "pp-commands\\fun-tictactoe-ng.py",  # new
         "fun tint": "pp-commands\\fun-tint.py"  # new
     }
 
