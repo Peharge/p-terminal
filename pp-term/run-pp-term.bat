@@ -965,37 +965,7 @@ cd /d "%PP_DIR%" || (
     exit /b 1
 )
 
-:: Überprüfen, ob Python 3.12 verfügbar ist
-echo 🔍 Checking for Python %EXPECTED_PYTHON_VERSION%...
-for /f "delims=" %%p in ('where python') do (
-    for /f "tokens=2 delims==" %%v in ('"%%p" -c "import sys; print(f'PY={sys.version_info.major}.{sys.version_info.minor}')"') do (
-        set "PYTHON_VER=%%v"
-        if "!PYTHON_VER!"=="PY=%EXPECTED_PYTHON_VERSION%" (
-            set "PYTHON_EXE=%%p"
-            goto :found_python
-        )
-    )
-)
-echo ❌ Python %EXPECTED_PYTHON_VERSION% not found in PATH!
-exit /b 1
-
-:found_python
-echo ✅ Found Python at "!PYTHON_EXE!"
-
-:: Erstellen der virtualenv, falls nicht vorhanden
-if not exist "%VENV_DIR%\Scripts\python.exe" (
-    echo 🛠️ Creating virtual environment in "%VENV_DIR%"...
-    "!PYTHON_EXE!" -m venv "%VENV_DIR%"
-    if errorlevel 1 (
-        echo ❌ Failed to create virtual environment!
-        exit /b 1
-    )
-    echo ✅ Virtual environment created successfully!
-) else (
-    echo ✅ Virtual environment already exists at "%VENV_DIR%"
-)
-
-:: .env-Datei erstellen oder validieren
+:: Ensure .env file exists and is correctly configured
 echo Checking for existing .env file at: "%PP_ENV_FILE%"
 if not exist "%PP_ENV_FILE%" (
     echo Creating .env file...
@@ -1005,6 +975,7 @@ if not exist "%PP_ENV_FILE%" (
         echo PYTHON_VERSION=%EXPECTED_PYTHON_VERSION%
     ) > "%PP_ENV_FILE%"
 
+    :: Verify file was created and is not empty
     if exist "%PP_ENV_FILE%" (
         for %%A in ("%PP_ENV_FILE%") do (
             if %%~zA gtr 0 (
