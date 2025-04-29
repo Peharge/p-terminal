@@ -1131,6 +1131,158 @@ def handle_special_commands(user_input):
 
         return True
 
+    if user_input.startswith("pa-qwen:0.6b "):
+        ollama_installed = check_command_installed("ollama")
+        if ollama_installed:
+            print(f"{green}Ollama is installed.{reset}")
+        else:
+            print(f"{red}Ollama is not installed. Please install it to proceed.{reset}")
+
+        start_ollama()
+        check_ollama_update()
+
+        question = user_input[len("pa "):]
+
+        response = get_response_from_ollama_qwen0_6(user_input, ollama)
+
+        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        type_out_text(response)
+
+        return True
+
+    if user_input.startswith("pa-qwen:1.7b "):
+        ollama_installed = check_command_installed("ollama")
+        if ollama_installed:
+            print(f"{green}Ollama is installed.{reset}")
+        else:
+            print(f"{red}Ollama is not installed. Please install it to proceed.{reset}")
+
+        start_ollama()
+        check_ollama_update()
+
+        question = user_input[len("pa "):]
+
+        response = get_response_from_ollama_qwen1_7(user_input, ollama)
+
+        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        type_out_text(response)
+
+        return True
+
+    if user_input.startswith("pa-qwen:4b "):
+        ollama_installed = check_command_installed("ollama")
+        if ollama_installed:
+            print(f"{green}Ollama is installed.{reset}")
+        else:
+            print(f"{red}Ollama is not installed. Please install it to proceed.{reset}")
+
+        start_ollama()
+        check_ollama_update()
+
+        question = user_input[len("pa "):]
+
+        response = get_response_from_ollama_qwen4(user_input, ollama)
+
+        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        type_out_text(response)
+
+        return True
+
+    if user_input.startswith("pa-qwen:8b "):
+        ollama_installed = check_command_installed("ollama")
+        if ollama_installed:
+            print(f"{green}Ollama is installed.{reset}")
+        else:
+            print(f"{red}Ollama is not installed. Please install it to proceed.{reset}")
+
+        start_ollama()
+        check_ollama_update()
+
+        question = user_input[len("pa "):]
+
+        response = get_response_from_ollama_qwen8(user_input, ollama)
+
+        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        type_out_text(response)
+
+        return True
+
+    if user_input.startswith("pa-qwen:14b "):
+        ollama_installed = check_command_installed("ollama")
+        if ollama_installed:
+            print(f"{green}Ollama is installed.{reset}")
+        else:
+            print(f"{red}Ollama is not installed. Please install it to proceed.{reset}")
+
+        start_ollama()
+        check_ollama_update()
+
+        question = user_input[len("pa "):]
+
+        response = get_response_from_ollama(user_input, ollama)
+
+        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        type_out_text(response)
+
+        return True
+
+    if user_input.startswith("pa-qwen:32b "):
+        ollama_installed = check_command_installed("ollama")
+        if ollama_installed:
+            print(f"{green}Ollama is installed.{reset}")
+        else:
+            print(f"{red}Ollama is not installed. Please install it to proceed.{reset}")
+
+        start_ollama()
+        check_ollama_update()
+
+        question = user_input[len("pa "):]
+
+        response = get_response_from_ollama_qwen32(user_input, ollama)
+
+        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        type_out_text(response)
+
+        return True
+
+    if user_input.startswith("pa-qwen:30b "):
+        ollama_installed = check_command_installed("ollama")
+        if ollama_installed:
+            print(f"{green}Ollama is installed.{reset}")
+        else:
+            print(f"{red}Ollama is not installed. Please install it to proceed.{reset}")
+
+        start_ollama()
+        check_ollama_update()
+
+        question = user_input[len("pa "):]
+
+        response = get_response_from_ollama_qwen30(user_input, ollama)
+
+        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        type_out_text(response)
+
+        return True
+
+    if user_input.startswith("pa-qwen:235b "):
+        ollama_installed = check_command_installed("ollama")
+        if ollama_installed:
+            print(f"{green}Ollama is installed.{reset}")
+        else:
+            print(f"{red}Ollama is not installed. Please install it to proceed.{reset}")
+
+        start_ollama()
+        check_ollama_update()
+
+        question = user_input[len("pa "):]
+
+        response = get_response_from_ollama_qwen235(user_input, ollama)
+
+        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        type_out_text(response)
+
+        return True
+
     return False
 
 # Constants
@@ -1817,6 +1969,82 @@ def get_response_from_ollama(user_message, ollama):
     except Exception as e:
         return f"ERROR: {e}"
 
+def get_response_from_ollama_qwen0_6(user_message, ollama):
+    """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
+    try:
+        response = ollama.chat(
+            model="qwen3:0.6b",  # Modellname
+            messages=[{"role": "user", "content": user_message}]
+        )
+        return response['message']['content']
+    except Exception as e:
+        return f"ERROR: {e}"
+
+def get_response_from_ollama_qwen1_7(user_message, ollama):
+    """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
+    try:
+        response = ollama.chat(
+            model="qwen3:1.7b",  # Modellname
+            messages=[{"role": "user", "content": user_message}]
+        )
+        return response['message']['content']
+    except Exception as e:
+        return f"ERROR: {e}"
+
+def get_response_from_ollama_qwen4(user_message, ollama):
+    """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
+    try:
+        response = ollama.chat(
+            model="qwen3:4b",  # Modellname
+            messages=[{"role": "user", "content": user_message}]
+        )
+        return response['message']['content']
+    except Exception as e:
+        return f"ERROR: {e}"
+
+def get_response_from_ollama_qwen8(user_message, ollama):
+    """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
+    try:
+        response = ollama.chat(
+            model="qwen3:8b",  # Modellname
+            messages=[{"role": "user", "content": user_message}]
+        )
+        return response['message']['content']
+    except Exception as e:
+        return f"ERROR: {e}"
+
+def get_response_from_ollama_qwen32(user_message, ollama):
+    """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
+    try:
+        response = ollama.chat(
+            model="qwen3:32b",  # Modellname
+            messages=[{"role": "user", "content": user_message}]
+        )
+        return response['message']['content']
+    except Exception as e:
+        return f"ERROR: {e}"
+
+def get_response_from_ollama_qwen30(user_message, ollama):
+    """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
+    try:
+        response = ollama.chat(
+            model="qwen3:30b-a3b",  # Modellname
+            messages=[{"role": "user", "content": user_message}]
+        )
+        return response['message']['content']
+    except Exception as e:
+        return f"ERROR: {e}"
+
+def get_response_from_ollama_qwen235(user_message, ollama):
+    """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
+    try:
+        response = ollama.chat(
+            model="qwen3:235b-a22b",  # Modellname
+            messages=[{"role": "user", "content": user_message}]
+        )
+        return response['message']['content']
+    except Exception as e:
+        return f"ERROR: {e}"
 
 def check_ollama_update():
     """
