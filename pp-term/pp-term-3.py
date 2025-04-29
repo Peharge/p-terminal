@@ -953,7 +953,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "theme-ls":
-        print("dark, light, hackerman, aptscience, cyberlife, ubuntu, nord, dracula, solarized_dark, gruvbox_dark, monokai, one_dark, material_dark, tokyo_night, arc_dark, ayu_mirage", "spiderman", "p_term", "mavis_1", "mavis_3", "mavis_4")
+        print("dark, light, hackerman, aptscience, cyberlife, ubuntu, nord, dracula, solarized_dark, gruvbox_dark, monokai, one_dark, material_dark, tokyo_night, arc_dark, ayu_mirage", "spiderman", "p_term", "mavis_1", "mavis_3", "mavis_4", "green", "red", "blue")
         return True
 
     if user_input.startswith("launch "):
@@ -1143,45 +1143,49 @@ THEMES_PATH = f'C:\\Users\\{os.getlogin()}\\p-terminal\\pp-term\\themes.json'
 COLOR_SCHEMES = {
     "dark": {
         "name": "Dark",
-        "background": "#0C0C0C",
-        "foreground": "#F2F2F2",
-        "black": "#0C0C0C",
-        "red": "#C50F1F",
-        "green": "#13A10E",
-        "yellow": "#C19C00",
-        "blue": "#0037DA",
-        "purple": "#881798",
-        "cyan": "#3A96DD",
-        "white": "#CCCCCC",
-        "brightBlack": "#767676",
-        "brightRed": "#E74856",
-        "brightGreen": "#16C60C",
-        "brightYellow": "#F9F1A5",
-        "brightBlue": "#3B78FF",
-        "brightPurple": "#B4009E",
-        "brightCyan": "#61D6D6",
-        "brightWhite": "#F2F2F2"
+        "background": "#0F0F1A",
+        "foreground": "#ffffff",
+        "black": "#1B1B2F",
+        "red": "#E10600",
+        "green": "#00FF9F",
+        "yellow": "#FFD000",
+        "blue": "#0047AB",
+        "purple": "#A200FF",
+        "cyan": "#00CFFF",
+        "white": "#FFFFFF",
+        "brightBlack": "#2C2C3A",
+        "brightRed": "#FF2C1F",
+        "brightGreen": "#4CFFB0",
+        "brightYellow": "#FFE94D",
+        "brightBlue": "#1E90FF",
+        "brightPurple": "#E87CFF",
+        "brightCyan": "#4DE9FF",
+        "brightWhite": "#FAFAFA",
+        "cursorColor": "#E10600",
+        "selectionBackground": "#0047AB",
     },
     "light": {
         "name": "Light",
         "background": "#FFFFFF",
-        "foreground": "#333333",
-        "black": "#000000",
+        "foreground": "#000000",
+        "black": "#FFFFFF",
         "red": "#C50F1F",
         "green": "#13A10E",
         "yellow": "#C19C00",
         "blue": "#0037DA",
         "purple": "#881798",
         "cyan": "#3A96DD",
-        "white": "#CCCCCC",
-        "brightBlack": "#767676",
+        "white": "#000000",
+        "brightBlack": "#0047AB",
         "brightRed": "#E74856",
         "brightGreen": "#16C60C",
         "brightYellow": "#F9F1A5",
         "brightBlue": "#3B78FF",
         "brightPurple": "#B4009E",
         "brightCyan": "#61D6D6",
-        "brightWhite": "#F2F2F2"
+        "brightWhite": "#FAFAFA",
+        "cursorColor": "#E10600",
+        "selectionBackground": "#2C2C3A",
     },
     "hackerman": {
         "name": "hackerman",
@@ -1500,7 +1504,6 @@ COLOR_SCHEMES = {
         "purple": "#A200FF",
         "cyan": "#00CFFF",
         "white": "#FFFFFF",
-
         "brightBlack": "#2C2C3A",
         "brightRed": "#FF2C1F",
         "brightGreen": "#4CFFB0",
@@ -1509,7 +1512,6 @@ COLOR_SCHEMES = {
         "brightPurple": "#E87CFF",
         "brightCyan": "#4DE9FF",
         "brightWhite": "#FAFAFA",
-
         "cursorColor": "#E10600",
         "selectionBackground": "#0047AB",
         "foreground": "#FFFFFF"
@@ -1525,7 +1527,6 @@ COLOR_SCHEMES = {
         "purple": "#A200FF",
         "cyan": "#00CFFF",
         "white": "#FFFFFF",
-
         "brightBlack": "#2C2C3A",
         "brightRed": "#FF2C1F",
         "brightGreen": "#4CFFB0",
@@ -1534,7 +1535,6 @@ COLOR_SCHEMES = {
         "brightPurple": "#E87CFF",
         "brightCyan": "#4DE9FF",
         "brightWhite": "#FAFAFA",
-
         "cursorColor": "#E10600",
         "selectionBackground": "#0047AB",
         "foreground": "#FFFFFF"
@@ -1550,7 +1550,6 @@ COLOR_SCHEMES = {
         "purple": "#A200FF",
         "cyan": "#00CFFF",
         "white": "#FFFFFF",
-
         "brightBlack": "#2C2C3A",
         "brightRed": "#FF2C1F",
         "brightGreen": "#4CFFB0",
@@ -1559,7 +1558,6 @@ COLOR_SCHEMES = {
         "brightPurple": "#E87CFF",
         "brightCyan": "#4DE9FF",
         "brightWhite": "#FAFAFA",
-
         "cursorColor": "#E10600",
         "selectionBackground": "#0047AB",
         "foreground": "#FFFFFF"
@@ -1575,7 +1573,6 @@ COLOR_SCHEMES = {
         "purple": "#A200FF",
         "cyan": "#00CFFF",
         "white": "#FFFFFF",
-
         "brightBlack": "#2C2C3A",
         "brightRed": "#FF2C1F",
         "brightGreen": "#4CFFB0",
@@ -1584,7 +1581,6 @@ COLOR_SCHEMES = {
         "brightPurple": "#E87CFF",
         "brightCyan": "#4DE9FF",
         "brightWhite": "#FAFAFA",
-
         "cursorColor": "#E10600",
         "selectionBackground": "#0047AB",
         "foreground": "#FFFFFF"
@@ -1600,7 +1596,6 @@ COLOR_SCHEMES = {
         "purple": "#A200FF",
         "cyan": "#00CFFF",
         "white": "#FFFFFF",
-
         "brightBlack": "#2C2C3A",
         "brightRed": "#FF2C1F",
         "brightGreen": "#4CFFB0",
@@ -1609,10 +1604,75 @@ COLOR_SCHEMES = {
         "brightPurple": "#E87CFF",
         "brightCyan": "#4DE9FF",
         "brightWhite": "#FAFAFA",
-
         "cursorColor": "#E10600",
         "selectionBackground": "#0047AB",
         "foreground": "#FFFFFF"
+    },
+    "green": {
+        "name": "green",
+        "background": "#000000",
+        "foreground": "#00FF00",
+        "black": "#00FF00",
+        "red": "#00FF00",
+        "green": "#00FF00",
+        "yellow": "#00FF00",
+        "blue": "#00FF00",
+        "purple": "#00FF00",
+        "cyan": "#00FF00",
+        "white": "#00FF00",
+        "brightBlack": "#00FF00",
+        "brightRed": "#00FF00",
+        "brightGreen": "#00FF00",
+        "brightYellow": "#00FF00",
+        "brightBlue": "#00FF00",
+        "brightPurple": "#00FF00",
+        "brightCyan": "#00FF00",
+        "brightWhite": "#00FF00",
+        "cursorColor": "#00FF00"
+    },
+    "red": {
+        "name": "red",
+        "background": "#000000",
+        "foreground": "#FF0000",
+        "black": "#FF0000",
+        "red": "#FF0000",
+        "green": "#FF0000",
+        "yellow": "#FF0000",
+        "blue": "#FF0000",
+        "purple": "#FF0000",
+        "cyan": "#FF0000",
+        "white": "#FF0000",
+        "brightBlack": "#FF0000",
+        "brightRed": "#FF0000",
+        "brightGreen": "#FF0000",
+        "brightYellow": "#FF0000",
+        "brightBlue": "#FF0000",
+        "brightPurple": "#FF0000",
+        "brightCyan": "#FF0000",
+        "brightWhite": "#FF0000",
+        "cursorColor": "#FF0000"
+    },
+    "blue": {
+        "name": "blue",
+        "background": "#000000",
+        "foreground": "#00BFFF",
+        "black": "#00BFFF",
+        "red": "#00BFFF",
+        "green": "#00BFFF",
+        "yellow": "#00BFFF",
+        "blue": "#00BFFF",
+        "purple": "#00BFFF",
+        "cyan": "#00BFFF",
+        "white": "#00BFFF",
+        "brightBlack": "#00BFFF",
+        "brightRed": "#00BFFF",
+        "brightGreen": "#00BFFF",
+        "brightYellow": "#00BFFF",
+        "brightBlue": "#00BFFF",
+        "brightPurple": "#00BFFF",
+        "brightCyan": "#00BFFF",
+        "brightWhite": "#00BFFF",
+        "cursorColor": "#00BFFF"
     }
 }
 
