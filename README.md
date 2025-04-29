@@ -65,7 +65,7 @@ Download the [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-te
 	- `ps-arxiv` - Peharge ArXiv search command  
 	etc.  
   
-- `pa` - Peharge AI command: Ask a question (AI functionality) -> deepcoder:14b  
+- `pa` - Peharge AI command: Ask a question (AI functionality) -> qwen3:14b  
 - `lx` - Linux command  
 - `lx-c` - Linux command with Peharge C compiler 
 - `lx-p` - Linux command with Python 
