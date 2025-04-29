@@ -1131,7 +1131,7 @@ def handle_special_commands(user_input):
 
         return True
 
-    if user_input.startswith("pa-qwen:0.6b "):
+    if user_input.startswith("pa-qwen3:0.6b "):
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
             print(f"{green}Ollama is installed.{reset}")
@@ -1150,7 +1150,7 @@ def handle_special_commands(user_input):
 
         return True
 
-    if user_input.startswith("pa-qwen:1.7b "):
+    if user_input.startswith("pa-qwen3:1.7b "):
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
             print(f"{green}Ollama is installed.{reset}")
@@ -1169,7 +1169,7 @@ def handle_special_commands(user_input):
 
         return True
 
-    if user_input.startswith("pa-qwen:4b "):
+    if user_input.startswith("pa-qwen3:4b "):
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
             print(f"{green}Ollama is installed.{reset}")
@@ -1188,7 +1188,7 @@ def handle_special_commands(user_input):
 
         return True
 
-    if user_input.startswith("pa-qwen:8b "):
+    if user_input.startswith("pa-qwen3:8b "):
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
             print(f"{green}Ollama is installed.{reset}")
@@ -1207,7 +1207,7 @@ def handle_special_commands(user_input):
 
         return True
 
-    if user_input.startswith("pa-qwen:14b "):
+    if user_input.startswith("pa-qwen3:14b "):
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
             print(f"{green}Ollama is installed.{reset}")
@@ -1226,7 +1226,7 @@ def handle_special_commands(user_input):
 
         return True
 
-    if user_input.startswith("pa-qwen:32b "):
+    if user_input.startswith("pa-qwen3:32b "):
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
             print(f"{green}Ollama is installed.{reset}")
@@ -1245,7 +1245,7 @@ def handle_special_commands(user_input):
 
         return True
 
-    if user_input.startswith("pa-qwen:30b "):
+    if user_input.startswith("pa-qwen3:30b "):
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
             print(f"{green}Ollama is installed.{reset}")
@@ -1264,7 +1264,7 @@ def handle_special_commands(user_input):
 
         return True
 
-    if user_input.startswith("pa-qwen:235b "):
+    if user_input.startswith("pa-qwen3:235b "):
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
             print(f"{green}Ollama is installed.{reset}")
