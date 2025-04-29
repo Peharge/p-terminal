@@ -677,7 +677,8 @@ def handle_special_commands(user_input):
         "fun nsnake": "pp-commands\\fun-nsnake.py",  # new
         "fun pacman": "pp-commands\\fun-pacman4console.py",  # new
         "fun tictactoe": "pp-commands\\fun-tictactoe-ng.py",  # new
-        "fun tint": "pp-commands\\fun-tint.py"  # new
+        "fun tint": "pp-commands\\fun-tint.py",  # new
+        "fun tetris": "pp-commands\\fun-vitetris.py"  # new
     }
 
     # Custom command launcher
