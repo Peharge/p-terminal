@@ -65,36 +65,23 @@ import subprocess
 import sys
 
 def run_alpine_python_command(command):
+    # Sicherstellen, dass der Befehl als String vorliegt
     if isinstance(command, str):
-        command = f"wsl {command}"
+        command = f"wsl {command}"  # Kommando für WSL einbetten
+
+    # Starten des Prozesses
+    process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
     try:
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        # Warten auf den Abschluss des Prozesses
         process.wait()
     except KeyboardInterrupt:
+        # Wenn der Benutzer den Prozess mit Ctrl+C unterbricht
         process.terminate()
-        print("\nProcess interrupted by user.")
-        sys.exit(1)
-    except Exception as e:
-        print(f"\nError while executing: {command}\n{e}")
-        sys.exit(1)
+        print("\nProcess was interrupted and terminated.")
 
-if __name__ == "__main__":
-    commands = [
-        'sudo apt install -y ninvaders',
-        'sudo apt install -y nsnake',
-        'sudo apt install -y bastet',
-        'sudo apt install -y moon-buggy',
-        'sudo apt install -y pacman4console',
-        'sudo apt install -y gnuchess',
-        'sudo apt install -y tint',
-        'sudo apt install -y tictactoe-ng',
-        'sudo apt install -y nethack-console',
-        'sudo apt install -y vitetris'
-    ]
+    print("Command was executed and the code exits.")
 
-    for cmd in commands:
-        print(f"\nExecuting: {cmd}")
-        run_alpine_python_command(cmd)
 
-    print("\nAll commands were executed successfully. Exiting script.")
+# Beispielbefehl
+run_alpine_python_command('vitetris')
