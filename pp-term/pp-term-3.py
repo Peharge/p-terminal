@@ -489,6 +489,14 @@ def handle_special_commands(user_input):
         "run qwen2.5-coder:7b": "pp-commands\\qwen-2-5-coder-0.5b.py",
         "run qwen2.5-coder:14b": "pp-commands\\qwen-2-5-coder-0.5b.py",
         "run qwen2.5-coder:32b": "pp-commands\\qwen-2-5-coder-0.5b.py",
+        "run qwen3:0.6b": "pp-commands\\qwen-3-0-6b.py", # new
+        "run qwen3:1.7b": "pp-commands\\qwen-3-1-7b.py",  # new
+        "run qwen3:4b": "pp-commands\\qwen-3-4b.py",  # new
+        "run qwen3:8b": "pp-commands\\qwen-3-8b.py",  # new
+        "run qwen3:14b": "pp-commands\\qwen-3-14b.py",  # new
+        "run qwen3:32b": "pp-commands\\qwen-3-32.py",  # new
+        "run qwen3:30b": "pp-commands\\qwen-3-30.py",  # new
+        "run qwen3:235b": "pp-commands\\qwen-3-235.py",  # new
         "run gemma3:1b": "pp-commands\\gemma-3-1b.py", # new
         "run gemma3:4b": "pp-commands\\gemma-3-4b.py", # new
         "run gemma3:12b": "pp-commands\\gemma-3-12b.py", # new
@@ -1115,11 +1123,6 @@ def handle_special_commands(user_input):
 
     return False
 
-import os
-import json
-import shutil
-import subprocess
-
 # Constants
 SETTINGS_PATH = os.path.expandvars(
     r"%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
@@ -1476,6 +1479,131 @@ COLOR_SCHEMES = {
         "brightCyan": "#B4F0E0",
         "brightWhite": "#FFFFFF",
         "cursorColor": "#FFA759"
+    },
+    "spiderman": {
+        "name": "spiderman",
+        "background": "#0F0F1A",
+        "black": "#1B1B2F",
+        "red": "#E10600",
+        "green": "#00FF9F",
+        "yellow": "#FFD000",
+        "blue": "#0047AB",
+        "purple": "#A200FF",
+        "cyan": "#00CFFF",
+        "white": "#FFFFFF",
+
+        "brightBlack": "#2C2C3A",
+        "brightRed": "#FF2C1F",
+        "brightGreen": "#4CFFB0",
+        "brightYellow": "#FFE94D",
+        "brightBlue": "#1E90FF",
+        "brightPurple": "#E87CFF",
+        "brightCyan": "#4DE9FF",
+        "brightWhite": "#FAFAFA",
+
+        "cursorColor": "#E10600",
+        "selectionBackground": "#0047AB",
+        "foreground": "#FFFFFF"
+    },
+    "p_term": {
+        "name": "p_term",
+        "background": "#0F0F1A",
+        "black": "#1B1B2F",
+        "red": "#E10600",
+        "green": "#00FF9F",
+        "yellow": "#FFD000",
+        "blue": "#0047AB",
+        "purple": "#A200FF",
+        "cyan": "#00CFFF",
+        "white": "#FFFFFF",
+
+        "brightBlack": "#2C2C3A",
+        "brightRed": "#FF2C1F",
+        "brightGreen": "#4CFFB0",
+        "brightYellow": "#FFE94D",
+        "brightBlue": "#1E90FF",
+        "brightPurple": "#E87CFF",
+        "brightCyan": "#4DE9FF",
+        "brightWhite": "#FAFAFA",
+
+        "cursorColor": "#E10600",
+        "selectionBackground": "#0047AB",
+        "foreground": "#FFFFFF"
+    },
+    "mavis_1": {
+        "name": "mavis_1",
+        "background": "#0F0F1A",
+        "black": "#1B1B2F",
+        "red": "#E10600",
+        "green": "#00FF9F",
+        "yellow": "#FFD000",
+        "blue": "#0047AB",
+        "purple": "#A200FF",
+        "cyan": "#00CFFF",
+        "white": "#FFFFFF",
+
+        "brightBlack": "#2C2C3A",
+        "brightRed": "#FF2C1F",
+        "brightGreen": "#4CFFB0",
+        "brightYellow": "#FFE94D",
+        "brightBlue": "#1E90FF",
+        "brightPurple": "#E87CFF",
+        "brightCyan": "#4DE9FF",
+        "brightWhite": "#FAFAFA",
+
+        "cursorColor": "#E10600",
+        "selectionBackground": "#0047AB",
+        "foreground": "#FFFFFF"
+    },
+    "mavis_2": {
+        "name": "mavis_2",
+        "background": "#0F0F1A",
+        "black": "#1B1B2F",
+        "red": "#E10600",
+        "green": "#00FF9F",
+        "yellow": "#FFD000",
+        "blue": "#0047AB",
+        "purple": "#A200FF",
+        "cyan": "#00CFFF",
+        "white": "#FFFFFF",
+
+        "brightBlack": "#2C2C3A",
+        "brightRed": "#FF2C1F",
+        "brightGreen": "#4CFFB0",
+        "brightYellow": "#FFE94D",
+        "brightBlue": "#1E90FF",
+        "brightPurple": "#E87CFF",
+        "brightCyan": "#4DE9FF",
+        "brightWhite": "#FAFAFA",
+
+        "cursorColor": "#E10600",
+        "selectionBackground": "#0047AB",
+        "foreground": "#FFFFFF"
+    },
+    "mavis_3": {
+        "name": "mavis_3",
+        "background": "#0F0F1A",
+        "black": "#1B1B2F",
+        "red": "#E10600",
+        "green": "#00FF9F",
+        "yellow": "#FFD000",
+        "blue": "#0047AB",
+        "purple": "#A200FF",
+        "cyan": "#00CFFF",
+        "white": "#FFFFFF",
+
+        "brightBlack": "#2C2C3A",
+        "brightRed": "#FF2C1F",
+        "brightGreen": "#4CFFB0",
+        "brightYellow": "#FFE94D",
+        "brightBlue": "#1E90FF",
+        "brightPurple": "#E87CFF",
+        "brightCyan": "#4DE9FF",
+        "brightWhite": "#FAFAFA",
+
+        "cursorColor": "#E10600",
+        "selectionBackground": "#0047AB",
+        "foreground": "#FFFFFF"
     }
 }
 
@@ -1621,7 +1749,7 @@ def get_response_from_ollama(user_message, ollama):
     """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
     try:
         response = ollama.chat(
-            model="deepcoder:14b",  # Modellname
+            model="qwen3:14b",  # Modellname
             messages=[{"role": "user", "content": user_message}]
         )
         return response['message']['content']

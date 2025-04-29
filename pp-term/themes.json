@@ -97,5 +97,65 @@
         "defaults": {
             "cursorColor": "#FFA759"
         }
+    },
+    "spiderman": {
+        "defaults": {
+            "colorScheme": "spiderman",
+            "useAcrylic": true,
+            "acrylicOpacity": 0.75,
+            "backgroundImage": "ms-appdata:///roaming/spiderman.jpg",
+            "backgroundImageStretchMode": "uniformToFill",
+            "backgroundImageAlignment": "center",
+            "backgroundImageOpacity": 0.85,
+            "cursorColor": "#E10600"
+        }
+    },
+    "p_term": {
+        "defaults": {
+            "colorScheme": "p_term",
+            "useAcrylic": true,
+            "acrylicOpacity": 0.4,
+            "backgroundImage": "ms-appdata:///roaming/p-term-fhd.png",
+            "backgroundImageStretchMode": "none",
+            "backgroundImageAlignment": "bottomRight",
+            "backgroundImageOpacity": 0.8,
+            "cursorColor": "#ffffff"
+        }
+    },
+    "mavis_1": {
+        "defaults": {
+            "colorScheme": "mavis_1",
+            "useAcrylic": true,
+            "acrylicOpacity": 0.4,
+            "backgroundImage": "ms-appdata:///roaming/mavis-1-5-banner-1-fhd.png",
+            "backgroundImageStretchMode": "none",
+            "backgroundImageAlignment": "bottomRight",
+            "backgroundImageOpacity": 0.8,
+            "cursorColor": "#ffffff"
+        }
+    },
+    "mavis_2": {
+        "defaults": {
+            "colorScheme": "mavis_2",
+            "useAcrylic": true,
+            "acrylicOpacity": 0.4,
+            "backgroundImage": "ms-appdata:///roaming/mavis1.3-banner-fhd.png",
+            "backgroundImageStretchMode": "none",
+            "backgroundImageAlignment": "bottomRight",
+            "backgroundImageOpacity": 0.8,
+            "cursorColor": "#ffffff"
+        }
+    },
+    "mavis_3": {
+        "defaults": {
+            "colorScheme": "mavis_3",
+            "useAcrylic": true,
+            "acrylicOpacity": 0.4,
+            "backgroundImage": "ms-appdata:///roaming/mavis-banner40-fhd.png",
+            "backgroundImageStretchMode": "none",
+            "backgroundImageAlignment": "bottomRight",
+            "backgroundImageOpacity": 0.8,
+            "cursorColor": "#ffffff"
+        }
     }
 }

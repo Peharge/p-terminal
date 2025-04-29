@@ -72,6 +72,14 @@
         "run qwen2.5-coder:7b": "pp-commands\\qwen-2-5-coder-0.5b.py",
         "run qwen2.5-coder:14b": "pp-commands\\qwen-2-5-coder-0.5b.py",
         "run qwen2.5-coder:32b": "pp-commands\\qwen-2-5-coder-0.5b.py",
+        "run qwen3:0.6b": "pp-commands\\qwen-3-0-6b.py", # new
+        "run qwen3:1.7b": "pp-commands\\qwen-3-1-7b.py",  # new
+        "run qwen3:4b": "pp-commands\\qwen-3-4b.py",  # new
+        "run qwen3:8b": "pp-commands\\qwen-3-8b.py",  # new
+        "run qwen3:14b": "pp-commands\\qwen-3-14b.py",  # new
+        "run qwen3:32b": "pp-commands\\qwen-3-32.py",  # new
+        "run qwen3:30b": "pp-commands\\qwen-3-30.py",  # new
+        "run qwen3:235b": "pp-commands\\qwen-3-235.py",  # new
         "run gemma3:1b": "pp-commands\\gemma-3-1b.py", # new
         "run gemma3:4b": "pp-commands\\gemma-3-4b.py", # new
         "run gemma3:12b": "pp-commands\\gemma-3-12b.py", # new
