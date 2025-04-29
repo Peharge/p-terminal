@@ -944,7 +944,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "theme-ls":
-        print("dark, light, hackerman, aptscience, cyberlife, ubuntu, nord, dracula, solarized_dark, gruvbox_dark, monokai, one_dark, material_dark, tokyo_night, arc_dark, ayu_mirage")
+        print("dark, light, hackerman, aptscience, cyberlife, ubuntu, nord, dracula, solarized_dark, gruvbox_dark, monokai, one_dark, material_dark, tokyo_night, arc_dark, ayu_mirage", "spiderman", "p_term", "mavis_1", "mavis_3", "mavis_4")
         return True
 
     if user_input.startswith("launch "):
@@ -1555,8 +1555,8 @@ COLOR_SCHEMES = {
         "selectionBackground": "#0047AB",
         "foreground": "#FFFFFF"
     },
-    "mavis_2": {
-        "name": "mavis_2",
+    "mavis_3": {
+        "name": "mavis_3",
         "background": "#0F0F1A",
         "black": "#1B1B2F",
         "red": "#E10600",
@@ -1580,8 +1580,8 @@ COLOR_SCHEMES = {
         "selectionBackground": "#0047AB",
         "foreground": "#FFFFFF"
     },
-    "mavis_3": {
-        "name": "mavis_3",
+    "mavis_4": {
+        "name": "mavis_4",
         "background": "#0F0F1A",
         "black": "#1B1B2F",
         "red": "#E10600",

@@ -134,9 +134,9 @@
             "cursorColor": "#ffffff"
         }
     },
-    "mavis_2": {
+    "mavis_3": {
         "defaults": {
-            "colorScheme": "mavis_2",
+            "colorScheme": "mavis_3",
             "useAcrylic": true,
             "acrylicOpacity": 0.75,
             "backgroundImage": "ms-appdata:///roaming/mavis1.3-banner-fhd.png",
@@ -146,9 +146,9 @@
             "cursorColor": "#ffffff"
         }
     },
-    "mavis_3": {
+    "mavis_4": {
         "defaults": {
-            "colorScheme": "mavis_3",
+            "colorScheme": "mavis_4",
             "useAcrylic": true,
             "acrylicOpacity": 0.75,
             "backgroundImage": "ms-appdata:///roaming/mavis-banner40-fhd.png",
