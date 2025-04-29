@@ -857,7 +857,7 @@ echo ✅ All WSL processes have been successfully terminated.
 set "PYCHARM_PROJECTS=%USERPROFILE%\p-terminal"
 set "PP_DIR=%PYCHARM_PROJECTS%\pp-term"
 set "PP_ENV_FILE=%PP_DIR%\.env"
-set "PP_RUN_FILE=%PP_DIR%\pp-term-3.bat"
+set "PP_RUN_FILE=%PP_DIR%\pp-term.bat"
 set "EXPECTED_PYTHON_VERSION=3.12"
 
 :: Ensure PyCharm Projects directory exists
