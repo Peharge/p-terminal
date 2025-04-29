@@ -182,7 +182,7 @@ timeout /t 5 >nul
 :: Check if Python is already installed
 python --version >nul 2>&1
 if %errorlevel% neq 0 (
-    echo Python 3.12 is not installed.
+    echo ❌ Python 3.12 is not installed.
     set /p install_python="Would you like to install Python 3.12? [y/n]: "
 
     if /i "%install_python%"=="y" (
@@ -252,7 +252,7 @@ if %errorlevel% neq 0 (
 :: Check if Git is already installed
 git --version >nul 2>&1
 if %errorlevel% neq 0 (
-    echo Git is not installed.
+    echo ❌ Git is not installed.
     set /p install_git="Would you like to install Git? [y/n]: "
 
     if /i "%install_git%"=="y" (
@@ -322,7 +322,7 @@ if %errorlevel% neq 0 (
 :: Check if Ollama is already installed
 ollama --version >nul 2>&1
 if %errorlevel% neq 0 (
-    echo Ollama is not installed.
+    echo ❌ Ollama is not installed.
     set /p install_ollama="Would you like to install Ollama? [y/n]: "
 
     if /i "%install_ollama%"=="y" (
@@ -392,7 +392,7 @@ if %errorlevel% neq 0 (
 :: Check if FFmpeg is already installed
 ffmpeg -version >nul 2>&1
 if %errorlevel% neq 0 (
-    echo FFmpeg is not installed.
+    echo ❌ FFmpeg is not installed.
     echo Installing FFmpeg is not required to run pp-term. However, installing FFmpeg is mandatory for using MAVIS Voice Assistant!
     set /p install_ffmpeg="Would you like to install FFmpeg? [y/n]: "
 
@@ -466,7 +466,7 @@ set SCRIPT_install_rustup=C:\Users\%USERNAME%\p-terminal\pp-term\run\rust\instal
 :: Check if Rustup is already installed
 rustup --version >nul 2>&1
 if %errorlevel% neq 0 (
-    echo Rustup is not installed.
+    echo ❌ Rustup is not installed.
     set /p install_rustup="Would you like to install Rustup? [y/n]: "
 
     if /i "%install_rustup%"=="y" (
@@ -534,7 +534,7 @@ if %errorlevel% neq 0 (
 :: Check if PowerShell 7 is already installed
 powershell -Command "$PSVersionTable.PSVersion" >nul 2>&1
 if %errorlevel% neq 0 (
-    echo PowerShell 7 is not installed.
+    echo ❌ PowerShell 7 is not installed.
     set /p install_powershell="Would you like to install PowerShell 7? [y/n]: "
 
     if /i "%install_powershell%"=="y" (
@@ -674,7 +674,7 @@ set "SCRIPT_install_wsl_alpine=C:\Users\%USERNAME%\p-terminal\pp-term\run\wsl\in
 :CheckWSLInstalled
 wsl --list >nul 2>&1
 if errorlevel 1 (
-    echo WSL is not installed.
+    echo ❌ WSL is not installed.
     set /p "install_wsl=Do you want to install WSL? [y/n]: "
     if /i "!install_wsl!"=="y" (
         echo Enabling WSL feature...
