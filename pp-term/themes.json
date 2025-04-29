@@ -114,7 +114,7 @@
         "defaults": {
             "colorScheme": "p_term",
             "useAcrylic": true,
-            "acrylicOpacity": 0.6,
+            "acrylicOpacity": 0.65,
             "backgroundImage": "ms-appdata:///roaming/p-term-fhd.png",
             "backgroundImageStretchMode": "uniformToFill",
             "backgroundImageAlignment": "center",
