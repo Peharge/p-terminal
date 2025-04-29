@@ -191,6 +191,14 @@ Download the [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-te
 - `run grafana` - Run Grafana
 - `install grafana` - Install Grafana
 - `account` - Manage Mavis account
+- `run qwen3:0.6b` - Run Qwen 3 model version 0.6b
+- `run qwen3:1.7b` - Run Qwen 3 model version 1.7b
+- `run qwen3:4b` - Run Qwen 3 model version 4b
+- `run qwen3:8b` - Run Qwen 3 model version 8b
+- `run qwen3:14b` - Run Qwen 3 model version 14b
+- `run qwen3:32b` - Run Qwen 3 model version 32b
+- `run qwen3:30b` - Run Qwen 3 model version 30b
+- `run qwen3:235b` - Run Qwen 3 model version 235b
 - `run deepseek-r1:1.5b` - Run DeepSeek model version 1.5b
 - `run deepseek-r1:7b` - Run DeepSeek model version 7b
 - `run deepseek-r1:8b` - Run DeepSeek model version 8b
