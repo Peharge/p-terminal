@@ -393,7 +393,8 @@ if %errorlevel% neq 0 (
 ffmpeg -version >nul 2>&1
 if %errorlevel% neq 0 (
     echo FFmpeg is not installed.
-    set /p install_ffmpeg="Installing FFmpeg is not required to run pp-term. However, installing FFmpeg is mandatory for using MAVIS Voice Assistant! Would you like to install FFmpeg? [y/n]: "
+    echo Installing FFmpeg is not required to run pp-term. However, installing FFmpeg is mandatory for using MAVIS Voice Assistant!
+    set /p install_ffmpeg="Would you like to install FFmpeg? [y/n]: "
 
     if /i "%install_ffmpeg%"=="y" (
         echo Downloading FFmpeg installer...
@@ -583,7 +584,8 @@ if exist "%SLICER_PATH%" (
     echo ✅ 3D Slicer is already installed.
 ) else (
     echo ❌ 3D Slicer is not installed.
-    set /p install_slicer="Installing 3D Slicer isn't required to run pp-term. However, if you plan to use SIMON, installing 3D Slicer is mandatory. If you encounter any problems during installation, simply run the 'Install 3d-slicer' command in the pp terminal. This installation method is significantly more secure! Would you like to install 3D Slicer? [y/n]: "
+    echo Installing 3D Slicer isn't required to run pp-term. However, if you plan to use SIMON, installing 3D Slicer is mandatory. If you encounter any problems during installation, simply run the 'Install 3d-slicer' command in the pp terminal. This installation method is significantly more secure!
+    set /p install_slicer="Would you like to install 3D Slicer? [y/n]: "
 
     if /i "%install_slicer%"=="y" (
         echo Downloading the 3D Slicer installer...
