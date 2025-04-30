@@ -5758,14 +5758,14 @@ def get_cool_pin():
             shell=True         # in Windows häufig nötig für PATH-Auflösung
         )
     except FileNotFoundError:
-        return "Fehler: oh-my-posh wurde nicht gefunden. Ist es im PATH?"
+        return "Error: oh-my-posh was not found. Is it in the PATH?"
     except Exception as e:
-        return f"Unerwarteter Fehler: {e}"
+        return f"Unexpected error: {e}"
 
     if result.returncode == 0:
         return result.stdout
     else:
-        return f"Fehler beim Ausführen von oh-my-posh:\n{result.stderr}"
+        return f"Error running oh-my-posh:\n{result.stderr}"
 
 def get_cool_3_pin():
     """
@@ -5796,14 +5796,14 @@ def get_cool_3_pin():
             shell=True  # in Windows häufig nötig für PATH-Auflösung
         )
     except FileNotFoundError:
-        return "Fehler: oh-my-posh wurde nicht gefunden. Ist es im PATH?"
+        return "Error: oh-my-posh was not found. Is it in the PATH?"
     except Exception as e:
-        return f"Unerwarteter Fehler: {e}"
+        return f"Unexpected error: {e}"
 
     if result.returncode == 0:
         return result.stdout
     else:
-        return f"Fehler beim Ausführen von oh-my-posh:\n{result.stderr}"
+        return f"Error running oh-my-posh:\n{result.stderr}"
 
 def get_cool_4_pin():
     """
@@ -5834,14 +5834,14 @@ def get_cool_4_pin():
             shell=True  # in Windows häufig nötig für PATH-Auflösung
         )
     except FileNotFoundError:
-        return "Fehler: oh-my-posh wurde nicht gefunden. Ist es im PATH?"
+        return "Error: oh-my-posh was not found. Is it in the PATH?"
     except Exception as e:
-        return f"Unerwarteter Fehler: {e}"
+        return f"Unexpected error: {e}"
 
     if result.returncode == 0:
         return result.stdout
     else:
-        return f"Fehler beim Ausführen von oh-my-posh:\n{result.stderr}"
+        return f"Error running oh-my-posh:\n{result.stderr}"
 
 
 def main():
