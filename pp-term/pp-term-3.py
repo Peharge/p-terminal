@@ -957,7 +957,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "theme-ls":
-        print("dark, light, hackerman, aptscience, cyberlife, ubuntu, nord, dracula, solarized_dark, gruvbox_dark, monokai, one_dark, material_dark, tokyo_night, arc_dark, ayu_mirage", "spiderman", "p_term", "mavis_1", "mavis_3", "mavis_4", "green", "red", "blue")
+        print("dark, light, main, hackerman, aptscience, cyberlife, ubuntu, nord, dracula, solarized_dark, gruvbox_dark, monokai, one_dark, material_dark, tokyo_night, arc_dark, ayu_mirage", "spiderman", "p_term", "mavis_1", "mavis_3", "mavis_4", "green", "red", "blue")
         return True
 
     if user_input.startswith("launch "):
@@ -1342,6 +1342,29 @@ COLOR_SCHEMES = {
         "brightWhite": "#FAFAFA",
         "cursorColor": "#E10600",
         "selectionBackground": "#2C2C3A",
+    },
+    "main": {
+        "name": "Dark",
+        "background": "#333333",
+        "foreground": "#ffffff",
+        "black": "#1B1B2F",
+        "red": "#E10600",
+        "green": "#00FF9F",
+        "yellow": "#FFD000",
+        "blue": "#1E90FF",
+        "purple": "#A200FF",
+        "cyan": "#00CFFF",
+        "white": "#FFFFFF",
+        "brightBlack": "#2C2C3A",
+        "brightRed": "#FF2C1F",
+        "brightGreen": "#4CFFB0",
+        "brightYellow": "#FFE94D",
+        "brightBlue": "#1fb1ff",
+        "brightPurple": "#E87CFF",
+        "brightCyan": "#4DE9FF",
+        "brightWhite": "#FAFAFA",
+        "cursorColor": "#E10600",
+        "selectionBackground": "#0047AB",
     },
     "hackerman": {
         "name": "hackerman",
