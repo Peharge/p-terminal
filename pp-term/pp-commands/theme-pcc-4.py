@@ -70,6 +70,7 @@ import requests
 import zipfile
 import ctypes
 from pathlib import Path
+from io import BytesIO
 
 
 # Step 1: Download Fira Code Nerd Font
@@ -88,36 +89,52 @@ def download_font(url, font_zip_path="FiraCode.zip"):
 
 
 # Step 2: Install the downloaded font
-def install_font(font_zip_path="FiraCode.zip"):
-    """Extract and install fonts from the ZIP archive."""
+def install_font(url="https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/FiraCode.zip"):
+    """Download, extract, and install Nerd Fonts from a GitHub release URL."""
+
+    # Define the fonts installation directory
     install_path = Path(os.getenv("WINDIR")) / "Fonts"
+
+    # Create the installation path if it doesn't exist
+    install_path.mkdir(parents=True, exist_ok=True)
+
+    # Download the font zip file
+    print("Downloading Nerd Font...")
+
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raise an error for bad status codes
+        zip_file = BytesIO(response.content)  # Read the content as a zip file
+    except requests.RequestException as e:
+        print(f"Error downloading the font: {e}")
+        return
 
     # Extract the ZIP archive
     print("Extracting the font...")
-    with zipfile.ZipFile(font_zip_path, 'r') as zip_ref:
-        zip_ref.extractall("FiraCode")
+    with zipfile.ZipFile(zip_file, 'r') as zip_ref:
+        zip_ref.extractall("FiraCode")  # Extract to a temporary folder
 
-    # Install fonts by copying to the Fonts directory
+    # Install fonts by copying them to the system Fonts directory
     print("Installing the font...")
     for root, dirs, files in os.walk("FiraCode"):
         for file in files:
             if file.endswith(".ttf"):
-                font_path = os.path.join(root, file)
+                font_path = Path(root) / file
                 try:
+                    # Ensure the font file is copied to the Fonts directory
                     shutil.copy(font_path, install_path)
-                    # Inform the system that the font has been added
-                    ctypes.windll.gdi32.AddFontResourceW(font_path)
+                    # Inform the system about the newly installed font
+                    ctypes.windll.gdi32.AddFontResourceW(str(font_path))
                     ctypes.windll.user32.PostMessageW(0xFFFF, 0x001D, 0, 0)  # WM_FONTCHANGE
                     print(f"Installed font: {file}")
                 except Exception as e:
                     print(f"Failed to install font {file}: {e}")
                     continue
 
-    # Clean up the extracted files
+    # Clean up extracted files
     shutil.rmtree("FiraCode")
-    os.remove(font_zip_path)
 
-    print("Font successfully installed.")
+    print("Font installation complete.")
 
 
 # Step 3: Adjust the Windows Terminal configuration
