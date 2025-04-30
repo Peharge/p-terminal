@@ -61,79 +61,177 @@
 #
 # Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 
-import subprocess
-import sys
 import os
+import sys
+import json
+import shutil
+import subprocess
+import requests
+import zipfile
+import ctypes
+from pathlib import Path
+
+
+# Step 1: Download Fira Code Nerd Font
+def download_font(url, font_zip_path="FiraCode.zip"):
+    """Download the Fira Code Nerd Font ZIP file."""
+    try:
+        print("Downloading Fira Code Nerd Font...")
+        response = requests.get(url)
+        response.raise_for_status()  # Raise an exception for HTTP errors
+        with open(font_zip_path, "wb") as file:
+            file.write(response.content)
+        print("Download complete.")
+    except requests.exceptions.RequestException as e:
+        print(f"Error downloading font: {e}")
+        sys.exit(1)
+
+
+# Step 2: Install the downloaded font
+def install_font(font_zip_path="FiraCode.zip"):
+    """Extract and install fonts from the ZIP archive."""
+    install_path = Path(os.getenv("WINDIR")) / "Fonts"
+
+    # Extract the ZIP archive
+    print("Extracting the font...")
+    with zipfile.ZipFile(font_zip_path, 'r') as zip_ref:
+        zip_ref.extractall("FiraCode")
+
+    # Install fonts by copying to the Fonts directory
+    print("Installing the font...")
+    for root, dirs, files in os.walk("FiraCode"):
+        for file in files:
+            if file.endswith(".ttf"):
+                font_path = os.path.join(root, file)
+                try:
+                    shutil.copy(font_path, install_path)
+                    # Inform the system that the font has been added
+                    ctypes.windll.gdi32.AddFontResourceW(font_path)
+                    ctypes.windll.user32.PostMessageW(0xFFFF, 0x001D, 0, 0)  # WM_FONTCHANGE
+                    print(f"Installed font: {file}")
+                except Exception as e:
+                    print(f"Failed to install font {file}: {e}")
+                    continue
+
+    # Clean up the extracted files
+    shutil.rmtree("FiraCode")
+    os.remove(font_zip_path)
+
+    print("Font successfully installed.")
+
+
+# Step 3: Adjust the Windows Terminal configuration
+def configure_terminal():
+    """Update Windows Terminal configuration to use FiraCode Nerd Font."""
+    terminal_profile_path = Path(os.getenv(
+        "LOCALAPPDATA")) / "Packages" / "Microsoft.WindowsTerminal_8wekyb3d8bbwe" / "LocalState" / "profiles.json"
+
+    if not terminal_profile_path.exists():
+        print("The file profiles.json could not be found.")
+        return
+
+    print("Configuring Windows Terminal...")
+
+    # Load the configuration file
+    try:
+        with open(terminal_profile_path, 'r', encoding='utf-8') as file:
+            config = json.load(file)
+    except (IOError, json.JSONDecodeError) as e:
+        print(f"Error reading profiles.json: {e}")
+        return
+
+    # Change the font for all profiles
+    for profile in config.get('profiles', {}).get('list', []):
+        profile.setdefault('fontFace', 'FiraCode Nerd Font')
+
+    # Save the modified configuration
+    try:
+        with open(terminal_profile_path, 'w', encoding='utf-8') as file:
+            json.dump(config, file, ensure_ascii=False, indent=4)
+        print("Windows Terminal configured to use 'FiraCode Nerd Font'.")
+    except IOError as e:
+        print(f"Error saving profiles.json: {e}")
+
 
 def check_and_install_winget():
-    """Überprüft, ob winget installiert ist, und installiert es gegebenenfalls."""
+    """Checks if winget is installed, and installs it if necessary."""
     try:
-        # Überprüfen, ob winget installiert ist
         subprocess.run(["winget", "--version"], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        print("winget ist bereits installiert.")
+        print("winget is already installed.")
     except subprocess.CalledProcessError:
-        print("winget ist nicht installiert. Installiere winget...")
+        print("winget is not installed. Installing winget...")
         install_winget()
 
+
 def install_winget():
-    """Installiert winget (Windows Package Manager)."""
+    """Installs winget (Windows Package Manager)."""
     if sys.platform == "win32":
         try:
-            # Versucht winget von Microsoft zu installieren
-            subprocess.run(["powershell", "-Command", "Set-ExecutionPolicy RemoteSigned -Scope CurrentUser"], check=True)
-            subprocess.run(["powershell", "-Command", "iwr https://aka.ms/install-winget.ps1 -OutFile install-winget.ps1"], check=True)
-            subprocess.run(["powershell", "-Command", "Set-ExecutionPolicy Unrestricted -Scope CurrentUser"], check=True)
-            subprocess.run(["powershell", "-Command", "powershell -ExecutionPolicy Bypass -File install-winget.ps1"], check=True)
-            print("winget wurde erfolgreich installiert.")
+            subprocess.run(["powershell", "-Command", "Set-ExecutionPolicy RemoteSigned -Scope CurrentUser"],
+                           check=True)
+            subprocess.run(
+                ["powershell", "-Command", "iwr https://aka.ms/install-winget.ps1 -OutFile install-winget.ps1"],
+                check=True)
+            subprocess.run(["powershell", "-Command", "Set-ExecutionPolicy Unrestricted -Scope CurrentUser"],
+                           check=True)
+            subprocess.run(["powershell", "-Command", "powershell -ExecutionPolicy Bypass -File install-winget.ps1"],
+                           check=True)
+            print("winget installed successfully.")
         except subprocess.CalledProcessError as e:
-            print(f"Fehler bei der Installation von winget: {e}")
+            print(f"Error installing winget: {e}")
             sys.exit(1)
 
+
 def install_oh_my_posh():
-    """Installiert OhMyPosh über winget."""
+    """Installs OhMyPosh via winget."""
     try:
-        # Installiert OhMyPosh
-        print("Installiere OhMyPosh...")
+        print("Installing OhMyPosh...")
         subprocess.run(["winget", "install", "JanDeDobbeleer.OhMyPosh"], check=True)
-        print("OhMyPosh wurde erfolgreich installiert.")
+        print("OhMyPosh installed successfully.")
     except subprocess.CalledProcessError as e:
-        print(f"Fehler bei der Installation von OhMyPosh: {e}")
+        print(f"Error installing OhMyPosh: {e}")
         sys.exit(1)
+
 
 def initialize_oh_my_posh():
-    """Initialisiert OhMyPosh für PowerShell mit dem angegebenen Konfigurationsdateipfad."""
+    """Initializes OhMyPosh for PowerShell with the specified configuration file path."""
     try:
-        # Initialisiert OhMyPosh
-        config_path = os.path.expanduser("~") + r"\AppData\Local\Programs\oh-my-posh\themes\jandedobbeleer.omp.json"
+        config_path = os.path.expanduser("~") + r"\AppData\Local\Programs\oh-my-posh\themes\powerlevel10k_rainbow.omp.json"
         command = f"oh-my-posh --init --shell pwsh --config {config_path} | Invoke-Expression"
         subprocess.run(["powershell", "-Command", command], check=True)
-        print("OhMyPosh wurde erfolgreich initialisiert.")
+        print("OhMyPosh initialized successfully.")
     except subprocess.CalledProcessError as e:
-        print(f"Fehler bei der Initialisierung von OhMyPosh: {e}")
+        print(f"Error initializing OhMyPosh: {e}")
         sys.exit(1)
+
 
 def upgrade_oh_my_posh():
-    """Aktualisiert OhMyPosh mit winget."""
+    """Upgrades OhMyPosh via winget."""
     try:
-        # Aktualisiert OhMyPosh
-        print("Aktualisiere OhMyPosh...")
+        print("Upgrading OhMyPosh...")
         subprocess.run(["winget", "upgrade", "JanDeDobbeleer.OhMyPosh"], check=True)
-        print("OhMyPosh wurde erfolgreich aktualisiert.")
+        print("OhMyPosh upgraded successfully.")
     except subprocess.CalledProcessError as e:
-        print(f"Fehler bei der Aktualisierung von OhMyPosh: {e}")
+        print(f"Error upgrading OhMyPosh: {e}")
         sys.exit(1)
 
+
 if __name__ == "__main__":
-    # Überprüft und installiert winget, falls erforderlich
+    # URL for FiraCode Nerd Font
+    font_url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v2.2.2/FiraCode.zip"
+
+    download_font(font_url)
+    install_font()
+    configure_terminal()
+
+    print("Done! Fira Code Nerd Font is now installed and configured.")
+
+    # Check and install winget if necessary
     check_and_install_winget()
 
-    # Installiert OhMyPosh
+    # Install, initialize and upgrade OhMyPosh
     install_oh_my_posh()
-
-    # Initialisiert OhMyPosh
     initialize_oh_my_posh()
-
-    # Aktualisiert OhMyPosh
     upgrade_oh_my_posh()
 
-    print("Alle Schritte wurden erfolgreich ausgeführt.")
+    print("All steps completed successfully.")
