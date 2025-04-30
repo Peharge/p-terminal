@@ -16,6 +16,9 @@ Hey ;-)
 
 # Code
 
+P-Terminal size GitHub: 306 MB <br>
+P-Terminal hole size: 1080 MB (Without LLm model, Linux OS or additional apps...) <br>
+
 | Language               | Files | Blank Lines | Comment Lines | Lines of Code |
 |------------------------|---------:|-----------:|-----------------:|-----------:|
 | Python                 | 6.832    | 497.822    | 705.237          | 2.021.772  |
