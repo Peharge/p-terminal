@@ -5722,7 +5722,7 @@ def completer(text, state):
         "powershell group-object", "powershell sort-object", "powershell select-object",
         "powershell where-object", "powershell foreach-object", "powershell new-object",
         "powershell compare-object", "powershell test-connection", "powershell foreach",
-        "ubuntu neofetch","ubuntu install git","ubuntu install htop","ubuntu list files",
+        "ubuntu neofetch", "ubuntu install git", "ubuntu install htop","ubuntu ls", "ubuntu list files",
         "ubuntu install python", "ubuntu install pip", "ubuntu check system info", "ubuntu update system",
         "ubuntu install models", "ubuntu clear terminal", "ubuntu show processes", "ubuntu search files",
         "ubuntu create directory", "ubuntu remove directory", "ubuntu install wget", "ubuntu find text in files",
@@ -5733,11 +5733,12 @@ def completer(text, state):
         "arch clear terminal","arch show processes","arch search files","arch create directory","arch remove directory",
         "arch install wget", "arch find text in files", "arch compress files", "arch extract files", "arch setup firewall",
         "arch restart network", "arch check disk usage", "arch monitor network traffic", "arch install curl", "arch install snap",
-        "arch install docker", "kali neofetch","kali install git", "kali install htop", "kali list files", "kali install python",
+        "arch install docker", "arch sudo pacman -S", "arch sudo pacman -R", "arch sudo pacman -Syu", "arch ls"
+        "kali neofetch", "kali install git", "kali install htop", "kali list files", "kali install python",
         "kali install pip", "kali check system info", "kali update system", "kali install models", "kali clear terminal",
         "kali show processes", "kali search files", "kali create directory", "kali remove directory", "kali install wget",
         "kali find text in files", "kali compress files", "kali extract files", "kali setup firewall", "kali restart network",
-        "kali check disk usage", "kali monitor network traffic", "kali install curl", "kali install snap", "kali install docker"
+        "kali check disk usage", "kali monitor network traffic", "kali install curl", "kali install snap", "kali install docker", "kali ls"
     ]
 
     # Filter die Befehle nach dem eingegebenen Text
