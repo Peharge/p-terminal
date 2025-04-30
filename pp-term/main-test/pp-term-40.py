@@ -5719,50 +5719,13 @@ def get_main_pin(current_dir, env_indicator):
         f"\n{green}└─{reset}{blue}${reset} "
     )
 
-def get_evil_pin(current_dir, env_indicator):
+def get_evel_pin(current_dir, env_indicator):
     return (
         f"\n{blue}┌──({reset}{red}root"
         + colored("㋐", attrs=["bold"])
         + f"{red}Peharge{reset}{blue})-[{reset}{current_dir}{blue}]-{reset}{env_indicator}"
         f"\n{blue}└─{reset}{red}#{reset} "
     )
-
-def get_cool_pin():
-    """
-    Ruft eine gerenderte Oh-My-Posh-Prompt basierend auf einer bestimmten Theme-Konfiguration ab.
-    """
-
-    config_path = os.path.expanduser(
-        r"~\AppData\Local\Programs\oh-my-posh\themes\jandedobbeleer.omp.json"
-    )
-    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
-
-    try:
-        result = subprocess.run(
-            [
-                "oh-my-posh",
-                "print",
-                "primary",
-                "--config", config_path,
-                "--pwd", working_dir,
-                "--shell", "pwsh"
-            ],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True,
-            encoding='utf-8',  # wichtig für korrekte Grafikzeichen
-            shell=True         # in Windows häufig nötig für PATH-Auflösung
-        )
-    except FileNotFoundError:
-        return "Fehler: oh-my-posh wurde nicht gefunden. Ist es im PATH?"
-    except Exception as e:
-        return f"Unerwarteter Fehler: {e}"
-
-    if result.returncode == 0:
-        return result.stdout
-    else:
-        return f"Fehler beim Ausführen von oh-my-posh:\n{result.stderr}"
-
 
 def main():
     state = "main"
@@ -5793,16 +5756,9 @@ def main():
             )
 
             # PIN-Design je nach state
-            if state == "main":
-                pin = get_main_pin(current_dir, env_indicator)
-            elif state == "evil":
-                pin = get_evil_pin(current_dir, env_indicator)
-            elif state == "cool":
-                pin = get_cool_pin()
-            else:
-                pin = get_cool_pin()
+            pin = get_main_pin(current_dir, env_indicator) if state == "main" else get_evel_pin(current_dir, env_indicator)
 
-            print(pin.encode('utf-8').decode(), end='')
+            print(pin, end='')
             user_input = input().strip()
 
             if handle_special_commands(user_input):
@@ -5817,11 +5773,7 @@ def main():
                 continue
 
             elif user_input.lower() == "pin evil":
-                state = "evil"
-                continue
-
-            elif user_input.lower() == "pin cool":
-                state = "cool"
+                state = "evel"
                 continue
 
             elif user_input.startswith("pp-cpp "):
