@@ -73,7 +73,7 @@ import logging
 required_packages = [
     "requests", "ollama", "transformers", "numpy", "pandas", "python-dotenv", "beautifulsoup4",
     "PyQt6", "PyQt6-sip", "PyQt6-Charts", "PyQt6-WebEngine", "PyQt6-Charts", "keyboard", "pyreadline3",
-    "requests", "psutil", "speedtest-cli", "colorama", "pyperclip", "termcolor", "docker", "flask"
+    "requests", "psutil", "speedtest-cli", "colorama", "pyperclip", "termcolor", "docker", "flask", "readline"
 ]
 
 
@@ -174,6 +174,7 @@ import time
 import logging
 from typing import Union, List, Optional
 import json
+import readline
 
 colorama.init()
 
@@ -5643,6 +5644,54 @@ def get_evel_pin(current_dir, env_indicator):
         f"\n{blue}└─{reset}{red}#{reset} "
     )
 
+def completer(text, state):
+    # Liste aller möglichen Befehle
+    commands = [
+        "p", "p git", "p htop", "p ls", "p simon", "p wsl", "p pip", "p models", "p ubuntu",
+        "pp", "pp-c", "pp-p", "ps", "ps-github", "ps-huggingface", "ps-ollama", "ps-stackoverflow",
+        "ps-arxiv", "pa", "lx", "lx-c", "lx-p", "lx-cpp-c", "lx-c-c", "lx-p-c", "ubuntu", "ubuntu-c",
+        "ubuntu-p", "debian", "debian-c", "debian-p", "kali", "kali-c", "kali-p", "hack", "arch", "arch-c",
+        "arch-p", "opensuse", "opensuse-c", "opensuse-p", "mint", "mint-c", "mint-p", "fedora", "fedora-c",
+        "fedora-p", "redhat", "redhat-c", "redhat-p", "sles", "sles-c", "sles-p", "pengwin", "pengwin-c",
+        "pengwin-p", "oracle", "oracle-c", "oracle-p", "cd", "cls", "clear", "dir", "ls", "mkdir", "rmdir",
+        "del", "rm", "echo", "type", "cat", "exit", "alpine", "scoop", "choco", "winget", "speedtest", "kill",
+        "download", "cputemp", "chucknorris", "theme", "cleantemp", "selfupdate", "tree", "py", "ask",
+        "weather", "whoami", "hostname", "ip", "os", "time", "date", "open", "fortune", "history", "search",
+        "zip", "unzip", "sysinfo", "clip set", "clip get", "ping", "emptytrash", "launch", "doctor",
+        "mavis env install", "install mavis env", "install mavis3", "install mavis3.3", "install mavis4",
+        "install mavis4.3", "mavis env update", "update mavis env", "mavis update", "update mavis",
+        "security", "p-terminal security", "securitycheck", "info", "mavis info", "info mavis", "p-term info",
+        "info p-term", "neofetch", "fastfetch", "screenfetch", "jupyter", "run jupyter", "run ju",
+        "run mavis-4", "run mavis-4-3", "run mavis-4-fast", "run mavis-4-3-fast", "run mavis-launcher-4",
+        "run ollama mavis-4", "install ollama mavis-4", "change models mavis-4", "change models", "grafana",
+        "run grafana", "install grafana", "account", "run qwen3:0.6b", "run qwen3:1.7b", "run qwen3:4b",
+        "run qwen3:8b", "run qwen3:14b", "run qwen3:32b", "run qwen3:30b", "run qwen3:235b", "run deepseek-r1:1.5b",
+        "run deepseek-r1:7b", "run deepseek-r1:8b", "run deepseek-r1:14b", "run deepseek-r1:32b", "run deepseek-r1:70b",
+        "run deepseek-r1:671b", "run deepscaler", "run llama3.1:8b", "run llama3.1:70b", "run llama3.1:405",
+        "run llama3.2:1b", "run llama3.2:3b", "run llama3.3", "run llama3:8b", "run llama3:70b", "run mistral",
+        "run mistral-large", "run mistral-nemo", "run mistral-openorca", "run mistral-small:22b",
+        "run mistral-small:24b",
+        "run phi4", "run qwen2.5:0.5b", "run qwen2.5:1.5b", "run qwen2.5:3b", "run qwen2.5:7b", "run qwen2.5:14b",
+        "run qwen2.5:32b", "run qwen2.5:72b", "run qwen2.5-coder:0.5b", "run qwen2.5-coder:1.5b",
+        "run qwen2.5-coder:3b",
+        "run qwen2.5-coder:7b", "run qwen2.5-coder:14b", "run qwen2.5-coder:32b", "run gemma3:1b", "run gemma3:4b",
+        "run gemma3:12b", "run gemma3:27b", "run qwq", "run command-a", "run phi4-mini", "run granite3.2:8b",
+        "run granite3.2:2b", "run granite3.2-vision:2b", "run qwen-2-5-omni:7b", "run qvq:72b", "run qwen-2-5-vl:32b",
+        "run qwen-2-5-vl:72b", "run llama-4-maverick:17b", "run llama-4-scout:17b", "run deepcoder:1.5b",
+        "run deepcoder:14b", "run mistral-small3.1", "help", "image generation", "video generation", "models",
+        "models ls", "install 3d-slicer", "run 3d-slicer", "install simon", "run simon", "jupyter --version",
+        "grafana --version", "3d-slicer --version", "pin-evil", "pin-main"
+    ]
+
+    # Filter die Befehle nach dem eingegebenen Text
+    options = [command for command in commands if command.startswith(text)]
+
+    # Gib die Option zurück, die mit dem aktuellen "state" übereinstimmt
+    if state < len(options):
+        return options[state]
+    else:
+        return None
+
 def main():
     state = "main"
 
@@ -5675,7 +5724,10 @@ def main():
             pin = get_main_pin(current_dir, env_indicator) if state == "main" else get_evel_pin(current_dir, env_indicator)
 
             print(pin, end='')
-            user_input = input().strip()
+            readline.set_completer(completer)
+            readline.parse_and_bind("tab: complete")
+
+            user_input = input()
 
             if handle_special_commands(user_input):
                 continue
