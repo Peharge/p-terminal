@@ -5808,7 +5808,7 @@ def get_cool_4_pin():
     """
 
     config_path = os.path.expanduser(
-        r"~\AppData\Local\Programs\oh-my-posh\themes\powerlevel10k_rainbow.omp.json"
+        r"~\AppData\Local\Programs\oh-my-posh\themes\p10k_classic.omp.jso"
     )
     working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
 
