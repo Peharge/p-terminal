@@ -274,6 +274,7 @@ Download the [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-te
   - `install cool pin-3`
 - `pin-cool-4` - cool-4 mode
 	- `install cool pin-4`  
+
 etc.  
 
 # Problems
