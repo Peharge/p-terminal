@@ -2180,7 +2180,7 @@ COMMANDS = [
     "run qwen-2-5-vl:72b", "run llama-4-maverick:17b", "run llama-4-scout:17b", "run deepcoder:1.5b",
     "run deepcoder:14b", "run mistral-small3.1", "help", "image generation", "video generation", "models",
     "models ls", "install 3d-slicer", "run 3d-slicer", "install simon", "run simon", "jupyter --version",
-    "grafana --version", "3d-slicer --version", "pin-evil", "pin-main",
+    "grafana --version", "3d-slicer --version", "pin-evil", "pin-main", "pin-cool", "pin-cool-3", "pin-cool-4",
     "p install", "p uninstall", "p upgrade", "p list", "p show", "p freeze", "p search",
     "p check", "p config", "p debug", "p cache", "p download", "p verify", "p wheel",
     "p completion", "pip install", "pip uninstall", "pip list", "pip show", "pip freeze",
