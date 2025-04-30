@@ -105,7 +105,7 @@ Download the [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-te
 - `pengwin-p` - Pengwin WSL Linux command with Python 
 - `oracle` - Oracle Linux command  
 - `oracle-c` - Oracle Linux command with Peharge C compiler 
-- `oracle-p` - Oracle Linux command with Python 
+- `oracle-p` - Oracle Linux command with Python
 - `cd` - Change directory  
 - `cls` - Clear screen (Windows)  
 - `clear` - Clear screen (Linux)  
@@ -268,6 +268,12 @@ Download the [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-te
 - `3d-slicer --version` - Display 3D Slicer version  
 - `pin-evil` - evil mode
 - `pin-main` - main mode
+- `pin-cool` - cool mode
+  - `install cool pin`
+- `pin-cool-3` - cool-3 mode
+  - `install cool pin-3`
+- `pin-cool-4` - cool-4 mode
+	- `install cool pin-4`
 etc.  
 
 # Problems
