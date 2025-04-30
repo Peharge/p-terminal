@@ -2145,6 +2145,7 @@ def is_tool_installed(tool_name):
     return result.returncode == 0
 
 
+'''
 # Liste aller verfügbaren Befehle
 COMMANDS = [
     "cd", "cls", "clear", "dir", "ls", "mkdir", "rmdir", "del", "rm", "echo", "type", "cat", "exit",
@@ -2166,7 +2167,7 @@ def completer(text, state):
 def setup_autocomplete():
     readline.set_completer(completer)
     readline.parse_and_bind("tab: complete")
-
+'''
 
 def search_websites(command):
     """Searches for websites related to the keyword using DuckDuckGo and returns links"""
