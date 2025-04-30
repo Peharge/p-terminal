@@ -289,3 +289,7 @@ etc.
 | **Terminal** | **Problem description** | **Cause**                                                                          | **Solution** | **Status** |
 |--------------|-------------------------|------------------------------------------------------------------------------------|--------------|------------|
 | P-Term       | p-term.bat              | Die .bat  muss eine .env erstellen um `./install/cpp/install-vs.py` auszuführen!!! | morgen...    | ✖          |
+
+## Lizenz
+
+This project is licensed under the MIT license – see the [LICENSE](LICENSE) file for details.
