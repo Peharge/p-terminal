@@ -5784,7 +5784,7 @@ def main():
             readline.set_completer(completer)
             readline.parse_and_bind("tab: complete")
 
-            user_input = input()
+            user_input = input() # .strip()
 
             if handle_special_commands(user_input):
                 continue
