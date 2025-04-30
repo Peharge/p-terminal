@@ -5734,6 +5734,7 @@ def get_cool_pin():
     """
     Ruft eine gerenderte Oh-My-Posh-Prompt basierend auf einer bestimmten Theme-Konfiguration ab.
     """
+    print("")
 
     config_path = os.path.expanduser(
         r"~\AppData\Local\Programs\oh-my-posh\themes\jandedobbeleer.omp.json"
@@ -5771,6 +5772,8 @@ def get_cool_3_pin():
     Ruft eine gerenderte Oh-My-Posh-Prompt basierend auf einer bestimmten Theme-Konfiguration ab.
     """
 
+    print("")
+
     config_path = os.path.expanduser(
         r"~\AppData\Local\Programs\oh-my-posh\themes\powerlevel10k_rainbow.omp.json"
     )
@@ -5806,6 +5809,8 @@ def get_cool_4_pin():
     """
     Ruft eine gerenderte Oh-My-Posh-Prompt basierend auf einer bestimmten Theme-Konfiguration ab.
     """
+
+    print("")
 
     config_path = os.path.expanduser(
         r"~\AppData\Local\Programs\oh-my-posh\themes\p10k_classic.omp.jso"
