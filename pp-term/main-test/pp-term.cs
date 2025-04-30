@@ -67,19 +67,133 @@
    Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 */
 
+using System;
 using System.Diagnostics;
+using System.IO;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
-class Program
+namespace PTerminal
 {
-    static void Main()
+    /// <summary>
+    /// Manages a custom Windows Terminal profile and launches the terminal with a specified .bat script.
+    /// </summary>
+    internal static class Program
     {
-        string user = System.Environment.UserName;
-        string command = $"/c cd /d \"C:\\Users\\{user}\\p-terminal\\pp-term\" && call run-pp-term.bat";
+        // Configuration constants
+        private const string ProfileName = "PP-Terminal";
+        private const string TabTitle = "PP-Term";
+        private const string ColorScheme = "p-term";
+        private const string FontFace = "FiraCode Nerd Font";
+        private const string ProfileGuid = "{a9716167-e115-4217-907b-7a6ec5577ff8}";
+        private const bool Hidden = false;
 
-        ProcessStartInfo psi = new ProcessStartInfo("cmd.exe", command);
-        psi.CreateNoWindow = false;     // auf true setzen, wenn kein Konsolenfenster erscheinen soll
-        psi.UseShellExecute = false;
+        // Resolve special folders
+        private static readonly string UserProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        private static readonly string LocalAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
-        Process.Start(psi);
+        // Paths
+        private static readonly string BatPath = Path.Combine(UserProfile, "p-terminal", "pp-term", "run-pp-term.bat");
+        private static readonly string StartingDirectory = Path.Combine(UserProfile, "p-terminal", "pp-term");
+        private static readonly string IconPath = Path.Combine(UserProfile, "p-terminal", "icons", "p-term-logo-5.png");
+        private static readonly string SettingsPath = Path.Combine(LocalAppData,
+            "Packages", "Microsoft.WindowsTerminal_8wekyb3d8bbwe", "LocalState", "settings.json");
+
+        private static void Main()
+        {
+            try
+            {
+                var settings = LoadOrCreateSettings(SettingsPath);
+                EnsureProfile(settings);
+                SaveSettings(SettingsPath, settings);
+                LaunchWindowsTerminal();
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"[Error] {ex.GetType().Name}: {ex.Message}");
+            }
+        }
+
+        private static JsonObject LoadOrCreateSettings(string path)
+        {
+            if (File.Exists(path))
+            {
+                var jsonText = File.ReadAllText(path);
+                return JsonNode.Parse(jsonText)?.AsObject() ?? new JsonObject();
+            }
+            return new JsonObject();
+        }
+
+        private static void EnsureProfile(JsonObject settings)
+        {
+            // Ensure "profiles" object exists
+            if (!settings.TryGetPropertyValue("profiles", out JsonNode profilesNode) || profilesNode is not JsonObject profiles)
+            {
+                profiles = new JsonObject();
+                settings["profiles"] = profiles;
+            }
+
+            // Ensure "list" array exists
+            if (!profiles.TryGetPropertyValue("list", out JsonNode listNode) || listNode is not JsonArray list)
+            {
+                list = new JsonArray();
+                profiles["list"] = list;
+            }
+
+            // Add profile if not exists
+            if (!ProfileExists(list))
+            {
+                var newProfile = new JsonObject
+                {
+                    ["name"] = ProfileName,
+                    ["guid"] = ProfileGuid,
+                    ["hidden"] = Hidden,
+                    ["tabTitle"] = TabTitle,
+                    ["commandline"] = BatPath,
+                    ["startingDirectory"] = StartingDirectory,
+                    ["icon"] = IconPath,
+                    ["colorScheme"] = ColorScheme,
+                    ["font"] = new JsonObject { ["face"] = FontFace }
+                };
+                list.Add(newProfile);
+            }
+        }
+
+        private static bool ProfileExists(JsonArray list)
+        {
+            foreach (var node in list)
+            {
+                if (node is JsonObject obj &&
+                    obj.TryGetPropertyValue("name", out JsonNode nameNode) &&
+                    nameNode?.GetValue<string>() == ProfileName)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private static void SaveSettings(string path, JsonObject settings)
+        {
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            var updatedJson = JsonSerializer.Serialize(settings, options);
+            File.WriteAllText(path, updatedJson);
+        }
+
+        private static void LaunchWindowsTerminal()
+        {
+            // Prepare arguments: select profile, then launch .bat
+            var arguments = $"-p \"{ProfileName}\" cmd /k \"call \"{BatPath}\"\"";
+
+            var psi = new ProcessStartInfo
+            {
+                FileName = "wt.exe",
+                Arguments = arguments,
+                UseShellExecute = true,
+                CreateNoWindow = false
+            };
+
+            Process.Start(psi);
+        }
     }
 }
