@@ -679,9 +679,9 @@ def handle_special_commands(user_input):
         "fun tictactoe": "pp-commands\\fun-tictactoe-ng.py",  # new
         "fun tint": "pp-commands\\fun-tint.py",  # new
         "fun tetris": "pp-commands\\fun-vitetris.py",  # new
-        "install cool theme": "pp-commands\\theme-pcc.py", # new
-        "install cool theme-3": "pp-commands\\theme-pcc-3.py",  # new
-        "install cool theme-4": "pp-commands\\theme-pcc-4.py"  # new
+        "install cool pin": "pp-commands\\theme-pcc.py", # new
+        "install cool pin-3": "pp-commands\\theme-pcc-3.py",  # new
+        "install cool pin-4": "pp-commands\\theme-pcc-4.py"  # new
     }
 
     # Custom command launcher
