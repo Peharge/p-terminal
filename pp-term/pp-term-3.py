@@ -157,6 +157,8 @@ import shlex
 from typing import Union, List, Optional
 import json
 import msvcrt
+from pathlib import Path
+import code
 
 colorama.init()
 
@@ -196,6 +198,7 @@ def loading_bar(text: str = "Processing", duration: int = 3, color: str = "") ->
         print(".", end="", flush=True)
         time.sleep(0.5)
     print(Style.RESET_ALL)
+
 
 def print_banner():
 
@@ -382,14 +385,6 @@ def change_directory(path):
 
 
 def handle_special_commands(user_input):
-    import datetime
-    import socket
-    import platform
-    import webbrowser
-    import random
-    import requests
-    import shlex
-    import logging
 
     user_input = user_input.strip()
 
@@ -1027,8 +1022,6 @@ def handle_special_commands(user_input):
 
     # Datei herunterladen
     if user_input.startswith("download "):
-        from pathlib import Path
-        import requests
 
         try:
             # Extract URL from input
@@ -1102,7 +1095,6 @@ def handle_special_commands(user_input):
     # Python REPL starten
     if user_input.lower() == "py":
         print(f"{blue}Starting Python REPL. Type 'exit()' to quit.{reset}")
-        import code
         code.interact(local=dict(globals(), **locals()))
         return True
 
@@ -5789,6 +5781,13 @@ def get_main_pin(current_dir, env_indicator):
         f"\n{green}└─{reset}{blue}${reset} "
     )
 
+def get_main_3_pin(current_dir, env_indicator_3):
+    print("")
+
+    return (
+        f"{env_indicator_3} PP {current_dir}:~{blue}${reset} "
+    )
+
 def get_evil_pin(current_dir, env_indicator):
     return (
         f"\n{blue}┌──({reset}{red}root"
@@ -5961,9 +5960,17 @@ def main():
                 f"{green}[{reset}{red}no venv recorded{reset}{green}]{reset}"
             )
 
+            env_indicator_3 = (
+                f"({display_env_path})"
+                if env_active else
+                f"({red}no venv recorded{reset})"
+            )
+
             # PIN-Design je nach state
             if state == "main":
                 pin = get_main_pin(current_dir, env_indicator)
+            elif state == "main-3":
+                pin = get_main_3_pin(current_dir, env_indicator_3)
             elif state == "evil":
                 pin = get_evil_pin(current_dir, env_indicator)
             elif state == "cool":
@@ -5986,6 +5993,10 @@ def main():
 
             elif user_input.lower() == "pin main":
                 state = "main"
+                continue
+
+            elif user_input.lower() == "pin main-3":
+                state = "main-3"
                 continue
 
             elif user_input.lower() == "pin evil":
