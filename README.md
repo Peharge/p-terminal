@@ -45,7 +45,7 @@ P-Terminal:
 soon
 
 PP-Terminal:
-Download the [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) file and double-click it. You're ready to go! Have fun with pp-terminal and you can always start it with pp-term/pp-term.exe after installation. If you want, you can further enhance your terminal with PP Terminal Themes/Pins: [PP Terminal Themes/Pins](./pp-term/THEMES.md)
+Download the [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) file and double-click it. You're ready to go! Have fun with pp-terminal and you can always start it with `pp-term/pp-term.exe` after installation. If you want, you can further enhance your terminal with PP Terminal Themes/Pins: [PP Terminal Themes/Pins](./pp-term/THEMES.md)
 <details>
   <summary>Problems installing the PP-Terminal</summary>
 
