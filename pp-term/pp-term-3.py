@@ -5788,11 +5788,18 @@ def get_main_3_pin(current_dir, env_indicator_3):
         f"{env_indicator_3} PP {current_dir}:~{blue}${reset} "
     )
 
-def get_evil_pin(current_dir, env_indicator):
+def get_main_4_pin(current_dir, env_indicator_3):
+    print("")
+
+    return (
+        f"{env_indicator_3} PP {current_dir}:~{red}#{reset} "
+    )
+
+def get_evil_pin(current_dir, env_indicator_4):
     return (
         f"\n{blue}┌──({reset}{red}root"
         + colored("㋐", attrs=["bold"])
-        + f"{red}Peharge{reset}{blue})-[{reset}{current_dir}{blue}]-{reset}{env_indicator}"
+        + f"{red}Peharge{reset}{blue})-[{reset}{current_dir}{blue}]-{reset}{env_indicator_4}"
         f"\n{blue}└─{reset}{red}#{reset} "
     )
 
@@ -5966,13 +5973,21 @@ def main():
                 f"({red}no venv recorded{reset})"
             )
 
+            env_indicator_4 = (
+                f"{blue}[{reset}{display_env_path}{blue}]{reset}"
+                if env_active else
+                f"{blue}[{reset}{red}no venv recorded{reset}{blue}]{reset}"
+            )
+
             # PIN-Design je nach state
             if state == "main":
                 pin = get_main_pin(current_dir, env_indicator)
             elif state == "main-3":
                 pin = get_main_3_pin(current_dir, env_indicator_3)
+            elif state == "main-4":
+                pin = get_main_4_pin(current_dir, env_indicator_3)
             elif state == "evil":
-                pin = get_evil_pin(current_dir, env_indicator)
+                pin = get_evil_pin(current_dir, env_indicator_4)
             elif state == "cool":
                 pin = get_cool_pin()
             elif state == "cool_3":
@@ -5997,6 +6012,10 @@ def main():
 
             elif user_input.lower() == "pin main-3":
                 state = "main-3"
+                continue
+
+            elif user_input.lower() == "pin main-4":
+                state = "main-4"
                 continue
 
             elif user_input.lower() == "pin evil":
