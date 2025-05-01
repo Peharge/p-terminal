@@ -98,7 +98,7 @@ def ensure_packages_installed(packages):
             print(f"{package} is already installed.")
 
 # Pfad zur bestehenden virtuellen Umgebung
-venv_path = rf"C:\Users\{os.getlogin()}\PycharmProjects\MAVIS\.env"
+venv_path = rf"C:\Users\{os.getlogin()}\p-terminal\pp-term\.env"
 
 # Aktivieren der virtuellen Umgebung
 activate_virtualenv(venv_path)
