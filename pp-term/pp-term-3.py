@@ -685,6 +685,9 @@ def handle_special_commands(user_input):
         "fun tictactoe": "pp-commands\\fun-tictactoe-ng.py",  # new
         "fun tint": "pp-commands\\fun-tint.py",  # new
         "fun tetris": "pp-commands\\fun-vitetris.py",  # new
+        "fun calculator": "pp-commands\\fun-calc.py",  # new
+        "fun calc": "pp-commands\\fun-calc.py",  # new
+        "fun install calculator": "pp-commands\\fun-install-calc.py",  # new
         "install cool pin": "pp-commands\\theme-pcc.py", # new
         "install cool pin-3": "pp-commands\\theme-pcc-3.py",  # new
         "install cool pin-4": "pp-commands\\theme-pcc-4.py"  # new
