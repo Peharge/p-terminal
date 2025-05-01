@@ -45,8 +45,7 @@ P-Terminal:
 soon
 
 PP-Terminal:
-Download the [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) file and double-click it. You're ready to go! Have fun with pp-terminal!
-
+Download the [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) file and double-click it. You're ready to go! Have fun with pp-terminal! If you want, PP-Terminal Themes/Pins: [PP-Terminal Themes/Pins](./pp-term/THEMES.md)
 <details>
   <summary>Problems installing the PP-Terminal</summary>
 
