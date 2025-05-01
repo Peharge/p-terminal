@@ -5928,6 +5928,31 @@ def get_cool_4_pin():
         return f"Error running oh-my-posh:\n{result.stderr}"
 
 
+import sys
+import msvcrt
+
+def input_line(prompt):
+    sys.stdout.write(prompt)
+    sys.stdout.flush()
+    user_input = ""
+    while True:
+        if msvcrt.kbhit():
+            ch = msvcrt.getwch()
+            if ch in ['\r', '\n']:
+                print()
+                break
+            elif ch == '\b':  # Backspace
+                if len(user_input) > 0:
+                    user_input = user_input[:-1]
+                    sys.stdout.write('\b \b')
+                    sys.stdout.flush()
+            elif ch.isprintable():
+                user_input += ch
+                sys.stdout.write(ch)
+                sys.stdout.flush()
+    return user_input.strip()
+
+
 def main():
     state = "main"
 
@@ -5970,8 +5995,7 @@ def main():
             else:
                 pin = get_main_pin(current_dir, env_indicator)
 
-            print(pin.encode('utf-8').decode(), end='')
-            user_input = input().strip()
+            user_input = input_line(pin)
 
             if handle_special_commands(user_input):
                 continue
