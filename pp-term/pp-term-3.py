@@ -2871,15 +2871,70 @@ def run_command_with_admin_c_privileges(command):
 
 # --- mp-p command---
 
-def run_command_with_admin_python_privileges(command):
+import os
+import sys
+import ctypes
+import subprocess
+
+def run_command_with_admin_python_privileges(command: str):
+    """
+    Führt einen Shell-Befehl im aktuellen Arbeitsverzeichnis mit Admin-Rechten aus.
+    - Windows: erhöhte PowerShell bleibt nach Ausführung geöffnet.
+    - Unix: sudo mit Eingabeaufforderung zum Schließen.
+    """
+    working_dir = os.getcwd()
+
+    # Windows-Plattform
     if sys.platform == "win32":
-        if ctypes.windll.shell32.IsUserAnAdmin() == 0:
-            powershell_command = f"Start-Process powershell -ArgumentList '-NoProfile -ExecutionPolicy Bypass -Command \"{command}\"' -Verb RunAs"
-            subprocess.run(["powershell", "-Command", powershell_command], shell=True)
+        if ctypes.windll.shell32.IsUserAnAdmin():
+            # Bereits erhöht
+            subprocess.run(command, shell=True, cwd=working_dir)
+
+            print("Completed!")
         else:
-            subprocess.run(command, shell=True)
+            # Skript zusammenbauen
+            # 1) Wechsel in das Arbeitsverzeichnis, 2) Befehl, 3) Read-Host, damit es offen bleibt
+            script = f"Set-Location -LiteralPath '{working_dir}'; {command}; Read-Host 'Press Enter to exit…'"
+
+            # ArgumentList-Array literal: PowerShell versteht das als echtes Array
+            # Wir verwenden doppelte Anführungszeichen und escapen sie in Python
+            args = [
+                "-NoProfile",
+                "-NoExit",
+                "-Command",
+                script.replace('"', '`"')
+            ]
+            # Jetzt das Array-Literal für PowerShell bauen:
+            arg_list_literal = "@(" + ",".join(f'"{a}"' for a in args) + ")"
+
+            # Finaler Start-Process-Aufruf:
+            ps_cmd = [
+                "powershell",
+                "-NoProfile",
+                "-Command",
+                "Start-Process",
+                "-FilePath", "powershell",
+                "-ArgumentList", arg_list_literal,
+                "-Verb", "RunAs"
+            ]
+
+            # Kein shell=True – wir übergeben schon das fertige List-Objekt
+            subprocess.run(ps_cmd, shell=False)
+
+            print("Completed!")
+
+    # Unix-Variante
     else:
-        subprocess.run(['sudo', '-S', command], input="password", text=True, shell=True)
+        safe_cmd = command.replace("'", "'\"'\"'")
+        sudo_script = f"cd '{working_dir}' && {safe_cmd}; echo; read -p '[Press Enter to close]' _"
+        try:
+            subprocess.run(
+                ["sudo", "bash", "-c", sudo_script],
+                check=True
+            )
+        except subprocess.CalledProcessError as e:
+            print(f"Fehler bei der Ausführung: {e}")
+
 
 
 def is_wsl_installed():
