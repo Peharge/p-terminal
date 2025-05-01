@@ -39,7 +39,7 @@ In development: Peharge Terminal: The fastest terminal in the world - More [p-te
 # Install
 
 <p align="center">
- <img width="800" src="./icons/p-term-demo-3.png" alt="peharge"/>
+ <img width="800" src="https://github.com/Peharge/p-terminal-images/raw/main/images/p-term-demo-3.png" alt="peharge"/>
 </p>
 
 
