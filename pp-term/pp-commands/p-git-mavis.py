@@ -348,7 +348,7 @@ class StatisticsTab(QWidget):
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("P-Term Commit Explorer")
+        self.setWindowTitle("P-Term Commit Explorer MAVIS")
         self.setGeometry(100, 100, 1200, 900)
         self.set_dark_mode()
 

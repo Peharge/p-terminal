@@ -587,8 +587,10 @@ def handle_special_commands(user_input):
         "p git ls": "pp-commands\\p-git.py", # new
         "p git": "pp-commands\\p-git.py",  # new
         "p git mavis": "pp-commands\\p-git-mavis.py",  # new
+        "p git mavis-web": "pp-commands\\p-git-mavis-web.py",  # new
         "p ls": "pp-commands\\p-ls.py", # new
         "p ls mavis": "pp-commands\\p-ls-mavis.py",  # new
+        "p ls mavis-web": "pp-commands\\p-ls-mavis-web.py",  # new
         "models": "pp-commands\\models-ls.py",  # new
         "models ls": "pp-commands\\models-ls.py",  # new
         "p models": "pp-commands\\p-models-ls.py",  # new

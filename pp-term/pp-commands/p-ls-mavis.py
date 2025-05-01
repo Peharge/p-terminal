@@ -71,7 +71,7 @@ from PyQt6.QtWidgets import (QApplication, QHBoxLayout, QLabel, QScrollArea, QSi
 class FileExplorer(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("P-Term File Explorer")
+        self.setWindowTitle("P-Term File Explorer MAVIS")
         self.setGeometry(100, 100, 1200, 800)
 
         self.set_dark_mode()
@@ -237,7 +237,7 @@ class FileExplorer(QWidget):
         self.setPalette(palette)
 
     def load_directory_structure(self):
-        directory_path = f"C:\\Users\\{os.getlogin()}\\p-terminal\\pp-term\\"
+        directory_path = f"C:\\Users\\{os.getlogin()}\\PycharmProjects\\MAVIS\\"
         self.tree.clear()
 
         self.add_directory_to_tree(directory_path)
