@@ -22,7 +22,6 @@
     <img alt="bash" src="https://img.shields.io/badge/PyCharm-555555?logo=pycharm">
     <img alt="bash" src="https://img.shields.io/badge/CLion-555555?logo=clion">
     <img alt="bash" src="https://img.shields.io/badge/RustRover-555555?logo=rustrover">
-
 </p>
 
 In development: Peharge Terminal: The fastest terminal in the world - More [p-terminal.com](https://peharge.github.io/MAVIS-web/p-term.html).
