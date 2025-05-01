@@ -6018,10 +6018,6 @@ def main():
             if handle_special_commands(user_input):
                 continue
 
-            elif user_input.startswith("pp "):
-                user_input = user_input[3:]
-                run_command_with_admin_python_privileges(user_input)
-
             elif user_input.lower() == "pin main":
                 state = "main"
                 continue
@@ -6049,6 +6045,10 @@ def main():
             elif user_input.lower() == "pin cool-4":
                 state = "cool_4"
                 continue
+
+            elif user_input.startswith("pp "):
+                user_input = user_input[3:]
+                run_command_with_admin_python_privileges(user_input)
 
             elif user_input.startswith("pp-cpp "):
                 user_input = user_input[7:]
