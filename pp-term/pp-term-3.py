@@ -5934,6 +5934,599 @@ def get_cool_4_pin():
     else:
         return f"Error running oh-my-posh:\n{result.stderr}"
 
+def get_cool_5_pin():
+    """
+    Ruft eine gerenderte Oh-My-Posh-Prompt basierend auf einer bestimmten Theme-Konfiguration ab.
+    """
+    print("")
+
+    config_path = os.path.expanduser(
+        r"~\AppData\Local\Programs\oh-my-posh\themes\amro.omp.json"
+    )
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+
+    try:
+        result = subprocess.run(
+            [
+                "oh-my-posh",
+                "print",
+                "primary",
+                "--config", config_path,
+                "--pwd", working_dir,
+                "--shell", "pwsh"
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            encoding='utf-8',  # wichtig für korrekte Grafikzeichen
+            shell=True         # in Windows häufig nötig für PATH-Auflösung
+        )
+    except FileNotFoundError:
+        return "Error: oh-my-posh was not found. Is it in the PATH?"
+    except Exception as e:
+        return f"Unexpected error: {e}"
+
+    if result.returncode == 0:
+        return result.stdout
+    else:
+        return f"Error running oh-my-posh:\n{result.stderr}"
+
+def get_cool_6_pin():
+    """
+    Ruft eine gerenderte Oh-My-Posh-Prompt basierend auf einer bestimmten Theme-Konfiguration ab.
+    """
+    print("")
+
+    config_path = os.path.expanduser(
+        r"~\AppData\Local\Programs\oh-my-posh\themes\M365Princess.omp.json"
+    )
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+
+    try:
+        result = subprocess.run(
+            [
+                "oh-my-posh",
+                "print",
+                "primary",
+                "--config", config_path,
+                "--pwd", working_dir,
+                "--shell", "pwsh"
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            encoding='utf-8',  # wichtig für korrekte Grafikzeichen
+            shell=True         # in Windows häufig nötig für PATH-Auflösung
+        )
+    except FileNotFoundError:
+        return "Error: oh-my-posh was not found. Is it in the PATH?"
+    except Exception as e:
+        return f"Unexpected error: {e}"
+
+    if result.returncode == 0:
+        return result.stdout
+    else:
+        return f"Error running oh-my-posh:\n{result.stderr}"
+
+
+def get_cool_8_pin():
+    """
+    Ruft eine gerenderte Oh-My-Posh-Prompt basierend auf einer bestimmten Theme-Konfiguration ab.
+    """
+    print("")
+
+    config_path = os.path.expanduser(
+        r"~\AppData\Local\Programs\oh-my-posh\themes\aliens.omp.json"
+    )
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+
+    try:
+        result = subprocess.run(
+            [
+                "oh-my-posh",
+                "print",
+                "primary",
+                "--config", config_path,
+                "--pwd", working_dir,
+                "--shell", "pwsh"
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            encoding='utf-8',  # wichtig für korrekte Grafikzeichen
+            shell=True  # in Windows häufig nötig für PATH-Auflösung
+        )
+    except FileNotFoundError:
+        return "Error: oh-my-posh was not found. Is it in the PATH?"
+    except Exception as e:
+        return f"Unexpected error: {e}"
+
+    if result.returncode == 0:
+        return result.stdout
+    else:
+        return f"Error running oh-my-posh:\n{result.stderr}"
+
+
+def get_cool_9_pin():
+    """
+    Ruft eine gerenderte Oh-My-Posh-Prompt basierend auf einer bestimmten Theme-Konfiguration ab.
+    """
+    print("")
+
+    config_path = os.path.expanduser(
+        r"~\AppData\Local\Programs\oh-my-posh\themes\agnoster.minimal.omp.json"
+    )
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+
+    try:
+        result = subprocess.run(
+            [
+                "oh-my-posh",
+                "print",
+                "primary",
+                "--config", config_path,
+                "--pwd", working_dir,
+                "--shell", "pwsh"
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            encoding='utf-8',  # wichtig für korrekte Grafikzeichen
+            shell=True  # in Windows häufig nötig für PATH-Auflösung
+        )
+    except FileNotFoundError:
+        return "Error: oh-my-posh was not found. Is it in the PATH?"
+    except Exception as e:
+        return f"Unexpected error: {e}"
+
+    if result.returncode == 0:
+        return result.stdout
+    else:
+        return f"Error running oh-my-posh:\n{result.stderr}"
+
+def get_cool_10_pin():
+    """
+    Ruft eine gerenderte Oh-My-Posh-Prompt basierend auf einer bestimmten Theme-Konfiguration ab.
+    """
+    print("")
+
+    config_path = os.path.expanduser(
+        r"~\AppData\Local\Programs\oh-my-posh\themes\agnosterplus.omp.json"
+    )
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+
+    try:
+        result = subprocess.run(
+            [
+                "oh-my-posh",
+                "print",
+                "primary",
+                "--config", config_path,
+                "--pwd", working_dir,
+                "--shell", "pwsh"
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            encoding='utf-8',  # wichtig für korrekte Grafikzeichen
+            shell=True  # in Windows häufig nötig für PATH-Auflösung
+        )
+    except FileNotFoundError:
+        return "Error: oh-my-posh was not found. Is it in the PATH?"
+    except Exception as e:
+        return f"Unexpected error: {e}"
+
+    if result.returncode == 0:
+        return result.stdout
+    else:
+        return f"Error running oh-my-posh:\n{result.stderr}"
+
+def get_cool_11_pin():
+    """
+    Ruft eine gerenderte Oh-My-Posh-Prompt basierend auf einer bestimmten Theme-Konfiguration ab.
+    """
+    print("")
+
+    config_path = os.path.expanduser(
+        r"~\AppData\Local\Programs\oh-my-posh\themes\atomic.omp.json"
+    )
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+
+    try:
+        result = subprocess.run(
+            [
+                "oh-my-posh",
+                "print",
+                "primary",
+                "--config", config_path,
+                "--pwd", working_dir,
+                "--shell", "pwsh"
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            encoding='utf-8',  # wichtig für korrekte Grafikzeichen
+            shell=True  # in Windows häufig nötig für PATH-Auflösung
+        )
+    except FileNotFoundError:
+        return "Error: oh-my-posh was not found. Is it in the PATH?"
+    except Exception as e:
+        return f"Unexpected error: {e}"
+
+    if result.returncode == 0:
+        return result.stdout
+    else:
+        return f"Error running oh-my-posh:\n{result.stderr}"
+
+def get_cool_12_pin():
+    """
+    Ruft eine gerenderte Oh-My-Posh-Prompt basierend auf einer bestimmten Theme-Konfiguration ab.
+    """
+    print("")
+
+    config_path = os.path.expanduser(
+        r"~\AppData\Local\Programs\oh-my-posh\themes\free-ukraine.omp.json"
+    )
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+
+    try:
+        result = subprocess.run(
+            [
+                "oh-my-posh",
+                "print",
+                "primary",
+                "--config", config_path,
+                "--pwd", working_dir,
+                "--shell", "pwsh"
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            encoding='utf-8',  # wichtig für korrekte Grafikzeichen
+            shell=True  # in Windows häufig nötig für PATH-Auflösung
+        )
+    except FileNotFoundError:
+        return "Error: oh-my-posh was not found. Is it in the PATH?"
+    except Exception as e:
+        return f"Unexpected error: {e}"
+
+    if result.returncode == 0:
+        return result.stdout
+    else:
+        return f"Error running oh-my-posh:\n{result.stderr}"
+
+def get_cool_13_pin():
+    """
+    Ruft eine gerenderte Oh-My-Posh-Prompt basierend auf einer bestimmten Theme-Konfiguration ab.
+    """
+    print("")
+
+    config_path = os.path.expanduser(
+        r"~\AppData\Local\Programs\oh-my-posh\themes\easy-term.omp.json"
+    )
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+
+    try:
+        result = subprocess.run(
+            [
+                "oh-my-posh",
+                "print",
+                "primary",
+                "--config", config_path,
+                "--pwd", working_dir,
+                "--shell", "pwsh"
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            encoding='utf-8',  # wichtig für korrekte Grafikzeichen
+            shell=True  # in Windows häufig nötig für PATH-Auflösung
+        )
+    except FileNotFoundError:
+        return "Error: oh-my-posh was not found. Is it in the PATH?"
+    except Exception as e:
+        return f"Unexpected error: {e}"
+
+    if result.returncode == 0:
+        return result.stdout
+    else:
+        return f"Error running oh-my-posh:\n{result.stderr}"
+
+def get_cool_14_pin():
+    """
+    Ruft eine gerenderte Oh-My-Posh-Prompt basierend auf einer bestimmten Theme-Konfiguration ab.
+    """
+    print("")
+
+    config_path = os.path.expanduser(
+        r"~\AppData\Local\Programs\oh-my-posh\themes\grandpa-style.omp.json"
+    )
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+
+    try:
+        result = subprocess.run(
+            [
+                "oh-my-posh",
+                "print",
+                "primary",
+                "--config", config_path,
+                "--pwd", working_dir,
+                "--shell", "pwsh"
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            encoding='utf-8',  # wichtig für korrekte Grafikzeichen
+            shell=True  # in Windows häufig nötig für PATH-Auflösung
+        )
+    except FileNotFoundError:
+        return "Error: oh-my-posh was not found. Is it in the PATH?"
+    except Exception as e:
+        return f"Unexpected error: {e}"
+
+    if result.returncode == 0:
+        return result.stdout
+    else:
+        return f"Error running oh-my-posh:\n{result.stderr}"
+
+def get_cool_15_pin():
+    """
+    Ruft eine gerenderte Oh-My-Posh-Prompt basierend auf einer bestimmten Theme-Konfiguration ab.
+    """
+    print("")
+
+    config_path = os.path.expanduser(
+        r"~\AppData\Local\Programs\oh-my-posh\themes\lambdageneration.omp.json"
+    )
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+
+    try:
+        result = subprocess.run(
+            [
+                "oh-my-posh",
+                "print",
+                "primary",
+                "--config", config_path,
+                "--pwd", working_dir,
+                "--shell", "pwsh"
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            encoding='utf-8',  # wichtig für korrekte Grafikzeichen
+            shell=True  # in Windows häufig nötig für PATH-Auflösung
+        )
+    except FileNotFoundError:
+        return "Error: oh-my-posh was not found. Is it in the PATH?"
+    except Exception as e:
+        return f"Unexpected error: {e}"
+
+    if result.returncode == 0:
+        return result.stdout
+    else:
+        return f"Error running oh-my-posh:\n{result.stderr}"
+
+def get_cool_16_pin():
+    """
+    Ruft eine gerenderte Oh-My-Posh-Prompt basierend auf einer bestimmten Theme-Konfiguration ab.
+    """
+    print("")
+
+    config_path = os.path.expanduser(
+        r"~\AppData\Local\Programs\oh-my-posh\themes\lightgreen.omp.json"
+    )
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+
+    try:
+        result = subprocess.run(
+            [
+                "oh-my-posh",
+                "print",
+                "primary",
+                "--config", config_path,
+                "--pwd", working_dir,
+                "--shell", "pwsh"
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            encoding='utf-8',  # wichtig für korrekte Grafikzeichen
+            shell=True  # in Windows häufig nötig für PATH-Auflösung
+        )
+    except FileNotFoundError:
+        return "Error: oh-my-posh was not found. Is it in the PATH?"
+    except Exception as e:
+        return f"Unexpected error: {e}"
+
+    if result.returncode == 0:
+        return result.stdout
+    else:
+        return f"Error running oh-my-posh:\n{result.stderr}"
+
+def get_cool_18_pin():
+    """
+    Ruft eine gerenderte Oh-My-Posh-Prompt basierend auf einer bestimmten Theme-Konfiguration ab.
+    """
+    print("")
+
+    config_path = os.path.expanduser(
+        r"~\AppData\Local\Programs\oh-my-posh\themes\negligible.omp.json"
+    )
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+
+    try:
+        result = subprocess.run(
+            [
+                "oh-my-posh",
+                "print",
+                "primary",
+                "--config", config_path,
+                "--pwd", working_dir,
+                "--shell", "pwsh"
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            encoding='utf-8',  # wichtig für korrekte Grafikzeichen
+            shell=True  # in Windows häufig nötig für PATH-Auflösung
+        )
+    except FileNotFoundError:
+        return "Error: oh-my-posh was not found. Is it in the PATH?"
+    except Exception as e:
+        return f"Unexpected error: {e}"
+
+    if result.returncode == 0:
+        return result.stdout
+    else:
+        return f"Error running oh-my-posh:\n{result.stderr}"
+
+def get_cool_19_pin():
+    """
+    Ruft eine gerenderte Oh-My-Posh-Prompt basierend auf einer bestimmten Theme-Konfiguration ab.
+    """
+    print("")
+
+    config_path = os.path.expanduser(
+        r"~\AppData\Local\Programs\oh-my-posh\themes\slimfat.omp.json"
+    )
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+
+    try:
+        result = subprocess.run(
+            [
+                "oh-my-posh",
+                "print",
+                "primary",
+                "--config", config_path,
+                "--pwd", working_dir,
+                "--shell", "pwsh"
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            encoding='utf-8',  # wichtig für korrekte Grafikzeichen
+            shell=True  # in Windows häufig nötig für PATH-Auflösung
+        )
+    except FileNotFoundError:
+        return "Error: oh-my-posh was not found. Is it in the PATH?"
+    except Exception as e:
+        return f"Unexpected error: {e}"
+
+    if result.returncode == 0:
+        return result.stdout
+    else:
+        return f"Error running oh-my-posh:\n{result.stderr}"
+
+def get_cool_20_pin():
+    """
+    Ruft eine gerenderte Oh-My-Posh-Prompt basierend auf einer bestimmten Theme-Konfiguration ab.
+    """
+    print("")
+
+    config_path = os.path.expanduser(
+        r"~\AppData\Local\Programs\oh-my-posh\themes\stelbent.minimal.omp.json"
+    )
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+
+    try:
+        result = subprocess.run(
+            [
+                "oh-my-posh",
+                "print",
+                "primary",
+                "--config", config_path,
+                "--pwd", working_dir,
+                "--shell", "pwsh"
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            encoding='utf-8',  # wichtig für korrekte Grafikzeichen
+            shell=True  # in Windows häufig nötig für PATH-Auflösung
+        )
+    except FileNotFoundError:
+        return "Error: oh-my-posh was not found. Is it in the PATH?"
+    except Exception as e:
+        return f"Unexpected error: {e}"
+
+    if result.returncode == 0:
+        return result.stdout
+    else:
+        return f"Error running oh-my-posh:\n{result.stderr}"
+
+def get_cool_21_pin():
+    """
+    Ruft eine gerenderte Oh-My-Posh-Prompt basierend auf einer bestimmten Theme-Konfiguration ab.
+    """
+    print("")
+
+    config_path = os.path.expanduser(
+        r"~\AppData\Local\Programs\oh-my-posh\themes\tonybaloney.omp.json"
+    )
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+
+    try:
+        result = subprocess.run(
+            [
+                "oh-my-posh",
+                "print",
+                "primary",
+                "--config", config_path,
+                "--pwd", working_dir,
+                "--shell", "pwsh"
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            encoding='utf-8',  # wichtig für korrekte Grafikzeichen
+            shell=True  # in Windows häufig nötig für PATH-Auflösung
+        )
+    except FileNotFoundError:
+        return "Error: oh-my-posh was not found. Is it in the PATH?"
+    except Exception as e:
+        return f"Unexpected error: {e}"
+
+    if result.returncode == 0:
+        return result.stdout
+    else:
+        return f"Error running oh-my-posh:\n{result.stderr}"
+
+def get_cool_23_pin():
+    """
+    Ruft eine gerenderte Oh-My-Posh-Prompt basierend auf einer bestimmten Theme-Konfiguration ab.
+    """
+    print("")
+
+    config_path = os.path.expanduser(
+        r"~\AppData\Local\Programs\oh-my-posh\themes\tokyo.omp.json"
+    )
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+
+    try:
+        result = subprocess.run(
+            [
+                "oh-my-posh",
+                "print",
+                "primary",
+                "--config", config_path,
+                "--pwd", working_dir,
+                "--shell", "pwsh"
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            encoding='utf-8',  # wichtig für korrekte Grafikzeichen
+            shell=True  # in Windows häufig nötig für PATH-Auflösung
+        )
+    except FileNotFoundError:
+        return "Error: oh-my-posh was not found. Is it in the PATH?"
+    except Exception as e:
+        return f"Unexpected error: {e}"
+
+    if result.returncode == 0:
+        return result.stdout
+    else:
+        return f"Error running oh-my-posh:\n{result.stderr}"
 
 def input_line(prompt):
     sys.stdout.write(prompt)
@@ -6012,6 +6605,38 @@ def main():
                 pin = get_cool_3_pin()
             elif state == "cool_4":
                 pin = get_cool_4_pin()
+            elif state == "cool_5":
+                pin = get_cool_5_pin()
+            elif state == "cool_6":
+                pin = get_cool_6_pin()
+            elif state == "cool_8":
+                pin = get_cool_8_pin()
+            elif state == "cool_9":
+                pin = get_cool_9_pin()
+            elif state == "cool_10":
+                pin = get_cool_10_pin()
+            elif state == "cool_11":
+                pin = get_cool_11_pin()
+            elif state == "cool_12":
+                pin = get_cool_12_pin()
+            elif state == "cool_13":
+                pin = get_cool_13_pin()
+            elif state == "cool_14":
+                pin = get_cool_14_pin()
+            elif state == "cool_15":
+                pin = get_cool_15_pin()
+            elif state == "cool_16":
+                pin = get_cool_16_pin()
+            elif state == "cool_18":
+                pin = get_cool_18_pin()
+            elif state == "cool_19":
+                pin = get_cool_19_pin()
+            elif state == "cool_20":
+                pin = get_cool_20_pin()
+            elif state == "cool_21":
+                pin = get_cool_21_pin()
+            elif state == "cool_23":
+                pin = get_cool_23_pin()
             else:
                 pin = get_main_pin(current_dir, env_indicator)
 
@@ -6046,6 +6671,70 @@ def main():
 
             elif user_input.lower() == "pin cool-4":
                 state = "cool_4"
+                continue
+
+            elif user_input.lower() == "pin cool-5":
+                state = "cool_5"
+                continue
+
+            elif user_input.lower() == "pin cool-6":
+                state = "cool_6"
+                continue
+
+            elif user_input.lower() == "pin cool-8":
+                state = "cool_8"
+                continue
+
+            elif user_input.lower() == "pin cool-9":
+                state = "cool_9"
+                continue
+
+            elif user_input.lower() == "pin cool-10":
+                state = "cool_10"
+                continue
+
+            elif user_input.lower() == "pin cool-11":
+                state = "cool_11"
+                continue
+
+            elif user_input.lower() == "pin cool-12":
+                state = "cool_12"
+                continue
+
+            elif user_input.lower() == "pin cool-13":
+                state = "cool_13"
+                continue
+
+            elif user_input.lower() == "pin cool-14":
+                state = "cool_14"
+                continue
+
+            elif user_input.lower() == "pin cool-15":
+                state = "cool_15"
+                continue
+
+            elif user_input.lower() == "pin cool-16":
+                state = "cool_16"
+                continue
+
+            elif user_input.lower() == "pin cool-18":
+                state = "cool_18"
+                continue
+
+            elif user_input.lower() == "pin cool-19":
+                state = "cool_19"
+                continue
+
+            elif user_input.lower() == "pin cool-20":
+                state = "cool_20"
+                continue
+
+            elif user_input.lower() == "pin cool-21":
+                state = "cool_21"
+                continue
+
+            elif user_input.lower() == "pin cool-23":
+                state = "cool_23"
                 continue
 
             elif user_input.startswith("pp "):
