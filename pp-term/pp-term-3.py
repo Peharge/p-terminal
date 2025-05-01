@@ -2179,7 +2179,8 @@ def is_tool_installed(tool_name):
 
 # Liste aller verfügbaren Befehle
 COMMANDS = [
-    "p", "p git", "p git mavis", "p htop", "p ls", "p ls mavis", "p simon", "p wsl", "p pip", "p models", "p ubuntu",
+    "p", "p git", "p git mavis", "p git mavis-web", "p git simon", "p htop", "p ls", "p ls mavis",
+    "ps ls mavis-web", "p ls simon", "p simon", "p wsl", "p pip", "p models", "p ubuntu",
     "pp", "pp-c", "pp-p", "ps", "ps-github", "ps-huggingface", "ps-ollama", "ps-stackoverflow",
     "ps-arxiv", "pa", "lx", "lx-c", "lx-p", "lx-cpp-c", "lx-c-c", "lx-p-c", "ubuntu", "ubuntu-c",
     "ubuntu-p", "debian", "debian-c", "debian-p", "kali", "kali-c", "kali-p", "hack", "arch", "arch-c",
