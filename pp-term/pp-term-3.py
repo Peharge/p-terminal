@@ -2928,7 +2928,7 @@ def run_command_with_admin_python_privileges(command: str):
                 check=True
             )
         except subprocess.CalledProcessError as e:
-            print(f"Fehler bei der Ausführung: {e}")
+            print(f"Execution error: {e}")
 
 
 
