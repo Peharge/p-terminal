@@ -81,7 +81,7 @@ def run_alpine_python_command(command):
 
 if __name__ == "__main__":
     commands = [
-        'sudo apt install -y qalculate'
+        'sudo apt install -y qalculate-gtk'
     ]
 
     for cmd in commands:
