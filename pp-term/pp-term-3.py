@@ -131,7 +131,6 @@ ensure_packages_installed(required_packages)
 from cgitb import strong
 from dotenv import load_dotenv
 from subprocess import run
-
 import readline
 from bs4 import BeautifulSoup
 import datetime
@@ -201,7 +200,6 @@ def loading_bar(text: str = "Processing", duration: int = 3, color: str = "") ->
 
 
 def print_banner():
-
     print("✅ All tasks were completed successfully!")
 
     print(f"""
@@ -385,7 +383,6 @@ def change_directory(path):
 
 
 def handle_special_commands(user_input):
-
     user_input = user_input.strip()
 
     # Lade Umgebungsvariablen
@@ -1272,6 +1269,7 @@ def handle_special_commands(user_input):
 
     return False
 
+
 # Constants
 SETTINGS_PATH = os.path.expandvars(
     r"%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
@@ -1839,20 +1837,24 @@ except (FileNotFoundError, json.JSONDecodeError) as e:
     print(f"Error loading themes.json: {e}")
     THEME_DEFAULTS = {}
 
+
 def create_backup(file_path: str) -> str:
     backup_path = file_path + BACKUP_SUFFIX
     shutil.copy2(file_path, backup_path)
     print(f"Backup created at: {backup_path}")
     return backup_path
 
+
 def load_settings(file_path: str) -> dict:
     with open(file_path, 'r', encoding='utf-8') as f:
         return json.load(f)
+
 
 def save_settings(file_path: str, settings: dict) -> None:
     with open(file_path, 'w', encoding='utf-8') as f:
         json.dump(settings, f, indent=4)
     print(f"Settings saved to {file_path}")
+
 
 def apply_color_scheme(settings: dict, scheme_name: str) -> None:
     scheme = COLOR_SCHEMES.get(scheme_name)
@@ -1865,6 +1867,7 @@ def apply_color_scheme(settings: dict, scheme_name: str) -> None:
         settings['theme'] = 'light' if 'light' in scheme_name else 'dark'
         print(f"Applied color scheme: {scheme.get('name')}")
 
+
 def apply_theme_defaults(settings: dict, theme_name: str) -> None:
     defaults = THEME_DEFAULTS.get(theme_name, {}).get('defaults')
     if defaults:
@@ -1872,9 +1875,11 @@ def apply_theme_defaults(settings: dict, theme_name: str) -> None:
         settings['profiles']['defaults'] = defaults
         print(f"Applied theme defaults for: {theme_name}")
 
+
 def restart_terminal() -> None:
     subprocess.run(["wt.exe", "new-tab"], check=False)
     print("Terminal restarted with new tab.")
+
 
 def switch_theme(user_input: str) -> bool:
     if not user_input.lower().startswith("theme "):
@@ -1980,6 +1985,7 @@ def get_response_from_ollama(user_message, ollama):
     except Exception as e:
         return f"ERROR: {e}"
 
+
 def get_response_from_ollama_qwen0_6(user_message, ollama):
     """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
     try:
@@ -1990,6 +1996,7 @@ def get_response_from_ollama_qwen0_6(user_message, ollama):
         return response['message']['content']
     except Exception as e:
         return f"ERROR: {e}"
+
 
 def get_response_from_ollama_qwen1_7(user_message, ollama):
     """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
@@ -2002,6 +2009,7 @@ def get_response_from_ollama_qwen1_7(user_message, ollama):
     except Exception as e:
         return f"ERROR: {e}"
 
+
 def get_response_from_ollama_qwen4(user_message, ollama):
     """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
     try:
@@ -2012,6 +2020,7 @@ def get_response_from_ollama_qwen4(user_message, ollama):
         return response['message']['content']
     except Exception as e:
         return f"ERROR: {e}"
+
 
 def get_response_from_ollama_qwen8(user_message, ollama):
     """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
@@ -2024,6 +2033,7 @@ def get_response_from_ollama_qwen8(user_message, ollama):
     except Exception as e:
         return f"ERROR: {e}"
 
+
 def get_response_from_ollama_qwen32(user_message, ollama):
     """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
     try:
@@ -2034,6 +2044,7 @@ def get_response_from_ollama_qwen32(user_message, ollama):
         return response['message']['content']
     except Exception as e:
         return f"ERROR: {e}"
+
 
 def get_response_from_ollama_qwen30(user_message, ollama):
     """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
@@ -2046,6 +2057,7 @@ def get_response_from_ollama_qwen30(user_message, ollama):
     except Exception as e:
         return f"ERROR: {e}"
 
+
 def get_response_from_ollama_qwen235(user_message, ollama):
     """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
     try:
@@ -2056,6 +2068,7 @@ def get_response_from_ollama_qwen235(user_message, ollama):
         return response['message']['content']
     except Exception as e:
         return f"ERROR: {e}"
+
 
 def check_ollama_update():
     """
@@ -2907,7 +2920,6 @@ def run_command_with_admin_python_privileges(command: str):
             )
         except subprocess.CalledProcessError as e:
             print(f"Execution error: {e}")
-
 
 
 def is_wsl_installed():
@@ -5795,6 +5807,7 @@ def get_main_4_pin(current_dir, env_indicator_3):
         f"{env_indicator_3} PP {current_dir}:~{red}#{reset} "
     )
 
+
 def get_evil_pin(current_dir, env_indicator_4):
     return (
         f"\n{blue}┌──({reset}{red}root"
@@ -5802,6 +5815,7 @@ def get_evil_pin(current_dir, env_indicator_4):
         + f"{red}Peharge{reset}{blue})-[{reset}{current_dir}{blue}]-{reset}{env_indicator_4}"
         f"\n{blue}└─{reset}{red}#{reset} "
     )
+
 
 def get_cool_pin():
     """
@@ -5840,6 +5854,7 @@ def get_cool_pin():
     else:
         return f"Error running oh-my-posh:\n{result.stderr}"
 
+
 def get_cool_3_pin():
     """
     Ruft eine gerenderte Oh-My-Posh-Prompt basierend auf einer bestimmten Theme-Konfiguration ab.
@@ -5877,6 +5892,7 @@ def get_cool_3_pin():
         return result.stdout
     else:
         return f"Error running oh-my-posh:\n{result.stderr}"
+
 
 def get_cool_4_pin():
     """
