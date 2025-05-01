@@ -76,8 +76,8 @@ fn main() {
     // Kommandozeilenargumente einlesen
     let args: Vec<String> = env::args().collect();
     if args.len() < 2 {
-        eprintln!("[ERROR] Kein Befehl angegeben.");
-        println!("\nDrücken Sie eine beliebige Taste, um zu beenden...");
+        eprintln!("[ERROR] No command specified.");
+        println!("\nPress any key to exit...");
         wait_for_enter();
         std::process::exit(1);
     }
@@ -93,8 +93,8 @@ fn main() {
         .stderr(Stdio::piped())
         .spawn() {
             Err(e) => {
-                eprintln!("[ERROR] CreateProcess fehlgeschlagen: {}", e);
-                println!("\nDrücken Sie eine beliebige Taste, um zu beenden...");
+                eprintln!("[ERROR] CreateProcess failed: {}", e);
+                println!("\nPress any key to exit...");
                 wait_for_enter();
                 std::process::exit(1);
             }
@@ -103,7 +103,7 @@ fn main() {
 
     // Auslesen der Standardausgabe (stdout) in einem eigenen Thread
     let stdout_handle = {
-        let stdout = child.stdout.take().expect("Kein Handle für stdout");
+        let stdout = child.stdout.take().expect("No handle for stdout");
         thread::spawn(move || {
             let mut reader = BufReader::new(stdout);
             let mut buffer = [0u8; 4096];
@@ -116,7 +116,7 @@ fn main() {
                         io::stdout().flush().unwrap();
                     },
                     Err(e) => {
-                        eprintln!("[ERROR] Fehler beim Lesen der stdout: {}", e);
+                        eprintln!("[ERROR] Error reading stdout: {}", e);
                         break;
                     }
                 }
@@ -126,7 +126,7 @@ fn main() {
 
     // Auslesen der Fehlerausgabe (stderr) in einem separaten Thread
     let stderr_handle = {
-        let stderr = child.stderr.take().expect("Kein Handle für stderr");
+        let stderr = child.stderr.take().expect("No handle for stderr");
         thread::spawn(move || {
             let mut reader = BufReader::new(stderr);
             let mut buffer = [0u8; 4096];
@@ -139,7 +139,7 @@ fn main() {
                         io::stderr().flush().unwrap();
                     },
                     Err(e) => {
-                        eprintln!("[ERROR] Fehler beim Lesen der stderr: {}", e);
+                        eprintln!("[ERROR] Error reading stderr: {}", e);
                         break;
                     }
                 }
@@ -151,7 +151,7 @@ fn main() {
     let exit_status = match child.wait() {
         Ok(status) => status.code().unwrap_or(-1),
         Err(e) => {
-            eprintln!("[ERROR] Fehler beim Warten auf den Kindprozess: {}", e);
+            eprintln!("[ERROR] Error waiting for child process: {}", e);
             -1
         }
     };
@@ -160,8 +160,8 @@ fn main() {
     let _ = stdout_handle.join();
     let _ = stderr_handle.join();
 
-    println!("\nProzess beendete mit Exit-Code: {}", exit_status);
-    println!("\nDrücken Sie eine beliebige Taste, um zu beenden...");
+    println!("\nProcess terminated with exit code: {}", exit_status);
+    println!("\nPress any key to exit...");
     wait_for_enter();
 }
 

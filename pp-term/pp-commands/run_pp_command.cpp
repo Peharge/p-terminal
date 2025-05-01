@@ -73,13 +73,13 @@
 
 // Hilfsfunktion zur Fehlerausgabe inklusive GetLastError-Code
 void printError(const std::string& msg) {
-    std::cerr << "[ERROR] " << msg << " Fehlercode: " << GetLastError() << std::endl;
+    std::cerr << "[ERROR] " << msg << " Error code: " << GetLastError() << std::endl;
 }
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {
-        std::cerr << "[ERROR] Kein Befehl angegeben.\n";
-        std::cout << "\nDrücken Sie eine beliebige Taste, um zu beenden..." << std::endl;
+        std::cerr << "[ERROR] No command specified.\n";
+        std::cout << "\nPress any key to exit..." << std::endl;
         system("pause");
         return 1;
     }
@@ -102,18 +102,18 @@ int main(int argc, char* argv[]) {
     // Pipe für die Ausgabe des Kindprozesses erstellen
     HANDLE hStdOutRead = NULL, hStdOutWrite = NULL;
     if (!CreatePipe(&hStdOutRead, &hStdOutWrite, &sa, 0)) {
-        printError("Pipe konnte nicht erstellt werden.");
-        std::cout << "\nDrücken Sie eine beliebige Taste, um zu beenden..." << std::endl;
+        printError("Pipe could not be created.");
+        std::cout << "\nPress any key to exit..." << std::endl;
         system("pause");
         return 1;
     }
 
     // Den Lese-Handle vom Kindprozess unzugänglich machen (d.h. er soll nicht erben)
     if (!SetHandleInformation(hStdOutRead, HANDLE_FLAG_INHERIT, 0)) {
-        printError("SetHandleInformation schlug fehl.");
+        printError("SetHandleInformation failed.");
         CloseHandle(hStdOutRead);
         CloseHandle(hStdOutWrite);
-        std::cout << "\nDrücken Sie eine beliebige Taste, um zu beenden..." << std::endl;
+        std::cout << "\nPress any key to exit..." << std::endl;
         system("pause");
         return 1;
     }
@@ -145,10 +145,10 @@ int main(int argc, char* argv[]) {
             NULL,
             &si,
             &pi)) {
-        printError("Kindprozess konnte nicht gestartet werden.");
+        printError("Child process could not be started.");
         CloseHandle(hStdOutRead);
         CloseHandle(hStdOutWrite);
-        std::cout << "\nDrücken Sie eine beliebige Taste, um zu beenden..." << std::endl;
+        std::cout << "\nPress any key to exit..." << std::endl;
         system("pause");
         return 1;
     }
@@ -175,9 +175,9 @@ int main(int argc, char* argv[]) {
     // Optional: Exit-Code des Kindprozesses ermitteln (für weiterführende Logik oder Fehleranalyse)
     DWORD exitCode;
     if (GetExitCodeProcess(pi.hProcess, &exitCode) == 0) {
-        printError("Exit-Code konnte nicht ermittelt werden.");
+        printError("Exit code could not be determined.");
     } else {
-        std::cout << "\nProzess beendete mit Exit-Code: " << exitCode << std::endl;
+        std::cout << "\nProcess terminated with exit code: " << exitCode << std::endl;
     }
 
     // Handles freigeben
@@ -186,7 +186,7 @@ int main(int argc, char* argv[]) {
     CloseHandle(pi.hThread);
 
     // Terminal offen halten, damit der Benutzer die Ausgabe lesen kann
-    std::cout << "\nDrücken Sie eine beliebige Taste, um zu beenden..." << std::endl;
+    std::cout << "\nPress any key to exit..." << std::endl;
     system("pause");
 
     return static_cast<int>(exitCode);

@@ -74,13 +74,13 @@
 
 // Hilfsfunktion zur Fehlerausgabe mit GetLastError-Code
 void printError(const char* msg) {
-    fprintf(stderr, "[ERROR] %s Fehlercode: %lu\n", msg, GetLastError());
+    fprintf(stderr, "[ERROR] %s Error code: %lu\n", msg, GetLastError());
 }
 
 int main(int argc, char *argv[]) {
     if (argc < 2) {
-        fprintf(stderr, "[ERROR] Kein Befehl angegeben.\n");
-        printf("\nDrücken Sie eine beliebige Taste, um zu beenden...\n");
+        fprintf(stderr, "[ERROR] No command specified.\n");
+        printf("\nPress any key to exit...\n");
         system("pause");
         return 1;
     }
@@ -98,7 +98,7 @@ int main(int argc, char *argv[]) {
     // Dynamisch genügend Speicher reservieren
     char *cmdLine = (char *)malloc(prefixLen + totalLen + 1);
     if (cmdLine == NULL) {
-        printError("Speicherallokation fehlgeschlagen");
+        printError("Memory allocation failed");
         return 1;
     }
 
@@ -120,20 +120,20 @@ int main(int argc, char *argv[]) {
     // Pipe für die Ausgabe des Kindprozesses erstellen
     HANDLE hStdOutRead = NULL, hStdOutWrite = NULL;
     if (!CreatePipe(&hStdOutRead, &hStdOutWrite, &sa, 0)) {
-        printError("CreatePipe fehlgeschlagen");
+        printError("CreatePipe failed");
         free(cmdLine);
-        printf("\nDrücken Sie eine beliebige Taste, um zu beenden...\n");
+        printf("\nPress any key to exit...\n");
         system("pause");
         return 1;
     }
 
     // Den Lese-Handle so einstellen, dass er nicht vererbt wird
     if (!SetHandleInformation(hStdOutRead, HANDLE_FLAG_INHERIT, 0)) {
-        printError("SetHandleInformation fehlgeschlagen");
+        printError("SetHandleInformation failed");
         CloseHandle(hStdOutRead);
         CloseHandle(hStdOutWrite);
         free(cmdLine);
-        printf("\nDrücken Sie eine beliebige Taste, um zu beenden...\n");
+        printf("\nPress any key to exit...\n");
         system("pause");
         return 1;
     }
@@ -161,11 +161,11 @@ int main(int argc, char *argv[]) {
             NULL,
             &si,
             &pi)) {
-        printError("CreateProcess fehlgeschlagen");
+        printError("CreateProcess failed");
         CloseHandle(hStdOutRead);
         CloseHandle(hStdOutWrite);
         free(cmdLine);
-        printf("\nDrücken Sie eine beliebige Taste, um zu beenden...\n");
+        printf("\nPress any key to exit...\n");
         system("pause");
         return 1;
     }
@@ -190,9 +190,9 @@ int main(int argc, char *argv[]) {
 
     DWORD exitCode;
     if (GetExitCodeProcess(pi.hProcess, &exitCode) == 0) {
-        printError("GetExitCodeProcess fehlgeschlagen");
+        printError("GetExitCodeProcess failed");
     } else {
-        printf("\nProzess beendete mit Exit-Code: %lu\n", exitCode);
+        printf("\nProcess terminated with exit code: %lu\n", exitCode);
     }
 
     // Alle Handles freigeben
@@ -203,7 +203,7 @@ int main(int argc, char *argv[]) {
     free(cmdLine);
 
     // Terminal offen halten, damit der Benutzer die Ausgabe lesen kann
-    printf("\nDrücken Sie eine beliebige Taste, um zu beenden...\n");
+    printf("\nPress any key to exit...\n");
     system("pause");
 
     return (int)exitCode;
