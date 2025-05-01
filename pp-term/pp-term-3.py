@@ -667,7 +667,22 @@ def handle_special_commands(user_input):
         "fun install calculator": "pp-commands\\fun-install-calc.py",  # new
         "install cool pin": "pp-commands\\theme-pcc.py", # new
         "install cool pin-3": "pp-commands\\theme-pcc-3.py",  # new
-        "install cool pin-4": "pp-commands\\theme-pcc-4.py"  # new
+        "install cool pin-4": "pp-commands\\theme-pcc-4.py",  # new
+        "install cool pin-5": "pp-commands\\theme-pcc-5.py",  # new
+        "install cool pin-6": "pp-commands\\theme-pcc-6.py",  # new
+        "install cool pin-8": "pp-commands\\theme-pcc-8.py",  # new
+        "install cool pin-9": "pp-commands\\theme-pcc-9.py",  # new
+        "install cool pin-10": "pp-commands\\theme-pcc-10.py",  # new
+        "install cool pin-11": "pp-commands\\theme-pcc-11.py",  # new
+        "install cool pin-13": "pp-commands\\theme-pcc-13.py",  # new
+        "install cool pin-14": "pp-commands\\theme-pcc-14.py",  # new
+        "install cool pin-15": "pp-commands\\theme-pcc-15.py",  # new
+        "install cool pin-16": "pp-commands\\theme-pcc-16.py",  # new
+        "install cool pin-18": "pp-commands\\theme-pcc-18.py",  # new
+        "install cool pin-19": "pp-commands\\theme-pcc-19.py",  # new
+        "install cool pin-20": "pp-commands\\theme-pcc-20.py",  # new
+        "install cool pin-21": "pp-commands\\theme-pcc-21.py",  # new
+        "install cool pin-23": "pp-commands\\theme-pcc-23.py"  # new
     }
 
     # Custom command launcher
