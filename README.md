@@ -48,7 +48,7 @@ soon
 PP-Terminal:
 Download the [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) file and double-click it. You're ready to go! Have fun with pp-terminal!
 
-# Comands
+# Commands
 
 - `p` - Peharge command  
 	- `p git` - Peharge git command - Opens a P-Term Commit Explorer  
