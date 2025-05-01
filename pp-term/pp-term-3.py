@@ -133,47 +133,30 @@ from dotenv import load_dotenv
 from subprocess import run
 
 import readline
-import ctypes
-import shlex
-import logging
-import os
-import getpass
-import subprocess
-import logging
-import shutil
-import requests
 from bs4 import BeautifulSoup
-import os
-import sys
 import datetime
 import socket
 import platform
 import webbrowser
 import random
-import shutil
 import zipfile
 import requests
 import psutil
 import pyperclip
 import ctypes
-import subprocess
 import speedtest
 import colorama
 from colorama import Fore, Style, Back
-import time
 import ollama
 from termcolor import colored
 import venv
 import selectors
 import signal
-import logging
-import subprocess
 import shutil
 import shlex
-import time
-import logging
 from typing import Union, List, Optional
 import json
+import msvcrt
 
 colorama.init()
 
@@ -5927,9 +5910,6 @@ def get_cool_4_pin():
     else:
         return f"Error running oh-my-posh:\n{result.stderr}"
 
-
-import sys
-import msvcrt
 
 def input_line(prompt):
     sys.stdout.write(prompt)
