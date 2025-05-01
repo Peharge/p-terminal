@@ -2871,11 +2871,6 @@ def run_command_with_admin_c_privileges(command):
 
 # --- mp-p command---
 
-import os
-import sys
-import ctypes
-import subprocess
-
 def run_command_with_admin_python_privileges(command: str):
     """
     Führt einen Shell-Befehl im aktuellen Arbeitsverzeichnis mit Admin-Rechten aus.
