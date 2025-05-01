@@ -2713,7 +2713,7 @@ def find_vcvarsall_c():
     return vs_path
 
 
-# --- mp command---
+# --- pp command---
 
 def get_project_paths_mp():
     """
@@ -2730,10 +2730,10 @@ def get_project_paths_mp():
 
 def compile_mp_cpp_with_vs(mp_cpp_file, mp_exe_file):
     """
-    Kompiliert run_mp_command.cpp mit cl.exe über die Visual Studio-Umgebung.
+    Kompiliert run_pp_command.cpp mit cl.exe über die Visual Studio-Umgebung.
     Die Ausgabe wird im UTF-8 Format eingelesen – ungültige Zeichen werden ersetzt.
     """
-    logging.info("Compile run_mp_command.cpp with Visual Studio C++...")
+    logging.info("Compile run_pp_command.cpp with Visual Studio C++...")
     vcvarsall = find_vcvarsall()
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{mp_cpp_file}" /Fe:"{mp_exe_file}"'
@@ -2791,7 +2791,7 @@ def run_command_with_admin_privileges(command):
         logging.warning("Cancellation by user.")
 
 
-# --- mp-c command---
+# --- pp-c command---
 
 def get_project_paths_mp_c():
     """
@@ -2808,7 +2808,7 @@ def get_project_paths_mp_c():
 
 def compile_mp_c_with_vs(mp_c_file, mp_c_exe_file):
     """
-    Kompiliert run_mp_command.c mit cl.exe über die Visual Studio-Umgebung.
+    Kompiliert run_pp_command.c mit cl.exe über die Visual Studio-Umgebung.
     """
     logging.info("Compiling run_mp_command.c with Visual Studio...")
     vcvarsall = find_vcvarsall_c()
