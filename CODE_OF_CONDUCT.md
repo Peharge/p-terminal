@@ -5,6 +5,7 @@
     <img src="./icons/pp-term-banner-3.svg" alt="peharge"/>
     <img src="./icons/peharge-banner-3.svg" alt="peharge"/>
 </p>
+
 ## Our Pledge
 As contributors and maintainers of the P-Terminal project, we pledge to foster an environment where researchers, scientists, and collaborators can engage, innovate, and contribute freely without fear of discrimination, harassment, or intimidation. P-Terminal is committed to providing an inclusive, accessible, and bias-free platform that empowers individuals to advance scientific discovery and knowledge.
 
