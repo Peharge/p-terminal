@@ -86,39 +86,107 @@ pin main
 ## Pin Evil
 
 ```bash 
-theme evil
+pin evil
 ```
 
 <p align="center">
  <img width="800" src="https://github.com/Peharge/p-terminal-images/raw/main/images/pin-3.png" alt="peharge"/>
 </p>
 
-## Pin Cool
+## Pin Main 3
 
 ```bash 
-theme cool
+pin main-3
 ```
 
 <p align="center">
  <img width="800" src="https://github.com/Peharge/p-terminal-images/raw/main/images/pin-4.png" alt="peharge"/>
 </p>
 
-## Pin Cool 3
+## Pin Main 4
 
 ```bash 
-theme cool-3
+pin main-4
 ```
 
 <p align="center">
  <img width="800" src="https://github.com/Peharge/p-terminal-images/raw/main/images/pin-5.png" alt="peharge"/>
 </p>
 
-## Pin Cool 4
-
-```bash 
-theme cool-4
-```
+## Pin Cool
 
 <p align="center">
  <img width="800" src="https://github.com/Peharge/p-terminal-images/raw/main/images/pin-6.png" alt="peharge"/>
 </p>
+
+```bash 
+pin cool
+```
+
+```bash 
+pin cool-3
+```
+
+```bash 
+pin cool-4
+```
+
+```bash 
+pin cool-5
+```
+
+```bash 
+pin cool-6
+```
+
+```bash 
+pin cool-8
+```
+
+```bash 
+pin cool-9
+```
+
+```bash 
+pin cool-11
+```
+
+```bash 
+pin cool-12
+```
+
+```bash 
+pin cool-13
+```
+
+```bash 
+pin cool-14
+```
+
+```bash 
+pin cool-15
+```
+
+```bash 
+pin cool-16
+```
+
+```bash 
+pin cool-18
+```
+
+```bash 
+pin cool-19
+```
+
+```bash 
+pin cool-20
+```
+
+```bash 
+pin cool-21
+```
+
+```bash 
+pin cool-23
+```
