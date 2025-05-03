@@ -6594,11 +6594,18 @@ def input_line(prompt):
         if ch == '\t':
             comps = get_completions(buf)
             if comps:
-                # Alle möglichen Vervollständigungen ausgeben
+                # Spaltenorientierte Ausgabe
                 sys.stdout.write('\n')
-                for c in comps:
-                    sys.stdout.write(c + '  ')
+                cols, _ = shutil.get_terminal_size((80, 20))
+                maxlen = max(len(c) for c in comps) + 2  # +2 für Abstand
+                per_line = cols // maxlen
+
+                for i, c in enumerate(comps):
+                    sys.stdout.write(c.ljust(maxlen))
+                    if (i + 1) % per_line == 0:
+                        sys.stdout.write('\n')
                 sys.stdout.write('\n')
+
                 # Prompt und bisherigen Puffer neu ausgeben
                 sys.stdout.write(prompt + buf)
                 sys.stdout.flush()
