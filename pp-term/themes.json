@@ -162,5 +162,22 @@
             "backgroundImageOpacity": 0.85,
             "cursorColor": "#ffffff"
         }
+    },
+    "fallout_pipboy": {
+        "adjustIndistinguishableColors": "always",
+        "backgroundImage": "ms-appdata:///roaming/Fallout_PipBoy.jpg",
+        "backgroundImageStretchMode": "fill",
+        "colorScheme": "GreenMonochrome",
+        "cursorShape": "emptyBox",
+        "experimental.retroTerminalEffect": true,
+        "font":
+        {
+            "face": "Cascadia Code",
+            "weight": "bold"
+        },
+        "intenseTextStyle": "none",
+        "padding": "57",
+        "scrollbarState": "visible",
+        "useAcrylic": true
     }
 }
