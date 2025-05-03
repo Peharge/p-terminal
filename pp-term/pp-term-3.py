@@ -75,7 +75,7 @@ required_packages = [
     "PyQt6", "PyQt6-sip", "PyQt6-Charts", "PyQt6-WebEngine", "PyQt6-Charts", "keyboard", "pyreadline3",
     "requests", "psutil", "speedtest-cli", "colorama", "pyperclip", "termcolor", "docker", "flask", "rich",
     "typer", "click", "blessed", "prompt-toolkit", "tqdm", "watchdog", "fire", "torch", "torchvision", "torchaudio",
-    "tensorflow", "tf-nightly", "notebook", "jupyterlab", "jax", "transformers"
+    "tensorflow", "tf-nightly", "notebook", "jupyterlab"
 ]
 
 
@@ -5693,6 +5693,7 @@ def find_active_env():
     # Nichts gefunden ➔ fallback
     return os.path.abspath(DEFAULT_ENV_DIR)
 
+
 def get_main_pin(current_dir, env_indicator):
     return (
         f"\n{green}┌──({reset}{blue}{getpass.getuser()}"
@@ -5701,12 +5702,14 @@ def get_main_pin(current_dir, env_indicator):
         f"\n{green}└─{reset}{blue}${reset} "
     )
 
+
 def get_main_3_pin(current_dir, env_indicator_3):
     print("")
 
     return (
         f"{env_indicator_3} PP {current_dir}:~{blue}${reset} "
     )
+
 
 def get_main_4_pin(current_dir, env_indicator_3):
     print("")
