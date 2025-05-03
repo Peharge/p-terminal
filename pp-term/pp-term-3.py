@@ -94,11 +94,11 @@ def activate_virtualenv(venv_path):
 
 def ensure_packages_installed(packages: list[str]) -> None:
     """
-    Ensures that the specified Python packages are installed.
+    Stellt sicher, dass die angegebenen Python-Pakete installiert werden.
 
-    Installs only missing packages. Silent, fast, and robust.
+    Installiert nur fehlende Pakete. Leise, schnell und robust.
     """
-    # Configure logging to exclude log level name (e.g. [INFO])
+
     logging.basicConfig(level=logging.INFO, format='%(message)s')
 
     missing = [pkg for pkg in packages if importlib.util.find_spec(pkg) is None]
@@ -164,7 +164,7 @@ colorama.init()
 DEFAULT_ENV_DIR = os.path.join("p-terminal", "pp-term", ".env")
 DEFAULT_PYTHON_EXECUTABLE = os.path.join(DEFAULT_ENV_DIR, "Scripts", "python.exe")
 
-# Globales Theme
+# Globales Thema
 current_theme = "dark"
 
 logging.basicConfig(
@@ -233,9 +233,8 @@ Thank you so much for using PP-Terminal. We truly appreciate your support ❤️
         for i in range(8, 16):
             print(f"\033[48;5;{i}m  \033[0m", end="")
 
-        print()  # Noch ein Zeilenumbruch am Ende
+        print()
 
-    # Aufruf der Funktion, um die Farbpalette zu zeigen
     show_color_palette()
 
 
@@ -266,7 +265,7 @@ def run_command(command, shell=False, cwd=None, extra_env=None):
         int: Exit-Code des Prozesses.
     """
 
-    # 1) Aktuelles Virtual Environment ermitteln (Pfad und optionale Env-Variablen)
+    # Aktuelles Virtual Environment ermitteln (Pfad und optionale Env-Variablen)
     active = find_active_env()
     # Erwarte entweder ein Tuple(path, env_dict) oder nur den Pfad als String
     if isinstance(active, tuple) and len(active) == 2 and isinstance(active[1], dict):
@@ -283,11 +282,11 @@ def run_command(command, shell=False, cwd=None, extra_env=None):
         python_name
     )
 
-    # 2) command in Liste umwandeln (nur wenn shell=False und command ist str)
+    # command in Liste umwandeln (nur wenn shell=False und command ist str)
     if isinstance(command, str) and not shell:
         command = shlex.split(command, posix=(os.name != "nt"))
 
-    # 3) pip- und python-Wrapper
+    # pip- und python-Wrapper
     if isinstance(command, list) and command:
         base = os.path.basename(command[0]).lower()
         if base == "pip" or base.startswith("pip"):
@@ -295,7 +294,7 @@ def run_command(command, shell=False, cwd=None, extra_env=None):
         elif base == "python" or base.startswith("python"):
             command = [python_exe] + command[1:]
 
-    # 4) Umgebung zusammenbauen: zuerst das Venv-Env, dann System-Env, dann extra_env
+    # Umgebung zusammenbauen: zuerst das Venv-Env, dann System-Env, dann extra_env
     env = {}
     env.update(venv_env)
     env.update(os.environ)
@@ -308,7 +307,7 @@ def run_command(command, shell=False, cwd=None, extra_env=None):
     if extra_env:
         env.update(extra_env)
 
-    # 5) Wenn shell=True: einfache Ausführung mit direktem Stream-Passing
+    # Wenn shell=True: einfache Ausführung mit direktem Stream-Passing
     if shell:
         proc = subprocess.Popen(
             command,
@@ -326,7 +325,7 @@ def run_command(command, shell=False, cwd=None, extra_env=None):
             proc.send_signal(signal.SIGINT)
             return proc.wait()
 
-    # 6) Ansonsten: non-shell mit PIPEs und selectors für Zeilen-Output
+    # Ansonsten: non-shell mit PIPEs und selectors für Zeilen-Output
     proc = subprocess.Popen(
         command,
         shell=False,
@@ -694,7 +693,7 @@ def handle_special_commands(user_input):
             run([script_path], shell=True)
         return True
 
-    # Built-in Commands Erweiterung:
+    # Built-in Commands Erweiterung
     if user_input.lower() in ["cls", "clear"]:
         os.system("cls" if os.name == "nt" else "clear")
         return True
@@ -749,7 +748,6 @@ def handle_special_commands(user_input):
         print(f"{yellow}Exiting PP-Terminal... Goodbye {user_name}!{reset}")
         sys.exit(0)
 
-    # Zusätzliche Luxus-Funktionen:
     if user_input.lower() == "whoami":
         print(user_name)
         return True
@@ -815,7 +813,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("search "):
         try:
-            # Split the input into command, filename, and keyword
+            # Teilen Sie die Eingabe in Befehl, Dateiname und Schlüsselwort auf
             parts = user_input.split(maxsplit=2)
             if len(parts) < 3:
                 print("Usage: search <filename> <keyword>")
@@ -823,17 +821,17 @@ def handle_special_commands(user_input):
 
             _, filename, keyword = parts
 
-            # Open the file with UTF-8 encoding
+            # Öffnen Sie die Datei mit UTF-8-Kodierung
             with open(filename, "r", encoding="utf-8") as file:
                 lines = file.readlines()
 
-            # Search for the keyword in each line, case insensitive
+            # Suchen Sie in jeder Zeile nach dem Schlüsselwort, ohne Berücksichtigung der Groß- und Kleinschreibung
             matches = []
             for i, line in enumerate(lines, start=1):
                 if keyword.lower() in line.lower():
                     matches.append(f"Line {i}: {line.rstrip()}")
 
-            # Output the results or a corresponding message if no matches are found
+            # Ausgabe der Ergebnisse oder einer entsprechenden Meldung, wenn keine Übereinstimmungen gefunden werden
             if matches:
                 print("\n".join(matches))
             else:
@@ -847,25 +845,25 @@ def handle_special_commands(user_input):
             print(f"{red}Error during search{reset}: {str(e)}")
         return True
 
-    # Create a zip folder (optimized for Windows)
+    # Erstellen Sie einen Zip-Ordner (optimiert für Windows)
     if user_input.startswith("zip "):
         try:
-            # Extract command and folder from input
+            # Befehl und Ordner aus der Eingabe extrahieren
             parts = user_input.split(maxsplit=1)
             if len(parts) < 2:
                 print("Usage: zip <folder>")
                 return True
 
             _, folder = parts
-            # Normalize the path, especially useful on Windows
+            # Normalisieren Sie den Pfad, besonders nützlich unter Windows
             folder_path = os.path.normpath(folder)
 
-            # Check if the folder exists
+            # Überprüfen Sie, ob der Ordner vorhanden ist
             if not os.path.isdir(folder_path):
                 print(f"{red}Error: Folder does not exist{reset}: {folder_path}")
                 return True
 
-            # Create the archive. The archive name matches the folder name without an extension.
+            # Erstellen Sie das Archiv. Der Archivname entspricht dem Ordnernamen ohne Erweiterung.
             shutil.make_archive(folder_path, 'zip', folder_path)
             print(f"{green}Folder successfully zipped!{reset}")
 
@@ -877,28 +875,28 @@ def handle_special_commands(user_input):
             print(f"{red}Error while zipping the folder{reset}: {str(e)}")
         return True
 
-    # Unzip an archive (optimized for Windows with enhanced checks)
+    # Entpacken Sie ein Archiv (optimiert für Windows mit erweiterten Prüfungen)
     if user_input.startswith("unzip "):
         try:
-            # Extract command and zip file from input
+            # Extrahieren Sie den Befehl und die ZIP-Datei aus der Eingabe
             parts = user_input.split(maxsplit=1)
             if len(parts) < 2:
                 print("Usage: unzip <zip_file_path>")
                 return True
 
             _, zip_path = parts
-            # Normalize the path, especially useful on Windows
+            # Normalisieren Sie den Pfad, besonders nützlich unter Windows
             zip_path = os.path.normpath(zip_path)
 
-            # Check if the zip file exists and is a file
+            # Überprüfen Sie, ob die Zip-Datei vorhanden ist und eine Datei ist
             if not os.path.isfile(zip_path):
                 print(f"{red}Error:{reset} File does not exist: {zip_path}")
                 return True
 
-            # Determine the target directory based on the filename without extension
+            # Zielverzeichnis anhand des Dateinamens ohne Erweiterung ermitteln
             extract_dir = os.path.splitext(zip_path)[0]
 
-            # Open and extract the zip archive
+            # Öffnen und entpacken Sie das Zip-Archiv
             with zipfile.ZipFile(zip_path, 'r') as zip_ref:
                 zip_ref.extractall(extract_dir)
 
@@ -912,22 +910,22 @@ def handle_special_commands(user_input):
             print(f"{red}Error while extracting:{reset} {str(e)}")
         return True
 
-    # RAM and CPU status
+    # RAM- und CPU-Status
     if user_input.lower() == "sysinfo":
         print(f"{blue}CPU Usage{reset}: {psutil.cpu_percent()}%")
         print(f"{blue}RAM Usage{reset}: {psutil.virtual_memory().percent}%")
         return True
 
-    # Set clipboard content (improved with extended validation and error handling)
+    # Inhalt der Zwischenablage festlegen (verbessert durch erweiterte Validierung und Fehlerbehandlung)
     if user_input.startswith("clip set "):
         try:
-            # Extract the text to be copied, removing leading and trailing whitespace
+            # Extrahieren Sie den zu kopierenden Text und entfernen Sie führende und nachfolgende Leerzeichen
             text = user_input[len("clip set "):].strip()
             if not text:
                 print("Usage: clip set <text>")
                 return True
 
-            # Copy text to clipboard
+            # Text in die Zwischenablage kopieren
             pyperclip.copy(text)
             print(f"{green}Text successfully copied to clipboard!{reset}")
         except ImportError:
@@ -964,7 +962,7 @@ def handle_special_commands(user_input):
     if user_input.startswith("launch "):
         command_str = user_input[len("launch "):].strip()
 
-        # 3. Catch empty input
+        # Leere Eingabe abfangen
         if not command_str:
             logging.error("No program specified after 'launch'.")
             return False  # Frühzeitige Rückgabe, falls kein Programmname angegeben wurde
@@ -993,20 +991,20 @@ def handle_special_commands(user_input):
     # Speedtest
     if user_input.lower() == "speedtest":
         try:
-            # Loading bar while the speedtest is running
+            # Ladebalken während der Speedtest läuft
             loading_bar("Running speedtest", 5)
 
-            # Speedtest instance
+            # Speedtest-Instanz
             st = speedtest.Speedtest()
 
-            # Download and upload speeds in Mbps
-            download = st.download() / 1_000_000  # Convert from bits to Mbps
-            upload = st.upload() / 1_000_000  # Convert from bits to Mbps
+            # Download- und Upload-Geschwindigkeiten in Mbit/s
+            download = st.download() / 1_000_000  # Konvertieren von Bits in Mbit/s
+            upload = st.upload() / 1_000_000  # Konvertieren von Bits in Mbit/s
 
-            # Get ping (latency)
+            # Ping abrufen (Latenz)
             ping = st.results.ping
 
-            # Print out results in a cool format
+            # Drucken Sie die Ergebnisse in einem coolen Format aus
             print(f"{blue}Download{reset}: {download:.2f} Mbps")
             print(f"{blue}Upload{reset}: {upload:.2f} Mbps")
             print(f"{blue}Ping{reset}: {ping} ms")
@@ -1014,7 +1012,7 @@ def handle_special_commands(user_input):
             return True
 
         except Exception as e:
-            # If something goes wrong, show the error
+            # Wenn etwas schief geht, zeigen Sie den Fehler
             print(f"{red}Whoops, something went wrong with the speedtest{reset}: {e}")
             return False
 
@@ -1038,11 +1036,11 @@ def handle_special_commands(user_input):
     if user_input.startswith("download "):
 
         try:
-            # Extract URL from input
+            # URL aus Eingabe extrahieren
             _, url = user_input.split(maxsplit=1)
             file_name = Path(url).name
 
-            # Download with progress feedback
+            # Download mit Fortschrittsfeedback
             loading_bar(f"Downloading {file_name}", 4)
             response = requests.get(url, stream=True, timeout=10)
             response.raise_for_status()
@@ -1076,7 +1074,7 @@ def handle_special_commands(user_input):
             print(f"{red}Couldn't fetch Chuck Norris joke!{reset}")
         return True
 
-    # Theme Wechsel - soon
+    # Theme Wechsel
     if user_input.startswith("theme "):
         switch_theme(user_input)
         return True
@@ -1088,7 +1086,7 @@ def handle_special_commands(user_input):
         print(f"{green}Temporary files cleaned!{reset}")
         return True
 
-    # Selbst Update (Demo)
+    # Selbst Update - soon
     if user_input.lower() == "selfupdate":
         print(f"{blue}Checking for updates...{reset}")
         loading_bar("Updating", 4)
@@ -1287,14 +1285,14 @@ def handle_special_commands(user_input):
     return False
 
 
-# Constants
+# Konstanten
 SETTINGS_PATH = os.path.expandvars(
     r"%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
 )
 BACKUP_SUFFIX = ".bak"
 THEMES_PATH = f'C:\\Users\\{os.getlogin()}\\p-terminal\\pp-term\\themes.json'
 
-# Predefined color schemes
+# Vordefinierte Farbschemata
 COLOR_SCHEMES = {
     "dark": {
         "name": "Dark",
@@ -1846,7 +1844,7 @@ COLOR_SCHEMES = {
     }
 }
 
-# Load theme-specific defaults
+# Laden themenspezifischer Standardeinstellungen
 try:
     with open(THEMES_PATH, 'r', encoding='utf-8') as f:
         THEME_DEFAULTS = json.load(f)
@@ -1932,7 +1930,7 @@ def switch_theme(user_input: str) -> bool:
 
 def get_weather():
     print("⛅ Fetching detailed weather for Berlin... (Demo)\n")
-    time.sleep(1)  # kleiner Effekt für Coolness
+    time.sleep(1)
 
     weather_icons = {
         "Sunny": "☀️",
@@ -2180,12 +2178,12 @@ def check_command_installed(command):
         return False
 
 def is_tool_installed(tool_name):
-    """Check if a tool is installed."""
+    """Prüfen Sie, ob ein Tool installiert ist."""
     result = subprocess.run(["which", tool_name], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     return result.returncode == 0
 
 def search_websites(command):
-    """Searches for websites related to the keyword using DuckDuckGo and returns links"""
+    """Sucht mit DuckDuckGo nach Websites, die mit dem Keyword in Zusammenhang stehen, und gibt Links zurück"""
     url = "https://html.duckduckgo.com/html/"
     params = {'q': command}
     headers = {
@@ -2214,7 +2212,7 @@ def search_websites(command):
 
 
 def search_github(command):
-    """Searches GitHub for repositories or pages related to the keyword using DuckDuckGo and returns links"""
+    """Durchsucht GitHub mit DuckDuckGo nach Repositories oder Seiten, die mit dem Schlüsselwort in Zusammenhang stehen, und gibt Links zurück"""
     url = "https://html.duckduckgo.com/html/"
     params = {'q': f"site:github.com {command}"}
     headers = {
@@ -2243,7 +2241,7 @@ def search_github(command):
 
 
 def search_huggingface(command):
-    """Searches Hugging Face for pages related to the keyword using DuckDuckGo and returns links"""
+    """Durchsucht Hugging Face mithilfe von DuckDuckGo nach Seiten, die mit dem Schlüsselwort in Zusammenhang stehen, und gibt Links zurück"""
     url = "https://html.duckduckgo.com/html/"
     params = {'q': f"site:huggingface.co {command}"}
     headers = {
@@ -2272,7 +2270,7 @@ def search_huggingface(command):
 
 
 def search_ollama(command):
-    """Searches Ollama for pages related to the keyword using DuckDuckGo and returns links"""
+    """Durchsucht Ollama mit DuckDuckGo nach Seiten, die mit dem Schlüsselwort in Zusammenhang stehen, und gibt Links zurück"""
     url = "https://html.duckduckgo.com/html/"
     params = {'q': f"site:ollama.com {command}"}
     headers = {
@@ -2301,7 +2299,7 @@ def search_ollama(command):
 
 
 def search_stackoverflow(command):
-    """Searches stackoverflow for pages related to the keyword using DuckDuckGo and returns links"""
+    """Durchsucht Stackoverflow mit DuckDuckGo nach Seiten, die mit dem Schlüsselwort in Zusammenhang stehen, und gibt Links zurück"""
     url = "https://html.duckduckgo.com/html/"
     params = {'q': f"site:stackoverflow.com {command}"}
     headers = {
@@ -2330,7 +2328,7 @@ def search_stackoverflow(command):
 
 
 def search_stackexchange(command):
-    """Searches stackexchange for pages related to the keyword using DuckDuckGo and returns links"""
+    """Durchsucht Stackexchange mit DuckDuckGo nach Seiten, die mit dem Schlüsselwort in Zusammenhang stehen, und gibt Links zurück"""
     url = "https://html.duckduckgo.com/html/"
     params = {'q': f"site:stackexchange.com {command}"}
     headers = {
@@ -2359,7 +2357,7 @@ def search_stackexchange(command):
 
 
 def search_pypi(command):
-    """Searches pypi for pages related to the keyword using DuckDuckGo and returns links"""
+    """Durchsucht pypi mit DuckDuckGo nach Seiten, die mit dem Schlüsselwort in Zusammenhang stehen, und gibt Links zurück"""
     url = "https://html.duckduckgo.com/html/"
     params = {'q': f"site:pypi.org {command}"}
     headers = {
@@ -2388,7 +2386,7 @@ def search_pypi(command):
 
 
 def search_arxiv(command):
-    """Searches arxiv for pages related to the keyword using DuckDuckGo and returns links"""
+    """Durchsucht arxiv mit DuckDuckGo nach Seiten, die mit dem Schlüsselwort in Zusammenhang stehen, und gibt Links zurück"""
     url = "https://html.duckduckgo.com/html/"
     params = {'q': f"site:arxiv.org {command}"}
     headers = {
@@ -2417,7 +2415,7 @@ def search_arxiv(command):
 
 
 def search_paperswithcode(command):
-    """Searches paperswithcode for pages related to the keyword using DuckDuckGo and returns links"""
+    """Durchsucht paperswithcode mit DuckDuckGo nach Seiten, die mit dem Schlüsselwort in Zusammenhang stehen, und gibt Links zurück"""
     url = "https://html.duckduckgo.com/html/"
     params = {'q': f"site:paperswithcode.com {command}"}
     headers = {
@@ -2446,7 +2444,7 @@ def search_paperswithcode(command):
 
 
 def search_kaggle(command):
-    """Searches kaggle for pages related to the keyword using DuckDuckGo and returns links"""
+    """Durchsucht Kaggle mithilfe von DuckDuckGo nach Seiten, die mit dem Schlüsselwort in Zusammenhang stehen, und gibt Links zurück"""
     url = "https://html.duckduckgo.com/html/"
     params = {'q': f"site:kaggle.com {command}"}
     headers = {
@@ -2475,7 +2473,7 @@ def search_kaggle(command):
 
 
 def search_geeksforgeeks(command):
-    """Searches geeksforgeeks for pages related to the keyword using DuckDuckGo and returns links"""
+    """Durchsucht geeksforgeeks mit DuckDuckGo nach Seiten, die mit dem Schlüsselwort in Zusammenhang stehen, und gibt Links zurück"""
     url = "https://html.duckduckgo.com/html/"
     params = {'q': f"site:geeksforgeeks.org {command}"}
     headers = {
@@ -2504,7 +2502,7 @@ def search_geeksforgeeks(command):
 
 
 def search_realpython(command):
-    """Searches realpython for pages related to the keyword using DuckDuckGo and returns links"""
+    """Durchsucht realpython mit DuckDuckGo nach Seiten, die mit dem Schlüsselwort in Zusammenhang stehen, und gibt Links zurück"""
     url = "https://html.duckduckgo.com/html/"
     params = {'q': f"site:realpython.com {command}"}
     headers = {
@@ -2533,7 +2531,7 @@ def search_realpython(command):
 
 
 def search_w3schools(command):
-    """Searches w3schools for pages related to the keyword using DuckDuckGo and returns links"""
+    """Durchsucht w3schools mit DuckDuckGo nach Seiten, die mit dem Schlüsselwort in Zusammenhang stehen, und gibt Links zurück"""
     url = "https://html.duckduckgo.com/html/"
     params = {'q': f"site:w3schools.com {command}"}
     headers = {
@@ -2562,7 +2560,7 @@ def search_w3schools(command):
 
 
 def search_developer_mozilla(command):
-    """Searches developer.mozilla.org for pages related to the keyword using DuckDuckGo and returns links"""
+    """Durchsucht developer.mozilla.org mit DuckDuckGo nach Seiten, die mit dem Schlüsselwort in Zusammenhang stehen, und gibt Links zurück"""
     url = "https://html.duckduckgo.com/html/"
     params = {'q': f"site:developer.mozilla.org.com {command}"}
     headers = {
@@ -2768,7 +2766,7 @@ def run_command_with_admin_c_privileges(command):
         logging.warning("Cancellation by user.")
 
 
-# --- mp-p command---
+# --- pp-p command---
 
 def run_command_with_admin_python_privileges(command: str):
     """
@@ -2831,21 +2829,21 @@ def run_command_with_admin_python_privileges(command: str):
 
 
 def is_wsl_installed():
-    """Check if WSL is installed by attempting to run a basic wsl command."""
+    """Überprüfen Sie, ob WSL installiert ist, indem Sie versuchen, einen grundlegenden WSL-Befehl auszuführen."""
     try:
-        # Try running 'wsl --list' which lists installed WSL distributions
+        # Versuchen Sie, „wsl --list“ auszuführen, das die installierten WSL-Distributionen auflistet
         subprocess.check_call(["wsl", "--list"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         return True
     except FileNotFoundError:
-        # WSL executable not found, meaning WSL is not installed
+        # Ausführbare WSL-Datei nicht gefunden, d. h. WSL ist nicht installiert
         print("Error: WSL is not installed or not found on the system.")
         return False
     except subprocess.CalledProcessError:
-        # WSL is found, but something went wrong while running the command
+        # WSL wurde gefunden, aber beim Ausführen des Befehls ist ein Fehler aufgetreten
         print("Error: WSL is installed, but an error occurred while executing the command.")
         return False
     except Exception as e:
-        # Catch any unexpected exceptions
+        # Fangen Sie alle unerwarteten Ausnahmen ab
         print(f"Unexpected error occurred while checking if WSL is installed: {e}")
         return False
 
@@ -5407,37 +5405,37 @@ def run_scoop_command(
     logger: Optional[logging.Logger] = None
 ) -> subprocess.CompletedProcess:
     """
-    Executes a Scoop command – super-fast, stable, and with robust logger fallback.
+    Führt einen Scoop-Befehl aus – superschnell, stabil und mit robustem Logger-Fallback.
 
-    Args:
-        command: Scoop command as a string or list.
-        timeout: Max runtime in seconds.
-        capture_output: Returns stdout/stderr if True.
-        retries: Number of retries on exit errors.
-        retry_delay: Base delay (seconds) for exponential backoff.
-        logger: Optional logger; if None, a default logger is configured.
+    Argumente:
+    Befehl: Scoop-Befehl als String oder Liste.
+    Timeout: Maximale Laufzeit in Sekunden.
+    Capture_Output: Gibt stdout/stderr zurück, wenn True.
+    Retrys: Anzahl der Wiederholungsversuche bei Exit-Fehlern.
+    Retry_Delay: Basisverzögerung (Sekunden) für exponentielles Backoff.
+    Logger: Optionaler Logger; falls keiner, wird ein Standard-Logger konfiguriert.
 
-    Returns:
-        subprocess.CompletedProcess with .stdout/.stderr if capture_output.
+    Rückgabewert:
+    subprocess.CompletedProcess mit .stdout/.stderr, wenn capture_output.
 
-    Raises:
-        RuntimeError: if scoop.exe is not found.
-        subprocess.CalledProcessError: on exit code ≠ 0 (after retries).
-        subprocess.TimeoutExpired: on timeout.
-        KeyboardInterrupt: on user interruption.
+    Löst aus:
+    RuntimeError: Wenn scoop.exe nicht gefunden wird.
+    subprocess.CalledProcessError: Bei Exit-Code ≠ 0 (nach Wiederholungsversuchen).
+    subprocess.TimeoutExpired: Bei Timeout.
+    KeyboardInterrupt: Bei Benutzerunterbrechung.
     """
-    # --- Logger fallback and configuration ---
+    # Logger-Fallback und -Konfiguration
     if logger is None:
         logger = logging.getLogger("run_scoop_command")
     if not logger.handlers:
-        # If no handler exists: add default stream handler
+        # Wenn kein Handler vorhanden ist: Standard-Stream-Handler hinzufügen
         handler = logging.StreamHandler()
         fmt = logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s")
         handler.setFormatter(fmt)
         logger.addHandler(handler)
         logger.setLevel(logging.INFO)
 
-    # --- Caching the scoop path ---
+    # Zwischenspeichern des Scoop-Pfads
     if not hasattr(run_scoop_command, "_scoop_path"):
         path = shutil.which("scoop")
         if not path:
@@ -5447,13 +5445,13 @@ def run_scoop_command(
         run_scoop_command._scoop_path = path
     scoop_path = run_scoop_command._scoop_path
 
-    # --- Tokenizing ---
+    # Tokenisierung
     args = command if isinstance(command, list) else shlex.split(command)
     cmd = [scoop_path] + args
 
     logger.debug(f"Starting Scoop: {' '.join(cmd)} (timeout={timeout}, retries={retries})")
 
-    # --- Execution with retries ---
+    # Ausführung mit Wiederholungsversuchen
     attempt = 0
     while True:
         attempt += 1
@@ -5480,7 +5478,7 @@ def run_scoop_command(
                 logger.warning(f"Retrying in {wait:.1f}s…")
                 time.sleep(wait)
                 continue
-            raise  # After retries, propagate the CalledProcessError
+            raise  # Nach Wiederholungsversuchen den CalledProcessError weitergeben
 
         except subprocess.TimeoutExpired as e:
             logger.error(f"Timeout after {timeout}s (attempt {attempt})")
@@ -5499,37 +5497,37 @@ def run_choco_command(
     logger: Optional[logging.Logger] = None
 ) -> subprocess.CompletedProcess:
     """
-    Executes a Chocolatey command – super-fast, stable, and with robust logger fallback.
+    Führt einen Chocolatey-Befehl aus – superschnell, stabil und mit robustem Logger-Fallback.
 
-    Args:
-        command: Chocolatey command as a string or list.
-        timeout: Maximum runtime in seconds.
-        capture_output: Returns stdout and stderr if True.
-        retries: Number of retries on exit errors.
-        retry_delay: Base delay (in seconds) for exponential backoff.
-        logger: Optional logger; if None, a default logger is configured.
+    Argumente:
+    command: Chocolatey-Befehl als String oder Liste.
+    timeout: Maximale Laufzeit in Sekunden.
+    capture_output: Gibt stdout und stderr zurück, wenn True.
+    retries: Anzahl der Wiederholungsversuche bei Exit-Fehlern.
+    retry_delay: Basisverzögerung (in Sekunden) für exponentielles Backoff.
+    logger: Optionaler Logger; falls keiner, wird ein Standard-Logger konfiguriert.
 
-    Returns:
-        subprocess.CompletedProcess with .stdout and .stderr (if capture_output is True).
+    Rückgabewert:
+    subprocess.CompletedProcess mit .stdout und .stderr (wenn capture_output True ist).
 
-    Raises:
-        RuntimeError: If choco.exe is not found.
-        subprocess.CalledProcessError: On exit code ≠ 0 (after retries).
-        subprocess.TimeoutExpired: On timeout.
-        KeyboardInterrupt: On user interruption.
+    Löst aus:
+    RuntimeError: Wenn choco.exe nicht gefunden wird.
+    subprocess.CalledProcessError: Bei Exit-Code ≠ 0 (nach Wiederholungsversuchen).
+    subprocess.TimeoutExpired: Bei Timeout.
+    KeyboardInterrupt: Bei Benutzerunterbrechung.
     """
-    # --- Logger fallback and configuration ---
+    # Logger-Fallback und -Konfiguration
     if logger is None:
         logger = logging.getLogger("run_choco_command")
     if not logger.handlers:
-        # Add default stream handler if none exists
+        # Standard-Stream-Handler hinzufügen, falls keiner vorhanden ist
         handler = logging.StreamHandler()
         fmt = logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s")
         handler.setFormatter(fmt)
         logger.addHandler(handler)
         logger.setLevel(logging.INFO)
 
-    # --- Caching the choco path ---
+    # Zwischenspeichern des Choco-Pfads
     if not hasattr(run_choco_command, "_choco_path"):
         path = shutil.which("choco")
         if not path:
@@ -5545,7 +5543,7 @@ def run_choco_command(
 
     logger.debug(f"Starting Chocolatey: {' '.join(cmd)} (timeout={timeout}, retries={retries})")
 
-    # --- Execution with retries ---
+    # Ausführung mit Wiederholungsversuchen
     attempt = 0
     while True:
         attempt += 1
@@ -5572,7 +5570,7 @@ def run_choco_command(
                 logger.warning(f"Retrying in {wait:.1f}s…")
                 time.sleep(wait)
                 continue
-            raise  # Pass the error after retries
+            raise  # Fehler nach Wiederholungsversuchen weitergeben
 
         except subprocess.TimeoutExpired as e:
             logger.error(f"Timeout after {timeout}s (attempt {attempt})")
@@ -5592,26 +5590,26 @@ def run_winget_command(
     logger: Optional[logging.Logger] = None
 ) -> subprocess.CompletedProcess:
     """
-    Executes a winget command – super-fast, stable, and with robust logger fallback.
+    Führt einen Winget-Befehl aus – superschnell, stabil und mit robustem Logger-Fallback.
 
-    Args:
-        command: Winget command as a string or list.
-        timeout: Maximum runtime in seconds.
-        capture_output: Returns stdout and stderr if True.
-        retries: Number of retries on exit errors.
-        retry_delay: Base delay (in seconds) for exponential backoff.
-        logger: Optional logger; if None, a default logger is configured.
+    Argumente:
+    command: Winget-Befehl als String oder Liste.
+    timeout: Maximale Laufzeit in Sekunden.
+    capture_output: Gibt stdout und stderr zurück, wenn True.
+    retries: Anzahl der Wiederholungsversuche bei Exit-Fehlern.
+    retry_delay: Basisverzögerung (in Sekunden) für exponentielles Backoff.
+    logger: Optionaler Logger; falls keiner, wird ein Standard-Logger konfiguriert.
 
-    Returns:
-        subprocess.CompletedProcess with .stdout and .stderr (if capture_output is True).
+    Rückgabewert:
+    subprocess.CompletedProcess mit .stdout und .stderr (wenn capture_output True ist).
 
-    Raises:
-        RuntimeError: If winget is not found.
-        subprocess.CalledProcessError: On exit code ≠ 0 (after retries).
-        subprocess.TimeoutExpired: On timeout.
-        KeyboardInterrupt: On user interruption.
+    Löst aus:
+    RuntimeError: Wenn Winget nicht gefunden wird.
+    subprocess.CalledProcessError: Bei Exit-Code ≠ 0 (nach Wiederholungsversuchen).
+    subprocess.TimeoutExpired: Bei Timeout.
+    KeyboardInterrupt: Bei Benutzerunterbrechung.
     """
-    # --- Logger fallback and configuration ---
+    # Logger-Fallback und -Konfiguration
     if logger is None:
         logger = logging.getLogger("run_winget_command")
     if not logger.handlers:
@@ -5621,7 +5619,7 @@ def run_winget_command(
         logger.addHandler(handler)
         logger.setLevel(logging.INFO)
 
-    # --- Caching the winget path ---
+    # Zwischenspeichern des Winget-Pfads
     if not hasattr(run_winget_command, "_winget_path"):
         path = shutil.which("winget")
         if not path:
@@ -5631,13 +5629,13 @@ def run_winget_command(
         run_winget_command._winget_path = path
     winget_path = run_winget_command._winget_path
 
-    # --- Tokenizing the command ---
+    # Tokenisieren des Befehls
     args = command if isinstance(command, list) else shlex.split(command)
     cmd = [winget_path] + args
 
     logger.debug(f"Starting winget: {' '.join(cmd)} (timeout={timeout}, retries={retries})")
 
-    # --- Execution with retries ---
+    # Ausführung mit Wiederholungsversuchen
     attempt = 0
     while True:
         attempt += 1
@@ -5664,7 +5662,7 @@ def run_winget_command(
                 logger.warning(f"Retrying in {wait:.1f}s…")
                 time.sleep(wait)
                 continue
-            raise  # Pass the error after retries
+            raise  # Fehler nach Wiederholungsversuchen weitergeben
 
         except subprocess.TimeoutExpired as e:
             logger.error(f"Timeout after {timeout}s (attempt {attempt})")
