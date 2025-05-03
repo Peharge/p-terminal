@@ -2184,115 +2184,6 @@ def is_tool_installed(tool_name):
     result = subprocess.run(["which", tool_name], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     return result.returncode == 0
 
-
-# Liste aller verfügbaren Befehle
-COMMANDS = [
-    "p", "p git", "p git mavis", "p git mavis-web", "p git simon", "p htop", "p ls", "p ls mavis",
-    "ps ls mavis-web", "p ls simon", "p simon", "p wsl", "p pip", "p models", "p ubuntu",
-    "pp", "pp-c", "pp-p", "ps", "ps-github", "ps-huggingface", "ps-ollama", "ps-stackoverflow",
-    "ps-arxiv", "pa", "lx", "lx-c", "lx-p", "lx-cpp-c", "lx-c-c", "lx-p-c", "ubuntu", "ubuntu-c",
-    "ubuntu-p", "debian", "debian-c", "debian-p", "kali", "kali-c", "kali-p", "hack", "arch", "arch-c",
-    "arch-p", "opensuse", "opensuse-c", "opensuse-p", "mint", "mint-c", "mint-p", "fedora", "fedora-c",
-    "fedora-p", "redhat", "redhat-c", "redhat-p", "sles", "sles-c", "sles-p", "pengwin", "pengwin-c",
-    "pengwin-p", "oracle", "oracle-c", "oracle-p", "cd", "cls", "clear", "dir", "ls", "mkdir", "rmdir",
-    "del", "rm", "echo", "type", "cat", "exit", "alpine", "scoop", "choco", "winget", "speedtest", "kill",
-    "download", "cputemp", "chucknorris", "theme", "cleantemp", "selfupdate", "tree", "py", "ask",
-    "weather", "whoami", "hostname", "ip", "os", "time", "date", "open", "fortune", "history", "search",
-    "zip", "unzip", "sysinfo", "clip set", "clip get", "ping", "emptytrash", "launch", "doctor",
-    "mavis env install", "install mavis env", "install mavis3", "install mavis3.3", "install mavis4",
-    "install mavis4.3", "mavis env update", "update mavis env", "mavis update", "update mavis",
-    "security", "p-terminal security", "securitycheck", "info", "mavis info", "info mavis", "p-term info",
-    "info p-term", "neofetch", "fastfetch", "screenfetch", "jupyter", "run jupyter", "run ju",
-    "run mavis-4", "run mavis-4-3", "run mavis-4-fast", "run mavis-4-3-fast", "run mavis-launcher-4",
-    "run ollama mavis-4", "install ollama mavis-4", "change models mavis-4", "change models", "grafana",
-    "run grafana", "install grafana", "account", "run qwen3:0.6b", "run qwen3:1.7b", "run qwen3:4b",
-    "run qwen3:8b", "run qwen3:14b", "run qwen3:32b", "run qwen3:30b", "run qwen3:235b", "run deepseek-r1:1.5b",
-    "run deepseek-r1:7b", "run deepseek-r1:8b", "run deepseek-r1:14b", "run deepseek-r1:32b", "run deepseek-r1:70b",
-    "run deepseek-r1:671b", "run deepscaler", "run llama3.1:8b", "run llama3.1:70b", "run llama3.1:405",
-    "run llama3.2:1b", "run llama3.2:3b", "run llama3.3", "run llama3:8b", "run llama3:70b", "run mistral",
-    "run mistral-large", "run mistral-nemo", "run mistral-openorca", "run mistral-small:22b",
-    "run mistral-small:24b", "run phi4", "run qwen2.5:0.5b", "run qwen2.5:1.5b", "run qwen2.5:3b", "run qwen2.5:7b",
-    "run qwen2.5:14b", "run qwen2.5:32b", "run qwen2.5:72b", "run qwen2.5-coder:0.5b", "run qwen2.5-coder:1.5b",
-    "run qwen2.5-coder:3b", "run qwen2.5-coder:7b", "run qwen2.5-coder:14b", "run qwen2.5-coder:32b", "run gemma3:1b", "run gemma3:4b",
-    "run gemma3:12b", "run gemma3:27b", "run qwq", "run command-a", "run phi4-mini", "run granite3.2:8b",
-    "run granite3.2:2b", "run granite3.2-vision:2b", "run qwen-2-5-omni:7b", "run qvq:72b", "run qwen-2-5-vl:32b",
-    "run qwen-2-5-vl:72b", "run llama-4-maverick:17b", "run llama-4-scout:17b", "run deepcoder:1.5b",
-    "run deepcoder:14b", "run mistral-small3.1", "help", "image generation", "video generation", "models",
-    "models ls", "install 3d-slicer", "run 3d-slicer", "install simon", "run simon", "jupyter --version",
-    "grafana --version", "3d-slicer --version", "pin-evil", "pin-main", "pin-cool", "pin-cool-3", "pin-cool-4",
-    "p install", "p uninstall", "p upgrade", "p list", "p show", "p freeze", "p search", "install cool pin", "install cool pin-3", "install cool pin-4"
-    "p check", "p config", "p debug", "p cache", "p download", "p verify", "p wheel",
-    "p completion", "pip install", "pip uninstall", "pip list", "pip show", "pip freeze",
-    "pip search", "pip check", "pip config", "pip debug", "pip cache", "pip download",
-    "pip verify", "pip wheel", "pip completion", "ollama install", "ollama uninstall",
-    "ollama upgrade", "ollama list", "ollama show", "ollama search", "ollama config",
-    "ollama debug", "ollama models", "ollama generate", "ollama tune", "ollama chat",
-    "ollama train", "ollama predict", "ollama eval", "ollama deploy", "ps-ollama models",
-    "ps-ollama install", "ps-ollama uninstall", "ps-ollama upgrade", "powershell help",
-    "powershell run", "powershell execute", "powershell script", "powershell install-module",
-    "powershell update-module", "powershell remove-module", "powershell get-command",
-    "powershell get-help", "powershell get-module", "powershell get-process",
-    "powershell get-service", "powershell get-eventlog", "powershell start-process",
-    "powershell stop-process", "powershell start-service", "powershell stop-service",
-    "powershell restart-service", "powershell invoke-command", "powershell set-executionpolicy",
-    "powershell test-connection", "powershell export-csv", "powershell import-csv",
-    "powershell convertto-json", "powershell convertfrom-json", "powershell get-content",
-    "powershell set-content", "powershell add-content", "powershell select-string",
-    "powershell new-item", "powershell remove-item", "powershell copy-item",
-    "powershell move-item", "powershell rename-item", "powershell get-childitem",
-    "powershell get-item", "powershell set-location", "powershell get-location",
-    "powershell resolve-path", "powershell test-path", "powershell get-acl",
-    "powershell set-acl", "powershell get-event", "powershell register-event",
-    "powershell unregister-event", "powershell wait-event", "powershell clear-eventlog",
-    "powershell show-eventlog", "powershell new-eventlog", "powershell remove-eventlog",
-    "powershell write-eventlog", "powershell get-wmiobject", "powershell invoke-wmimethod",
-    "powershell set-wmiinstance", "powershell remove-wmiobject", "powershell get-counter",
-    "powershell start-job", "powershell get-job", "powershell stop-job",
-    "powershell receive-job", "powershell remove-job", "powershell wait-job",
-    "powershell get-variable", "powershell set-variable", "powershell remove-variable",
-    "powershell new-variable", "powershell get-credential", "powershell get-history",
-    "powershell add-history", "powershell clear-history", "powershell get-alias",
-    "powershell set-alias", "powershell remove-alias", "powershell new-alias",
-    "powershell get-host", "powershell get-command", "powershell get-member",
-    "powershell get-help", "powershell show-command", "powershell start-transcript",
-    "powershell stop-transcript", "powershell out-file", "powershell out-string",
-    "powershell out-host", "powershell out-null", "powershell out-printer",
-    "powershell out-gridview", "powershell format-list", "powershell format-table",
-    "powershell format-custom", "powershell format-wide", "powershell measure-object",
-    "powershell group-object", "powershell sort-object", "powershell select-object",
-    "powershell where-object", "powershell foreach-object", "powershell new-object",
-    "powershell compare-object", "powershell test-connection", "powershell foreach",
-    "ubuntu neofetch", "ubuntu install git", "ubuntu install htop","ubuntu ls", "ubuntu list files",
-    "ubuntu install python", "ubuntu install pip", "ubuntu check system info", "ubuntu update system",
-    "ubuntu install models", "ubuntu clear terminal", "ubuntu show processes", "ubuntu search files",
-    "ubuntu create directory", "ubuntu remove directory", "ubuntu install wget", "ubuntu find text in files",
-    "ubuntu compress files", "ubuntu extract files", "ubuntu setup firewall", "ubuntu restart network",
-    "ubuntu check disk usage", "ubuntu monitor network traffic", "ubuntu install curl", "ubuntu install snap",
-    "ubuntu install docker", "arch neofetch", "arch install git", "arch install htop","arch list files",
-    "arch install python","arch install pip","arch check system info","arch update system","arch install models",
-    "arch clear terminal","arch show processes","arch search files","arch create directory","arch remove directory",
-    "arch install wget", "arch find text in files", "arch compress files", "arch extract files", "arch setup firewall",
-    "arch restart network", "arch check disk usage", "arch monitor network traffic", "arch install curl", "arch install snap",
-    "arch install docker", "arch sudo pacman -S", "arch sudo pacman -R", "arch sudo pacman -Syu", "arch ls"
-    "kali neofetch", "kali install git", "kali install htop", "kali list files", "kali install python",
-    "kali install pip", "kali check system info", "kali update system", "kali install models", "kali clear terminal",
-    "kali show processes", "kali search files", "kali create directory", "kali remove directory", "kali install wget",
-    "kali find text in files", "kali compress files", "kali extract files", "kali setup firewall", "kali restart network",
-    "kali check disk usage", "kali monitor network traffic", "kali install curl", "kali install snap", "kali install docker", "kali ls"
-]
-
-def completer(text, state):
-    matches = [cmd for cmd in COMMANDS if cmd.startswith(text)]
-    if state < len(matches):
-        return matches[state]
-    else:
-        return None
-
-def setup_autocomplete():
-    readline.set_completer(completer)
-    readline.parse_and_bind("tab: complete")
-
-
 def search_websites(command):
     """Searches for websites related to the keyword using DuckDuckGo and returns links"""
     url = "https://html.duckduckgo.com/html/"
@@ -6543,26 +6434,182 @@ def get_cool_23_pin():
     else:
         return f"Error running oh-my-posh:\n{result.stderr}"
 
+COMMANDS = [
+    "p", "p git", "p git mavis", "p git mavis-web", "p git simon", "p htop", "p ls", "p ls mavis",
+    "ps ls mavis-web", "p ls simon", "p simon", "p wsl", "p pip", "p models", "p ubuntu",
+    "pp", "pp-c", "pp-p", "ps", "ps-github", "ps-huggingface", "ps-ollama", "ps-stackoverflow",
+    "ps-arxiv", "pa", "lx", "lx-c", "lx-p", "lx-cpp-c", "lx-c-c", "lx-p-c", "ubuntu", "ubuntu-c",
+    "ubuntu-p", "debian", "debian-c", "debian-p", "kali", "kali-c", "kali-p", "hack", "arch", "arch-c",
+    "arch-p", "opensuse", "opensuse-c", "opensuse-p", "mint", "mint-c", "mint-p", "fedora", "fedora-c",
+    "fedora-p", "redhat", "redhat-c", "redhat-p", "sles", "sles-c", "sles-p", "pengwin", "pengwin-c",
+    "pengwin-p", "oracle", "oracle-c", "oracle-p", "cd", "cls", "clear", "dir", "ls", "mkdir", "rmdir",
+    "del", "rm", "echo", "type", "cat", "exit", "alpine", "scoop", "choco", "winget", "speedtest", "kill",
+    "download", "cputemp", "chucknorris", "theme", "cleantemp", "selfupdate", "tree", "py", "ask",
+    "weather", "whoami", "hostname", "ip", "os", "time", "date", "open", "fortune", "history", "search",
+    "zip", "unzip", "sysinfo", "clip set", "clip get", "ping", "emptytrash", "launch", "doctor",
+    "mavis env install", "install mavis env", "install mavis3", "install mavis3.3", "install mavis4",
+    "install mavis4.3", "mavis env update", "update mavis env", "mavis update", "update mavis",
+    "security", "p-terminal security", "securitycheck", "info", "mavis info", "info mavis", "p-term info",
+    "info p-term", "neofetch", "fastfetch", "screenfetch", "jupyter", "run jupyter", "run ju",
+    "run mavis-4", "run mavis-4-3", "run mavis-4-fast", "run mavis-4-3-fast", "run mavis-launcher-4",
+    "run ollama mavis-4", "install ollama mavis-4", "change models mavis-4", "change models", "grafana",
+    "run grafana", "install grafana", "account", "run qwen3:0.6b", "run qwen3:1.7b", "run qwen3:4b",
+    "run qwen3:8b", "run qwen3:14b", "run qwen3:32b", "run qwen3:30b", "run qwen3:235b", "run deepseek-r1:1.5b",
+    "run deepseek-r1:7b", "run deepseek-r1:8b", "run deepseek-r1:14b", "run deepseek-r1:32b", "run deepseek-r1:70b",
+    "run deepseek-r1:671b", "run deepscaler", "run llama3.1:8b", "run llama3.1:70b", "run llama3.1:405",
+    "run llama3.2:1b", "run llama3.2:3b", "run llama3.3", "run llama3:8b", "run llama3:70b", "run mistral",
+    "run mistral-large", "run mistral-nemo", "run mistral-openorca", "run mistral-small:22b",
+    "run mistral-small:24b", "run phi4", "run qwen2.5:0.5b", "run qwen2.5:1.5b", "run qwen2.5:3b", "run qwen2.5:7b",
+    "run qwen2.5:14b", "run qwen2.5:32b", "run qwen2.5:72b", "run qwen2.5-coder:0.5b", "run qwen2.5-coder:1.5b",
+    "run qwen2.5-coder:3b", "run qwen2.5-coder:7b", "run qwen2.5-coder:14b", "run qwen2.5-coder:32b", "run gemma3:1b", "run gemma3:4b",
+    "run gemma3:12b", "run gemma3:27b", "run qwq", "run command-a", "run phi4-mini", "run granite3.2:8b",
+    "run granite3.2:2b", "run granite3.2-vision:2b", "run qwen-2-5-omni:7b", "run qvq:72b", "run qwen-2-5-vl:32b",
+    "run qwen-2-5-vl:72b", "run llama-4-maverick:17b", "run llama-4-scout:17b", "run deepcoder:1.5b",
+    "run deepcoder:14b", "run mistral-small3.1", "help", "image generation", "video generation", "models",
+    "models ls", "install 3d-slicer", "run 3d-slicer", "install simon", "run simon", "jupyter --version",
+    "grafana --version", "3d-slicer --version", "pin-evil", "pin-main", "pin-cool", "pin-cool-3", "pin-cool-4",
+    "p install", "p uninstall", "p upgrade", "p list", "p show", "p freeze", "p search", "install cool pin", "install cool pin-3", "install cool pin-4"
+    "p check", "p config", "p debug", "p cache", "p download", "p verify", "p wheel",
+    "p completion", "pip install", "pip uninstall", "pip list", "pip show", "pip freeze",
+    "pip search", "pip check", "pip config", "pip debug", "pip cache", "pip download",
+    "pip verify", "pip wheel", "pip completion", "ollama install", "ollama uninstall",
+    "ollama upgrade", "ollama list", "ollama show", "ollama search", "ollama config",
+    "ollama debug", "ollama models", "ollama generate", "ollama tune", "ollama chat",
+    "ollama train", "ollama predict", "ollama eval", "ollama deploy", "ps-ollama models",
+    "ps-ollama install", "ps-ollama uninstall", "ps-ollama upgrade", "powershell help",
+    "powershell run", "powershell execute", "powershell script", "powershell install-module",
+    "powershell update-module", "powershell remove-module", "powershell get-command",
+    "powershell get-help", "powershell get-module", "powershell get-process",
+    "powershell get-service", "powershell get-eventlog", "powershell start-process",
+    "powershell stop-process", "powershell start-service", "powershell stop-service",
+    "powershell restart-service", "powershell invoke-command", "powershell set-executionpolicy",
+    "powershell test-connection", "powershell export-csv", "powershell import-csv",
+    "powershell convertto-json", "powershell convertfrom-json", "powershell get-content",
+    "powershell set-content", "powershell add-content", "powershell select-string",
+    "powershell new-item", "powershell remove-item", "powershell copy-item",
+    "powershell move-item", "powershell rename-item", "powershell get-childitem",
+    "powershell get-item", "powershell set-location", "powershell get-location",
+    "powershell resolve-path", "powershell test-path", "powershell get-acl",
+    "powershell set-acl", "powershell get-event", "powershell register-event",
+    "powershell unregister-event", "powershell wait-event", "powershell clear-eventlog",
+    "powershell show-eventlog", "powershell new-eventlog", "powershell remove-eventlog",
+    "powershell write-eventlog", "powershell get-wmiobject", "powershell invoke-wmimethod",
+    "powershell set-wmiinstance", "powershell remove-wmiobject", "powershell get-counter",
+    "powershell start-job", "powershell get-job", "powershell stop-job",
+    "powershell receive-job", "powershell remove-job", "powershell wait-job",
+    "powershell get-variable", "powershell set-variable", "powershell remove-variable",
+    "powershell new-variable", "powershell get-credential", "powershell get-history",
+    "powershell add-history", "powershell clear-history", "powershell get-alias",
+    "powershell set-alias", "powershell remove-alias", "powershell new-alias",
+    "powershell get-host", "powershell get-command", "powershell get-member",
+    "powershell get-help", "powershell show-command", "powershell start-transcript",
+    "powershell stop-transcript", "powershell out-file", "powershell out-string",
+    "powershell out-host", "powershell out-null", "powershell out-printer",
+    "powershell out-gridview", "powershell format-list", "powershell format-table",
+    "powershell format-custom", "powershell format-wide", "powershell measure-object",
+    "powershell group-object", "powershell sort-object", "powershell select-object",
+    "powershell where-object", "powershell foreach-object", "powershell new-object",
+    "powershell compare-object", "powershell test-connection", "powershell foreach",
+    "ubuntu neofetch", "ubuntu install git", "ubuntu install htop","ubuntu ls", "ubuntu list files",
+    "ubuntu install python", "ubuntu install pip", "ubuntu check system info", "ubuntu update system",
+    "ubuntu install models", "ubuntu clear terminal", "ubuntu show processes", "ubuntu search files",
+    "ubuntu create directory", "ubuntu remove directory", "ubuntu install wget", "ubuntu find text in files",
+    "ubuntu compress files", "ubuntu extract files", "ubuntu setup firewall", "ubuntu restart network",
+    "ubuntu check disk usage", "ubuntu monitor network traffic", "ubuntu install curl", "ubuntu install snap",
+    "ubuntu install docker", "arch neofetch", "arch install git", "arch install htop","arch list files",
+    "arch install python","arch install pip","arch check system info","arch update system","arch install models",
+    "arch clear terminal","arch show processes","arch search files","arch create directory","arch remove directory",
+    "arch install wget", "arch find text in files", "arch compress files", "arch extract files", "arch setup firewall",
+    "arch restart network", "arch check disk usage", "arch monitor network traffic", "arch install curl", "arch install snap",
+    "arch install docker", "arch sudo pacman -S", "arch sudo pacman -R", "arch sudo pacman -Syu", "arch ls"
+    "kali neofetch", "kali install git", "kali install htop", "kali list files", "kali install python",
+    "kali install pip", "kali check system info", "kali update system", "kali install models", "kali clear terminal",
+    "kali show processes", "kali search files", "kali create directory", "kali remove directory", "kali install wget",
+    "kali find text in files", "kali compress files", "kali extract files", "kali setup firewall", "kali restart network",
+    "kali check disk usage", "kali monitor network traffic", "kali install curl", "kali install snap", "kali install docker", "kali ls"
+]
+
+# Verlauf und Index
+history = []
+history_index = -1
+
+def get_completions(prefix):
+    """Gibt alle COMMANDS zurück, die mit prefix anfangen (für tab-Vervollständigung)."""
+    return [cmd for cmd in COMMANDS if cmd.startswith(prefix)]
+
 def input_line(prompt):
+    """Lesen einer Zeile mit History (Up/Down) und Tab-Completion."""
     sys.stdout.write(prompt)
     sys.stdout.flush()
-    user_input = ""
+
+    buf = ''
+    global history_index
+    history_index = len(history)
+
     while True:
-        if msvcrt.kbhit():
-            ch = msvcrt.getwch()
-            if ch in ['\r', '\n']:
-                print()
-                break
-            elif ch == '\b':  # Backspace
-                if len(user_input) > 0:
-                    user_input = user_input[:-1]
-                    sys.stdout.write('\b \b')
-                    sys.stdout.flush()
-            elif ch.isprintable():
-                user_input += ch
-                sys.stdout.write(ch)
+        ch = msvcrt.getwch()
+
+        # Enter
+        if ch in ('\r', '\n'):
+            print()
+            if buf:
+                history.append(buf)
+            return buf
+
+        # Backspace
+        if ch == '\b':
+            if buf:
+                buf = buf[:-1]
+                sys.stdout.write('\b \b')
                 sys.stdout.flush()
-    return user_input.strip()
+            continue
+
+        # Tab = Completion
+        if ch == '\t':
+            comps = get_completions(buf)
+            if comps:
+                # Alle möglichen Vervollständigungen ausgeben
+                sys.stdout.write('\n')
+                for c in comps:
+                    sys.stdout.write(c + '  ')
+                sys.stdout.write('\n')
+                # Prompt und bisherigen Puffer neu ausgeben
+                sys.stdout.write(prompt + buf)
+                sys.stdout.flush()
+            continue
+
+        # Pfeiltasten: Spezialcode '\xe0'
+        if ch == '\xe0':
+            arrow = msvcrt.getwch()
+            # Up arrow
+            if arrow == 'H' and history and history_index > 0:
+                history_index -= 1
+                new_buf = history[history_index]
+            # Down arrow
+            elif arrow == 'P':
+                if history_index < len(history) - 1:
+                    history_index += 1
+                    new_buf = history[history_index]
+                else:
+                    history_index = len(history)
+                    new_buf = ''
+            else:
+                continue
+            # Lösche bisherigen Buffer vom Bildschirm
+            sys.stdout.write('\b' * len(buf))
+            sys.stdout.write(' ' * len(buf))
+            sys.stdout.write('\b' * len(buf))
+            buf = new_buf
+            sys.stdout.write(buf)
+            sys.stdout.flush()
+            continue
+
+        # Normale Zeichen
+        if ch.isprintable():
+            buf += ch
+            sys.stdout.write(ch)
+            sys.stdout.flush()
+
 
 
 def main():
@@ -6570,7 +6617,7 @@ def main():
 
     print_banner()
     set_python_path()
-    setup_autocomplete()
+    # setup_autocomplete()
 
     while True:
         try:
