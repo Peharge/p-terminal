@@ -65,9 +65,10 @@ import os
 import sys
 import datetime
 import chardet
+import logging
 
 from PyQt6.QtCore import Qt, QSize
-from PyQt6.QtGui import QColor, QIcon, QPalette, QFont, QPixmap, QImageReader
+from PyQt6.QtGui import QColor, QIcon, QPalette, QFont, QPixmap, QImageReader, QSyntaxHighlighter, QTextCharFormat
 from PyQt6.QtWidgets import (
     QApplication, QLabel, QScrollArea, QSizePolicy,
     QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget,
@@ -83,71 +84,122 @@ try:
 except ImportError:
     PYGMENTS_AVAILABLE = False
 
-class FileExplorer(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle("P-Term File Explorer")
-        self.setGeometry(100, 100, 1200, 800)
+# Basic Python highlighter for QTextEdit fallback
+class PythonHighlighter(QSyntaxHighlighter):
+    keywords = [
+        'def', 'class', 'if', 'elif', 'else', 'while', 'for', 'in', 'try', 'except', 'finally',
+        'with', 'as', 'return', 'import', 'from', 'pass', 'break', 'continue', 'and', 'or', 'not', 'None', 'True', 'False'
+    ]
 
-        self.set_dark_mode()
-        self._setup_icon()
-        self._setup_widgets()
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.formats = {}
+        fmt_keyword = QTextCharFormat()
+        fmt_keyword.setForeground(QColor('#c586c0'))
+        fmt_keyword.setFontWeight(QFont.Weight.Bold)
+        for word in self.keywords:
+            self.formats[word] = fmt_keyword
+
+    def highlightBlock(self, text):
+        for word, fmt in self.formats.items():
+            index = text.find(word)
+            while index != -1:
+                length = len(word)
+                self.setFormat(index, length, fmt)
+                index = text.find(word, index + length)
+
+class FileDisplayWidget(QStackedWidget):
+    """Manages display of text, markdown, and images"""
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+        # Plain text viewer with syntax highlighting fallback
+        self.text_view = QTextEdit()
+        self.text_view.setReadOnly(True)
+        self.text_view.setFont(QFont("Courier New", 12))
+        self.highlighter = PythonHighlighter(self.text_view.document())
+
+        # Markdown / HTML viewer
+        self.markdown_view = QTextBrowser()
+        self.markdown_view.setOpenExternalLinks(True)
+        self.markdown_view.setFont(QFont("Courier New", 12))
+
+        # Image viewer
+        self.image_label = QLabel(alignment=Qt.AlignmentFlag.AlignCenter)
+        self.image_label.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Ignored)
+        self.image_label.setScaledContents(True)
+
+        self.addWidget(self.text_view)
+        self.addWidget(self.markdown_view)
+        self.addWidget(self.image_label)
+
+    def display_image(self, path, container_size):
+        pixmap = QPixmap(path)
+        if pixmap.isNull():
+            raise ValueError(f"Cannot load image: {path}")
+        scaled = pixmap.scaled(container_size, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+        self.image_label.setPixmap(scaled)
+        self.setCurrentWidget(self.image_label)
+
+    def display_markdown(self, content):
+        self.markdown_view.setMarkdown(content)
+        self.setCurrentWidget(self.markdown_view)
+
+    def display_html(self, html):
+        self.markdown_view.setHtml(html)
+        self.setCurrentWidget(self.markdown_view)
+
+    def display_text(self, content):
+        self.text_view.setPlainText(content)
+        self.setCurrentWidget(self.text_view)
+
+class FileExplorer(QWidget):
+    """A professional file explorer with syntax highlighting and image support."""
+    SUPPORTED_IMAGE_EXT = {'.png', '.jpg', '.jpeg', '.gif', '.bmp', '.ico'}
+    SUPPORTED_MARKDOWN_EXT = {'.md', '.markdown'}
+    SUPPORTED_CODE_EXT = {'.py', '.cpp', '.c', '.h', '.bat', '.js', '.java', '.html', '.css'}
+
+    def __init__(self, root_dir=None):
+        super().__init__()
+        logging.basicConfig(level=logging.INFO)
+        self.setWindowTitle("P-Term File Explorer")
+        self.resize(1200, 800)
+
+        self.root_dir = root_dir or os.path.expanduser("~/p-terminal/pp-term/")
+
+        self._setup_ui()
         self.apply_styles()
+        self.set_dark_mode()
         self.load_directory_structure()
 
-    def _setup_icon(self):
-        user = os.getenv("USERNAME") or os.getenv("USER")
-        base = os.path.expanduser(f"~/{user}/p-terminal/pp-term/icons/")
-        path = os.path.join(base, "p-term-logo-5.ico")
-        if os.path.exists(path):
-            self.setWindowIcon(QIcon(path))
-
-    def _setup_widgets(self):
+    def _setup_ui(self):
         layout = QVBoxLayout(self)
 
         # File tree
         self.tree = QTreeWidget()
-        self.tree.setHeaderLabels(["Name", "Type", "Size", "Date Modified"])
-        self.tree.itemClicked.connect(self.display_file_content)
+        self.tree.setHeaderLabels(["Name", "Type", "Size", "Modified"])
+        self.tree.itemClicked.connect(self.on_item_clicked)
         layout.addWidget(self.tree)
 
         user = os.getenv("USERNAME") or os.getenv("USER")
         icon_path = f"C:/Users/{user}/p-terminal/pp-term/icons/p-term-logo-5.ico"
         self.setWindowIcon(QIcon(icon_path))
 
-        # Content area with stack
-        self.stack = QStackedWidget()
-        self.text_edit = QTextEdit()
-        self.text_edit.setReadOnly(True)
-        self.text_edit.setFont(QFont("Courier New", 12))
+        # Content display
+        self.content = FileDisplayWidget()
+        self.scroll = QScrollArea()
+        self.scroll.setWidgetResizable(True)
+        self.scroll.setWidget(self.content)
+        layout.addWidget(self.scroll)
 
-        self.markdown_view = QTextBrowser()
-        self.markdown_view.setOpenExternalLinks(True)
-        self.markdown_view.setFont(QFont("Courier New", 12))
-
-        self.image_label = QLabel(alignment=Qt.AlignmentFlag.AlignCenter)
-        self.image_label.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Ignored)
-        self.image_label.setScaledContents(True)
-
-        # Add widgets to stack
-        self.stack.addWidget(self.text_edit)
-        self.stack.addWidget(self.markdown_view)
-        self.stack.addWidget(self.image_label)
-
-        # Scroll area
-        self.scroll_area = QScrollArea()
-        self.scroll_area.setWidgetResizable(True)
-        self.scroll_area.setWidget(self.stack)
-        layout.addWidget(self.scroll_area)
-
-        # Status label
-        self.status_label = QLabel("Loading...")
-        layout.addWidget(self.status_label)
+        # Status bar
+        self.status = QLabel("Ready")
+        layout.addWidget(self.status)
 
     def set_dark_mode(self):
-        pal = self.palette()
-        pal.setColor(QPalette.ColorRole.Window, QColor(46, 46, 46))
-        pal.setColor(QPalette.ColorRole.WindowText, QColor(255, 255, 255))
+        pal = QPalette()
+        pal.setColor(QPalette.ColorRole.Window, QColor(30, 30, 30))
+        pal.setColor(QPalette.ColorRole.WindowText, QColor(220, 220, 220))
         self.setPalette(pal)
 
     def apply_styles(self):
@@ -276,121 +328,88 @@ class FileExplorer(QWidget):
         """)
 
     def load_directory_structure(self):
-        root = os.path.expanduser("~/p-terminal/pp-term/")
         self.tree.clear()
-        self._add_directory_to_tree(root)
-        self.status_label.setText("Directory structure loaded.")
+        self._add_entries(self.root_dir, None)
+        self.status.setText(f"Loaded: {self.root_dir}")
 
-    def _add_directory_to_tree(self, path, parent_item=None):
+    def _add_entries(self, path, parent_item):
         try:
             entries = sorted(os.scandir(path), key=lambda e: (not e.is_dir(), e.name.lower()))
         except PermissionError:
+            logging.warning(f"Permission denied: {path}")
             return
         for entry in entries:
-            if entry.name.lower() == 'doom.run':
-                continue
+            if entry.name.startswith('.'):
+                continue  # skip hidden
             item = QTreeWidgetItem([
                 entry.name,
-                'Directory' if entry.is_dir() else 'File',
-                self.format_size(entry.stat().st_size) if entry.is_file() else '',
-                datetime.datetime.fromtimestamp(entry.stat().st_mtime).strftime("%Y-%m-%d %H:%M:%S")
+                'Dir' if entry.is_dir() else 'File',
+                self._format_size(entry.stat().st_size) if entry.is_file() else '',
+                datetime.datetime.fromtimestamp(entry.stat().st_mtime).strftime("%Y-%m-%d %H:%M")
             ])
+            item.setData(0, Qt.ItemDataRole.UserRole, entry.path)
             if parent_item:
                 parent_item.addChild(item)
             else:
                 self.tree.addTopLevelItem(item)
             if entry.is_dir():
-                self._add_directory_to_tree(entry.path, item)
+                self._add_entries(entry.path, item)
 
-    def format_size(self, size_bytes):
-        for unit in ['B', 'KB', 'MB', 'GB', 'TB']:
-            if size_bytes < 1024:
-                return f"{size_bytes:.1f} {unit}"
-            size_bytes /= 1024
-        return f"{size_bytes:.1f} PB"
+    def _format_size(self, size):
+        for unit in ['B', 'KB', 'MB', 'GB']:
+            if size < 1024:
+                return f"{size:.1f}{unit}"
+            size /= 1024
+        return f"{size:.1f}TB"
 
-    def display_file_content(self, item):
-        if item.text(1) != 'File':
+    def on_item_clicked(self, item):
+        path = item.data(0, Qt.ItemDataRole.UserRole)
+        if not os.path.isfile(path):
             return
-        full_path = self.get_full_path(item)
-        ext = os.path.splitext(full_path)[1].lower()
-
-        # Image display
-        if QImageReader and QImageReader(full_path).canRead() or ext in ['.png', '.jpg', '.jpeg', '.gif', '.bmp']:
-            pixmap = QPixmap(full_path)
-            if not pixmap.isNull():
-                scaled = pixmap.scaled(self.scroll_area.viewport().size(), Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
-                self.image_label.setPixmap(scaled)
-                self.stack.setCurrentWidget(self.image_label)
-                self.status_label.setText(f"Displayed image '{os.path.basename(full_path)}'")
-                return
-
-        # Markdown files
-        if ext in ['.md', '.markdown']:
-            try:
-                with open(full_path, 'r', encoding='utf-8') as f:
-                    md = f.read()
-                self.markdown_view.setMarkdown(md)
-                self.stack.setCurrentWidget(self.markdown_view)
-                self.status_label.setText(f"Displayed markdown '{os.path.basename(full_path)}'")
-            except Exception as e:
-                self.text_edit.setPlainText(f"Error reading markdown: {e}")
-                self.stack.setCurrentWidget(self.text_edit)
-                self.status_label.setText("Failed to display markdown.")
-            return
-
-        # Syntax highlighting for code
-        code_exts = ['.py', '.cpp', '.c', '.h', '.bat']
-        if ext in code_exts and PYGMENTS_AVAILABLE:
-            try:
-                code = open(full_path, 'r', encoding='utf-8', errors='replace').read()
-                lexer = get_lexer_for_filename(full_path, stripall=True)
-                formatter = HtmlFormatter(full=True)
-                html = highlight(code, lexer, formatter)
-                self.markdown_view.setHtml(html)
-                self.stack.setCurrentWidget(self.markdown_view)
-                self.status_label.setText(f"Displayed code '{os.path.basename(full_path)}' with highlighting")
-            except Exception as e:
-                self.text_edit.setPlainText(f"Error highlighting code: {e}")
-                self.stack.setCurrentWidget(self.text_edit)
-                self.status_label.setText("Failed to highlight code.")
-            return
-
-        # Plain text fallback
+        ext = os.path.splitext(path)[1].lower()
+        self.status.setText(f"Opening {os.path.basename(path)}")
         try:
-            raw = open(full_path, 'rb').read()
-            enc = chardet.detect(raw)['encoding'] or 'utf-8'
-            txt = raw.decode(enc, errors='replace')
-            self.text_edit.setPlainText(txt)
-            self.stack.setCurrentWidget(self.text_edit)
-            self.status_label.setText(f"Displayed '{os.path.basename(full_path)}' ({enc} decoded)")
+            if ext in self.SUPPORTED_IMAGE_EXT and QImageReader(path).canRead():
+                size = self.scroll.viewport().size()
+                self.content.display_image(path, size)
+            elif ext in self.SUPPORTED_MARKDOWN_EXT:
+                with open(path, 'r', encoding='utf-8') as f:
+                    self.content.display_markdown(f.read())
+            elif ext in self.SUPPORTED_CODE_EXT and PYGMENTS_AVAILABLE:
+                code = open(path, 'r', encoding='utf-8', errors='replace').read()
+                lexer = get_lexer_for_filename(path, stripall=True)
+                html = highlight(code, lexer, HtmlFormatter(full=True, style='monokai'))
+                self.content.display_html(html)
+            else:
+                raw = open(path, 'rb').read()
+                enc = chardet.detect(raw)['encoding'] or 'utf-8'
+                txt = raw.decode(enc, errors='replace')
+                self.content.display_text(txt)
         except Exception as e:
-            self.text_edit.setPlainText(f"Error reading file: {e}")
-            self.stack.setCurrentWidget(self.text_edit)
-            self.status_label.setText("Failed to display file.")
-
-    def get_full_path(self, item):
-        parts = []
-        while item:
-            parts.insert(0, item.text(0))
-            item = item.parent()
-        base = os.path.expanduser("~/p-terminal/pp-term/")
-        return os.path.join(base, *parts)
+            logging.error(e)
+            self.content.display_text(f"Error: {e}")
+            self.status.setText("Failed to display content.")
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        w = self.width()
-        self.tree.setColumnWidth(0, int(w * 0.40))
+        width = self.width()
+        self.tree.setColumnWidth(0, int(width * 0.4))
         for i in range(1, 4):
-            self.tree.setColumnWidth(i, int(w * 0.20))
-        # Rescale image if displayed
-        if self.stack.currentWidget() == self.image_label and not self.image_label.pixmap() is None:
-            pixmap = self.image_label.pixmap()
-            scaled = pixmap.scaled(self.scroll_area.viewport().size(), Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
-            self.image_label.setPixmap(scaled)
+            self.tree.setColumnWidth(i, int(width * 0.2))
+        # Rescale displayed image
+        if self.content.currentWidget() == self.content.image_label:
+            pixmap = self.content.image_label.pixmap()
+            if pixmap:
+                scaled = pixmap.scaled(self.scroll.viewport().size(), Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+                self.content.image_label.setPixmap(scaled)
+
+
+def main():
+    app = QApplication(sys.argv)
+    explorer = FileExplorer()
+    explorer.show()
+    sys.exit(app.exec())
+
 
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    win = FileExplorer()
-    win.show()
-    sys.exit(app.exec())
+    main()
