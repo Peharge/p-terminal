@@ -731,12 +731,13 @@ def handle_special_commands(user_input):
         print(user_input[5:].strip())
         return True
 
-    '''if "=" in user_input:
+    """
+    if "=" in user_input:
         var, value = map(str.strip, user_input.split("=", 1))
         os.environ[var] = value
         print(f"{blue}Environment variable set{reset}: {var}={value}")
         return True
-    '''
+    """
 
     if user_input.startswith(("type ", "cat ")):
         try:
@@ -805,12 +806,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "history":
-        try:
-            hist_len = readline.get_current_history_length()
-            for i in range(1, hist_len + 1):
-                print(f"{i}: {readline.get_history_item(i)}")
-        except Exception as e:
-            print(f"{red}Error reading history{reset}: {str(e)}")
+        handle_history_command()
         return True
 
     if user_input.startswith("search "):
@@ -6733,6 +6729,19 @@ def input_line(prompt):
             sys.stdout.write(ch)
             sys.stdout.flush()
 
+
+def handle_history_command():
+    """
+    Gibt alle Einträge in history aus.
+    Rückgabe True signalisiert, dass das Kommando history verarbeitet wurde.
+    """
+    if not history:
+        print("No commands in the history.")
+    else:
+        print("Previous commands:")
+        for idx, cmd in enumerate(history, start=1):
+            print(f"  {idx}: {cmd}")
+    return True
 
 
 def main():
