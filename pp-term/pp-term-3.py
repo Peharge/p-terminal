@@ -954,8 +954,12 @@ def handle_special_commands(user_input):
             print(f"{red}Error emptying trash{reset}: {str(e)}")
         return True
 
-    if user_input.lower() == "themes-ls":
+    if user_input.lower() == "themes":
         print("dark, light, main, hackerman, glass, aurelia, alternative, aptscience, cyberlife, ubuntu, nord, dracula, solarized_dark, gruvbox_dark, monokai, one_dark, material_dark, tokyo_night, arc_dark, ayu_mirage", "spiderman", "p_term", "mavis_1", "mavis_3", "mavis_4", "green", "red", "blue", "fallout_pipboy")
+        return True
+
+    if user_input.lower() == "pin":
+        print("main", "main-3", "main-4", "evil", "cool", "cool-3", "cool-4", "cool-5", "cool-6", "cool-8", "cool-9", "cool-10", "cool-11", "cool-12", "cool-13", "cool-14", "cool-15", "cool-16", "cool-18", "cool-19", "cool-20", "cool-21", "cool-23")
         return True
 
     if user_input.startswith("launch "):
