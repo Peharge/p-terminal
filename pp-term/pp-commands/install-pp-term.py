@@ -69,6 +69,7 @@ import time
 import importlib.util
 import os
 import logging
+import platform
 
 required_packages = ["requests", "Flask", "numpy", "pandas", "python-dotenv", "pipdeptree", "urllib3", "PyQt6", "pipdeptree", "jupyter_server_terminals"]
 
