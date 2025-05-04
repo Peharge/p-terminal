@@ -684,7 +684,9 @@ def handle_special_commands(user_input):
         "install cool pin-19": "pp-commands\\theme-pcc-19.py",  # new
         "install cool pin-20": "pp-commands\\theme-pcc-20.py",  # new
         "install cool pin-21": "pp-commands\\theme-pcc-21.py",  # new
-        "install cool pin-23": "pp-commands\\theme-pcc-23.py"  # new
+        "install cool pin-23": "pp-commands\\theme-pcc-23.py",  # new
+        "run githubdesktop": "pp-commands\\run-githubdesktop.py", # new
+        "run dockerdesktop": "pp-commands\\run-dockerdesktop.py" # new
     }
 
     # Custom command launcher
