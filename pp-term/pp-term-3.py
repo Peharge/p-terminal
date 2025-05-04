@@ -75,7 +75,7 @@ required_packages = [
     "PyQt6", "PyQt6-sip", "PyQt6-Charts", "PyQt6-WebEngine", "PyQt6-Charts", "keyboard", "pyreadline3",
     "requests", "psutil", "speedtest-cli", "colorama", "pyperclip", "termcolor", "docker", "flask", "rich",
     "typer", "click", "blessed", "prompt-toolkit", "tqdm", "watchdog", "fire", "torch", "torchvision", "torchaudio",
-    "tensorflow", "tf-nightly", "notebook", "jupyterlab", "jax", "transformers"
+    "tensorflow", "tf-nightly", "notebook", "jupyterlab", "jax", "transformers", "chardet"
 ]
 
 
