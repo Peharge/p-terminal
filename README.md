@@ -422,8 +422,6 @@ etc.
 |--------------|------------------------------|--------------------------------------------------------------------------------------------------|--------------|------------|
 | P-Term       | p-term.bat                   | Die .bat  muss eine .env erstellen um `./install/cpp/install-vs.py` auszuführen!!!               | ...          | ✖          |
 | PP-Term      | run-pp-term.bat /pp-term.exe | Verbessere der Instation von PP-Term                                                             | ...          | ✖          |
-| PP-Term      | pp-term-3.py                 | Dur die neue Eingegabe von `user_input = input_line(pin)` ist tap nicht mehr möglich!!!          | 03.05.2025   | ✔          |
-| PP-Term      | pp-term-3.py                 | Ein problem mit `histoy` und .evt noch bei mehr noch Fheler durch `user_input = input_line(pin)` | 04-05-2025   | ✖          |
 
 ## Lizenz
 
