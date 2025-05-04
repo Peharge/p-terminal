@@ -955,7 +955,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "theme-ls":
-        print("dark, light, main, hackerman, aptscience, cyberlife, ubuntu, nord, dracula, solarized_dark, gruvbox_dark, monokai, one_dark, material_dark, tokyo_night, arc_dark, ayu_mirage", "spiderman", "p_term", "mavis_1", "mavis_3", "mavis_4", "green", "red", "blue", "fallout_pipboy")
+        print("dark, light, main, hackerman, glass, aptscience, cyberlife, ubuntu, nord, dracula, solarized_dark, gruvbox_dark, monokai, one_dark, material_dark, tokyo_night, arc_dark, ayu_mirage", "spiderman", "p_term", "mavis_1", "mavis_3", "mavis_4", "green", "red", "blue", "fallout_pipboy")
         return True
 
     if user_input.startswith("launch "):
