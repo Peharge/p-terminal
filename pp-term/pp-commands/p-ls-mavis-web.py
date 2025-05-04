@@ -63,45 +63,153 @@
 
 import os
 import sys
-from PyQt6.QtGui import QColor, QIcon, QPalette
-from PyQt6.QtWidgets import (QApplication, QHBoxLayout, QLabel, QScrollArea, QSizePolicy, QTreeWidget,
-                             QTreeWidgetItem, QVBoxLayout, QWidget, QTextEdit)
+import datetime
+import chardet
+import logging
+
+from PyQt6.QtCore import Qt, QSize
+from PyQt6.QtGui import QColor, QIcon, QPalette, QFont, QPixmap, QImageReader, QSyntaxHighlighter, QTextCharFormat
+from PyQt6.QtWidgets import (
+    QApplication, QLabel, QScrollArea, QSizePolicy,
+    QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget,
+    QTextEdit, QTextBrowser, QStackedWidget
+)
+
+# Optional syntax highlighting
+try:
+    from pygments import highlight
+    from pygments.lexers import get_lexer_for_filename
+    from pygments.formatters import HtmlFormatter
+
+    PYGMENTS_AVAILABLE = True
+except ImportError:
+    PYGMENTS_AVAILABLE = False
+
+
+# Basic Python highlighter for QTextEdit fallback
+class PythonHighlighter(QSyntaxHighlighter):
+    keywords = [
+        'def', 'class', 'if', 'elif', 'else', 'while', 'for', 'in', 'try', 'except', 'finally',
+        'with', 'as', 'return', 'import', 'from', 'pass', 'break', 'continue', 'and', 'or', 'not', 'None', 'True',
+        'False'
+    ]
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.formats = {}
+        fmt_keyword = QTextCharFormat()
+        fmt_keyword.setForeground(QColor('#c586c0'))
+        fmt_keyword.setFontWeight(QFont.Weight.Bold)
+        for word in self.keywords:
+            self.formats[word] = fmt_keyword
+
+    def highlightBlock(self, text):
+        for word, fmt in self.formats.items():
+            index = text.find(word)
+            while index != -1:
+                length = len(word)
+                self.setFormat(index, length, fmt)
+                index = text.find(word, index + length)
+
+
+class FileDisplayWidget(QStackedWidget):
+    """Manages display of text, markdown, and images"""
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+        # Plain text viewer with syntax highlighting fallback
+        self.text_view = QTextEdit()
+        self.text_view.setReadOnly(True)
+        self.text_view.setFont(QFont("Courier New", 12))
+        self.highlighter = PythonHighlighter(self.text_view.document())
+
+        # Markdown / HTML viewer
+        self.markdown_view = QTextBrowser()
+        self.markdown_view.setOpenExternalLinks(True)
+        self.markdown_view.setFont(QFont("Courier New", 12))
+
+        # Image viewer
+        self.image_label = QLabel(alignment=Qt.AlignmentFlag.AlignCenter)
+        self.image_label.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Ignored)
+        self.image_label.setScaledContents(True)
+
+        self.addWidget(self.text_view)
+        self.addWidget(self.markdown_view)
+        self.addWidget(self.image_label)
+
+    def display_image(self, path, container_size):
+        pixmap = QPixmap(path)
+        if pixmap.isNull():
+            raise ValueError(f"Cannot load image: {path}")
+        scaled = pixmap.scaled(container_size, Qt.AspectRatioMode.KeepAspectRatio,
+                               Qt.TransformationMode.SmoothTransformation)
+        self.image_label.setPixmap(scaled)
+        self.setCurrentWidget(self.image_label)
+
+    def display_markdown(self, content):
+        self.markdown_view.setMarkdown(content)
+        self.setCurrentWidget(self.markdown_view)
+
+    def display_html(self, html):
+        self.markdown_view.setHtml(html)
+        self.setCurrentWidget(self.markdown_view)
+
+    def display_text(self, content):
+        self.text_view.setPlainText(content)
+        self.setCurrentWidget(self.text_view)
 
 
 class FileExplorer(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle("P-Term File Explorer MAVIS-Web")
-        self.setGeometry(100, 100, 1200, 800)
+    """A professional file explorer with syntax highlighting and image support."""
+    SUPPORTED_IMAGE_EXT = {'.png', '.jpg', '.jpeg', '.gif', '.bmp', '.ico'}
+    SUPPORTED_MARKDOWN_EXT = {'.md', '.markdown'}
+    SUPPORTED_CODE_EXT = {'.py', '.cpp', '.c', '.h', '.bat', '.js', '.java', '.html', '.css'}
 
+    def __init__(self, root_dir=None):
+        super().__init__()
+        logging.basicConfig(level=logging.INFO)
+        self.setWindowTitle("P-Term File Explorer")
+        self.resize(1200, 800)
+
+        self.root_dir = root_dir or os.path.expanduser("~/PycharmProjects/MAVIS-web/")
+
+        self._setup_ui()
+        self.apply_styles()
         self.set_dark_mode()
+        self.load_directory_structure()
+
+    def _setup_ui(self):
+        layout = QVBoxLayout(self)
+
+        # File tree
+        self.tree = QTreeWidget()
+        self.tree.setHeaderLabels(["Name", "Type", "Size", "Modified"])
+        self.tree.itemClicked.connect(self.on_item_clicked)
+        layout.addWidget(self.tree)
 
         user = os.getenv("USERNAME") or os.getenv("USER")
         icon_path = f"C:/Users/{user}/p-terminal/pp-term/icons/p-term-logo-5.ico"
         self.setWindowIcon(QIcon(icon_path))
 
-        main_layout = QVBoxLayout()
+        # Content display
+        self.content = FileDisplayWidget()
+        self.scroll = QScrollArea()
+        self.scroll.setWidgetResizable(True)
+        self.scroll.setWidget(self.content)
+        layout.addWidget(self.scroll)
 
-        # Tree widget for file explorer
-        self.tree = QTreeWidget()
-        self.tree.setHeaderLabels(["Name", "Type", "Size", "Date Modified"])
-        self.tree.itemClicked.connect(self.display_file_content)
-        main_layout.addWidget(self.tree)
+        # Status bar
+        self.status = QLabel("Ready")
+        layout.addWidget(self.status)
 
-        # Scroll area for file content
-        self.scroll_area = QScrollArea()
-        self.scroll_area.setWidgetResizable(True)
-        main_layout.addWidget(self.scroll_area)
+    def set_dark_mode(self):
+        pal = QPalette()
+        pal.setColor(QPalette.ColorRole.Window, QColor(30, 30, 30))
+        pal.setColor(QPalette.ColorRole.WindowText, QColor(220, 220, 220))
+        self.setPalette(pal)
 
-        # File content display
-        self.file_content = QTextEdit()
-        self.file_content.setReadOnly(True)
-        self.scroll_area.setWidget(self.file_content)
-
-        self.status_label = QLabel("Loading...")
-        main_layout.addWidget(self.status_label)
-
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+    def apply_styles(self):
         self.setStyleSheet("""
             QWidget {
                 background-color: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #1b2631, stop:1 #0f1626);
@@ -109,7 +217,7 @@ class FileExplorer(QWidget):
                 font-family: 'Roboto', sans-serif;
                 font-size: 14px;
             }
-            
+
             QLineEdit {
                 background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2c3e50, stop:1 #1c2833);
                 border: 1px solid #778899;
@@ -117,7 +225,7 @@ class FileExplorer(QWidget):
                 padding: 5px;
                 color: #FFFFFF;
             }
-            
+
             QPushButton {
                 background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2c3e50, stop:1 #1c2833);
                 border: none;
@@ -125,97 +233,97 @@ class FileExplorer(QWidget):
                 padding: 5px 10px;
                 color: #FFFFFF;
             }
-            
+
             QPushButton:hover {
                 background-color: #1c2833;
             }
-            
+
             QTreeWidget {
                 background-color: transparent;
                 border: 1px solid #778899;
                 border-radius: 8px;
             }
-            
+
             QTreeWidget::item {
                 padding: 8px;
                 border-bottom: 1px solid #778899;
             }
-            
+
             QTreeWidget::item:selected {
                 background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #34495e, stop:1 #1c2833);
                 color: #FFFFFF;
             }
-            
+
             QHeaderView::section {
                 background-color: transparent;
                 padding: 8px;
                 border: none;
             }
-            
+
             QScrollArea {
                 border: none;
                 background-color: transparent;
             }
-            
+
             QScrollBar:vertical {
                 background-color: transparent;  /* Hintergrund (Schiene) in transparent */
                 width: 10px;
                 border-radius: 5px;
             }
-            
+
             QScrollBar::handle:vertical {
                 background-color: #ffffff;  /* Schieber (Block) in Weiß */
                 min-height: 20px;
                 border-radius: 5px;
             }
-            
+
             QScrollBar::add-line:vertical,
             QScrollBar::sub-line:vertical {
                 background: transparent;
             }
-            
+
             QScrollBar::up-arrow:vertical,
             QScrollBar::down-arrow:vertical {
                 background: transparent;
             }
-            
+
             QScrollBar::add-page:vertical,
             QScrollBar::sub-page:vertical {
                 background: transparent;
             }
-            
+
             QScrollBar:horizontal {
                 background-color: transparent;  /* Auch der horizontale Balken in transparent */
                 height: 10px;
                 border-radius: 5px;
             }
-            
+
             QScrollBar::handle:horizontal {
                 background-color: #ffffff;
                 min-width: 20px;
                 border-radius: 5px;
             }
-            
+
             QScrollBar::add-line:horizontal,
             QScrollBar::sub-line:horizontal {
                 background: transparent;
             }
-            
+
             QScrollBar::left-arrow:horizontal,
             QScrollBar::right-arrow:horizontal {
                 background: transparent;
             }
-            
+
             QScrollBar::add-page:horizontal,
             QScrollBar::sub-page:horizontal {
                 background: transparent;
             }
-            
+
             QLabel {
                 background: transparent;
                 font-size: 16px;
             }
-            
+
             QTextEdit {
                 background-color: transparent;
                 color: #FFFFFF;
@@ -226,90 +334,90 @@ class FileExplorer(QWidget):
             }
         """)
 
-        self.setLayout(main_layout)
-
-        self.load_directory_structure()
-
-    def set_dark_mode(self):
-        palette = self.palette()
-        palette.setColor(QPalette.ColorRole.Window, QColor(46, 46, 46))
-        palette.setColor(QPalette.ColorRole.WindowText, QColor(255, 255, 255))
-        self.setPalette(palette)
-
     def load_directory_structure(self):
-        directory_path = f"C:\\Users\\{os.getlogin()}\\PycharmProjects\\MAVIS-web\\"
         self.tree.clear()
+        self._add_entries(self.root_dir, None)
+        self.status.setText(f"Loaded: {self.root_dir}")
 
-        self.add_directory_to_tree(directory_path)
-
-        self.status_label.setText("Directory structure loaded successfully.")
-
-    def add_directory_to_tree(self, path, parent=None):
+    def _add_entries(self, path, parent_item):
         try:
-            items = os.listdir(path)
+            entries = sorted(os.scandir(path), key=lambda e: (not e.is_dir(), e.name.lower()))
         except PermissionError:
+            logging.warning(f"Permission denied: {path}")
             return
-
-        for item in items:
-            item_path = os.path.join(path, item)
-
-            if "doom.run" in item_path:
-                continue
-
-            item_type = "Directory" if os.path.isdir(item_path) else "File"
-            item_size = os.path.getsize(item_path) if os.path.isfile(item_path) else ""
-
-            try:
-                item_mtime = os.path.getmtime(item_path)  # Fehlerquelle
-                formatted_date = self.format_date(item_mtime)
-            except OSError:
-                formatted_date = "N/A"
-
-            tree_item = QTreeWidgetItem([item, item_type, str(item_size), formatted_date])
-
-            if os.path.isdir(item_path):
-                self.add_directory_to_tree(item_path, tree_item)
-
-            if parent:
-                parent.addChild(tree_item)
+        for entry in entries:
+            if entry.name.startswith('.'):
+                continue  # skip hidden
+            item = QTreeWidgetItem([
+                entry.name,
+                'Dir' if entry.is_dir() else 'File',
+                self._format_size(entry.stat().st_size) if entry.is_file() else '',
+                datetime.datetime.fromtimestamp(entry.stat().st_mtime).strftime("%Y-%m-%d %H:%M")
+            ])
+            item.setData(0, Qt.ItemDataRole.UserRole, entry.path)
+            if parent_item:
+                parent_item.addChild(item)
             else:
-                self.tree.addTopLevelItem(tree_item)
+                self.tree.addTopLevelItem(item)
+            if entry.is_dir():
+                self._add_entries(entry.path, item)
 
-    def format_date(self, timestamp):
-        import datetime
-        dt = datetime.datetime.fromtimestamp(timestamp)
-        return dt.strftime("%Y-%m-%d %H:%M:%S")
+    def _format_size(self, size):
+        for unit in ['B', 'KB', 'MB', 'GB']:
+            if size < 1024:
+                return f"{size:.1f}{unit}"
+            size /= 1024
+        return f"{size:.1f}TB"
 
-    def display_file_content(self, item):
-        if item.text(1) == "File":
-            file_path = self.get_full_path(item)
-            with open(file_path, 'r') as file:
-                content = file.read()
-            self.file_content.setPlainText(content)
-        else:
-            self.file_content.clear()
-
-    def get_full_path(self, item):
-        path = item.text(0)
-        parent = item.parent()
-        while parent:
-            path = os.path.join(parent.text(0), path)
-            parent = parent.parent()
-        return os.path.join(f"C:\\Users\\{os.getlogin()}\\PycharmProjects\\MAVIS-web\\", path)
+    def on_item_clicked(self, item):
+        path = item.data(0, Qt.ItemDataRole.UserRole)
+        if not os.path.isfile(path):
+            return
+        ext = os.path.splitext(path)[1].lower()
+        self.status.setText(f"Opening {os.path.basename(path)}")
+        try:
+            if ext in self.SUPPORTED_IMAGE_EXT and QImageReader(path).canRead():
+                size = self.scroll.viewport().size()
+                self.content.display_image(path, size)
+            elif ext in self.SUPPORTED_MARKDOWN_EXT:
+                with open(path, 'r', encoding='utf-8') as f:
+                    self.content.display_markdown(f.read())
+            elif ext in self.SUPPORTED_CODE_EXT and PYGMENTS_AVAILABLE:
+                code = open(path, 'r', encoding='utf-8', errors='replace').read()
+                lexer = get_lexer_for_filename(path, stripall=True)
+                html = highlight(code, lexer, HtmlFormatter(full=True, style='monokai'))
+                self.content.display_html(html)
+            else:
+                raw = open(path, 'rb').read()
+                enc = chardet.detect(raw)['encoding'] or 'utf-8'
+                txt = raw.decode(enc, errors='replace')
+                self.content.display_text(txt)
+        except Exception as e:
+            logging.error(e)
+            self.content.display_text(f"Error: {e}")
+            self.status.setText("Failed to display content.")
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-
-        # 50% der Breite für die 'Name' Spalte
         width = self.width()
-        self.tree.setColumnWidth(0, int(width * 0.40))  # Erste Spalte (Name) 40% der Fensterbreite
-        self.tree.setColumnWidth(1, int(width * 0.20))  # Zweite Spalte (Type) 20% der Fensterbreite
-        self.tree.setColumnWidth(2, int(width * 0.20))  # Dritte Spalte (Size) 20% der Fensterbreite
-        self.tree.setColumnWidth(3, int(width * 0.20))  # Vierte Spalte (Date Modified) 20% der Fensterbreite
+        self.tree.setColumnWidth(0, int(width * 0.4))
+        for i in range(1, 4):
+            self.tree.setColumnWidth(i, int(width * 0.2))
+        # Rescale displayed image
+        if self.content.currentWidget() == self.content.image_label:
+            pixmap = self.content.image_label.pixmap()
+            if pixmap:
+                scaled = pixmap.scaled(self.scroll.viewport().size(), Qt.AspectRatioMode.KeepAspectRatio,
+                                       Qt.TransformationMode.SmoothTransformation)
+                self.content.image_label.setPixmap(scaled)
 
 
-if __name__ == "__main__":
+def main():
     app = QApplication(sys.argv)
-    window = FileExplorer()
-    window.show()
+    explorer = FileExplorer()
+    explorer.show()
     sys.exit(app.exec())
+
+
+if __name__ == '__main__':
+    main()
