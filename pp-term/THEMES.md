@@ -113,7 +113,8 @@ pin main-4
  <img width="800" src="https://github.com/Peharge/p-terminal-images/raw/main/images/pin-5.png" alt="peharge"/>
 </p>
 
-## Pin Cool
+## Pin Cool 
+[Oh my Posh](https://github.com/JanDeDobbeleer/oh-my-posh) / [Nerd fonts](https://github.com/ryanoasis/nerd-fonts/)
 
 <p align="center">
  <img width="800" src="https://github.com/Peharge/p-terminal-images/raw/main/images/pin-6.png" alt="peharge"/>
