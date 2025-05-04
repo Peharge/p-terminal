@@ -5775,44 +5775,6 @@ def get_cool_pin():
     """
     Ruft eine gerenderte Oh-My-Posh-Prompt basierend auf einer bestimmten Theme-Konfiguration ab.
     """
-    print("")
-
-    config_path = os.path.expanduser(
-        r"~\AppData\Local\Programs\oh-my-posh\themes\jandedobbeleer.omp.json"
-    )
-    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
-
-    try:
-        result = subprocess.run(
-            [
-                "oh-my-posh",
-                "print",
-                "primary",
-                "--config", config_path,
-                "--pwd", working_dir,
-                "--shell", "pwsh"
-            ],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True,
-            encoding='utf-8',  # wichtig für korrekte Grafikzeichen
-            shell=True         # in Windows häufig nötig für PATH-Auflösung
-        )
-    except FileNotFoundError:
-        return "Error: oh-my-posh was not found. Is it in the PATH?"
-    except Exception as e:
-        return f"Unexpected error: {e}"
-
-    if result.returncode == 0:
-        return result.stdout
-    else:
-        return f"Error running oh-my-posh:\n{result.stderr}"
-
-
-def get_cool_3_pin():
-    """
-    Ruft eine gerenderte Oh-My-Posh-Prompt basierend auf einer bestimmten Theme-Konfiguration ab.
-    """
 
     print("")
 
@@ -5836,6 +5798,44 @@ def get_cool_3_pin():
             text=True,
             encoding='utf-8',  # wichtig für korrekte Grafikzeichen
             shell=True  # in Windows häufig nötig für PATH-Auflösung
+        )
+    except FileNotFoundError:
+        return "Error: oh-my-posh was not found. Is it in the PATH?"
+    except Exception as e:
+        return f"Unexpected error: {e}"
+
+    if result.returncode == 0:
+        return result.stdout
+    else:
+        return f"Error running oh-my-posh:\n{result.stderr}"
+
+
+def get_cool_3_pin():
+    """
+    Ruft eine gerenderte Oh-My-Posh-Prompt basierend auf einer bestimmten Theme-Konfiguration ab.
+    """
+    print("")
+
+    config_path = os.path.expanduser(
+        r"~\AppData\Local\Programs\oh-my-posh\themes\jandedobbeleer.omp.json"
+    )
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+
+    try:
+        result = subprocess.run(
+            [
+                "oh-my-posh",
+                "print",
+                "primary",
+                "--config", config_path,
+                "--pwd", working_dir,
+                "--shell", "pwsh"
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            encoding='utf-8',  # wichtig für korrekte Grafikzeichen
+            shell=True         # in Windows häufig nötig für PATH-Auflösung
         )
     except FileNotFoundError:
         return "Error: oh-my-posh was not found. Is it in the PATH?"
