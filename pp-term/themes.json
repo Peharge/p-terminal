@@ -35,6 +35,20 @@
             "cursorColor": "#ffffff"
         }
     },
+    "alternative": {
+        "defaults": {
+            "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+            "name": "alternative",
+            "hidden": false,
+            "colorScheme": "alternative",
+            "fontFace": "Cascadia Code PL",
+            "fontSize": 10,
+            "backgroundImageOpacity": 0.2,
+            "acrylicOpacity": 0.8,
+            "useAcrylic": true,
+            "cursorColor": "#ffffff"
+        }
+    },
     "nord": {
         "defaults": {
             "cursorColor": "#ffffff"
