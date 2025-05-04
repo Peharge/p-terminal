@@ -1023,12 +1023,19 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("kill "):
         try:
-            pid = int(user_input.split(maxsplit=1)[1])
-            p = psutil.Process(pid)
-            p.terminate()
-            print(f"{green}Killed process {pid}{reset}")
+            _, pid_str = user_input.split(maxsplit=1)
+            pid = int(pid_str)
+            process = psutil.Process(pid)
+            process.terminate()
+            print(f"{green}Process {pid} has been terminated.{reset}")
+        except ValueError:
+            print(f"{red}Invalid PID: '{pid_str}' is not a valid number.{reset}")
+        except psutil.NoSuchProcess:
+            print(f"{red}No process with PID {pid} found.{reset}")
+        except psutil.AccessDenied:
+            print(f"{red}Permission denied: Unable to terminate process {pid}.{reset}")
         except Exception as e:
-            print(f"{red}Error killing process{reset}: {str(e)}")
+            print(f"{red}Error terminating process:{reset} {str(e)}")
         return True
 
     # Datei herunterladen
