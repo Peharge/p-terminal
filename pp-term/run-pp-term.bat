@@ -650,6 +650,52 @@ if exist "%SLICER_PATH%" (
     )
 )
 
+docker --version >nul 2>&1
+if %ERRORLEVEL% NEQ 0 (
+    echo ❌ Docker Desktop is not installed.
+    set /p install_docker="Would you like to install Docker Desktop? [y/n]: "
+
+    if /I "%install_docker%"=="y" (
+        echo Downloading Docker Desktop installer...
+        set "DOCKER_URL=https://desktop.docker.com/win/stable/Docker%20Desktop%20Installer.exe"
+        set "DOCKER_INSTALLER=%TEMP%\DockerDesktopInstaller.exe"
+        powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri '%DOCKER_URL%' -OutFile '%DOCKER_INSTALLER%'"
+
+        if exist "%DOCKER_INSTALLER%" (
+            echo Running Docker installer...
+            start /wait "" "%DOCKER_INSTALLER%" install --quiet
+
+            docker --version >nul 2>&1
+            if %ERRORLEVEL% EQU 0 (
+                echo ✅ Docker Desktop successfully installed!
+                del "%DOCKER_INSTALLER%"
+            ) else (
+                echo ❌ Installation failed. Retrying...
+                del "%DOCKER_INSTALLER%"
+                start /wait "" "%DOCKER_INSTALLER%" install --quiet
+
+                docker --version >nul 2>&1
+                if %ERRORLEVEL% EQU 0 (
+                    echo ✅ Docker Desktop successfully installed after retry!
+                    del "%DOCKER_INSTALLER%"
+                ) else (
+                    echo ❌ Docker could not be installed!
+                    echo Please install manually: https://docs.docker.com/desktop/windows/install/
+                )
+            )
+        ) else (
+            echo ❌ Error: Installer could not be downloaded!
+            echo Please install manually: https://docs.docker.com/desktop/windows/install/
+        )
+    ) else (
+        echo ❌ Docker will not be installed.
+        echo Please install manually: https://docs.docker.com/desktop/windows/install/
+    )
+) else (
+    echo ✅ Docker is already installed:
+    docker --version
+)
+
 set "USERNAME=%USERNAME%"
 set "PYTHON_PATH=C:\Users\%USERNAME%\p-terminal\pp-term\.env\Scripts\python.exe"
 
