@@ -61,27 +61,66 @@
 #
 # Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 
-import subprocess
 import sys
-import platform
+import getpass
+import subprocess
+import threading
+import time
 import importlib.util
+import os
+import logging
 
 required_packages = ["requests", "Flask", "numpy", "pandas", "python-dotenv", "pipdeptree", "urllib3", "PyQt6", "pipdeptree", "jupyter_server_terminals"]
 
-def ensure_packages_installed(packages):
-    """Stellt sicher, dass alle erforderlichen Pakete installiert sind."""
-    for package in packages:
-        if importlib.util.find_spec(package) is None:
-            print(f"Installing {package}...")
-            try:
-                subprocess.run([sys.executable, "-m", "pip", "install", package], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-                print(f"{package} installed successfully.")
-            except subprocess.CalledProcessError:
-                print(f"WARNING: Failed to install {package}. Please install it manually.")
-        else:
-            print(f"{package} is already installed.")
+def activate_virtualenv(venv_path):
+    """Aktiviert eine bestehende virtuelle Umgebung."""
+    activate_script = os.path.join(venv_path, "Scripts", "activate") if os.name == "nt" else os.path.join(venv_path,
+                                                                                                          "bin",
+                                                                                                          "activate")
 
-# Stellen Sie sicher, dass alle erforderlichen Pakete installiert sind
+    if not os.path.exists(activate_script):
+        print(f"❌ Error: Virtual environment not found at {venv_path}.")
+        sys.exit(1)
+
+    os.environ["VIRTUAL_ENV"] = venv_path
+    os.environ["PATH"] = os.path.join(venv_path, "Scripts") + os.pathsep + os.environ["PATH"]
+    print(f"Virtual environment {venv_path} activated.")
+
+
+def ensure_packages_installed(packages: list[str]) -> None:
+    """
+    Stellt sicher, dass die angegebenen Python-Pakete installiert werden.
+
+    Installiert nur fehlende Pakete. Leise, schnell und robust.
+    """
+
+    logging.basicConfig(level=logging.INFO, format='%(message)s')
+
+    missing = [pkg for pkg in packages if importlib.util.find_spec(pkg) is None]
+
+    if not missing:
+        logging.info("✅ All required packages are already installed.")
+        return
+
+    logging.info(f"Installing missing packages: {', '.join(missing)}")
+
+    try:
+        subprocess.run(
+            [
+                sys.executable, "-m", "pip", "install", "--quiet", "--disable-pip-version-check",
+                *missing
+            ],
+            check=True
+        )
+        logging.info("✅ Missing packages installed successfully.")
+    except subprocess.CalledProcessError as e:
+        logging.error("❌ Failed to install required packages.")
+        logging.debug(f"Error details: {e}")
+
+
+# Virtuelle Umgebung aktivieren und Pakete sicherstellen
+venv_path = f"C:\\Users\\{os.getlogin()}\\p-terminal\\pp-term\\.env"
+activate_virtualenv(venv_path)
 ensure_packages_installed(required_packages)
 
 import requests
