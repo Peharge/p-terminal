@@ -636,6 +636,7 @@ def handle_special_commands(user_input):
         "grafana --version": "pp-commands\\grafana-version.py",  # new
         "3d-slicer --version": "pp-commands\\3d-slicer-version.py",  # new
         "doctor": "pp-commands\\doctor.py", # new
+        "hole doctor": "pp-commands\\doctor-hole.py",  # new
         "fun": "pp-commands\\fun.py",  # new
         "fun aafire": "pp-commands\\fun-aafire.py",  # new
         "fun cmatrix": "pp-commands\\fun-cmatrix.py",  # new
@@ -6468,7 +6469,7 @@ COMMANDS = [
     "del", "rm", "echo", "type", "cat", "exit", "alpine", "scoop", "choco", "winget", "speedtest", "kill",
     "download", "cputemp", "chucknorris", "theme", "cleantemp", "selfupdate", "tree", "py", "ask",
     "weather", "whoami", "hostname", "ip", "os", "time", "date", "open", "fortune", "history", "search",
-    "zip", "unzip", "sysinfo", "clip set", "clip get", "ping", "emptytrash", "launch", "doctor",
+    "zip", "unzip", "sysinfo", "clip set", "clip get", "ping", "emptytrash", "launch", "doctor", "hole doctor",
     "mavis env install", "install mavis env", "install mavis3", "install mavis3.3", "install mavis4",
     "install mavis4.3", "mavis env update", "update mavis env", "mavis update", "update mavis",
     "security", "p-terminal security", "securitycheck", "info", "mavis info", "info mavis", "p-term info",

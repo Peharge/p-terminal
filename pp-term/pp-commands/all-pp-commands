@@ -1,4 +1,4 @@
-    commands = {
+commands = {
         "mavis env install": "mavis-install\\install-info-mavis-4.py",
         "install mavis env": "mavis-install\\install-info-mavis-4.py",
         "install mavis3": "mavis-install\\install-info-mavis-4.py", # new
@@ -243,6 +243,7 @@
         "grafana --version": "pp-commands\\grafana-version.py",  # new
         "3d-slicer --version": "pp-commands\\3d-slicer-version.py",  # new
         "doctor": "pp-commands\\doctor.py", # new
+        "hole doctor": "pp-commands\\doctor-hole.py",  # new
         "fun": "pp-commands\\fun.py",  # new
         "fun aafire": "pp-commands\\fun-aafire.py",  # new
         "fun cmatrix": "pp-commands\\fun-cmatrix.py",  # new
