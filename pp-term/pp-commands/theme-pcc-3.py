@@ -213,7 +213,7 @@ def install_oh_my_posh():
 def initialize_oh_my_posh():
     """Initializes OhMyPosh for PowerShell with the specified configuration file path."""
     try:
-        config_path = os.path.expanduser("~") + r"\AppData\Local\Programs\oh-my-posh\themes\powerlevel10k_rainbow.omp.json"
+        config_path = os.path.expanduser("~") + r"\AppData\Local\Programs\oh-my-posh\themes\jandedobbeleer.omp.json"
         command = f"oh-my-posh --init --shell pwsh --config {config_path} | Invoke-Expression"
         subprocess.run(["powershell", "-Command", command], check=True)
         print("OhMyPosh initialized successfully.")
