@@ -955,7 +955,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "theme-ls":
-        print("dark, light, main, hackerman, glass, aptscience, cyberlife, ubuntu, nord, dracula, solarized_dark, gruvbox_dark, monokai, one_dark, material_dark, tokyo_night, arc_dark, ayu_mirage", "spiderman", "p_term", "mavis_1", "mavis_3", "mavis_4", "green", "red", "blue", "fallout_pipboy")
+        print("dark, light, main, hackerman, glass, aurelia, aptscience, cyberlife, ubuntu, nord, dracula, solarized_dark, gruvbox_dark, monokai, one_dark, material_dark, tokyo_night, arc_dark, ayu_mirage", "spiderman", "p_term", "mavis_1", "mavis_3", "mavis_4", "green", "red", "blue", "fallout_pipboy")
         return True
 
     if user_input.startswith("launch "):
@@ -1886,6 +1886,27 @@ COLOR_SCHEMES = {
         "selectionBackground": "#415441",
         "white": "#59FF59",
         "yellow": "#8F7500"
+    },
+    "aurelia": {
+        "name": "aurelia",
+        "background": "#1a1a1a",
+        "black": "#000000",
+        "blue": "#579BD5",
+        "brightBlack": "#797979",
+        "brightBlue": "#9CDCFE",
+        "brightCyan": "#2BC4E2",
+        "brightGreen": "#1AD69C",
+        "brightPurple": "#975EAB",
+        "brightRed": "#EB2A88",
+        "brightWhite": "#EAEAEA",
+        "brightYellow": "#e9ad95",
+        "cyan": "#00B6D6",
+        "foreground": "#EA549F",
+        "green": "#4EC9B0",
+        "purple": "#714896",
+        "red": "#E92888",
+        "white": "#EAEAEA",
+        "yellow": "#CE9178"
     }
 }
 
