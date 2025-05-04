@@ -197,6 +197,8 @@
         "p ollama": "pp-commands\\p-ollama.py",  # new
         "p huggingface": "pp-commands\\p-huggingface.py",  # new
         "p github.com": "pp-commands\\p-github.py",  # new
+        "p wikipedia": "pp-commands\\p-wikipedia.py",  # new
+        "p youtube": "pp-commands\\p-youtube.py",  # new
         "p kali.com": "pp-commands\\p-kali.py",  # new
         "p mint.com": "pp-commands\\p-mint.py",  # new
         "p monai.com": "pp-commands\\p-monai.py",  # new
