@@ -6741,7 +6741,6 @@ def input_line(prompt):
     buf = ''
     global history_index
     history_index = len(history)
-    cursor_index = len(buf)
 
     while True:
         ch = msvcrt.getwch()
@@ -6785,19 +6784,11 @@ def input_line(prompt):
         # Pfeiltasten: Spezialcode '\xe0'
         if ch == '\xe0':
             arrow = msvcrt.getwch()
-
-            # Up arrow - History zurück
+            # Up arrow
             if arrow == 'H' and history and history_index > 0:
                 history_index -= 1
                 new_buf = history[history_index]
-                buf = new_buf
-                cursor_index = len(buf)
-                # sys.stdout.write("\r" + prompt + buf + " ")
-                # sys.stdout.write("\r" + prompt + buf)
-                sys.stdout.write(buf)
-                sys.stdout.flush()
-
-            # Down arrow - History vor
+            # Down arrow
             elif arrow == 'P':
                 if history_index < len(history) - 1:
                     history_index += 1
@@ -6805,26 +6796,15 @@ def input_line(prompt):
                 else:
                     history_index = len(history)
                     new_buf = ''
-                buf = new_buf
-                cursor_index = len(buf)
-                # sys.stdout.write("\r" + prompt + buf + " ")
-                # sys.stdout.write("\r" + prompt + buf)
-                sys.stdout.write(buf)
-                sys.stdout.flush()
-
-            # Left arrow - Cursor nach links bewegen
-            elif arrow == 'K':
-                if cursor_index > 0:
-                    cursor_index -= 1
-                    sys.stdout.write("\033[D")  # ANSI-Escape-Code für "Cursor nach links"
-                    sys.stdout.flush()
-
-            # Right arrow - Cursor nach rechts bewegen
-            elif arrow == 'M':
-                if cursor_index < len(buf):
-                    cursor_index += 1
-                    sys.stdout.write("\033[C")  # ANSI-Escape-Code für "Cursor nach rechts"
-                    sys.stdout.flush()
+            else:
+                continue
+            # Lösche bisherigen Buffer vom Bildschirm
+            sys.stdout.write('\b' * len(buf))
+            sys.stdout.write(' ' * len(buf))
+            sys.stdout.write('\b' * len(buf))
+            buf = new_buf
+            sys.stdout.write(buf)
+            sys.stdout.flush()
             continue
 
         # Normale Zeichen
