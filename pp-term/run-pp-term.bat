@@ -63,7 +63,7 @@ REM pouvant découler directement ou indirectement de l'utilisation, de la modif
 REM
 REM Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 
-setlocal enabledelayedexpansion
+setlocal EnableExtensions EnableDelayedExpansion
 chcp 65001
 
 echo.
@@ -117,6 +117,13 @@ echo Initializing PP-Terminal
 echo Gooo...
 echo.
 
+:: Global Settings
+set "SCRIPT_DIR=%~dp0"
+set "LOGFILE=C:\Users\julia\p-terminal\pp-term\WSL_Diagnostics.log"
+set "MAX_DRIFT=300"          & rem Maximum allowed time drift in seconds
+set "PING_ADDR=8.8.8.8"      & rem Default ping target
+set "TEST_DOMAIN=example.com"
+
 :: Get Windows Build number
 for /f "tokens=3" %%a in ('reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v CurrentBuildNumber 2^>nul') do (
     set "BuildNumber=%%a"
@@ -126,55 +133,55 @@ echo Detected Windows Build Number: !BuildNumber!
 
 :: Check if BuildNumber is >= 22000 (Windows 11 starts with build 22000)
 if not defined BuildNumber (
-    echo ❌ Failed to detect Windows Build Number.
+    call :Log ERROR "❌ Failed to detect Windows Build Number."
     goto :end
 )
 
 set /a CheckBuild=!BuildNumber!
 
 if !CheckBuild! GEQ 22000 (
-    echo ✅ Windows 11 is in use.
+    call :Log PASS "✅ Windows 11 is in use."
 ) else (
-    echo ❌ This is not Windows 11.
+    call :Log ERROR "❌ This is not Windows 11."
 )
 
 :: Check if Windows Defender is active
 sc query windefend | findstr /i "RUNNING" >nul
 if !errorlevel! equ 0 (
-    echo ✅ Windows Defender is active.
+    call :Log PASS "✅ Windows Defender is active."
 ) else (
-    echo ❌ Windows Defender is NOT active.
+    call :Log ERROR "❌ Windows Defender is NOT active."
 )
 
 :: Check if running inside a Virtual Machine
 systeminfo | findstr /i "Virtual" "VMware" "Hyper-V" "VirtualBox" >nul
 if !errorlevel! equ 0 (
-    echo ❌ Virtual Machine or Hypervisor detected!
+    call :Log ERROR "❌ Virtual Machine or Hypervisor detected!"
     echo The terminal will be closed for security reasons.
     exit
 ) else (
-    echo ✅ No Virtual Machine detected.
+    call :Log PASS "✅ No Virtual Machine detected."
 )
 
 :: Get local IP address
 for /f "tokens=2 delims=:" %%i in ('ipconfig ^| findstr /i "IPv4"') do set "LOCAL_IP=%%i"
-echo Lokale IP: %LOCAL_IP%
+echo Lokale IP:%LOCAL_IP%
 
 :: Check basic internet connection via ping to Google DNS
 ping -n 1 8.8.8.8 >nul
 if %errorlevel%==0 (
-    echo ✅ Internet connection exists.
+    call :Log PASS "✅ Internet connection exists."
 
     :: Check if a secure website is reachable (needs curl installed)
     curl --silent --head https://www.google.com | findstr /i "HTTP/1.1 200" >nul
     if %errorlevel%==0 (
-        echo ✅ Secure Internet access verified.
+        call :Log PASS "✅ Secure Internet access verified."
     ) else (
-        echo ❌ Secure website not reachable! Possible issues with HTTPS or DNS.
+        call :Log ERROR "❌ Secure website not reachable! Possible issues with HTTPS or DNS."
     )
 
 ) else (
-    echo ❌ No internet connection!
+    call :Log ERROR "❌ No internet connection!"
 )
 
 timeout /t 5 >nul
@@ -182,11 +189,11 @@ timeout /t 5 >nul
 :: Check if Python is already installed
 python --version >nul 2>&1
 if %errorlevel% neq 0 (
-    echo ❌ Python 3.12 is not installed.
+    call :Log ERROR "❌ Python 3.12 is not installed."
     set /p install_python="Would you like to install Python 3.12? [y/n]: "
 
     if /i "%install_python%"=="y" (
-        echo Downloading Python 3.12 installer...
+        call :Log INFO "Downloading Python 3.12 installer..."
 
         set "PYTHON_URL=https://www.python.org/ftp/python/3.12.2/python-3.12.2-amd64.exe"
         set "PYTHON_INSTALLER=%TEMP%\python-3.12.2-installer.exe"
@@ -195,19 +202,19 @@ if %errorlevel% neq 0 (
         powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri '%PYTHON_URL%' -OutFile '%PYTHON_INSTALLER%'"
 
         if exist "%PYTHON_INSTALLER%" (
-            echo Running Python installer...
+            call :Log INFO "Running Python installer..."
             start /wait %PYTHON_INSTALLER% /quiet InstallAllUsers=1 PrependPath=1 Include_test=0
 
             :: Verify installation
             python --version >nul 2>&1
             if %errorlevel% neq 0 (
-                echo ❌ Error: Installation failed! Retrying...
+                call :Log ERROR "❌ Installation failed! Retrying..."
                 del "%PYTHON_INSTALLER%"
                 start /wait %PYTHON_INSTALLER% /quiet InstallAllUsers=1 PrependPath=1 Include_test=0
 
                 python --version >nul 2>&1
                 if %errorlevel% neq 0 (
-                    echo ❌ Second installation attempt failed! Trying ZIP method...
+                    ecall :Log ERROR "❌ Second installation attempt failed! Trying ZIP method..."
                     del "%PYTHON_INSTALLER%"
                     set "PYTHON_ZIP_URL=https://www.python.org/ftp/python/3.12.2/python-3.12.2-embed-amd64.zip"
                     set "PYTHON_ZIP=%TEMP%\python-3.12.2.zip"
@@ -224,39 +231,39 @@ if %errorlevel% neq 0 (
 
                         "%PYTHON_DIR%\python.exe" --version >nul 2>&1
                         if %errorlevel% neq 0 (
-                            echo ❌ ZIP installation failed! Cleaning up...
+                            call :Log ERROR "❌ ZIP installation failed! Cleaning up..."
                             rmdir /s /q "%PYTHON_DIR%"
-                            echo Manual installation required: https://www.python.org/downloads
+                            call :Log INFO "Manual installation required: https://www.python.org/downloads"
                         ) else (
-                            echo ✅ Python 3.12 successfully installed using ZIP method!
+                            call :Log PASS "✅ Python 3.12 successfully installed using ZIP method!"
                         )
                     ) else (
-                        echo ❌ ZIP download failed! Manual installation required.
+                        call :Log ERROR "❌ ZIP download failed! Manual installation required."
                     )
                 ) else (
-                    echo ✅ Python 3.12 successfully installed!
+                    call :Log PASS "✅ Python 3.12 successfully installed!"
                 )
             ) else (
-                echo ✅ Python 3.12 successfully installed!
+                call :Log PASS "✅ Python 3.12 successfully installed!"
             )
         ) else (
-            echo ❌ Error: Python installer could not be downloaded!
+            call :Log ERROR "❌ Python installer could not be downloaded!"
         )
     ) else (
-        echo Installation aborted. Please install Python 3.12 manually: https://www.python.org/downloads
+        call :Log HINT "Installation aborted. Please install Python 3.12 manually: https://www.python.org/downloads"
     )
 ) else (
-    echo ✅ Python is already installed.
+    call :Log PASS "✅ Python is already installed."
 )
 
 :: Check if Git is already installed
 git --version >nul 2>&1
 if %errorlevel% neq 0 (
-    echo ❌ Git is not installed.
+    call :Log ERROR "❌ Git is not installed."
     set /p install_git="Would you like to install Git? [y/n]: "
 
     if /i "%install_git%"=="y" (
-        echo Downloading Git installer...
+        call :Log INFO "Downloading Git installer..."
 
         set "GIT_URL=https://github.com/git-for-windows/git/releases/latest/download/Git-2.44.0-64-bit.exe"
         set "GIT_INSTALLER=%TEMP%\git-installer.exe"
@@ -265,19 +272,19 @@ if %errorlevel% neq 0 (
         powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri '%GIT_URL%' -OutFile '%GIT_INSTALLER%'"
 
         if exist "%GIT_INSTALLER%" (
-            echo Running Git installer...
+            call :Log INFO "Running Git installer..."
             start /wait %GIT_INSTALLER% /VERYSILENT /NORESTART /CLOSEAPPLICATIONS
 
             :: Verify installation
             git --version >nul 2>&1
             if %errorlevel% neq 0 (
-                echo ❌ Error: Installation failed! Retrying...
+                call :Log ERROR "❌ Installation failed! Retrying..."
                 del "%GIT_INSTALLER%"
                 start /wait %GIT_INSTALLER% /VERYSILENT /NORESTART /CLOSEAPPLICATIONS
 
                 git --version >nul 2>&1
                 if %errorlevel% neq 0 (
-                    echo ❌ Second installation attempt failed! Trying ZIP method...
+                    call :Log ERROR "❌ Second installation attempt failed! Trying ZIP method..."
                     del "%GIT_INSTALLER%"
                     set "GIT_ZIP_URL=https://github.com/git-for-windows/git/releases/latest/download/PortableGit-2.44.0-64-bit.zip"
                     set "GIT_ZIP=%TEMP%\git-portable.zip"
@@ -294,39 +301,39 @@ if %errorlevel% neq 0 (
 
                         "%GIT_DIR%\bin\git.exe" --version >nul 2>&1
                         if %errorlevel% neq 0 (
-                            echo ❌ ZIP installation failed! Cleaning up...
+                            call :Log ERROR "❌ ZIP installation failed! Cleaning up..."
                             rmdir /s /q "%GIT_DIR%"
-                            echo Manual installation required: https://git-scm.com/downloads
+                            call :Log INFO "Manual installation required: https://git-scm.com/downloads"
                         ) else (
-                            echo ✅ Git successfully installed using ZIP method!
+                            call :Log PASS "✅ Git successfully installed using ZIP method!"
                         )
                     ) else (
-                        echo ❌ ZIP download failed! Manual installation required.
+                        call :Log ERROR "❌ ZIP download failed! Manual installation required."
                     )
                 ) else (
-                    echo ✅ Git successfully installed!
+                    call :Log PASS "✅ Git successfully installed!"
                 )
             ) else (
-                echo ✅ Git successfully installed!
+                call :Log PASS "✅ Git successfully installed!"
             )
         ) else (
-            echo ❌ Error: Git installer could not be downloaded!
+            call :Log ERROR "❌ Git installer could not be downloaded!"
         )
     ) else (
-        echo Installation aborted. Please install Git manually: https://git-scm.com/downloads
+        call :Log HINT "Installation aborted. Please install Git manually: https://git-scm.com/downloads"
     )
 ) else (
-    echo ✅ Git is already installed.
+    call :Log PASS "✅ Git is already installed."
 )
 
 :: Check if Ollama is already installed
 ollama --version >nul 2>&1
 if %errorlevel% neq 0 (
-    echo ❌ Ollama is not installed.
+    call :Log ERROR "❌ Ollama is not installed."
     set /p install_ollama="Would you like to install Ollama? [y/n]: "
 
     if /i "%install_ollama%"=="y" (
-        echo Downloading Ollama installer...
+        call :Log INFO "Downloading Ollama installer..."
 
         set "OLLAMA_URL=https://ollama.com/download/OllamaSetup.exe"
         set "OLLAMA_INSTALLER=%TEMP%\OllamaSetup.exe"
@@ -335,19 +342,19 @@ if %errorlevel% neq 0 (
         powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri '%OLLAMA_URL%' -OutFile '%OLLAMA_INSTALLER%'"
 
         if exist "%OLLAMA_INSTALLER%" (
-            echo Running Ollama installer...
+            call :Log INFO "Running Ollama installer..."
             start /wait %OLLAMA_INSTALLER% /silent /norestart
 
             :: Verify installation
             ollama --version >nul 2>&1
             if %errorlevel% neq 0 (
-                echo ❌ Error: Installation failed! Retrying...
+                call :Log ERROR "❌ Error: Installation failed! Retrying..."
                 del "%OLLAMA_INSTALLER%"
                 start /wait %OLLAMA_INSTALLER% /silent /norestart
 
                 ollama --version >nul 2>&1
                 if %errorlevel% neq 0 (
-                    echo ❌ Second installation attempt failed! Trying ZIP method...
+                    call :Log ERROR "❌ Second installation attempt failed! Trying ZIP method..."
                     del "%OLLAMA_INSTALLER%"
                     set "OLLAMA_ZIP_URL=https://ollama.com/download/OllamaPortable.zip"
                     set "OLLAMA_ZIP=%TEMP%\OllamaPortable.zip"
@@ -364,40 +371,40 @@ if %errorlevel% neq 0 (
 
                         "%OLLAMA_DIR%\ollama.exe" --version >nul 2>&1
                         if %errorlevel% neq 0 (
-                            echo ❌ ZIP installation failed! Cleaning up...
+                            call :Log ERROR "❌ ZIP installation failed! Cleaning up..."
                             rmdir /s /q "%OLLAMA_DIR%"
-                            echo Manual installation required: https://ollama.com/download
+                            call :Log INFO "Manual installation required: https://ollama.com/download"
                         ) else (
-                            echo ✅ Ollama successfully installed using ZIP method!
+                            call :Log PASS "✅ Ollama successfully installed using ZIP method!"
                         )
                     ) else (
-                        echo ❌ ZIP download failed! Manual installation required.
+                        call :Log ERROR "❌ ZIP download failed! Manual installation required."
                     )
                 ) else (
-                    echo ✅ Ollama successfully installed!
+                    call :Log PASS "✅ Ollama successfully installed!"
                 )
             ) else (
-                echo ✅ Ollama successfully installed!
+                call :Log PASS "✅ Ollama successfully installed!"
             )
         ) else (
-            echo ❌ Error: Ollama installer could not be downloaded!
+            call :Log ERROR "❌ Ollama installer could not be downloaded!"
         )
     ) else (
-        echo Installation aborted. Please install Ollama manually: https://ollama.com/download
+        call :Log HINT "Installation aborted. Please install Ollama manually: https://ollama.com/download"
     )
 ) else (
-    echo ✅ Ollama is already installed.
+    call :Log PASS "✅ Ollama is already installed."
 )
 
 :: Check if FFmpeg is already installed
 ffmpeg -version >nul 2>&1
 if %errorlevel% neq 0 (
-    echo ❌ FFmpeg is not installed.
-    echo Installing FFmpeg is not required to run pp-term. However, installing FFmpeg is mandatory for using MAVIS Voice Assistant!
+    call :Log ERROR "❌ FFmpeg is not installed."
+    call :Log INFO "Installing FFmpeg is not required to run pp-term. However, installing FFmpeg is mandatory for using MAVIS Voice Assistant!"
     set /p install_ffmpeg="Would you like to install FFmpeg? [y/n]: "
 
     if /i "%install_ffmpeg%"=="y" (
-        echo Downloading FFmpeg installer...
+        call :Log INFO "Downloading FFmpeg installer..."
 
         set "FFMPEG_URL=https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
         set "FFMPEG_ZIP=%TEMP%\ffmpeg.zip"
@@ -407,7 +414,7 @@ if %errorlevel% neq 0 (
         powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri '%FFMPEG_URL%' -OutFile '%FFMPEG_ZIP%'"
 
         if exist "%FFMPEG_ZIP%" (
-            echo Extracting FFmpeg...
+            call :Log INFO "Extracting FFmpeg..."
             powershell -Command "Expand-Archive -Path '%FFMPEG_ZIP%' -DestinationPath '%FFMPEG_DIR%' -Force"
             del "%FFMPEG_ZIP%"
 
@@ -417,7 +424,7 @@ if %errorlevel% neq 0 (
             :: Verify installation
             ffmpeg -version >nul 2>&1
             if %errorlevel% neq 0 (
-                echo ❌ Error: Installation failed! Retrying...
+               call :Log ERROR "❌ Installation failed! Retrying..."
                 rmdir /s /q "%FFMPEG_DIR%"
                 powershell -Command "Invoke-WebRequest -Uri '%FFMPEG_URL%' -OutFile '%FFMPEG_ZIP%'"
                 powershell -Command "Expand-Archive -Path '%FFMPEG_ZIP%' -DestinationPath '%FFMPEG_DIR%' -Force"
@@ -426,7 +433,7 @@ if %errorlevel% neq 0 (
 
                 ffmpeg -version >nul 2>&1
                 if %errorlevel% neq 0 (
-                    echo ❌ Second installation attempt failed! Trying alternative ZIP source...
+                    call :Log ERROR "❌ Second installation attempt failed! Trying alternative ZIP source..."
                     rmdir /s /q "%FFMPEG_DIR%"
                     set "FFMPEG_ALT_URL=https://github.com/BtbN/FFmpeg-Builds/releases/latest/download/ffmpeg-master-latest-win64-gpl.zip"
                     set "FFMPEG_ZIP=%TEMP%\ffmpeg-alt.zip"
@@ -437,26 +444,26 @@ if %errorlevel% neq 0 (
 
                     ffmpeg -version >nul 2>&1
                     if %errorlevel% neq 0 (
-                        echo ❌ Alternative ZIP installation failed! Cleaning up...
+                        call :Log ERROR "❌ Alternative ZIP installation failed! Cleaning up..."
                         rmdir /s /q "%FFMPEG_DIR%"
-                        echo Manual installation required: https://ffmpeg.org/download.html#build-windows
+                        call :Log HINT "Manual installation required: https://ffmpeg.org/download.html#build-windows"
                     ) else (
-                        echo ✅ FFmpeg successfully installed using alternative ZIP method!
+                        call :Log PASS "✅ FFmpeg successfully installed using alternative ZIP method!"
                     )
                 ) else (
-                    echo ✅ FFmpeg successfully installed!
+                    call :Log PASS "✅ FFmpeg successfully installed!"
                 )
             ) else (
-                echo ✅ FFmpeg successfully installed!
+                call :Log PASS "✅ FFmpeg successfully installed!"
             )
         ) else (
-            echo ❌ Error: FFmpeg installer could not be downloaded!
+            call :Log ERROR "❌ FFmpeg installer could not be downloaded!"
         )
     ) else (
-        echo Installation aborted. Please install FFmpeg manually: https://ffmpeg.org/download.html#build-windows
+        call :Log HINT "Installation aborted. Please install FFmpeg manually: https://ffmpeg.org/download.html#build-windows"
     )
 ) else (
-    echo ✅ FFmpeg is already installed.
+    call :Log PASS "✅ FFmpeg is already installed."
 )
 
 set USERNAME=%USERNAME%
@@ -466,11 +473,11 @@ set SCRIPT_install_rustup=C:\Users\%USERNAME%\p-terminal\pp-term\run\rust\instal
 :: Check if Rustup is already installed
 rustup --version >nul 2>&1
 if %errorlevel% neq 0 (
-    echo ❌ Rustup is not installed.
+    call :Log ERROR "❌ Rustup is not installed."
     set /p install_rustup="Would you like to install Rustup? [y/n]: "
 
     if /i "%install_rustup%"=="y" (
-        echo Downloading Rustup installer...
+        call :Log INFO "Downloading Rustup installer..."
 
         set "RUSTUP_URL=https://win.rustup.rs"
         set "RUSTUP_INSTALLER=%TEMP%\rustup-init.exe"
@@ -479,20 +486,20 @@ if %errorlevel% neq 0 (
         powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri '%RUSTUP_URL%' -OutFile '%RUSTUP_INSTALLER%'"
 
         if exist "%RUSTUP_INSTALLER%" (
-            echo Running Rustup installer...
+            call :Log INFO "Running Rustup installer..."
             start /wait %RUSTUP_INSTALLER% -y
 
             :: Verify installation
             rustup --version >nul 2>&1
             if %errorlevel% neq 0 (
-                echo ❌ Error: Installation failed! Retrying...
+                call :Log ERROR "❌ Installation failed! Retrying..."
                 del "%RUSTUP_INSTALLER%"
                 powershell -Command "Invoke-WebRequest -Uri '%RUSTUP_URL%' -OutFile '%RUSTUP_INSTALLER%'"
                 start /wait %RUSTUP_INSTALLER% -y
 
                 rustup --version >nul 2>&1
                 if %errorlevel% neq 0 (
-                    echo ❌ Second installation attempt failed! Trying alternative method...
+                    call :Log ERROR "❌ Second installation attempt failed! Trying alternative method..."
                     del "%RUSTUP_INSTALLER%"
                     set "RUSTUP_ALT_URL=https://static.rust-lang.org/rustup/dist/x86_64-pc-windows-msvc/rustup-init.exe"
                     set "RUSTUP_INSTALLER=%TEMP%\rustup-alt.exe"
@@ -501,44 +508,44 @@ if %errorlevel% neq 0 (
 
                     rustup --version >nul 2>&1
                     if %errorlevel% neq 0 (
-                        echo ❌ Alternative installation failed! Cleaning up...
+                        call :Log ERROR "❌ Alternative installation failed! Cleaning up..."
                         del "%RUSTUP_INSTALLER%"
 
                         if not exist "%SCRIPT_install_rustup%" (
-                            echo Error: Script not found: %SCRIPT_install_rustup%
+                            call :Log ERROR "❌ Script not found: %SCRIPT_install_rustup%"
                             exit /B 1
                         )
 
                         "%PYTHON_PATH%" "%SCRIPT_install_rustup%"
 
-                        echo Manual installation required: https://rustup.rs/
+                        call :Log INFO "Manual installation required: https://rustup.rs/"
                     ) else (
-                        echo ✅ Rustup successfully installed using alternative method!
+                        call :Log PASS "✅ Rustup successfully installed using alternative method!"
                     )
                 ) else (
-                    echo ✅ Rustup successfully installed!
+                    call :Log PASS "✅ Rustup successfully installed!"
                 )
             ) else (
-                echo ✅ Rustup successfully installed!
+                call :Log PASS "✅ Rustup successfully installed!"
             )
         ) else (
-            echo ❌ Error: Rustup installer could not be downloaded!
+            call :Log ERROR "❌ Rustup installer could not be downloaded!"
         )
     ) else (
-        echo Installation aborted. Please install Rustup manually: https://rustup.rs/
+        call :Log HINT "Installation aborted. Please install Rustup manually: https://rustup.rs/"
     )
 ) else (
-    echo ✅ Rustup is already installed.
+    call :Log PASS "✅ Rustup is already installed."
 )
 
 :: Check if PowerShell 7 is already installed
 powershell -Command "$PSVersionTable.PSVersion" >nul 2>&1
 if %errorlevel% neq 0 (
-    echo ❌ PowerShell 7 is not installed.
+    call :Log ERROR "❌ PowerShell 7 is not installed."
     set /p install_powershell="Would you like to install PowerShell 7? [y/n]: "
 
     if /i "%install_powershell%"=="y" (
-        echo Downloading PowerShell 7 installer...
+        call :Log INFO "Downloading PowerShell 7 installer..."
 
         set "POWERSHELL_URL=https://github.com/PowerShell/PowerShell/releases/download/v7.2.9/PowerShell-7.2.9-win-x64.msi"
         set "POWERSHELL_INSTALLER=%TEMP%\PowerShell-7.2.9-installer.msi"
@@ -547,33 +554,36 @@ if %errorlevel% neq 0 (
         powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri '%POWERSHELL_URL%' -OutFile '%POWERSHELL_INSTALLER%'"
 
         if exist "%POWERSHELL_INSTALLER%" (
-            echo Running PowerShell installer...
+            call :Log INFO "Running PowerShell installer..."
             start /wait msiexec.exe /i "%POWERSHELL_INSTALLER%" /quiet /norestart
 
             :: Verify installation
             powershell -Command "$PSVersionTable.PSVersion" >nul 2>&1
             if %errorlevel% neq 0 (
-                echo ❌ Error: Installation failed! Retrying...
+                call :Log ERROR "❌ Installation failed! Retrying..."
                 del "%POWERSHELL_INSTALLER%"
                 start /wait msiexec.exe /i "%POWERSHELL_INSTALLER%" /quiet /norestart
 
                 powershell -Command "$PSVersionTable.PSVersion" >nul 2>&1
                 if %errorlevel% neq 0 (
-                    echo ❌ Second installation attempt failed! Manual installation required: https://github.com/PowerShell/PowerShell/releases
+                    call :Log ERROR "❌ Second installation attempt failed!"
+                    call :Log INFO "Manual installation required: https://github.com/PowerShell/PowerShell/releases"
                 ) else (
-                    echo ✅ PowerShell 7 successfully installed!
+                    call :Log PASS "✅ PowerShell 7 successfully installed!"
                 )
             ) else (
-                echo ✅ PowerShell 7 successfully installed!
+                call :Log PASS "✅ PowerShell 7 successfully installed!"
             )
         ) else (
-            echo ❌ Error: PowerShell installer could not be downloaded!
+            call :Log ERROR "❌ PowerShell installer could not be downloaded!"
         )
     ) else (
-        echo Installation aborted. Please install PowerShell 7 manually: https://github.com/PowerShell/PowerShell/releases
+        call :Log HINT "Installation aborted. Please install PowerShell 7 manually: https://github.com/PowerShell/PowerShell/releases"
     )
 ) else (
-    echo ✅ PowerShell 7 is already installed.
+    call :Log PASS "✅ PowerShell 7 is already installed."
+    for /f "tokens=*" %%i in ('powershell -Command "$PSVersionTable.PSVersion.ToString()"') do set PSVersion=%%i
+    echo PowerShell Version: !PSVersion!
 )
 
 :: Set the installation path for 3D Slicer
@@ -581,14 +591,16 @@ set "SLICER_PATH=C:\Users\%USERNAME%\AppData\Local\slicer.org\Slicer 5.6.2\Slice
 
 :: Check if 3D Slicer is already installed
 if exist "%SLICER_PATH%" (
-    echo ✅ 3D Slicer is already installed.
+    call :Log PASS "✅ 3D Slicer is already installed."
+    echo 3D Slicer Version:
+    "C:\Users\%USERNAME%\AppData\Local\slicer.org\Slicer 5.6.2\Slicer.exe" --version
 ) else (
-    echo ❌ 3D Slicer is not installed.
-    echo Installing 3D Slicer isn't required to run pp-term. However, if you plan to use SIMON, installing 3D Slicer is mandatory. If you encounter any problems during installation, simply run the 'Install 3d-slicer' command in the pp terminal. This installation method is significantly more secure!
+    call :Log ERROR "❌ 3D Slicer is not installed."
+    call :Log INFO "Installing 3D Slicer isn't required to run pp-term. However, if you plan to use SIMON, installing 3D Slicer is mandatory. If you encounter any problems during installation, simply run the 'Install 3d-slicer' command in the pp terminal. This installation method is significantly more secure!"
     set /p install_slicer="Would you like to install 3D Slicer? [y/n]: "
 
     if /i "%install_slicer%"=="y" (
-        echo Downloading the 3D Slicer installer...
+        call :Log INFO "Downloading the 3D Slicer installer..."
 
         set "SLICER_URL=https://download.slicer.org/bitstream/302208"
         set "SLICER_INSTALLER=%TEMP%\Slicer-Installer.exe"
@@ -597,23 +609,23 @@ if exist "%SLICER_PATH%" (
         powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri '%SLICER_URL%' -OutFile '%SLICER_INSTALLER%'"
 
         if exist "%SLICER_INSTALLER%" (
-            echo Starting the 3D Slicer installer...
+            call :Log INFO "Starting the 3D Slicer installer..."
 
             :: Run the installer (silent installation)
             start /wait %SLICER_INSTALLER% /SILENT
 
             :: Check if 3D Slicer was successfully installed
             if exist "%SLICER_PATH%" (
-                echo ✅ 3D Slicer was successfully installed!
+                call :Log PASS "✅ 3D Slicer was successfully installed!"
             ) else (
-                echo ❌ Error: Installation failed! Retrying...
+                call :Log ERROR "❌ Installation failed! Retrying..."
                 del "%SLICER_INSTALLER%"
                 start /wait %SLICER_INSTALLER% /SILENT
 
                 if exist "%SLICER_PATH%" (
-                    echo ✅ 3D Slicer was successfully installed!
+                    call :Log PASS "✅ 3D Slicer was successfully installed!"
                 ) else (
-                    echo ❌ Second installation attempt failed! Trying ZIP method...
+                    call :Log ERROR "❌ Second installation attempt failed! Trying ZIP method..."
                     del "%SLICER_INSTALLER%"
                     set "SLICER_ZIP_URL=https://download.slicer.org/bitstream/302209"
                     set "SLICER_ZIP=%TEMP%\Slicer.zip"
@@ -631,68 +643,68 @@ if exist "%SLICER_PATH%" (
 
                         :: Check if 3D Slicer works
                         if exist "%SLICER_PATH%" (
-                            echo ✅ 3D Slicer was successfully installed via ZIP method!
+                            call :Log PASS "✅ 3D Slicer was successfully installed via ZIP method!"
                         ) else (
-                            echo ❌ ZIP installation failed! Cleaning up...
+                            call :Log ERROR "❌ ZIP installation failed! Cleaning up..."
                             rmdir /s /q "%SLICER_DIR%"
-                            echo Manual installation required: https://download.slicer.org
+                            call :Log INFO "Manual installation required: https://download.slicer.org"
                         )
                     ) else (
-                        echo ❌ ZIP download failed! Manual installation required.
+                        call :Log ERROR "❌ ZIP download failed! Manual installation required."
                     )
                 )
             )
         ) else (
-            echo ❌ Error: The 3D Slicer installer could not be downloaded!
+            call :Log ERROR "❌ The 3D Slicer installer could not be downloaded!"
         )
     ) else (
-        echo Installation canceled. Please install 3D Slicer manually: https://download.slicer.org
+        call :Log HINT "Installation canceled. Please install 3D Slicer manually: https://download.slicer.org"
     )
 )
 
 docker --version >nul 2>&1
 if %ERRORLEVEL% NEQ 0 (
-    echo ❌ Docker Desktop is not installed.
+    call :Log ERROR "❌ Docker Desktop is not installed."
     set /p install_docker="Would you like to install Docker Desktop? [y/n]: "
 
     if /I "%install_docker%"=="y" (
-        echo Downloading Docker Desktop installer...
+        call :Log INFO "Downloading Docker Desktop installer..."
         set "DOCKER_URL=https://desktop.docker.com/win/stable/Docker%20Desktop%20Installer.exe"
         set "DOCKER_INSTALLER=%TEMP%\DockerDesktopInstaller.exe"
         powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri '%DOCKER_URL%' -OutFile '%DOCKER_INSTALLER%'"
 
         if exist "%DOCKER_INSTALLER%" (
-            echo Running Docker installer...
+            call :Log INFO "Running Docker installer..."
             start /wait "" "%DOCKER_INSTALLER%" install --quiet
 
             docker --version >nul 2>&1
             if %ERRORLEVEL% EQU 0 (
-                echo ✅ Docker Desktop successfully installed!
+                call :Log PASS "✅ Docker Desktop successfully installed!"
                 del "%DOCKER_INSTALLER%"
             ) else (
-                echo ❌ Installation failed. Retrying...
+                call :Log ERROR "❌ Installation failed. Retrying..."
                 del "%DOCKER_INSTALLER%"
                 start /wait "" "%DOCKER_INSTALLER%" install --quiet
 
                 docker --version >nul 2>&1
                 if %ERRORLEVEL% EQU 0 (
-                    echo ✅ Docker Desktop successfully installed after retry!
+                    call :Log PASS "✅ Docker Desktop successfully installed after retry!"
                     del "%DOCKER_INSTALLER%"
                 ) else (
-                    echo ❌ Docker could not be installed!
-                    echo Please install manually: https://docs.docker.com/desktop/windows/install/
+                    call :Log ERROR "❌ Docker could not be installed!"
+                    call :Log HINT "Please install manually: https://docs.docker.com/desktop/windows/install/"
                 )
             )
         ) else (
-            echo ❌ Error: Installer could not be downloaded!
-            echo Please install manually: https://docs.docker.com/desktop/windows/install/
+            call :Log ERROR "❌ Installer could not be downloaded!"
+            call :Log HINT "Please install manually: https://docs.docker.com/desktop/windows/install/"
         )
     ) else (
-        echo ❌ Docker will not be installed.
-        echo Please install manually: https://docs.docker.com/desktop/windows/install/
+        call :Log ERROR "❌ Docker will not be installed."
+        call :Log HINT "Please install manually: https://docs.docker.com/desktop/windows/install/"
     )
 ) else (
-    echo ✅ Docker is already installed:
+    call :Log PASS "✅ Docker is already installed"
     docker --version
 )
 
@@ -720,33 +732,33 @@ set "SCRIPT_install_wsl_alpine=C:\Users\%USERNAME%\p-terminal\pp-term\run\wsl\in
 :CheckWSLInstalled
 wsl --list >nul 2>&1
 if errorlevel 1 (
-    echo ❌ WSL is not installed.
+    all :Log ERROR "❌ WSL is not installed."
     set /p "install_wsl=Do you want to install WSL? [y/n]: "
     if /i "!install_wsl!"=="y" (
-        echo Enabling WSL feature...
+        call :Log INFO "Enabling WSL feature..."
         dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart >nul 2>&1
         if errorlevel 1 (
-            echo ❌ Error: Could not enable the WSL feature.
+           call :Log ERROR "❌ Could not enable the WSL feature."
             if not exist "%SCRIPT_install_wsl%" (
-                echo Error: Python fallback script not found: %SCRIPT_install_wsl%
+                all :Log ERROR "❌ Python fallback script not found: %SCRIPT_install_wsl%"
                 pause
                 exit /b 1
             )
             call "%PYTHON_PATH%" "%SCRIPT_install_wsl%"
         ) else (
-            echo ✅ WSL feature enabled successfully.
-            echo Please restart your computer and run the script again.
+            call :Log PASS "✅ WSL feature enabled successfully."
+            call :Log INFO "Please restart your computer and run the script again."
             pause
             exit /b 0
         )
     ) else (
-        echo Installation aborted. Please install WSL manually.
+        call :Log INFO "Installation aborted. Please install WSL manually."
         pause
         exit /b 1
     )
 )
 
-echo ✅ WSL is already installed.
+call :Log PASS "✅ WSL is already installed."
 
 goto CheckDistroInstalled
 
@@ -762,16 +774,16 @@ if not defined found_distro (
 )
 
 :DistroFound
-echo ✅ WSL is already set up with the distribution: "!found_distro!".
+call :Log PASS "✅ WSL is already set up with the distribution: !found_distro!."
 goto Continue
 
 :AskInstall
-echo No Linux distribution was found.
+call :Log INFO "No Linux distribution was found."
 set /p "install_choice=Do you want to install a Linux distribution? [y/n]: "
 if /i "!install_choice!"=="y" (
     goto SelectDistro
 ) else (
-    echo Installation aborted.
+    call :Log INFO "Installation aborted."
     goto Continue
 )
 
@@ -848,26 +860,26 @@ if "%choice%"=="1" (
     set "DISTRO_PACKAGE=Alpine"
     set "SCRIPT_DISTRO=%SCRIPT_install_wsl_alpine%"
 ) else (
-    echo ❌ Invalid choice. The program will now exit.
+    call :Log ERROR "❌ Invalid choice. The program will now exit."
     pause
     exit /b 1
 )
 
 :: Check if the corresponding Python script exists
 if not exist "!SCRIPT_DISTRO!" (
-    echo Error: Python script not found: "!SCRIPT_DISTRO!"
+    call :Log ERROR "❌ Python script not found: !SCRIPT_DISTRO!"
     pause
     exit /b 1
 )
 
 echo.
-echo You have selected: "!DISTRO_NAME!"
+call :Log INFO "You have selected: !DISTRO_NAME!"
 echo.
 
 set /a attempts=0
 :InstallLoop
 set /a attempts+=1
-echo [Attempt !attempts!] Starting installation of "!DISTRO_NAME!"...
+call :Log INFO "[Attempt !attempts!] Starting installation of !DISTRO_NAME!..."
 call "%PYTHON_PATH%" "!SCRIPT_DISTRO!"
 
 :: Short pause to allow the installation process to settle
@@ -880,18 +892,18 @@ for /f "usebackq delims=" %%i in (`wsl --list --quiet`) do (
 )
 if defined installed (
     echo.
-    echo ✅ "!DISTRO_NAME!" has been successfully installed!
+    call :Log PASS "✅ !DISTRO_NAME! has been successfully installed!"
     goto Continue
 ) else (
     echo.
-    echo ❌ Installation of "!DISTRO_NAME!" failed on attempt !attempts!.
+    call :Log ERROR "❌ Installation of !DISTRO_NAME! failed on attempt !attempts!."
     if !attempts! lss 3 (
-        echo Waiting 3 seconds before retrying...
+        call :Log INFO "Waiting 3 seconds before retrying..."
         timeout /t 3 >nul
         goto InstallLoop
     ) else (
-        echo ❌ All installation attempts have failed.
-        echo Please install "!DISTRO_NAME!" manually (e.g., via the Microsoft Store).
+        call :Log ERROR "❌ All installation attempts have failed."
+        call :Log HINT "Please install !DISTRO_NAME! manually (e.g., via the Microsoft Store)."
         pause
         exit /b 1
     )
@@ -899,7 +911,431 @@ if defined installed (
 
 :Continue
 
-echo ✅ All WSL processes have been successfully terminated.
+call :Log PASS "✅ All WSL processes have been successfully terminated."
+
+:: Initialization & Log Header
+call :InitLog
+call :Log INFO "Starting professional WSL diagnostics"
+
+:: Verify WSL Executable and Version
+where wsl >nul 2>&1 || (
+    call :Log ERROR "❌ wsl.exe not found. Please install or enable WSL."
+    exit /B 1
+)
+
+call :Log INFO "Listing WSL client version"& call :Run wsl --version
+
+:: 1) General WSL Engine Status
+call :Log INFO "Retrieving general WSL engine status"
+call :Run wsl --status
+if errorlevel 1 (
+    call :Log WARN "❌ Unable to retrieve WSL engine status."
+) else (
+    call :Log INFO "✅ WSL engine status retrieved successfully."
+)
+
+call :Log INFO "Starting deep diagnostics for each distribution"
+
+:: Ubuntu
+wsl -d Ubuntu -- bash -c "exit" 2>nul
+if %errorlevel% equ 0 (
+
+    call :Log INFO "Starting deep diagnostics for Ubuntu"
+
+    :: Durchlaufe alle WSL-Distributionen
+    set "DISTRO=%%A" & set "VER=%%B" & set "STATE=%%C"
+    call :Log CHECK "=== Diagnostics for Ubuntu (Version: !VER!, State: !STATE!) ==="
+
+    rem -- Launch Test
+    call :Log TEST "Launching Ubuntu
+    call :Run wsl -d Ubuntu -- true
+    if errorlevel 1 (
+        call :Log FAIL "Cannot launch Ubuntu"
+        call :Log HINT "Try: wsl --terminate Ubuntu & wsl --unregister Ubuntu and reinstall"
+    ) else (
+        call :Log PASS "✅ Launch OK"
+    )
+
+    rem -- Kernel & OS Info
+    call :Log TEST "Retrieving kernel and OS info"
+    call :Run wsl -d Ubuntu -- uname -a
+    call :Run wsl -d Ubuntu -- cat /etc/os-release
+    call :Log PASS "✅ Kernel and OS details displayed"
+
+    rem -- Uptime & Load
+    call :Log TEST "Checking uptime and load average"
+    call :Run wsl -d Ubuntu -- uptime
+    call :Log PASS "✅ Uptime and load displayed"
+
+    rem -- Memory Usage
+    call :Log TEST "Checking memory usage"
+    call :Run wsl -d Ubuntu -- free -m
+    call :Log PASS "✅ Memory usage OK"
+
+    rem -- Disk Usage
+    call :Log TEST "Checking disk usage"
+    call :Run wsl -d Ubuntu -- df -h /
+    call :Log PASS "✅ Disk usage OK"
+
+    rem -- Top Processes
+    call :Log TEST "Listing top CPU processes"
+    wsl -d Ubuntu -- bash -c "top -b -n 1 | head -n 10"
+    call :Log PASS "✅ Top processes displayed"
+
+    rem -- Network Connectivity Check
+    call :Log TEST "Pinging %PING_ADDR%"
+    call :Run wsl -d Ubuntu -- ping -c 2 %PING_ADDR%
+    if errorlevel 1 (
+        call :Log WARN "❌ Network unreachable"
+        call :Log HINT "Check WSL network settings and Windows Firewall"
+    ) else (
+        call :Log PASS "✅ Network OK"
+    )
+
+    rem -- DNS Resolution Check
+    call :Log TEST "Resolving %TEST_DOMAIN%"
+    call :Run wsl -d Ubuntu -- nslookup %TEST_DOMAIN%
+    if errorlevel 1 (
+        call :Log WARN "❌ DNS resolution failed"
+    ) else (
+        call :Log PASS "✅ DNS OK"
+    )
+
+    call :Log INFO "Starting update process for Ubuntu..."
+
+    call :Log INFO "Updating Ubuntu using apt..."
+    call :Run wsl -d Ubuntu -- sudo apt update && sudo apt upgrade -y
+    call :Log PASS "✅ Ubuntu updated successfully."
+
+    call :Log INFO "Update process completed for Ubuntu."
+) else (
+    call :Log INFO "Ubuntu is not installed."
+)
+
+:: Debian
+wsl -d Debian -- bash -c "exit" 2>nul
+if %errorlevel% equ 0 (
+
+    call :Log INFO "Starting deep diagnostics for Debian"
+
+    :: Durchlaufe alle WSL-Distributionen
+    set "DISTRO=%%A" & set "VER=%%B" & set "STATE=%%C"
+    call :Log CHECK "=== Diagnostics for Debian (Version: !VER!, State: !STATE!) ==="
+
+    rem -- Launch Test
+    call :Log TEST "Launching Debian
+    call :Run wsl -d Debian -- true
+    if errorlevel 1 (
+        call :Log FAIL "Cannot launch Debian"
+        call :Log HINT "Try: wsl --terminate Debian & wsl --unregister Debian and reinstall"
+    ) else (
+        call :Log PASS "✅ Launch OK"
+    )
+
+    rem -- Kernel & OS Info
+    call :Log TEST "Retrieving kernel and OS info"
+    call :Run wsl -d Debian -- uname -a
+    call :Run wsl -d Debian -- cat /etc/os-release
+    call :Log PASS "✅ Kernel and OS details displayed"
+
+    rem -- Uptime & Load
+    call :Log TEST "Checking uptime and load average"
+    call :Run wsl -d Debian -- uptime
+    call :Log PASS "✅ Uptime and load displayed"
+
+    rem -- Memory Usage
+    call :Log TEST "Checking memory usage"
+    call :Run wsl -d Debian -- free -m
+    call :Log PASS "✅ Memory usage OK"
+
+    rem -- Disk Usage
+    call :Log TEST "Checking disk usage"
+    call :Run wsl -d Debian -- df -h /
+    call :Log PASS "✅ Disk usage OK"
+
+    rem -- Top Processes
+    call :Log TEST "Listing top CPU processes"
+    wsl -d Debian -- bash -c "top -b -n 1 | head -n 10"
+    call :Log PASS "✅ Top processes displayed"
+
+    rem -- Network Connectivity Check
+    call :Log TEST "Pinging %PING_ADDR%"
+    call :Run wsl -d Debian -- ping -c 2 %PING_ADDR%
+    if errorlevel 1 (
+        call :Log WARN "❌ Network unreachable"
+        call :Log HINT "Check WSL network settings and Windows Firewall"
+    ) else (
+        call :Log PASS "✅ Network OK"
+    )
+
+    rem -- DNS Resolution Check
+    call :Log TEST "Resolving %TEST_DOMAIN%"
+    call :Run wsl -d Debian -- nslookup %TEST_DOMAIN%
+    if errorlevel 1 (
+        call :Log WARN "❌ DNS resolution failed"
+    ) else (
+        call :Log PASS "✅ DNS OK"
+    )
+
+    call :Log INFO "Starting update process for Debian..."
+
+    call :Log INFO "Updating Debian using apt..."
+    call :Run wsl -d Debian -- sudo apt update && sudo apt upgrade -y
+    call :Log PASS "✅ Debian updated successfully."
+
+    call :Log INFO "Update process completed for Debian."
+) else (
+    call :Log INFO "Debian is not installed."
+)
+
+
+:: Arch Linux
+wsl -d kali-linux -- bash -c "exit" 2>nul
+if %errorlevel% equ 0 (
+
+    call :Log INFO "Starting deep diagnostics for kali-linux"
+
+    :: Durchlaufe alle WSL-Distributionen
+    set "DISTRO=%%A" & set "VER=%%B" & set "STATE=%%C"
+    call :Log CHECK "=== Diagnostics for kali-linux (Version: !VER!, State: !STATE!) ==="
+
+    rem -- Launch Test
+    call :Log TEST "Launching kali-linux
+    call :Run wsl -d kali-linux -- true
+    if errorlevel 1 (
+        call :Log FAIL "Cannot launch kali-linux"
+        call :Log HINT "Try: wsl --terminate kali-linux & wsl --unregister kali-linux and reinstall"
+    ) else (
+        call :Log PASS "✅ Launch OK"
+    )
+
+    rem -- Kernel & OS Info
+    call :Log TEST "Retrieving kernel and OS info"
+    call :Run wsl -d kali-linux -- uname -a
+    call :Run wsl -d kali-linux -- cat /etc/os-release
+    call :Log PASS "✅ Kernel and OS details displayed"
+
+    rem -- Uptime & Load
+    call :Log TEST "Checking uptime and load average"
+    call :Run wsl -d kali-linux -- uptime
+    call :Log PASS "✅ Uptime and load displayed"
+
+    rem -- Memory Usage
+    call :Log TEST "Checking memory usage"
+    call :Run wsl -d kali-linux -- free -m
+    call :Log PASS "✅ Memory usage OK"
+
+    rem -- Disk Usage
+    call :Log TEST "Checking disk usage"
+    call :Run wsl -d kali-linux -- df -h /
+    call :Log PASS "✅ Disk usage OK"
+
+    rem -- Top Processes
+    call :Log TEST "Listing top CPU processes"
+    wsl -d kali-linux -- bash -c "top -b -n 1 | head -n 10"
+    call :Log PASS "✅ Top processes displayed"
+
+    rem -- Network Connectivity Check
+    call :Log TEST "Pinging %PING_ADDR%"
+    call :Run wsl -d kali-linux -- ping -c 2 %PING_ADDR%
+    if errorlevel 1 (
+        call :Log WARN "❌ Network unreachable"
+        call :Log HINT "Check WSL network settings and Windows Firewall"
+    ) else (
+        call :Log PASS "✅ Network OK"
+    )
+
+    rem -- DNS Resolution Check
+    call :Log TEST "Resolving %TEST_DOMAIN%"
+    call :Run wsl -d kali-linux -- nslookup %TEST_DOMAIN%
+    if errorlevel 1 (
+        call :Log WARN "❌ DNS resolution failed"
+    ) else (
+        call :Log PASS "✅ DNS OK"
+    )
+
+    call :Log INFO "Starting update process for kali-linux..."
+
+    call :Log INFO "Updating kali-linux using apt..."
+    call :Run wsl -d kali-linux -- sudo apt update && sudo apt upgrade -y
+    call :Log PASS "✅ kali-linux updated successfully."
+
+    call :Log INFO "Update process completed for kali-linux."
+) else (
+    call :Log INFO "kali-linux is not installed."
+)
+
+wsl -d Arch -- bash -c "exit" 2>nul
+if %errorlevel% equ 0 (
+    call :Log INFO "Starting deep diagnostics for Arch"
+
+    :: Durchlaufe alle WSL-Distributionen
+    set "DISTRO=%%A" & set "VER=%%B" & set "STATE=%%C"
+    call :Log CHECK "=== Diagnostics for Arch (Version: !VER!, State: !STATE!) ==="
+
+    rem -- Launch Test
+    call :Log TEST "Launching Arch
+    call :Run wsl -d Arch -- true
+    if errorlevel 1 (
+        call :Log FAIL "Cannot launch Arch"
+        call :Log HINT "Try: wsl --terminate Arch & wsl --unregister Arch and reinstall"
+    ) else (
+        call :Log PASS "✅ Launch OK"
+    )
+
+    rem -- Kernel & OS Info
+    call :Log TEST "Retrieving kernel and OS info"
+    call :Run wsl -d Arch -- uname -a
+    call :Run wsl -d Arch -- cat /etc/os-release
+    call :Log PASS "✅ Kernel and OS details displayed"
+
+    rem -- Uptime & Load
+    call :Log TEST "Checking uptime and load average"
+    call :Run wsl -d Arch -- uptime
+    call :Log PASS "✅ Uptime and load displayed"
+
+    rem -- Memory Usage
+    call :Log TEST "Checking memory usage"
+    call :Run wsl -d Arch -- free -m
+    call :Log PASS "✅ Memory usage OK"
+
+    rem -- Disk Usage
+    call :Log TEST "Checking disk usage"
+    call :Run wsl -d Arch -- df -h /
+    call :Log PASS "✅ Disk usage OK"
+
+    rem -- Top Processes
+    call :Log TEST "Listing top CPU processes"
+    wsl -d Arch -- bash -c "top -b -n 1 | head -n 10"
+    call :Log PASS "✅ Top processes displayed"
+
+    rem -- Network Connectivity Check
+    call :Log TEST "Pinging %PING_ADDR%"
+    call :Run wsl -d Arch -- ping -c 2 %PING_ADDR%
+    if errorlevel 1 (
+        call :Log WARN "❌ Network unreachable"
+        call :Log HINT "Check WSL network settings and Windows Firewall"
+    ) else (
+        call :Log PASS "✅ Network OK"
+    )
+
+    rem -- DNS Resolution Check
+    call :Log TEST "Resolving %TEST_DOMAIN%"
+    call :Run wsl -d Arch -- nslookup %TEST_DOMAIN%
+    if errorlevel 1 (
+        call :Log WARN "❌ DNS resolution failed"
+    ) else (
+        call :Log PASS "✅ DNS OK"
+    )
+
+    call :Log INFO "Starting update process for Arch..."
+
+    call :Log INFO "Updating Arch using apt..."
+    call :Run wsl -d Arch -- sudo pacman -Syu -y
+    call :Log PASS "✅ Arch updated successfully."
+
+    call :Log INFO "Update process completed for Arch."
+) else (
+    call :Log INFO "Arch is not installed."
+)
+
+:: openSUSE
+wsl -d openSUSE -- bash -c "exit" 2>nul
+if %errorlevel% equ 0 (
+    echo openSUSE is installed.
+) else (
+    echo openSUSE is not installed.
+)
+
+:: Linux Mint
+wsl -d LinuxMint -- bash -c "exit" 2>nul
+if %errorlevel% equ 0 (
+    echo Linux Mint is installed.
+) else (
+    echo Linux Mint is not installed.
+)
+
+:: Fedora
+wsl -d Fedora -- bash -c "exit" 2>nul
+if %errorlevel% equ 0 (
+    echo Fedora is installed.
+) else (
+    echo Fedora is not installed.
+)
+
+:: Red Hat Enterprise Linux
+wsl -d "Red Hat Enterprise Linux" -- bash -c "exit" 2>nul
+if %errorlevel% equ 0 (
+    echo Red Hat Enterprise Linux is installed.
+) else (
+    echo Red Hat Enterprise Linux is not installed.
+)
+
+:: SUSE Linux
+wsl -d SUSE -- bash -c "exit" 2>nul
+if %errorlevel% equ 0 (
+    echo SUSE Linux is installed.
+) else (
+    echo SUSE Linux is not installed.
+)
+
+:: Pengwin
+wsl -d Pengwin -- bash -c "exit" 2>nul
+if %errorlevel% equ 0 (
+    echo Pengwin is installed.
+) else (
+    echo Pengwin is not installed.
+)
+
+:: Oracle Linux
+wsl -d OracleLinux -- bash -c "exit" 2>nul
+if %errorlevel% equ 0 (
+    echo Oracle Linux is installed.
+) else (
+    echo Oracle Linux is not installed.
+)
+
+:: Clear Linux
+wsl -d ClearLinux -- bash -c "exit" 2>nul
+if %errorlevel% equ 0 (
+    echo Clear Linux is installed.
+) else (
+    echo Clear Linux is not installed.
+)
+
+:: Alpine
+wsl -d Alpine -- bash -c "exit" 2>nul
+if %errorlevel% equ 0 (
+    echo Alpine is installed.
+) else (
+    echo Alpine is not installed.
+)
+
+rem -- Time Sync Check
+call :Log TEST "Checking time drift"
+for /F "delims=" %%T in ('powershell -NoProfile -Command "(Get-Date -UFormat '%%s')"') do set "TS_HOST=%%T"
+for /F "delims=" %%T in ('wsl -d "%DEFAULT_DISTRO%" -- date +%%s') do set "TS_DISTRO=%%T"
+set /A DRIFT=TS_HOST-TS_DISTRO
+if !DRIFT! GTR %MAX_DRIFT% (
+    call :Log WARN "❌ Time drift !DRIFT!s"
+) else (
+    call :Log PASS "✅ Time sync OK"
+)
+
+rem -- Mount Points Check
+call :Log TEST "Listing mount points"
+call :Run wsl -d "%DEFAULT_DISTRO%" -- mount
+if errorlevel 1 (
+    call :Log WARN "❌ Cannot list mounts"
+) else (
+    call :Log PASS "✅ Mount points displayed"
+)
+
+call :Log INFO "Deep diagnostics completed for all distributions."
+
+:: Final Summary & Exit
+call :Log PASS "✅ All diagnostics complete. Exiting with code %ERRORLEVEL%"
+endlocal
 
 :: Define project path
 set "PYCHARM_PROJECTS=%USERPROFILE%\p-terminal"
@@ -913,7 +1349,7 @@ if not exist "%PYCHARM_PROJECTS%" (
     echo Creating project directory: %PYCHARM_PROJECTS%...
     mkdir "%PYCHARM_PROJECTS%"
     if errorlevel 1 (
-        echo ❌ Error: Failed to create directory %PYCHARM_PROJECTS%. Exiting...
+        call :Log WARN "❌ Error: Failed to create directory %PYCHARM_PROJECTS%. Exiting..."
         exit /b 1
     )
 )
@@ -928,7 +1364,7 @@ if not exist "%PP_DIR%" (
     :: Check if Git is installed
     where git >nul 2>&1
     if %errorlevel% neq 0 (
-        echo ❌ Error: Git is not installed. Please install Git first.
+        call :Log WARN "❌ Error: Git is not installed. Please install Git first."
         exit /b 1
     )
 
@@ -936,7 +1372,7 @@ if not exist "%PP_DIR%" (
     echo Testing connection to GitHub...
     for /f "delims=" %%i in ('ping -n 1 -w 5000 github.com ^| find "TTL"') do set REACHABLE=1
     if not defined REACHABLE (
-        echo ❌ Error: Cannot reach GitHub! Check your internet connection or firewall settings.
+        call :Log WARN "❌ Cannot reach GitHub! Check your internet connection or firewall settings."
         exit /b 1
     )
     set REACHABLE=  :: Zurücksetzen der REACHABLE-Variable
@@ -946,10 +1382,10 @@ if not exist "%PP_DIR%" (
     git clone https://github.com/Peharge/p-terminal.git "%PP_DIR%"
 
     if %errorlevel% neq 0 (
-        echo ❌ Error: Cloning P-terminal repository failed! Make sure GitHub is accessible and the URL is correct.
+        call :Log WARN "❌ Cloning P-terminal repository failed! Make sure GitHub is accessible and the URL is correct."
         exit /b 1
     ) else (
-        echo ✅ P-terminal repository cloned successfully!
+        call :Log PASS "✅ P-terminal repository cloned successfully!"
     )
 ) else (
     echo P-terminal repository already exists. Checking for updates...
@@ -959,7 +1395,7 @@ if not exist "%PP_DIR%" (
     :: Check if the repository is in the correct state (no uncommitted changes)
     git diff-index --quiet HEAD --
     if %errorlevel% neq 0 (
-        echo ❌ Error: There are uncommitted changes! Please commit or discard them first.
+       call :Log WARN "❌ There are uncommitted changes! Please commit or discard them first."
         exit /b 1
     )
 
@@ -967,7 +1403,7 @@ if not exist "%PP_DIR%" (
     echo Fetching latest changes...
     git fetch --quiet
     if %errorlevel% neq 0 (
-        echo ❌ Error: Could not fetch updates from the remote repository! Check your internet connection or Git configuration.
+        call :Log WARN "❌ Could not fetch updates from the remote repository! Check your internet connection or Git configuration."
         exit /b 1
     )
 
@@ -979,35 +1415,35 @@ if not exist "%PP_DIR%" (
         :: Perform Git Pull (with timeout of 5 seconds)
         git pull --quiet
         if %errorlevel% neq 0 (
-            echo ❌ Error: Could not update P-terminal repository! Check your internet connection or Git configuration.
+            call :Log WARN "❌ Could not update P-terminal repository! Check your internet connection or Git configuration."
             exit /b 1
         ) else (
-            echo ✅ P-terminal repository updated successfully!
+            call :Log PASS "✅ P-terminal repository updated successfully!"
         )
     ) else (
-        echo ✅ P-terminal repository is already up-to-date!
+        call :Log PASS "✅ P-terminal repository is already up-to-date!"
     )
 )
 
 :: Check Git status after pull (no merge conflicts)
 git status | find "Merge conflict" >nul
 if %errorlevel% equ 0 (
-    echo ❌ Error: Merge conflicts detected. Please resolve them manually.
+    call :Log WARN "❌ Merge conflicts detected. Please resolve them manually."
     exit /b 1
 )
 
-echo ✅ P-terminal update process completed successfully.
+call :Log PASS "✅ P-terminal update process completed successfully."
 
 :: Ensure P-terminal directory exists
 if not exist "%PP_DIR%" (
-    echo ❌ Error: P-terminal directory does not exist!
+    call :Log WARN "❌ P-terminal directory does not exist!"
     echo Make sure the repository was cloned correctly.
     exit /b 1
 )
 
 :: Change to P-terminal directory
 cd /d "%PP_DIR%" || (
-    echo ❌ Error: Failed to access P-terminal directory!
+    call :Log WARN "❌ Failed to access P-terminal directory!"
     exit /b 1
 )
 
@@ -1025,19 +1461,19 @@ if not exist "%PP_ENV_FILE%" (
     if exist "%PP_ENV_FILE%" (
         for %%A in ("%PP_ENV_FILE%") do (
             if %%~zA gtr 0 (
-                echo ✅ .env file created successfully at "%PP_ENV_FILE%"
+                call :Log PASS "✅ .env file created successfully at %PP_ENV_FILE%"
             ) else (
-                echo ❌ Error: .env file was created but is empty!
+                call :Log WARN "❌ .env file was created but is empty!"
                 del "%PP_ENV_FILE%" >nul 2>&1
                 exit /b 1
             )
         )
     ) else (
-        echo ❌ Error: Failed to create .env file!
+        call :Log WARN "❌ Failed to create .env file!"
         exit /b 1
     )
 ) else (
-    echo ✅ .env file already exists at "%PP_ENV_FILE%"
+    call :Log PASS "✅ .env file already exists at %PP_ENV_FILE%"
 )
 
 :: Define the username variable dynamically
@@ -1130,7 +1566,7 @@ if not exist "%PP_ENV_FILE%" (
 
 :: Check if P-terminal run file exists
 if not exist "%PP_RUN_FILE%" (
-    echo ❌ Error: pp-term.bat not found!
+    call :Log WARN "❌ pp-term.bat not found!"
     echo Please verify that the file exists in: %PP_DIR%
     exit /b 1
 )
@@ -1141,22 +1577,67 @@ echo Starting PP_terminal...
 :: Check if the file is executable (check for executable file)
 :: Test if the file is an .bat file
 if /I not "%PP_RUN_FILE:~-4%"==".bat" (
-    echo ❌ Error: The file is not an executable file!
+    call :Log WARN "❌ The file is not an executable file!"
     exit /b 1
 )
 
 :: Final report
-:: echo ✅ All tasks were completed successfully!
+:: call :Log PASS "✅ All tasks were completed successfully!"
 
 :: Try to start the file and check if it is successful
 call "%PP_RUN_FILE%"
 if %errorlevel% neq 0 (
-    echo ❌ Error: PP-Terminal could not be started successfully!
+    call :Log WARN "❌ PP-Terminal could not be started successfully!"
     exit /b 1
 ) else (
-    echo ✅ PP-Terminal was successfully launched!
+   call :Log PASS "✅ PP-Terminal was successfully launched!"
 )
 
 :: endlocal
 pause
 exit /b
+
+:: Functions
+:InitLog
+    (echo [%DATE% %TIME%] [LOG INIT] Log created >"%LOGFILE%"
+    ) 2>nul
+    goto :eof
+
+:Timestamp
+    rem Set TS variable to timestamp YYYY-MM-DD HH:MM:SS.mmm
+    for /F "tokens=* delims=" %%D in ('powershell -NoProfile -Command "Get-Date -Format 'yyyy-MM-dd HH:mm:ss.fff'"') do set "TS=%%D"
+    goto :eof
+
+:Log
+    rem call :Log LEVEL Message
+    setlocal EnableDelayedExpansion
+    call :Timestamp
+    set "LEVEL=%~1"
+    shift
+    set "MSG="
+    :buildMsg
+    if "%~1"=="" goto continueLog
+    set "MSG=!MSG! %~1"
+    shift
+    goto buildMsg
+
+:continueLog
+    set "MSG=!MSG:~1!"  & rem entfernt führendes Leerzeichen
+    echo [!TS!] [!LEVEL!] !MSG!
+    >>"%LOGFILE%" echo [!TS!] [!LEVEL!] !MSG!
+    endlocal
+    goto :eof
+
+:Run
+    rem call :Run command arguments
+    setlocal
+    set "CMD=%*"
+    rem echo [COMMAND] %CMD%
+    >>"%LOGFILE%" echo [COMMAND] %CMD%
+    cmd /C %CMD%
+    endlocal
+    goto :eof
+
+:BlankLine
+    echo.
+    goto :eof
