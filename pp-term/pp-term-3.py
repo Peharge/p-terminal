@@ -1129,6 +1129,7 @@ def handle_special_commands(user_input):
 
     # Mini KI Antwort - soon
     if user_input.startswith("pa "):
+        user_input = user_input[3:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
             print(f"{green}Ollama is installed.{reset}")
@@ -1137,8 +1138,6 @@ def handle_special_commands(user_input):
 
         start_ollama()
         check_ollama_update()
-
-        question = user_input[len("pa "):]
 
         response = get_response_from_ollama(user_input, ollama)
 
@@ -1148,6 +1147,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("pa-qwen3:0.6b "):
+        user_input = user_input[14:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
             print(f"{green}Ollama is installed.{reset}")
@@ -1156,8 +1156,6 @@ def handle_special_commands(user_input):
 
         start_ollama()
         check_ollama_update()
-
-        question = user_input[len("pa "):]
 
         response = get_response_from_ollama_qwen0_6(user_input, ollama)
 
@@ -1167,6 +1165,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("pa-qwen3:1.7b "):
+        user_input = user_input[14:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
             print(f"{green}Ollama is installed.{reset}")
@@ -1175,8 +1174,6 @@ def handle_special_commands(user_input):
 
         start_ollama()
         check_ollama_update()
-
-        question = user_input[len("pa "):]
 
         response = get_response_from_ollama_qwen1_7(user_input, ollama)
 
@@ -1186,6 +1183,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("pa-qwen3:4b "):
+        user_input = user_input[12:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
             print(f"{green}Ollama is installed.{reset}")
@@ -1194,8 +1192,6 @@ def handle_special_commands(user_input):
 
         start_ollama()
         check_ollama_update()
-
-        question = user_input[len("pa "):]
 
         response = get_response_from_ollama_qwen4(user_input, ollama)
 
@@ -1205,6 +1201,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("pa-qwen3:8b "):
+        user_input = user_input[12:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
             print(f"{green}Ollama is installed.{reset}")
@@ -1213,8 +1210,6 @@ def handle_special_commands(user_input):
 
         start_ollama()
         check_ollama_update()
-
-        question = user_input[len("pa "):]
 
         response = get_response_from_ollama_qwen8(user_input, ollama)
 
@@ -1224,6 +1219,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("pa-qwen3:14b "):
+        user_input = user_input[13:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
             print(f"{green}Ollama is installed.{reset}")
@@ -1232,8 +1228,6 @@ def handle_special_commands(user_input):
 
         start_ollama()
         check_ollama_update()
-
-        question = user_input[len("pa "):]
 
         response = get_response_from_ollama(user_input, ollama)
 
@@ -1243,6 +1237,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("pa-qwen3:32b "):
+        user_input = user_input[13:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
             print(f"{green}Ollama is installed.{reset}")
@@ -1251,8 +1246,6 @@ def handle_special_commands(user_input):
 
         start_ollama()
         check_ollama_update()
-
-        question = user_input[len("pa "):]
 
         response = get_response_from_ollama_qwen32(user_input, ollama)
 
@@ -1262,6 +1255,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("pa-qwen3:30b "):
+        user_input = user_input[13:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
             print(f"{green}Ollama is installed.{reset}")
@@ -1270,8 +1264,6 @@ def handle_special_commands(user_input):
 
         start_ollama()
         check_ollama_update()
-
-        question = user_input[len("pa "):]
 
         response = get_response_from_ollama_qwen30(user_input, ollama)
 
@@ -1281,6 +1273,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("pa-qwen3:235b "):
+        user_input = user_input[14:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
             print(f"{green}Ollama is installed.{reset}")
@@ -1289,8 +1282,6 @@ def handle_special_commands(user_input):
 
         start_ollama()
         check_ollama_update()
-
-        question = user_input[len("pa "):]
 
         response = get_response_from_ollama_qwen235(user_input, ollama)
 
