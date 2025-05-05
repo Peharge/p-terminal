@@ -944,7 +944,7 @@ if %errorlevel% equ 0 (
 
     :: Durchlaufe alle WSL-Distributionen
     set "DISTRO=%%A" & set "VER=%%B" & set "STATE=%%C"
-    call :Log CHECK "=== Diagnostics for Ubuntu (Version: !VER!, State: !STATE!) ==="
+    call :Log CHECK "Diagnostics for Ubuntu (Version: !VER!, State: !STATE!)"
 
     rem -- Launch Test
     call :Log TEST "Launching Ubuntu
@@ -1247,7 +1247,7 @@ if %errorlevel% equ 0 (
 
     :: Durchlaufe alle WSL-Distributionen
     set "DISTRO=%%A" & set "VER=%%B" & set "STATE=%%C"
-    call :Log CHECK "=== Diagnostics for openSUSE (Version: !VER!, State: !STATE!) ==="
+    call :Log CHECK "Diagnostics for openSUSE (Version: !VER!, State: !STATE!)"
 
     rem -- Launch Test
     call :Log TEST "Launching openSUSE
@@ -1322,7 +1322,7 @@ if %errorlevel% equ 0 (
 
     :: Durchlaufe alle WSL-Distributionen
     set "DISTRO=%%A" & set "VER=%%B" & set "STATE=%%C"
-    call :Log CHECK "=== Diagnostics for mint (Version: !VER!, State: !STATE!) ==="
+    call :Log CHECK "Diagnostics for mint (Version: !VER!, State: !STATE!)"
 
     rem -- Launch Test
     call :Log TEST "Launching mint
@@ -1397,7 +1397,7 @@ if %errorlevel% equ 0 (
 
     :: Durchlaufe alle WSL-Distributionen
     set "DISTRO=%%A" & set "VER=%%B" & set "STATE=%%C"
-    call :Log CHECK "=== Diagnostics for Fedora (Version: !VER!, State: !STATE!) ==="
+    call :Log CHECK "Diagnostics for Fedora (Version: !VER!, State: !STATE!)"
 
     rem -- Launch Test
     call :Log TEST "Launching Fedora
@@ -1472,7 +1472,7 @@ if %errorlevel% equ 0 (
 
     :: Durchlaufe alle WSL-Distributionen
     set "DISTRO=%%A" & set "VER=%%B" & set "STATE=%%C"
-    call :Log CHECK "=== Diagnostics for RedHat (Version: !VER!, State: !STATE!) ==="
+    call :Log CHECK "Diagnostics for RedHat (Version: !VER!, State: !STATE!)"
 
     rem -- Launch Test
     call :Log TEST "Launching RedHat
@@ -1548,7 +1548,7 @@ if %errorlevel% equ 0 (
 
     :: Durchlaufe alle WSL-Distributionen
     set "DISTRO=%%A" & set "VER=%%B" & set "STATE=%%C"
-    call :Log CHECK "=== Diagnostics for suse-linux (Version: !VER!, State: !STATE!) ==="
+    call :Log CHECK "Diagnostics for suse-linux (Version: !VER!, State: !STATE!)"
 
     rem -- Launch Test
     call :Log TEST "Launching suse-linux
@@ -1624,7 +1624,7 @@ if %errorlevel% equ 0 (
 
     :: Durchlaufe alle WSL-Distributionen
     set "DISTRO=%%A" & set "VER=%%B" & set "STATE=%%C"
-    call :Log CHECK "=== Diagnostics for Pengwin (Version: !VER!, State: !STATE!) ==="
+    call :Log CHECK "Diagnostics for Pengwin (Version: !VER!, State: !STATE!)"
 
     rem -- Launch Test
     call :Log TEST "Launching Pengwin
@@ -1700,7 +1700,7 @@ if %errorlevel% equ 0 (
 
     :: Durchlaufe alle WSL-Distributionen
     set "DISTRO=%%A" & set "VER=%%B" & set "STATE=%%C"
-    call :Log CHECK "=== Diagnostics for oracle-linux (Version: !VER!, State: !STATE!) ==="
+    call :Log CHECK "Diagnostics for oracle-linux (Version: !VER!, State: !STATE!)"
 
     rem -- Launch Test
     call :Log TEST "Launching oracle-linux
@@ -1776,7 +1776,7 @@ if %errorlevel% equ 0 (
 
     :: Durchlaufe alle WSL-Distributionen
     set "DISTRO=%%A" & set "VER=%%B" & set "STATE=%%C"
-    call :Log CHECK "=== Diagnostics for clear-linux (Version: !VER!, State: !STATE!) ==="
+    call :Log CHECK "Diagnostics for clear-linux (Version: !VER!, State: !STATE!)"
 
     rem -- Launch Test
     call :Log TEST "Launching clear-linux
@@ -1851,7 +1851,7 @@ if %errorlevel% equ 0 (
 
     :: Durchlaufe alle WSL-Distributionen
     set "DISTRO=%%A" & set "VER=%%B" & set "STATE=%%C"
-    call :Log CHECK "=== Diagnostics for Alpine (Version: !VER!, State: !STATE!) ==="
+    call :Log CHECK "Diagnostics for Alpine (Version: !VER!, State: !STATE!)"
 
     rem -- Launch Test
     call :Log TEST "Launching Alpine
