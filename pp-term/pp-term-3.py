@@ -5801,7 +5801,7 @@ def get_main_3_pin(current_dir, env_indicator_3):
     print("")
 
     return (
-        f"{env_indicator_3} PP {current_dir}:~{blue}${reset} "
+        f"{env_indicator_3} {blue}PP{reset} {current_dir}:~{blue}${reset} "
     )
 
 
@@ -5809,7 +5809,7 @@ def get_main_4_pin(current_dir, env_indicator_3):
     print("")
 
     return (
-        f"{env_indicator_3} PP {current_dir}:~{red}#{reset} "
+        f"{env_indicator_3} {red}PP{reset} {current_dir}:~{red}#{reset} "
     )
 
 
