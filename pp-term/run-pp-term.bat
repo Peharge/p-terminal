@@ -1395,6 +1395,27 @@ if %errorlevel% equ 0 (
     call :Log PASS "✅ openSUSE updated successfully."
 
     call :Log INFO "Update process completed for openSUSE."
+
+    rem -- Time Sync Check
+    call :Log TEST "Checking time drift"
+    for /F "delims=" %%T in ('powershell -NoProfile -Command "(Get-Date -UFormat '%%s')"') do set "TS_HOST=%%T"
+    for /F "delims=" %%T in ('wsl -d Arch -- date +%%s') do set "TS_DISTRO=%%T"
+    set /A DRIFT=TS_HOST-TS_DISTRO
+    if !DRIFT! GTR %MAX_DRIFT% (
+        call :Log WARN "❌ Time drift !DRIFT!s"
+    ) else (
+        call :Log PASS "✅ Time sync OK"
+    )
+
+    rem -- Mount Points Check
+    call :Log TEST "Listing mount points"
+    call :Run wsl -d Arch -- mount
+    if errorlevel 1 (
+        call :Log WARN "❌ Cannot list mounts"
+    ) else (
+        call :Log PASS "✅ Mount points displayed"
+    )
+
 ) else (
     call :Log INFO "openSUSE is not installed."
 )
@@ -1470,6 +1491,27 @@ if %errorlevel% equ 0 (
     call :Log PASS "✅ mint updated successfully."
 
     call :Log INFO "Update process completed for mint."
+
+        rem -- Time Sync Check
+    call :Log TEST "Checking time drift"
+    for /F "delims=" %%T in ('powershell -NoProfile -Command "(Get-Date -UFormat '%%s')"') do set "TS_HOST=%%T"
+    for /F "delims=" %%T in ('wsl -d mint -- date +%%s') do set "TS_DISTRO=%%T"
+    set /A DRIFT=TS_HOST-TS_DISTRO
+    if !DRIFT! GTR %MAX_DRIFT% (
+        call :Log WARN "❌ Time drift !DRIFT!s"
+    ) else (
+        call :Log PASS "✅ Time sync OK"
+    )
+
+    rem -- Mount Points Check
+    call :Log TEST "Listing mount points"
+    call :Run wsl -d mint -- mount
+    if errorlevel 1 (
+        call :Log WARN "❌ Cannot list mounts"
+    ) else (
+        call :Log PASS "✅ Mount points displayed"
+    )
+
 ) else (
     call :Log INFO "mint is not installed."
 )
@@ -1545,6 +1587,27 @@ if %errorlevel% equ 0 (
     call :Log PASS "✅ Fedora updated successfully."
 
     call :Log INFO "Update process completed for Fedora."
+
+    rem -- Time Sync Check
+    call :Log TEST "Checking time drift"
+    for /F "delims=" %%T in ('powershell -NoProfile -Command "(Get-Date -UFormat '%%s')"') do set "TS_HOST=%%T"
+    for /F "delims=" %%T in ('wsl -d Fedora -- date +%%s') do set "TS_DISTRO=%%T"
+    set /A DRIFT=TS_HOST-TS_DISTRO
+    if !DRIFT! GTR %MAX_DRIFT% (
+        call :Log WARN "❌ Time drift !DRIFT!s"
+    ) else (
+        call :Log PASS "✅ Time sync OK"
+    )
+
+    rem -- Mount Points Check
+    call :Log TEST "Listing mount points"
+    call :Run wsl -d Fedora -- mount
+    if errorlevel 1 (
+        call :Log WARN "❌ Cannot list mounts"
+    ) else (
+        call :Log PASS "✅ Mount points displayed"
+    )
+
 ) else (
     call :Log INFO "Fedora is not installed."
 )
@@ -1620,6 +1683,27 @@ if %errorlevel% equ 0 (
     call :Log PASS "✅ RedHat updated successfully."
 
     call :Log INFO "Update process completed for RedHat."
+
+        rem -- Time Sync Check
+    call :Log TEST "Checking time drift"
+    for /F "delims=" %%T in ('powershell -NoProfile -Command "(Get-Date -UFormat '%%s')"') do set "TS_HOST=%%T"
+    for /F "delims=" %%T in ('wsl -d RedHat -- date +%%s') do set "TS_DISTRO=%%T"
+    set /A DRIFT=TS_HOST-TS_DISTRO
+    if !DRIFT! GTR %MAX_DRIFT% (
+        call :Log WARN "❌ Time drift !DRIFT!s"
+    ) else (
+        call :Log PASS "✅ Time sync OK"
+    )
+
+    rem -- Mount Points Check
+    call :Log TEST "Listing mount points"
+    call :Run wsl -d RedHat -- mount
+    if errorlevel 1 (
+        call :Log WARN "❌ Cannot list mounts"
+    ) else (
+        call :Log PASS "✅ Mount points displayed"
+    )
+
 ) else (
     call :Log INFO "RedHat is not installed."
 )
@@ -1696,6 +1780,27 @@ if %errorlevel% equ 0 (
     call :Log PASS "✅ suse-linux updated successfully."
 
     call :Log INFO "Update process completed for suse-linux."
+
+    rem -- Time Sync Check
+    call :Log TEST "Checking time drift"
+    for /F "delims=" %%T in ('powershell -NoProfile -Command "(Get-Date -UFormat '%%s')"') do set "TS_HOST=%%T"
+    for /F "delims=" %%T in ('wsl -d suse-linux -- date +%%s') do set "TS_DISTRO=%%T"
+    set /A DRIFT=TS_HOST-TS_DISTRO
+    if !DRIFT! GTR %MAX_DRIFT% (
+        call :Log WARN "❌ Time drift !DRIFT!s"
+    ) else (
+        call :Log PASS "✅ Time sync OK"
+    )
+
+    rem -- Mount Points Check
+    call :Log TEST "Listing mount points"
+    call :Run wsl -d suse-linux -- mount
+    if errorlevel 1 (
+        call :Log WARN "❌ Cannot list mounts"
+    ) else (
+        call :Log PASS "✅ Mount points displayed"
+    )
+
 ) else (
     call :Log INFO "suse-linux is not installed."
 )
@@ -1772,6 +1877,27 @@ if %errorlevel% equ 0 (
     call :Log PASS "✅ Pengwin updated successfully."
 
     call :Log INFO "Update process completed for Pengwin."
+
+    rem -- Time Sync Check
+    call :Log TEST "Checking time drift"
+    for /F "delims=" %%T in ('powershell -NoProfile -Command "(Get-Date -UFormat '%%s')"') do set "TS_HOST=%%T"
+    for /F "delims=" %%T in ('wsl -d Pengwin -- date +%%s') do set "TS_DISTRO=%%T"
+    set /A DRIFT=TS_HOST-TS_DISTRO
+    if !DRIFT! GTR %MAX_DRIFT% (
+        call :Log WARN "❌ Time drift !DRIFT!s"
+    ) else (
+        call :Log PASS "✅ Time sync OK"
+    )
+
+    rem -- Mount Points Check
+    call :Log TEST "Listing mount points"
+    call :Run wsl -d Pengwin -- mount
+    if errorlevel 1 (
+        call :Log WARN "❌ Cannot list mounts"
+    ) else (
+        call :Log PASS "✅ Mount points displayed"
+    )
+
 ) else (
     call :Log INFO "Pengwin is not installed."
 )
@@ -1848,6 +1974,27 @@ if %errorlevel% equ 0 (
     call :Log PASS "✅ oracle-linux updated successfully."
 
     call :Log INFO "Update process completed for oracle-linux."
+
+    rem -- Time Sync Check
+    call :Log TEST "Checking time drift"
+    for /F "delims=" %%T in ('powershell -NoProfile -Command "(Get-Date -UFormat '%%s')"') do set "TS_HOST=%%T"
+    for /F "delims=" %%T in ('wsl -d oracle-linux -- date +%%s') do set "TS_DISTRO=%%T"
+    set /A DRIFT=TS_HOST-TS_DISTRO
+    if !DRIFT! GTR %MAX_DRIFT% (
+        call :Log WARN "❌ Time drift !DRIFT!s"
+    ) else (
+        call :Log PASS "✅ Time sync OK"
+    )
+
+    rem -- Mount Points Check
+    call :Log TEST "Listing mount points"
+    call :Run wsl -d oracle-linux -- mount
+    if errorlevel 1 (
+        call :Log WARN "❌ Cannot list mounts"
+    ) else (
+        call :Log PASS "✅ Mount points displayed"
+    )
+
 ) else (
     call :Log INFO "oracle-linux is not installed."
 )
@@ -1924,6 +2071,27 @@ if %errorlevel% equ 0 (
     call :Log PASS "✅ clear-linux updated successfully."
 
     call :Log INFO "Update process completed for clear-linux."
+
+    rem -- Time Sync Check
+    call :Log TEST "Checking time drift"
+    for /F "delims=" %%T in ('powershell -NoProfile -Command "(Get-Date -UFormat '%%s')"') do set "TS_HOST=%%T"
+    for /F "delims=" %%T in ('wsl -d clear-linux -- date +%%s') do set "TS_DISTRO=%%T"
+    set /A DRIFT=TS_HOST-TS_DISTRO
+    if !DRIFT! GTR %MAX_DRIFT% (
+        call :Log WARN "❌ Time drift !DRIFT!s"
+    ) else (
+        call :Log PASS "✅ Time sync OK"
+    )
+
+    rem -- Mount Points Check
+    call :Log TEST "Listing mount points"
+    call :Run wsl -d clear-linux -- mount
+    if errorlevel 1 (
+        call :Log WARN "❌ Cannot list mounts"
+    ) else (
+        call :Log PASS "✅ Mount points displayed"
+    )
+
 ) else (
     call :Log INFO "clear-linux is not installed."
 )
@@ -1999,6 +2167,27 @@ if %errorlevel% equ 0 (
     call :Log PASS "✅ Alpine updated successfully."
 
     call :Log INFO "Update process completed for Alpine."
+
+    rem -- Time Sync Check
+    call :Log TEST "Checking time drift"
+    for /F "delims=" %%T in ('powershell -NoProfile -Command "(Get-Date -UFormat '%%s')"') do set "TS_HOST=%%T"
+    for /F "delims=" %%T in ('wsl -d Alpine -- date +%%s') do set "TS_DISTRO=%%T"
+    set /A DRIFT=TS_HOST-TS_DISTRO
+    if !DRIFT! GTR %MAX_DRIFT% (
+        call :Log WARN "❌ Time drift !DRIFT!s"
+    ) else (
+        call :Log PASS "✅ Time sync OK"
+    )
+
+    rem -- Mount Points Check
+    call :Log TEST "Listing mount points"
+    call :Run wsl -d Alpine -- mount
+    if errorlevel 1 (
+        call :Log WARN "❌ Cannot list mounts"
+    ) else (
+        call :Log PASS "✅ Mount points displayed"
+    )
+
 ) else (
     call :Log INFO "Alpine is not installed."
 )
