@@ -1008,6 +1008,27 @@ if %errorlevel% equ 0 (
     call :Log PASS "✅ Ubuntu updated successfully."
 
     call :Log INFO "Update process completed for Ubuntu."
+
+    rem -- Time Sync Check
+    call :Log TEST "Checking time drift"
+    for /F "delims=" %%T in ('powershell -NoProfile -Command "(Get-Date -UFormat '%%s')"') do set "TS_HOST=%%T"
+    for /F "delims=" %%T in ('wsl -d Ubuntu -- date +%%s') do set "TS_DISTRO=%%T"
+    set /A DRIFT=TS_HOST-TS_DISTRO
+    if !DRIFT! GTR %MAX_DRIFT% (
+        call :Log WARN "❌ Time drift !DRIFT!s"
+    ) else (
+        call :Log PASS "✅ Time sync OK"
+    )
+
+    rem -- Mount Points Check
+    call :Log TEST "Listing mount points"
+    call :Run wsl -d Ubuntu -- mount
+    if errorlevel 1 (
+        call :Log WARN "❌ Cannot list mounts"
+    ) else (
+        call :Log PASS "✅ Mount points displayed"
+    )
+
 ) else (
     call :Log INFO "Ubuntu is not installed."
 )
@@ -1084,6 +1105,27 @@ if %errorlevel% equ 0 (
     call :Log PASS "✅ Debian updated successfully."
 
     call :Log INFO "Update process completed for Debian."
+
+    rem -- Time Sync Check
+    call :Log TEST "Checking time drift"
+    for /F "delims=" %%T in ('powershell -NoProfile -Command "(Get-Date -UFormat '%%s')"') do set "TS_HOST=%%T"
+    for /F "delims=" %%T in ('wsl -d Debian -- date +%%s') do set "TS_DISTRO=%%T"
+    set /A DRIFT=TS_HOST-TS_DISTRO
+    if !DRIFT! GTR %MAX_DRIFT% (
+        call :Log WARN "❌ Time drift !DRIFT!s"
+    ) else (
+        call :Log PASS "✅ Time sync OK"
+    )
+
+    rem -- Mount Points Check
+    call :Log TEST "Listing mount points"
+    call :Run wsl -d Debian -- mount
+    if errorlevel 1 (
+        call :Log WARN "❌ Cannot list mounts"
+    ) else (
+        call :Log PASS "✅ Mount points displayed"
+    )
+
 ) else (
     call :Log INFO "Debian is not installed."
 )
@@ -1161,6 +1203,27 @@ if %errorlevel% equ 0 (
     call :Log PASS "✅ kali-linux updated successfully."
 
     call :Log INFO "Update process completed for kali-linux."
+
+    rem -- Time Sync Check
+    call :Log TEST "Checking time drift"
+    for /F "delims=" %%T in ('powershell -NoProfile -Command "(Get-Date -UFormat '%%s')"') do set "TS_HOST=%%T"
+    for /F "delims=" %%T in ('wsl -d kali-linux -- date +%%s') do set "TS_DISTRO=%%T"
+    set /A DRIFT=TS_HOST-TS_DISTRO
+    if !DRIFT! GTR %MAX_DRIFT% (
+        call :Log WARN "❌ Time drift !DRIFT!s"
+    ) else (
+        call :Log PASS "✅ Time sync OK"
+    )
+
+    rem -- Mount Points Check
+    call :Log TEST "Listing mount points"
+    call :Run wsl -d kali-linux -- mount
+    if errorlevel 1 (
+        call :Log WARN "❌ Cannot list mounts"
+    ) else (
+        call :Log PASS "✅ Mount points displayed"
+    )
+
 ) else (
     call :Log INFO "kali-linux is not installed."
 )
@@ -1236,6 +1299,27 @@ if %errorlevel% equ 0 (
     call :Log PASS "✅ Arch updated successfully."
 
     call :Log INFO "Update process completed for Arch."
+
+    rem -- Time Sync Check
+    call :Log TEST "Checking time drift"
+    for /F "delims=" %%T in ('powershell -NoProfile -Command "(Get-Date -UFormat '%%s')"') do set "TS_HOST=%%T"
+    for /F "delims=" %%T in ('wsl -d Arch -- date +%%s') do set "TS_DISTRO=%%T"
+    set /A DRIFT=TS_HOST-TS_DISTRO
+    if !DRIFT! GTR %MAX_DRIFT% (
+        call :Log WARN "❌ Time drift !DRIFT!s"
+    ) else (
+        call :Log PASS "✅ Time sync OK"
+    )
+
+    rem -- Mount Points Check
+    call :Log TEST "Listing mount points"
+    call :Run wsl -d Arch -- mount
+    if errorlevel 1 (
+        call :Log WARN "❌ Cannot list mounts"
+    ) else (
+        call :Log PASS "✅ Mount points displayed"
+    )
+
 ) else (
     call :Log INFO "Arch is not installed."
 )
@@ -1917,26 +2001,6 @@ if %errorlevel% equ 0 (
     call :Log INFO "Update process completed for Alpine."
 ) else (
     call :Log INFO "Alpine is not installed."
-)
-
-rem -- Time Sync Check
-call :Log TEST "Checking time drift"
-for /F "delims=" %%T in ('powershell -NoProfile -Command "(Get-Date -UFormat '%%s')"') do set "TS_HOST=%%T"
-for /F "delims=" %%T in ('wsl -d "%DEFAULT_DISTRO%" -- date +%%s') do set "TS_DISTRO=%%T"
-set /A DRIFT=TS_HOST-TS_DISTRO
-if !DRIFT! GTR %MAX_DRIFT% (
-    call :Log WARN "❌ Time drift !DRIFT!s"
-) else (
-    call :Log PASS "✅ Time sync OK"
-)
-
-rem -- Mount Points Check
-call :Log TEST "Listing mount points"
-call :Run wsl -d "%DEFAULT_DISTRO%" -- mount
-if errorlevel 1 (
-    call :Log WARN "❌ Cannot list mounts"
-) else (
-    call :Log PASS "✅ Mount points displayed"
 )
 
 call :Log INFO "Deep diagnostics completed for all distributions."
