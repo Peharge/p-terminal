@@ -1020,7 +1020,7 @@ if %errorlevel% equ 0 (
 
     :: Durchlaufe alle WSL-Distributionen
     set "DISTRO=%%A" & set "VER=%%B" & set "STATE=%%C"
-    call :Log CHECK "=== Diagnostics for Debian (Version: !VER!, State: !STATE!) ==="
+    call :Log CHECK "Diagnostics for Debian (Version: !VER!, State: !STATE!)"
 
     rem -- Launch Test
     call :Log TEST "Launching Debian
@@ -1089,7 +1089,7 @@ if %errorlevel% equ 0 (
 )
 
 
-:: Arch Linux
+:: Kali Linux
 wsl -d kali-linux -- bash -c "exit" 2>nul
 if %errorlevel% equ 0 (
 
@@ -1097,7 +1097,7 @@ if %errorlevel% equ 0 (
 
     :: Durchlaufe alle WSL-Distributionen
     set "DISTRO=%%A" & set "VER=%%B" & set "STATE=%%C"
-    call :Log CHECK "=== Diagnostics for kali-linux (Version: !VER!, State: !STATE!) ==="
+    call :Log CHECK "Diagnostics for kali-linux (Version: !VER!, State: !STATE!)"
 
     rem -- Launch Test
     call :Log TEST "Launching kali-linux
@@ -1165,13 +1165,14 @@ if %errorlevel% equ 0 (
     call :Log INFO "kali-linux is not installed."
 )
 
+:: Arch Linux
 wsl -d Arch -- bash -c "exit" 2>nul
 if %errorlevel% equ 0 (
     call :Log INFO "Starting deep diagnostics for Arch"
 
     :: Durchlaufe alle WSL-Distributionen
     set "DISTRO=%%A" & set "VER=%%B" & set "STATE=%%C"
-    call :Log CHECK "=== Diagnostics for Arch (Version: !VER!, State: !STATE!) ==="
+    call :Log CHECK "Diagnostics for Arch (Version: !VER!, State: !STATE!)"
 
     rem -- Launch Test
     call :Log TEST "Launching Arch
@@ -1242,73 +1243,680 @@ if %errorlevel% equ 0 (
 :: openSUSE
 wsl -d openSUSE -- bash -c "exit" 2>nul
 if %errorlevel% equ 0 (
-    echo openSUSE is installed.
+    call :Log INFO "Starting deep diagnostics for openSUSE"
+
+    :: Durchlaufe alle WSL-Distributionen
+    set "DISTRO=%%A" & set "VER=%%B" & set "STATE=%%C"
+    call :Log CHECK "=== Diagnostics for openSUSE (Version: !VER!, State: !STATE!) ==="
+
+    rem -- Launch Test
+    call :Log TEST "Launching openSUSE
+    call :Run wsl -d openSUSE -- true
+    if errorlevel 1 (
+        call :Log FAIL "Cannot launch openSUSE"
+        call :Log HINT "Try: wsl --terminate openSUSE & wsl --unregister openSUSE and reinstall"
+    ) else (
+        call :Log PASS "✅ Launch OK"
+    )
+
+    rem -- Kernel & OS Info
+    call :Log TEST "Retrieving kernel and OS info"
+    call :Run wsl -d openSUSE -- uname -a
+    call :Run wsl -d openSUSE -- cat /etc/os-release
+    call :Log PASS "✅ Kernel and OS details displayed"
+
+    rem -- Uptime & Load
+    call :Log TEST "Checking uptime and load average"
+    call :Run wsl -d openSUSE -- uptime
+    call :Log PASS "✅ Uptime and load displayed"
+
+    rem -- Memory Usage
+    call :Log TEST "Checking memory usage"
+    call :Run wsl -d openSUSE -- free -m
+    call :Log PASS "✅ Memory usage OK"
+
+    rem -- Disk Usage
+    call :Log TEST "Checking disk usage"
+    call :Run wsl -d openSUSE -- df -h /
+    call :Log PASS "✅ Disk usage OK"
+
+    rem -- Top Processes
+    call :Log TEST "Listing top CPU processes"
+    wsl -d openSUSE -- bash -c "top -b -n 1 | head -n 10"
+    call :Log PASS "✅ Top processes displayed"
+
+    rem -- Network Connectivity Check
+    call :Log TEST "Pinging %PING_ADDR%"
+    call :Run wsl -d openSUSE -- ping -c 2 %PING_ADDR%
+    if errorlevel 1 (
+        call :Log WARN "❌ Network unreachable"
+        call :Log HINT "Check WSL network settings and Windows Firewall"
+    ) else (
+        call :Log PASS "✅ Network OK"
+    )
+
+    rem -- DNS Resolution Check
+    call :Log TEST "Resolving %TEST_DOMAIN%"
+    call :Run wsl -d openSUSE -- nslookup %TEST_DOMAIN%
+    if errorlevel 1 (
+        call :Log WARN "❌ DNS resolution failed"
+    ) else (
+        call :Log PASS "✅ DNS OK"
+    )
+
+    call :Log INFO "Starting update process for openSUSE..."
+
+    call :Log INFO "Updating openSUSE using apt..."
+    call :Run wsl -d openSUSE -- sudo zypper refresh && sudo zypper update -y
+    call :Log PASS "✅ openSUSE updated successfully."
+
+    call :Log INFO "Update process completed for openSUSE."
 ) else (
-    echo openSUSE is not installed.
+    call :Log INFO "openSUSE is not installed."
 )
 
 :: Linux Mint
-wsl -d LinuxMint -- bash -c "exit" 2>nul
+wsl -d mint -- bash -c "exit" 2>nul
 if %errorlevel% equ 0 (
-    echo Linux Mint is installed.
+    call :Log INFO "Starting deep diagnostics for mint"
+
+    :: Durchlaufe alle WSL-Distributionen
+    set "DISTRO=%%A" & set "VER=%%B" & set "STATE=%%C"
+    call :Log CHECK "=== Diagnostics for mint (Version: !VER!, State: !STATE!) ==="
+
+    rem -- Launch Test
+    call :Log TEST "Launching mint
+    call :Run wsl -d mint -- true
+    if errorlevel 1 (
+        call :Log FAIL "Cannot launch mint"
+        call :Log HINT "Try: wsl --terminate mint & wsl --unregister mint and reinstall"
+    ) else (
+        call :Log PASS "✅ Launch OK"
+    )
+
+    rem -- Kernel & OS Info
+    call :Log TEST "Retrieving kernel and OS info"
+    call :Run wsl -d mint -- uname -a
+    call :Run wsl -d mint -- cat /etc/os-release
+    call :Log PASS "✅ Kernel and OS details displayed"
+
+    rem -- Uptime & Load
+    call :Log TEST "Checking uptime and load average"
+    call :Run wsl -d mint -- uptime
+    call :Log PASS "✅ Uptime and load displayed"
+
+    rem -- Memory Usage
+    call :Log TEST "Checking memory usage"
+    call :Run wsl -d mint -- free -m
+    call :Log PASS "✅ Memory usage OK"
+
+    rem -- Disk Usage
+    call :Log TEST "Checking disk usage"
+    call :Run wsl -d mint -- df -h /
+    call :Log PASS "✅ Disk usage OK"
+
+    rem -- Top Processes
+    call :Log TEST "Listing top CPU processes"
+    wsl -d mint -- bash -c "top -b -n 1 | head -n 10"
+    call :Log PASS "✅ Top processes displayed"
+
+    rem -- Network Connectivity Check
+    call :Log TEST "Pinging %PING_ADDR%"
+    call :Run wsl -d mint -- ping -c 2 %PING_ADDR%
+    if errorlevel 1 (
+        call :Log WARN "❌ Network unreachable"
+        call :Log HINT "Check WSL network settings and Windows Firewall"
+    ) else (
+        call :Log PASS "✅ Network OK"
+    )
+
+    rem -- DNS Resolution Check
+    call :Log TEST "Resolving %TEST_DOMAIN%"
+    call :Run wsl -d mint -- nslookup %TEST_DOMAIN%
+    if errorlevel 1 (
+        call :Log WARN "❌ DNS resolution failed"
+    ) else (
+        call :Log PASS "✅ DNS OK"
+    )
+
+    call :Log INFO "Starting update process for mint..."
+
+    call :Log INFO "Updating mint using apt..."
+    call :Run wsl -d mint -- sudo apt update && sudo apt upgrade -y
+    call :Log PASS "✅ mint updated successfully."
+
+    call :Log INFO "Update process completed for mint."
 ) else (
-    echo Linux Mint is not installed.
+    call :Log INFO "mint is not installed."
 )
 
 :: Fedora
 wsl -d Fedora -- bash -c "exit" 2>nul
 if %errorlevel% equ 0 (
-    echo Fedora is installed.
+    call :Log INFO "Starting deep diagnostics for Fedora"
+
+    :: Durchlaufe alle WSL-Distributionen
+    set "DISTRO=%%A" & set "VER=%%B" & set "STATE=%%C"
+    call :Log CHECK "=== Diagnostics for Fedora (Version: !VER!, State: !STATE!) ==="
+
+    rem -- Launch Test
+    call :Log TEST "Launching Fedora
+    call :Run wsl -d Fedora -- true
+    if errorlevel 1 (
+        call :Log FAIL "Cannot launch Fedora"
+        call :Log HINT "Try: wsl --terminate Fedora & wsl --unregister Fedora and reinstall"
+    ) else (
+        call :Log PASS "✅ Launch OK"
+    )
+
+    rem -- Kernel & OS Info
+    call :Log TEST "Retrieving kernel and OS info"
+    call :Run wsl -d Fedora -- uname -a
+    call :Run wsl -d Fedora -- cat /etc/os-release
+    call :Log PASS "✅ Kernel and OS details displayed"
+
+    rem -- Uptime & Load
+    call :Log TEST "Checking uptime and load average"
+    call :Run wsl -d Fedora -- uptime
+    call :Log PASS "✅ Uptime and load displayed"
+
+    rem -- Memory Usage
+    call :Log TEST "Checking memory usage"
+    call :Run wsl -d Fedora -- free -m
+    call :Log PASS "✅ Memory usage OK"
+
+    rem -- Disk Usage
+    call :Log TEST "Checking disk usage"
+    call :Run wsl -d Fedora -- df -h /
+    call :Log PASS "✅ Disk usage OK"
+
+    rem -- Top Processes
+    call :Log TEST "Listing top CPU processes"
+    wsl -d Fedora -- bash -c "top -b -n 1 | head -n 10"
+    call :Log PASS "✅ Top processes displayed"
+
+    rem -- Network Connectivity Check
+    call :Log TEST "Pinging %PING_ADDR%"
+    call :Run wsl -d Fedora -- ping -c 2 %PING_ADDR%
+    if errorlevel 1 (
+        call :Log WARN "❌ Network unreachable"
+        call :Log HINT "Check WSL network settings and Windows Firewall"
+    ) else (
+        call :Log PASS "✅ Network OK"
+    )
+
+    rem -- DNS Resolution Check
+    call :Log TEST "Resolving %TEST_DOMAIN%"
+    call :Run wsl -d Fedora -- nslookup %TEST_DOMAIN%
+    if errorlevel 1 (
+        call :Log WARN "❌ DNS resolution failed"
+    ) else (
+        call :Log PASS "✅ DNS OK"
+    )
+
+    call :Log INFO "Starting update process for Fedora..."
+
+    call :Log INFO "Updating Fedora using apt..."
+    call :Run wsl -d Fedora -- sudo dnf upgrade -y
+    call :Log PASS "✅ Fedora updated successfully."
+
+    call :Log INFO "Update process completed for Fedora."
 ) else (
-    echo Fedora is not installed.
+    call :Log INFO "Fedora is not installed."
 )
 
 :: Red Hat Enterprise Linux
-wsl -d "Red Hat Enterprise Linux" -- bash -c "exit" 2>nul
+wsl -d "RedHat" -- bash -c "exit" 2>nul
 if %errorlevel% equ 0 (
-    echo Red Hat Enterprise Linux is installed.
+    call :Log INFO "Starting deep diagnostics for RedHat"
+
+    :: Durchlaufe alle WSL-Distributionen
+    set "DISTRO=%%A" & set "VER=%%B" & set "STATE=%%C"
+    call :Log CHECK "=== Diagnostics for RedHat (Version: !VER!, State: !STATE!) ==="
+
+    rem -- Launch Test
+    call :Log TEST "Launching RedHat
+    call :Run wsl -d RedHat -- true
+    if errorlevel 1 (
+        call :Log FAIL "Cannot launch RedHat"
+        call :Log HINT "Try: wsl --terminate RedHat & wsl --unregister RedHat and reinstall"
+    ) else (
+        call :Log PASS "✅ Launch OK"
+    )
+
+    rem -- Kernel & OS Info
+    call :Log TEST "Retrieving kernel and OS info"
+    call :Run wsl -d RedHat -- uname -a
+    call :Run wsl -d RedHat -- cat /etc/os-release
+    call :Log PASS "✅ Kernel and OS details displayed"
+
+    rem -- Uptime & Load
+    call :Log TEST "Checking uptime and load average"
+    call :Run wsl -d RedHat -- uptime
+    call :Log PASS "✅ Uptime and load displayed"
+
+    rem -- Memory Usage
+    call :Log TEST "Checking memory usage"
+    call :Run wsl -d RedHat -- free -m
+    call :Log PASS "✅ Memory usage OK"
+
+    rem -- Disk Usage
+    call :Log TEST "Checking disk usage"
+    call :Run wsl -d RedHat -- df -h /
+    call :Log PASS "✅ Disk usage OK"
+
+    rem -- Top Processes
+    call :Log TEST "Listing top CPU processes"
+    wsl -d RedHat -- bash -c "top -b -n 1 | head -n 10"
+    call :Log PASS "✅ Top processes displayed"
+
+    rem -- Network Connectivity Check
+    call :Log TEST "Pinging %PING_ADDR%"
+    call :Run wsl -d RedHat -- ping -c 2 %PING_ADDR%
+    if errorlevel 1 (
+        call :Log WARN "❌ Network unreachable"
+        call :Log HINT "Check WSL network settings and Windows Firewall"
+    ) else (
+        call :Log PASS "✅ Network OK"
+    )
+
+    rem -- DNS Resolution Check
+    call :Log TEST "Resolving %TEST_DOMAIN%"
+    call :Run wsl -d RedHat -- nslookup %TEST_DOMAIN%
+    if errorlevel 1 (
+        call :Log WARN "❌ DNS resolution failed"
+    ) else (
+        call :Log PASS "✅ DNS OK"
+    )
+
+    call :Log INFO "Starting update process for RedHat..."
+
+    call :Log INFO "Updating RedHat using apt..."
+    call :Run wsl -d RedHat -- sudo yum update -y
+    call :Log PASS "✅ RedHat updated successfully."
+
+    call :Log INFO "Update process completed for RedHat."
 ) else (
-    echo Red Hat Enterprise Linux is not installed.
+    call :Log INFO "RedHat is not installed."
 )
+
 
 :: SUSE Linux
 wsl -d SUSE -- bash -c "exit" 2>nul
 if %errorlevel% equ 0 (
-    echo SUSE Linux is installed.
+    call :Log INFO "Starting deep diagnostics for suse-linux"
+
+    :: Durchlaufe alle WSL-Distributionen
+    set "DISTRO=%%A" & set "VER=%%B" & set "STATE=%%C"
+    call :Log CHECK "=== Diagnostics for suse-linux (Version: !VER!, State: !STATE!) ==="
+
+    rem -- Launch Test
+    call :Log TEST "Launching suse-linux
+    call :Run wsl -d suse-linux -- true
+    if errorlevel 1 (
+        call :Log FAIL "Cannot launch suse-linux"
+        call :Log HINT "Try: wsl --terminate suse-linux & wsl --unregister suse-linux and reinstall"
+    ) else (
+        call :Log PASS "✅ Launch OK"
+    )
+
+    rem -- Kernel & OS Info
+    call :Log TEST "Retrieving kernel and OS info"
+    call :Run wsl -d suse-linux -- uname -a
+    call :Run wsl -d suse-linux -- cat /etc/os-release
+    call :Log PASS "✅ Kernel and OS details displayed"
+
+    rem -- Uptime & Load
+    call :Log TEST "Checking uptime and load average"
+    call :Run wsl -d suse-linux -- uptime
+    call :Log PASS "✅ Uptime and load displayed"
+
+    rem -- Memory Usage
+    call :Log TEST "Checking memory usage"
+    call :Run wsl -d suse-linux -- free -m
+    call :Log PASS "✅ Memory usage OK"
+
+    rem -- Disk Usage
+    call :Log TEST "Checking disk usage"
+    call :Run wsl -d suse-linux -- df -h /
+    call :Log PASS "✅ Disk usage OK"
+
+    rem -- Top Processes
+    call :Log TEST "Listing top CPU processes"
+    wsl -d suse-linux -- bash -c "top -b -n 1 | head -n 10"
+    call :Log PASS "✅ Top processes displayed"
+
+    rem -- Network Connectivity Check
+    call :Log TEST "Pinging %PING_ADDR%"
+    call :Run wsl -d suse-linux -- ping -c 2 %PING_ADDR%
+    if errorlevel 1 (
+        call :Log WARN "❌ Network unreachable"
+        call :Log HINT "Check WSL network settings and Windows Firewall"
+    ) else (
+        call :Log PASS "✅ Network OK"
+    )
+
+    rem -- DNS Resolution Check
+    call :Log TEST "Resolving %TEST_DOMAIN%"
+    call :Run wsl -d suse-linux -- nslookup %TEST_DOMAIN%
+    if errorlevel 1 (
+        call :Log WARN "❌ DNS resolution failed"
+    ) else (
+        call :Log PASS "✅ DNS OK"
+    )
+
+    call :Log INFO "Starting update process for suse-linux..."
+
+    call :Log INFO "Updating suse-linux using apt..."
+    call :Run wsl -d suse-linux -- sudo zypper refresh && sudo zypper update -y
+    call :Log PASS "✅ suse-linux updated successfully."
+
+    call :Log INFO "Update process completed for suse-linux."
 ) else (
-    echo SUSE Linux is not installed.
+    call :Log INFO "suse-linux is not installed."
 )
+
 
 :: Pengwin
 wsl -d Pengwin -- bash -c "exit" 2>nul
 if %errorlevel% equ 0 (
-    echo Pengwin is installed.
+    call :Log INFO "Starting deep diagnostics for Pengwin"
+
+    :: Durchlaufe alle WSL-Distributionen
+    set "DISTRO=%%A" & set "VER=%%B" & set "STATE=%%C"
+    call :Log CHECK "=== Diagnostics for Pengwin (Version: !VER!, State: !STATE!) ==="
+
+    rem -- Launch Test
+    call :Log TEST "Launching Pengwin
+    call :Run wsl -d Pengwin -- true
+    if errorlevel 1 (
+        call :Log FAIL "Cannot launch Pengwin"
+        call :Log HINT "Try: wsl --terminate Pengwin & wsl --unregister Pengwin and reinstall"
+    ) else (
+        call :Log PASS "✅ Launch OK"
+    )
+
+    rem -- Kernel & OS Info
+    call :Log TEST "Retrieving kernel and OS info"
+    call :Run wsl -d Pengwin -- uname -a
+    call :Run wsl -d Pengwin -- cat /etc/os-release
+    call :Log PASS "✅ Kernel and OS details displayed"
+
+    rem -- Uptime & Load
+    call :Log TEST "Checking uptime and load average"
+    call :Run wsl -d Pengwin -- uptime
+    call :Log PASS "✅ Uptime and load displayed"
+
+    rem -- Memory Usage
+    call :Log TEST "Checking memory usage"
+    call :Run wsl -d Pengwin -- free -m
+    call :Log PASS "✅ Memory usage OK"
+
+    rem -- Disk Usage
+    call :Log TEST "Checking disk usage"
+    call :Run wsl -d Pengwin -- df -h /
+    call :Log PASS "✅ Disk usage OK"
+
+    rem -- Top Processes
+    call :Log TEST "Listing top CPU processes"
+    wsl -d Pengwin -- bash -c "top -b -n 1 | head -n 10"
+    call :Log PASS "✅ Top processes displayed"
+
+    rem -- Network Connectivity Check
+    call :Log TEST "Pinging %PING_ADDR%"
+    call :Run wsl -d Pengwin -- ping -c 2 %PING_ADDR%
+    if errorlevel 1 (
+        call :Log WARN "❌ Network unreachable"
+        call :Log HINT "Check WSL network settings and Windows Firewall"
+    ) else (
+        call :Log PASS "✅ Network OK"
+    )
+
+    rem -- DNS Resolution Check
+    call :Log TEST "Resolving %TEST_DOMAIN%"
+    call :Run wsl -d Pengwin -- nslookup %TEST_DOMAIN%
+    if errorlevel 1 (
+        call :Log WARN "❌ DNS resolution failed"
+    ) else (
+        call :Log PASS "✅ DNS OK"
+    )
+
+    call :Log INFO "Starting update process for Pengwin..."
+
+    call :Log INFO "Updating Pengwin using apt..."
+    call :Run wsl -d Pengwin -- sudo apt update && sudo apt upgrade -y
+    call :Log PASS "✅ Pengwin updated successfully."
+
+    call :Log INFO "Update process completed for Pengwin."
 ) else (
-    echo Pengwin is not installed.
+    call :Log INFO "Pengwin is not installed."
 )
+
 
 :: Oracle Linux
 wsl -d OracleLinux -- bash -c "exit" 2>nul
 if %errorlevel% equ 0 (
-    echo Oracle Linux is installed.
+    call :Log INFO "Starting deep diagnostics for oracle-linux"
+
+    :: Durchlaufe alle WSL-Distributionen
+    set "DISTRO=%%A" & set "VER=%%B" & set "STATE=%%C"
+    call :Log CHECK "=== Diagnostics for oracle-linux (Version: !VER!, State: !STATE!) ==="
+
+    rem -- Launch Test
+    call :Log TEST "Launching oracle-linux
+    call :Run wsl -d oracle-linux -- true
+    if errorlevel 1 (
+        call :Log FAIL "Cannot launch oracle-linux"
+        call :Log HINT "Try: wsl --terminate oracle-linux & wsl --unregister oracle-linux and reinstall"
+    ) else (
+        call :Log PASS "✅ Launch OK"
+    )
+
+    rem -- Kernel & OS Info
+    call :Log TEST "Retrieving kernel and OS info"
+    call :Run wsl -d oracle-linux -- uname -a
+    call :Run wsl -d oracle-linux -- cat /etc/os-release
+    call :Log PASS "✅ Kernel and OS details displayed"
+
+    rem -- Uptime & Load
+    call :Log TEST "Checking uptime and load average"
+    call :Run wsl -d oracle-linux -- uptime
+    call :Log PASS "✅ Uptime and load displayed"
+
+    rem -- Memory Usage
+    call :Log TEST "Checking memory usage"
+    call :Run wsl -d oracle-linux -- free -m
+    call :Log PASS "✅ Memory usage OK"
+
+    rem -- Disk Usage
+    call :Log TEST "Checking disk usage"
+    call :Run wsl -d oracle-linux -- df -h /
+    call :Log PASS "✅ Disk usage OK"
+
+    rem -- Top Processes
+    call :Log TEST "Listing top CPU processes"
+    wsl -d oracle-linux -- bash -c "top -b -n 1 | head -n 10"
+    call :Log PASS "✅ Top processes displayed"
+
+    rem -- Network Connectivity Check
+    call :Log TEST "Pinging %PING_ADDR%"
+    call :Run wsl -d oracle-linux -- ping -c 2 %PING_ADDR%
+    if errorlevel 1 (
+        call :Log WARN "❌ Network unreachable"
+        call :Log HINT "Check WSL network settings and Windows Firewall"
+    ) else (
+        call :Log PASS "✅ Network OK"
+    )
+
+    rem -- DNS Resolution Check
+    call :Log TEST "Resolving %TEST_DOMAIN%"
+    call :Run wsl -d oracle-linux -- nslookup %TEST_DOMAIN%
+    if errorlevel 1 (
+        call :Log WARN "❌ DNS resolution failed"
+    ) else (
+        call :Log PASS "✅ DNS OK"
+    )
+
+    call :Log INFO "Starting update process for oracle-linux..."
+
+    call :Log INFO "Updating oracle-linux using apt..."
+    call :Run wsl -d oracle-linux -- sudo dnf upgrade -y
+    call :Log PASS "✅ oracle-linux updated successfully."
+
+    call :Log INFO "Update process completed for oracle-linux."
 ) else (
-    echo Oracle Linux is not installed.
+    call :Log INFO "oracle-linux is not installed."
 )
+
 
 :: Clear Linux
 wsl -d ClearLinux -- bash -c "exit" 2>nul
 if %errorlevel% equ 0 (
-    echo Clear Linux is installed.
+    call :Log INFO "Starting deep diagnostics for clear-linux"
+
+    :: Durchlaufe alle WSL-Distributionen
+    set "DISTRO=%%A" & set "VER=%%B" & set "STATE=%%C"
+    call :Log CHECK "=== Diagnostics for clear-linux (Version: !VER!, State: !STATE!) ==="
+
+    rem -- Launch Test
+    call :Log TEST "Launching clear-linux
+    call :Run wsl -d clear-linux -- true
+    if errorlevel 1 (
+        call :Log FAIL "Cannot launch clear-linux"
+        call :Log HINT "Try: wsl --terminate clear-linux & wsl --unregister clear-linux and reinstall"
+    ) else (
+        call :Log PASS "✅ Launch OK"
+    )
+
+    rem -- Kernel & OS Info
+    call :Log TEST "Retrieving kernel and OS info"
+    call :Run wsl -d clear-linux -- uname -a
+    call :Run wsl -d clear-linux -- cat /etc/os-release
+    call :Log PASS "✅ Kernel and OS details displayed"
+
+    rem -- Uptime & Load
+    call :Log TEST "Checking uptime and load average"
+    call :Run wsl -d clear-linux -- uptime
+    call :Log PASS "✅ Uptime and load displayed"
+
+    rem -- Memory Usage
+    call :Log TEST "Checking memory usage"
+    call :Run wsl -d clear-linux -- free -m
+    call :Log PASS "✅ Memory usage OK"
+
+    rem -- Disk Usage
+    call :Log TEST "Checking disk usage"
+    call :Run wsl -d clear-linux -- df -h /
+    call :Log PASS "✅ Disk usage OK"
+
+    rem -- Top Processes
+    call :Log TEST "Listing top CPU processes"
+    wsl -d clear-linux -- bash -c "top -b -n 1 | head -n 10"
+    call :Log PASS "✅ Top processes displayed"
+
+    rem -- Network Connectivity Check
+    call :Log TEST "Pinging %PING_ADDR%"
+    call :Run wsl -d clear-linux -- ping -c 2 %PING_ADDR%
+    if errorlevel 1 (
+        call :Log WARN "❌ Network unreachable"
+        call :Log HINT "Check WSL network settings and Windows Firewall"
+    ) else (
+        call :Log PASS "✅ Network OK"
+    )
+
+    rem -- DNS Resolution Check
+    call :Log TEST "Resolving %TEST_DOMAIN%"
+    call :Run wsl -d clear-linux -- nslookup %TEST_DOMAIN%
+    if errorlevel 1 (
+        call :Log WARN "❌ DNS resolution failed"
+    ) else (
+        call :Log PASS "✅ DNS OK"
+    )
+
+    call :Log INFO "Starting update process for clear-linux..."
+
+    call :Log INFO "Updating clear-linux using apt..."
+    call :Run wsl -d clear-linux -- sudo swupd update
+    call :Log PASS "✅ clear-linux updated successfully."
+
+    call :Log INFO "Update process completed for clear-linux."
 ) else (
-    echo Clear Linux is not installed.
+    call :Log INFO "clear-linux is not installed."
 )
 
 :: Alpine
 wsl -d Alpine -- bash -c "exit" 2>nul
 if %errorlevel% equ 0 (
-    echo Alpine is installed.
+    call :Log INFO "Starting deep diagnostics for Alpine"
+
+    :: Durchlaufe alle WSL-Distributionen
+    set "DISTRO=%%A" & set "VER=%%B" & set "STATE=%%C"
+    call :Log CHECK "=== Diagnostics for Alpine (Version: !VER!, State: !STATE!) ==="
+
+    rem -- Launch Test
+    call :Log TEST "Launching Alpine
+    call :Run wsl -d Alpine -- true
+    if errorlevel 1 (
+        call :Log FAIL "Cannot launch Alpine"
+        call :Log HINT "Try: wsl --terminate Alpine & wsl --unregister Alpine and reinstall"
+    ) else (
+        call :Log PASS "✅ Launch OK"
+    )
+
+    rem -- Kernel & OS Info
+    call :Log TEST "Retrieving kernel and OS info"
+    call :Run wsl -d Alpine -- uname -a
+    call :Run wsl -d Alpine -- cat /etc/os-release
+    call :Log PASS "✅ Kernel and OS details displayed"
+
+    rem -- Uptime & Load
+    call :Log TEST "Checking uptime and load average"
+    call :Run wsl -d Alpine -- uptime
+    call :Log PASS "✅ Uptime and load displayed"
+
+    rem -- Memory Usage
+    call :Log TEST "Checking memory usage"
+    call :Run wsl -d Alpine -- free -m
+    call :Log PASS "✅ Memory usage OK"
+
+    rem -- Disk Usage
+    call :Log TEST "Checking disk usage"
+    call :Run wsl -d Alpine -- df -h /
+    call :Log PASS "✅ Disk usage OK"
+
+    rem -- Top Processes
+    call :Log TEST "Listing top CPU processes"
+    wsl -d Alpine -- bash -c "top -b -n 1 | head -n 10"
+    call :Log PASS "✅ Top processes displayed"
+
+    rem -- Network Connectivity Check
+    call :Log TEST "Pinging %PING_ADDR%"
+    call :Run wsl -d Alpine -- ping -c 2 %PING_ADDR%
+    if errorlevel 1 (
+        call :Log WARN "❌ Network unreachable"
+        call :Log HINT "Check WSL network settings and Windows Firewall"
+    ) else (
+        call :Log PASS "✅ Network OK"
+    )
+
+    rem -- DNS Resolution Check
+    call :Log TEST "Resolving %TEST_DOMAIN%"
+    call :Run wsl -d Alpine -- nslookup %TEST_DOMAIN%
+    if errorlevel 1 (
+        call :Log WARN "❌ DNS resolution failed"
+    ) else (
+        call :Log PASS "✅ DNS OK"
+    )
+
+    call :Log INFO "Starting update process for Alpine..."
+
+    call :Log INFO "Updating Alpine using apt..."
+    call :Run wsl -d Alpine -- sudo apk update && sudo apk upgrade
+    call :Log PASS "✅ Alpine updated successfully."
+
+    call :Log INFO "Update process completed for Alpine."
 ) else (
-    echo Alpine is not installed.
+    call :Log INFO "Alpine is not installed."
 )
 
 rem -- Time Sync Check
