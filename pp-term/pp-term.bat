@@ -63,6 +63,16 @@ REM pouvant découler directement ou indirectement de l'utilisation, de la modif
 REM
 REM Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 
+setlocal EnableExtensions EnableDelayedExpansion
+chcp 65001
+
+:: Global Settings
+set "SCRIPT_DIR=%~dp0"
+set "LOGFILE=C:\Users\julia\p-terminal\pp-term\WSL_Diagnostics.log"
+set "MAX_DRIFT=300"          & rem Maximum allowed time drift in seconds
+set "PING_ADDR=8.8.8.8"      & rem Default ping target
+set "TEST_DOMAIN=example.com"
+
 set USERNAME=%USERNAME%
 set PYTHON_PATH=C:\Users\%USERNAME%\p-terminal\pp-term\.env\Scripts\python.exe
 set SCRIPT_install_vs_cpp=C:\Users\%USERNAME%\p-terminal\pp-term\run\cpp\install-vs.py
@@ -70,18 +80,19 @@ set SCRIPT_install_vs_c=C:\Users\%USERNAME%\p-terminal\pp-term\run\c\install-vs.
 set "VCVARS_PATH=C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat"
 set "PEHARGE_PATH_CPP=C:\Users\%USERNAME%\p-terminal\pp-term\peharge-cpp-compier"
 set "PEHARGE_PATH_C=C:\Users\%USERNAME%\p-terminal\pp-term\peharge-c-compiler"
-set SCRIPT_PATH_1=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-3.py
+set SCRIPT_PATH_INSTALL=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-4-install.py
+set SCRIPT_PATH_MAIN=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-4.py
 
 if not exist "%PYTHON_PATH%" (
-    echo Error: Python interpreter not found: %PYTHON_PATH%
+    call :Log ERROR "❌ Python interpreter not found: %PYTHON_PATH%"
     exit /B 1
 )
 
 if not exist "%VCVARS_PATH%" (
-    echo ❌ Peharge Compiler: vcvarsall.bat not found. Please ensure Visual Studio is correctly installed.
+    call :Log ERROR "❌ Peharge Compiler: vcvarsall.bat not found. Please ensure Visual Studio is correctly installed."
 
     if not exist "%SCRIPT_install_vs_cpp%" (
-        echo Error: Script not found: %SCRIPT_install_vs_cpp%
+        call :Log ERROR "❌ Script not found: %SCRIPT_install_vs_cpp%"
         exit /B 1
     )
 
@@ -89,42 +100,94 @@ if not exist "%VCVARS_PATH%" (
 )
 
 if not exist "%PEHARGE_PATH_CPP%" (
-    echo ❌ Peharge Cpp Compiler: The p-terminal folder "%PEHARGE_PATH_CPP%" does not exist. Please ensure it is set up correctly.
+    call :Log ERROR "❌ Peharge Cpp Compiler: The p-terminal folder %PEHARGE_PATH_CPP% does not exist. Please ensure it is set up correctly."
 
     if not exist "%SCRIPT_install_vs_cpp%" (
-        echo Error: Script not found: %SCRIPT_install_vs_cpp%
+        call :Log ERROR "❌ Script not found: %SCRIPT_install_vs_cpp%"
         exit /B 1
     )
 
     "%PYTHON_PATH%" "%SCRIPT_install_vs_cpp%"
 )
 
-echo ✅ Peharge C++ Compiler available and the folder "%PEHARGE_PATH_CPP%" exists.
+call :Log PASS "✅ Peharge C++ Compiler available and the folder %PEHARGE_PATH_CPP% exists."
 
 if not exist "%PEHARGE_PATH_C%" (
-    echo ❌ Peharge C Compiler: The p-terminal folder "%PEHARGE_PATH_C%" does not exist. Please ensure it is set up correctly.
+    call :Log ERROR "❌ Peharge C Compiler: The p-terminal folder "%PEHARGE_PATH_C%" does not exist. Please ensure it is set up correctly."
 
     if not exist "%SCRIPT_install_vs_c%" (
-        echo Error: Script not found: %SCRIPT_install_vs_c%
+        call :Log ERROR "❌  Script not found: %SCRIPT_install_vs_c%"
         exit /B 1
     )
 
     "%PYTHON_PATH%" "%SCRIPT_install_vs_c%"
 )
 
-echo ✅ Peharge C Compiler available and the folder "%PEHARGE_PATH_C%" exists.
+call :Log PASS "✅ Peharge C Compiler available and the folder %PEHARGE_PATH_C% exists."
 
 rem Setze das Arbeitsverzeichnis auf C:\Users\%USERNAME%
 cd /d C:\Users\%USERNAME%
 
-if not exist "%SCRIPT_PATH_1%" (
-    echo Error: Script not found: %SCRIPT_PATH_1%
+if not exist "%SCRIPT_PATH_INSTALL%" (
+    call :Log ERROR "❌ Script not found: %SCRIPT_PATH_INSTALL%"
     exit /B 1
 )
 
-"%PYTHON_PATH%" "%SCRIPT_PATH_1%"
+"%PYTHON_PATH%" "%SCRIPT_PATH_INSTALL%"
+
+if not exist "%SCRIPT_PATH_MAIN%" (
+    call :Log ERROR "❌ Script not found: %SCRIPT_PATH_MAIN%"
+    exit /B 1
+)
+
+"%PYTHON_PATH%" "%SCRIPT_PATH_MAIN%"
 
 echo.
-echo The scripts have been executed!
-echo Press any key to exit.
+call :Log INFO "The scripts have been executed!"
+call :Log INFO "Press any key to exit."
 pause
+
+:: Functions
+:InitLog
+    (echo [%DATE% %TIME%] [LOG INIT] Log created >"%LOGFILE%"
+    ) 2>nul
+    goto :eof
+
+:Timestamp
+    rem Set TS variable to timestamp YYYY-MM-DD HH:MM:SS.mmm
+    for /F "tokens=* delims=" %%D in ('powershell -NoProfile -Command "Get-Date -Format 'yyyy-MM-dd HH:mm:ss.fff'"') do set "TS=%%D"
+    goto :eof
+
+:Log
+    rem call :Log LEVEL Message
+    setlocal EnableDelayedExpansion
+    call :Timestamp
+    set "LEVEL=%~1"
+    shift
+    set "MSG="
+    :buildMsg
+    if "%~1"=="" goto continueLog
+    set "MSG=!MSG! %~1"
+    shift
+    goto buildMsg
+
+:continueLog
+    set "MSG=!MSG:~1!"  & rem entfernt führendes Leerzeichen
+    echo [!TS!] [!LEVEL!] !MSG!
+    >>"%LOGFILE%" echo [!TS!] [!LEVEL!] !MSG!
+    endlocal
+    goto :eof
+
+:Run
+    rem call :Run command arguments
+    setlocal
+    set "CMD=%*"
+    rem echo [COMMAND] %CMD%
+    >>"%LOGFILE%" echo [COMMAND] %CMD%
+    cmd /C %CMD%
+    endlocal
+    goto :eof
+
+:BlankLine
+    echo.
+    goto :eof
