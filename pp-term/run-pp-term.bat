@@ -254,6 +254,7 @@ if %errorlevel% neq 0 (
     )
 ) else (
     call :Log PASS "✅ Python is already installed."
+    python --version
 )
 
 :: Check if Git is already installed
@@ -324,6 +325,7 @@ if %errorlevel% neq 0 (
     )
 ) else (
     call :Log PASS "✅ Git is already installed."
+    git --version
 )
 
 :: Check if Ollama is already installed
@@ -394,6 +396,7 @@ if %errorlevel% neq 0 (
     )
 ) else (
     call :Log PASS "✅ Ollama is already installed."
+    ollama --version
 )
 
 :: Check if FFmpeg is already installed
@@ -464,6 +467,7 @@ if %errorlevel% neq 0 (
     )
 ) else (
     call :Log PASS "✅ FFmpeg is already installed."
+    ffmpeg --version
 )
 
 set USERNAME=%USERNAME%
@@ -536,6 +540,7 @@ if %errorlevel% neq 0 (
     )
 ) else (
     call :Log PASS "✅ Rustup is already installed."
+    rustup --version
 )
 
 :: Check if PowerShell 7 is already installed
