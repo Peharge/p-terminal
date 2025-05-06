@@ -65,7 +65,7 @@ REM Veuillez lire l'intégralité des termes et conditions de la licence MIT pou
 
 set USERNAME=%USERNAME%
 set PYTHON_PATH=C:\Users\%USERNAME%\p-terminal\pp-term\.env\Scripts\python.exe
-set SCRIPT_PATH_1=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-3.py
+set SCRIPT_PATH_1=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-4.py
 
 if not exist "%PYTHON_PATH%" (
     echo Error: Python interpreter not found: %PYTHON_PATH%
