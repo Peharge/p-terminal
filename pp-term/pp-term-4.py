@@ -632,7 +632,7 @@ def handle_special_commands(user_input):
         "run vs-code": "pp-commands\\run-vs-code.py",  # new
         "run vs": "pp-commands\\run-vs.py",  # new
         "p map": "pp-commands\\p-map.py", # new
-        "p weather": "pp-commands\\p-whether.py" # new
+        "p weather": "pp-commands\\p-weather.py" # new
     }
 
     # Custom command launcher
