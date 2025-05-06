@@ -1004,7 +1004,7 @@ if %errorlevel% equ 0 (
     call :Log INFO "Starting update process for Ubuntu..."
 
     call :Log INFO "Updating Ubuntu using apt..."
-    call :Run wsl -d Ubuntu -- sudo apt update && sudo apt upgrade -y
+    call :Run wsl -d Ubuntu -- sh -c "sudo apt update && sudo apt upgrade -y"
     call :Log PASS "✅ Ubuntu updated successfully."
 
     call :Log INFO "Update process completed for Ubuntu."
@@ -1101,7 +1101,7 @@ if %errorlevel% equ 0 (
     call :Log INFO "Starting update process for Debian..."
 
     call :Log INFO "Updating Debian using apt..."
-    call :Run wsl -d Debian -- sudo apt update && sudo apt upgrade -y
+    call :Run wsl -d Debian -- sh -c "sudo apt update && sudo apt upgrade -y"
     call :Log PASS "✅ Debian updated successfully."
 
     call :Log INFO "Update process completed for Debian."
@@ -1199,7 +1199,7 @@ if %errorlevel% equ 0 (
     call :Log INFO "Starting update process for kali-linux..."
 
     call :Log INFO "Updating kali-linux using apt..."
-    call :Run wsl -d kali-linux -- sudo apt update && sudo apt upgrade -y
+    call :Run wsl -d kali-linux -- sh -c "sudo apt update && sudo apt upgrade -y"
     call :Log PASS "✅ kali-linux updated successfully."
 
     call :Log INFO "Update process completed for kali-linux."
@@ -1295,7 +1295,7 @@ if %errorlevel% equ 0 (
     call :Log INFO "Starting update process for Arch..."
 
     call :Log INFO "Updating Arch using apt..."
-    call :Run wsl -d Arch -- sudo pacman -Syu -y
+    call :Run wsl -d Arch -- sh -c "sudo pacman -Syu --noconfirm"
     call :Log PASS "✅ Arch updated successfully."
 
     call :Log INFO "Update process completed for Arch."
@@ -1391,7 +1391,7 @@ if %errorlevel% equ 0 (
     call :Log INFO "Starting update process for openSUSE..."
 
     call :Log INFO "Updating openSUSE using apt..."
-    call :Run wsl -d openSUSE -- sudo zypper refresh && sudo zypper update -y
+    call :Run wsl -d openSUSE -- sh -c "sudo zypper refresh && sudo zypper update -y"
     call :Log PASS "✅ openSUSE updated successfully."
 
     call :Log INFO "Update process completed for openSUSE."
@@ -1487,7 +1487,7 @@ if %errorlevel% equ 0 (
     call :Log INFO "Starting update process for mint..."
 
     call :Log INFO "Updating mint using apt..."
-    call :Run wsl -d mint -- sudo apt update && sudo apt upgrade -y
+    call :Run wsl -d mint -- sh -c "sudo apt update && sudo apt upgrade -y"
     call :Log PASS "✅ mint updated successfully."
 
     call :Log INFO "Update process completed for mint."
@@ -1583,7 +1583,7 @@ if %errorlevel% equ 0 (
     call :Log INFO "Starting update process for Fedora..."
 
     call :Log INFO "Updating Fedora using apt..."
-    call :Run wsl -d Fedora -- sudo dnf upgrade -y
+    call :Run wsl -d Fedora -- sh -c "sudo dnf upgrade -y"
     call :Log PASS "✅ Fedora updated successfully."
 
     call :Log INFO "Update process completed for Fedora."
@@ -1679,7 +1679,7 @@ if %errorlevel% equ 0 (
     call :Log INFO "Starting update process for RedHat..."
 
     call :Log INFO "Updating RedHat using apt..."
-    call :Run wsl -d RedHat -- sudo yum update -y
+    call :Run wsl -d RedHat -- sh -c "sudo yum update -y"
     call :Log PASS "✅ RedHat updated successfully."
 
     call :Log INFO "Update process completed for RedHat."
@@ -1776,7 +1776,7 @@ if %errorlevel% equ 0 (
     call :Log INFO "Starting update process for suse-linux..."
 
     call :Log INFO "Updating suse-linux using apt..."
-    call :Run wsl -d suse-linux -- sudo zypper refresh && sudo zypper update -y
+    call :Run wsl -d suse-linux -- sh -c "sudo zypper refresh && sudo zypper update -y"
     call :Log PASS "✅ suse-linux updated successfully."
 
     call :Log INFO "Update process completed for suse-linux."
@@ -1873,7 +1873,7 @@ if %errorlevel% equ 0 (
     call :Log INFO "Starting update process for Pengwin..."
 
     call :Log INFO "Updating Pengwin using apt..."
-    call :Run wsl -d Pengwin -- sudo apt update && sudo apt upgrade -y
+    call :Run wsl -d Pengwin -- sh -c "sudo apt update && sudo apt upgrade -y"
     call :Log PASS "✅ Pengwin updated successfully."
 
     call :Log INFO "Update process completed for Pengwin."
@@ -2163,7 +2163,7 @@ if %errorlevel% equ 0 (
     call :Log INFO "Starting update process for Alpine..."
 
     call :Log INFO "Updating Alpine using apt..."
-    call :Run wsl -d Alpine -- sudo apk update && sudo apk upgrade
+    call :Run wsl -d Alpine -- sh -c "sudo apk update && sudo apk upgrade --no-progress"
     call :Log PASS "✅ Alpine updated successfully."
 
     call :Log INFO "Update process completed for Alpine."
