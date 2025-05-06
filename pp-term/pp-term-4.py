@@ -630,7 +630,9 @@ def handle_special_commands(user_input):
         "run dockerdesktop": "pp-commands\\run-dockerdesktop.py", # new
         "run pycharm": "pp-commands\\run-pycharm.py",  # new
         "run vs-code": "pp-commands\\run-vs-code.py",  # new
-        "run vs": "pp-commands\\run-vs.py"  # new
+        "run vs": "pp-commands\\run-vs.py",  # new
+        "p map": "pp-commands\\p-map.py", # new
+        "p weather": "pp-commands\\p-whether.py" # new
     }
 
     # Custom command launcher
