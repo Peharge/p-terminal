@@ -1004,7 +1004,7 @@ if %errorlevel% equ 0 (
     call :Log INFO "Starting update process for Ubuntu..."
 
     call :Log INFO "Updating Ubuntu using apt..."
-    call :Run wsl -d Ubuntu -- sudo apt update && sudo apt upgrade -y
+    call :Run wsl -d Ubuntu -- bash -c "sudo apt update && sudo apt upgrade -y"
     call :Log PASS "✅ Ubuntu updated successfully."
 
     call :Log INFO "Update process completed for Ubuntu."
@@ -1101,7 +1101,7 @@ if %errorlevel% equ 0 (
     call :Log INFO "Starting update process for Debian..."
 
     call :Log INFO "Updating Debian using apt..."
-    call :Run wsl -d Debian -- sudo apt update && sudo apt upgrade -y
+    call :Run wsl -d Debian -- bash -c "sudo apt update && sudo apt upgrade -y"
     call :Log PASS "✅ Debian updated successfully."
 
     call :Log INFO "Update process completed for Debian."
@@ -1199,7 +1199,7 @@ if %errorlevel% equ 0 (
     call :Log INFO "Starting update process for kali-linux..."
 
     call :Log INFO "Updating kali-linux using apt..."
-    call :Run wsl -d kali-linux -- sudo apt update && sudo apt upgrade -y
+    call :Run wsl -d kali-linux -- bash -c "sudo apt update && sudo apt upgrade -y"
     call :Log PASS "✅ kali-linux updated successfully."
 
     call :Log INFO "Update process completed for kali-linux."
@@ -1295,7 +1295,7 @@ if %errorlevel% equ 0 (
     call :Log INFO "Starting update process for Arch..."
 
     call :Log INFO "Updating Arch using apt..."
-    call :Run wsl -d Arch -- sudo pacman -Syu -y
+    call :Run wsl -d Arch -- sudo pacman -Syu --noconfirm
     call :Log PASS "✅ Arch updated successfully."
 
     call :Log INFO "Update process completed for Arch."
