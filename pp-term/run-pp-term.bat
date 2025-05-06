@@ -1294,7 +1294,7 @@ if %errorlevel% equ 0 (
 
     call :Log INFO "Starting update process for Arch..."
 
-    call :Log INFO "Updating Arch using apt..."
+    call :Log INFO "Updating Arch using pacman..."
     call :Run wsl -d Arch -- sh -c "sudo pacman -Syu --noconfirm"
     call :Log PASS "✅ Arch updated successfully."
 
@@ -1390,7 +1390,7 @@ if %errorlevel% equ 0 (
 
     call :Log INFO "Starting update process for openSUSE..."
 
-    call :Log INFO "Updating openSUSE using apt..."
+    call :Log INFO "Updating openSUSE using zypper..."
     call :Run wsl -d openSUSE -- sh -c "sudo zypper refresh && sudo zypper update -y"
     call :Log PASS "✅ openSUSE updated successfully."
 
@@ -1582,7 +1582,7 @@ if %errorlevel% equ 0 (
 
     call :Log INFO "Starting update process for Fedora..."
 
-    call :Log INFO "Updating Fedora using apt..."
+    call :Log INFO "Updating Fedora using dnf..."
     call :Run wsl -d Fedora -- sh -c "sudo dnf upgrade -y"
     call :Log PASS "✅ Fedora updated successfully."
 
@@ -1678,7 +1678,7 @@ if %errorlevel% equ 0 (
 
     call :Log INFO "Starting update process for RedHat..."
 
-    call :Log INFO "Updating RedHat using apt..."
+    call :Log INFO "Updating RedHat using yum..."
     call :Run wsl -d RedHat -- sh -c "sudo yum update -y"
     call :Log PASS "✅ RedHat updated successfully."
 
@@ -1775,7 +1775,7 @@ if %errorlevel% equ 0 (
 
     call :Log INFO "Starting update process for suse-linux..."
 
-    call :Log INFO "Updating suse-linux using apt..."
+    call :Log INFO "Updating suse-linux using zypper..."
     call :Run wsl -d suse-linux -- sh -c "sudo zypper refresh && sudo zypper update -y"
     call :Log PASS "✅ suse-linux updated successfully."
 
@@ -1969,7 +1969,7 @@ if %errorlevel% equ 0 (
 
     call :Log INFO "Starting update process for oracle-linux..."
 
-    call :Log INFO "Updating oracle-linux using apt..."
+    call :Log INFO "Updating oracle-linux using dnf..."
     call :Run wsl -d oracle-linux -- sudo dnf upgrade -y
     call :Log PASS "✅ oracle-linux updated successfully."
 
@@ -2066,7 +2066,7 @@ if %errorlevel% equ 0 (
 
     call :Log INFO "Starting update process for clear-linux..."
 
-    call :Log INFO "Updating clear-linux using apt..."
+    call :Log INFO "Updating clear-linux using swupd..."
     call :Run wsl -d clear-linux -- sudo swupd update
     call :Log PASS "✅ clear-linux updated successfully."
 
@@ -2162,7 +2162,7 @@ if %errorlevel% equ 0 (
 
     call :Log INFO "Starting update process for Alpine..."
 
-    call :Log INFO "Updating Alpine using apt..."
+    call :Log INFO "Updating Alpine using apk..."
     call :Run wsl -d Alpine -- sh -c "sudo apk update && sudo apk upgrade --no-progress"
     call :Log PASS "✅ Alpine updated successfully."
 
