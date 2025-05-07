@@ -99,7 +99,6 @@ CHECK_MAP: Dict[str, Callable[[Path], Tuple[bool, str]]] = {}
 # Logging Setup
 logger = logging.getLogger("Doctor")
 logger.setLevel(logging.INFO)
-logger.setLevel(logging.INFO)
 
 # Formatter
 fmt = logging.Formatter("[%(asctime)s] [%(levelname)s] %(message)s")
