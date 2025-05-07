@@ -141,8 +141,6 @@ def loading_bar(text: str = "Processing", duration: int = 3, color: str = "") ->
 
 
 def print_banner():
-    print("✅ All tasks were completed successfully!")
-
     print(f"""
 {blue}██████╗ ██████╗{reset}{white}    ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗     {reset}
 {blue}██╔══██╗██╔══██╗{reset}{white}   ╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║     {reset}
