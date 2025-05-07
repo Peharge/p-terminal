@@ -942,7 +942,7 @@ if errorlevel 1 (
 call :Log INFO "Starting deep diagnostics for each distribution"
 
 :: Ubuntu
-wsl -d Ubuntu -- bash -c "exit" 2>nul
+wsl -d Ubuntu -- bash -c "exit" >nul 2>&1
 if %errorlevel% equ 0 (
 
     call :Log INFO "Starting deep diagnostics for Ubuntu"
@@ -1012,6 +1012,10 @@ if %errorlevel% equ 0 (
     call :Run wsl -d Ubuntu -- sh -c "sudo apt update && sudo apt upgrade -y"
     call :Log PASS "✅ Ubuntu updated successfully."
 
+    call :Log INFO "Updating Ubuntu using apt..."
+    call :Run wsl -d Ubuntu -- sh -c "sudo apt update && sudo apt upgrade -y"
+    call :Log PASS "✅ Ubuntu updated successfully."
+
     call :Log INFO "Update process completed for Ubuntu."
 
     rem -- Time Sync Check
@@ -1039,7 +1043,7 @@ if %errorlevel% equ 0 (
 )
 
 :: Debian
-wsl -d Debian -- bash -c "exit" 2>nul
+wsl -d Debian -- bash -c "exit" >nul 2>&1
 if %errorlevel% equ 0 (
 
     call :Log INFO "Starting deep diagnostics for Debian"
@@ -1137,7 +1141,7 @@ if %errorlevel% equ 0 (
 
 
 :: Kali Linux
-wsl -d kali-linux -- bash -c "exit" 2>nul
+wsl -d kali-linux -- bash -c "exit" >nul 2>&1
 if %errorlevel% equ 0 (
 
     call :Log INFO "Starting deep diagnostics for kali-linux"
@@ -1234,7 +1238,7 @@ if %errorlevel% equ 0 (
 )
 
 :: Arch Linux
-wsl -d Arch -- bash -c "exit" 2>nul
+wsl -d Arch -- bash -c "exit" >nul 2>&1
 if %errorlevel% equ 0 (
     call :Log INFO "Starting deep diagnostics for Arch"
 
@@ -1330,7 +1334,7 @@ if %errorlevel% equ 0 (
 )
 
 :: openSUSE
-wsl -d openSUSE -- bash -c "exit" 2>nul
+wsl -d openSUSE -- bash -c "exit" >nul 2>&1
 if %errorlevel% equ 0 (
     call :Log INFO "Starting deep diagnostics for openSUSE"
 
@@ -1404,7 +1408,7 @@ if %errorlevel% equ 0 (
     rem -- Time Sync Check
     call :Log TEST "Checking time drift"
     for /F "delims=" %%T in ('powershell -NoProfile -Command "(Get-Date -UFormat '%%s')"') do set "TS_HOST=%%T"
-    for /F "delims=" %%T in ('wsl -d Arch -- date +%%s') do set "TS_DISTRO=%%T"
+    for /F "delims=" %%T in ('wsl -d openSUSE-Leap -- date +%%s') do set "TS_DISTRO=%%T"
     set /A DRIFT=TS_HOST-TS_DISTRO
     if !DRIFT! GTR %MAX_DRIFT% (
         call :Log WARN "❌ Time drift !DRIFT!s"
@@ -1414,7 +1418,7 @@ if %errorlevel% equ 0 (
 
     rem -- Mount Points Check
     call :Log TEST "Listing mount points"
-    call :Run wsl -d Arch -- mount
+    call :Run wsl -d openSUSE-Leap -- mount
     if errorlevel 1 (
         call :Log WARN "❌ Cannot list mounts"
     ) else (
@@ -1426,7 +1430,7 @@ if %errorlevel% equ 0 (
 )
 
 :: Linux Mint
-wsl -d mint -- bash -c "exit" 2>nul
+wsl -d mint -- bash -c "exit" >nul 2>&1
 if %errorlevel% equ 0 (
     call :Log INFO "Starting deep diagnostics for mint"
 
@@ -1522,7 +1526,7 @@ if %errorlevel% equ 0 (
 )
 
 :: Fedora
-wsl -d Fedora -- bash -c "exit" 2>nul
+wsl -d Fedora -- bash -c "exit" >nul 2>&1
 if %errorlevel% equ 0 (
     call :Log INFO "Starting deep diagnostics for Fedora"
 
@@ -1618,7 +1622,7 @@ if %errorlevel% equ 0 (
 )
 
 :: Red Hat Enterprise Linux
-wsl -d "RedHat" -- bash -c "exit" 2>nul
+wsl -d "RedHat" -- bash -c "exit" >nul 2>&1
 if %errorlevel% equ 0 (
     call :Log INFO "Starting deep diagnostics for RedHat"
 
@@ -1715,7 +1719,7 @@ if %errorlevel% equ 0 (
 
 
 :: SUSE Linux
-wsl -d SUSE -- bash -c "exit" 2>nul
+wsl -d SUSE -- bash -c "exit" >nul 2>&1
 if %errorlevel% equ 0 (
     call :Log INFO "Starting deep diagnostics for suse-linux"
 
@@ -1812,7 +1816,7 @@ if %errorlevel% equ 0 (
 
 
 :: Pengwin
-wsl -d Pengwin -- bash -c "exit" 2>nul
+wsl -d Pengwin -- bash -c "exit" >nul 2>&1
 if %errorlevel% equ 0 (
     call :Log INFO "Starting deep diagnostics for Pengwin"
 
@@ -1909,7 +1913,7 @@ if %errorlevel% equ 0 (
 
 
 :: Oracle Linux
-wsl -d OracleLinux -- bash -c "exit" 2>nul
+wsl -d OracleLinux -- bash -c "exit" >nul 2>&1
 if %errorlevel% equ 0 (
     call :Log INFO "Starting deep diagnostics for oracle-linux"
 
@@ -2006,7 +2010,7 @@ if %errorlevel% equ 0 (
 
 
 :: Clear Linux
-wsl -d ClearLinux -- bash -c "exit" 2>nul
+wsl -d ClearLinux -- bash -c "exit" >nul 2>&1
 if %errorlevel% equ 0 (
     call :Log INFO "Starting deep diagnostics for clear-linux"
 
@@ -2102,7 +2106,7 @@ if %errorlevel% equ 0 (
 )
 
 :: Alpine
-wsl -d Alpine -- bash -c "exit" 2>nul
+wsl -d Alpine -- bash -c "exit" >nul 2>&1
 if %errorlevel% equ 0 (
     call :Log INFO "Starting deep diagnostics for Alpine"
 
