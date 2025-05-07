@@ -632,7 +632,8 @@ def handle_special_commands(user_input):
         "run vs-code": "pp-commands\\run-vs-code.py",  # new
         "run vs": "pp-commands\\run-vs.py",  # new
         "p map": "pp-commands\\p-map.py", # new
-        "p weather": "pp-commands\\p-weather.py" # new
+        "p weather": "pp-commands\\p-weather.py", # new
+        "run mavis main": "pp-commands\\run-mavis-main.py" # new
     }
 
     # Custom command launcher
@@ -6536,7 +6537,7 @@ COMMANDS = [
     "p", "p git", "p git mavis", "p git mavis-web", "p git simon", "p htop", "p ls", "p ls mavis",
     "ps ls mavis-web", "p ls simon", "p simon", "p wsl", "p pip", "p models", "p ubuntu",
     "pp", "pp-cpp", "pp-c", "pp-p", "ps", "ps-github", "ps-huggingface", "ps-ollama", "ps-stackoverflow",
-    "ps-arxiv", "pa", "lx", "lx-c", "lx-p", "lx-cpp-c", "lx-c-c", "lx-p-c", "ubuntu", "ubuntu-c",
+    "ps-arxiv", "pa", "run mavis main", "lx", "lx-c", "lx-p", "lx-cpp-c", "lx-c-c", "lx-p-c", "ubuntu", "ubuntu-c",
     "ubuntu-p", "debian", "debian-c", "debian-p", "kali", "kali-c", "kali-p", "hack", "arch", "arch-c",
     "arch-p", "opensuse", "opensuse-c", "opensuse-p", "mint", "mint-c", "mint-p", "fedora", "fedora-c",
     "fedora-p", "redhat", "redhat-c", "redhat-p", "sles", "sles-c", "sles-p", "pengwin", "pengwin-c",
