@@ -1087,7 +1087,7 @@ def handle_special_commands(user_input):
 
         return True
 
-    if user_input.startswith("pa-qwen3:0.6b "):
+    if user_input.startswith("pa qwen3:0.6b "):
         user_input = user_input[14:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
@@ -1105,7 +1105,7 @@ def handle_special_commands(user_input):
 
         return True
 
-    if user_input.startswith("pa-qwen3:1.7b "):
+    if user_input.startswith("pa qwen3:1.7b "):
         user_input = user_input[14:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
@@ -1123,7 +1123,7 @@ def handle_special_commands(user_input):
 
         return True
 
-    if user_input.startswith("pa-qwen3:4b "):
+    if user_input.startswith("pa qwen3:4b "):
         user_input = user_input[12:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
@@ -1141,7 +1141,7 @@ def handle_special_commands(user_input):
 
         return True
 
-    if user_input.startswith("pa-qwen3:8b "):
+    if user_input.startswith("pa qwen3:8b "):
         user_input = user_input[12:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
@@ -1159,7 +1159,7 @@ def handle_special_commands(user_input):
 
         return True
 
-    if user_input.startswith("pa-qwen3:14b "):
+    if user_input.startswith("pa qwen3:14b "):
         user_input = user_input[13:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
@@ -1177,7 +1177,7 @@ def handle_special_commands(user_input):
 
         return True
 
-    if user_input.startswith("pa-qwen3:32b "):
+    if user_input.startswith("pa qwen3:32b "):
         user_input = user_input[13:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
@@ -1195,7 +1195,7 @@ def handle_special_commands(user_input):
 
         return True
 
-    if user_input.startswith("pa-qwen3:30b "):
+    if user_input.startswith("pa qwen3:30b "):
         user_input = user_input[13:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
@@ -1213,7 +1213,7 @@ def handle_special_commands(user_input):
 
         return True
 
-    if user_input.startswith("pa-qwen3:235b "):
+    if user_input.startswith("pa qwen3:235b "):
         user_input = user_input[14:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
@@ -1231,7 +1231,7 @@ def handle_special_commands(user_input):
 
         return True
 
-    if user_input.startswith("pa-llama4:scout "):
+    if user_input.startswith("pa llama4:scout "):
         user_input = user_input[16:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
@@ -1249,7 +1249,7 @@ def handle_special_commands(user_input):
 
         return True
 
-    if user_input.startswith("pa-llama4:maverick "):
+    if user_input.startswith("pa llama4:maverick "):
         user_input = user_input[19:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
