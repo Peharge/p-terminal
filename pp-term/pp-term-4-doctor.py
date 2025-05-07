@@ -320,13 +320,14 @@ def scan_project(root: Path, args):
 
 # CLI
 def main():
-    p = ArgumentParser(description="Doctor Script für Full-Stack-Checks")
+    p = ArgumentParser(description="Doctor Script for full-stack checks")
     p.add_argument("-p","--path",      type=Path, default=Path(r"C:\Users\julia\p-terminal\pp-term"))
     p.add_argument("-tio","--threads-io", type=int, default=DEFAULT_THREADS_IO)
     args = p.parse_args()
 
     logger.info(f"Start scanning {args.path}")
     scan_project(args.path, args)
+    print("")
 
 if __name__ == "__main__":
     main()
