@@ -205,6 +205,17 @@ To develop and run the PP Terminal, you also need the C++ extensions for Visual 
 	etc.  
   
 - `pa` - Peharge AI command: Ask a question (AI functionality) -> qwen3:14b  
+    - `pa qwen3:0.6b`
+    - `pa qwen3:1.7b`
+    - `pa qwen3:4b`
+    - `pa qwen3:8b`
+    - `pa qwen3:14b`
+    - `pa qwen3:32b`
+    - `pa qwen3:30b`
+    - `pa qwen3:235b`
+    - `pa llama4:scout`
+    - `pa llama4:maverick`
+
 - `lx` - Linux command  
 - `lx-c` - Linux command with Peharge C compiler 
 - `lx-p` - Linux command with Python 
