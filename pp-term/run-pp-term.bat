@@ -113,7 +113,7 @@ wmic logicaldisk get name, description, filesystem, size, freespace
 echo Logged in Users:
 query user
 echo.
-echo Initializing PP-Terminal
+echo Initializing PP-Terminal 4
 echo Gooo...
 echo.
 
