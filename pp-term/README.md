@@ -14,12 +14,12 @@
 
 Hey ;-)
 
-# Code (01.05.2025)
+## Code (01.05.2025)
 
 P-Terminal size GitHub: 306 MB <br>
 P-Terminal hole size: 5200 MB (Without LLm model, Linux OS or additional apps...) <br>
 
-## Code-Statistik (03.05.2025) - cloc .
+### Code-Statistik (03.05.2025) - cloc .
 
 | Language                                | files     | blank     | comment     | code       |
 |-----------------------------------------|-----------|-----------|-------------|------------|
