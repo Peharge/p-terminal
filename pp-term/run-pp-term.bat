@@ -1006,17 +1006,21 @@ if %errorlevel% equ 0 (
         call :Log PASS "✅ DNS OK"
     )
 
-    call :Log INFO "Starting update process for Ubuntu..."
+    call :Log INFO "Starting update and repair process for Ubuntu..."
 
     call :Log INFO "Updating Ubuntu using apt..."
     call :Run wsl -d Ubuntu -- sh -c "sudo apt update && sudo apt upgrade -y"
     call :Log PASS "✅ Ubuntu updated successfully."
 
-    call :Log INFO "Updating Ubuntu using apt..."
-    call :Run wsl -d Ubuntu -- sh -c "sudo apt update && sudo apt upgrade -y"
-    call :Log PASS "✅ Ubuntu updated successfully."
+    call :Log INFO "Fixing broken packages..."
+    call :Run wsl -d Ubuntu -- sh -c "sudo apt install --fix-broken -y"
+    call :Log PASS "✅ Broken packages fixed."
 
-    call :Log INFO "Update process completed for Ubuntu."
+    call :Log INFO "Configuring any unpacked packages..."
+    call :Run wsl -d Ubuntu -- sh -c "sudo dpkg --configure -a"
+    call :Log PASS "✅ Package configuration completed."
+
+    call :Log INFO "Update and repair process completed for Ubuntu."
 
     rem -- Time Sync Check
     call :Log TEST "Checking time drift"
@@ -1107,13 +1111,21 @@ if %errorlevel% equ 0 (
         call :Log PASS "✅ DNS OK"
     )
 
-    call :Log INFO "Starting update process for Debian..."
+    call :Log INFO "Starting update and repair process for Debian..."
 
     call :Log INFO "Updating Debian using apt..."
     call :Run wsl -d Debian -- sh -c "sudo apt update && sudo apt upgrade -y"
     call :Log PASS "✅ Debian updated successfully."
 
-    call :Log INFO "Update process completed for Debian."
+    call :Log INFO "Fixing broken packages..."
+    call :Run wsl -d Debian -- sh -c "sudo apt install --fix-broken -y"
+    call :Log PASS "✅ Broken packages fixed."
+
+    call :Log INFO "Configuring any unpacked packages..."
+    call :Run wsl -d Debian -- sh -c "sudo dpkg --configure -a"
+    call :Log PASS "✅ Package configuration completed."
+
+    call :Log INFO "Update and repair process completed for Debian."
 
     rem -- Time Sync Check
     call :Log TEST "Checking time drift"
@@ -1205,13 +1217,21 @@ if %errorlevel% equ 0 (
         call :Log PASS "✅ DNS OK"
     )
 
-    call :Log INFO "Starting update process for kali-linux..."
+    call :Log INFO "Starting update and repair process for Kali Linux..."
 
-    call :Log INFO "Updating kali-linux using apt..."
+    call :Log INFO "Updating Kali Linux using apt..."
     call :Run wsl -d kali-linux -- sh -c "sudo apt update && sudo apt upgrade -y"
-    call :Log PASS "✅ kali-linux updated successfully."
+    call :Log PASS "✅ Kali Linux updated successfully."
 
-    call :Log INFO "Update process completed for kali-linux."
+    call :Log INFO "Fixing broken packages..."
+    call :Run wsl -d kali-linux -- sh -c "sudo apt install --fix-broken -y"
+    call :Log PASS "✅ Broken packages fixed."
+
+    call :Log INFO "Configuring any unpacked packages..."
+    call :Run wsl -d kali-linux -- sh -c "sudo dpkg --configure -a"
+    call :Log PASS "✅ Package configuration completed."
+
+    call :Log INFO "Update and repair process completed for Kali Linux."
 
     rem -- Time Sync Check
     call :Log TEST "Checking time drift"
@@ -1301,13 +1321,21 @@ if %errorlevel% equ 0 (
         call :Log PASS "✅ DNS OK"
     )
 
-    call :Log INFO "Starting update process for Arch..."
+    call :Log INFO "Starting update and repair process for Arch Linux..."
 
-    call :Log INFO "Updating Arch using pacman..."
+    call :Log INFO "Updating Arch Linux using pacman..."
     call :Run wsl -d Arch -- sh -c "sudo pacman -Syu --noconfirm"
-    call :Log PASS "✅ Arch updated successfully."
+    call :Log PASS "✅ Arch Linux updated successfully."
 
-    call :Log INFO "Update process completed for Arch."
+    call :Log INFO "Fixing broken packages (forcing reinstall)..."
+    call :Run wsl -d Arch -- sh -c "sudo pacman -S --noconfirm $(pacman -Qqk | awk '/0 altered files/ {next} {print $1}' | sort -u)"
+    call :Log PASS "✅ Broken packages reinstalled (if any)."
+
+    call :Log INFO "Clearing package cache (optional)..."
+    call :Run wsl -d Arch -- sh -c "sudo pacman -Sc --noconfirm"
+    call :Log PASS "✅ Package cache cleaned."
+
+    call :Log INFO "Update and repair process completed for Arch Linux."
 
     rem -- Time Sync Check
     call :Log TEST "Checking time drift"
@@ -1397,13 +1425,21 @@ if %errorlevel% equ 0 (
         call :Log PASS "✅ DNS OK"
     )
 
-    call :Log INFO "Starting update process for openSUSE..."
+    call :Log INFO "Starting update and repair process for openSUSE..."
 
     call :Log INFO "Updating openSUSE using zypper..."
-    call :Run wsl -d openSUSE -- sh -c "sudo zypper refresh && sudo zypper update -y"
+    call :Run wsl -d openSUSE-Leap -- sh -c "sudo zypper refresh && sudo zypper update -y"
     call :Log PASS "✅ openSUSE updated successfully."
 
-    call :Log INFO "Update process completed for openSUSE."
+    call :Log INFO "Repairing broken dependencies..."
+    call :Run wsl -d openSUSE-Leap -- sh -c "sudo zypper verify"
+    call :Log PASS "✅ Dependency check completed."
+
+    call :Log INFO "Installing missing recommended packages (optional)..."
+    call :Run wsl -d openSUSE-Leap -- sh -c "sudo zypper install-new-recommends"
+    call :Log PASS "✅ Recommended packages installation checked."
+
+    call :Log INFO "Update and repair process completed for openSUSE."
 
     rem -- Time Sync Check
     call :Log TEST "Checking time drift"
@@ -1493,13 +1529,21 @@ if %errorlevel% equ 0 (
         call :Log PASS "✅ DNS OK"
     )
 
-    call :Log INFO "Starting update process for mint..."
+    call :Log INFO "Starting update and repair process for Linux Mint..."
 
-    call :Log INFO "Updating mint using apt..."
-    call :Run wsl -d mint -- sh -c "sudo apt update && sudo apt upgrade -y"
-    call :Log PASS "✅ mint updated successfully."
+    call :Log INFO "Updating Linux Mint using apt..."
+    call :Run wsl -d LinuxMint -- sh -c "sudo apt update && sudo apt upgrade -y"
+    call :Log PASS "✅ Linux Mint updated successfully."
 
-    call :Log INFO "Update process completed for mint."
+    call :Log INFO "Fixing broken packages..."
+    call :Run wsl -d LinuxMint -- sh -c "sudo apt install --fix-broken -y"
+    call :Log PASS "✅ Broken packages fixed."
+
+    call :Log INFO "Configuring any unpacked packages..."
+    call :Run wsl -d LinuxMint -- sh -c "sudo dpkg --configure -a"
+    call :Log PASS "✅ Package configuration completed."
+
+    call :Log INFO "Update and repair process completed for Linux Mint."
 
         rem -- Time Sync Check
     call :Log TEST "Checking time drift"
@@ -1589,13 +1633,21 @@ if %errorlevel% equ 0 (
         call :Log PASS "✅ DNS OK"
     )
 
-    call :Log INFO "Starting update process for Fedora..."
+    call :Log INFO "Starting update and repair process for Fedora..."
 
     call :Log INFO "Updating Fedora using dnf..."
-    call :Run wsl -d Fedora -- sh -c "sudo dnf upgrade -y"
+    call :Run wsl -d Fedora -- sh -c "sudo dnf update -y"
     call :Log PASS "✅ Fedora updated successfully."
 
-    call :Log INFO "Update process completed for Fedora."
+    call :Log INFO "Fixing broken packages..."
+    call :Run wsl -d Fedora -- sh -c "sudo dnf reinstall $(dnf repoquery --unsatisfied)"
+    call :Log PASS "✅ Broken packages reinstalled (if any)."
+
+    call :Log INFO "Cleaning package cache..."
+    call :Run wsl -d Fedora -- sh -c "sudo dnf clean all"
+    call :Log PASS "✅ Package cache cleaned."
+
+    call :Log INFO "Update and repair process completed for Fedora."
 
     rem -- Time Sync Check
     call :Log TEST "Checking time drift"
@@ -1685,13 +1737,21 @@ if %errorlevel% equ 0 (
         call :Log PASS "✅ DNS OK"
     )
 
-    call :Log INFO "Starting update process for RedHat..."
+    call :Log INFO "Starting update and repair process for Red Hat..."
 
-    call :Log INFO "Updating RedHat using yum..."
-    call :Run wsl -d RedHat -- sh -c "sudo yum update -y"
-    call :Log PASS "✅ RedHat updated successfully."
+    call :Log INFO "Updating Red Hat using dnf..."
+    call :Run wsl -d RedHat -- sh -c "sudo dnf update -y"
+    call :Log PASS "✅ Red Hat updated successfully."
 
-    call :Log INFO "Update process completed for RedHat."
+    call :Log INFO "Fixing broken packages..."
+    call :Run wsl -d RedHat -- sh -c "sudo dnf reinstall $(dnf repoquery --unsatisfied)"
+    call :Log PASS "✅ Broken packages reinstalled (if any)."
+
+    call :Log INFO "Cleaning package cache..."
+    call :Run wsl -d RedHat -- sh -c "sudo dnf clean all"
+    call :Log PASS "✅ Package cache cleaned."
+
+    call :Log INFO "Update and repair process completed for Red Hat."
 
         rem -- Time Sync Check
     call :Log TEST "Checking time drift"
@@ -1782,13 +1842,21 @@ if %errorlevel% equ 0 (
         call :Log PASS "✅ DNS OK"
     )
 
-    call :Log INFO "Starting update process for suse-linux..."
+    call :Log INFO "Starting update and repair process for SUSE Linux..."
 
-    call :Log INFO "Updating suse-linux using zypper..."
-    call :Run wsl -d suse-linux -- sh -c "sudo zypper refresh && sudo zypper update -y"
-    call :Log PASS "✅ suse-linux updated successfully."
+    call :Log INFO "Updating SUSE Linux using zypper..."
+    call :Run wsl -d SUSE -- sh -c "sudo zypper refresh && sudo zypper update -y"
+    call :Log PASS "✅ SUSE Linux updated successfully."
 
-    call :Log INFO "Update process completed for suse-linux."
+    call :Log INFO "Repairing broken dependencies..."
+    call :Run wsl -d SUSE -- sh -c "sudo zypper verify"
+    call :Log PASS "✅ Dependency check completed."
+
+    call :Log INFO "Installing missing recommended packages (optional)..."
+    call :Run wsl -d SUSE -- sh -c "sudo zypper install-new-recommends"
+    call :Log PASS "✅ Recommended packages installation checked."
+
+    call :Log INFO "Update and repair process completed for SUSE Linux."
 
     rem -- Time Sync Check
     call :Log TEST "Checking time drift"
@@ -1879,13 +1947,21 @@ if %errorlevel% equ 0 (
         call :Log PASS "✅ DNS OK"
     )
 
-    call :Log INFO "Starting update process for Pengwin..."
+    call :Log INFO "Starting update and repair process for Pengwin..."
 
     call :Log INFO "Updating Pengwin using apt..."
     call :Run wsl -d Pengwin -- sh -c "sudo apt update && sudo apt upgrade -y"
     call :Log PASS "✅ Pengwin updated successfully."
 
-    call :Log INFO "Update process completed for Pengwin."
+    call :Log INFO "Fixing broken packages..."
+    call :Run wsl -d Pengwin -- sh -c "sudo apt install --fix-broken -y"
+    call :Log PASS "✅ Broken packages fixed."
+
+    call :Log INFO "Configuring any unpacked packages..."
+    call :Run wsl -d Pengwin -- sh -c "sudo dpkg --configure -a"
+    call :Log PASS "✅ Package configuration completed."
+
+    call :Log INFO "Update and repair process completed for Pengwin."
 
     rem -- Time Sync Check
     call :Log TEST "Checking time drift"
@@ -1976,13 +2052,21 @@ if %errorlevel% equ 0 (
         call :Log PASS "✅ DNS OK"
     )
 
-    call :Log INFO "Starting update process for oracle-linux..."
+    call :Log INFO "Starting update and repair process for Oracle Linux..."
 
-    call :Log INFO "Updating oracle-linux using dnf..."
-    call :Run wsl -d oracle-linux -- sudo dnf upgrade -y
-    call :Log PASS "✅ oracle-linux updated successfully."
+    call :Log INFO "Updating Oracle Linux using dnf..."
+    call :Run wsl -d OracleLinux -- sh -c "sudo dnf update -y"
+    call :Log PASS "✅ Oracle Linux updated successfully."
 
-    call :Log INFO "Update process completed for oracle-linux."
+    call :Log INFO "Fixing broken packages..."
+    call :Run wsl -d OracleLinux -- sh -c "sudo dnf reinstall $(dnf repoquery --unsatisfied)"
+    call :Log PASS "✅ Broken packages reinstalled (if any)."
+
+    call :Log INFO "Cleaning package cache..."
+    call :Run wsl -d OracleLinux -- sh -c "sudo dnf clean all"
+    call :Log PASS "✅ Package cache cleaned."
+
+    call :Log INFO "Update and repair process completed for Oracle Linux."
 
     rem -- Time Sync Check
     call :Log TEST "Checking time drift"
@@ -2073,13 +2157,21 @@ if %errorlevel% equ 0 (
         call :Log PASS "✅ DNS OK"
     )
 
-    call :Log INFO "Starting update process for clear-linux..."
+    call :Log INFO "Starting update and repair process for Clear Linux..."
 
-    call :Log INFO "Updating clear-linux using swupd..."
-    call :Run wsl -d clear-linux -- sudo swupd update
-    call :Log PASS "✅ clear-linux updated successfully."
+    call :Log INFO "Updating Clear Linux using swupd..."
+    call :Run wsl -d ClearLinux -- sh -c "sudo swupd update"
+    call :Log PASS "✅ Clear Linux updated successfully."
 
-    call :Log INFO "Update process completed for clear-linux."
+    call :Log INFO "Fixing missing dependencies..."
+    call :Run wsl -d ClearLinux -- sh -c "sudo swupd repair"
+    call :Log PASS "✅ Missing dependencies repaired."
+
+    call :Log INFO "Cleaning up the package cache..."
+    call :Run wsl -d ClearLinux -- sh -c "sudo swupd clean"
+    call :Log PASS "✅ Package cache cleaned."
+
+    call :Log INFO "Update and repair process completed for Clear Linux."
 
     rem -- Time Sync Check
     call :Log TEST "Checking time drift"
@@ -2169,13 +2261,21 @@ if %errorlevel% equ 0 (
         call :Log PASS "✅ DNS OK"
     )
 
-    call :Log INFO "Starting update process for Alpine..."
+    call :Log INFO "Starting update and repair process for Alpine Linux..."
 
-    call :Log INFO "Updating Alpine using apk..."
-    call :Run wsl -d Alpine -- sh -c "sudo apk update && sudo apk upgrade --no-progress"
-    call :Log PASS "✅ Alpine updated successfully."
+    call :Log INFO "Updating Alpine Linux using apk..."
+    call :Run wsl -d Alpine -- sh -c "sudo apk update && sudo apk upgrade"
+    call :Log PASS "✅ Alpine Linux updated successfully."
 
-    call :Log INFO "Update process completed for Alpine."
+    call :Log INFO "Fixing broken packages..."
+    call :Run wsl -d Alpine -- sh -c "sudo apk fix"
+    call :Log PASS "✅ Broken packages fixed."
+
+    call :Log INFO "Cleaning up the package cache..."
+    call :Run wsl -d Alpine -- sh -c "sudo apk cache clean"
+    call :Log PASS "✅ Package cache cleaned."
+
+    call :Log INFO "Update and repair process completed for Alpine Linux."
 
     rem -- Time Sync Check
     call :Log TEST "Checking time drift"
