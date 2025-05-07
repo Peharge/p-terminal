@@ -76,6 +76,6 @@ if __name__ == "__main__":
     now = datetime.now()
     print(f"[{now.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]}] [INFO] run MAVIS 4.3")
     batch_file = os.path.join(
-        "C:\\Users", os.getlogin(), "PycharmProjects", "MAVIS", "run-mavis-4-3.bat"
+        "C:\\Users", os.getlogin(), "PycharmProjects", "MAVIS", "run-mavis-4-3-pp-term.bat"
     )
     run_batch_file(batch_file)
