@@ -78,9 +78,10 @@ set PYTHON_PATH=C:\Users\%USERNAME%\p-terminal\pp-term\.env\Scripts\python.exe
 set SCRIPT_install_vs_cpp=C:\Users\%USERNAME%\p-terminal\pp-term\run\cpp\install-vs.py
 set SCRIPT_install_vs_c=C:\Users\%USERNAME%\p-terminal\pp-term\run\c\install-vs.py
 set "VCVARS_PATH=C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat"
-set "PEHARGE_PATH_CPP=C:\Users\%USERNAME%\p-terminal\pp-term\peharge-cpp-compier"
+set "PEHARGE_PATH_CPP=C:\Users\%USERNAME%\p-terminal\pp-term\peharge-cpp-compiler"
 set "PEHARGE_PATH_C=C:\Users\%USERNAME%\p-terminal\pp-term\peharge-c-compiler"
 set SCRIPT_PATH_INSTALL=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-4-install.py
+set SCRIPT_PATH_DOCTOR=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-4-doctor.py
 set SCRIPT_PATH_MAIN=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-4.py
 
 if not exist "%PYTHON_PATH%" (
@@ -134,6 +135,13 @@ if not exist "%SCRIPT_PATH_INSTALL%" (
 )
 
 "%PYTHON_PATH%" "%SCRIPT_PATH_INSTALL%"
+
+if not exist "%SCRIPT_PATH_DOCTOR%" (
+    call :Log ERROR "❌ Script not found: %SCRIPT_PATH_DOCTOR%"
+    exit /B 1
+)
+
+"%PYTHON_PATH%" "%SCRIPT_PATH_DOCTOR%"
 
 if not exist "%SCRIPT_PATH_MAIN%" (
     call :Log ERROR "❌ Script not found: %SCRIPT_PATH_MAIN%"
