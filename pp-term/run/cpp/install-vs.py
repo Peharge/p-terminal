@@ -65,7 +65,7 @@
 """
 Installationsskript für die Visual Studio C++ Build Tools Umgebung.
 Dieses Skript ermittelt das Projektverzeichnis (basierend auf dem aktuellen Benutzer) und
-erstellt darin den Ordner "peharge-cpp-compier". In diesem Ordner wird nach erfolgreichem
+erstellt darin den Ordner "peharge-cpp-compiler". In diesem Ordner wird nach erfolgreichem
 Test der Visual Studio Umgebung (über vcvarsall.bat und cl.exe) ein Batch-Skript abgelegt,
 das die Umgebung initialisiert und ein Beispiel-Kompilierungskommando ausführt.
 """
@@ -191,14 +191,14 @@ def verify_compiler(vcvarsall_path, temp_dir):
 
 def create_compiler_folder(target_dir, vcvarsall_path):
     """
-    Erstellt im angegebenen Zielverzeichnis ('peharge-cpp-compier') eine Batch-Datei, die
+    Erstellt im angegebenen Zielverzeichnis ('peharge-cpp-compiler') eine Batch-Datei, die
     die Visual Studio Umgebung initialisiert und ein Beispiel-Kompilierungskommando ausführt.
 
     Args:
         target_dir (str): Das Verzeichnis, in dem der "Compiler" abgelegt werden soll.
         vcvarsall_path (str): Pfad zur Datei 'vcvarsall.bat'.
     """
-    # Erstelle den Ordner falls nicht existent (target_dir sollte z. B. "peharge-cpp-compier" sein)
+    # Erstelle den Ordner falls nicht existent (target_dir sollte z. B. "peharge-cpp-compiler" sein)
     os.makedirs(target_dir, exist_ok=True)
 
     batch_file = os.path.join(target_dir, "build_peharge.bat")
@@ -224,7 +224,7 @@ def main():
       - Ermitteln des Projektverzeichnisses.
       - Suchen der Visual Studio Umgebung.
       - Testen des Compilers.
-      - Erstellen des speziellen Ordners 'peharge-cpp-compier' mit einer Batch-Datei,
+      - Erstellen des speziellen Ordners 'peharge-cpp-compiler' mit einer Batch-Datei,
         die zum Kompilieren des peharge-Projektes verwendet werden kann.
       - Schreiben einer Log-Datei im Zielordner.
     """
@@ -235,7 +235,7 @@ def main():
         username = getpass.getuser()
         project_root = os.path.join("C:\\Users", username, "p-terminal", "pp-term")
         # Der Zielordner für den "Compiler" wird hier angelegt:
-        compiler_dir = os.path.join(project_root, "peharge-cpp-compier")
+        compiler_dir = os.path.join(project_root, "peharge-cpp-compiler")
         os.makedirs(compiler_dir, exist_ok=True)
         logger.info("Project directory: %s", project_root)
 
