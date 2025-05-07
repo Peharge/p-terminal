@@ -100,7 +100,7 @@ def start_jupyter():
             print(f"{red}Error: Jupyter is not installed in the virtual environment.{reset}")
             sys.exit(1)
 
-        jupyter_directory = os.path.join(user_home, "p-terminal", "pp-term", "jupyter")
+        jupyter_directory = os.path.join(user_home, "p-terminal", "pp-term", "mavis-jupyter")
         if not os.path.isdir(jupyter_directory):
             print(f"{red}Error: The specified directory '{jupyter_directory}' does not exist.{reset}")
             sys.exit(1)
