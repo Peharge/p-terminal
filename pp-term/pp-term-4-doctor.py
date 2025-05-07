@@ -141,7 +141,7 @@ class Report:
             for issue in self.issues:
                 print(f"❌ {issue}")
         else:
-            logger.info("✅ Scan did not detect any problems.")
+            logger.info("✅ PP-Term Scan did not detect any problems.")
 
 report = Report()
 
@@ -338,7 +338,7 @@ def main():
     p.add_argument("-tio","--threads-io", type=int, default=DEFAULT_THREADS_IO)
     args = p.parse_args()
 
-    logger.info(f"Start scanning {args.path}")
+    logger.info(f"Start scanning {args.path}, with PP-Term Scanner")
     scan_project(args.path, args)
     print("")
 
