@@ -143,6 +143,9 @@ if not exist "%SCRIPT_PATH_INSTALL%" (
 
 "%PYTHON_PATH%" "%SCRIPT_PATH_INSTALL%"
 
+rem Setze das Arbeitsverzeichnis auf C:\Users\%USERNAME%
+cd /d C:\Users\%USERNAME%
+
 if not exist "%SCRIPT_PATH_MAIN%" (
     call :Log ERROR "❌ Script not found: %SCRIPT_PATH_MAIN%"
     exit /B 1
