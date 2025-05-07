@@ -73,7 +73,7 @@ from datetime import datetime
 log_path = Path(__file__).parent / "installer.log"
 logging.basicConfig(
     level=logging.INFO,
-    format="[%(asctime)s.%(msecs)03d] [%(levelname)s] %(message)s",
+    format="[%(asctime)s.%(msecs)03d] %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
     handlers=[
         logging.FileHandler(log_path, encoding='utf-8'),
@@ -104,14 +104,14 @@ def activate_virtualenv(path: Path) -> None:
     """
     activate_script = path / ("Scripts/activate" if os.name == "nt" else "bin/activate")
     if not activate_script.exists():
-        logging.error(f"Virtual environment not found at: {path}")
+        logging.error(f"[ERROR] ❌ Virtual environment not found at: {path}")
         sys.exit(1)
 
     # Update environment variables
     os.environ["VIRTUAL_ENV"] = str(path)
     bin_dir = path / ('Scripts' if os.name == 'nt' else 'bin')
     os.environ["PATH"] = str(bin_dir) + os.pathsep + os.environ.get("PATH", "")
-    logging.info(f"Virtual environment activated: {path}")
+    logging.info(f"[INFO] Virtual environment activated: {path}")
 
 
 def ensure_packages(packages: list[str]) -> None:
@@ -123,12 +123,12 @@ def ensure_packages(packages: list[str]) -> None:
         if importlib.util.find_spec(pkg) is None:
             missing.append(pkg)
     if not missing:
-        logging.info("✅ All required packages are already installed.")
+        logging.info("[PASS] ✅ All required packages are already installed.")
         return
 
-    logging.info(f"Found {len(missing)} missing packages: {', '.join(missing)}")
+    logging.info(f"[INFO] Found {len(missing)} missing packages: {', '.join(missing)}")
     for index, pkg in enumerate(missing, 1):
-        logging.info(f"[{index}/{len(missing)}] Installing package: {pkg}")
+        logging.info(f"[INFO] [{index}/{len(missing)}] Installing package: {pkg}")
         try:
             # Install the package
             result = subprocess.run(
@@ -139,25 +139,26 @@ def ensure_packages(packages: list[str]) -> None:
             )
             if result.returncode == 0:
                 # Output the complete pip install result
-                logging.info(f"pip install {pkg}")
+                logging.info(f"[INFO] pip install {pkg}")
                 logging.info(result.stdout)  # Full output
-                logging.info(f"{pkg} successfully installed.")
+                logging.info(f"[PASS] ✅ {pkg} successfully installed.")
             else:
                 # Error output in case of problems
-                logging.error(f"Failed to install {pkg}:")
+                logging.error(f"[ERROR] ❌ Failed to install {pkg}:")
                 logging.error(result.stderr)
         except Exception as e:
-            logging.error(f"Error installing {pkg}: {e}")
-    logging.info("✅ All missing packages processed.")
+            logging.error(f"[ERROR] ❌ Error installing {pkg}: {e}")
+    logging.info("[PASS] ✅ All missing packages processed.")
 
 
 def main():
     venv_path = Path(os.getenv('VENV_PATH', Path.home() / 'p-terminal' / 'pp-term' / '.env'))
-    logging.info("Starting virtual environment activation...")
+    logging.info("[INFO] Starting virtual environment activation...")
     activate_virtualenv(venv_path)
-    logging.info("Starting package checks and installations...")
+    logging.info("[INFO] Starting package checks and installations...")
     ensure_packages(REQUIRED_PACKAGES)
-    logging.info("Environment setup complete.")
+    logging.info("[PASS] ✅ Environment setup complete.")
+    logging.info("[PASS] ✅ All tasks were completed successfully!")
 
 
 if __name__ == '__main__':
