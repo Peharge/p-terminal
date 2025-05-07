@@ -1231,6 +1231,42 @@ def handle_special_commands(user_input):
 
         return True
 
+    if user_input.startswith("pa-llama4:scout "):
+        user_input = user_input[16:].strip()
+        ollama_installed = check_command_installed("ollama")
+        if ollama_installed:
+            print(f"{green}Ollama is installed.{reset}")
+        else:
+            print(f"{red}Ollama is not installed. Please install it to proceed.{reset}")
+
+        start_ollama()
+        check_ollama_update()
+
+        response = get_response_from_ollama_llama4_scout(user_input, ollama)
+
+        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        type_out_text(response)
+
+        return True
+
+    if user_input.startswith("pa-llama4:maverick "):
+        user_input = user_input[19:].strip()
+        ollama_installed = check_command_installed("ollama")
+        if ollama_installed:
+            print(f"{green}Ollama is installed.{reset}")
+        else:
+            print(f"{red}Ollama is not installed. Please install it to proceed.{reset}")
+
+        start_ollama()
+        check_ollama_update()
+
+        response = get_response_from_ollama_llama4_maverick(user_input, ollama)
+
+        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        type_out_text(response)
+
+        return True
+
     return False
 
 
@@ -2115,6 +2151,30 @@ def get_response_from_ollama_qwen235(user_message, ollama):
     try:
         response = ollama.chat(
             model="qwen3:235b-a22b",  # Modellname
+            messages=[{"role": "user", "content": user_message}]
+        )
+        return response['message']['content']
+    except Exception as e:
+        return f"ERROR: {e}"
+
+
+def get_response_from_ollama_llama4_scout(user_message, ollama):
+    """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
+    try:
+        response = ollama.chat(
+            model="llama4:scout",  # Modellname
+            messages=[{"role": "user", "content": user_message}]
+        )
+        return response['message']['content']
+    except Exception as e:
+        return f"ERROR: {e}"
+
+
+def get_response_from_ollama_llama4_maverick(user_message, ollama):
+    """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
+    try:
+        response = ollama.chat(
+            model="llama4:maverick",  # Modellname
             messages=[{"role": "user", "content": user_message}]
         )
         return response['message']['content']
