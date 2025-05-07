@@ -194,8 +194,10 @@ To develop and run the PP Terminal, you also need the C++ extensions for Visual 
 	etc.  
   
 - `pp` - Peharge permission command  
-- `pp-c` - Peharge permission compile command  
-- `pp-p` - Peharge permission publish command  
+- `pp-cpp` - Peharge permission Peharge C++ compiler
+- `pp-c` - Peharge permission Peharge C compiler
+- `pp-p` - Peharge permission run with Python
+
 - `ps` - Peharge search command  
 	- `ps-github` - Peharge GitHub search command  
 	- `ps-huggingface` - Huggingface GitHub search command  
