@@ -100,23 +100,23 @@ def timestamp() -> str:
 
 def activate_virtualenv(path: Path) -> None:
     """
-    Activate a virtual environment at the given path.
+    Activates a virtual environment at the given path.
     """
     activate_script = path / ("Scripts/activate" if os.name == "nt" else "bin/activate")
     if not activate_script.exists():
-        logging.error(f"Virtual environment not found at {path}")
+        logging.error(f"Virtual environment not found at: {path}")
         sys.exit(1)
 
     # Update environment variables
     os.environ["VIRTUAL_ENV"] = str(path)
     bin_dir = path / ('Scripts' if os.name == 'nt' else 'bin')
     os.environ["PATH"] = str(bin_dir) + os.pathsep + os.environ.get("PATH", "")
-    logging.info(f"Activated virtual environment: {path}")
+    logging.info(f"Virtual environment activated: {path}")
 
 
 def ensure_packages(packages: list[str]) -> None:
     """
-    Check and install missing packages one by one, logging each step.
+    Checks and installs missing packages one by one, logging each step.
     """
     missing = []
     for pkg in packages:
@@ -130,7 +130,7 @@ def ensure_packages(packages: list[str]) -> None:
     for index, pkg in enumerate(missing, 1):
         logging.info(f"[{index}/{len(missing)}] Installing package: {pkg}")
         try:
-            # Install package
+            # Install the package
             result = subprocess.run(
                 [sys.executable, "-m", "pip", "install", pkg, "--disable-pip-version-check"],
                 stdout=subprocess.PIPE,
@@ -138,16 +138,16 @@ def ensure_packages(packages: list[str]) -> None:
                 text=True
             )
             if result.returncode == 0:
-                # Log first meaningful line
-                output_lines = result.stdout.splitlines()
-                message = output_lines[0] if output_lines else 'Installation succeeded'
-                logging.info(f"{pkg} installed successfully: {message}")
+                # Output the complete pip install result
+                logging.info(f"pip install {pkg}")
+                logging.info(result.stdout)  # Full output
+                logging.info(f"{pkg} successfully installed.")
             else:
-                err_lines = result.stderr.splitlines()
-                error_msg = err_lines[0] if err_lines else 'Unknown error'
-                logging.error(f"Failed to install {pkg}: {error_msg}")
+                # Error output in case of problems
+                logging.error(f"Failed to install {pkg}:")
+                logging.error(result.stderr)
         except Exception as e:
-            logging.error(f"Exception during installation of {pkg}: {e}")
+            logging.error(f"Error installing {pkg}: {e}")
     logging.info("✅ All missing packages processed.")
 
 
