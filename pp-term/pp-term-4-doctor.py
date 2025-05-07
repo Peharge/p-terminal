@@ -76,36 +76,45 @@ from pathlib import Path
 from typing import Tuple
 import logging.handlers
 
+# stdout auf UTF-8 (für Konsole mit Emoji)
+sys.stdout.reconfigure(encoding='utf-8')
 
 # Konfiguration
-DEFAULT_THREADS_IO      = 8
-DEFAULT_PROCESSES_CPU   = os.cpu_count() or 4
-LOG_FILE                = Path("doctor.log")
+DEFAULT_THREADS_IO = 8
+DEFAULT_PROCESSES_CPU = os.cpu_count() or 4
+LOG_FILE = Path("doctor.log")
 EXCLUDE_DIRS = {
     ".git", ".venv", "__pycache__",
-    "Lib", "Scripts", "Include",         # typische venv-Ordner
+    "Lib", "Scripts", "Include",
     "site-packages", "dist-packages",
-    ".env", "main-test"
+    ".env", "main-test", "icons", "static",
+    "pp-term.exe"
 }
-EXCLUDE_PATTERNS        = {".*"}  # regex für versteckte Dateien/Ordner
-FILE_SIZE_LIMIT         = 10 * 1024 * 1024
-FILE_AGE_LIMIT_DAYS     = 365
+EXCLUDE_PATTERNS = {".*"}  # regex für versteckte Dateien/Ordner
+FILE_SIZE_LIMIT = 10 * 1024 * 1024
+FILE_AGE_LIMIT_DAYS = 365
 
-# Zu-COMMAND-Mapping pro Dateiendung
 CHECK_MAP: Dict[str, Callable[[Path], Tuple[bool, str]]] = {}
 
 # Logging Setup
 logger = logging.getLogger("Doctor")
 logger.setLevel(logging.INFO)
+
+# Formatter
 fmt = logging.Formatter("[%(asctime)s] [%(levelname)s] %(message)s")
-# Console
-ch = logging.StreamHandler(sys.stdout)
-ch.setFormatter(fmt)
-# Rolling File
-fh = logging.handlers.RotatingFileHandler(LOG_FILE, maxBytes=5_000_000, backupCount=3)
-fh.setFormatter(fmt)
-logger.addHandler(ch)
-logger.addHandler(fh)
+
+# Console Handler (UTF-8)
+console_handler = logging.StreamHandler(sys.stdout)
+console_handler.setFormatter(fmt)
+
+# File Handler (rolling log)
+file_handler = logging.handlers.RotatingFileHandler(LOG_FILE, maxBytes=5_000_000, backupCount=3, encoding='utf-8')
+file_handler.setFormatter(fmt)
+
+# Alte Handler entfernen, neue hinzufügen
+logger.handlers.clear()
+logger.addHandler(console_handler)
+logger.addHandler(file_handler)
 
 # Global Report
 class Report:
@@ -125,10 +134,14 @@ class Report:
             self.issues.append(msg)
 
     def summary(self):
-        print("")
-        logger.info(f"SCAN SUMMARY ({len(self.issues)} issues):")
-        for m in self.issues:
-            print(f"❌ {m}")
+        print()  # Leerzeile
+
+        if self.issues:
+            logger.info(f"Scan summary ({len(self.issues)} issues):")
+            for issue in self.issues:
+                print(f"❌ {issue}")
+        else:
+            logger.info("✅ Scan did not detect any problems.")
 
 report = Report()
 
