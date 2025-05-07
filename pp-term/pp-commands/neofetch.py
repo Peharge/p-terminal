@@ -355,10 +355,10 @@ def print_system_info(system_info: dict):
                    ██████      
                 ████████████                                             {blue}{title}{reset}
              ██████████████████                                          {line}
-          ████████████████████████                                       {blue}P-Terminal Version{reset}: 1.1
-       ██████████████████████████████                                    {blue}PP-Terminal Version{reset}: 3
-       █████████████████████████████████                                 {blue}Peharge C Compiler Version{reset}: 3
-       ████████████████████████████████████                              {blue}Peharge C++ Compiler Version{reset}: 3
+          ████████████████████████                                       {blue}P-Terminal Version{reset}: 1
+       ██████████████████████████████                                    {blue}PP-Terminal Version{reset}: 4
+       █████████████████████████████████                                 {blue}Peharge C Compiler Version{reset}: 4
+       ████████████████████████████████████                              {blue}Peharge C++ Compiler Version{reset}: 4
        ███████████████████████████████████████                           {blue}P-Terminal License{reset}: MIT
        ██████████████████████████████████████████                        {blue}MAVIS Version{reset}: 4.3
        █████████████████████████████████████████████                     {blue}MAVIS Installer Version{reset}: 4
