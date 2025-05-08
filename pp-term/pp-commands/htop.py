@@ -108,7 +108,7 @@ def run_htop():
 
 
 def main():
-    """Main logic to check and run bashtop."""
+    """Main logic to check and run htop."""
     if not is_htop_installed():
         install_htop()
 
