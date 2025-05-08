@@ -88,7 +88,7 @@ REQUIRED_PACKAGES = [
     "psutil", "speedtest-cli", "colorama", "pyperclip", "termcolor", "docker", "flask",
     "typer", "click", "blessed", "prompt-toolkit", "tqdm", "watchdog", "fire", "torch",
     "torchvision", "torchaudio", "tensorflow", "tf-nightly", "notebook", "jupyterlab", "jax",
-    "chardet", "plotly", "py-cpuinfo", "gputil"
+    "chardet", "plotly", "py-cpuinfo", "gputil", "tabulate"
 ]
 
 
