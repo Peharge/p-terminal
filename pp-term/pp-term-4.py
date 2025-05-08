@@ -99,6 +99,7 @@ import json
 import msvcrt
 from pathlib import Path
 import code
+from datetime import datetime
 
 colorama.init()
 
@@ -138,6 +139,12 @@ def loading_bar(text: str = "Processing", duration: int = 3, color: str = "") ->
         print(".", end="", flush=True)
         time.sleep(0.5)
     print(Style.RESET_ALL)
+
+
+def timestamp() -> str:
+    """Returns current time formatted with milliseconds"""
+    now = datetime.now()
+    return now.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
 
 
 def print_banner():
@@ -315,9 +322,9 @@ def change_directory(path):
     try:
         os.chdir(path)
     except FileNotFoundError:
-        print(f"Directory not found: {path}", file=sys.stderr)
+        print(f"[{timestamp()}] [INFO] Directory not found: {path}", file=sys.stderr)
     except Exception as e:
-        print(f"Error: {str(e)}", file=sys.stderr)
+        print(f"[{timestamp()}] [ERROR] {str(e)}", file=sys.stderr)
 
 
 def handle_special_commands(user_input):
@@ -631,7 +638,11 @@ def handle_special_commands(user_input):
         "run vs": "pp-commands\\run-vs.py",  # new
         "p map": "pp-commands\\p-map.py", # new
         "p weather": "pp-commands\\p-weather.py", # new
-        "run mavis main": "pp-commands\\run-mavis-main.py" # new
+        "run mavis main": "pp-commands\\run-mavis-main.py", # new
+        "htop": "pp-commands\\htop.py",  # new
+        "bashtop": "pp-commands\\bashtop.py", # new
+        "btop": "pp-commands\\btop.py",  # new
+        "atop": "pp-commands\\atop.py"  # new
     }
 
     # Custom command launcher
@@ -665,14 +676,14 @@ def handle_special_commands(user_input):
         try:
             os.rmdir(user_input[6:].strip())
         except Exception as e:
-            print(f"{red}Error{reset}: {str(e)}", file=sys.stderr)
+            print(f"[{timestamp()}] [ERROR] {str(e)}", file=sys.stderr)
         return True
 
     if user_input.startswith(("del ", "rm ")):
         try:
             os.remove(user_input.split(maxsplit=1)[1].strip())
         except Exception as e:
-            print(f"{red}Error{reset}: {str(e)}", file=sys.stderr)
+            print(f"[{timestamp()}] [ERROR] {str(e)}", file=sys.stderr)
         return True
 
     if user_input.startswith("echo "):
@@ -692,7 +703,7 @@ def handle_special_commands(user_input):
             with open(user_input.split(maxsplit=1)[1].strip(), "r", encoding="utf-8") as f:
                 print(f.read())
         except Exception as e:
-            print(f"{red}Error{reset}: {str(e)}", file=sys.stderr)
+            print(f"[{timestamp()}] [ERROR] {str(e)}", file=sys.stderr)
         return True
 
     if user_input.lower() == "exit":
@@ -713,7 +724,7 @@ def handle_special_commands(user_input):
             ip_address = socket.gethostbyname(hostname)
             print(f"{blue}IP Address{reset}: {ip_address}")
         except:
-            print(f"{red}Could not retrieve IP address{reset}")
+            print(f"[{timestamp()}] [ERROR] Could not retrieve IP address")
         return True
 
     if user_input.lower() == "os":
@@ -781,14 +792,14 @@ def handle_special_commands(user_input):
             if matches:
                 print("\n".join(matches))
             else:
-                print("No matches found.")
+                print(f"[{timestamp()}] [ERROR] No matches found.")
 
         except FileNotFoundError:
-            print(f"{red}File not found{reset}: {filename}")
+            print(f"[{timestamp()}] [ERROR] File not found: {filename}")
         except PermissionError:
-            print(f"{red}No permission to read{reset}: {filename}")
+            print(f"[{timestamp()}] [ERROR] No permission to read: {filename}")
         except Exception as e:
-            print(f"{red}Error during search{reset}: {str(e)}")
+            print(f"[{timestamp()}] [ERROR] Error during search: {str(e)}")
         return True
 
     # Erstellen Sie einen Zip-Ordner (optimiert für Windows)
@@ -814,11 +825,11 @@ def handle_special_commands(user_input):
             print(f"{green}Folder successfully zipped!{reset}")
 
         except FileNotFoundError:
-            print(f"{red}Error: Folder not found{reset}: {folder_path}")
+            print(f"[{timestamp()}] [ERROR] Folder not found: {folder_path}")
         except PermissionError:
-            print(f"{red}Error: No permission to access the folder{reset}: {folder_path}")
+            print(f"[{timestamp()}] [ERROR] No permission to access the folder: {folder_path}")
         except Exception as e:
-            print(f"{red}Error while zipping the folder{reset}: {str(e)}")
+            print(f"[{timestamp()}] [ERROR] while zipping the folder: {str(e)}")
         return True
 
     # Entpacken Sie ein Archiv (optimiert für Windows mit erweiterten Prüfungen)
@@ -827,7 +838,7 @@ def handle_special_commands(user_input):
             # Extrahieren Sie den Befehl und die ZIP-Datei aus der Eingabe
             parts = user_input.split(maxsplit=1)
             if len(parts) < 2:
-                print("Usage: unzip <zip_file_path>")
+                print(f"[{timestamp()}] [INFO] Usage: unzip <zip_file_path>")
                 return True
 
             _, zip_path = parts
@@ -836,7 +847,7 @@ def handle_special_commands(user_input):
 
             # Überprüfen Sie, ob die Zip-Datei vorhanden ist und eine Datei ist
             if not os.path.isfile(zip_path):
-                print(f"{red}Error:{reset} File does not exist: {zip_path}")
+                print(f"[{timestamp()}] [ERROR] File does not exist: {zip_path}")
                 return True
 
             # Zielverzeichnis anhand des Dateinamens ohne Erweiterung ermitteln
@@ -849,11 +860,11 @@ def handle_special_commands(user_input):
             print(f"{green}Archive successfully extracted to:{reset} {extract_dir}")
 
         except zipfile.BadZipFile:
-            print(f"{red}Error:{reset} Invalid zip archive: {zip_path}")
+            print(f"[{timestamp()}] [ERROR] Invalid zip archive: {zip_path}")
         except PermissionError:
-            print(f"{red}Error:{reset} No permission to access the file: {zip_path}")
+            print(f"[{timestamp()}] [ERROR] No permission to access the file: {zip_path}")
         except Exception as e:
-            print(f"{red}Error while extracting:{reset} {str(e)}")
+            print(f"[{timestamp()}] [ERROR] Error while extracting:{reset} {str(e)}")
         return True
 
     # RAM- und CPU-Status
@@ -868,7 +879,7 @@ def handle_special_commands(user_input):
             # Extrahieren Sie den zu kopierenden Text und entfernen Sie führende und nachfolgende Leerzeichen
             text = user_input[len("clip set "):].strip()
             if not text:
-                print("Usage: clip set <text>")
+                print(f"[{timestamp()}] [INFO] Usage: clip set <text>")
                 return True
 
             # Text in die Zwischenablage kopieren
@@ -876,9 +887,9 @@ def handle_special_commands(user_input):
             print(f"{green}Text successfully copied to clipboard!{reset}")
         except ImportError:
             print(
-                f"{red}Error:{reset} pyperclip module is not installed. Please install it with 'pip install pyperclip'")
+                f"[{timestamp()}] [ERROR] pyperclip module is not installed. Please install it with 'pip install pyperclip'")
         except Exception as e:
-            print(f"{red}Error while copying to clipboard{reset}: {str(e)}")
+            print(f"[{timestamp()}] [ERROR] Error while copying to clipboard{reset}: {str(e)}")
         return True
 
     # Zwischenablage lesen
@@ -896,9 +907,9 @@ def handle_special_commands(user_input):
     if user_input.lower() == "emptytrash":
         try:
             ctypes.windll.shell32.SHEmptyRecycleBinW(None, None, 0x00000001)
-            print(f"{green}Recycle Bin emptied!{reset}")
+            print(f"[{timestamp()}] [PASS] Recycle Bin emptied!")
         except Exception as e:
-            print(f"{red}Error emptying trash{reset}: {str(e)}")
+            print(f"[{timestamp()}] [ERROR] Error emptying trash: {str(e)}")
         return True
 
     if user_input.lower() == "themes":
@@ -963,7 +974,7 @@ def handle_special_commands(user_input):
 
         except Exception as e:
             # Wenn etwas schief geht, zeigen Sie den Fehler
-            print(f"{red}Whoops, something went wrong with the speedtest{reset}: {e}")
+            print(f"[{timestamp()}] [ERROR] Whoops, something went wrong with the speedtest: {e}")
             return False
 
     # Prozessliste
@@ -978,15 +989,15 @@ def handle_special_commands(user_input):
             pid = int(pid_str)
             process = psutil.Process(pid)
             process.terminate()
-            print(f"{green}Process {pid} has been terminated.{reset}")
+            print(f"[{timestamp()}] [INFO] Process {pid} has been terminated.")
         except ValueError:
-            print(f"{red}Invalid PID: '{pid_str}' is not a valid number.{reset}")
+            print(f"[{timestamp()}] [ERROR] Invalid PID: '{pid_str}' is not a valid number.")
         except psutil.NoSuchProcess:
-            print(f"{red}No process with PID {pid} found.{reset}")
+            print(f"[{timestamp()}] [ERROR] No process with PID {pid} found.")
         except psutil.AccessDenied:
-            print(f"{red}Permission denied: Unable to terminate process {pid}.{reset}")
+            print(f"[{timestamp()}] [ERROR] Permission denied: Unable to terminate process {pid}.")
         except Exception as e:
-            print(f"{red}Error terminating process:{reset} {str(e)}")
+            print(f"[{timestamp()}] [ERROR] Terminating process: {str(e)}")
         return True
 
     # Datei herunterladen
@@ -1008,13 +1019,13 @@ def handle_special_commands(user_input):
                     if chunk:
                         file.write(chunk)
 
-            print(f"{green}Downloaded {file_name}{reset}")
+            print(f"[{timestamp()}] [INFO] Downloaded {file_name}")
         except requests.HTTPError as http_err:
-            print(f"{red}HTTP error during download{reset}: {http_err}")
+            print(f"[{timestamp()}] [ERROR] HTTP error during download: {http_err}")
         except requests.RequestException as req_err:
-            print(f"{red}Request error during download{reset}: {req_err}")
+            print(f"[{timestamp()}] [ERROR] Request error during download: {req_err}")
         except Exception as err:
-            print(f"{red}Unexpected error{reset}: {err}")
+            print(f"[{timestamp()}] [ERROR] Unexpected error: {err}")
         return True
 
     # CPU Temperatur
@@ -1028,7 +1039,7 @@ def handle_special_commands(user_input):
             joke = requests.get("https://api.chucknorris.io/jokes/random").json()['value']
             print(f"{blue}Chuck Norris says{reset}: {joke}")
         except:
-            print(f"{red}Couldn't fetch Chuck Norris joke!{reset}")
+            print(f"[{timestamp()}] [ERROR] Couldn't fetch Chuck Norris joke!")
         return True
 
     # Theme Wechsel
@@ -1040,14 +1051,14 @@ def handle_special_commands(user_input):
     if user_input.lower() == "cleantemp":
         temp = os.getenv('TEMP')
         shutil.rmtree(temp, ignore_errors=True)
-        print(f"{green}Temporary files cleaned!{reset}")
+        print(f"[{timestamp()}] [INFO] Temporary files cleaned!")
         return True
 
     # Selbst Update - soon
     if user_input.lower() == "selfupdate":
-        print(f"{blue}Checking for updates...{reset}")
+        print(f"[{timestamp()}] [INFO] Checking for updates...")
         loading_bar("Updating", 4)
-        print(f"{green}PP-Terminal updated! (demo mode){reset}")
+        print(f"[{timestamp()}] [PASS] PP-Terminal updated! (demo mode)")
         return True
 
     # Directory Baumansicht
@@ -1063,7 +1074,7 @@ def handle_special_commands(user_input):
 
     # Python REPL starten
     if user_input.lower() == "py":
-        print(f"{blue}Starting Python REPL. Type 'exit()' to quit.{reset}")
+        print(f"[{timestamp()}] [INFO] Starting Python REPL. Type 'exit()' to quit.")
         code.interact(local=dict(globals(), **locals()))
         return True
 
@@ -1072,9 +1083,9 @@ def handle_special_commands(user_input):
         user_input = user_input[3:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
-            print(f"{green}Ollama is installed.{reset}")
+            print(f"[{timestamp()}] [INFO] Ollama is installed.")
         else:
-            print(f"{red}Ollama is not installed. Please install it to proceed.{reset}")
+            print(f"[{timestamp()}] [ERROR] Ollama is not installed. Please install it to proceed.")
 
         start_ollama()
         check_ollama_update()
@@ -1090,9 +1101,9 @@ def handle_special_commands(user_input):
         user_input = user_input[14:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
-            print(f"{green}Ollama is installed.{reset}")
+            print(f"[{timestamp()}] [INFO] Ollama is installed.")
         else:
-            print(f"{red}Ollama is not installed. Please install it to proceed.{reset}")
+            print(f"[{timestamp()}] [ERROR] Ollama is not installed. Please install it to proceed.")
 
         start_ollama()
         check_ollama_update()
@@ -1108,9 +1119,9 @@ def handle_special_commands(user_input):
         user_input = user_input[14:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
-            print(f"{green}Ollama is installed.{reset}")
+            print(f"[{timestamp()}] [INFO] Ollama is installed.")
         else:
-            print(f"{red}Ollama is not installed. Please install it to proceed.{reset}")
+            print(f"[{timestamp()}] [ERROR] Ollama is not installed. Please install it to proceed.")
 
         start_ollama()
         check_ollama_update()
@@ -1126,9 +1137,9 @@ def handle_special_commands(user_input):
         user_input = user_input[12:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
-            print(f"{green}Ollama is installed.{reset}")
+            print(f"[{timestamp()}] [INFO] Ollama is installed.")
         else:
-            print(f"{red}Ollama is not installed. Please install it to proceed.{reset}")
+            print(f"[{timestamp()}] [ERROR] Ollama is not installed. Please install it to proceed.")
 
         start_ollama()
         check_ollama_update()
@@ -1144,9 +1155,9 @@ def handle_special_commands(user_input):
         user_input = user_input[12:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
-            print(f"{green}Ollama is installed.{reset}")
+            print(f"[{timestamp()}] [INFO] Ollama is installed.")
         else:
-            print(f"{red}Ollama is not installed. Please install it to proceed.{reset}")
+            print(f"[{timestamp()}] [ERROR] Ollama is not installed. Please install it to proceed.")
 
         start_ollama()
         check_ollama_update()
@@ -1162,9 +1173,9 @@ def handle_special_commands(user_input):
         user_input = user_input[13:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
-            print(f"{green}Ollama is installed.{reset}")
+            print(f"[{timestamp()}] [INFO] Ollama is installed.")
         else:
-            print(f"{red}Ollama is not installed. Please install it to proceed.{reset}")
+            print(f"[{timestamp()}] [ERROR] Ollama is not installed. Please install it to proceed.")
 
         start_ollama()
         check_ollama_update()
@@ -1180,9 +1191,9 @@ def handle_special_commands(user_input):
         user_input = user_input[13:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
-            print(f"{green}Ollama is installed.{reset}")
+            print(f"[{timestamp()}] [INFO] Ollama is installed.")
         else:
-            print(f"{red}Ollama is not installed. Please install it to proceed.{reset}")
+            print(f"[{timestamp()}] [ERROR] Ollama is not installed. Please install it to proceed.")
 
         start_ollama()
         check_ollama_update()
@@ -1198,9 +1209,9 @@ def handle_special_commands(user_input):
         user_input = user_input[13:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
-            print(f"{green}Ollama is installed.{reset}")
+            print(f"[{timestamp()}] [INFO] Ollama is installed.")
         else:
-            print(f"{red}Ollama is not installed. Please install it to proceed.{reset}")
+            print(f"[{timestamp()}] [ERROR] Ollama is not installed. Please install it to proceed.")
 
         start_ollama()
         check_ollama_update()
@@ -1216,9 +1227,9 @@ def handle_special_commands(user_input):
         user_input = user_input[14:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
-            print(f"{green}Ollama is installed.{reset}")
+            print(f"[{timestamp()}] [INFO] Ollama is installed.")
         else:
-            print(f"{red}Ollama is not installed. Please install it to proceed.{reset}")
+            print(f"[{timestamp()}] [ERROR] Ollama is not installed. Please install it to proceed.")
 
         start_ollama()
         check_ollama_update()
@@ -1234,9 +1245,9 @@ def handle_special_commands(user_input):
         user_input = user_input[16:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
-            print(f"{green}Ollama is installed.{reset}")
+            print(f"[{timestamp()}] [INFO] Ollama is installed.")
         else:
-            print(f"{red}Ollama is not installed. Please install it to proceed.{reset}")
+            print(f"[{timestamp()}] [ERROR] Ollama is not installed. Please install it to proceed.")
 
         start_ollama()
         check_ollama_update()
@@ -1252,9 +1263,9 @@ def handle_special_commands(user_input):
         user_input = user_input[19:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
-            print(f"{green}Ollama is installed.{reset}")
+            print(f"[{timestamp()}] [INFO] Ollama is installed.")
         else:
-            print(f"{red}Ollama is not installed. Please install it to proceed.{reset}")
+            print(f"[{timestamp()}] [ERROR] Ollama is not installed. Please install it to proceed.")
 
         start_ollama()
         check_ollama_update()
@@ -1921,14 +1932,14 @@ try:
     with open(THEMES_PATH, 'r', encoding='utf-8') as f:
         THEME_DEFAULTS = json.load(f)
 except (FileNotFoundError, json.JSONDecodeError) as e:
-    print(f"Error loading themes.json: {e}")
+    print(f"[{timestamp()}] [ERROR] Error loading themes.json: {e}")
     THEME_DEFAULTS = {}
 
 
 def create_backup(file_path: str) -> str:
     backup_path = file_path + BACKUP_SUFFIX
     shutil.copy2(file_path, backup_path)
-    print(f"Backup created at: {backup_path}")
+    print(f"[{timestamp()}] [INFO] Backup created at: {backup_path}")
     return backup_path
 
 
@@ -1940,7 +1951,7 @@ def load_settings(file_path: str) -> dict:
 def save_settings(file_path: str, settings: dict) -> None:
     with open(file_path, 'w', encoding='utf-8') as f:
         json.dump(settings, f, indent=4)
-    print(f"Settings saved to {file_path}")
+    print(f"[{timestamp()}] [INFO] Settings saved to {file_path}")
 
 
 def apply_color_scheme(settings: dict, scheme_name: str) -> None:
@@ -1952,7 +1963,7 @@ def apply_color_scheme(settings: dict, scheme_name: str) -> None:
         for profile in settings.get('profiles', {}).get('list', []):
             profile['colorScheme'] = scheme.get('name')
         settings['theme'] = 'light' if 'light' in scheme_name else 'dark'
-        print(f"Applied color scheme: {scheme.get('name')}")
+        print(f"[{timestamp()}] [INFO] Applied color scheme: {scheme.get('name')}")
 
 
 def apply_theme_defaults(settings: dict, theme_name: str) -> None:
@@ -1960,12 +1971,12 @@ def apply_theme_defaults(settings: dict, theme_name: str) -> None:
     if defaults:
         settings.setdefault('profiles', {})
         settings['profiles']['defaults'] = defaults
-        print(f"Applied theme defaults for: {theme_name}")
+        print(f"[{timestamp()}] [INFO] Applied theme defaults for: {theme_name}")
 
 
 def restart_terminal() -> None:
     subprocess.run(["wt.exe", "new-tab"], check=False)
-    print("Terminal restarted with new tab.")
+    print(f"[{timestamp()}] [INFO] Terminal restarted with new tab.")
 
 
 def switch_theme(user_input: str) -> bool:
@@ -1976,7 +1987,7 @@ def switch_theme(user_input: str) -> bool:
     key = choice.lower().replace('-', '_')
 
     if key not in COLOR_SCHEMES and key not in THEME_DEFAULTS:
-        print(f"Unknown theme '{choice}'. Available: {', '.join(sorted(set(COLOR_SCHEMES) | set(THEME_DEFAULTS)))}")
+        print(f"[{timestamp()}] [ERROR] Unknown theme '{choice}'. Available: {', '.join(sorted(set(COLOR_SCHEMES) | set(THEME_DEFAULTS)))}")
         return True
 
     try:
@@ -1990,18 +2001,18 @@ def switch_theme(user_input: str) -> bool:
             apply_theme_defaults(settings, key)
 
         save_settings(SETTINGS_PATH, settings)
-        print(f"Theme '{choice}' applied successfully.")
+        print(f"[{timestamp()}] [PASS] Theme '{choice}' applied successfully.")
 
         restart_terminal()
 
     except Exception as e:
-        print(f"Failed to apply theme '{choice}': {e}")
+        print(f"[{timestamp()}] [ERROR] Failed to apply theme '{choice}': {e}")
 
     return True
 
 
 def get_weather():
-    print("⛅ Fetching detailed weather for Berlin... (Demo)\n")
+    print("[{timestamp()}] [INFO] Fetching detailed weather for Berlin... (Demo)\n")
     time.sleep(1)
 
     weather_icons = {
@@ -2047,9 +2058,9 @@ def get_weather():
             print(f"{blue}Moon Phase{reset}: {moon_phase}")
             print(f"{blue}Precipitation{reset}: {precipitation}\n")
         else:
-            print(f"Failed to retrieve weather data. Status code: {response.status_code}")
+            print(f"[{timestamp()}] [ERROR] Failed to retrieve weather data. Status code: {response.status_code}")
     except Exception as e:
-        print(f"Error fetching weather: {str(e)}")
+        print(f"[{timestamp()}] [ERROR] Error fetching weather: {str(e)}")
 
 
 def type_out_text(text, delay=0.05):
@@ -2070,7 +2081,7 @@ def get_response_from_ollama(user_message, ollama):
         )
         return response['message']['content']
     except Exception as e:
-        return f"ERROR: {e}"
+        return f"[{timestamp()}] [ERROR] {e}"
 
 
 def get_response_from_ollama_qwen0_6(user_message, ollama):
@@ -2082,7 +2093,7 @@ def get_response_from_ollama_qwen0_6(user_message, ollama):
         )
         return response['message']['content']
     except Exception as e:
-        return f"ERROR: {e}"
+        return f"[{timestamp()}] [ERROR] {e}"
 
 
 def get_response_from_ollama_qwen1_7(user_message, ollama):
@@ -2094,7 +2105,7 @@ def get_response_from_ollama_qwen1_7(user_message, ollama):
         )
         return response['message']['content']
     except Exception as e:
-        return f"ERROR: {e}"
+        return f"[{timestamp()}] [ERROR] {e}"
 
 
 def get_response_from_ollama_qwen4(user_message, ollama):
@@ -2106,7 +2117,7 @@ def get_response_from_ollama_qwen4(user_message, ollama):
         )
         return response['message']['content']
     except Exception as e:
-        return f"ERROR: {e}"
+        return f"[{timestamp()}] [ERROR] {e}"
 
 
 def get_response_from_ollama_qwen8(user_message, ollama):
@@ -2118,7 +2129,7 @@ def get_response_from_ollama_qwen8(user_message, ollama):
         )
         return response['message']['content']
     except Exception as e:
-        return f"ERROR: {e}"
+        return f"[{timestamp()}] [ERROR] {e}"
 
 
 def get_response_from_ollama_qwen32(user_message, ollama):
@@ -2130,7 +2141,7 @@ def get_response_from_ollama_qwen32(user_message, ollama):
         )
         return response['message']['content']
     except Exception as e:
-        return f"ERROR: {e}"
+        return f"[{timestamp()}] [ERROR] {e}"
 
 
 def get_response_from_ollama_qwen30(user_message, ollama):
@@ -2142,7 +2153,7 @@ def get_response_from_ollama_qwen30(user_message, ollama):
         )
         return response['message']['content']
     except Exception as e:
-        return f"ERROR: {e}"
+        return f"[{timestamp()}] [ERROR] {e}"
 
 
 def get_response_from_ollama_qwen235(user_message, ollama):
@@ -2154,7 +2165,7 @@ def get_response_from_ollama_qwen235(user_message, ollama):
         )
         return response['message']['content']
     except Exception as e:
-        return f"ERROR: {e}"
+        return f"[{timestamp()}] [ERROR] {e}"
 
 
 def get_response_from_ollama_llama4_scout(user_message, ollama):
@@ -2166,7 +2177,7 @@ def get_response_from_ollama_llama4_scout(user_message, ollama):
         )
         return response['message']['content']
     except Exception as e:
-        return f"ERROR: {e}"
+        return f"[{timestamp()}] [ERROR] {e}"
 
 
 def get_response_from_ollama_llama4_maverick(user_message, ollama):
@@ -2178,7 +2189,7 @@ def get_response_from_ollama_llama4_maverick(user_message, ollama):
         )
         return response['message']['content']
     except Exception as e:
-        return f"ERROR: {e}"
+        return f"[{timestamp()}] [ERROR] {e}"
 
 
 def check_ollama_update():
@@ -2193,21 +2204,21 @@ def check_ollama_update():
                                             stdout=subprocess.PIPE, text=True).stdout.strip()
 
             if local_version != remote_version:
-                print(f"{yellow}New Ollama version available: {remote_version} (Current: {local_version}){reset}")
+                print(f"[{timestamp()}] [INFO] New Ollama version available: {remote_version} (Current: {local_version})")
                 while True:
                     user_input = input("Do you want to update Ollama? [y/n]:").strip().lower()
                     if user_input in ["y", "yes"]:
                         subprocess.run(["ollama", "update"], check=True)
-                        print(f"{green}Ollama updated successfully! Please restart the script.{reset}")
+                        print(f"[{timestamp()}] [PASS] Ollama updated successfully! Please restart the script.")
                         exit()
                     elif user_input in ["n", "no"]:
-                        print("Skipping update.")
+                        print(f"[{timestamp()}] [INFO] Skipping update.")
                         break
                     else:
-                        print(f"{red}Invalid input. Please enter 'y' for yes or 'n' for no.{reset}")
+                        print(f"[{timestamp()}] [INFO] Invalid input. Please enter 'y' for yes or 'n' for no.")
 
     except Exception as e:
-        print(f"{red}Error checking for updates: {e}{reset}")
+        print(f"[{timestamp()}] [ERROR] Error checking for updates: {e}{reset}")
 
 
 def find_ollama_path():
@@ -2221,9 +2232,9 @@ def find_ollama_path():
         elif platform.system() == "Darwin":  # macOS
             return "/Applications/Ollama.app/Contents/MacOS/Ollama"
         else:
-            raise EnvironmentError("Unsupported Operating System. Ollama is not supported on this platform.")
+            raise EnvironmentError(f"[{timestamp()}] [INFO] Unsupported Operating System. Ollama is not supported on this platform.")
     except Exception as e:
-        raise FileNotFoundError(f"Error finding Ollama path: {e}")
+        raise FileNotFoundError(f"[{timestamp()}] [ERROR] Error finding Ollama path: {e}")
 
 
 def start_ollama():
@@ -2240,22 +2251,22 @@ def start_ollama():
         )
 
         if "ollama" not in result.stdout.lower():
-            print(f"{blue}Ollama is not running. Starting Ollama...{reset}")
+            print(f"[{timestamp()}] [INFO] Ollama is not running. Starting Ollama...")
 
             # Pfad zu Ollama finden
             ollama_path = find_ollama_path()
 
             if not os.path.exists(ollama_path):
-                raise FileNotFoundError(f"Ollama executable not found at: {ollama_path}")
+                raise FileNotFoundError(f"[{timestamp()}] [ERROR] Ollama executable not found at: {ollama_path}")
 
             # Ollama starten
             subprocess.Popen([ollama_path], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, close_fds=True if platform.system() != "Windows" else False)
             time.sleep(5)  # Warten, bis Ollama gestartet ist
-            print(f"{green}Ollama started successfully.{reset}\n")
+            print(f"[{timestamp()}] [PASS] Ollama started successfully.{reset}\n")
         else:
-            print(f"{green}Ollama is already running.{reset}\n")
+            print(f"[{timestamp()}] [INFO] Ollama is already running.{reset}\n")
     except Exception as e:
-        print(f"{red}Error starting Ollama: {e}{reset}")
+        print(f"[{timestamp()}] [ERROR] Error starting Ollama: {e}{reset}")
 
 
 def check_command_installed(command):
@@ -2270,7 +2281,7 @@ def check_command_installed(command):
                                 stderr=subprocess.PIPE)
         return result.returncode == 0
     except Exception as e:
-        print(f"{red}Error checking command {command}: {e}{reset}")
+        print(f"[{timestamp()}] [ERROR] Error checking command {command}: {e}")
         return False
 
 def is_tool_installed(tool_name):
@@ -2286,12 +2297,12 @@ def search_websites(command):
         'User-Agent': 'Mozilla/5.0'
     }
 
-    print(f"\nSearching for: '{command}' ...\n")
+    print(f"\n[{timestamp()}] [INFO] Searching for: '{command}' ...\n")
     try:
         response = requests.post(url, data=params, headers=headers, timeout=10)
         response.raise_for_status()
     except Exception as e:
-        print(f"Error during request: {e}")
+        print(f"[{timestamp()}] [ERROR] Error during request: {e}")
         return
 
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -2302,9 +2313,9 @@ def search_websites(command):
         print(f"{blue}[{i}]{reset} {a['href']}")
 
     if not links:
-        print("No results found.")
+        print(f"[{timestamp()}] [ERROR] No results found.")
     else:
-        print(f"\n{len(links)} results found.\n")
+        print(f"\n[{timestamp()}] [INFO] {len(links)} results found.\n")
 
 
 def search_github(command):
@@ -2315,12 +2326,12 @@ def search_github(command):
         'User-Agent': 'Mozilla/5.0'
     }
 
-    print(f"\nSearching GitHub for: '{command}' ...\n")
+    print(f"\n[{timestamp()}] [INFO] Searching for: '{command}' ...\n")
     try:
         response = requests.post(url, data=params, headers=headers, timeout=10)
         response.raise_for_status()
     except Exception as e:
-        print(f"Error during request: {e}")
+        print(f"[{timestamp()}] [ERROR] Error during request: {e}")
         return
 
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -2331,9 +2342,9 @@ def search_github(command):
         print(f"{blue}[{i}]{reset} {a['href']}")
 
     if not links:
-        print("No results found.")
+        print(f"[{timestamp()}] [ERROR] No results found.")
     else:
-        print(f"\n{len(links)} results found.\n")
+        print(f"\n[{timestamp()}] [INFO] {len(links)} results found.\n")
 
 
 def search_huggingface(command):
@@ -2344,12 +2355,12 @@ def search_huggingface(command):
         'User-Agent': 'Mozilla/5.0'
     }
 
-    print(f"\nSearching Hugging Face for: '{command}' ...\n")
+    print(f"\n[{timestamp()}] [INFO] Searching for: '{command}' ...\n")
     try:
         response = requests.post(url, data=params, headers=headers, timeout=10)
         response.raise_for_status()
     except Exception as e:
-        print(f"Error during request: {e}")
+        print(f"[{timestamp()}] [ERROR] Error during request: {e}")
         return
 
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -2360,9 +2371,9 @@ def search_huggingface(command):
         print(f"{blue}[{i}]{reset} {a['href']}")
 
     if not links:
-        print("No results found.")
+        print(f"[{timestamp()}] [ERROR] No results found.")
     else:
-        print(f"\n{len(links)} results found.\n")
+        print(f"\n[{timestamp()}] [INFO] {len(links)} results found.\n")
 
 
 def search_ollama(command):
@@ -2373,12 +2384,12 @@ def search_ollama(command):
         'User-Agent': 'Mozilla/5.0'
     }
 
-    print(f"\nSearching Ollama for: '{command}' ...\n")
+    print(f"\n[{timestamp()}] [INFO] Searching for: '{command}' ...\n")
     try:
         response = requests.post(url, data=params, headers=headers, timeout=10)
         response.raise_for_status()
     except Exception as e:
-        print(f"Error during request: {e}")
+        print(f"[{timestamp()}] [ERROR] Error during request: {e}")
         return
 
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -2389,9 +2400,9 @@ def search_ollama(command):
         print(f"{blue}[{i}]{reset} {a['href']}")
 
     if not links:
-        print("No results found.")
+        print(f"[{timestamp()}] [ERROR] No results found.")
     else:
-        print(f"\n{len(links)} results found.\n")
+        print(f"\n[{timestamp()}] [INFO] {len(links)} results found.\n")
 
 
 def search_stackoverflow(command):
@@ -2402,12 +2413,12 @@ def search_stackoverflow(command):
         'User-Agent': 'Mozilla/5.0'
     }
 
-    print(f"\nSearching Stack Overflow for: '{command}' ...\n")
+    print(f"\n[{timestamp()}] [INFO] Searching for: '{command}' ...\n")
     try:
         response = requests.post(url, data=params, headers=headers, timeout=10)
         response.raise_for_status()
     except Exception as e:
-        print(f"Error during request: {e}")
+        print(f"[{timestamp()}] [ERROR] Error during request: {e}")
         return
 
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -2418,9 +2429,9 @@ def search_stackoverflow(command):
         print(f"{blue}[{i}]{reset} {a['href']}")
 
     if not links:
-        print("No results found.")
+        print(f"[{timestamp()}] [ERROR] No results found.")
     else:
-        print(f"\n{len(links)} results found.\n")
+        print(f"\n[{timestamp()}] [INFO] {len(links)} results found.\n")
 
 
 def search_stackexchange(command):
@@ -2431,12 +2442,12 @@ def search_stackexchange(command):
         'User-Agent': 'Mozilla/5.0'
     }
 
-    print(f"\nSearching Stack Exchange for: '{command}' ...\n")
+    print(f"\n[{timestamp()}] [INFO] Searching for: '{command}' ...\n")
     try:
         response = requests.post(url, data=params, headers=headers, timeout=10)
         response.raise_for_status()
     except Exception as e:
-        print(f"Error during request: {e}")
+        print(f"[{timestamp()}] [ERROR] Error during request: {e}")
         return
 
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -2447,9 +2458,9 @@ def search_stackexchange(command):
         print(f"{blue}[{i}]{reset} {a['href']}")
 
     if not links:
-        print("No results found.")
+        print(f"[{timestamp()}] [ERROR] No results found.")
     else:
-        print(f"\n{len(links)} results found.\n")
+        print(f"\n[{timestamp()}] [INFO] {len(links)} results found.\n")
 
 
 def search_pypi(command):
@@ -2460,12 +2471,12 @@ def search_pypi(command):
         'User-Agent': 'Mozilla/5.0'
     }
 
-    print(f"\nSearching PyPI for: '{command}' ...\n")
+    print(f"\n[{timestamp()}] [INFO] Searching for: '{command}' ...\n")
     try:
         response = requests.post(url, data=params, headers=headers, timeout=10)
         response.raise_for_status()
     except Exception as e:
-        print(f"Error during request: {e}")
+        print(f"[{timestamp()}] [ERROR] Error during request: {e}")
         return
 
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -2476,9 +2487,9 @@ def search_pypi(command):
         print(f"{blue}[{i}]{reset} {a['href']}")
 
     if not links:
-        print("No results found.")
+        print(f"[{timestamp()}] [ERROR] No results found.")
     else:
-        print(f"\n{len(links)} results found.\n")
+        print(f"\n[{timestamp()}] [INFO] {len(links)} results found.\n")
 
 
 def search_arxiv(command):
@@ -2489,12 +2500,12 @@ def search_arxiv(command):
         'User-Agent': 'Mozilla/5.0'
     }
 
-    print(f"\nSearching ArXiv for: '{command}' ...\n")
+    print(f"\n[{timestamp()}] [INFO] Searching for: '{command}' ...\n")
     try:
         response = requests.post(url, data=params, headers=headers, timeout=10)
         response.raise_for_status()
     except Exception as e:
-        print(f"Error during request: {e}")
+        print(f"[{timestamp()}] [ERROR] Error during request: {e}")
         return
 
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -2505,9 +2516,9 @@ def search_arxiv(command):
         print(f"{blue}[{i}]{reset} {a['href']}")
 
     if not links:
-        print("No results found.")
+        print(f"[{timestamp()}] [ERROR] No results found.")
     else:
-        print(f"\n{len(links)} results found.\n")
+        print(f"\n[{timestamp()}] [INFO] {len(links)} results found.\n")
 
 
 def search_paperswithcode(command):
@@ -2518,12 +2529,12 @@ def search_paperswithcode(command):
         'User-Agent': 'Mozilla/5.0'
     }
 
-    print(f"\nSearching Papers with Code for: '{command}' ...\n")
+    print(f"\n[{timestamp()}] [INFO] Searching for: '{command}' ...\n")
     try:
         response = requests.post(url, data=params, headers=headers, timeout=10)
         response.raise_for_status()
     except Exception as e:
-        print(f"Error during request: {e}")
+        print(f"[{timestamp()}] [ERROR] Error during request: {e}")
         return
 
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -2534,9 +2545,9 @@ def search_paperswithcode(command):
         print(f"{blue}[{i}]{reset} {a['href']}")
 
     if not links:
-        print("No results found.")
+        print(f"[{timestamp()}] [ERROR] No results found.")
     else:
-        print(f"\n{len(links)} results found.\n")
+        print(f"\n[{timestamp()}] [INFO] {len(links)} results found.\n")
 
 
 def search_kaggle(command):
@@ -2547,12 +2558,13 @@ def search_kaggle(command):
         'User-Agent': 'Mozilla/5.0'
     }
 
-    print(f"\nSearching Kaggle for: '{command}' ...\n")
+
+    print(f"\n[{timestamp()}] [INFO] Searching for: '{command}' ...\n")
     try:
         response = requests.post(url, data=params, headers=headers, timeout=10)
         response.raise_for_status()
     except Exception as e:
-        print(f"Error during request: {e}")
+        print(f"[{timestamp()}] [ERROR] Error during request: {e}")
         return
 
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -2563,9 +2575,9 @@ def search_kaggle(command):
         print(f"{blue}[{i}]{reset} {a['href']}")
 
     if not links:
-        print("No results found.")
+        print(f"[{timestamp()}] [ERROR] No results found.")
     else:
-        print(f"\n{len(links)} results found.\n")
+        print(f"\n[{timestamp()}] [INFO] {len(links)} results found.\n")
 
 
 def search_geeksforgeeks(command):
@@ -2576,12 +2588,13 @@ def search_geeksforgeeks(command):
         'User-Agent': 'Mozilla/5.0'
     }
 
-    print(f"\nSearching GeeksforGeeks for: '{command}' ...\n")
+
+    print(f"\n[{timestamp()}] [INFO] Searching for: '{command}' ...\n")
     try:
         response = requests.post(url, data=params, headers=headers, timeout=10)
         response.raise_for_status()
     except Exception as e:
-        print(f"Error during request: {e}")
+        print(f"[{timestamp()}] [ERROR] Error during request: {e}")
         return
 
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -2592,9 +2605,9 @@ def search_geeksforgeeks(command):
         print(f"{blue}[{i}]{reset} {a['href']}")
 
     if not links:
-        print("No results found.")
+        print(f"[{timestamp()}] [ERROR] No results found.")
     else:
-        print(f"\n{len(links)} results found.\n")
+        print(f"\n[{timestamp()}] [INFO] {len(links)} results found.\n")
 
 
 def search_realpython(command):
@@ -2605,12 +2618,12 @@ def search_realpython(command):
         'User-Agent': 'Mozilla/5.0'
     }
 
-    print(f"\nSearching Real Python for: '{command}' ...\n")
+    print(f"\n[{timestamp()}] [INFO] Searching for: '{command}' ...\n")
     try:
         response = requests.post(url, data=params, headers=headers, timeout=10)
         response.raise_for_status()
     except Exception as e:
-        print(f"Error during request: {e}")
+        print(f"[{timestamp()}] [ERROR] Error during request: {e}")
         return
 
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -2621,9 +2634,9 @@ def search_realpython(command):
         print(f"{blue}[{i}]{reset} {a['href']}")
 
     if not links:
-        print("No results found.")
+        print(f"[{timestamp()}] [ERROR] No results found.")
     else:
-        print(f"\n{len(links)} results found.\n")
+        print(f"\n[{timestamp()}] [INFO] {len(links)} results found.\n")
 
 
 def search_w3schools(command):
@@ -2634,12 +2647,12 @@ def search_w3schools(command):
         'User-Agent': 'Mozilla/5.0'
     }
 
-    print(f"\nSearching W3Schools for: '{command}' ...\n")
+    print(f"\n[{timestamp()}] [INFO] Searching for: '{command}' ...\n")
     try:
         response = requests.post(url, data=params, headers=headers, timeout=10)
         response.raise_for_status()
     except Exception as e:
-        print(f"Error during request: {e}")
+        print(f"[{timestamp()}] [ERROR] Error during request: {e}")
         return
 
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -2650,9 +2663,9 @@ def search_w3schools(command):
         print(f"{blue}[{i}]{reset} {a['href']}")
 
     if not links:
-        print("No results found.")
+        print(f"[{timestamp()}] [ERROR] No results found.")
     else:
-        print(f"\n{len(links)} results found.\n")
+        print(f"\n[{timestamp()}] [INFO] {len(links)} results found.\n")
 
 
 def search_developer_mozilla(command):
@@ -2663,12 +2676,12 @@ def search_developer_mozilla(command):
         'User-Agent': 'Mozilla/5.0'
     }
 
-    print(f"\nSearching Mozilla Developer Network (MDN) for: '{command}' ...\n")
+    print(f"\n[{timestamp()}] [INFO] Searching for: '{command}' ...\n")
     try:
         response = requests.post(url, data=params, headers=headers, timeout=10)
         response.raise_for_status()
     except Exception as e:
-        print(f"Error during request: {e}")
+        print(f"[{timestamp()}] [ERROR] Error during request: {e}")
         return
 
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -2679,9 +2692,9 @@ def search_developer_mozilla(command):
         print(f"{blue}[{i}]{reset} {a['href']}")
 
     if not links:
-        print("No results found.")
+        print(f"[{timestamp()}] [ERROR] No results found.")
     else:
-        print(f"\n{len(links)} results found.\n")
+        print(f"\n[{timestamp()}] [INFO] {len(links)} results found.\n")
 
 
 def find_vcvarsall():
@@ -2691,7 +2704,7 @@ def find_vcvarsall():
     path = r"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat"
     if os.path.isfile(path):
         return path
-    raise FileNotFoundError("vcvarsall.bat not found. Please make sure Visual Studio is installed.")
+    raise FileNotFoundError(f"[{timestamp()}] [ERROR] vcvarsall.bat not found. Please make sure Visual Studio is installed.")
 
 
 def find_vcvarsall_c():
@@ -2702,7 +2715,7 @@ def find_vcvarsall_c():
     vs_path = r"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat"
     if not os.path.isfile(vs_path):
         logging.error("Visual Studio vcvarsall.bat file not found.")
-        raise FileNotFoundError("vcvarsall.bat not found. Please ensure Visual Studio is installed.")
+        raise FileNotFoundError(f"[{timestamp()}] [ERROR] vcvarsall.bat not found. Please ensure Visual Studio is installed.")
     return vs_path
 
 
@@ -5851,14 +5864,14 @@ def get_cool_pin():
             shell=True  # in Windows häufig nötig für PATH-Auflösung
         )
     except FileNotFoundError:
-        return "Error: oh-my-posh was not found. Is it in the PATH?"
+        return f"[{timestamp()}] [ERROR] oh-my-posh was not found. Is it in the PATH?"
     except Exception as e:
-        return f"Unexpected error: {e}"
+        return f"[{timestamp()}] [ERROR] Unexpected error: {e}"
 
     if result.returncode == 0:
         return result.stdout
     else:
-        return f"Error running oh-my-posh:\n{result.stderr}"
+        return f"[{timestamp()}] [ERROR] Error running oh-my-posh:\n{result.stderr}"
 
 
 def get_cool_3_pin():
@@ -5889,14 +5902,14 @@ def get_cool_3_pin():
             shell=True         # in Windows häufig nötig für PATH-Auflösung
         )
     except FileNotFoundError:
-        return "Error: oh-my-posh was not found. Is it in the PATH?"
+        return f"[{timestamp()}] [ERROR] oh-my-posh was not found. Is it in the PATH?"
     except Exception as e:
-        return f"Unexpected error: {e}"
+        return f"[{timestamp()}] [ERROR] Unexpected error: {e}"
 
     if result.returncode == 0:
         return result.stdout
     else:
-        return f"Error running oh-my-posh:\n{result.stderr}"
+        return f"[{timestamp()}] [ERROR] Error running oh-my-posh:\n{result.stderr}"
 
 
 def get_cool_4_pin():
@@ -5928,14 +5941,14 @@ def get_cool_4_pin():
             shell=True  # in Windows häufig nötig für PATH-Auflösung
         )
     except FileNotFoundError:
-        return "Error: oh-my-posh was not found. Is it in the PATH?"
+        return f"[{timestamp()}] [ERROR] oh-my-posh was not found. Is it in the PATH?"
     except Exception as e:
-        return f"Unexpected error: {e}"
+        return f"[{timestamp()}] [ERROR] Unexpected error: {e}"
 
     if result.returncode == 0:
         return result.stdout
     else:
-        return f"Error running oh-my-posh:\n{result.stderr}"
+        return f"[{timestamp()}] [ERROR] Error running oh-my-posh:\n{result.stderr}"
 
 def get_cool_5_pin():
     """
@@ -5965,14 +5978,14 @@ def get_cool_5_pin():
             shell=True         # in Windows häufig nötig für PATH-Auflösung
         )
     except FileNotFoundError:
-        return "Error: oh-my-posh was not found. Is it in the PATH?"
+        return f"[{timestamp()}] [ERROR] oh-my-posh was not found. Is it in the PATH?"
     except Exception as e:
-        return f"Unexpected error: {e}"
+        return f"[{timestamp()}] [ERROR] Unexpected error: {e}"
 
     if result.returncode == 0:
         return result.stdout
     else:
-        return f"Error running oh-my-posh:\n{result.stderr}"
+        return f"[{timestamp()}] [ERROR] Error running oh-my-posh:\n{result.stderr}"
 
 def get_cool_6_pin():
     """
@@ -6002,14 +6015,14 @@ def get_cool_6_pin():
             shell=True         # in Windows häufig nötig für PATH-Auflösung
         )
     except FileNotFoundError:
-        return "Error: oh-my-posh was not found. Is it in the PATH?"
+        return f"[{timestamp()}] [ERROR] oh-my-posh was not found. Is it in the PATH?"
     except Exception as e:
-        return f"Unexpected error: {e}"
+        return f"[{timestamp()}] [ERROR] Unexpected error: {e}"
 
     if result.returncode == 0:
         return result.stdout
     else:
-        return f"Error running oh-my-posh:\n{result.stderr}"
+        return f"[{timestamp()}] [ERROR] Error running oh-my-posh:\n{result.stderr}"
 
 
 def get_cool_8_pin():
@@ -6040,14 +6053,14 @@ def get_cool_8_pin():
             shell=True  # in Windows häufig nötig für PATH-Auflösung
         )
     except FileNotFoundError:
-        return "Error: oh-my-posh was not found. Is it in the PATH?"
+        return f"[{timestamp()}] [ERROR] oh-my-posh was not found. Is it in the PATH?"
     except Exception as e:
-        return f"Unexpected error: {e}"
+        return f"[{timestamp()}] [ERROR] Unexpected error: {e}"
 
     if result.returncode == 0:
         return result.stdout
     else:
-        return f"Error running oh-my-posh:\n{result.stderr}"
+        return f"[{timestamp()}] [ERROR] Error running oh-my-posh:\n{result.stderr}"
 
 
 def get_cool_9_pin():
@@ -6078,14 +6091,14 @@ def get_cool_9_pin():
             shell=True  # in Windows häufig nötig für PATH-Auflösung
         )
     except FileNotFoundError:
-        return "Error: oh-my-posh was not found. Is it in the PATH?"
+        return f"[{timestamp()}] [ERROR] oh-my-posh was not found. Is it in the PATH?"
     except Exception as e:
-        return f"Unexpected error: {e}"
+        return f"[{timestamp()}] [ERROR] Unexpected error: {e}"
 
     if result.returncode == 0:
         return result.stdout
     else:
-        return f"Error running oh-my-posh:\n{result.stderr}"
+        return f"[{timestamp()}] [ERROR] Error running oh-my-posh:\n{result.stderr}"
 
 def get_cool_10_pin():
     """
@@ -6115,14 +6128,14 @@ def get_cool_10_pin():
             shell=True  # in Windows häufig nötig für PATH-Auflösung
         )
     except FileNotFoundError:
-        return "Error: oh-my-posh was not found. Is it in the PATH?"
+        return f"[{timestamp()}] [ERROR] oh-my-posh was not found. Is it in the PATH?"
     except Exception as e:
-        return f"Unexpected error: {e}"
+        return f"[{timestamp()}] [ERROR] Unexpected error: {e}"
 
     if result.returncode == 0:
         return result.stdout
     else:
-        return f"Error running oh-my-posh:\n{result.stderr}"
+        return f"[{timestamp()}] [ERROR] Error running oh-my-posh:\n{result.stderr}"
 
 def get_cool_11_pin():
     """
@@ -6152,14 +6165,14 @@ def get_cool_11_pin():
             shell=True  # in Windows häufig nötig für PATH-Auflösung
         )
     except FileNotFoundError:
-        return "Error: oh-my-posh was not found. Is it in the PATH?"
+        return f"[{timestamp()}] [ERROR] oh-my-posh was not found. Is it in the PATH?"
     except Exception as e:
-        return f"Unexpected error: {e}"
+        return f"[{timestamp()}] [ERROR] Unexpected error: {e}"
 
     if result.returncode == 0:
         return result.stdout
     else:
-        return f"Error running oh-my-posh:\n{result.stderr}"
+        return f"[{timestamp()}] [ERROR] Error running oh-my-posh:\n{result.stderr}"
 
 def get_cool_12_pin():
     """
@@ -6189,14 +6202,14 @@ def get_cool_12_pin():
             shell=True  # in Windows häufig nötig für PATH-Auflösung
         )
     except FileNotFoundError:
-        return "Error: oh-my-posh was not found. Is it in the PATH?"
+        return f"[{timestamp()}] [ERROR] oh-my-posh was not found. Is it in the PATH?"
     except Exception as e:
-        return f"Unexpected error: {e}"
+        return f"[{timestamp()}] [ERROR] Unexpected error: {e}"
 
     if result.returncode == 0:
         return result.stdout
     else:
-        return f"Error running oh-my-posh:\n{result.stderr}"
+        return f"[{timestamp()}] [ERROR] Error running oh-my-posh:\n{result.stderr}"
 
 def get_cool_13_pin():
     """
@@ -6226,14 +6239,14 @@ def get_cool_13_pin():
             shell=True  # in Windows häufig nötig für PATH-Auflösung
         )
     except FileNotFoundError:
-        return "Error: oh-my-posh was not found. Is it in the PATH?"
+        return f"[{timestamp()}] [ERROR] oh-my-posh was not found. Is it in the PATH?"
     except Exception as e:
-        return f"Unexpected error: {e}"
+        return f"[{timestamp()}] [ERROR] Unexpected error: {e}"
 
     if result.returncode == 0:
         return result.stdout
     else:
-        return f"Error running oh-my-posh:\n{result.stderr}"
+        return f"[{timestamp()}] [ERROR] Error running oh-my-posh:\n{result.stderr}"
 
 def get_cool_14_pin():
     """
@@ -6263,14 +6276,14 @@ def get_cool_14_pin():
             shell=True  # in Windows häufig nötig für PATH-Auflösung
         )
     except FileNotFoundError:
-        return "Error: oh-my-posh was not found. Is it in the PATH?"
+        return f"[{timestamp()}] [ERROR] oh-my-posh was not found. Is it in the PATH?"
     except Exception as e:
-        return f"Unexpected error: {e}"
+        return f"[{timestamp()}] [ERROR] Unexpected error: {e}"
 
     if result.returncode == 0:
         return result.stdout
     else:
-        return f"Error running oh-my-posh:\n{result.stderr}"
+        return f"[{timestamp()}] [ERROR] Error running oh-my-posh:\n{result.stderr}"
 
 def get_cool_15_pin():
     """
@@ -6300,14 +6313,14 @@ def get_cool_15_pin():
             shell=True  # in Windows häufig nötig für PATH-Auflösung
         )
     except FileNotFoundError:
-        return "Error: oh-my-posh was not found. Is it in the PATH?"
+        return f"[{timestamp()}] [ERROR] oh-my-posh was not found. Is it in the PATH?"
     except Exception as e:
-        return f"Unexpected error: {e}"
+        return f"[{timestamp()}] [ERROR] Unexpected error: {e}"
 
     if result.returncode == 0:
         return result.stdout
     else:
-        return f"Error running oh-my-posh:\n{result.stderr}"
+        return f"[{timestamp()}] [ERROR] Error running oh-my-posh:\n{result.stderr}"
 
 def get_cool_16_pin():
     """
@@ -6337,14 +6350,14 @@ def get_cool_16_pin():
             shell=True  # in Windows häufig nötig für PATH-Auflösung
         )
     except FileNotFoundError:
-        return "Error: oh-my-posh was not found. Is it in the PATH?"
+        return f"[{timestamp()}] [ERROR] oh-my-posh was not found. Is it in the PATH?"
     except Exception as e:
-        return f"Unexpected error: {e}"
+        return f"[{timestamp()}] [ERROR] Unexpected error: {e}"
 
     if result.returncode == 0:
         return result.stdout
     else:
-        return f"Error running oh-my-posh:\n{result.stderr}"
+        return f"[{timestamp()}] [ERROR] Error running oh-my-posh:\n{result.stderr}"
 
 def get_cool_18_pin():
     """
@@ -6374,14 +6387,14 @@ def get_cool_18_pin():
             shell=True  # in Windows häufig nötig für PATH-Auflösung
         )
     except FileNotFoundError:
-        return "Error: oh-my-posh was not found. Is it in the PATH?"
+        return f"[{timestamp()}] [ERROR] oh-my-posh was not found. Is it in the PATH?"
     except Exception as e:
-        return f"Unexpected error: {e}"
+        return f"[{timestamp()}] [ERROR] Unexpected error: {e}"
 
     if result.returncode == 0:
         return result.stdout
     else:
-        return f"Error running oh-my-posh:\n{result.stderr}"
+        return f"[{timestamp()}] [ERROR] Error running oh-my-posh:\n{result.stderr}"
 
 def get_cool_19_pin():
     """
@@ -6411,14 +6424,14 @@ def get_cool_19_pin():
             shell=True  # in Windows häufig nötig für PATH-Auflösung
         )
     except FileNotFoundError:
-        return "Error: oh-my-posh was not found. Is it in the PATH?"
+        return f"[{timestamp()}] [ERROR] oh-my-posh was not found. Is it in the PATH?"
     except Exception as e:
-        return f"Unexpected error: {e}"
+        return f"[{timestamp()}] [ERROR] Unexpected error: {e}"
 
     if result.returncode == 0:
         return result.stdout
     else:
-        return f"Error running oh-my-posh:\n{result.stderr}"
+        return f"[{timestamp()}] [ERROR] Error running oh-my-posh:\n{result.stderr}"
 
 def get_cool_20_pin():
     """
@@ -6448,14 +6461,14 @@ def get_cool_20_pin():
             shell=True  # in Windows häufig nötig für PATH-Auflösung
         )
     except FileNotFoundError:
-        return "Error: oh-my-posh was not found. Is it in the PATH?"
+        return f"[{timestamp()}] [ERROR] oh-my-posh was not found. Is it in the PATH?"
     except Exception as e:
-        return f"Unexpected error: {e}"
+        return f"[{timestamp()}] [ERROR] Unexpected error: {e}"
 
     if result.returncode == 0:
         return result.stdout
     else:
-        return f"Error running oh-my-posh:\n{result.stderr}"
+        return f"[{timestamp()}] [ERROR] Error running oh-my-posh:\n{result.stderr}"
 
 def get_cool_21_pin():
     """
@@ -6485,14 +6498,14 @@ def get_cool_21_pin():
             shell=True  # in Windows häufig nötig für PATH-Auflösung
         )
     except FileNotFoundError:
-        return "Error: oh-my-posh was not found. Is it in the PATH?"
+        return f"[{timestamp()}] [ERROR] oh-my-posh was not found. Is it in the PATH?"
     except Exception as e:
-        return f"Unexpected error: {e}"
+        return f"[{timestamp()}] [ERROR] Unexpected error: {e}"
 
     if result.returncode == 0:
         return result.stdout
     else:
-        return f"Error running oh-my-posh:\n{result.stderr}"
+        return f"[{timestamp()}] [ERROR] Error running oh-my-posh:\n{result.stderr}"
 
 def get_cool_23_pin():
     """
@@ -6522,14 +6535,14 @@ def get_cool_23_pin():
             shell=True  # in Windows häufig nötig für PATH-Auflösung
         )
     except FileNotFoundError:
-        return "Error: oh-my-posh was not found. Is it in the PATH?"
+        return f"[{timestamp()}] [ERROR] oh-my-posh was not found. Is it in the PATH?"
     except Exception as e:
-        return f"Unexpected error: {e}"
+        return f"[{timestamp()}] [ERROR] Unexpected error: {e}"
 
     if result.returncode == 0:
         return result.stdout
     else:
-        return f"Error running oh-my-posh:\n{result.stderr}"
+        return f"[{timestamp()}] [ERROR] Error running oh-my-posh:\n{result.stderr}"
 
 COMMANDS = [
     "p", "p git", "p git mavis", "p git mavis-web", "p git simon", "p htop", "p ls", "p ls mavis",
@@ -6811,9 +6824,9 @@ def handle_history_command():
     Rückgabe True signalisiert, dass das Kommando history verarbeitet wurde.
     """
     if not history:
-        print("No commands in the history.")
+        print(f"[{timestamp()}] [ERROR] No commands in the history.")
     else:
-        print("Previous commands:")
+        print(f"[{timestamp()}] [INFO] Previous commands:")
         for idx, cmd in enumerate(history, start=1):
             print(f"  {idx}: {cmd}")
     return True
@@ -7084,410 +7097,410 @@ def main():
             elif user_input.startswith("lx "):
                 user_input = user_input[3:].strip()
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Linux: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Linux: {user_input}")
                     run_linux_command(user_input)
 
             elif user_input.startswith("lx-cpp "):
                 user_input = user_input[7:].strip()
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Linux: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Linux: {user_input}")
                     run_linux_command(user_input)
 
             elif user_input.startswith("lx-cpp-c "):
                 user_input = user_input[9:].strip()
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Linux: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Linux: {user_input}")
                     run_linux_cpp_c_command(user_input)
 
             elif user_input.startswith("lx-c "):
                 user_input = user_input[5:].strip()
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Linux: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Linux: {user_input}")
                     run_linux_c_command(user_input)
 
             elif user_input.startswith("lx-c-c "):
                 user_input = user_input[7:].strip()
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Linux: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Linux: {user_input}")
                     run_linux_c_c_command(user_input)
 
             elif user_input.startswith("lx-p "):
                 user_input = user_input[5:].strip()
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Linux: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Linux: {user_input}")
                     run_linux_python_command(user_input)
 
             elif user_input.startswith("lx-p-c "):
                 user_input = user_input[6:].strip()
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Linux: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Linux: {user_input}")
                     run_linux_p_c_command(user_input)
 
             elif user_input.startswith("linux "):
                 user_input = user_input[6:].strip()
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Linux: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Linux: {user_input}")
                     run_linux_command(user_input)
 
             elif user_input.startswith("ubuntu "):
                 user_input = user_input[7:].strip()
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Ubuntu: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Ubuntu: {user_input}")
                     run_ubuntu_command(user_input)
 
             elif user_input.startswith("ubuntu-c "):
                 user_input = user_input[9:].strip()
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Ubuntu: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Ubuntu: {user_input}")
                     run_ubuntu_c_command(user_input)
 
             elif user_input.startswith("ubuntu-p "):
                 user_input = user_input[9:].strip()
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Ubuntu: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Ubuntu: {user_input}")
                     run_ubuntu_python_command(user_input)
 
             elif user_input.startswith("debian "):
                 user_input = user_input[7:].strip()  # Remove the "debian " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Debian: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Debian: {user_input}")
                     run_debian_command(user_input)
 
             elif user_input.startswith("debian-c "):
                 user_input = user_input[9:].strip()  # Remove the "debian " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Debian: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Debian: {user_input}")
                     run_debian_c_command(user_input)
 
             elif user_input.startswith("debian-p "):
                 user_input = user_input[9:].strip()  # Remove the "debian " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Debian: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Debian: {user_input}")
                     run_debian_python_command(user_input)
 
             elif user_input.startswith("kali "):
                 user_input = user_input[5:].strip()  # Remove the "kali " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Kali: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Kali: {user_input}")
                     run_kali_command(user_input)
 
             elif user_input.startswith("kali-c "):
                 user_input = user_input[7:].strip()  # Remove the "kali " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Kali: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Kali: {user_input}")
                     run_kali_c_command(user_input)
 
             elif user_input.startswith("kali-p "):
                 user_input = user_input[7:].strip()  # Remove the "kali " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Kali: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Kali: {user_input}")
                     run_kali_python_command(user_input)
 
             elif user_input.startswith("hack "):
                 user_input = user_input[5:].strip()  # Remove the "kali " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Kali: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Kali: {user_input}")
                     run_kali_command(user_input)
 
             elif user_input.startswith("arch "):
                 user_input = user_input[5:].strip()  # Remove the "arch " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Arch: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Arch: {user_input}")
                     run_arch_command(user_input)
 
             elif user_input.startswith("arch-c "):
                 user_input = user_input[7:].strip()  # Remove the "arch " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Arch: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Arch: {user_input}")
                     run_arch_c_command(user_input)
 
             elif user_input.startswith("arch-p "):
                 user_input = user_input[7:].strip()  # Remove the "arch " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Arch: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Arch: {user_input}")
                     run_arch_python_command(user_input)
 
             elif user_input.startswith("openSUSE "):
                 user_input = user_input[9:].strip()  # Remove the "openSUSE " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on openSUSE: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on openSUSE: {user_input}")
                     run_opensuse_command(user_input)
 
             elif user_input.startswith("openSUSE-c "):
                 user_input = user_input[11:].strip()  # Remove the "openSUSE " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on openSUSE: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on openSUSE: {user_input}")
                     run_opensuse_c_command(user_input)
 
             elif user_input.startswith("openSUSE-p "):
                 user_input = user_input[11:].strip()  # Remove the "openSUSE " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on openSUSE: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on openSUSE: {user_input}")
                     run_opensuse_python_command(user_input)
 
             elif user_input.startswith("mint "):
                 user_input = user_input[5:].strip()  # Remove the "mint " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on openSUSE: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on openSUSE: {user_input}")
                     run_mint_command(user_input)
 
             elif user_input.startswith("mint-c "):
                 user_input = user_input[7:].strip()  # Remove the "mint " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on openSUSE: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on openSUSE: {user_input}")
                     run_mint_c_command(user_input)
 
             elif user_input.startswith("mint-p "):
                 user_input = user_input[7:].strip()  # Remove the "mint " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on openSUSE: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on openSUSE: {user_input}")
                     run_mint_python_command(user_input)
 
             elif user_input.startswith("fedora "):
                 user_input = user_input[7:].strip()  # Remove the "fedora " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Fedora: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Fedora: {user_input}")
                     run_fedora_command(user_input)
 
             elif user_input.startswith("fedora-c "):
                 user_input = user_input[9:].strip()  # Remove the "fedora " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Fedora: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Fedora: {user_input}")
                     run_fedora_c_command(user_input)
 
             elif user_input.startswith("fedora-p "):
                 user_input = user_input[9:].strip()  # Remove the "fedora " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Fedora: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Fedora: {user_input}")
                     run_fedora_python_command(user_input)
 
             elif user_input.startswith("redhat "):
                 user_input = user_input[7:].strip()  # Remove the "redhat " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on RedHat: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on RedHat: {user_input}")
                     run_redhat_command(user_input)
 
             elif user_input.startswith("redhat-c "):
                 user_input = user_input[9:].strip()  # Remove the "redhat " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on RedHat: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on RedHat: {user_input}")
                     run_redhat_c_command(user_input)
 
             elif user_input.startswith("redhat-p "):
                 user_input = user_input[9:].strip()  # Remove the "redhat " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on RedHat: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on RedHat: {user_input}")
                     run_redhat_python_command(user_input)
 
             elif user_input.startswith("sles "):
                 user_input = user_input[7:].strip()  # Remove the "sles " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on SLES: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on SLES: {user_input}")
                     run_sles_command(user_input)
 
             elif user_input.startswith("sles-c "):
                 user_input = user_input[9:].strip()  # Remove the "sles " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on SLES: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on SLES: {user_input}")
                     run_sles_c_command(user_input)
 
             elif user_input.startswith("sles-p "):
                 user_input = user_input[9:].strip()  # Remove the "sles " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on SLES: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on SLES: {user_input}")
                     run_sles_python_command(user_input)
 
             elif user_input.startswith("pengwin "):
                 user_input = user_input[7:].strip()  # Remove the "pengwin " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Pengwin: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Pengwin: {user_input}")
                     run_pengwin_command(user_input)
 
             elif user_input.startswith("pengwin-c "):
                 user_input = user_input[9:].strip()  # Remove the "pengwin " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Pengwin: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Pengwin: {user_input}")
                     run_pengwin_c_command(user_input)
 
             elif user_input.startswith("pengwin-p "):
                 user_input = user_input[9:].strip()  # Remove the "pengwin " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Pengwin: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Pengwin: {user_input}")
                     run_pengwin_python_command(user_input)
 
             elif user_input.startswith("oracle "):
                 user_input = user_input[7:].strip()  # Remove the "oracle " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Oracle: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Oracle: {user_input}")
                     run_oracle_command(user_input)
 
             elif user_input.startswith("oracle-c "):
                 user_input = user_input[9:].strip()  # Remove the "oracle " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Oracle: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Oracle: {user_input}")
                     run_oracle_c_command(user_input)
 
             elif user_input.startswith("oracle-p "):
                 user_input = user_input[9:].strip()  # Remove the "oracle " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Oracle: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Oracle: {user_input}")
                     run_oracle_python_command(user_input)
 
             elif user_input.startswith("alpine "):
                 user_input = user_input[7:].strip()  # Remove the "alpine " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Alpine: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Alpine: {user_input}")
                     run_alpine_command(user_input)
 
             elif user_input.startswith("alpine-c "):
                 user_input = user_input[9:].strip()  # Remove the "alpine " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Alpine: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Alpine: {user_input}")
                     run_alpine_c_command(user_input)
 
             elif user_input.startswith("alpine-p "):
                 user_input = user_input[9:].strip()  # Remove the "alpine " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Alpine: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Alpine: {user_input}")
                     run_alpine_python_command(user_input)
 
             elif user_input.startswith("clear "):
                 user_input = user_input[7:].strip()  # Remove the "clear " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Clear: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Clear: {user_input}")
                     run_clear_command(user_input)
 
             elif user_input.startswith("clear-c "):
                 user_input = user_input[9:].strip()  # Remove the "clear " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Clear: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Clear: {user_input}")
                     run_clear_c_command(user_input)
 
             elif user_input.startswith("clear-p "):
                 user_input = user_input[9:].strip()  # Remove the "clear " prefix
                 if not is_wsl_installed():
-                    print("WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
-                    print(f"Executing the following command on Clear: {user_input}")
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Clear: {user_input}")
                     run_clear_python_command(user_input)
 
             elif user_input.startswith("sc "):
                 user_input = user_input[3:].strip()
-                print(f"Executing the following command with scoop: {user_input}")
+                print(f"[{timestamp()}] [INFO] Executing the following command with scoop: {user_input}")
                 run_scoop_command(user_input)
 
             elif user_input.startswith("scoop "):
                 user_input = user_input[6:].strip()
-                print(f"Executing the following command with scoop: {user_input}")
+                print(f"[{timestamp()}] [INFO] Executing the following command with scoop: {user_input}")
                 run_scoop_command(user_input)
 
             elif user_input.startswith("cho "):
                 user_input = user_input[4:].strip()
-                print(f"Executing the following command with choco: {user_input}")
+                print(f"[{timestamp()}] [INFO] Executing the following command with choco: {user_input}")
                 run_choco_command(user_input)
 
             elif user_input.startswith("choco "):
                 user_input = user_input[6:].strip()
-                print(f"Executing the following command with choco: {user_input}")
+                print(f"[{timestamp()}] [INFO] Executing the following command with choco: {user_input}")
                 run_choco_command(user_input)
 
             elif user_input.startswith("winget "):
                 user_input = user_input[6:].strip()
-                print(f"Executing the following command with winget : {user_input}")
+                print(f"[{timestamp()}] [INFO] Executing the following command with winget : {user_input}")
                 run_winget_command(user_input)
 
             else:
@@ -7500,7 +7513,7 @@ def main():
             print("\nExiting...")
             break
         except Exception as e:
-            print(f"Error: {str(e)}", file=sys.stderr)
+            print(f"[{timestamp()}] [ERROR]  {str(e)}", file=sys.stderr)
 
 
 if __name__ == "__main__":
