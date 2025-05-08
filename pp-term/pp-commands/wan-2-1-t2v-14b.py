@@ -70,9 +70,6 @@ import importlib.util
 import os
 import select
 
-import imageio  # Für das Speichern von Videos
-from transformers import pipeline
-
 # Farbcodes definieren
 red = "\033[91m"
 green = "\033[92m"
@@ -117,6 +114,9 @@ def ensure_packages_installed(packages):
 venv_path = rf"C:\Users\{os.getlogin()}\p-terminal\pp-term\.env"
 activate_virtualenv(venv_path)
 ensure_packages_installed(required_packages)
+
+import imageio  # Für das Speichern von Videos
+from transformers import pipeline
 
 sys.stdout.reconfigure(encoding='utf-8')
 user_name = getpass.getuser()

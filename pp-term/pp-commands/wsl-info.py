@@ -76,6 +76,12 @@ Prerequisites:
 
 import subprocess
 import sys
+from datetime import datetime
+
+def timestamp() -> str:
+    """Returns current time formatted with milliseconds"""
+    now = datetime.now()
+    return now.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
 
 
 def run_command(cmd: list[str]) -> tuple[str, str]:
@@ -98,9 +104,9 @@ def run_command(cmd: list[str]) -> tuple[str, str]:
         )
         return result.stdout.strip(), ""
     except subprocess.CalledProcessError as e:
-        return "", f"Error executing {' '.join(cmd)}: {e.stderr.strip()}"
+        return "", f"[{timestamp()}] [ERROR] Error executing {' '.join(cmd)}: {e.stderr.strip()}"
     except FileNotFoundError:
-        return "", f"Command not found: {cmd[0]}"
+        return "", f"[{timestamp()}] [ERROR] Command not found: {cmd[0]}"
 
 
 def get_wsl_status() -> str:
@@ -112,7 +118,7 @@ def get_wsl_status() -> str:
     """
     status, error = run_command(["wsl", "--status"])
     if error:
-        return f"Error retrieving WSL status:\n{error}"
+        return f"[{timestamp()}] [ERROR] Error retrieving WSL status:\n{error}"
     return status
 
 
@@ -125,7 +131,7 @@ def get_installed_distros() -> str:
     """
     distros, error = run_command(["wsl", "--list", "--verbose"])
     if error:
-        return f"Error retrieving installed distributions:\n{error}"
+        return f"[{timestamp()}] [ERROR] Error retrieving installed distributions:\n{error}"
     return distros
 
 

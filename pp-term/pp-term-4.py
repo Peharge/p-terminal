@@ -2012,7 +2012,7 @@ def switch_theme(user_input: str) -> bool:
 
 
 def get_weather():
-    print("[{timestamp()}] [INFO] Fetching detailed weather for Berlin... (Demo)\n")
+    print(f"[{timestamp()}] [INFO] Fetching detailed weather for Berlin... (Demo)\n")
     time.sleep(1)
 
     weather_icons = {
