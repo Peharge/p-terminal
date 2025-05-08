@@ -63,25 +63,57 @@
 
 import subprocess
 import sys
+from pathlib import Path
+import logging
 
-def run_alpine_python_command(command):
-    # Sicherstellen, dass der Befehl als String vorliegt
-    if isinstance(command, str):
-        command = f"wsl {command}"  # Kommando für WSL einbetten
+# Log setup: timestamp with milliseconds
+log_path = Path(__file__).parent / "installer.log"
+logging.basicConfig(
+    level=logging.INFO,
+    format="[%(asctime)s.%(msecs)03d] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S.%f",
+    handlers=[
+        logging.FileHandler(log_path, encoding='utf-8'),
+        logging.StreamHandler(sys.stdout)
+    ]
+)
 
-    # Starten des Prozesses
-    process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
+def is_figlet_installed():
+    """Checks if figlet is installed."""
     try:
-        # Warten auf den Abschluss des Prozesses
-        process.wait()
-    except KeyboardInterrupt:
-        # Wenn der Benutzer den Prozess mit Ctrl+C unterbricht
-        process.terminate()
-        print("\nProcess was interrupted and terminated.")
-
-    print("Command was executed and the code exits.")
+        subprocess.run(["wsl", "which", "figlet"], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        return True
+    except subprocess.CalledProcessError:
+        return False
 
 
-# Beispielbefehl
-run_alpine_python_command('figlet "Hallo Welt!"')
+def install_figlet():
+    """Installs figlet if it is not installed."""
+    logging.info("[INFO] figlet is not installed. Installing figlet...")
+    subprocess.run(["wsl", "sudo", "apt", "update"], check=True)
+    subprocess.run(["wsl", "sudo", "apt", "install", "-y", "figlet"], check=True)
+    logging.info("[INFO] figlet has been successfully installed.")
+
+
+def run_figlet():
+    """Runs figlet."""
+    logging.info("[INFO] Running figlet...")
+    command = 'figlet "Hallo Welt!"'
+    if isinstance(command, str):
+        command = f"wsl {command}"  # Embed command for WSL
+
+    process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+    process.communicate()
+
+
+def main():
+    """Main logic to check and run figlet."""
+    if not is_figlet_installed():
+        install_figlet()
+
+    run_figlet()
+
+
+if __name__ == "__main__":
+    main()
