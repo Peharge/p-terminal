@@ -111,7 +111,7 @@ current_theme = "dark"
 
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
+    format="[%(asctime)s] [%(levelname)s] %(message)s",
     handlers=[logging.StreamHandler()]
 )
 
@@ -642,7 +642,33 @@ def handle_special_commands(user_input):
         "htop": "pp-commands\\htop.py",  # new
         "bashtop": "pp-commands\\bashtop.py", # new
         "btop": "pp-commands\\btop.py",  # new
-        "atop": "pp-commands\\atop.py"  # new
+        "atop": "pp-commands\\atop.py",  # new
+        "emacs": "pp-commands\\emacs.py",  # new
+        "vim": "pp-commands\\vim.py",  # new
+        "nano": "pp-commands\\nano.py",  # new
+        "dstat": "pp-commands\\dstat.py",  # new
+        "nmon": "pp-commands\\nmon.py",  # new
+        "glances": "pp-commands\\glances.py",  # new
+        "iftop": "pp-commands\\iftop.py",  # new
+        "nethogs": "pp-commands\\nethogs.py",  # new
+        "bmon": "pp-commands\\bmon.py",  # new
+        "tcpdump": "pp-commands\\tcpdump.py",  # new
+        "speedtest-cli": "pp-commands\\speedtest-cli.py",  # new
+        "ncdu": "pp-commands\\ncdu.py",  # new
+        "duf": "pp-commands\\duf.py",  # new
+        "lsblk": "pp-commands\\lsblk.py",  # new
+        "iotop": "pp-commands\\iotop.py",  # new
+        "fzf": "pp-commands\\fzf.py",  # new
+        "fd": "pp-commands\\fd.py",  # new
+        "bat": "pp-commands\\bat.py",  # new
+        "exa": "pp-commands\\exa.py",  # new
+        "tldr": "pp-commands\\tldr.py",  # new
+        "gitui": "pp-commands\\gitui.py",  # new
+        "lazygit": "pp-commands\\lazygit.py",  # new
+        "zoxide": "pp-commands\\zoxide.py",  # new
+        "starship": "pp-commands\\starship.py",  # new
+        "nala": "pp-commands\\nala.py",  # new
+        "bpytop": "pp-commands\\bpytop.py"   # new
     }
 
     # Custom command launcher
