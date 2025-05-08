@@ -89,7 +89,7 @@ def is_htop_installed():
 
 
 def install_htop():
-    """Installs bashtop if it is not installed."""
+    """Installs htop if it is not installed."""
     logging.info("[INFO] Htop is not installed. Installing htop...")
     subprocess.run(["wsl", "sudo", "apt", "update"], check=True)
     subprocess.run(["wsl", "sudo", "apt", "install", "-y", "htop"], check=True)
