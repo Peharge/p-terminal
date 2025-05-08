@@ -63,9 +63,20 @@
 
 import sys
 import getpass
+import subprocess
+import threading
+import time
 import importlib.util
 import os
-import subprocess
+from dotenv import load_dotenv
+from subprocess import run
+from datetime import datetime
+
+def timestamp() -> str:
+    """Returns current time formatted with milliseconds"""
+    now = datetime.now()
+    return now.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
+
 
 required_packages = ["matplotlib"]
 
@@ -75,13 +86,13 @@ def activate_virtualenv(venv_path):
 
     # Überprüfen, ob die virtuelle Umgebung existiert
     if not os.path.exists(activate_script):
-        print(f"Error: The virtual environment could not be found at {venv_path}.")
+        print(f"[{timestamp()}] [ERROR] The virtual environment could not be found at {venv_path}.")
         sys.exit(1)
 
     # Umgebungsvariable für die virtuelle Umgebung setzen
     os.environ["VIRTUAL_ENV"] = venv_path
     os.environ["PATH"] = os.path.join(venv_path, "Scripts") + os.pathsep + os.environ["PATH"]
-    print(f"Virtual environment {venv_path} enabled.")
+    print(f"[{timestamp()}] [INFO] Virtual environment {venv_path} enabled.")
 
 def ensure_packages_installed(packages):
     """Stellt sicher, dass alle erforderlichen Pakete installiert sind."""
@@ -91,11 +102,12 @@ def ensure_packages_installed(packages):
             try:
                 subprocess.run([sys.executable, "-m", "pip", "install", package], check=True, stdout=subprocess.DEVNULL,
                                stderr=subprocess.DEVNULL)
-                print(f"{package} installed successfully.")
+                print(f"[{timestamp()}] [INFO] {package} installed successfully.")
             except subprocess.CalledProcessError:
-                print(f"WARNING: Failed to install {package}. Please install it manually.")
+                print(f"[{timestamp()}] [INFO] Failed to install {package}. Please install it manually.")
         else:
-            print(f"{package} is already installed.")
+            print(f"[{timestamp()}] [INFO] {package} is already installed.")
+
 
 # Pfad zur bestehenden virtuellen Umgebung
 venv_path = rf"C:\Users\{os.getlogin()}\p-terminal\pp-term\.env"
