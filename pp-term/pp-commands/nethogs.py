@@ -71,7 +71,7 @@ log_path = Path(__file__).parent / "installer.log"
 logging.basicConfig(
     level=logging.INFO,
     format="[%(asctime)s.%(msecs)03d] %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
+    datefmt="%Y-%m-%d %H:%M:%S.%f",
     handlers=[
         logging.FileHandler(log_path, encoding='utf-8'),
         logging.StreamHandler(sys.stdout)
