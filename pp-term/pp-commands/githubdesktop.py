@@ -65,6 +65,12 @@ import subprocess
 import sys
 import os
 import shutil
+from datetime import datetime
+
+def timestamp() -> str:
+    """Returns current time formatted with milliseconds"""
+    now = datetime.now()
+    return now.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
 
 
 def find_github_desktop():
@@ -91,18 +97,18 @@ def open_github_desktop():
     github_desktop_path = find_github_desktop()
 
     if github_desktop_path is None:
-        print("GitHub Desktop was not found. Please check the installation path.")
+        print("[{timestamp()}] [ERROR] GitHub Desktop was not found. Please check the installation path.")
         sys.exit(1)
 
     # Try opening GitHub Desktop
     try:
         subprocess.run([github_desktop_path], check=True)
-        print("GitHub Desktop opened successfully.")
+        print("[{timestamp()}] [INFO] GitHub Desktop opened successfully.")
     except subprocess.CalledProcessError as e:
-        print(f"Error opening GitHub Desktop: {e}")
+        print(f"[{timestamp()}] [ERROR] Error opening GitHub Desktop: {e}")
         sys.exit(1)
     except Exception as e:
-        print(f"Unexpected error: {e}")
+        print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
         sys.exit(1)
 
 
