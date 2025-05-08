@@ -68,38 +68,45 @@ import threading
 import time
 import importlib.util
 import os
+from dotenv import load_dotenv
+from subprocess import run
+from datetime import datetime
 
-required_packages = [
-    "requests", "py-cpuinfo", "psutil"
-]
+def timestamp() -> str:
+    """Returns current time formatted with milliseconds"""
+    now = datetime.now()
+    return now.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
 
+
+required_packages = ["requests", "py-cpuinfo", "psutil"]
 
 def activate_virtualenv(venv_path):
     """Aktiviert eine bestehende virtuelle Umgebung."""
-    activate_script = os.path.join(venv_path, "Scripts", "activate") if os.name == "nt" else os.path.join(venv_path,
-                                                                                                          "bin",
-                                                                                                          "activate")
+    activate_script = os.path.join(venv_path, "Scripts", "activate") if os.name == "nt" else os.path.join(venv_path, "bin", "activate")
 
+    # Überprüfen, ob die virtuelle Umgebung existiert
     if not os.path.exists(activate_script):
-        print(f"Error: Virtual environment not found at {venv_path}.")
+        print(f"[{timestamp()}] [ERROR] The virtual environment could not be found at {venv_path}.")
         sys.exit(1)
 
+    # Umgebungsvariable für die virtuelle Umgebung setzen
     os.environ["VIRTUAL_ENV"] = venv_path
     os.environ["PATH"] = os.path.join(venv_path, "Scripts") + os.pathsep + os.environ["PATH"]
-    print(f"Virtual environment {venv_path} activated.")
-
+    print(f"[{timestamp()}] [INFO] Virtual environment {venv_path} enabled.")
 
 def ensure_packages_installed(packages):
-    """Installiert fehlende Pakete effizient."""
-    to_install = [pkg for pkg in packages if importlib.util.find_spec(pkg) is None]
-
-    if to_install:
-        print(f"Installing missing packages: {', '.join(to_install)}...")
-        subprocess.run([sys.executable, "-m", "pip", "install"] + to_install, check=True, stdout=subprocess.DEVNULL,
-                       stderr=subprocess.DEVNULL)
-        print("All missing packages installed.")
-    else:
-        print("All required packages are already installed.")
+    """Stellt sicher, dass alle erforderlichen Pakete installiert sind."""
+    for package in packages:
+        if importlib.util.find_spec(package) is None:
+            print(f"Installing {package}...")
+            try:
+                subprocess.run([sys.executable, "-m", "pip", "install", package], check=True, stdout=subprocess.DEVNULL,
+                               stderr=subprocess.DEVNULL)
+                print(f"[{timestamp()}] [INFO] {package} installed successfully.")
+            except subprocess.CalledProcessError:
+                print(f"[{timestamp()}] [INFO] Failed to install {package}. Please install it manually.")
+        else:
+            print(f"[{timestamp()}] [INFO] {package} is already installed.")
 
 
 # Virtuelle Umgebung aktivieren und Pakete sicherstellen
