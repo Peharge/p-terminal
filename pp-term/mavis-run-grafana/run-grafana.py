@@ -70,7 +70,7 @@ import requests
 from urllib.request import urlretrieve
 
 # Konfiguration des Loggings
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format='[%(asctime)s] [%(levelname)s] %(message)s')
 
 GRAFANA_VERSION = "11.1.5"
 GRAFANA_WINDOWS_URL = f"https://dl.grafana.com/oss/release/grafana-{GRAFANA_VERSION}.windows-amd64.zip"
