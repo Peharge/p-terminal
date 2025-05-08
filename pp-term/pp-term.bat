@@ -129,19 +129,19 @@ call :Log PASS "✅ Peharge C Compiler available and the folder %PEHARGE_PATH_C%
 rem Setze das Arbeitsverzeichnis auf C:\Users\%USERNAME%\p-terminal\pp-term
 cd /d C:\Users\%USERNAME%\p-terminal\pp-term
 
-if not exist "%SCRIPT_PATH_DOCTOR%" (
-    call :Log ERROR "❌ Script not found: %SCRIPT_PATH_DOCTOR%"
-    exit /B 1
-)
-
-"%PYTHON_PATH%" "%SCRIPT_PATH_DOCTOR%"
-
 if not exist "%SCRIPT_PATH_INSTALL%" (
     call :Log ERROR "❌ Script not found: %SCRIPT_PATH_INSTALL%"
     exit /B 1
 )
 
 "%PYTHON_PATH%" "%SCRIPT_PATH_INSTALL%"
+
+if not exist "%SCRIPT_PATH_DOCTOR%" (
+    call :Log ERROR "❌ Script not found: %SCRIPT_PATH_DOCTOR%"
+    exit /B 1
+)
+
+"%PYTHON_PATH%" "%SCRIPT_PATH_DOCTOR%"
 
 rem Setze das Arbeitsverzeichnis auf C:\Users\%USERNAME%
 cd /d C:\Users\%USERNAME%
