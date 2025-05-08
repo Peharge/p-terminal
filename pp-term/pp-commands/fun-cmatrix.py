@@ -63,25 +63,57 @@
 
 import subprocess
 import sys
+from pathlib import Path
+import logging
 
-def run_alpine_python_command(command):
-    # Sicherstellen, dass der Befehl als String vorliegt
-    if isinstance(command, str):
-        command = f"wsl {command}"  # Kommando für WSL einbetten
+# Log setup: timestamp with milliseconds
+log_path = Path(__file__).parent / "installer.log"
+logging.basicConfig(
+    level=logging.INFO,
+    format="[%(asctime)s.%(msecs)03d] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S.%f",
+    handlers=[
+        logging.FileHandler(log_path, encoding='utf-8'),
+        logging.StreamHandler(sys.stdout)
+    ]
+)
 
-    # Starten des Prozesses
-    process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
+def is_cmatrix_installed():
+    """Checks if cmatrix is installed."""
     try:
-        # Warten auf den Abschluss des Prozesses
-        process.wait()
-    except KeyboardInterrupt:
-        # Wenn der Benutzer den Prozess mit Ctrl+C unterbricht
-        process.terminate()
-        print("\nProcess was interrupted and terminated.")
-
-    print("Command was executed and the code exits.")
+        subprocess.run(["wsl", "which", "cmatrix"], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        return True
+    except subprocess.CalledProcessError:
+        return False
 
 
-# Beispielbefehl
-run_alpine_python_command('cmatrix')
+def install_cmatrix():
+    """Installs cmatrix if it is not installed."""
+    logging.info("[INFO] cmatrix is not installed. Installing cmatrix...")
+    subprocess.run(["wsl", "sudo", "apt", "update"], check=True)
+    subprocess.run(["wsl", "sudo", "apt", "install", "-y", "cmatrix"], check=True)
+    logging.info("[INFO] cmatrix has been successfully installed.")
+
+
+def run_cmatrix():
+    """Runs cmatrix."""
+    logging.info("[INFO] Running cmatrix...")
+    command = "cmatrix"
+    if isinstance(command, str):
+        command = f"wsl {command}"  # Embed command for WSL
+
+    process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+    process.communicate()
+
+
+def main():
+    """Main logic to check and run cmatrix."""
+    if not is_cmatrix_installed():
+        install_cmatrix()
+
+    run_cmatrix()
+
+
+if __name__ == "__main__":
+    main()
