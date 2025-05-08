@@ -70,7 +70,7 @@ def find_docker_desktop():
     # Common paths for Docker Desktop installation on Windows
     possible_paths = [
         r"C:\Program Files\Docker\Docker\Docker Desktop.exe",  # Standard installation path
-        r"C:\Users\{user}\AppData\Local\Docker\Docker Desktop.exe"  # Another potential path
+        rf"C:\Users\{os.getlogin()}\AppData\Local\Docker\Docker Desktop.exe"  # Another potential path
     ]
 
     # Get the current username to customize the path for the first location
