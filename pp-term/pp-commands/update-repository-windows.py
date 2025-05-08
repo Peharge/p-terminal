@@ -67,6 +67,13 @@ import subprocess
 from datetime import datetime
 import sys
 # import getpass
+from datetime import datetime
+
+def timestamp() -> str:
+    """Returns current time formatted with milliseconds"""
+    now = datetime.now()
+    return now.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
+
 
 # Farbcodes definieren
 red = "\033[91m"
@@ -121,18 +128,18 @@ def prompt_for_update():
         elif choice in {"n", "no"}:
             return False
         else:
-            print(f"{yellow}Invalid input. Please enter 'y' or 'n'.{reset}")
+            print(f"[{timestamp()}] [ERROR] Invalid input. Please enter 'y' or 'n'.")
 
 
 def perform_update():
     """Führt das Update durch, indem das Batch-Skript ausgeführt wird."""
     if os.path.exists(batch_file):
-        print(f"{green}Start update...{reset}")
+        print(f"Start update...")
         subprocess.run(batch_file, shell=True)  # Führt das Skript aus
-        print(f"{green}Update completed.{reset}")
+        print(f"[{timestamp()}] [INFO] Update completed.")
         write_last_update()  # Aktualisiert das Datum auf heute
     else:
-        print(f"{red}Batch file not found{reset}: {batch_file}")
+        print(f"[{timestamp()}] [ERROR] Batch file not found: {batch_file}")
 
 
 def main():
@@ -142,14 +149,14 @@ def main():
 
     last_update = read_last_update()
     if last_update:
-        print(f"{blue}P-Terminal - Last update{reset}: {last_update}")
+        print(f"[{timestamp()}] [INFO] P-Terminal - Last update: {last_update}")
     else:
-        print(f"{yellow}P-Terminal - No update date found.{reset}")
+        print(f"[{timestamp()}] [INFO] P-Terminal - No update date found.")
 
     if prompt_for_update():
         perform_update()
     else:
-        print(f"{blue}Update aborted.{reset}")
+        print(f"[{timestamp()}] [INFO] Update aborted.")
 
 if __name__ == "__main__":
     main()
