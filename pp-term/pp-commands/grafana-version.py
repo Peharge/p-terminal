@@ -62,6 +62,12 @@
 # Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 
 import os
+from datetime import datetime
+
+def timestamp() -> str:
+    """Returns current time formatted with milliseconds"""
+    now = datetime.now()
+    return now.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
 
 
 def main():
@@ -70,7 +76,7 @@ def main():
 
     # Überprüfen, ob die Datei existiert
     if not os.path.exists(grafana_file):
-        print(f"Error: The file {grafana_file} does not exist.")
+        print(f"[{timestamp()}] [ERROR] The file {grafana_file} does not exist.")
         return
 
     # Datei lesen und Inhalt ausgeben
