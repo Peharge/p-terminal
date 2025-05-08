@@ -69,8 +69,14 @@ import time
 import importlib.util
 import os
 import select
+from datetime import datetime
 
-# Farbcodes definieren
+def timestamp() -> str:
+    """Returns current time formatted with milliseconds"""
+    now = datetime.now()
+    return now.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
+
+# Color codes
 red = "\033[91m"
 green = "\033[92m"
 yellow = "\033[93m"
@@ -83,66 +89,66 @@ orange = "\033[38;5;214m"
 reset = "\033[0m"
 bold = "\033[1m"
 
-# Erforderliche Pakete (sicherstellen, dass imageio und transformers installiert sind)
+# Required packages
 required_packages = ["imageio", "transformers"]
 
 def activate_virtualenv(venv_path):
-    """Aktiviert eine bestehende virtuelle Umgebung."""
+    """Activates an existing virtual environment."""
     activate_script = os.path.join(venv_path, "Scripts", "activate") if os.name == "nt" else os.path.join(venv_path, "bin", "activate")
     if not os.path.exists(activate_script):
-        print(f"Error: The virtual environment could not be found at {venv_path}.")
+        print(f"[{timestamp()}] [ERROR] Virtual environment could not be found at {venv_path}.")
         sys.exit(1)
     os.environ["VIRTUAL_ENV"] = venv_path
     os.environ["PATH"] = os.path.join(venv_path, "Scripts") + os.pathsep + os.environ["PATH"]
-    print(f"Virtual environment {venv_path} enabled.")
+    print(f"[{timestamp()}] [PASS] Virtual environment {venv_path} enabled.")
 
 def ensure_packages_installed(packages):
-    """Stellt sicher, dass alle erforderlichen Pakete installiert sind."""
+    """Ensures all required packages are installed."""
     for package in packages:
         try:
             importlib.import_module(package)
-            print(f"{package} is already installed.")
+            print(f"[{timestamp()}] [PASS] {package} is already installed.")
         except ImportError:
-            print(f"Installing {package}...")
+            print(f"[{timestamp()}] [INFO] Installing {package}...")
             try:
                 subprocess.run([sys.executable, "-m", "pip", "install", package], check=True)
-                print(f"{package} installed successfully.")
+                print(f"[{timestamp()}] [PASS] {package} installed successfully.")
             except subprocess.CalledProcessError:
-                print(f"WARNING: Failed to install {package}. Please install it manually.")
+                print(f"[{timestamp()}] [ERROR] Failed to install {package}. Please install it manually.")
 
-# Pfad zur bestehenden virtuellen Umgebung (anpassen, falls erforderlich)
+# Path to the existing virtual environment
 venv_path = rf"C:\Users\{os.getlogin()}\p-terminal\pp-term\.env"
 activate_virtualenv(venv_path)
 ensure_packages_installed(required_packages)
 
-import imageio  # Für das Speichern von Videos
+import imageio  # For saving videos
 from transformers import pipeline
 
 sys.stdout.reconfigure(encoding='utf-8')
 user_name = getpass.getuser()
 
 def check_command_installed(command):
-    """Überprüft, ob ein Befehlszeilentool installiert ist."""
+    """Checks if a command-line tool is installed."""
     try:
-        result = subprocess.run(["which" if os.name != "nt" else "where", command],
+        result = subprocess.run(["where" if os.name == "nt" else "which", command],
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
         return result.returncode == 0
     except Exception as e:
-        print(f"{red}Error checking command {command}{reset}: {e}")
+        print(f"[{timestamp()}] [ERROR] Error checking command {command}{reset}: {e}")
         return False
 
 def input_with_timeout(prompt, timeout=10):
-    """Fragt den Benutzer nach einer Eingabe mit Timeout."""
-    print(prompt, end=": ", flush=True)
+    """Prompts user for input with a timeout."""
+    print(f"[{timestamp()}] [INFO] {prompt}", end=": ", flush=True)
     i, _, _ = select.select([sys.stdin], [], [], timeout)
     if i:
         return sys.stdin.readline().strip()
     else:
-        return None  # Timeout erreicht
+        return None  # Timeout reached
 
 def type_out_text(text, delay=0.05):
-    """Tippt den Text langsam aus."""
+    """Types text out slowly."""
     for char in text:
         sys.stdout.write(char)
         sys.stdout.flush()
@@ -150,49 +156,37 @@ def type_out_text(text, delay=0.05):
     print()
 
 def get_video_from_huggingface(prompt, video_pipeline):
-    """
-    Generiert ein Video basierend auf dem Benutzereingabe-Prompt.
-    Hier wird das Text-zu-Video Modell von Wan-AI verwendet.
-    """
-    print(f"{cyan}Generiere Video für den Prompt: {prompt}{reset}")
-    # Aufruf des Pipelines mit dem eingegebenen Prompt
+    """Generates a video based on user prompt using Wan-AI's model."""
+    print(f"[{timestamp()}] [INFO] {cyan}Generating video for prompt: {prompt}{reset}")
     video_output = video_pipeline(prompt)
-    # Es wird angenommen, dass video_output eine Liste von Frames (als NumPy-Arrays) ist.
     return video_output
 
 def save_video(video_frames, output_path="output.mp4", fps=8):
-    """
-    Speichert die generierten Video-Frames als MP4-Datei.
-    Die Bildrate (fps) kann nach Bedarf angepasst werden.
-    """
-    print(f"{green}Speichere das Video in {output_path}{reset}")
+    """Saves generated video frames as MP4."""
+    print(f"[{timestamp()}] [INFO] {green}Saving video to {output_path}{reset}")
     imageio.mimwrite(output_path, video_frames, fps=fps, quality=8)
-    print(f"{green}Video gespeichert.{reset}")
+    print(f"[{timestamp()}] [PASS] {green}Video saved successfully.{reset}")
 
 def main():
-    """Hauptfunktion."""
+    """Main function."""
     if check_command_installed("huggingface"):
-        print(f"{green}Huggingface CLI is installed.{reset}")
-
-        # Lade die Text-zu-Video Pipeline mit dem Wan2.1 Modell
+        print(f"[{timestamp()}] [PASS] {green}Huggingface CLI is installed.{reset}")
         video_pipeline = pipeline("text-to-video", model="Wan-AI/Wan2.1-T2V-14B")
 
         while True:
-            user_input = input("\nGib einen Prompt ein (oder 'exit' zum Beenden):")
+            user_input = input("\nEnter a prompt (or 'exit' to quit): ")
             if user_input.lower() == "exit":
-                print("Beende das Programm...")
+                print(f"[{timestamp()}] [INFO] Exiting program...")
                 break
 
             video_frames = get_video_from_huggingface(user_input, video_pipeline)
 
-            # Hier wird angenommen, dass video_frames eine Liste von NumPy-Arrays darstellt.
             if isinstance(video_frames, list):
                 save_video(video_frames, "output.mp4")
             else:
-                print(f"{yellow}Unerwartetes Video-Output-Format erhalten: {type(video_frames)}{reset}")
-
+                print(f"[{timestamp()}] [ERROR] {yellow}Unexpected video output format: {type(video_frames)}{reset}")
     else:
-        print(f"{red}Huggingface CLI ist nicht installiert. Bitte installiere es, um fortzufahren.{reset}")
+        print(f"[{timestamp()}] [ERROR] {red}Huggingface CLI is not installed. Please install it to proceed.{reset}")
         sys.exit(1)
 
 if __name__ == "__main__":
