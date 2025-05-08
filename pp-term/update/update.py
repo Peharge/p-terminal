@@ -65,6 +65,13 @@ import subprocess
 import requests
 import sys
 import os
+from datetime import datetime
+
+def timestamp() -> str:
+    """Returns current time formatted with milliseconds"""
+    now = datetime.now()
+    return now.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
+
 
 # Farbcodes definieren
 red = "\033[91m"
@@ -92,36 +99,36 @@ def get_latest_commits():
         response.raise_for_status()  # Überprüft auf HTTP-Fehler
 
         commits = response.json()
-        print(f"\n{cyan}Latest commits on GitHub: {reset}")
+        print(f"\n[{timestamp()}] [INFO] Latest commits on GitHub: ")
         for commit in commits[:5]:  # Zeige die letzten 5 Commits an
             print(
-                f"{blue}Commit {commit['sha'][:7]}:{reset} {commit['commit']['message']} ({magenta}Autor: {commit['commit']['author']['name']}{reset})")
+                f"[{timestamp()}] [INFO] Commit {commit['sha'][:7]}: {commit['commit']['message']} ({magenta}Autor: {commit['commit']['author']['name']}{reset})")
     except requests.exceptions.RequestException as e:
-        print(f"{red}Error retrieving commits from GitHub: {e}{reset}")
+        print(f"[{timestamp()}] [ERROR] Error retrieving commits from GitHub: {e}")
 
 
 # Funktion, um ein Git-Repository zu aktualisieren
 def update_repo():
     try:
-        print(f"\n{yellow}Start pull process...{reset}")
+        print(f"\nStart pull process...")
         result = subprocess.run(["git", "pull"], capture_output=True, text=True)
 
         if result.returncode == 0:
-            print(f"{green}Repository has been successfully updated!{reset}")
+            print(f"[{timestamp()}] [PASS] Repository has been successfully updated!")
         else:
-            print(f"{red}Error updating repository: {reset}")
+            print(f"[{timestamp()}] [ERROR] Error updating repository: ")
             print(result.stderr)
     except subprocess.CalledProcessError as e:
-        print(f"{red}Error running git pull: {e}{reset}")
+        print(f"[{timestamp()}] [ERROR] Error running git pull: {e}")
     except Exception as e:
-        print(f"{red}Unknown error updating repository: {e}{reset}")
+        print(f"[{timestamp()}] [ERROR] Unknown error updating repository: {e}")
 
 
 # Funktion, um zu überprüfen, ob das Verzeichnis ein Git-Repository ist
 def is_git_repo():
     try:
         result = subprocess.run(["git", "status"], capture_output=True, text=True)
-        if "fatal: not a git repository" in result.stderr:
+        if "[{timestamp()}] [ERROR] Not a git repository" in result.stderr:
             return False
         return True
     except subprocess.CalledProcessError:
@@ -133,36 +140,36 @@ def main():
     print("\nRepository Information:\n-----------------------")
     # Sicherstellen, dass das Skript im richtigen Verzeichnis ausgeführt wird
     if not is_git_repo():
-        print(f"{red}The current directory is not a Git repository!{reset}")
+        print(f"[{timestamp()}] [ERROR] The current directory is not a Git repository!")
         sys.exit(1)
 
     # Überprüfen, ob ein Update verfügbar ist
     try:
         result = subprocess.run(["git", "fetch"], capture_output=True, text=True)
         if result.returncode != 0:
-            print(f"{red}Error retrieving changes!{reset}")
+            print(f"[{timestamp()}] [ERROR] Error retrieving changes!")
             sys.exit(1)
     except subprocess.CalledProcessError as e:
-        print(f"{red}Error running git fetch: {e}{reset}")
+        print(f"[{timestamp()}] [ERROR] Error running git fetch: {e}")
         sys.exit(1)
 
     # Überprüfen, ob Updates verfügbar sind
     result = subprocess.run(["git", "status"], capture_output=True, text=True)
     if "Your branch is up to date" in result.stdout:
-        print(f"{green}The repository is already up to date.{reset}")
+        print(f"[{timestamp()}] [INFO] The repository is already up to date.")
         sys.exit(0)
 
     # Frage, ob der Benutzer die neuesten Commits auf GitHub sehen möchte
-    show_commits = input(f"\n{blue}Want to see the latest commits on GitHub? [y/n]: {reset}").strip().lower()
+    show_commits = input(f"\nWant to see the latest commits on GitHub? [y/n]: ").strip().lower()
     if show_commits in ['y', 'yes']:
         get_latest_commits()
 
     # Frage, ob der Benutzer das Repository aktualisieren möchte
-    update = input(f"\n{cyan}Do you want to update the repository now? [y/n]: {reset}").strip().lower()
+    update = input(f"\nDo you want to update the repository now? [y/n]: ").strip().lower()
     if update in ['y', 'yes']:
         update_repo()
     else:
-        print(f"{yellow}Update canceled!{reset}")
+        print(f"[{timestamp()}] [PASS] Update canceled!")
 
 
 if __name__ == "__main__":
