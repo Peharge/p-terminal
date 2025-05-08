@@ -61,6 +61,13 @@
 #
 # Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 
+from datetime import datetime
+
+def timestamp() -> str:
+    """Returns current time formatted with milliseconds"""
+    now = datetime.now()
+    return now.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
+
 # Farbcodes definieren (kleingeschrieben)
 red = "\033[91m"
 green = "\033[92m"
@@ -76,7 +83,7 @@ bold = "\033[1m"
 
 def show_help():
     # Kopfzeile
-    print("\nThis guide provides descriptions of the available terminal commands and usage instructions.\n")
+    print("\n[{timestamp()}] [INFO] This guide provides descriptions of the available terminal commands and usage instructions.\n")
 
     # Verfügbare Befehle und Beschreibungen
     print("Available Commands and Their Descriptions")
