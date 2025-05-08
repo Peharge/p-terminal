@@ -323,10 +323,8 @@ class AdvancedSystemMonitor(QWidget):
         self.mem_card = self.create_metric_card("Memory Usage", "#94bfff")
         self.disk_card = self.create_metric_card("Disk Usage", "#ffcc00")
         self.net_card = self.create_metric_card("Network", "#7ed321")
-        metrics_layout.addWidget(self.cpu_card)
-        metrics_layout.addWidget(self.mem_card)
-        metrics_layout.addWidget(self.disk_card)
-        metrics_layout.addWidget(self.net_card)
+        for card in (self.cpu_card, self.mem_card, self.disk_card, self.net_card):
+            metrics_layout.addWidget(card)
         layout.addLayout(metrics_layout)
 
         # Process filter bar
@@ -608,15 +606,24 @@ class AdvancedSystemMonitor(QWidget):
             self.ssd_series.append(start + i, usage)
 
     def populate_process_table(self, process_list):
-        """Populates the process table with the top 20 processes by CPU usage."""
-        sorted_procs = sorted(process_list, key=lambda p: p.info.get('cpu_percent', 0), reverse=True)[:20]
+        """Populates the process table with all processes, optionally filtered."""
+        filter_text = self.filter_input.text().lower()
+        # Filter processes by name if filter is set
+        if filter_text:
+            filtered = [p for p in process_list if filter_text in (p.info.get('name') or '').lower()]
+        else:
+            filtered = process_list
+
+        # Sort by CPU usage descending
+        sorted_procs = sorted(filtered, key=lambda p: p.info.get('cpu_percent', 0), reverse=True)
         self.process_table.setRowCount(len(sorted_procs))
         for row, proc in enumerate(sorted_procs):
-            pid_item = QTableWidgetItem(str(proc.info.get('pid')))
-            name_item = QTableWidgetItem(proc.info.get('name') or "N/A")
-            cpu_item = QTableWidgetItem(f"{proc.info.get('cpu_percent', 0)}%")
-            mem_item = QTableWidgetItem(f"{proc.info.get('memory_percent', 0):.2f}%")
-            for item in (pid_item, cpu_item, mem_item):
+            info = proc.info
+            pid_item = QTableWidgetItem(str(info.get('pid', '')))
+            name_item = QTableWidgetItem(info.get('name') or "N/A")
+            cpu_item = QTableWidgetItem(f"{info.get('cpu_percent', 0)}%")
+            mem_item = QTableWidgetItem(f"{info.get('memory_percent', 0):.2f}%")
+            for item in (pid_item, name_item, cpu_item, mem_item):
                 item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
             self.process_table.setItem(row, 0, pid_item)
             self.process_table.setItem(row, 1, name_item)
