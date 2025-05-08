@@ -641,6 +641,7 @@ def handle_special_commands(user_input):
         "run mavis main": "pp-commands\\run-mavis-main.py", # new
         "htop": "pp-commands\\htop.py",  # new
         "bashtop": "pp-commands\\bashtop.py", # new
+        "taskmanager": "pp-commands\\bashtop.py",  # new
         "btop": "pp-commands\\btop.py",  # new
         "atop": "pp-commands\\atop.py",  # new
         "emacs": "pp-commands\\emacs.py",  # new
