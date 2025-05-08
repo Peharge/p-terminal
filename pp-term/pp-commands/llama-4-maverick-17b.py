@@ -74,6 +74,8 @@ import select
 
 from transformers import pipeline
 import torch
+import threading
+import queue
 
 # Farbcodes definieren
 red = "\033[91m"
@@ -142,13 +144,26 @@ def check_command_installed(command):
         return False
 
 def input_with_timeout(prompt, timeout=10):
-    """Fragt den Benutzer nach einer Eingabe mit Timeout."""
-    print(prompt, end=": ", flush=True)
-    i, _, _ = select.select([sys.stdin], [], [], timeout)
-    if i:
-        return sys.stdin.readline().strip()
-    else:
-        return None  # Timeout erreicht
+    """Plattformkompatible Eingabe mit Timeout."""
+    print(prompt, end='', flush=True)
+
+    q = queue.Queue()
+
+    def get_input():
+        try:
+            user_input = input()
+            q.put(user_input)
+        except Exception:
+            q.put(None)
+
+    thread = threading.Thread(target=get_input)
+    thread.daemon = True
+    thread.start()
+
+    try:
+        return q.get(timeout=timeout)
+    except queue.Empty:
+        return None
 
 def type_out_text(text, delay=0.05):
     """Tippt den Text langsam aus."""
