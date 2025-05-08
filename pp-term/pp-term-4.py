@@ -7539,7 +7539,7 @@ def main():
             print("\nExiting...")
             break
         except Exception as e:
-            print(f"[{timestamp()}] [ERROR]  {str(e)}", file=sys.stderr)
+            print(f"[{timestamp()}] [ERROR] {str(e)}", file=sys.stderr)
 
 
 if __name__ == "__main__":
