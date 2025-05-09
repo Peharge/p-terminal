@@ -163,19 +163,26 @@ if !errorlevel! equ 0 (
     call :Log PASS "✅ No Virtual Machine detected."
 )
 
-:: Get Local IP Address
-for /f "tokens=2 delims=:" %%i in ('ipconfig ^| findstr /i "IPv4"') do (
-    set "ip=%%i"
-    set "ip=!ip: =!"
-)
-echo Local IP Address: !ip!
+for /f "tokens=*" %%A in ('wmic nic where "NetEnabled='TRUE'" get NetConnectionID^,MACAddress^,Description^,ServiceName /format:csv ^| findstr /v /i "Node"') do (
+    for /f "tokens=2,3,4,5 delims=," %%i in ("%%A") do (
+        set "adapterName=%%i"
+        set "mac=%%j"
+        set "desc=%%k"
+        set "service=%%l"
 
-:: Get Active Network Adapter Name
-for /f "tokens=1,* delims=:" %%a in ('ipconfig ^| findstr /i "adapter"') do (
-    set "adapter=%%b"
+        rem Determine adapter type
+        set "type=Unknown"
+        echo %%k | findstr /i "Wireless WLAN Wi-Fi" >nul && set "type=WLAN"
+        echo %%k | findstr /i "Ethernet LAN" >nul && set "type=Ethernet"
+        echo %%k | findstr /i "Virtual" >nul && set "type=Virtual"
+
+        echo Adapter Name: !adapterName!
+        echo MAC Address: !mac!
+        echo Description: !desc!
+        echo Service Name: !service!
+        echo Adapter Type: !type!
+    )
 )
-set "adapter=!adapter:~1!"
-echo Active Network Adapter: !adapter!
 
 :: Check Internet Connection via Ping
 ping -n 1 8.8.8.8 >nul
