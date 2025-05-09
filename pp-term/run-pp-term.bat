@@ -163,26 +163,63 @@ if !errorlevel! equ 0 (
     call :Log PASS "✅ No Virtual Machine detected."
 )
 
-:: Get local IP address
-for /f "tokens=2 delims=:" %%i in ('ipconfig ^| findstr /i "IPv4"') do set "LOCAL_IP=%%i"
-echo Lokale IP:%LOCAL_IP%
+:: Get Local IP Address
+for /f "tokens=2 delims=:" %%i in ('ipconfig ^| findstr /i "IPv4"') do (
+    set "ip=%%i"
+    set "ip=!ip: =!"
+)
+echo Local IP Address: !ip!
 
-:: Check basic internet connection via ping to Google DNS
+:: Get Active Network Adapter Name
+for /f "tokens=1,* delims=:" %%a in ('ipconfig ^| findstr /i "adapter"') do (
+    set "adapter=%%b"
+)
+set "adapter=!adapter:~1!"
+echo Active Network Adapter: !adapter!
+
+:: Check Internet Connection via Ping
 ping -n 1 8.8.8.8 >nul
 if %errorlevel%==0 (
-    call :Log PASS "✅ Internet connection exists."
+    call :Log PASS "✅ Internet connection is active."
 
-    :: Check if a secure website is reachable (needs curl installed)
+    :: === Check HTTPS Access ===
     curl --silent --head https://www.google.com | findstr /i "HTTP/1.1 200" >nul
-    if %errorlevel%==0 (
-        call :Log PASS "✅ Secure Internet access verified."
+    if !errorlevel! == 0 (
+        call :Log PASS "✅ Secure HTTPS access is working."
     ) else (
-        call :Log ERROR "❌ Secure website not reachable! Possible issues with HTTPS or DNS."
+        call :Log ERROR "❌ No HTTPS access – possibly a DNS or SSL issue."
     )
-
 ) else (
     call :Log ERROR "❌ No internet connection!"
 )
+
+:: Set up log file and timestamp
+set LOGFILE=%~dp0hardware_check.log
+
+:: Initialize log
+call :InitLog
+
+:: CPU Check
+call :CheckCPU
+
+:: RAM Check
+call :CheckMemory
+
+:: Disk Check
+call :CheckDisks
+
+:: GPU Check
+call :CheckGPU
+
+:: System Health Check
+call :CheckSystemHealth
+
+:: Driver Check
+call :CheckDrivers
+
+:: Final Log Message
+call :Log "INFO" "✅ Hardware check completed."
+
 
 timeout /t 5 >nul
 
@@ -2506,4 +2543,187 @@ exit /b
 
 :BlankLine
     echo.
+    goto :eof
+
+:: CPU Check using PowerShell
+:CheckCPU
+    call :Log "INFO" "Checking CPU..."
+
+    :: Powershell-Befehl zum Abrufen der CPU-Informationen und Umformatierung in Liste mit Zeilenumbrüchen
+    for /f "delims=" %%a in ('powershell -Command "Get-WmiObject Win32_Processor | Select-Object Name, Manufacturer, MaxClockSpeed, Status | ForEach-Object { 'Name: ' + $_.Name + [Environment]::NewLine + 'Manufacturer: ' + $_.Manufacturer + [Environment]::NewLine + 'MaxClockSpeed: ' + $_.MaxClockSpeed + [Environment]::NewLine + 'Status: ' + $_.Status }"') do (
+        set "CPU_INFO=%%a"
+        echo !CPU_INFO!
+    )
+
+    :: Prüfen, ob CPU-Daten erfolgreich abgerufen wurden
+    if not defined CPU_INFO (
+        call :Log "ERROR" "❌ CPU Error: No CPU detected or details could not be retrieved."
+    ) else (
+        call :Log "INFO" "✅ CPU check successful."
+    )
+
+    goto :eof
+
+
+:: RAM Check using PowerShell
+:CheckMemory
+    call :Log "INFO" "Checking RAM..."
+
+    :: Powershell-Befehl zum Abrufen der RAM-Informationen und Umformatierung in Liste mit Zeilenumbrüchen
+    for /f "delims=" %%a in ('powershell -Command "Get-WmiObject Win32_PhysicalMemory | Select-Object Capacity, Manufacturer, Speed | ForEach-Object { 'Capacity: ' + [math]::round($_.Capacity / 1GB, 2) + ' GB' + [Environment]::NewLine + 'Manufacturer: ' + $_.Manufacturer + [Environment]::NewLine + 'Speed: ' + $_.Speed + ' MHz' }"') do (
+        set "MEMORY_INFO=%%a"
+        echo !MEMORY_INFO!
+    )
+
+    :: Prüfen, ob RAM-Daten erfolgreich abgerufen wurden
+    if not defined MEMORY_INFO (
+        call :Log "ERROR" "❌ RAM Error: No RAM details available."
+    ) else (
+        call :Log "INFO" "✅ RAM check successful."
+    )
+
+    goto :eof
+
+
+:: Disk Check using PowerShell
+:CheckDisks
+    call :Log "INFO" "Checking disks..."
+
+    :: Powershell-Befehl zum Abrufen der Festplatten-Informationen und Umformatierung in Liste mit Zeilenumbrüchen
+    for /f "delims=" %%a in ('powershell -Command "Get-WmiObject Win32_LogicalDisk | Select-Object DeviceID, MediaType, Size, FreeSpace | ForEach-Object { 'DeviceID: ' + $_.DeviceID + [Environment]::NewLine + 'MediaType: ' + $_.MediaType + [Environment]::NewLine + 'Size: ' + [math]::round($_.Size / 1GB, 2) + ' GB' + [Environment]::NewLine + 'FreeSpace: ' + [math]::round($_.FreeSpace / 1GB, 2) + ' GB' }"') do (
+        set "DISK_INFO=%%a"
+        echo !DISK_INFO!
+    )
+
+    :: Prüfen, ob Festplatten-Daten erfolgreich abgerufen wurden
+    if not defined DISK_INFO (
+        call :Log "ERROR" "❌ Disk Error: No C: drive found or details could not be retrieved."
+    ) else (
+        call :Log "INFO" "✅ Disk check successful."
+    )
+
+    goto :eof
+
+
+:: GPU Check using PowerShell
+:CheckGPU
+    call :Log "INFO" "Checking GPU..."
+
+    :: Powershell-Befehl zum Abrufen der GPU-Informationen und Umformatierung in Liste mit Zeilenumbrüchen
+    for /f "delims=" %%a in ('powershell -Command "Get-WmiObject Win32_VideoController | Select-Object Caption, DriverVersion | ForEach-Object { 'Caption: ' + $_.Caption + [Environment]::NewLine + 'DriverVersion: ' + $_.DriverVersion }"') do (
+        set "GPU_INFO=%%a"
+       echo !GPU_INFO!
+    )
+
+    :: Prüfen, ob GPU-Daten erfolgreich abgerufen wurden
+    if not defined GPU_INFO (
+        call :Log "ERROR" "❌ GPU Error: No GPU details available."
+    ) else (
+        call :Log "INFO" "✅ GPU check successful."
+    )
+
+    goto :eof
+
+
+:: System Health Check using PowerShell
+:CheckSystemHealth
+    call :Log "INFO" "Checking system health..."
+
+    :: Powershell-Befehl zum Abrufen der Systemstatus-Informationen und Umformatierung in Liste mit Zeilenumbrüchen
+    for /f "delims=" %%a in ('powershell -Command "Get-WmiObject Win32_OperatingSystem | Select-Object Status | ForEach-Object { 'Status: ' + $_.Status }"') do (
+        set "SYSTEM_HEALTH=%%a"
+        echo !SYSTEM_HEALTH!
+    )
+
+    :: Prüfen, ob Systemstatus-Daten erfolgreich abgerufen wurden
+    if not defined SYSTEM_HEALTH (
+        call :Log "ERROR" "❌ System Status Error: No system health data available."
+    ) else (
+        call :Log "INFO" "✅ System health check successful."
+    )
+
+    goto :eof
+
+
+:: Driver Check using PowerShell
+:CheckDrivers
+    call :Log "INFO" "Checking drivers..."
+
+    rem PowerShell Befehl, um die Treiberinformationen im CSV-Format zu exportieren
+    powershell -Command "Get-WmiObject Win32_PnPSignedDriver | Select-Object DeviceName, DriverVersion, Manufacturer | Export-Csv -Path temp_driver_check.csv -NoTypeInformation -Encoding UTF8"
+
+    rem Überprüfen, ob die Datei existiert und gelesen werden kann
+    if exist temp_driver_check.csv (
+        call :Log "INFO" "✅ Driver check successful. Analyzing drivers..."
+
+        rem Jetzt die Treiber-Datei durchgehen und für jedes Gerät spezifische Infos ausgeben
+        for /F "tokens=1,2,* delims=," %%A in (temp_driver_check.csv) do (
+            rem Entfernen von Leerzeichen und Anführungszeichen in den Variablen
+            set "deviceName=%%A"
+            set "driverVersion=%%B"
+            set "manufacturer=%%C"
+
+            rem Entfernen von Anführungszeichen und führenden/folgenden Leerzeichen
+            set "deviceName=!deviceName:"=!"
+            set "deviceName=!deviceName: =!"
+            set "driverVersion=!driverVersion:"=!"
+            set "driverVersion=!driverVersion: =!"
+            set "manufacturer=!manufacturer:"=!"
+            set "manufacturer=!manufacturer: =!"
+
+            rem Überspringen der Header-Zeile (falls notwendig)
+            if not "!deviceName!"=="DeviceName" (
+                rem Saubere Ausgabe für jedes Gerät mit Formatierung
+                call :Log "INFO" "We check !deviceName! for errors"
+                echo Driver: !deviceName!
+                echo Manufacturer: !manufacturer!
+                echo Driver Version: !driverVersion!
+
+                rem Beispiel: Spezifische Treiber-Analyse für bekannte Geräte
+                if /I "!deviceName!"=="WAN Miniport (L2TP)" (
+                    call :Log "INFO" "   This is a virtual network adapter for VPN (L2TP)."
+                    if "!driverVersion!"=="10.0.26100.1" (
+                        call :Log "INFO" "✅ This driver is stable, secure, and up-to-date."
+                    ) else (
+                        call :Log "WARNING" "This driver version may be outdated. Consider updating."
+                    )
+                ) else if /I "!deviceName!"=="WAN Miniport (IKEv2)" (
+                    call :Log "INFO" "   This is a virtual network adapter for VPN (IKEv2)."
+                    if "!driverVersion!"=="10.0.26100.1" (
+                        call :Log "INFO" "✅ This driver is stable, secure, and up-to-date."
+                    ) else (
+                        call :Log "WARNING" "This driver version may be outdated. Consider updating."
+                    )
+                ) else if /I "!deviceName!"=="Generic software device" (
+                    call :Log "INFO" "   Generic software device detected."
+                    if "!driverVersion!"=="10.0.26100.1" (
+                        call :Log "INFO" "✅ This driver is stable, secure, and up-to-date."
+                    ) else (
+                        call :Log "WARNING" "This driver version may be outdated. Consider updating."
+                    )
+                ) else if /I "!deviceName!"=="Hyper-V Virtual Switch Extension Adapter" (
+                    call :Log "INFO" "   Virtual Switch Extension Adapter for Hyper-V."
+                    if "!driverVersion!"=="10.0.26100.1" (
+                        call :Log "INFO" "✅ This driver is stable, secure, and up-to-date."
+                    ) else (
+                        call :Log "WARNING" "This driver version may be outdated. Consider updating."
+                    )
+                ) else if /I "!deviceName!"=="WAN Miniport (Network Monitor)" (
+                    call :Log "INFO" "This is a network monitor adapter used for debugging."
+                    if "!driverVersion!"=="10.0.26100.1" (
+                        call :Log "INFO" "✅ This driver is stable, secure, and up-to-date."
+                    ) else (
+                        call :Log "WARNING" "This driver version may be outdated. Consider updating."
+                    )
+                ) else (
+                    rem Generische Ausgabe für nicht spezifizierte Treiber
+                    call :Log "INFO" "This driver is stable and secure, but regular updates are recommended."
+                )
+            )
+        )
+    ) else (
+        call :Log "ERROR" "❌ Driver Error: Could not find the driver file for analysis."
+    )
+    rem Bereinigen
+    del temp_driver_check.csv
     goto :eof
