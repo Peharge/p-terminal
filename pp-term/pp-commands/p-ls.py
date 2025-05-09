@@ -67,12 +67,12 @@ import datetime
 import chardet
 import logging
 
-from PyQt6.QtCore import Qt, QSize
+from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QColor, QIcon, QPalette, QFont, QPixmap, QImageReader, QSyntaxHighlighter, QTextCharFormat
 from PyQt6.QtWidgets import (
     QApplication, QLabel, QScrollArea, QSizePolicy,
     QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget,
-    QTextEdit, QTextBrowser, QStackedWidget
+    QTextBrowser, QStackedWidget, QSplitter
 )
 
 # Optional syntax highlighting
@@ -113,24 +113,14 @@ class FileDisplayWidget(QStackedWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        # Plain text viewer with syntax highlighting fallback
-        self.text_view = QTextEdit()
-        self.text_view.setReadOnly(True)
+        self.text_view = QTextBrowser()
         self.text_view.setFont(QFont("Courier New", 12))
-        self.highlighter = PythonHighlighter(self.text_view.document())
 
-        # Markdown / HTML viewer
-        self.markdown_view = QTextBrowser()
-        self.markdown_view.setOpenExternalLinks(True)
-        self.markdown_view.setFont(QFont("Courier New", 12))
-
-        # Image viewer
         self.image_label = QLabel(alignment=Qt.AlignmentFlag.AlignCenter)
         self.image_label.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Ignored)
         self.image_label.setScaledContents(True)
 
         self.addWidget(self.text_view)
-        self.addWidget(self.markdown_view)
         self.addWidget(self.image_label)
 
     def display_image(self, path, container_size):
@@ -142,12 +132,12 @@ class FileDisplayWidget(QStackedWidget):
         self.setCurrentWidget(self.image_label)
 
     def display_markdown(self, content):
-        self.markdown_view.setMarkdown(content)
-        self.setCurrentWidget(self.markdown_view)
+        self.text_view.setMarkdown(content)
+        self.setCurrentWidget(self.text_view)
 
     def display_html(self, html):
-        self.markdown_view.setHtml(html)
-        self.setCurrentWidget(self.markdown_view)
+        self.text_view.setHtml(html)
+        self.setCurrentWidget(self.text_view)
 
     def display_text(self, content):
         self.text_view.setPlainText(content)
@@ -175,26 +165,35 @@ class FileExplorer(QWidget):
     def _setup_ui(self):
         layout = QVBoxLayout(self)
 
+        # Vertical splitter: file tree above, content viewer below
+        splitter = QSplitter(Qt.Orientation.Vertical)
+
         # File tree
         self.tree = QTreeWidget()
         self.tree.setHeaderLabels(["Name", "Type", "Size", "Modified"])
         self.tree.itemClicked.connect(self.on_item_clicked)
-        layout.addWidget(self.tree)
+        splitter.addWidget(self.tree)
 
-        user = os.getenv("USERNAME") or os.getenv("USER")
-        icon_path = f"C:/Users/{user}/p-terminal/pp-term/icons/p-term-logo-5.ico"
-        self.setWindowIcon(QIcon(icon_path))
-
-        # Content display
+        # Content display area below file tree
         self.content = FileDisplayWidget()
         self.scroll = QScrollArea()
         self.scroll.setWidgetResizable(True)
         self.scroll.setWidget(self.content)
-        layout.addWidget(self.scroll)
+        splitter.addWidget(self.scroll)
+
+        # Initial splitter sizes
+        splitter.setSizes([400, 400])
+
+        layout.addWidget(splitter)
 
         # Status bar
         self.status = QLabel("Ready")
         layout.addWidget(self.status)
+
+        # Window icon
+        user = os.getenv("USERNAME") or os.getenv("USER")
+        icon_path = f"C:/Users/{user}/p-terminal/pp-term/icons/p-term-logo-5.ico"
+        self.setWindowIcon(QIcon(icon_path))
 
     def set_dark_mode(self):
         pal = QPalette()
@@ -210,7 +209,7 @@ class FileExplorer(QWidget):
                 font-family: 'Roboto', sans-serif;
                 font-size: 14px;
             }
-            
+
             QLineEdit {
                 background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2c3e50, stop:1 #1c2833);
                 border: 1px solid #778899;
@@ -218,7 +217,7 @@ class FileExplorer(QWidget):
                 padding: 5px;
                 color: #FFFFFF;
             }
-            
+
             QPushButton {
                 background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2c3e50, stop:1 #1c2833);
                 border: none;
@@ -226,97 +225,97 @@ class FileExplorer(QWidget):
                 padding: 5px 10px;
                 color: #FFFFFF;
             }
-            
+
             QPushButton:hover {
                 background-color: #1c2833;
             }
-            
+
             QTreeWidget {
                 background-color: transparent;
                 border: 1px solid #778899;
                 border-radius: 8px;
             }
-            
+
             QTreeWidget::item {
                 padding: 8px;
                 border-bottom: 1px solid #778899;
             }
-            
+
             QTreeWidget::item:selected {
                 background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #34495e, stop:1 #1c2833);
                 color: #FFFFFF;
             }
-            
+
             QHeaderView::section {
                 background-color: transparent;
                 padding: 8px;
                 border: none;
             }
-            
+
             QScrollArea {
                 border: none;
                 background-color: transparent;
             }
-            
+
             QScrollBar:vertical {
                 background-color: transparent;  /* Hintergrund (Schiene) in transparent */
                 width: 10px;
                 border-radius: 5px;
             }
-            
+
             QScrollBar::handle:vertical {
                 background-color: #ffffff;  /* Schieber (Block) in Weiß */
                 min-height: 20px;
                 border-radius: 5px;
             }
-            
+
             QScrollBar::add-line:vertical,
             QScrollBar::sub-line:vertical {
                 background: transparent;
             }
-            
+
             QScrollBar::up-arrow:vertical,
             QScrollBar::down-arrow:vertical {
                 background: transparent;
             }
-            
+
             QScrollBar::add-page:vertical,
             QScrollBar::sub-page:vertical {
                 background: transparent;
             }
-            
+
             QScrollBar:horizontal {
                 background-color: transparent;  /* Auch der horizontale Balken in transparent */
                 height: 10px;
                 border-radius: 5px;
             }
-            
+
             QScrollBar::handle:horizontal {
                 background-color: #ffffff;
                 min-width: 20px;
                 border-radius: 5px;
             }
-            
+
             QScrollBar::add-line:horizontal,
             QScrollBar::sub-line:horizontal {
                 background: transparent;
             }
-            
+
             QScrollBar::left-arrow:horizontal,
             QScrollBar::right-arrow:horizontal {
                 background: transparent;
             }
-            
+
             QScrollBar::add-page:horizontal,
             QScrollBar::sub-page:horizontal {
                 background: transparent;
             }
-            
+
             QLabel {
                 background: transparent;
                 font-size: 16px;
             }
-            
+
             QTextEdit {
                 background-color: transparent;
                 color: #FFFFFF;
@@ -340,7 +339,7 @@ class FileExplorer(QWidget):
             return
         for entry in entries:
             if entry.name.startswith('.'):
-                continue  # skip hidden
+                continue
             item = QTreeWidgetItem([
                 entry.name,
                 'Dir' if entry.is_dir() else 'File',
@@ -392,11 +391,10 @@ class FileExplorer(QWidget):
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        width = self.width()
-        self.tree.setColumnWidth(0, int(width * 0.4))
+        height = self.height()
+        self.tree.setColumnWidth(0, int(self.width() * 0.5))
         for i in range(1, 4):
-            self.tree.setColumnWidth(i, int(width * 0.2))
-        # Rescale displayed image
+            self.tree.setColumnWidth(i, int(self.width() * 0.15))
         if self.content.currentWidget() == self.content.image_label:
             pixmap = self.content.image_label.pixmap()
             if pixmap:
@@ -409,7 +407,6 @@ def main():
     explorer = FileExplorer()
     explorer.show()
     sys.exit(app.exec())
-
 
 if __name__ == '__main__':
     main()
