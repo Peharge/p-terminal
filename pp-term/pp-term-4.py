@@ -681,7 +681,10 @@ def handle_special_commands(user_input):
         "pycharm": "pp-commands\\pycharm.py", # new
         "rider": "pp-commands\\rider.py", # new
         "vs-code": "pp-commands\\vs-code.py", # new
-        "webstorm": "pp-commands\\webstorm.py" # new
+        "webstorm": "pp-commands\\webstorm.py", # new
+        "golab": "pp-commands\\golab.py",  # new
+        "phpstorm": "pp-commands\\phpstorm.py",  # new
+        "githubdesktop": "pp-commands\\githubdesktop.py"  # new
     }
 
     # Custom command launcher
