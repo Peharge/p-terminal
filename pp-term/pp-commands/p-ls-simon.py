@@ -67,12 +67,12 @@ import datetime
 import chardet
 import logging
 
-from PyQt6.QtCore import Qt, QSize
+from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QColor, QIcon, QPalette, QFont, QPixmap, QImageReader, QSyntaxHighlighter, QTextCharFormat
 from PyQt6.QtWidgets import (
     QApplication, QLabel, QScrollArea, QSizePolicy,
     QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget,
-    QTextEdit, QTextBrowser, QStackedWidget
+    QTextBrowser, QStackedWidget, QSplitter
 )
 
 # Optional syntax highlighting
@@ -80,18 +80,15 @@ try:
     from pygments import highlight
     from pygments.lexers import get_lexer_for_filename
     from pygments.formatters import HtmlFormatter
-
     PYGMENTS_AVAILABLE = True
 except ImportError:
     PYGMENTS_AVAILABLE = False
-
 
 # Basic Python highlighter for QTextEdit fallback
 class PythonHighlighter(QSyntaxHighlighter):
     keywords = [
         'def', 'class', 'if', 'elif', 'else', 'while', 'for', 'in', 'try', 'except', 'finally',
-        'with', 'as', 'return', 'import', 'from', 'pass', 'break', 'continue', 'and', 'or', 'not', 'None', 'True',
-        'False'
+        'with', 'as', 'return', 'import', 'from', 'pass', 'break', 'continue', 'and', 'or', 'not', 'None', 'True', 'False'
     ]
 
     def __init__(self, parent=None):
@@ -111,54 +108,40 @@ class PythonHighlighter(QSyntaxHighlighter):
                 self.setFormat(index, length, fmt)
                 index = text.find(word, index + length)
 
-
 class FileDisplayWidget(QStackedWidget):
     """Manages display of text, markdown, and images"""
-
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        # Plain text viewer with syntax highlighting fallback
-        self.text_view = QTextEdit()
-        self.text_view.setReadOnly(True)
+        self.text_view = QTextBrowser()
         self.text_view.setFont(QFont("Courier New", 12))
-        self.highlighter = PythonHighlighter(self.text_view.document())
 
-        # Markdown / HTML viewer
-        self.markdown_view = QTextBrowser()
-        self.markdown_view.setOpenExternalLinks(True)
-        self.markdown_view.setFont(QFont("Courier New", 12))
-
-        # Image viewer
         self.image_label = QLabel(alignment=Qt.AlignmentFlag.AlignCenter)
         self.image_label.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Ignored)
         self.image_label.setScaledContents(True)
 
         self.addWidget(self.text_view)
-        self.addWidget(self.markdown_view)
         self.addWidget(self.image_label)
 
     def display_image(self, path, container_size):
         pixmap = QPixmap(path)
         if pixmap.isNull():
             raise ValueError(f"Cannot load image: {path}")
-        scaled = pixmap.scaled(container_size, Qt.AspectRatioMode.KeepAspectRatio,
-                               Qt.TransformationMode.SmoothTransformation)
+        scaled = pixmap.scaled(container_size, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
         self.image_label.setPixmap(scaled)
         self.setCurrentWidget(self.image_label)
 
     def display_markdown(self, content):
-        self.markdown_view.setMarkdown(content)
-        self.setCurrentWidget(self.markdown_view)
+        self.text_view.setMarkdown(content)
+        self.setCurrentWidget(self.text_view)
 
     def display_html(self, html):
-        self.markdown_view.setHtml(html)
-        self.setCurrentWidget(self.markdown_view)
+        self.text_view.setHtml(html)
+        self.setCurrentWidget(self.text_view)
 
     def display_text(self, content):
         self.text_view.setPlainText(content)
         self.setCurrentWidget(self.text_view)
-
 
 class FileExplorer(QWidget):
     """A professional file explorer with syntax highlighting and image support."""
@@ -169,7 +152,7 @@ class FileExplorer(QWidget):
     def __init__(self, root_dir=None):
         super().__init__()
         logging.basicConfig(level=logging.INFO)
-        self.setWindowTitle("P-Term File Explorer")
+        self.setWindowTitle("P-Term File Explorer ~/PycharmProjects/SIMON/")
         self.resize(1200, 800)
 
         self.root_dir = root_dir or os.path.expanduser("~/PycharmProjects/SIMON/")
@@ -182,26 +165,35 @@ class FileExplorer(QWidget):
     def _setup_ui(self):
         layout = QVBoxLayout(self)
 
+        # Vertical splitter: file tree above, content viewer below
+        splitter = QSplitter(Qt.Orientation.Vertical)
+
         # File tree
         self.tree = QTreeWidget()
         self.tree.setHeaderLabels(["Name", "Type", "Size", "Modified"])
         self.tree.itemClicked.connect(self.on_item_clicked)
-        layout.addWidget(self.tree)
+        splitter.addWidget(self.tree)
 
-        user = os.getenv("USERNAME") or os.getenv("USER")
-        icon_path = f"C:/Users/{user}/p-terminal/pp-term/icons/p-term-logo-5.ico"
-        self.setWindowIcon(QIcon(icon_path))
-
-        # Content display
+        # Content display area below file tree
         self.content = FileDisplayWidget()
         self.scroll = QScrollArea()
         self.scroll.setWidgetResizable(True)
         self.scroll.setWidget(self.content)
-        layout.addWidget(self.scroll)
+        splitter.addWidget(self.scroll)
+
+        # Initial splitter sizes
+        splitter.setSizes([400, 400])
+
+        layout.addWidget(splitter)
 
         # Status bar
         self.status = QLabel("Ready")
         layout.addWidget(self.status)
+
+        # Window icon
+        user = os.getenv("USERNAME") or os.getenv("USER")
+        icon_path = f"C:/Users/{user}/p-terminal/pp-term/icons/p-term-logo-5.ico"
+        self.setWindowIcon(QIcon(icon_path))
 
     def set_dark_mode(self):
         pal = QPalette()
@@ -347,7 +339,7 @@ class FileExplorer(QWidget):
             return
         for entry in entries:
             if entry.name.startswith('.'):
-                continue  # skip hidden
+                continue
             item = QTreeWidgetItem([
                 entry.name,
                 'Dir' if entry.is_dir() else 'File',
@@ -399,16 +391,14 @@ class FileExplorer(QWidget):
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        width = self.width()
-        self.tree.setColumnWidth(0, int(width * 0.4))
+        height = self.height()
+        self.tree.setColumnWidth(0, int(self.width() * 0.5))
         for i in range(1, 4):
-            self.tree.setColumnWidth(i, int(width * 0.2))
-        # Rescale displayed image
+            self.tree.setColumnWidth(i, int(self.width() * 0.15))
         if self.content.currentWidget() == self.content.image_label:
             pixmap = self.content.image_label.pixmap()
             if pixmap:
-                scaled = pixmap.scaled(self.scroll.viewport().size(), Qt.AspectRatioMode.KeepAspectRatio,
-                                       Qt.TransformationMode.SmoothTransformation)
+                scaled = pixmap.scaled(self.scroll.viewport().size(), Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
                 self.content.image_label.setPixmap(scaled)
 
 
@@ -417,7 +407,6 @@ def main():
     explorer = FileExplorer()
     explorer.show()
     sys.exit(app.exec())
-
 
 if __name__ == '__main__':
     main()
