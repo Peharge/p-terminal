@@ -428,12 +428,14 @@ def handle_special_commands(user_input):
         "run granite3.2:8b": "pp-commands\\granite-3-2-8b.py", # new
         "run granite3.2:2b": "pp-commands\\granite-3-2-2b.py", # new
         "run granite3.2-vision:2b": "pp-commands\\granite-3-2-2b-vision.py", # new
-        "run qwen-2-5-omni:7b": "pp-commands\\qwen-2-5-omni-7b.py",  # new
+        "run qwen2.5-omni:7b": "pp-commands\\qwen-2-5-omni-7b.py",  # new
         "run qvq:72b": "pp-commands\\qvq-72b.py",  # new
-        "run qwen-2-5-vl:32b": "pp-commands\\qwen-2-5-vl-32b.py",  # new
-        "run qwen-2-5-vl:72b": "pp-commands\\qwen-2-5-vl-72b.py",  # new
-        "run llama-4-maverick:17b": "pp-commands\\llama-4-maverick-17b.py",  # new
-        "run llama-4-scout:17b": "pp-commands\\llama-4-scout-17b.py",  # new
+        "run qwen2.5-vl:32b": "pp-commands\\qwen-2-5-vl-32b.py",  # new
+        "run qwen2.5-vl:72b": "pp-commands\\qwen-2-5-vl-72b.py",  # new
+        "run llama4-maverick:17b": "pp-commands\\llama-4-maverick-17b-ollama.py",  # new
+        "run llama4-scout:17b": "pp-commands\\llama-4-scout-17b-ollama.py",  # new
+        "run llama4-maverick:17b hg": "pp-commands\\llama-4-maverick-17b.py",  # new
+        "run llama4-scout:17b hg": "pp-commands\\llama-4-scout-17b.py",  # new
         "run deepcoder:1.5b": "pp-commands\\deepcoder-1-5b.py",  # new
         "run deepcoder:14b": "pp-commands\\deepcoder-14b.py", # new
         "run mistral-small3.1": "pp-commands\\mistral-small-3-1.py",  # new
