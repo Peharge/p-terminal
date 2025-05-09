@@ -28,12 +28,12 @@ In development: Peharge Terminal: The fastest terminal in the world - More [p-te
 
 # NEWS
 
-- **[23.04.2025]** Developmentstart of P-Term and PP-Ptem!!!
-- **[24.04.2025]** PP-Term EAP release: [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat)!!!
-- **[28.08.2025]** PP-Term 1 release!!!
-- **[01.05.2025]** PP-Term 3 EAP release!!!
-- **[08.05.2025]** PP-Term 3 release!!!
-- **[01.08.2025]** P-Term 1 release!!!
+- **[23.04.2025]** Developmentstart of P-Term and PP-Ptem
+- **[24.04.2025]** PP-Term EAP release: [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat)
+- **[28.08.2025]** PP-Term 1 release
+- **[01.05.2025]** PP-Term 3 EAP release
+- **[08.05.2025]** PP-Term 3 release
+- **[01.08.2025]** P-Term 1 release
 
 # Install
 
