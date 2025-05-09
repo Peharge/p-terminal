@@ -2674,35 +2674,35 @@ exit /b
             rem Überspringen der Header-Zeile (falls notwendig)
             if not "!deviceName!"=="DeviceName" (
                 rem Saubere Ausgabe für jedes Gerät mit Formatierung
-                call :Log "INFO" "We check !deviceName! for errors"
+                call :Log "INFO" "Checking !deviceName! for errors"
                 echo Driver: !deviceName!
                 echo Manufacturer: !manufacturer!
                 echo Driver Version: !driverVersion!
 
                 rem Beispiel: Spezifische Treiber-Analyse für bekannte Geräte
                 if /I "!deviceName!"=="WAN Miniport (L2TP)" (
-                    call :Log "INFO" "   This is a virtual network adapter for VPN (L2TP)."
+                    call :Log "INFO" "This is a virtual network adapter for VPN (L2TP)."
                     if "!driverVersion!"=="10.0.26100.1" (
                         call :Log "INFO" "✅ This driver is stable, secure, and up-to-date."
                     ) else (
                         call :Log "WARNING" "This driver version may be outdated. Consider updating."
                     )
                 ) else if /I "!deviceName!"=="WAN Miniport (IKEv2)" (
-                    call :Log "INFO" "   This is a virtual network adapter for VPN (IKEv2)."
+                    call :Log "INFO" "This is a virtual network adapter for VPN (IKEv2)."
                     if "!driverVersion!"=="10.0.26100.1" (
                         call :Log "INFO" "✅ This driver is stable, secure, and up-to-date."
                     ) else (
                         call :Log "WARNING" "This driver version may be outdated. Consider updating."
                     )
                 ) else if /I "!deviceName!"=="Generic software device" (
-                    call :Log "INFO" "   Generic software device detected."
+                    call :Log "INFO" "Generic software device detected."
                     if "!driverVersion!"=="10.0.26100.1" (
                         call :Log "INFO" "✅ This driver is stable, secure, and up-to-date."
                     ) else (
                         call :Log "WARNING" "This driver version may be outdated. Consider updating."
                     )
                 ) else if /I "!deviceName!"=="Hyper-V Virtual Switch Extension Adapter" (
-                    call :Log "INFO" "   Virtual Switch Extension Adapter for Hyper-V."
+                    call :Log "INFO" "Virtual Switch Extension Adapter for Hyper-V."
                     if "!driverVersion!"=="10.0.26100.1" (
                         call :Log "INFO" "✅ This driver is stable, secure, and up-to-date."
                     ) else (
