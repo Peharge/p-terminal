@@ -68,6 +68,12 @@ import threading
 import time
 import importlib.util
 import os
+from datetime import datetime
+
+def timestamp() -> str:
+    """Returns current time formatted with milliseconds"""
+    now = datetime.now()
+    return now.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
 
 required_packages = [
     "requests", "py-cpuinfo", "psutil"
@@ -81,12 +87,12 @@ def activate_virtualenv(venv_path):
                                                                                                           "activate")
 
     if not os.path.exists(activate_script):
-        print(f"Error: Virtual environment not found at {venv_path}.")
+        print(f"[{timestamp()}] [ERROR] Virtual environment not found at {venv_path}.")
         sys.exit(1)
 
     os.environ["VIRTUAL_ENV"] = venv_path
     os.environ["PATH"] = os.path.join(venv_path, "Scripts") + os.pathsep + os.environ["PATH"]
-    print(f"Virtual environment {venv_path} activated.")
+    print(f"[{timestamp()}] [PASS] Virtual environment {venv_path} activated.")
 
 
 def ensure_packages_installed(packages):
@@ -94,12 +100,12 @@ def ensure_packages_installed(packages):
     to_install = [pkg for pkg in packages if importlib.util.find_spec(pkg) is None]
 
     if to_install:
-        print(f"Installing missing packages: {', '.join(to_install)}...")
+        print(f"[{timestamp()}] [INFO] Installing missing packages: {', '.join(to_install)}...")
         subprocess.run([sys.executable, "-m", "pip", "install"] + to_install, check=True, stdout=subprocess.DEVNULL,
                        stderr=subprocess.DEVNULL)
-        print("All missing packages installed.")
+        print(f"[{timestamp()}] [PASS] All missing packages installed.")
     else:
-        print("All required packages are already installed.")
+        print(f"[{timestamp()}] [INFO] All required packages are already installed.")
 
 
 # Virtuelle Umgebung aktivieren und Pakete sicherstellen
@@ -237,9 +243,9 @@ def get_powershell_version():
         )
         return result.stdout.strip()
     except subprocess.CalledProcessError:
-        return "Fehler beim Abrufen der PowerShell-Version."
+        return f"[{timestamp()}] [ERROR] Error retrieving PowerShell version."
     except FileNotFoundError:
-        return "PowerShell ist nicht installiert oder nicht im PATH."
+        return f"[{timestamp()}] [ERROR] PowerShell is not installed or not in the PATH."
 
 def get_wsl_version():
     try:
@@ -250,9 +256,9 @@ def get_wsl_version():
         version = result.stdout.strip().split("\n")[0]  # WSL-Version extrahieren
         return version
     except subprocess.CalledProcessError:
-        return "Fehler beim Abrufen der WSL-Version."
+        return f"[{timestamp()}] [ERROR] Error retrieving WSL version."
     except FileNotFoundError:
-        return "WSL ist nicht installiert oder nicht im PATH."
+        return f"[{timestamp()}] [ERROR] WSL is not installed or not in the PATH."
 
 def get_kernel_version():
     try:
@@ -263,9 +269,9 @@ def get_kernel_version():
         kernel_version = result.stdout.strip()
         return kernel_version
     except subprocess.CalledProcessError:
-        return "Fehler beim Abrufen der Kernel-Version."
+        return f"[{timestamp()}] [ERROR] Error retrieving kernel version."
     except FileNotFoundError:
-        return "WSL ist nicht installiert oder nicht im PATH."
+        return f"[{timestamp()}] [ERROR] WSL is not installed or not in the PATH."
 
 def get_wslg_version():
     try:
@@ -276,9 +282,9 @@ def get_wslg_version():
         version = result.stdout.strip().split("\n")[4]  # 5. Zeile extrahieren
         return version
     except subprocess.CalledProcessError:
-        return "Fehler beim Abrufen der WSL-Version."
+        return f"[{timestamp()}] [ERROR] Error retrieving WSL version."
     except FileNotFoundError:
-        return "WSL ist nicht installiert oder nicht im PATH."
+        return f"[{timestamp()}] [ERROR] WSL is not installed or not in the PATH."
 
 def get_msrpc_version():
     try:
@@ -289,9 +295,9 @@ def get_msrpc_version():
         version = result.stdout.strip().split("\n")[6]  # 7. Zeile extrahieren
         return version
     except subprocess.CalledProcessError:
-        return "Fehler beim Abrufen der WSL-Version."
+        return f"[{timestamp()}] [ERROR] Error retrieving WSL version."
     except FileNotFoundError:
-        return "WSL ist nicht installiert oder nicht im PATH."
+        return f"[{timestamp()}] [ERROR] WSL is not installed or not in the PATH."
 
 def get_direct3d_version():
     try:
@@ -302,9 +308,9 @@ def get_direct3d_version():
         version = result.stdout.strip().split("\n")[8]  # 9. Zeile extrahieren
         return version
     except subprocess.CalledProcessError:
-        return "Fehler beim Abrufen der WSL-Version."
+        return f"[{timestamp()}] [ERROR] Error retrieving WSL version."
     except FileNotFoundError:
-        return "WSL ist nicht installiert oder nicht im PATH."
+        return f"[{timestamp()}] [ERROR] WSL is not installed or not in the PATH."
 
 def get_dxcore_version():
     try:
@@ -315,9 +321,9 @@ def get_dxcore_version():
         version = result.stdout.strip().split("\n")[10]  # 11. Zeile extrahieren
         return version
     except subprocess.CalledProcessError:
-        return "Fehler beim Abrufen der WSL-Version."
+        return f"[{timestamp()}] [ERROR] Error retrieving WSL version."
     except FileNotFoundError:
-        return "WSL ist nicht installiert oder nicht im PATH."
+        return f"[{timestamp()}] [ERROR] WSL is not installed or not in the PATH."
 
 def get_visual_studio_version():
     try:
@@ -327,7 +333,7 @@ def get_visual_studio_version():
             version, _ = winreg.QueryValueEx(key, "Version")
             return version
     except FileNotFoundError:
-        return "Visual Studio not found"
+        return f"[{timestamp()}] [ERROR] Visual Studio not found"
 
 def get_ollama_version():
     # First attempt: Query version
@@ -338,12 +344,12 @@ def get_ollama_version():
         try:
             subprocess.check_output(['ollama', 'start'], text=True)
         except subprocess.CalledProcessError:
-            return "Warning: Could not start Ollama."
+            return f"[{timestamp()}] [INFO] Warning: Could not start Ollama."
         # Second attempt: Query version again
         try:
             return subprocess.check_output(['ollama', '--version'], text=True).strip()
         except subprocess.CalledProcessError:
-            return "Warning: Could not connect to a running Ollama instance."
+            return f"[{timestamp()}] [INFO] Warning: Could not connect to a running Ollama instance."
 
 def print_system_info(system_info: dict):
     """Funktion, um die Systeminformationen im Terminal auszugeben"""
