@@ -577,6 +577,7 @@ def handle_special_commands(user_input):
         "p neofetch": "pp-commands\\p-neofetch.py",  # new
         "p fastfetch": "pp-commands\\p-neofetch.py",  # new
         "p screenfetch": "pp-commands\\p-neofetch.py",  # new
+        "p vswhere": "pp-commands\\p-vswhere.py",  # new
         "install 3d-slicer": "run\\simon\\3d-slicer\\install-3d-slicer.py", # new
         "run 3d-slicer": "run\\simon\\3d-slicer\\run-3d-slicer.py",  # new
         "install simon": "run\\simon\\install-simon-1.py",  # new
@@ -672,7 +673,15 @@ def handle_special_commands(user_input):
         "zoxide": "pp-commands\\zoxide.py",  # new
         "starship": "pp-commands\\starship.py",  # new
         "nala": "pp-commands\\nala.py",  # new
-        "bpytop": "pp-commands\\bpytop.py"   # new
+        "bpytop": "pp-commands\\bpytop.py", # new
+        "belnder": "pp-commands\\belnder.py", # new
+        "clion": "pp-commands\\clion.py", # new
+        "community": "pp-commands\\community.py", # new
+        "intellij": "pp-commands\\intellij.py", # new
+        "pycharm": "pp-commands\\pycharm.py", # new
+        "rider": "pp-commands\\rider.py", # new
+        "vs-code": "pp-commands\\vs-code.py", # new
+        "webstorm": "pp-commands\\webstorm.py" # new
     }
 
     # Custom command launcher
