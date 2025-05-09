@@ -152,7 +152,7 @@ class FileExplorer(QWidget):
     def __init__(self, root_dir=None):
         super().__init__()
         logging.basicConfig(level=logging.INFO)
-        self.setWindowTitle("P-Term File Explorer")
+        self.setWindowTitle("P-Term File Explorer ~/p-terminal/pp-term/")
         self.resize(1200, 800)
 
         self.root_dir = root_dir or os.path.expanduser("~/p-terminal/pp-term/")
