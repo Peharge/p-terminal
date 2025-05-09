@@ -65,208 +65,202 @@ import sys
 import subprocess
 import json
 import logging
+import shutil
+import argparse
 import os
 from pathlib import Path
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 from PyQt6 import QtCore, QtWidgets, QtGui
 from PyQt6.QtGui import QIcon
 
-# SETTINGS: Path to vswhere.exe (adjust if not in PATH)
-VSWHERE_PATH = Path(
+# Constants
+DEFAULT_VSWHERE = Path(
     "C:/Program Files (x86)/Microsoft Visual Studio/Installer/vswhere.exe"
 )
-
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="[%(asctime)s] [%(levelname)s] %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
-)
+LOG_FORMAT = "[%(asctime)s] [%(levelname)s] %(message)s"
+DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 
-class Worker(QtCore.QThread):
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="VS Build Tools Inspector with customizable style sheet"
+    )
+    parser.add_argument(
+        "--style",
+        type=Path,
+        help="Optional path to a .qss style sheet",
+        default=Path(__file__).parent / "style.qss"
+    )
+    parser.add_argument(
+        "--vswhere",
+        type=Path,
+        help="Path to vswhere.exe",
+        default=DEFAULT_VSWHERE
+    )
+    return parser.parse_args()
+
+
+class VsWhereWorker(QtCore.QRunnable):
     """
-    Executes vswhere.exe, decodes the output safely as UTF-8,
-    and sends the result or error via signal.
+    QRunnable to execute vswhere.exe and emit results.
     """
-    resultReady = QtCore.pyqtSignal(list)
-    errorOccurred = QtCore.pyqtSignal(str)
 
+    class Signals(QtCore.QObject):
+        finished = QtCore.pyqtSignal()
+        result = QtCore.pyqtSignal(list)
+        error = QtCore.pyqtSignal(str)
+
+    def __init__(
+        self,
+        vswhere_path: Path,
+        include_workloads: bool = True,
+        include_components: bool = True,
+    ):
+        super().__init__()
+        self.vswhere_path = vswhere_path
+        self.include_workloads = include_workloads
+        self.include_components = include_components
+        self.signals = self.Signals()
+
+    @QtCore.pyqtSlot()
     def run(self) -> None:
-        # Ensure vswhere.exe exists
-        if not VSWHERE_PATH.exists():
-            err = f"vswhere.exe not found: {VSWHERE_PATH}"
-            logging.error(err)
-            self.errorOccurred.emit(err)
+        if not self.vswhere_path.exists():
+            msg = f"vswhere.exe not found: {self.vswhere_path}"
+            logging.error(msg)
+            self.signals.error.emit(msg)
+            self.signals.finished.emit()
             return
 
+        args = [str(self.vswhere_path), "-all", "-format", "json"]
+        if self.include_workloads:
+            args[2:2] = ["-products", "*"]
+
         try:
-            logging.info("Starting vswhere.exe…")
+            logging.info("Invoking vswhere: %s", args)
             proc = subprocess.run(
-                [str(VSWHERE_PATH), "-all", "-products", "*", "-format", "json"],
+                args,
                 capture_output=True,
-                check=True
+                check=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
             )
-
-            raw_out: bytes = proc.stdout or b""
-            text_out: str = raw_out.decode("utf-8", errors="replace")
-
-            try:
-                data = json.loads(text_out)
-            except json.JSONDecodeError as je:
-                msg = f"JSON error: {je.msg} (Position {je.pos})"
-                logging.error(msg + "\n" + text_out[:200] + "…")
-                self.errorOccurred.emit(msg)
-                return
-
-            logging.info(f"{len(data)} instance(s) found.")
-            self.resultReady.emit(data)
-
-        except subprocess.CalledProcessError as cpe:
-            err_text = (cpe.stderr or b"").decode("utf-8", errors="ignore").strip()
-            msg = f"vswhere.exe failed: {err_text or cpe}"
-            logging.error(msg)
-            self.errorOccurred.emit(msg)
-
+            data = json.loads(proc.stdout)
+            logging.info("Found %d instances.", len(data))
+            self.signals.result.emit(data)
+        except subprocess.CalledProcessError as e:
+            err = (e.stderr or str(e)).strip()
+            logging.error("vswhere failed: %s", err)
+            self.signals.error.emit(f"vswhere failed: {err}")
+        except json.JSONDecodeError as e:
+            logging.error("JSON parse error: %s", e)
+            self.signals.error.emit(f"JSON parse error: {e.msg}")
         except Exception as e:
-            msg = f"Unexpected error in Worker.run(): {e}"
-            logging.exception(msg)
-            self.errorOccurred.emit(msg)
+            logging.exception("Unexpected error in VsWhereWorker")
+            self.signals.error.emit(str(e))
+        finally:
+            self.signals.finished.emit()
 
 
 class LoadingOverlay(QtWidgets.QWidget):
-    """
-    Semi-transparent overlay with animated spinner.
-    """
-    def __init__(self, parent: QtWidgets.QWidget = None) -> None:
+    """Semi-transparent overlay with spinner or fallback label."""
+
+    def __init__(self, parent: QtWidgets.QWidget) -> None:
         super().__init__(parent)
         self.setAttribute(QtCore.Qt.WidgetAttribute.WA_TransparentForMouseEvents)
-        self.setStyleSheet("background: rgba(0, 0, 0, 120);")
+        self.setStyleSheet("background: rgba(0,0,0,0.5);")
+        self.setVisible(False)
 
         layout = QtWidgets.QVBoxLayout(self)
         layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
-        # Animation (spinner.gif must be in the same folder)
-        gif_path = Path(__file__).parent / "spinner.gif"
-        if gif_path.exists():
-            self.spinner = QtWidgets.QLabel(self)
-            movie = QtGui.QMovie(str(gif_path))
-            self.spinner.setMovie(movie)
+        gif = Path(__file__).parent / "spinner.gif"
+        if gif.exists():
+            lbl = QtWidgets.QLabel(self)
+            movie = QtGui.QMovie(str(gif))
+            lbl.setMovie(movie)
             movie.start()
-            layout.addWidget(self.spinner)
+            layout.addWidget(lbl)
         else:
-            lbl = QtWidgets.QLabel("🔄 Loading build tools…", self)
-            lbl.setFont(QtGui.QFont("", 16))
-            lbl.setStyleSheet("color: white;")
+            lbl = QtWidgets.QLabel("Loading…", self)
+            lbl.setStyleSheet("color:white; font-size:16px;")
             layout.addWidget(lbl)
 
     def resizeEvent(self, event: QtGui.QResizeEvent) -> None:
-        self.setGeometry(0, 0, self.parent().width(), self.parent().height())
+        self.setGeometry(self.parent().rect())
         super().resizeEvent(event)
 
 
 class MainWindow(QtWidgets.QMainWindow):
-    def __init__(self) -> None:
-        super().__init__()
-        self.setWindowTitle("P-Term Visual Studio Build Tools Inspector")
-        self.resize(900, 650)
+    """
+    Main application window for Visual Studio Build Tools Inspector.
+    """
 
-        # Assumes the repository is in the p-terminal folder of the current user
+    def __init__(self, vswhere_path: Path, style_path: Path) -> None:
+        super().__init__()
+        self.vswhere_path = vswhere_path
+        self.style_path = style_path
+        self.current_data: List[Dict] = []
+        self.setup_logging()
+        self.setWindowTitle("P-Term VS Build Tools Inspector")
+        self.resize(1000, 700)
+        self.init_ui()
+        self.init_worker_pool()
+
+        # Annahme: Das Repository befindet sich im p-terminal-Ordner des aktuellen Benutzers
         user = os.getenv("USERNAME") or os.getenv("USER")
         self.repo_path = f"C:/Users/{user}/p-terminal/pp-term"
         icon_path = f"C:/Users/{user}/p-terminal/pp-term/icons/p-term-logo-5.ico"
         self.setWindowIcon(QIcon(icon_path))
 
-        # Central widget & layout
-        central = QtWidgets.QWidget(self)
-        self.setCentralWidget(central)
-        vbox = QtWidgets.QVBoxLayout(central)
 
-        # Toolbar with icon
-        toolbar = QtWidgets.QToolBar()
-        self.addToolBar(toolbar)
-        icon = self.style().standardIcon(
-            QtWidgets.QStyle.StandardPixmap.SP_BrowserReload
+    def setup_logging(self) -> None:
+        logging.basicConfig(
+            level=logging.INFO,
+            format=LOG_FORMAT,
+            datefmt=DATE_FORMAT,
         )
-        refresh_action = QtGui.QAction(icon, "Refresh", self)
-        refresh_action.setToolTip("Reload data")
-        refresh_action.triggered.connect(self.load_data)
-        toolbar.addAction(refresh_action)
 
-        # Tree view
+    def init_ui(self) -> None:
+        # Load style sheet if available
+        if self.style_path and self.style_path.exists():
+            css = self.style_path.read_text()
+            self.setStyleSheet(css)
+
+        # Splitter for tree + detail pane
+        splitter = QtWidgets.QSplitter()
         self.tree = QtWidgets.QTreeWidget()
         self.tree.setHeaderLabels([
-            "Instance ID", "InstallPath", "Version", "DisplayName"
+            "Instance ID", "Install Path", "Version", "Display Name"
         ])
-        vbox.addWidget(self.tree)
+        self.tree.itemClicked.connect(self.on_item_selected)
+
+        self.detail = QtWidgets.QTextEdit()
+        self.detail.setReadOnly(True)
+
+        splitter.addWidget(self.tree)
+        splitter.addWidget(self.detail)
+        splitter.setStretchFactor(1, 1)
+        self.setCentralWidget(splitter)
+
+        # Toolbar
+        toolbar = self.addToolBar("main")
+        refresh_icon = self.style().standardIcon(
+            QtWidgets.QStyle.StandardPixmap.SP_BrowserReload
+        )
+        action = QtGui.QAction(refresh_icon, "Refresh", self)
+        action.setToolTip("Reload data")
+        action.triggered.connect(self.load_data)
+        toolbar.addAction(action)
 
         # Status bar
-        self.status = QtWidgets.QStatusBar()
-        self.setStatusBar(self.status)
+        self.status = self.statusBar()
 
-        # Loading overlay (initially hidden)
-        self.overlay = LoadingOverlay(self.centralWidget())
-        self.overlay.hide()
+        # Overlay
+        self.overlay = LoadingOverlay(self.tree)
 
-        # Initial query shortly after start
-        QtCore.QTimer.singleShot(100, self.load_data)
-
-    def load_data(self) -> None:
-        """Starts the worker thread to load data."""
-        self.tree.clear()
-        self.status.showMessage("Loading build tools information...")
-        self.overlay.show()
-
-        self.worker = Worker(self)
-        self.worker.resultReady.connect(self.on_data_ready)
-        self.worker.errorOccurred.connect(self.on_error)
-        self.worker.finished.connect(self.worker.deleteLater)
-        self.worker.start()
-
-    def on_data_ready(self, data: List[Dict]) -> None:
-        """Populates the tree when data is received."""
-        for inst in data:
-            top = QtWidgets.QTreeWidgetItem([
-                inst.get("instanceId", ""),
-                inst.get("installationPath", ""),
-                inst.get("installationVersion", ""),
-                inst.get("displayName", ""),
-            ])
-            # Workloads
-            for w in inst.get("workloads", []):
-                w_item = QtWidgets.QTreeWidgetItem([f"⚙️ {w.get('id', '')}"])
-                top.addChild(w_item)
-            # Components
-            for c in inst.get("components", []):
-                c_item = QtWidgets.QTreeWidgetItem([f"🔧 {c.get('id', '')}"])
-                top.addChild(c_item)
-
-            self.tree.addTopLevelItem(top)
-
-        self.status.showMessage(f"{len(data)} instance(s) loaded.", 5000)
-        self.overlay.hide()
-
-    def on_error(self, msg: str) -> None:
-        """Displays error message and hides overlay."""
-        self.overlay.hide()
-        logging.error("Error loading data: " + msg)
-        QtWidgets.QMessageBox.critical(self, "Error", msg)
-        self.status.showMessage("Error loading data", 5000)
-
-    def closeEvent(self, event: QtGui.QCloseEvent) -> None:
-        """Ensures the worker is cleanly terminated."""
-        if hasattr(self, "worker") and self.worker.isRunning():
-            self.worker.quit()
-            self.worker.wait(2000)
-        super().closeEvent(event)
-
-
-if __name__ == "__main__":
-    app = QtWidgets.QApplication(sys.argv)
-
-    # Global style sheet (outsourced for better readability)
-    STYLE = """
+        self.setStyleSheet("""
             QWidget {
                 background-color: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #1b2631, stop:1 #0f1626);
                 color: #FFFFFF;
@@ -289,7 +283,7 @@ if __name__ == "__main__":
                 padding: 5px 10px;
                 color: #FFFFFF;
             }
-            
+
             QPushButton:hover {
                 background-color: #1c2833;
             }
@@ -328,7 +322,7 @@ if __name__ == "__main__":
                 font-family: 'Courier New', monospace;
                 font-size: 12px;
             }
-            
+
             QTabBar::tab {
                 background: transparent;
                 padding: 8px;
@@ -336,73 +330,133 @@ if __name__ == "__main__":
                 border-top-left-radius: 6px;
                 border-top-right-radius: 6px;
             }
-            
+
             QTabBar::tab:selected {
                 background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #34495e, stop:1 #1c2833);
                 color: #FFFFFF;
             }
-            
+
             QScrollArea {
                 border: none;
                 background-color: transparent;
             }
-            
+
             QScrollBar:vertical {
                 background-color: transparent;  /* Hintergrund (Schiene) in transparent */
                 width: 10px;
                 border-radius: 5px;
             }
-            
+
             QScrollBar::handle:vertical {
                 background-color: #ffffff;  /* Schieber (Block) in Weiß */
                 min-height: 20px;
                 border-radius: 5px;
             }
-            
+
             QScrollBar::add-line:vertical,
             QScrollBar::sub-line:vertical {
                 background: transparent;
             }
-            
+
             QScrollBar::up-arrow:vertical,
             QScrollBar::down-arrow:vertical {
                 background: transparent;
             }
-            
+
             QScrollBar::add-page:vertical,
             QScrollBar::sub-page:vertical {
                 background: transparent;
             }
-            
+
             QScrollBar:horizontal {
                 background-color: transparent;  /* Auch der horizontale Balken in transparent */
                 height: 10px;
                 border-radius: 5px;
             }
-            
+
             QScrollBar::handle:horizontal {
                 background-color: #ffffff;
                 min-width: 20px;
                 border-radius: 5px;
             }
-            
+
             QScrollBar::add-line:horizontal,
             QScrollBar::sub-line:horizontal {
                 background: transparent;
             }
-            
+
             QScrollBar::left-arrow:horizontal,
             QScrollBar::right-arrow:horizontal {
                 background: transparent;
             }
-            
+
             QScrollBar::add-page:horizontal,
             QScrollBar::sub-page:horizontal {
                 background: transparent;
             }
-    """
-    app.setStyleSheet(STYLE)
+        """)
 
-    window = MainWindow()
+    def init_worker_pool(self) -> None:
+        self.thread_pool = QtCore.QThreadPool(self)
+
+    def load_data(self) -> None:
+        self.tree.clear()
+        self.detail.clear()
+        self.status.showMessage("Loading build tools info…")
+        self.overlay.setVisible(True)
+
+        worker = VsWhereWorker(vswhere_path=self.vswhere_path)
+        worker.signals.result.connect(self.populate_tree)
+        worker.signals.error.connect(self.show_error)
+        worker.signals.finished.connect(lambda: self.overlay.setVisible(False))
+        self.thread_pool.start(worker)
+
+    @QtCore.pyqtSlot(list)
+    def populate_tree(self, instances: List[Dict]) -> None:
+        self.current_data = instances
+        for inst in instances:
+            root = QtWidgets.QTreeWidgetItem([
+                inst.get("instanceId", ""),
+                inst.get("installationPath", ""),
+                inst.get("installationVersion", ""),
+                inst.get("displayName", ""),
+            ])
+            root.setData(0, QtCore.Qt.ItemDataRole.UserRole, inst)
+            for workload in inst.get("workloads", []):
+                child = QtWidgets.QTreeWidgetItem(root, [f"⚙️ {workload.get('id', '')}"])
+                child.setData(0, QtCore.Qt.ItemDataRole.UserRole, workload)
+            for comp in inst.get("components", []):
+                child = QtWidgets.QTreeWidgetItem(root, [f"🔧 {comp.get('id', '')}"])
+                child.setData(0, QtCore.Qt.ItemDataRole.UserRole, comp)
+            self.tree.addTopLevelItem(root)
+        self.status.showMessage(f"Loaded {len(instances)} instances.", 5000)
+
+    @QtCore.pyqtSlot(QtWidgets.QTreeWidgetItem, int)
+    def on_item_selected(self, item: QtWidgets.QTreeWidgetItem, col: int) -> None:
+        data = item.data(0, QtCore.Qt.ItemDataRole.UserRole)
+        if data:
+            self.detail.setPlainText(json.dumps(data, indent=2))
+        else:
+            self.detail.clear()
+
+    @QtCore.pyqtSlot(str)
+    def show_error(self, message: str) -> None:
+        logging.error(message)
+        QtWidgets.QMessageBox.critical(self, "Error", message)
+        self.status.showMessage("Error loading data", 5000)
+
+    def closeEvent(self, event: QtGui.QCloseEvent) -> None:
+        self.thread_pool.waitForDone(2000)
+        super().closeEvent(event)
+
+
+def main() -> None:
+    args = parse_args()
+    app = QtWidgets.QApplication(sys.argv)
+    window = MainWindow(vswhere_path=args.vswhere, style_path=args.style)
     window.show()
     sys.exit(app.exec())
+
+
+if __name__ == "__main__":
+    main()
