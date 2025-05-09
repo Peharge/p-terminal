@@ -127,7 +127,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QColor, QIcon, QPalette, QTextCharFormat, QSyntaxHighlighter
 from PyQt6.QtWidgets import (QApplication, QLabel, QSizePolicy, QTreeWidgetItem,
                              QTreeWidget, QVBoxLayout, QWidget, QHeaderView,
-                             QLineEdit, QPushButton, QHBoxLayout, QTextEdit, QTabWidget, QMainWindow)
+                             QLineEdit, QPushButton, QHBoxLayout, QTextEdit, QTabWidget, QMainWindow, QSplitter)
 
 # Matplotlib-Integration in PyQt6
 from matplotlib.figure import Figure
@@ -239,21 +239,30 @@ class ExplorerTab(QWidget):
         search_layout.addWidget(search_button)
         layout.addLayout(search_layout)
 
+        # Splitter für die Trennung der Commits und Diff-Vorschau
+        splitter = QSplitter(Qt.Orientation.Vertical)
+
         # Baumansicht der Commits
         self.tree = QTreeWidget()
         self.tree.setHeaderLabels(["Commit Hash", "Message", "Author", "Date", "Status"])
         self.tree.header().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.tree.itemClicked.connect(self.display_commit_diff)
-        layout.addWidget(self.tree)
-
-        self.status_label = QLabel("Loading...")
-        layout.addWidget(self.status_label)
 
         # Diff-Vorschau
         self.diff_text = QTextEdit()
         self.diff_text.setReadOnly(True)
         self.highlighter = DiffHighlighter(self.diff_text.document())
-        layout.addWidget(self.diff_text)
+
+        # Füge die Widgets zum Splitter hinzu
+        splitter.addWidget(self.tree)
+        splitter.addWidget(self.diff_text)
+
+        # Füge den Splitter zum Layout hinzu
+        layout.addWidget(splitter)
+
+        # Status-Label
+        self.status_label = QLabel("Loading...")
+        layout.addWidget(self.status_label)
 
         self.setLayout(layout)
         self.load_commits()
