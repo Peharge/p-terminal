@@ -69,7 +69,7 @@ from collections import deque
 
 from PyQt6.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QHBoxLayout, QStackedWidget, QFrame, QLabel, QProgressBar,
-    QTableWidget, QTableWidgetItem, QHeaderView, QScrollArea, QLineEdit, QPushButton, QMenu, QMessageBox, QComboBox, QPlainTextEdit
+    QTableWidget, QTableWidgetItem, QHeaderView, QScrollArea, QLineEdit, QPushButton, QMenu, QMessageBox, QComboBox, QPlainTextEdit, QTabBar
 )
 from PyQt6.QtCore import QTimer, Qt, QPoint
 from PyQt6.QtGui import QIcon, QPainter
@@ -96,23 +96,37 @@ class AdvancedSystemMonitor(QWidget):
         main_layout.setContentsMargins(15, 15, 15, 15)
         main_layout.setSpacing(10)
 
-        # Mode selector: Overview, CPU Chart, RAM Chart, SSD Chart, System Info
-        mode_layout = QHBoxLayout()
-        self.mode_selector = QComboBox()
-        self.mode_selector.addItems([
-            "Overview",
-            "CPU diagram",
-            "RAM diagram",
-            "SSD diagram",
-            "System Info"
-        ])
-        self.mode_selector.currentIndexChanged.connect(self.switch_mode)
-        mode_layout.addWidget(QLabel("Mode:"))
-        mode_layout.addWidget(self.mode_selector)
-        mode_layout.addStretch()
-        main_layout.addLayout(mode_layout)
+        # Taskbar (QTabBar) for mode selection
+        self.taskbar = QTabBar()
+        self.taskbar.addTab("Overview")
+        self.taskbar.addTab("CPU diagram")
+        self.taskbar.addTab("RAM diagram")
+        self.taskbar.addTab("SSD diagram")
+        self.taskbar.addTab("System Info")
+        self.taskbar.setShape(QTabBar.Shape.RoundedNorth)
+        self.taskbar.setExpanding(True)
+        self.taskbar.setTabsClosable(False)
+        self.taskbar.setStyleSheet("""
+            QTabBar::tab {
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2c3e50, stop:1 #1c2833);
+                color: #FFFFFF;
+                padding: 8px 16px;
+                margin: 2px;
+                border-top-left-radius: 6px;
+                border-top-right-radius: 6px;
+            }
+            QTabBar::tab:selected {
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #34495e, stop:1 #1c2833);
+                font-weight: bold;
+            }
+            QTabBar {
+                background-color: #1b2631;
+            }
+        """)
+        self.taskbar.currentChanged.connect(self.switch_mode)
+        main_layout.addWidget(self.taskbar)
 
-        # Stacked widget to switch between views
+        # Stacked widget for views
         self.stacked_widget = QStackedWidget()
         self.overview_widget = self.create_overview_widget()
         self.cpu_chart_widget = self.create_cpu_chart_widget()
@@ -120,11 +134,11 @@ class AdvancedSystemMonitor(QWidget):
         self.ssd_chart_widget = self.create_ssd_chart_widget()
         self.system_info_widget = self.create_system_info_widget()
 
-        self.stacked_widget.addWidget(self.overview_widget)    # index 0
-        self.stacked_widget.addWidget(self.cpu_chart_widget)     # index 1
-        self.stacked_widget.addWidget(self.ram_chart_widget)     # index 2
-        self.stacked_widget.addWidget(self.ssd_chart_widget)     # index 3
-        self.stacked_widget.addWidget(self.system_info_widget)   # index 4
+        self.stacked_widget.addWidget(self.overview_widget)  # index 0
+        self.stacked_widget.addWidget(self.cpu_chart_widget)  # index 1
+        self.stacked_widget.addWidget(self.ram_chart_widget)  # index 2
+        self.stacked_widget.addWidget(self.ssd_chart_widget)  # index 3
+        self.stacked_widget.addWidget(self.system_info_widget)  # index 4
 
         main_layout.addWidget(self.stacked_widget)
         self.setLayout(main_layout)
