@@ -399,153 +399,201 @@ class StatisticsTab(QWidget):
         self.canvas.draw()
 
 class TreeTab(QWidget):
-    NODE_RADIUS = 6
-    X_SPACING = 200  # Increased spacing for better readability
-    Y_SPACING = 100  # Increased spacing to avoid text overlapping
-    MARGIN = 50  # Margin around the tree
-
+    """
+    Zeigt den vollständigen Git-Commit-Tree mit Graph, Branches und Farben
+    wie in 'git log --oneline --graph --color --all --decorate'.
+    """
     def __init__(self, repo_path):
         super().__init__()
         self.repo_path = repo_path
-        self.branch_colors = {}  # Store assigned colors for branches
-        self._init_ui()
-        self._draw_graph()
+        self.init_ui()
 
-    def _init_ui(self):
-        layout = QVBoxLayout(self)
-        self.view = QGraphicsView()
-        self.view.setRenderHint(QPainter.RenderHint.Antialiasing, True)
-        self.scene = QGraphicsScene(self.view)
-        self.view.setScene(self.scene)
-        layout.addWidget(self.view)
+    def init_ui(self):
+        layout = QVBoxLayout()
 
-    def _draw_graph(self):
+        self.text_view = QTextEdit()
+        self.text_view.setReadOnly(True)
+        self.text_view.setFontFamily("Courier New")
+        self.text_view.setFontPointSize(10)
+
+        layout.addWidget(self.text_view)
+        self.setLayout(layout)
+
+        self.load_git_graph()
+
+    def load_git_graph(self):
         try:
-            repo = Repo(self.repo_path, search_parent_directories=True)
-        except InvalidGitRepositoryError:
-            text_item = self.scene.addText(
-                f"No valid Git repository found:\nPath: {self.repo_path}",
-                QFont("Arial", 12, QFont.Weight.Bold)
+            output = subprocess.check_output(
+                ["git", "log", "--oneline", "--graph", "--color", "--all", "--decorate"],
+                cwd=self.repo_path,
+                stderr=subprocess.STDOUT
             )
-            text_item.setDefaultTextColor(QColor('#ffffff'))
-            return
+            ansi_output = output.decode("utf-8", errors="replace")
+            # ANSI-Escape-Sequenzen entfernen (Farben etc.)
+            clean_output = self.strip_ansi(ansi_output)
+            self.text_view.setPlainText(clean_output)
+        except subprocess.CalledProcessError as e:
+            self.text_view.setPlainText(f"Error loading the Git logs:\n{e.output.decode('utf-8', errors='replace')}")
+        except Exception as e:
+            self.text_view.setPlainText(f"Unknown error: {str(e)}")
 
-        # Get all commits and organize them by branch
-        commits = list(repo.iter_commits('--all', topo_order=True))
-        branch_map = self._map_branches_to_commits(repo)
-
-        # Assign colors to branches
-        self._assign_branch_colors(branch_map)
-
-        # Set scene size dynamically
-        width = len(branch_map) * self.X_SPACING + self.MARGIN * 2
-        height = len(commits) * self.Y_SPACING + self.MARGIN * 2
-        self.scene.setSceneRect(0, 0, width, height)
-
-        # Draw the tree structure
-        self._draw_tree(commits, branch_map)
-
-    def _map_branches_to_commits(self, repo):
+    def strip_ansi(self, text):
         """
-        Maps each commit to the branches it belongs to.
+        Entfernt ANSI-Escape-Sequenzen aus dem Text.
         """
-        branch_map = {}
-        for branch in repo.branches:
-            for commit in repo.iter_commits(branch.name):
-                branch_map.setdefault(commit.hexsha, set()).add(branch.name)
-        return branch_map
+        import re
+        ansi_escape = re.compile(r'\x1b\[[0-9;]*m')
+        return ansi_escape.sub('', text)
 
-    def _assign_branch_colors(self, branch_map):
-        """
-        Assigns a unique color to each branch.
-        """
-        for branch_name in set(branch for branches in branch_map.values() for branch in branches):
-            self.branch_colors[branch_name] = QColor(
-                random.randint(50, 200),
-                random.randint(50, 200),
-                random.randint(50, 200)
+class GitNameStatusTab(QWidget):
+    """
+    Zeigt die Git-Log-Ausgabe mit Dateinamen und Statusänderungen
+    wie bei 'git log --name-status'.
+    """
+    def __init__(self, repo_path):
+        super().__init__()
+        self.repo_path = repo_path
+        self.init_ui()
+
+    def init_ui(self):
+        layout = QVBoxLayout()
+
+        self.text_view = QTextEdit()
+        self.text_view.setReadOnly(True)
+        self.text_view.setFontFamily("Courier New")
+        self.text_view.setFontPointSize(10)
+
+        layout.addWidget(self.text_view)
+        self.setLayout(layout)
+
+        self.load_git_log_name_status()
+
+    def load_git_log_name_status(self):
+        try:
+            output = subprocess.check_output(
+                ["git", "log", "--name-status"],
+                cwd=self.repo_path,
+                stderr=subprocess.STDOUT
             )
+            text_output = output.decode("utf-8", errors="replace")
+            self.text_view.setPlainText(text_output)
+        except subprocess.CalledProcessError as e:
+            self.text_view.setPlainText(f"Error loading the Git logs:\n{e.output.decode('utf-8', errors='replace')}")
+        except Exception as e:
+            self.text_view.setPlainText(f"Unknown error: {str(e)}")
 
-    def _draw_tree(self, commits, branch_map):
-        """
-        Draws the tree structure with commits and their branches.
-        """
-        pen_node = QPen(QColor('#225e7a'))
-        font_info = QFont("Arial", 8)
+class GitShortlogTab(QWidget):
+    """
+    Zeigt die Git-Shortlog-Ausgabe an, die die Anzahl der Commits pro Autor
+    wie bei 'git shortlog -sn --all' anzeigt.
+    """
+    def __init__(self, repo_path):
+        super().__init__()
+        self.repo_path = repo_path
+        self.init_ui()
 
-        # Separate main branches (left) and others (right)
-        main_branches = {"main", "master"}
-        branch_positions = {"main": 0, "master": 0}  # Leftmost column for main branches
-        other_branch_offset = 1  # Start other branches from column 1
+    def init_ui(self):
+        layout = QVBoxLayout()
 
-        for idx, commit in enumerate(commits):
-            branch_names = branch_map.get(commit.hexsha, [])
-            is_main = any(branch in main_branches for branch in branch_names)
-            branch_key = ",".join(sorted(branch_names)) if branch_names else "untracked"
+        self.text_view = QTextEdit()
+        self.text_view.setReadOnly(True)
+        self.text_view.setFontFamily("Courier New")
+        self.text_view.setFontPointSize(10)
 
-            # Assign horizontal position
-            if branch_key not in branch_positions:
-                branch_positions[branch_key] = other_branch_offset
-                other_branch_offset += 1
+        layout.addWidget(self.text_view)
+        self.setLayout(layout)
 
-            # Calculate node position
-            x = branch_positions[branch_key] * self.X_SPACING + self.MARGIN
-            y = idx * self.Y_SPACING + self.MARGIN
-            pt = QPointF(x, y)
+        self.load_git_shortlog()
 
-            # Draw node circle
-            brush_node = QBrush(self.branch_colors.get(branch_key, QColor('#3daee9')))
-            self.scene.addEllipse(
-                pt.x() - self.NODE_RADIUS,
-                pt.y() - self.NODE_RADIUS,
-                self.NODE_RADIUS * 2,
-                self.NODE_RADIUS * 2,
-                pen_node,
-                brush_node
+    def load_git_shortlog(self):
+        try:
+            output = subprocess.check_output(
+                ["git", "shortlog", "-sn", "--all"],
+                cwd=self.repo_path,
+                stderr=subprocess.STDOUT
             )
+            text_output = output.decode("utf-8", errors="replace")
+            self.text_view.setPlainText(text_output)
+        except subprocess.CalledProcessError as e:
+            self.text_view.setPlainText(f"Error loading the Git logs:\n{e.output.decode('utf-8', errors='replace')}")
+        except Exception as e:
+            self.text_view.setPlainText(f"Unknown error: {str(e)}")
 
-            # Add commit and branch info (shortened format)
-            branch_info = f" | {', '.join(sorted(branch_names))}" if branch_names else ""
-            info = (
-                f"{commit.hexsha[:7]} | {commit.author.name} | "
-                f"{commit.committed_datetime.strftime('%Y-%m-%d')}{branch_info} | "
-                f"{commit.message.strip()[:50]}..."  # Shorten commit message
-            )
-            text_item = self.scene.addText(info, font_info)
-            text_item.setDefaultTextColor(QColor('#ffffff'))
-            text_item.setTextWidth(300)
-            text_item.setPos(
-                pt.x() + self.NODE_RADIUS + 5,
-                pt.y() - self.NODE_RADIUS
-            )
-            # Add tooltip with full info
-            tooltip_info = (
-                f"{commit.hexsha}\nAuthor: {commit.author.name}\nDate: "
-                f"{commit.committed_datetime.strftime('%Y-%m-%d %H:%M:%S')}\n"
-                f"Branches: {', '.join(sorted(branch_names)) if branch_names else 'None'}\n"
-                f"Message: {commit.message.strip()}"
-            )
-            text_item.setToolTip(tooltip_info)
+class GitBugfixLogTab(QWidget):
+    """
+    Zeigt die Git-Shortlog-Ausgabe an, die die Anzahl der Commits pro Autor
+    wie bei 'git shortlog -sn --all' anzeigt.
+    """
+    def __init__(self, repo_path):
+        super().__init__()
+        self.repo_path = repo_path
+        self.init_ui()
 
-            # Draw edges to parents using curved paths
-            for parent in commit.parents:
-                parent_idx = next((i for i, c in enumerate(commits) if c.hexsha == parent.hexsha), None)
-                if parent_idx is not None:
-                    parent_x = branch_positions[branch_key] * self.X_SPACING + self.MARGIN
-                    parent_y = parent_idx * self.Y_SPACING + self.MARGIN
-                    self._draw_curved_line(pt, QPointF(parent_x, parent_y), branch_key)
+    def init_ui(self):
+        layout = QVBoxLayout()
 
-    def _draw_curved_line(self, start, end, branch_key):
-        """
-        Draws a curved line between two points to connect commits.
-        """
-        path = QPainterPath()
-        path.moveTo(start)
-        control_point = QPointF((start.x() + end.x()) / 2, (start.y() + end.y()) / 2 - 50)
-        path.quadTo(control_point, end)
-        pen = QPen(self.branch_colors.get(branch_key, QColor('#666666')))
-        pen.setWidth(2)
-        self.scene.addPath(path, pen)
+        self.text_view = QTextEdit()
+        self.text_view.setReadOnly(True)
+        self.text_view.setFontFamily("Courier New")
+        self.text_view.setFontPointSize(10)
+
+        layout.addWidget(self.text_view)
+        self.setLayout(layout)
+
+        self.load_git_shortlog()
+
+    def load_git_shortlog(self):
+        try:
+            output = subprocess.check_output(
+                ["git", "log", "--oneline", "--grep='Bugfix'", "--color"],
+                cwd=self.repo_path,
+                stderr=subprocess.STDOUT
+            )
+            text_output = output.decode("utf-8", errors="replace")
+            self.text_view.setPlainText(text_output)
+        except subprocess.CalledProcessError as e:
+            self.text_view.setPlainText(f"Error loading the Git logs:\n{e.output.decode('utf-8', errors='replace')}")
+        except Exception as e:
+            self.text_view.setPlainText(f"Unknown error: {str(e)}")
+
+class StatsDiffTab(QWidget):
+    """
+    Zeigt die Git-Log-Ausgabe an, die die Commit-Statistiken mit der Anzahl
+    der hinzugefügten und entfernten Zeilen pro Commit anzeigt (wie bei
+    'git log --stat --numstat --oneline').
+    """
+    def __init__(self, repo_path):
+        super().__init__()
+        self.repo_path = repo_path
+        self.init_ui()
+
+    def init_ui(self):
+        layout = QVBoxLayout()
+
+        self.text_view = QTextEdit()
+        self.text_view.setReadOnly(True)
+        self.text_view.setFontFamily("Courier New")
+        self.text_view.setFontPointSize(10)
+
+        layout.addWidget(self.text_view)
+        self.setLayout(layout)
+
+        self.load_git_log()
+
+    def load_git_log(self):
+        try:
+            # Verwenden des Git-Befehls 'git log --stat --numstat --oneline'
+            output = subprocess.check_output(
+                ["git", "log", "--stat", "--numstat", "--oneline"],
+                cwd=self.repo_path,
+                stderr=subprocess.STDOUT
+            )
+            text_output = output.decode("utf-8", errors="replace")
+            self.text_view.setPlainText(text_output)
+        except subprocess.CalledProcessError as e:
+            self.text_view.setPlainText(f"Error loading the Git logs:\n{e.output.decode('utf-8', errors='replace')}")
+        except Exception as e:
+            self.text_view.setPlainText(f"Unknown error: {str(e)}")
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -578,6 +626,22 @@ class MainWindow(QMainWindow):
         # Tab für Commit Tree
         stats_tab = TreeTab(self.repo_path)
         tabs.addTab(stats_tab, "Commit Tree")
+
+        # Tab für Git Name Status
+        stats_tab = GitNameStatusTab(self.repo_path)
+        tabs.addTab(stats_tab, "Git Name Status")
+
+        # Tab für Git Bugfix Log
+        stats_tab = GitBugfixLogTab(self.repo_path)
+        tabs.addTab(stats_tab, "Git Bugfix Log")
+
+        # Tab für Git Stats and DiffTab
+        stats_tab = StatsDiffTab(self.repo_path)
+        tabs.addTab(stats_tab, "Git Stats and Diff")
+
+        # Tab für Git Short log
+        stats_tab = GitShortlogTab(self.repo_path)
+        tabs.addTab(stats_tab, "Git Short log")
 
         # Style für Hintergrund (globaler Verlauf)
         self.setStyleSheet("""
