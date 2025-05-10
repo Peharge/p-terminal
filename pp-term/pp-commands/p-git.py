@@ -373,7 +373,6 @@ class StatisticsTab(QWidget):
         # Redraw the canvas to reflect updates
         self.canvas.draw()
 
-
 class TreeTab(QWidget):
     NODE_RADIUS = 6
     X_SPACING = 200  # Increased spacing for better readability
