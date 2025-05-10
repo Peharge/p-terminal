@@ -367,21 +367,23 @@ class StatisticsTab(QWidget):
         self.canvas.draw()
 
 
-import os
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QGraphicsView, QGraphicsScene
-from PyQt6.QtGui import QPen, QBrush, QColor, QPainter, QFont
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QGraphicsView, QGraphicsScene, QToolTip
+from PyQt6.QtGui import QPen, QBrush, QColor, QPainter, QFont, QPainterPath
 from PyQt6.QtCore import Qt, QPointF
 from git import Repo, InvalidGitRepositoryError
+import random
+
 
 class TreeTab(QWidget):
     NODE_RADIUS = 6
-    X_POSITION = 100  # X-coordinate for nodes
-    Y_SPACING = 80
-    MARGIN = 50
+    X_SPACING = 200  # Increased spacing for better readability
+    Y_SPACING = 100  # Increased spacing to avoid text overlapping
+    MARGIN = 50  # Margin around the tree
 
     def __init__(self, repo_path):
         super().__init__()
         self.repo_path = repo_path
+        self.branch_colors = {}  # Store assigned colors for branches
         self._init_ui()
         self._draw_graph()
 
@@ -404,37 +406,71 @@ class TreeTab(QWidget):
             text_item.setDefaultTextColor(QColor('#ffffff'))
             return
 
-        # Get all commits
+        # Get all commits and organize them by branch
         commits = list(repo.iter_commits('--all', topo_order=True))
-        # Sort by date descending (newest first)
-        commits_sorted = sorted(commits, key=lambda c: c.committed_datetime, reverse=True)
+        branch_map = self._map_branches_to_commits(repo)
 
-        # Map commits to branch names
+        # Assign colors to branches
+        self._assign_branch_colors(branch_map)
+
+        # Set scene size dynamically
+        width = len(branch_map) * self.X_SPACING + self.MARGIN * 2
+        height = len(commits) * self.Y_SPACING + self.MARGIN * 2
+        self.scene.setSceneRect(0, 0, width, height)
+
+        # Draw the tree structure
+        self._draw_tree(commits, branch_map)
+
+    def _map_branches_to_commits(self, repo):
+        """
+        Maps each commit to the branches it belongs to.
+        """
         branch_map = {}
         for branch in repo.branches:
             for commit in repo.iter_commits(branch.name):
                 branch_map.setdefault(commit.hexsha, set()).add(branch.name)
+        return branch_map
 
-        # Set scene size
-        width = self.X_POSITION + 400
-        height = len(commits_sorted) * self.Y_SPACING + self.MARGIN * 2
-        self.scene.setSceneRect(0, 0, width, height)
+    def _assign_branch_colors(self, branch_map):
+        """
+        Assigns a unique color to each branch.
+        """
+        for branch_name in set(branch for branches in branch_map.values() for branch in branches):
+            self.branch_colors[branch_name] = QColor(
+                random.randint(50, 200),
+                random.randint(50, 200),
+                random.randint(50, 200)
+            )
 
-        pen_line = QPen(QColor('#666666'), 1)
+    def _draw_tree(self, commits, branch_map):
+        """
+        Draws the tree structure with commits and their branches.
+        """
         pen_node = QPen(QColor('#225e7a'))
-        brush_node = QBrush(QColor('#3daee9'))
         font_info = QFont("Arial", 8)
 
-        # Draw vertical edge between sequential commits
-        for i in range(len(commits_sorted) - 1):
-            pt1 = self._pt(i)
-            pt2 = self._pt(i + 1)
-            self.scene.addLine(pt1.x(), pt1.y(), pt2.x(), pt2.y(), pen_line)
+        # Separate main branches (left) and others (right)
+        main_branches = {"main", "master"}
+        branch_positions = {"main": 0, "master": 0}  # Leftmost column for main branches
+        other_branch_offset = 1  # Start other branches from column 1
 
-        # Draw nodes and commit info including branches
-        for idx, commit in enumerate(commits_sorted):
-            pt = self._pt(idx)
-            # Node circle
+        for idx, commit in enumerate(commits):
+            branch_names = branch_map.get(commit.hexsha, [])
+            is_main = any(branch in main_branches for branch in branch_names)
+            branch_key = ",".join(sorted(branch_names)) if branch_names else "untracked"
+
+            # Assign horizontal position
+            if branch_key not in branch_positions:
+                branch_positions[branch_key] = other_branch_offset
+                other_branch_offset += 1
+
+            # Calculate node position
+            x = branch_positions[branch_key] * self.X_SPACING + self.MARGIN
+            y = idx * self.Y_SPACING + self.MARGIN
+            pt = QPointF(x, y)
+
+            # Draw node circle
+            brush_node = QBrush(self.branch_colors.get(branch_key, QColor('#3daee9')))
             self.scene.addEllipse(
                 pt.x() - self.NODE_RADIUS,
                 pt.y() - self.NODE_RADIUS,
@@ -443,15 +479,14 @@ class TreeTab(QWidget):
                 pen_node,
                 brush_node
             )
-            # Prepare commit info
-            branches = branch_map.get(commit.hexsha, [])
-            branch_info = f" | branches: {', '.join(sorted(branches))}" if branches else ""
+
+            # Add commit and branch info (shortened format)
+            branch_info = f" | {', '.join(sorted(branch_names))}" if branch_names else ""
             info = (
                 f"{commit.hexsha[:7]} | {commit.author.name} | "
-                f"{commit.committed_datetime.strftime('%Y-%m-%d')}" + branch_info + "\n"
-                f"{commit.message.strip()}"
+                f"{commit.committed_datetime.strftime('%Y-%m-%d')}{branch_info} | "
+                f"{commit.message.strip()[:50]}..."  # Shorten commit message
             )
-            # Add text
             text_item = self.scene.addText(info, font_info)
             text_item.setDefaultTextColor(QColor('#ffffff'))
             text_item.setTextWidth(300)
@@ -459,13 +494,34 @@ class TreeTab(QWidget):
                 pt.x() + self.NODE_RADIUS + 5,
                 pt.y() - self.NODE_RADIUS
             )
+            # Add tooltip with full info
+            tooltip_info = (
+                f"{commit.hexsha}\nAuthor: {commit.author.name}\nDate: "
+                f"{commit.committed_datetime.strftime('%Y-%m-%d %H:%M:%S')}\n"
+                f"Branches: {', '.join(sorted(branch_names)) if branch_names else 'None'}\n"
+                f"Message: {commit.message.strip()}"
+            )
+            text_item.setToolTip(tooltip_info)
 
-    def _pt(self, index):
-        x = self.X_POSITION
-        y = index * self.Y_SPACING + self.MARGIN
-        return QPointF(x, y)
+            # Draw edges to parents using curved paths
+            for parent in commit.parents:
+                parent_idx = next((i for i, c in enumerate(commits) if c.hexsha == parent.hexsha), None)
+                if parent_idx is not None:
+                    parent_x = branch_positions[branch_key] * self.X_SPACING + self.MARGIN
+                    parent_y = parent_idx * self.Y_SPACING + self.MARGIN
+                    self._draw_curved_line(pt, QPointF(parent_x, parent_y), branch_key)
 
-
+    def _draw_curved_line(self, start, end, branch_key):
+        """
+        Draws a curved line between two points to connect commits.
+        """
+        path = QPainterPath()
+        path.moveTo(start)
+        control_point = QPointF((start.x() + end.x()) / 2, (start.y() + end.y()) / 2 - 50)
+        path.quadTo(control_point, end)
+        pen = QPen(self.branch_colors.get(branch_key, QColor('#666666')))
+        pen.setWidth(2)
+        self.scene.addPath(path, pen)
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -476,7 +532,7 @@ class MainWindow(QMainWindow):
 
         # Annahme: Das Repository befindet sich im p-terminal-Ordner des aktuellen Benutzers
         user = os.getenv("USERNAME") or os.getenv("USER")
-        self.repo_path = f"C:/Users/{user}/PycharmProjects/MAVIS"
+        self.repo_path = f"C:/Users/julia/llama-models"
         icon_path = f"C:/Users/{user}/p-terminal/pp-term/icons/p-term-logo-5.ico"
         self.setWindowIcon(QIcon(icon_path))
 
