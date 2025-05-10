@@ -517,6 +517,10 @@ def handle_special_commands(user_input):
         "p git mavis": "pp-commands\\p-git-mavis.py",  # new
         "p git mavis-web": "pp-commands\\p-git-mavis-web.py",  # new
         "p git simon": "pp-commands\\p-git-simon.py",  # new
+        "p git llama.cpp": "pp-commands\\p-git-llama-cpp.py",  # new
+        "p git pytorch": "pp-commands\\p-git-pytorch.py",  # new
+        "p git tensorflow": "pp-commands\\p-git-tensorflow.py",  # new
+        "p git jax": "pp-commands\\p-git-jax.py",  # new
         "p ls": "pp-commands\\p-ls.py", # new
         "p p-terminal ls": "pp-commands\\p-ls.py",  # new
         "p ls mavis": "pp-commands\\p-ls-mavis.py",  # new
