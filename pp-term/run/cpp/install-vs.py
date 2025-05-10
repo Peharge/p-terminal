@@ -78,15 +78,18 @@ import getpass
 import platform
 import shutil
 import logging
+from pathlib import Path
 
-# Logging-Konfiguration
+log_path = Path(__file__).parent / "peharge-compiler.log"
 logging.basicConfig(
     level=logging.INFO,
-    format="[%(asctime)s] [%(levelname)s] %(message)s",
+    format="[%(asctime)s.%(msecs)03d] %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
-    stream=sys.stdout
+    handlers=[
+        logging.FileHandler(log_path, encoding='utf-8'),
+        logging.StreamHandler(sys.stdout)
+    ]
 )
-logger = logging.getLogger(__name__)
 
 
 def find_vcvarsall():
