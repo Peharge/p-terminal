@@ -366,6 +366,107 @@ class StatisticsTab(QWidget):
         # Redraw the canvas to reflect updates
         self.canvas.draw()
 
+
+import os
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QGraphicsView, QGraphicsScene
+from PyQt6.QtGui import QPen, QBrush, QColor, QPainter, QFont
+from PyQt6.QtCore import Qt, QPointF
+from git import Repo, InvalidGitRepositoryError
+
+class TreeTab(QWidget):
+    NODE_RADIUS = 6
+    X_POSITION = 100  # X-coordinate for nodes
+    Y_SPACING = 80
+    MARGIN = 50
+
+    def __init__(self, repo_path):
+        super().__init__()
+        self.repo_path = repo_path
+        self._init_ui()
+        self._draw_graph()
+
+    def _init_ui(self):
+        layout = QVBoxLayout(self)
+        self.view = QGraphicsView()
+        self.view.setRenderHint(QPainter.RenderHint.Antialiasing, True)
+        self.scene = QGraphicsScene(self.view)
+        self.view.setScene(self.scene)
+        layout.addWidget(self.view)
+
+    def _draw_graph(self):
+        try:
+            repo = Repo(self.repo_path, search_parent_directories=True)
+        except InvalidGitRepositoryError:
+            text_item = self.scene.addText(
+                f"No valid Git repository found:\nPath: {self.repo_path}",
+                QFont("Arial", 12, QFont.Weight.Bold)
+            )
+            text_item.setDefaultTextColor(QColor('#ffffff'))
+            return
+
+        # Get all commits
+        commits = list(repo.iter_commits('--all', topo_order=True))
+        # Sort by date descending (newest first)
+        commits_sorted = sorted(commits, key=lambda c: c.committed_datetime, reverse=True)
+
+        # Map commits to branch names
+        branch_map = {}
+        for branch in repo.branches:
+            for commit in repo.iter_commits(branch.name):
+                branch_map.setdefault(commit.hexsha, set()).add(branch.name)
+
+        # Set scene size
+        width = self.X_POSITION + 400
+        height = len(commits_sorted) * self.Y_SPACING + self.MARGIN * 2
+        self.scene.setSceneRect(0, 0, width, height)
+
+        pen_line = QPen(QColor('#666666'), 1)
+        pen_node = QPen(QColor('#225e7a'))
+        brush_node = QBrush(QColor('#3daee9'))
+        font_info = QFont("Arial", 8)
+
+        # Draw vertical edge between sequential commits
+        for i in range(len(commits_sorted) - 1):
+            pt1 = self._pt(i)
+            pt2 = self._pt(i + 1)
+            self.scene.addLine(pt1.x(), pt1.y(), pt2.x(), pt2.y(), pen_line)
+
+        # Draw nodes and commit info including branches
+        for idx, commit in enumerate(commits_sorted):
+            pt = self._pt(idx)
+            # Node circle
+            self.scene.addEllipse(
+                pt.x() - self.NODE_RADIUS,
+                pt.y() - self.NODE_RADIUS,
+                self.NODE_RADIUS * 2,
+                self.NODE_RADIUS * 2,
+                pen_node,
+                brush_node
+            )
+            # Prepare commit info
+            branches = branch_map.get(commit.hexsha, [])
+            branch_info = f" | branches: {', '.join(sorted(branches))}" if branches else ""
+            info = (
+                f"{commit.hexsha[:7]} | {commit.author.name} | "
+                f"{commit.committed_datetime.strftime('%Y-%m-%d')}" + branch_info + "\n"
+                f"{commit.message.strip()}"
+            )
+            # Add text
+            text_item = self.scene.addText(info, font_info)
+            text_item.setDefaultTextColor(QColor('#ffffff'))
+            text_item.setTextWidth(300)
+            text_item.setPos(
+                pt.x() + self.NODE_RADIUS + 5,
+                pt.y() - self.NODE_RADIUS
+            )
+
+    def _pt(self, index):
+        x = self.X_POSITION
+        y = index * self.Y_SPACING + self.MARGIN
+        return QPointF(x, y)
+
+
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -375,7 +476,7 @@ class MainWindow(QMainWindow):
 
         # Annahme: Das Repository befindet sich im p-terminal-Ordner des aktuellen Benutzers
         user = os.getenv("USERNAME") or os.getenv("USER")
-        self.repo_path = f"C:/Users/{user}/p-terminal/pp-term"
+        self.repo_path = f"C:/Users/{user}/PycharmProjects/MAVIS"
         icon_path = f"C:/Users/{user}/p-terminal/pp-term/icons/p-term-logo-5.ico"
         self.setWindowIcon(QIcon(icon_path))
 
@@ -393,6 +494,10 @@ class MainWindow(QMainWindow):
         # Tab für Commit Statistik (nur die letzten 30 Tage)
         stats_tab = StatisticsTab(self.repo_path)
         tabs.addTab(stats_tab, "Commit Statistik")
+
+        # Tab für Commit Tree
+        stats_tab = TreeTab(self.repo_path)
+        tabs.addTab(stats_tab, "Commit Tree")
 
         # Style für Hintergrund (globaler Verlauf)
         self.setStyleSheet("""
