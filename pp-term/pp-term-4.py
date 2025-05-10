@@ -109,11 +109,15 @@ DEFAULT_PYTHON_EXECUTABLE = os.path.join(DEFAULT_ENV_DIR, "Scripts", "python.exe
 # Globales Thema
 current_theme = "dark"
 
+log_path = Path(__file__).parent / "peharge-compiler.log"
 logging.basicConfig(
     level=logging.INFO,
-    format="[%(asctime)s] [%(levelname)s] %(message)s",
+    format="[%(asctime)s.%(msecs)03d] %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
-    handlers=[logging.StreamHandler()]
+    handlers=[
+        logging.FileHandler(log_path, encoding='utf-8'),
+        logging.StreamHandler(sys.stdout)
+    ]
 )
 
 user_name = getpass.getuser()
