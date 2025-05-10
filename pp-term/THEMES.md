@@ -122,33 +122,56 @@ pin main-4
 ## Pin Cool 
 [Oh my Posh](https://github.com/JanDeDobbeleer/oh-my-posh) / [Nerd fonts](https://github.com/ryanoasis/nerd-fonts/)
 
-<p align="center">
- <img width="800" src="https://github.com/Peharge/p-terminal-images/raw/main/images/pin-6.png" alt="peharge"/>
-</p>
 
 ```bash 
 pin cool
 ```
 
+<p align="center">
+ <img width="800" src="https://github.com/Peharge/p-terminal-images/raw/main/images/pin-cool.png" alt="peharge"/>
+</p>
+
 ```bash 
 pin cool-3
 ```
+
+<p align="center">
+ <img width="800" src="https://github.com/Peharge/p-terminal-images/raw/main/images/pin-cool-3.png" alt="peharge"/>
+</p>
 
 ```bash 
 pin cool-4
 ```
 
+<p align="center">
+ <img width="800" src="https://github.com/Peharge/p-terminal-images/raw/main/images/pin-cool-4.png" alt="peharge"/>
+</p>
+
 ```bash 
 pin cool-5
 ```
+
+<p align="center">
+ <img width="800" src="https://github.com/Peharge/p-terminal-images/raw/main/images/pin-cool-5.png" alt="peharge"/>
+</p>
 
 ```bash 
 pin cool-6
 ```
 
+<p align="center">
+ <img width="800" src="https://github.com/Peharge/p-terminal-images/raw/main/images/pin-cool-6.png" alt="peharge"/>
+</p>
+
 ```bash 
 pin cool-8
 ```
+
+<p align="center">
+ <img width="800" src="https://github.com/Peharge/p-terminal-images/raw/main/images/pin-cool-8.png" alt="peharge"/>
+</p>
+
+etc.
 
 ```bash 
 pin cool-9
