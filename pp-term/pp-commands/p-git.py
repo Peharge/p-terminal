@@ -531,7 +531,7 @@ class MainWindow(QMainWindow):
 
         # Annahme: Das Repository befindet sich im p-terminal-Ordner des aktuellen Benutzers
         user = os.getenv("USERNAME") or os.getenv("USER")
-        self.repo_path = f"C:/Users/julia/p-terminal/pp-term"
+        self.repo_path = f"C:/Users/{user}/p-terminal/pp-term"
         icon_path = f"C:/Users/{user}/p-terminal/pp-term/icons/p-term-logo-5.ico"
         self.setWindowIcon(QIcon(icon_path))
 
