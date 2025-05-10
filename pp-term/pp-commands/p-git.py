@@ -78,7 +78,7 @@ def timestamp() -> str:
     return now.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
 
 
-required_packages = ["matplotlib"]
+required_packages = ["matplotlib", "GitPython"]
 
 def activate_virtualenv(venv_path):
     """Aktiviert eine bestehende virtuelle Umgebung."""
@@ -135,6 +135,13 @@ try:
     from matplotlib.backends.backend_qt6agg import FigureCanvasQTAgg as FigureCanvas
 except ImportError:
     from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QGraphicsView, QGraphicsScene, QToolTip
+from PyQt6.QtGui import QPen, QBrush, QColor, QPainter, QFont, QPainterPath
+from PyQt6.QtCore import Qt, QPointF
+from git import Repo, InvalidGitRepositoryError
+import random
+
 
 def get_git_commits(repo_path):
     """
@@ -367,13 +374,6 @@ class StatisticsTab(QWidget):
         self.canvas.draw()
 
 
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QGraphicsView, QGraphicsScene, QToolTip
-from PyQt6.QtGui import QPen, QBrush, QColor, QPainter, QFont, QPainterPath
-from PyQt6.QtCore import Qt, QPointF
-from git import Repo, InvalidGitRepositoryError
-import random
-
-
 class TreeTab(QWidget):
     NODE_RADIUS = 6
     X_SPACING = 200  # Increased spacing for better readability
@@ -532,7 +532,7 @@ class MainWindow(QMainWindow):
 
         # Annahme: Das Repository befindet sich im p-terminal-Ordner des aktuellen Benutzers
         user = os.getenv("USERNAME") or os.getenv("USER")
-        self.repo_path = f"C:/Users/julia/llama-models"
+        self.repo_path = f"C:/Users/julia/p-terminal/pp-term"
         icon_path = f"C:/Users/{user}/p-terminal/pp-term/icons/p-term-logo-5.ico"
         self.setWindowIcon(QIcon(icon_path))
 
