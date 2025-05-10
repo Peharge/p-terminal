@@ -201,7 +201,7 @@ if %errorlevel%==0 (
 )
 
 :: Set up log file and timestamp
-set LOGFILE=%~dp0hardware_check.log
+set LOGFILE=%~dp0hardware-check.log
 
 :: Initialize log
 call :InitLog
