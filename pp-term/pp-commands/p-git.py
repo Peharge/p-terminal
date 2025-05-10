@@ -160,7 +160,7 @@ def get_git_commits(repo_path):
             ["git", "log", "--date=short", "--pretty=format:%H|%h|%s|%an|%ad"],
             text=True,
             encoding="utf-8",  # Explicit encoding for robustness
-            errors="replace"   # Replace undecodable characters
+            errors="replace"  # Replace undecodable characters
         ).strip().split("\n")
 
         # Determine the main branch (origin/main or origin/master)
