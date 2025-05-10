@@ -145,24 +145,35 @@ import random
 
 def get_git_commits(repo_path):
     """
-    Liest lokale Git-Commits aus und liefert eine Liste von Tupeln:
+    Reads local Git commits and returns a list of tuples:
     (full_hash, short_hash, message, author, date, color)
 
-    - Datum im Format YYYY-MM-DD (ISO)
-    - Trenner '|' sorgt für korrektes Parsen auch bei Leerzeichen in der Commit-Message
+    - Date is in the format YYYY-MM-DD (ISO)
+    - '|' is used as the delimiter to ensure proper parsing even with spaces in the commit message
     """
-    os.chdir(repo_path)
     try:
-        # Lokale Commits abrufen, Datum im ISO-Format
+        # Change directory to the repository path
+        os.chdir(repo_path)
+
+        # Fetch local commits (date in ISO format)
         local_commits = subprocess.check_output(
             ["git", "log", "--date=short", "--pretty=format:%H|%h|%s|%an|%ad"],
-            text=True
-        ).split("\n")
+            text=True,
+            encoding="utf-8",  # Explicit encoding for robustness
+            errors="replace"   # Replace undecodable characters
+        ).strip().split("\n")
 
-        # Bestimme den Main-Branch
-        branches = subprocess.check_output(["git", "ls-remote", "--heads", "origin"], text=True).split("\n")
+        # Determine the main branch (origin/main or origin/master)
+        branches_output = subprocess.check_output(
+            ["git", "ls-remote", "--heads", "origin"],
+            text=True,
+            encoding="utf-8",
+            errors="replace"
+        ).strip().split("\n")
+
+        # Identify the main branch
         main_branch = None
-        for branch in branches:
+        for branch in branches_output:
             if "refs/heads/main" in branch:
                 main_branch = "origin/main"
                 break
@@ -171,24 +182,38 @@ def get_git_commits(repo_path):
                 break
 
         if not main_branch:
-            return []  # Kein Main-Branch gefunden
+            return []  # No main branch found
 
-        # Remote-Commits (nur deren Hashes)
-        remote_commits = subprocess.check_output(["git", "log", main_branch, "--pretty=format:%H"], text=True).split("\n")
-        remote_hashes = set(remote_commits)
+        # Fetch remote commits (only their hashes)
+        remote_commits_output = subprocess.check_output(
+            ["git", "log", main_branch, "--pretty=format:%H"],
+            text=True,
+            encoding="utf-8",
+            errors="replace"
+        ).strip().split("\n")
+        remote_hashes = set(remote_commits_output)
 
+        # Process local commits and determine their color
         commits = []
         for commit in local_commits:
             if commit:
                 parts = commit.split("|")
                 if len(parts) != 5:
-                    continue
+                    continue  # Skip malformed entries
                 full_hash, short_hash, message, author, date = parts
                 color = "red" if full_hash not in remote_hashes else "green"
                 commits.append((full_hash, short_hash, message, author, date, color))
 
         return commits
-    except subprocess.CalledProcessError:
+
+    except subprocess.CalledProcessError as e:
+        print(f"Error executing Git command: {e}")
+        return []
+    except FileNotFoundError as e:
+        print(f"Git is not installed or not found in PATH: {e}")
+        return []
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
         return []
 
 class DiffHighlighter(QSyntaxHighlighter):
