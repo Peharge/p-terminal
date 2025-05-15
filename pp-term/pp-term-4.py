@@ -7567,6 +7567,7 @@ def run_scoop_command(
             logger.warning("Aborted by user")
             raise
 
+
 def run_choco_command(
     command: Union[str, List[str]],
     timeout: Optional[int] = None,
