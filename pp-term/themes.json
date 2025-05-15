@@ -1,0 +1,247 @@
+{
+    "hackerman": {
+        "defaults": {
+            "colorScheme": "One Half Dark",
+            "useAcrylic": true,
+            "acrylicOpacity": 0.4,
+            "backgroundImage": "ms-appdata:///roaming/p-term-logo-8.png",
+            "backgroundImageStretchMode": "none",
+            "backgroundImageAlignment": "bottomRight",
+            "backgroundImageOpacity": 0.8,
+            "cursorColor": "#ffffff"
+        }
+    },
+    "glass": {
+        "defaults": {
+            "colorScheme": "glass",
+            "useAcrylic": true,
+            "acrylicOpacity": 0.4,
+            "backgroundImage": "ms-appdata:///roaming/p-term-logo-8.png",
+            "backgroundImageStretchMode": "none",
+            "backgroundImageAlignment": "bottomRight",
+            "backgroundImageOpacity": 0.8,
+            "cursorColor": "#ffffff"
+        }
+    },
+    "glassmain": {
+        "defaults": {
+            "colorScheme": "glassmain",
+            "useAcrylic": true,
+            "acrylicOpacity": 0.4,
+            "backgroundImage": "ms-appdata:///roaming/p-term-logo-8.png",
+            "backgroundImageStretchMode": "none",
+            "backgroundImageAlignment": "bottomRight",
+            "backgroundImageOpacity": 0.8,
+            "cursorColor": "#ffffff"
+        }
+    },
+    "aurelia": {
+        "defaults": {
+            "colorScheme": "aurelia",
+            "useAcrylic": true,
+            "acrylicOpacity": 0.4,
+            "backgroundImage": "ms-appdata:///roaming/p-term-logo-8.png",
+            "backgroundImageStretchMode": "none",
+            "backgroundImageAlignment": "bottomRight",
+            "backgroundImageOpacity": 0.8,
+            "cursorColor": "#ffffff"
+        }
+    },
+    "alternative": {
+        "defaults": {
+            "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+            "name": "alternative",
+            "hidden": false,
+            "colorScheme": "alternative",
+            "fontFace": "Cascadia Code PL",
+            "fontSize": 10,
+            "backgroundImageOpacity": 0.2,
+            "acrylicOpacity": 0.8,
+            "useAcrylic": true,
+            "cursorColor": "#ffffff"
+        }
+    },
+    "nord": {
+        "defaults": {
+            "cursorColor": "#ffffff"
+        }
+    },
+    "main": {
+        "defaults": {
+            "cursorColor": "#ffffff"
+        }
+    },
+    "aptscience": {
+        "defaults": {
+            "name": "aptscience",
+            "hidden": false,
+            "tabTitle": "Aperture science",
+            "colorScheme": "aptscience",
+            "backgroundImage": "ms-appdata:///roaming/Aperture Science-txt-smallened.png",
+            "icon": "https://www.kindpng.com/picc/m/235-2355356_aperture-science-icon-png-transparent-png.png",
+            "cursorShape": "filledBox",
+            "cursorColor": "#A66900",
+            "experimental.retroTerminalEffect": true,
+            "acrylicOpacity": 0.8,
+            "backgroundImageOpacity": 0.8,
+            "backgroundImageAlignment": "bottomRight",
+            "backgroundImageStretchMode": "none"
+        }
+    },
+    "cyberlife": {
+        "defaults": {
+            "name": "Cyberlife",
+            "hidden": false,
+            "tabTitle": "Cyberlife Industries",
+            "colorScheme": "Cyberlife",
+            "backgroundImage": "ms-appdata:///roaming/Cyberlife_console_background.png",
+            "icon": "ms-appdata:///roaming/LED_-_Detroit.png",
+            "cursorShape": "filledBox",
+            "cursorColor": "#6AE4F1",
+            "experimental.retroTerminalEffect": true,
+            "acrylicOpacity": 0.8,
+            "backgroundImageOpacity": 0.6
+        }
+    },
+    "ubuntu": {
+        "defaults": {
+            "cursorColor": "#ffffff"
+        }
+    },
+    "ubuntuglass": {
+        "defaults": {
+            "colorScheme": "ubuntuglass",
+            "useAcrylic": true,
+            "acrylicOpacity": 0.4,
+            "backgroundImageOpacity": 0.8,
+            "cursorColor": "#ffffff"
+        }
+    },
+    "mint": {
+        "defaults": {
+            "cursorColor": "#ffffff"
+        }
+    },
+    "dracula": {
+        "defaults": {
+            "cursorColor": "#ffffff"
+        }
+    },
+    "solarized_dark": {
+        "defaults": {
+            "cursorColor": "#ffffff"
+        }
+    },
+    "gruvbox_dark": {
+        "defaults": {
+            "cursorColor": "#FE8019"
+        }
+    },
+    "monokai": {
+        "defaults": {
+            "cursorColor": "#F8F8F0"
+        }
+    },
+    "one_dark": {
+        "defaults": {
+            "cursorColor": "#528BFF"
+        }
+    },
+    "material_dark": {
+        "defaults": {
+            "cursorColor": "#FFCB6B"
+        }
+    },
+    "tokyo_night": {
+        "defaults": {
+            "cursorColor": "#7AA2F7"
+        }
+    },
+    "arc_dark": {
+        "defaults": {
+            "cursorColor": "#82AAFF"
+        }
+    },
+    "ayu_mirage": {
+        "defaults": {
+            "cursorColor": "#FFA759"
+        }
+    },
+    "spiderman": {
+        "defaults": {
+            "colorScheme": "spiderman",
+            "useAcrylic": true,
+            "acrylicOpacity": 0.75,
+            "backgroundImage": "ms-appdata:///roaming/spiderman.jpg",
+            "backgroundImageStretchMode": "uniformToFill",
+            "backgroundImageAlignment": "center",
+            "backgroundImageOpacity": 0.85,
+            "cursorColor": "#E10600"
+        }
+    },
+    "p_term": {
+        "defaults": {
+            "colorScheme": "p_term",
+            "useAcrylic": true,
+            "acrylicOpacity": 0.65,
+            "backgroundImage": "ms-appdata:///roaming/p-term-fhd.png",
+            "backgroundImageStretchMode": "uniformToFill",
+            "backgroundImageAlignment": "center",
+            "backgroundImageOpacity": 0.85,
+            "cursorColor": "#ffffff"
+        }
+    },
+    "mavis_1": {
+        "defaults": {
+            "colorScheme": "mavis_1",
+            "useAcrylic": true,
+            "acrylicOpacity": 0.75,
+            "backgroundImage": "ms-appdata:///roaming/mavis-1-5-banner-1-fhd.png",
+            "backgroundImageStretchMode": "uniformToFill",
+            "backgroundImageAlignment": "center",
+            "backgroundImageOpacity": 0.85,
+            "cursorColor": "#ffffff"
+        }
+    },
+    "mavis_3": {
+        "defaults": {
+            "colorScheme": "mavis_3",
+            "useAcrylic": true,
+            "acrylicOpacity": 0.75,
+            "backgroundImage": "ms-appdata:///roaming/mavis1.3-banner-fhd.png",
+            "backgroundImageStretchMode": "uniformToFill",
+            "backgroundImageAlignment": "center",
+            "backgroundImageOpacity": 0.85,
+            "cursorColor": "#ffffff"
+        }
+    },
+    "mavis_4": {
+        "defaults": {
+            "colorScheme": "mavis_4",
+            "useAcrylic": true,
+            "acrylicOpacity": 0.75,
+            "backgroundImage": "ms-appdata:///roaming/mavis-banner40-fhd.png",
+            "backgroundImageStretchMode": "uniformToFill",
+            "backgroundImageAlignment": "center",
+            "backgroundImageOpacity": 0.85,
+            "cursorColor": "#ffffff"
+        }
+    },
+    "fallout_pipboy": {
+        "adjustIndistinguishableColors": "always",
+        "backgroundImage": "ms-appdata:///roaming/Fallout_PipBoy.jpg",
+        "backgroundImageStretchMode": "fill",
+        "colorScheme": "GreenMonochrome",
+        "cursorShape": "emptyBox",
+        "experimental.retroTerminalEffect": true,
+        "font":
+        {
+            "face": "Cascadia Code",
+            "weight": "bold"
+        },
+        "intenseTextStyle": "none",
+        "padding": "57",
+        "scrollbarState": "visible",
+        "useAcrylic": true
+    }
+}
