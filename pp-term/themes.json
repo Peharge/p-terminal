@@ -117,6 +117,51 @@
             "cursorColor": "#ffffff"
         }
     },
+    "violetglass": {
+        "defaults": {
+            "colorScheme": "violetglass",
+            "useAcrylic": true,
+            "acrylicOpacity": 0.4,
+            "backgroundImageOpacity": 0.8,
+            "cursorColor": "#ffffff"
+        }
+    },
+    "yellowglass": {
+        "defaults": {
+            "colorScheme": "yellowglass",
+            "useAcrylic": true,
+            "acrylicOpacity": 0.4,
+            "backgroundImageOpacity": 0.8,
+            "cursorColor": "#ffffff"
+        }
+    },
+    "blueglass": {
+        "defaults": {
+            "colorScheme": "blueglass",
+            "useAcrylic": true,
+            "acrylicOpacity": 0.4,
+            "backgroundImageOpacity": 0.8,
+            "cursorColor": "#ffffff"
+        }
+    },
+    "greenglass": {
+        "defaults": {
+            "colorScheme": "greenglass",
+            "useAcrylic": true,
+            "acrylicOpacity": 0.4,
+            "backgroundImageOpacity": 0.8,
+            "cursorColor": "#ffffff"
+        }
+    },
+    "redglass": {
+        "defaults": {
+            "colorScheme": "redglass",
+            "useAcrylic": true,
+            "acrylicOpacity": 0.4,
+            "backgroundImageOpacity": 0.8,
+            "cursorColor": "#ffffff"
+        }
+    },
     "mint": {
         "defaults": {
             "cursorColor": "#ffffff"
