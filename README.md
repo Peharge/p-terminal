@@ -26,6 +26,8 @@
 
 In development: Peharge Terminal: The coolest terminal in the world - More [p-terminal.com](https://peharge.github.io/MAVIS-web/p-term.html).
 
+The commit history can be found at: https://github.com/Peharge/p-terminal-old
+
 # NEWS
 
 - **[23.04.2025]** Developmentstart of P-Term and PP-Ptem
