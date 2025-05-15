@@ -1973,11 +1973,11 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "themes":
-        print("dark, light, main, hackerman, glass, aurelia, alternative, aptscience, cyberlife, ubuntu, nord, dracula, solarized_dark, gruvbox_dark, monokai, one_dark, material_dark, tokyo_night, arc_dark, ayu_mirage", "spiderman", "p_term", "mavis_1", "mavis_3", "mavis_4", "green", "red", "blue", "fallout_pipboy")
+        print("alternative", "aptscience", "arc_dark", "aurelia", "ayu_mirage", "blue", "blueglass", "cyberlife", "dark", "dracula", "fallout_pipboy", "glass", "glassmain", "green", "greenglass", "gruvbox_dark", "hackerman", "light", "main", "material_dark", "mavis_1", "mavis_3", "mavis_4", "mint", "monokai", "nord", "one_dark", "p_term", "red", "redglass", "solarized_dark", "spiderman", "tokyo_night", "ubuntu", "ubuntuglass", "violetglass", "yellowglass")
         return True
 
     if user_input.lower() == "pin":
-        print("main", "main-3", "main-4", "evil", "cool", "cool-3", "cool-4", "cool-5", "cool-6", "cool-8", "cool-9", "cool-10", "cool-11", "cool-12", "cool-13", "cool-14", "cool-15", "cool-16", "cool-18", "cool-19", "cool-20", "cool-21", "cool-23")
+        print("main/main-1", "main-3", "main-4", "main-5", "evil/evil-1", "evil-2", "evil-3", "evil-4", "evil-5", "stable/stable-1", "stable-2", "stable-3", "stable-4", "stable-5", "cool/cool-1", "cool-2", "cool-3", "cool-4", "cool-5", "cool-6", "cool-7", "cool-8", "cool-9", "cool-10", "cool-11", "cool-12", "cool-13", "cool-14", "cool-15", "cool-16", "cool-17", "cool-18", "cool-19", "cool-20", "cool-21", "cool-22", "cool-23")
         return True
 
     if user_input.startswith("launch "):
@@ -9334,6 +9334,10 @@ def main():
                 state = "main"
                 continue
 
+            elif user_input.lower() == "pin main-1":
+                state = "main"
+                continue
+
             elif user_input.lower() == "pin main-2":
                 state = "main-2"
                 continue
@@ -9351,6 +9355,10 @@ def main():
                 continue
 
             elif user_input.lower() == "pin evil":
+                state = "evil"
+                continue
+
+            elif user_input.lower() == "pin evil-1":
                 state = "evil"
                 continue
 
@@ -9374,6 +9382,10 @@ def main():
                 state = "stable"
                 continue
 
+            elif user_input.lower() == "pin stable-1":
+                state = "stable"
+                continue
+
             elif user_input.lower() == "pin stable-2":
                 state = "stable-2"
                 continue
@@ -9383,6 +9395,10 @@ def main():
                 continue
 
             elif user_input.lower() == "pin cool":
+                state = "cool"
+                continue
+
+            elif user_input.lower() == "pin cool-1":
                 state = "cool"
                 continue
 
