@@ -74,8 +74,8 @@ logging.basicConfig(level=logging.INFO, format='[%(asctime)s] [%(levelname)s] %(
 
 GRAFANA_VERSION = "11.1.5"
 GRAFANA_WINDOWS_URL = f"https://dl.grafana.com/oss/release/grafana-{GRAFANA_VERSION}.windows-amd64.zip"
-GRAFANA_WINDOWS_ZIP = os.path.join(os.path.expanduser("~"), "p-terminal", "pp-term", "run-grafana", "grafana.zip")
-GRAFANA_DIR = os.path.join(os.path.expanduser("~"), "p-terminal", "pp-term", "run-grafana", "Grafana")
+GRAFANA_WINDOWS_ZIP = os.path.join(os.path.expanduser("~"), "p-terminal", "pp-term", "mavis-run-grafana", "grafana.zip")
+GRAFANA_DIR = os.path.join(os.path.expanduser("~"), "p-terminal", "pp-term", "mavis-run-grafana", "Grafana")
 GRAFANA_EXEC_TEMPLATE = os.path.join(GRAFANA_DIR, "grafana-v11.1.5", "bin", "grafana-server.exe")
 GRAFANA_EXEC = os.path.join(GRAFANA_DIR, "bin", "grafana-server.exe")
 
