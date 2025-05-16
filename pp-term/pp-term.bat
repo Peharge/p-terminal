@@ -143,15 +143,22 @@ if not exist "%SCRIPT_PATH_DOCTOR%" (
 
 "%PYTHON_PATH%" "%SCRIPT_PATH_DOCTOR%"
 
-rem Setze das Arbeitsverzeichnis auf C:\Users\%USERNAME%
-cd /d C:\Users\%USERNAME%
+REM Verzeichnis dieser .bat-Datei ermitteln
+set SCRIPT_DIR=%~dp0
 
-if not exist "%SCRIPT_PATH_MAIN%" (
-    call :Log ERROR "❌ Script not found: %SCRIPT_PATH_MAIN%"
-    exit /B 1
+REM PS1-Datei (angepasst, falls sie anders heißt)
+set PS1_FILE=p-start-1ps.ps1
+set PS1_PATH=%SCRIPT_DIR%%PS1_FILE%
+
+REM Prüfen, ob die PS1-Datei existiert
+if not exist "%PS1_PATH%" (
+    echo [ERROR] PowerShell-Skript nicht gefunden: "%PS1_PATH%"
+    pause
+    exit /b 1
 )
 
-"%PYTHON_PATH%" "%SCRIPT_PATH_MAIN%"
+REM PowerShell-Skript mit ExecutionPolicy Bypass ausführen
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%PS1_PATH%"
 
 echo.
 call :Log INFO "The scripts have been executed!"
