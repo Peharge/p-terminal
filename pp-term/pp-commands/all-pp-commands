@@ -263,7 +263,7 @@
         "doctor": "pp-commands\\doctor.py", # new
         "hole doctor": "pp-commands\\doctor-hole.py",  # new
         "fun": "pp-commands\\fun-matrix.py",  # new
-        "fun ls": "pp-commands\\fun-ls.py",  # new
+        "fun sl": "pp-commands\\fun-sl.py",  # new
         "fun aafire": "pp-commands\\fun-aafire.py",  # new
         "fun cmatrix": "pp-commands\\fun-cmatrix.py",  # new
         "fun cow": "pp-commands\\fun-cow.py",  # new
