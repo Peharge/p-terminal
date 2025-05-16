@@ -263,7 +263,7 @@ Total:
 |   |   |-- fun-install-calc.py
 |   |   |-- fun-install-games.py
 |   |   |-- fun-install.py
-|   |   |-- fun-ls.py
+|   |   |-- fun-sl.py
 |   |   |-- fun-matrix-green.py
 |   |   |-- fun-matrix.py
 |   |   |-- fun-moon-buggy.py
