@@ -1,4 +1,5 @@
 @echo off
+
 REM Englisch Peharge: This source code is released under the MIT License.
 REM
 REM Usage Rights:
@@ -62,61 +63,24 @@ REM pouvant découler directement ou indirectement de l'utilisation, de la modif
 REM
 REM Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 
-setlocal EnableExtensions EnableDelayedExpansion
-chcp 65001 >nul
+setlocal enabledelayedexpansion
 
-:: Config
-set "USERNAME=%USERNAME%"
-set "LOGFILE=C:\Users\%USERNAME%\p-terminal\pp-term\WSL_Diagnostics.log"
-set "PYTHON_EXE=C:\Users\%USERNAME%\p-terminal\pp-term\.env\Scripts\python.exe"
-set "SCRIPT_PATH=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-4.py"
-set "WORKDIR=C:\Users\%USERNAME%"
+REM Verzeichnis dieser .bat-Datei ermitteln
+set SCRIPT_DIR=%~dp0
 
-:: Change to target working directory
-cd /d "%WORKDIR%"
+REM PS1-Datei (angepasst, falls sie anders heißt)
+set PS1_FILE=p-start-1ps.ps1
+set PS1_PATH=%SCRIPT_DIR%%PS1_FILE%
 
-:: CPU affinity mask
-for /f "tokens=2 delims==" %%A in ('wmic cpu get NumberOfLogicalProcessors /value ^| find "NumberOfLogicalProcessors"') do set /A "LOGPROC=%%A"
-if %LOGPROC% GTR 64 set "LOGPROC=64"
-setlocal EnableDelayedExpansion
-set "AFF_MASK=0"
-for /L %%I in (0,1,%LOGPROC%-1) do (
-    set /A "AFF_MASK|=(1<<%%I)"
-)
-endlocal & set "AFFINITY=%AFF_MASK%"
-
-:: Launch Python script with full CPU and high priority
-powershell -NoProfile -ExecutionPolicy Bypass -Command ^
-  "$p = Start-Process -FilePath '%PYTHON_EXE%' -ArgumentList '%SCRIPT_PATH%' -WorkingDirectory '%WORKDIR%' -NoNewWindow -Wait -PassThru;
-   $p.PriorityClass = 'High'; ^
-   $p.ProcessorAffinity = 0x%AFFINITY%" 2>>"%LOGFILE%"
-
-if errorlevel 1 (
-    call :Log ERROR "❌ Failed to start Python script"
-    exit /B 1
+REM Prüfen, ob die PS1-Datei existiert
+if not exist "%PS1_PATH%" (
+    echo [ERROR] PowerShell-Skript nicht gefunden: "%PS1_PATH%"
+    pause
+    exit /b 1
 )
 
-exit /B 0
+REM PowerShell-Skript mit ExecutionPolicy Bypass ausführen
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%PS1_PATH%"
 
-:: Logging Functions
-:Timestamp
-for /F "usebackq tokens=* delims=" %%D in (`powershell -NoProfile -Command "Get-Date -Format \"yyyy-MM-dd HH:mm:ss.fff\""`) do set "TS=%%D"
-goto :eof
-
-:Log
-setlocal EnableDelayedExpansion
-call :Timestamp
-set "LEVEL=%~1"
-shift
-set "MSG="
-:buildMsg
-if "%~1"=="" goto logIt
-set "MSG=!MSG! %~1"
-shift
-goto buildMsg
-:logIt
-set "MSG=!MSG:~1!"
-echo [!TS!] [!LEVEL!] !MSG! >>"%LOGFILE%"
-echo [!TS!] [!LEVEL!] !MSG!
+pause
 endlocal
-goto :eof
