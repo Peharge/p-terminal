@@ -2656,81 +2656,67 @@ exit /b
 :CheckDrivers
     call :Log "INFO" "Checking drivers..."
 
-    rem PowerShell Befehl, um die Treiberinformationen im CSV-Format zu exportieren
-    powershell -Command "Get-WmiObject Win32_PnPSignedDriver | Select-Object DeviceName, DriverVersion, Manufacturer | Export-Csv -Path temp_driver_check.csv -NoTypeInformation -Encoding UTF8"
+    set "csvPath=%USERPROFILE%\temp_driver_check.csv"
 
-    rem Überprüfen, ob die Datei existiert und gelesen werden kann
-    if exist temp_driver_check.csv (
+    rem PowerShell-Skript temporär schreiben
+    set "ps1Path=%TEMP%\export_drivers.ps1"
+    (
+    echo $drivers = Get-WmiObject Win32_PnPSignedDriver ^| Select-Object DeviceName, DriverVersion, Manufacturer
+    echo $csv = $drivers ^| ConvertTo-Csv -NoTypeInformation ^| ForEach-Object { $_ -replace '"' }
+    echo $csv ^| Set-Content -Encoding UTF8 "%csvPath%"
+    ) > "%ps1Path%"
+
+    rem Skript ausführen
+    powershell -NoProfile -ExecutionPolicy Bypass -File "%ps1Path%"
+
+
+    if exist "%csvPath%" (
         call :Log "INFO" "✅ Driver check successful. Analyzing drivers..."
 
-        rem Jetzt die Treiber-Datei durchgehen und für jedes Gerät spezifische Infos ausgeben
-        for /F "tokens=1,2,* delims=," %%A in (temp_driver_check.csv) do (
-            rem Entfernen von Leerzeichen und Anführungszeichen in den Variablen
-            set "deviceName=%%A"
-            set "driverVersion=%%B"
-            set "manufacturer=%%C"
+        set "firstLineSkipped=false"
+        for /F "usebackq tokens=1,2,3 delims=," %%A in ("%csvPath%") do (
+            if not "!firstLineSkipped!"=="true" (
+                set "firstLineSkipped=true"
+            ) else (
+                set "deviceName=%%A"
+                set "driverVersion=%%B"
+                set "manufacturer=%%C"
 
-            rem Entfernen von Anführungszeichen und führenden/folgenden Leerzeichen
-            set "deviceName=!deviceName:"=!"
-            set "deviceName=!deviceName: =!"
-            set "driverVersion=!driverVersion:"=!"
-            set "driverVersion=!driverVersion: =!"
-            set "manufacturer=!manufacturer:"=!"
-            set "manufacturer=!manufacturer: =!"
+                rem Leerzeichen entfernen
+                for %%V in (deviceName driverVersion manufacturer) do (
+                    set "!%%V!=!%%V: =!"
+                )
 
-            rem Überspringen der Header-Zeile (falls notwendig)
-            if not "!deviceName!"=="DeviceName" (
-                rem Saubere Ausgabe für jedes Gerät mit Formatierung
                 call :Log "INFO" "Checking !deviceName! for errors"
                 echo Driver: !deviceName!
                 echo Manufacturer: !manufacturer!
                 echo Driver Version: !driverVersion!
 
-                rem Beispiel: Spezifische Treiber-Analyse für bekannte Geräte
-                if /I "!deviceName!"=="WAN Miniport (L2TP)" (
-                    call :Log "INFO" "This is a virtual network adapter for VPN (L2TP)."
-                    if "!driverVersion!"=="10.0.26100.1" (
-                        call :Log "INFO" "✅ This driver is stable, secure, and up-to-date."
-                    ) else (
-                        call :Log "WARNING" "This driver version may be outdated. Consider updating."
-                    )
-                ) else if /I "!deviceName!"=="WAN Miniport (IKEv2)" (
-                    call :Log "INFO" "This is a virtual network adapter for VPN (IKEv2)."
-                    if "!driverVersion!"=="10.0.26100.1" (
-                        call :Log "INFO" "✅ This driver is stable, secure, and up-to-date."
-                    ) else (
-                        call :Log "WARNING" "This driver version may be outdated. Consider updating."
-                    )
-                ) else if /I "!deviceName!"=="Generic software device" (
-                    call :Log "INFO" "Generic software device detected."
-                    if "!driverVersion!"=="10.0.26100.1" (
-                        call :Log "INFO" "✅ This driver is stable, secure, and up-to-date."
-                    ) else (
-                        call :Log "WARNING" "This driver version may be outdated. Consider updating."
-                    )
-                ) else if /I "!deviceName!"=="Hyper-V Virtual Switch Extension Adapter" (
-                    call :Log "INFO" "Virtual Switch Extension Adapter for Hyper-V."
-                    if "!driverVersion!"=="10.0.26100.1" (
-                        call :Log "INFO" "✅ This driver is stable, secure, and up-to-date."
-                    ) else (
-                        call :Log "WARNING" "This driver version may be outdated. Consider updating."
-                    )
-                ) else if /I "!deviceName!"=="WAN Miniport (Network Monitor)" (
-                    call :Log "INFO" "This is a network monitor adapter used for debugging."
-                    if "!driverVersion!"=="10.0.26100.1" (
-                        call :Log "INFO" "✅ This driver is stable, secure, and up-to-date."
-                    ) else (
-                        call :Log "WARNING" "This driver version may be outdated. Consider updating."
-                    )
+                rem Beispiel-Checks
+                if /I "!deviceName!"=="WANMiniport(L2TP)" (
+                    call :CheckVersion "!driverVersion!" "L2TP VPN Adapter"
+                ) else if /I "!deviceName!"=="WANMiniport(IKEv2)" (
+                    call :CheckVersion "!driverVersion!" "IKEv2 VPN Adapter"
+                ) else if /I "!deviceName!"=="Hyper-VVirtualSwitchExtensionAdapter" (
+                    call :CheckVersion "!driverVersion!" "Hyper-V Adapter"
                 ) else (
-                    rem Generische Ausgabe für nicht spezifizierte Treiber
-                    call :Log "INFO" "This driver is stable and secure, but regular updates are recommended."
+                    call :Log "INFO" "Driver for !deviceName! appears OK, but check regularly for updates."
                 )
             )
         )
     ) else (
-        call :Log "ERROR" "❌ Driver Error: Could not find the driver file for analysis."
+        call :Log "ERROR" "❌ Driver Error: Could not find the driver file at %csvPath%."
     )
-    rem Bereinigen
-    del temp_driver_check.csv
+
+    del "%csvPath%" >nul 2>&1
+    goto :eof
+
+:CheckVersion
+    rem %1 = driverVersion
+    rem %2 = deviceName
+    if "%~1"=="10.0.26100.1" (
+        call :Log "INFO" "✅ %~2 is stable, secure, and up-to-date."
+    ) else (
+        call :Log "WARNING" "⚠️ %~2 may be outdated. Installed version: %~1"
+    )
     goto :eof
