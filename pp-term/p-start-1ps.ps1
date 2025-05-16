@@ -93,7 +93,7 @@ if (!(Test-Path $logDir)) {
 
 try {
     # Start-Log
-    Write-Log INFO "Run Python script with maximum CPU affinity..."
+    Write-Log INFO "Run PP-Term script with maximum CPU affinity..."
 
     # Existenz prüfen
     if (!(Test-Path $PythonExe)) {
