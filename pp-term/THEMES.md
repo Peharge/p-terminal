@@ -122,8 +122,7 @@ pin main-4
 </p>
 
 ## Pin Cool 
-[Oh my Posh](https://github.com/JanDeDobbeleer/oh-my-posh) / [Nerd fonts](https://github.com/ryanoasis/nerd-fonts/) or [Nerd fonts](https://www.nerdfonts.com/font-downloads)
-
+[Oh my Posh](https://github.com/JanDeDobbeleer/oh-my-posh) / [Nerd fonts](https://github.com/ryanoasis/nerd-fonts/) or [Nerd fonts](https://www.nerdfonts.com/font-downloads) (```explorer shell:fonts```)
 
 ```bash 
 pin cool
