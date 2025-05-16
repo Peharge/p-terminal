@@ -87,8 +87,7 @@ EXCLUDE_DIRS = {
     ".git", ".venv", "__pycache__",
     "Lib", "Scripts", "Include",
     "site-packages", "dist-packages",
-    ".env", "main-test", "icons", "static",
-    "pp-term.exe", "pp-term-fast.exe"
+    ".env", "main-test", "icons", "static"
 }
 EXCLUDE_PATTERNS = {".*"}  # regex für versteckte Dateien/Ordner
 FILE_SIZE_LIMIT = 10 * 1024 * 1024
@@ -339,7 +338,7 @@ def scan_project(root: Path, args):
 # CLI
 def main():
     p = ArgumentParser(description="Doctor Script for full-stack checks")
-    p.add_argument("-p","--path",      type=Path, default=Path(r"C:\Users\julia\p-terminal\pp-term"))
+    p.add_argument("-p","--path",      type=Path, default=Path(rf"C:\Users\{os.getlogin()}\p-terminal\pp-term"))
     p.add_argument("-tio","--threads-io", type=int, default=DEFAULT_THREADS_IO)
     args = p.parse_args()
 
