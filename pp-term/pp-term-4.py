@@ -4237,14 +4237,14 @@ def search_websites_all(command, num_results=50, results_per_page=10):
         soup = BeautifulSoup(response.text, 'html.parser')
         results = soup.find_all('div', class_='result')
         if not results:
-            print(f"[{timestamp()}] [WARN] Keine weiteren Ergebnisse bei Offset {offset}.")
+            print(f"[{timestamp()}] [WARN] No further results at Offset {offset}.")
             break
 
         for result in results:
             link_tag = result.find('a', class_='result__a', href=True)
             desc_tag = result.find('a', class_='result__snippet') or result.find('div', class_='result__snippet')
             url = link_tag['href'] if link_tag else None
-            snippet = desc_tag.get_text(strip=True) if desc_tag else 'Keine Beschreibung verfügbar.'
+            snippet = desc_tag.get_text(strip=True) if desc_tag else 'No description available.'
 
             if url and (url, snippet) not in collected:
                 collected.append((url, snippet))
@@ -4258,9 +4258,9 @@ def search_websites_all(command, num_results=50, results_per_page=10):
 
     total = len(collected)
     if total == 0:
-        print(f"[{timestamp()}] [ERROR] Keine Ergebnisse gefunden.")
+        print(f"[{timestamp()}] [ERROR] No results found.")
     else:
-        print(f"\n[{timestamp()}] [INFO] {total} Ergebnisse gesammelt.\n")
+        print(f"\n[{timestamp()}] [INFO] {total} Results collected.\n")
 
     return collected
 
@@ -4271,20 +4271,20 @@ def search_and_show_first_image(query):
         for result in results:
             image_url = result.get("image")
             if not image_url:
-                print(f"[{timestamp()}] [ERROR] Kein Bild gefunden.")
+                print(f"[{timestamp()}] [ERROR] No picture found.")
                 return
 
             try:
-                print(f"[{timestamp()}] [INFO] Lade Bild von: {image_url}")
+                print(f"[{timestamp()}] [INFO] Charge picture of: {image_url}")
                 response = requests.get(image_url, timeout=10)
                 image = Image.open(BytesIO(response.content))
                 temp_path = "temp_duck_image.jpg"
                 image.convert("RGB").save(temp_path)
-                print(f"[{timestamp()}] [INFO] Zeige Bild ...")
+                print(f"[{timestamp()}] [INFO] Show picture ...")
                 os.startfile(temp_path)  # Nur für Windows
                 return
             except Exception as e:
-                print(f"[{timestamp()}] [ERROR] Fehler beim Laden oder Anzeigen des Bildes: {e}")
+                print(f"[{timestamp()}] [ERROR] Error loading or displaying the image: {e}")
                 return
 
 
