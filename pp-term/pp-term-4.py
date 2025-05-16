@@ -747,6 +747,7 @@ def handle_special_commands(user_input):
         "micro": "pp-commands\\micro.py", # new
         "gedit": "pp-commands\\gedit.py", # new
         "update": "pp-commands\\update.py", # new
+        "selfupdate": "pp-commands\\update.py",  # new
         "update pp-term": "pp-commands\\updade.py",  # new
         "kakoune": "pp-commands\\kakoune.py",  # new
         "helix": "pp-commands\\helix.py",  # new
@@ -2438,8 +2439,21 @@ def handle_special_commands(user_input):
             _, pid_str = user_input.split(maxsplit=1)
             pid = int(pid_str)
             process = psutil.Process(pid)
-            process.terminate()
-            print(f"[{timestamp()}] [INFO] Process {pid} has been terminated.")
+
+            process.terminate()  # Graceful termination
+            gone, alive = psutil.wait_procs([process], timeout=3)
+
+            if alive:
+                # Falls Prozess nicht terminiert hat, sofort killen
+                for p in alive:
+                    p.kill()
+                gone, alive = psutil.wait_procs(alive, timeout=3)
+
+            if not alive:
+                print(f"[{timestamp()}] [INFO] Process {pid} has been terminated.")
+            else:
+                print(f"[{timestamp()}] [WARNING] Process {pid} could not be killed.")
+
         except ValueError:
             print(f"[{timestamp()}] [ERROR] Invalid PID: '{pid_str}' is not a valid number.")
         except psutil.NoSuchProcess:
@@ -2447,7 +2461,7 @@ def handle_special_commands(user_input):
         except psutil.AccessDenied:
             print(f"[{timestamp()}] [ERROR] Permission denied: Unable to terminate process {pid}.")
         except Exception as e:
-            print(f"[{timestamp()}] [ERROR] Terminating process: {str(e)}")
+            print(f"[{timestamp()}] [ERROR] Unexpected error while terminating process: {str(e)}")
         return True
 
     # Datei herunterladen
@@ -2528,16 +2542,32 @@ def handle_special_commands(user_input):
 
     # Temp Dateien löschen
     if user_input.lower() == "cleantemp":
-        temp = os.getenv('TEMP')
-        shutil.rmtree(temp, ignore_errors=True)
-        print(f"[{timestamp()}] [INFO] Temporary files cleaned!")
-        return True
+        temp = os.getenv('TEMP') or os.getenv('TMP')  # Falls TEMP nicht gesetzt ist
+        if not temp or not os.path.isdir(temp):
+            print(f"[{timestamp()}] [ERROR] Temporary directory not found.")
+            return True
 
-    # Selbst Update - soon
-    if user_input.lower() == "selfupdate":
-        print(f"[{timestamp()}] [INFO] Checking for updates...")
-        loading_bar("Updating", 4)
-        print(f"[{timestamp()}] [PASS] PP-Terminal updated! (demo mode)")
+        # Sicherheitscheck: nur löschen, wenn Pfad eindeutig TEMP-Verzeichnis ist
+        # z.B. Vermeide versehentliches Löschen von Wurzelverzeichnissen
+        if temp in ("C:\\", "C:\\Windows", "C:\\Windows\\System32", "/"):
+            print(f"[{timestamp()}] [ERROR] Unsafe temporary directory path: {temp}. Abgebrochen.")
+            return True
+
+        try:
+            # Alle Dateien und Ordner im TEMP löschen
+            for entry in os.listdir(temp):
+                path = os.path.join(temp, entry)
+                try:
+                    if os.path.isfile(path) or os.path.islink(path):
+                        os.unlink(path)
+                    elif os.path.isdir(path):
+                        shutil.rmtree(path)
+                except Exception as e:
+                    print(f"[{timestamp()}] [WARNING] Fehler beim Löschen von {path}: {e}")
+
+            print(f"[{timestamp()}] [INFO] Temporary files cleaned!")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Fehler beim Bereinigen des TEMP-Ordners: {e}")
         return True
 
     # Directory Baumansicht
@@ -2553,8 +2583,17 @@ def handle_special_commands(user_input):
 
     # Python REPL starten
     if user_input.lower() == "py":
-        print(f"[{timestamp()}] [INFO] Starting Python REPL. Type 'exit()' to quit.")
-        code.interact(local=dict(globals(), **locals()))
+        import code
+        print(f"[{timestamp()}] [INFO] Starting Python REPL. Type 'exit()' or Ctrl-D to quit.")
+        try:
+            # Starte interaktive Python-Konsole mit globalem Namespace
+            code.interact(local=globals())
+        except SystemExit:
+            # exit() ruft SystemExit - einfach sauber beenden
+            pass
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Unexpected error in REPL: {e}")
+        print(f"[{timestamp()}] [INFO] Python REPL session ended.")
         return True
 
     if user_input.startswith("pb "):

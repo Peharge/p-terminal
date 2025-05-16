@@ -1,4 +1,4 @@
-commands = {
+    commands = {
         "mavis env install": "mavis-install\\install-info-mavis-4.py",
         "install mavis env": "mavis-install\\install-info-mavis-4.py",
         "install mavis3": "mavis-install\\install-info-mavis-4.py", # new
@@ -390,6 +390,7 @@ commands = {
         "micro": "pp-commands\\micro.py", # new
         "gedit": "pp-commands\\gedit.py", # new
         "update": "pp-commands\\update.py", # new
+        "selfupdate": "pp-commands\\update.py",  # new
         "update pp-term": "pp-commands\\updade.py",  # new
         "kakoune": "pp-commands\\kakoune.py",  # new
         "helix": "pp-commands\\helix.py",  # new
