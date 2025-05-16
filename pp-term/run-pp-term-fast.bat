@@ -87,7 +87,7 @@ endlocal & set "AFFINITY=%AFF_MASK%"
 
 :: Launch Python script with full CPU and high priority
 powershell -NoProfile -ExecutionPolicy Bypass -Command ^
-  "$p = Start-Process -FilePath '%PYTHON_EXE%' -ArgumentList '%SCRIPT_PATH%' -WorkingDirectory '%WORKDIR%' -NoNewWindow -Wait -PassThru; ^
+  "$p = Start-Process -FilePath '%PYTHON_EXE%' -ArgumentList '%SCRIPT_PATH%' -WorkingDirectory '%WORKDIR%' -NoNewWindow -Wait -PassThru;
    $p.PriorityClass = 'High'; ^
    $p.ProcessorAffinity = 0x%AFFINITY%" 2>>"%LOGFILE%"
 
