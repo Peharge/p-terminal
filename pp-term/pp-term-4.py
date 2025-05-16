@@ -7859,7 +7859,7 @@ def get_evil_5_pin(current_dir, env_indicator_3):
 
 def get_stable_pin(current_dir, env_indicator_6):
     return (
-        f"\n┌──(root"
+        f"\n┌──({getpass.getuser()}"
         + colored("㋐", attrs=["bold"])
         + f"Peharge)-[{current_dir}]-{env_indicator_6}"
         f"\n└─$ "
@@ -7879,6 +7879,31 @@ def get_stable_3_pin(current_dir, env_indicator_3):
 
     return (
         f"{env_indicator_3} {getpass.getuser()}" + colored("㋐", attrs=["bold"]) + f"Peharge{reset} {current_dir}:~$ "
+    )
+
+
+def get_stable_4_pin(current_dir, env_indicator_6):
+    return (
+        f"\n┌──(root"
+        + colored("㋐", attrs=["bold"])
+        + f"Peharge)-[{current_dir}]-{env_indicator_6}"
+        f"\n└─# "
+    )
+
+
+def get_stable_5_pin(current_dir, env_indicator_8):
+    print("")
+
+    return (
+        f"{env_indicator_8} PP {current_dir}:~# "
+    )
+
+
+def get_stable_6_pin(current_dir, env_indicator_8):
+    print("")
+
+    return (
+        f"{env_indicator_8} root" + colored("㋐", attrs=["bold"]) + f"Peharge{reset} {current_dir}:~# "
     )
 
 
@@ -9232,6 +9257,24 @@ def main():
                 user_input = input(pin).strip()
                 history.append(user_input)
 
+            elif state == "stable-4":
+                setup_autocomplete()
+                pin = get_stable_4_pin(current_dir, env_indicator_8)
+                user_input = input(pin).strip()
+                history.append(user_input)
+
+            elif state == "stable-5":
+                setup_autocomplete()
+                pin = get_stable_5_pin(current_dir, env_indicator_8)
+                user_input = input(pin).strip()
+                history.append(user_input)
+
+            elif state == "stable-6":
+                setup_autocomplete()
+                pin = get_stable_6_pin(current_dir, env_indicator_8)
+                user_input = input(pin).strip()
+                history.append(user_input)
+
             elif state == "cool":
                 pin = get_cool_pin()
                 user_input = input_line(pin)
@@ -9393,6 +9436,18 @@ def main():
 
             elif user_input.lower() == "pin stable-3":
                 state = "stable-3"
+                continue
+
+            elif user_input.lower() == "pin stable-4":
+                state = "stable-4"
+                continue
+
+            elif user_input.lower() == "pin stable-5":
+                state = "stable-5"
+                continue
+
+            elif user_input.lower() == "pin stable-6":
+                state = "stable-6"
                 continue
 
             elif user_input.lower() == "pin cool":
