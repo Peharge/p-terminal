@@ -48,6 +48,8 @@ theme ubuntu
 
 ## Theme P-Term
 
+Img to: "C:\Users\julian\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\RoamingState für Bilder"
+
 ```bash 
 theme p-term
 ```
