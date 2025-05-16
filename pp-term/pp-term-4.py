@@ -2954,7 +2954,7 @@ SETTINGS_PATH = os.path.expandvars(
 BACKUP_SUFFIX = ".bak"
 THEMES_PATH = f'C:\\Users\\{os.getlogin()}\\p-terminal\\pp-term\\themes.json'
 
-# C:\Users\julia\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\RoamingState für Bilder
+# C:\Users\julian\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\RoamingState für Bilder
 
 # Vordefinierte Farbschemata
 COLOR_SCHEMES = {
@@ -7892,7 +7892,7 @@ def get_cool_pin():
     config_path = os.path.expanduser(
         r"~\AppData\Local\Programs\oh-my-posh\themes\powerlevel10k_rainbow.omp.json"
     )
-    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julian"
 
     try:
         result = subprocess.run(
@@ -7930,7 +7930,7 @@ def get_cool_2_pin():
     config_path = os.path.expanduser(
         r"~\AppData\Local\Programs\oh-my-posh\themes\atomicBit.omp.json"
     )
-    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julian"
 
     try:
         result = subprocess.run(
@@ -7968,7 +7968,7 @@ def get_cool_3_pin():
     config_path = os.path.expanduser(
         r"~\AppData\Local\Programs\oh-my-posh\themes\jandedobbeleer.omp.json"
     )
-    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julian"
 
     try:
         result = subprocess.run(
@@ -8007,7 +8007,7 @@ def get_cool_4_pin():
     config_path = os.path.expanduser(
         r"~\AppData\Local\Programs\oh-my-posh\themes\p10k_classic.omp.jso"
     )
-    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julian"
 
     try:
         result = subprocess.run(
@@ -8045,7 +8045,7 @@ def get_cool_5_pin():
     config_path = os.path.expanduser(
         r"~\AppData\Local\Programs\oh-my-posh\themes\amro.omp.json"
     )
-    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julian"
 
     try:
         result = subprocess.run(
@@ -8083,7 +8083,7 @@ def get_cool_6_pin():
     config_path = os.path.expanduser(
         r"~\AppData\Local\Programs\oh-my-posh\themes\M365Princess.omp.json"
     )
-    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julian"
 
     try:
         result = subprocess.run(
@@ -8121,7 +8121,7 @@ def get_cool_7_pin():
     config_path = os.path.expanduser(
         r"~\AppData\Local\Programs\oh-my-posh\themes\blue-owl.omp.json"
     )
-    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julian"
 
     try:
         result = subprocess.run(
@@ -8159,7 +8159,7 @@ def get_cool_8_pin():
     config_path = os.path.expanduser(
         r"~\AppData\Local\Programs\oh-my-posh\themes\aliens.omp.json"
     )
-    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julian"
 
     try:
         result = subprocess.run(
@@ -8197,7 +8197,7 @@ def get_cool_9_pin():
     config_path = os.path.expanduser(
         r"~\AppData\Local\Programs\oh-my-posh\themes\agnoster.minimal.omp.json"
     )
-    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julian"
 
     try:
         result = subprocess.run(
@@ -8235,7 +8235,7 @@ def get_cool_10_pin():
     config_path = os.path.expanduser(
         r"~\AppData\Local\Programs\oh-my-posh\themes\agnosterplus.omp.json"
     )
-    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julian"
 
     try:
         result = subprocess.run(
@@ -8273,7 +8273,7 @@ def get_cool_11_pin():
     config_path = os.path.expanduser(
         r"~\AppData\Local\Programs\oh-my-posh\themes\atomic.omp.json"
     )
-    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julian"
 
     try:
         result = subprocess.run(
@@ -8311,7 +8311,7 @@ def get_cool_12_pin():
     config_path = os.path.expanduser(
         r"~\AppData\Local\Programs\oh-my-posh\themes\free-ukraine.omp.json"
     )
-    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julian"
 
     try:
         result = subprocess.run(
@@ -8349,7 +8349,7 @@ def get_cool_13_pin():
     config_path = os.path.expanduser(
         r"~\AppData\Local\Programs\oh-my-posh\themes\easy-term.omp.json"
     )
-    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julian"
 
     try:
         result = subprocess.run(
@@ -8387,7 +8387,7 @@ def get_cool_14_pin():
     config_path = os.path.expanduser(
         r"~\AppData\Local\Programs\oh-my-posh\themes\grandpa-style.omp.json"
     )
-    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julian"
 
     try:
         result = subprocess.run(
@@ -8425,7 +8425,7 @@ def get_cool_15_pin():
     config_path = os.path.expanduser(
         r"~\AppData\Local\Programs\oh-my-posh\themes\lambdageneration.omp.json"
     )
-    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julian"
 
     try:
         result = subprocess.run(
@@ -8463,7 +8463,7 @@ def get_cool_16_pin():
     config_path = os.path.expanduser(
         r"~\AppData\Local\Programs\oh-my-posh\themes\lightgreen.omp.json"
     )
-    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julian"
 
     try:
         result = subprocess.run(
@@ -8501,7 +8501,7 @@ def get_cool_17_pin():
     config_path = os.path.expanduser(
         r"~\AppData\Local\Programs\oh-my-posh\themes\bubbles.omp.json"
     )
-    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julian"
 
     try:
         result = subprocess.run(
@@ -8539,7 +8539,7 @@ def get_cool_18_pin():
     config_path = os.path.expanduser(
         r"~\AppData\Local\Programs\oh-my-posh\themes\negligible.omp.json"
     )
-    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julian"
 
     try:
         result = subprocess.run(
@@ -8577,7 +8577,7 @@ def get_cool_19_pin():
     config_path = os.path.expanduser(
         r"~\AppData\Local\Programs\oh-my-posh\themes\slimfat.omp.json"
     )
-    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julian"
 
     try:
         result = subprocess.run(
@@ -8615,7 +8615,7 @@ def get_cool_20_pin():
     config_path = os.path.expanduser(
         r"~\AppData\Local\Programs\oh-my-posh\themes\stelbent.minimal.omp.json"
     )
-    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julian"
 
     try:
         result = subprocess.run(
@@ -8653,7 +8653,7 @@ def get_cool_21_pin():
     config_path = os.path.expanduser(
         r"~\AppData\Local\Programs\oh-my-posh\themes\tonybaloney.omp.json"
     )
-    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julian"
 
     try:
         result = subprocess.run(
@@ -8691,7 +8691,7 @@ def get_cool_22_pin():
     config_path = os.path.expanduser(
         r"~\AppData\Local\Programs\oh-my-posh\themes\emodipt.omp.json"
     )
-    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julian"
 
     try:
         result = subprocess.run(
@@ -8729,7 +8729,7 @@ def get_cool_23_pin():
     config_path = os.path.expanduser(
         r"~\AppData\Local\Programs\oh-my-posh\themes\tokyo.omp.json"
     )
-    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julia"
+    working_dir = os.getcwd()  # oder spezifisch: r"C:\Users\julian"
 
     try:
         result = subprocess.run(
