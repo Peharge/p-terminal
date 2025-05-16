@@ -334,7 +334,6 @@ Total:
 |   |   |-- llama-4-scout-17b-ollama.py
 |   |   |-- llama-4-scout-17b.py
 |   |   |-- lsblk.py
-|   |   |-- m-models-ls.py
 |   |   |-- mg.py
 |   |   |-- micro.py
 |   |   |-- mistral-large.py
