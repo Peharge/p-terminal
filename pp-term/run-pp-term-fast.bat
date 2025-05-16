@@ -69,7 +69,7 @@ REM Verzeichnis dieser .bat-Datei ermitteln
 set SCRIPT_DIR=%~dp0
 
 REM PS1-Datei (angepasst, falls sie anders heißt)
-set PS1_FILE=p-start-1ps.ps1
+set PS1_FILE=p-start.ps1
 set PS1_PATH=%SCRIPT_DIR%%PS1_FILE%
 
 REM Prüfen, ob die PS1-Datei existiert
