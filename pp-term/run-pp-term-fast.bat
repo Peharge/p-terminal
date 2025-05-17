@@ -65,6 +65,13 @@ REM Veuillez lire l'intégralité des termes et conditions de la licence MIT pou
 
 setlocal enabledelayedexpansion
 
+:: Global Settings
+set "SCRIPT_DIR=%~dp0"
+set "LOGFILE=C:\Users\julia\p-terminal\pp-term\WSL_Diagnostics.log"
+set "MAX_DRIFT=300"          & rem Maximum allowed time drift in seconds
+set "PING_ADDR=8.8.8.8"      & rem Default ping target
+set "TEST_DOMAIN=example.com"
+
 REM Verzeichnis dieser .bat-Datei ermitteln
 set SCRIPT_DIR=%~dp0
 
@@ -74,7 +81,7 @@ set PS1_PATH=%SCRIPT_DIR%%PS1_FILE%
 
 REM Prüfen, ob die PS1-Datei existiert
 if not exist "%PS1_PATH%" (
-    echo [ERROR] PowerShell-Skript nicht gefunden: "%PS1_PATH%"
+    call :Log ERROR "PowerShell script not found:
     pause
     exit /b 1
 )
@@ -84,3 +91,48 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%PS1_PATH%"
 
 pause
 endlocal
+
+:: Functions
+:InitLog
+    (echo [%DATE% %TIME%] [LOG INIT] Log created >"%LOGFILE%"
+    ) 2>nul
+    goto :eof
+
+:Timestamp
+    rem Set TS variable to timestamp YYYY-MM-DD HH:MM:SS.mmm
+    for /F "tokens=* delims=" %%D in ('powershell -NoProfile -Command "Get-Date -Format 'yyyy-MM-dd HH:mm:ss.fff'"') do set "TS=%%D"
+    goto :eof
+
+:Log
+    rem call :Log LEVEL Message
+    setlocal EnableDelayedExpansion
+    call :Timestamp
+    set "LEVEL=%~1"
+    shift
+    set "MSG="
+    :buildMsg
+    if "%~1"=="" goto continueLog
+    set "MSG=!MSG! %~1"
+    shift
+    goto buildMsg
+
+:continueLog
+    set "MSG=!MSG:~1!"  & rem entfernt führendes Leerzeichen
+    echo [!TS!] [!LEVEL!] !MSG!
+    >>"%LOGFILE%" echo [!TS!] [!LEVEL!] !MSG!
+    endlocal
+    goto :eof
+
+:Run
+    rem call :Run command arguments
+    setlocal
+    set "CMD=%*"
+    rem echo [COMMAND] %CMD%
+    >>"%LOGFILE%" echo [COMMAND] %CMD%
+    cmd /C %CMD%
+    endlocal
+    goto :eof
+
+:BlankLine
+    echo.
+    goto :eof
