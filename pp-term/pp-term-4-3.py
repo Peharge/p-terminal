@@ -9212,7 +9212,7 @@ def main():
             env_indicator_main = (
                 f"{display_env_path}"
                 if env_active else
-                f"{red}no venv recorded{reset}"
+                f"{red}no venv{reset}"
             )
 
             env_indicator = (
