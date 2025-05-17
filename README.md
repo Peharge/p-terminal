@@ -33,7 +33,7 @@
 The coolest terminal in the world<br>
 A warm welcome, to P-Term (C/C++) and PP-Term (Python)<br>
 Peharge Projects 2025<br>
-Thank you for your interest in Peharge Terminal. We greatly appreciate that ❤️<br>
+Thank you for your interest in Peharge Terminal. We greatly appreciate that ❤️<br><br>
 [`P-Terminal.com`](https://peharge.github.io/MAVIS-web/p-term.html) [`Download PP-Term`](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) [`Download P-Term (SOON)`](https://github.com/Peharge/p-terminal/blob/main/p-term/run-p-term.bat)
 
 </div>
@@ -54,9 +54,8 @@ Thank you for your interest in Peharge Terminal. We greatly appreciate that ❤�
 # **_PP-Terminal 3_**
 
 Why show the standard? The PP Terminal does it all<br>
-— but we show you what sets it apart.<br><br><br>
-<img width="600" src="https://peharge.github.io/MAVIS-web/images/pp-term-img.png" alt="pp-term"/><br><br><br>
-[`Download PP-Term`](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) [`PP-Term Commands`](https://peharge.github.io/MAVIS-web/commands-pp-term.html)
+— but we show you what sets it apart.<br><br>[`Download PP-Term`](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) [`PP-Term Commands`](https://peharge.github.io/MAVIS-web/commands-pp-term.html)<br><br>
+<img width="600" src="https://peharge.github.io/MAVIS-web/images/pp-term-img.png" alt="pp-term"/><br><br>
 </div>
 
 | Information                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | Image                                                                   |
