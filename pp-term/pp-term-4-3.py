@@ -7901,7 +7901,7 @@ def get_main_10_pin(current_dir, env_indicator_main):
 def get_main_11_pin(current_dir, env_indicator_main):
     circuit = colored('❖❖', 'blue')
     return (
-        f"\n{circuit} {colored(getpass.getuser()+'@Peharge', 'white', attrs=['bold'])}"
+        f"\n{circuit} {colored(getpass.getuser() + colored("㋐", attrs=["bold"]) + f'Peharge', 'white', attrs=['bold'])}"
         f" {colored('⟿', 'blue')} {colored(current_dir, 'white')}"
         f" {colored('⟿', 'blue')} {env_indicator_main}"
         f"\n{circuit} {colored(timestamp(), 'white')} {colored('❯', 'blue')} "
@@ -7911,7 +7911,7 @@ def get_main_11_pin(current_dir, env_indicator_main):
 def get_main_12_pin(current_dir, env_indicator_main):
     wave = colored('〰️', 'blue')
     return (
-        f"\n{wave}{wave}{colored('╼', 'white')} {colored(getpass.getuser(), 'white')}@{colored('Peharge', 'blue')}"
+        f"\n{wave}{wave}{colored('╼', 'white')} {colored(getpass.getuser(), 'white')}" + colored("㋐", attrs=["bold"])+ f"{colored('Peharge', 'white')}"
         f" {wave}{wave}{colored('╾', 'white')} {colored(current_dir, 'white')}"
         f" {wave}{wave}{colored('╼', 'white')} {env_indicator_main}"
         f"\n{colored('▶', 'blue')} "
@@ -7921,7 +7921,7 @@ def get_main_12_pin(current_dir, env_indicator_main):
 def get_main_13_pin(current_dir, env_indicator_main):
     diamond = colored('◆', 'blue')
     return (
-        f"\n{diamond*3} {colored(getpass.getuser()+'@Peharge', 'white', attrs=['bold'])} {diamond*3}"
+        f"\n{diamond*3} {colored(getpass.getuser() + colored("㋐", attrs=["bold"])+ 'Peharge', 'white', attrs=['bold'])} {diamond*3}"
         f"\n {colored(current_dir, 'blue')} {colored('|', 'white')} {env_indicator_main}"
         f"\n{colored('⇨', 'blue')} "
     )
@@ -7930,7 +7930,7 @@ def get_main_13_pin(current_dir, env_indicator_main):
 def get_main_14_pin(current_dir, env_indicator_main):
     pulse = colored('•', 'blue')
     return (
-        f"\n{pulse} {colored('GRID>', 'white', attrs=['bold'])} {colored(getpass.getuser(), 'blue')}@{colored('Peharge', 'white')}"
+        f"\n{pulse} {colored('GRID>', 'white', attrs=['bold'])} {colored(getpass.getuser(), 'blue')}" + colored("㋐", attrs=["bold"])+ f"{colored('Peharge', 'white')}"
         f" {pulse}\n{pulse} {colored(current_dir, 'blue')} {pulse} {env_indicator_main}"
         f"\n{pulse} {colored('»', 'blue')} "
     )
@@ -7939,7 +7939,7 @@ def get_main_14_pin(current_dir, env_indicator_main):
 def get_main_15_pin(current_dir, env_indicator_main):
     sl = colored('⧸', 'blue')
     return (
-        f"\n{sl}{sl}{sl} {colored(getpass.getuser()+'@Peharge', 'white', attrs=['bold'])} {sl}{sl}{sl}"
+        f"\n{sl}{sl}{sl} {colored(getpass.getuser() + colored("㋐", attrs=["bold"])+ 'Peharge', 'white', attrs=['bold'])} {sl}{sl}{sl}"
         f"\n {colored(current_dir, 'blue')} {sl} {env_indicator_main}"
         f"\n{colored('❯', 'blue')} "
     )
@@ -7947,7 +7947,7 @@ def get_main_15_pin(current_dir, env_indicator_main):
 
 def get_main_16_pin(current_dir, env_indicator_main):
     return (
-        f"\n{colored('▯▯▯▯', 'blue')} {colored(getpass.getuser()+'·Peharge', 'white', attrs=['bold'])}"
+        f"\n{colored('▯▯▯▯', 'blue')} {colored(getpass.getuser()+ colored("㋐", attrs=["bold"])+ 'Peharge', 'white', attrs=['bold'])}"
         f" {colored('⇢', 'blue')} {colored(current_dir, 'white')}"
         f" {colored('⇢', 'blue')} {env_indicator_main}"
         f"\n{colored('▯▯▯▯', 'blue')} {colored(timestamp(), 'white')} {colored('›', 'blue')} "
@@ -7958,7 +7958,7 @@ def get_main_17_pin(current_dir, env_indicator_main):
     bar = colored('▮', 'blue')
     return (
         f"\n{bar*3} {colored('DATAPULSE', 'white', attrs=['bold'])} {bar*3}"
-        f"\n{bar} {colored(getpass.getuser()+'@Peharge', 'blue')} {bar}"
+        f"\n{bar} {colored(getpass.getuser()+ colored("㋐", attrs=["bold"]) + 'Peharge', 'blue')} {bar}"
         f"\n{bar} {colored(current_dir, 'white')} {bar} {env_indicator_main}"
         f"\n{bar*3} {colored('▶', 'white')} "
     )
@@ -7967,7 +7967,7 @@ def get_main_17_pin(current_dir, env_indicator_main):
 def get_main_18_pin(current_dir, env_indicator_main):
     node = colored('◉', 'blue')
     return (
-        f"\n{node} {colored(getpass.getuser(), 'white')}@{colored('Peharge', 'blue')}"
+        f"\n{node} {colored(getpass.getuser(), 'white')}" + colored("㋐", attrs=["bold"]) + "{colored('Peharge', 'blue')}"
         f" {node} {colored(current_dir, 'white')} {node} {env_indicator_main}"
         f"\n{node} {colored('❯', 'white')} "
     )
@@ -7977,14 +7977,14 @@ def get_main_19_pin(current_dir, env_indicator_main):
     grid = colored('⊡', 'blue')
     return (
         f"\n{grid}{grid}{grid} {colored('QUANTUM', 'white', attrs=['bold'])} {grid}{grid}{grid}"
-        f"\n{colored(getpass.getuser()+'@Peharge', 'blue')} | {colored(current_dir, 'white')} | {env_indicator_main}"
+        f"\n{colored(getpass.getuser() + colored("㋐", attrs=["bold"]) + 'Peharge', 'blue')} | {colored(current_dir, 'white')} | {env_indicator_main}"
         f"\n{colored('▸▸', 'blue')} "
     )
 
 
 def get_main_20_pin(current_dir, env_indicator_main):
     return (
-        f"\n{colored('~', 'blue')} {colored(getpass.getuser()+'@Peharge', 'white')} {colored('~', 'blue')}"
+        f"\n{colored('~', 'blue')} {colored(getpass.getuser() + colored("㋐", attrs=["bold"]) + 'Peharge', 'white')} {colored('~', 'blue')}"
         f" {colored(current_dir, 'blue')} {colored('/', 'white')} {env_indicator_main}"
         f"\n{colored('❯', 'blue')} "
     )
@@ -7994,7 +7994,7 @@ def get_main_21_pin(current_dir, env_indicator_main):
     flow = colored('»', 'blue')
     return (
         f"\n{flow*2} {colored('BYTEFLOW', 'white', attrs=['bold'])} {flow*2}"
-        f"\n{flow} {colored(getpass.getuser()+'@Peharge', 'blue')} {flow}"
+        f"\n{flow} {colored(getpass.getuser() + colored("㋐", attrs=["bold"]) + 'Peharge', 'blue')} {flow}"
         f"\n{flow} {colored(current_dir, 'white')} {flow} {env_indicator_main}"
         f"\n{flow*2} {colored('›', 'white')} "
     )
@@ -8003,7 +8003,7 @@ def get_main_21_pin(current_dir, env_indicator_main):
 def get_main_22_pin(current_dir, env_indicator_main):
     prism = colored('◇', 'blue')
     return (
-        f"\n{prism*2} {colored(getpass.getuser()+'@Peharge', 'white')} {prism*2}"
+        f"\n{prism*2} {colored(getpass.getuser() + colored("㋐", attrs=["bold"]) + 'Peharge', 'white')} {prism*2}"
         f"\n{colored(current_dir, 'blue')} {colored('⇄', 'white')} {env_indicator_main}"
         f"\n{colored('❯❯', 'blue')} "
     )
@@ -8011,7 +8011,7 @@ def get_main_22_pin(current_dir, env_indicator_main):
 
 def get_main_23_pin(current_dir, env_indicator_main):
     return (
-        f"\n{colored('[', 'blue')}{colored(getpass.getuser()+'@Peharge', 'white')}{colored(']', 'blue')}"
+        f"\n{colored('[', 'blue')}{colored(getpass.getuser() + colored("㋐", attrs=["bold"]) + 'Peharge', 'white')}{colored(']', 'blue')}"
         f"{colored('<', 'white')}{colored(current_dir, 'blue')}{colored('>', 'white')}"
         f"{colored('[', 'blue')}{env_indicator_main}{colored(']', 'white')}"
         f"\n{colored('›', 'blue')} "
@@ -8021,7 +8021,7 @@ def get_main_23_pin(current_dir, env_indicator_main):
 def get_main_24_pin(current_dir, env_indicator_main):
     slash = colored('╱', 'blue')
     return (
-        f"\n{slash*3} {colored(getpass.getuser()+'@Peharge', 'white')} {slash*3}"
+        f"\n{slash*3} {colored(getpass.getuser() + colored("㋐", attrs=["bold"]) + 'Peharge', 'white')} {slash*3}"
         f"\n{slash} {colored(current_dir, 'blue')} {slash} {env_indicator_main}"
         f"\n{colored('❯', 'blue')} "
     )
@@ -8031,7 +8031,7 @@ def get_main_25_pin(current_dir, env_indicator_main):
     ring = colored('◯', 'blue')
     return (
         f"\n{ring} {colored('PEHARGE', 'white', attrs=['bold'])} {ring}"
-        f"\n{colored(getpass.getuser()+'@Peharge', 'blue')} · {colored(current_dir, 'white')} · {env_indicator_main}"
+        f"\n{colored(getpass.getuser() + colored("㋐", attrs=["bold"]) + 'Peharge', 'blue')} · {colored(current_dir, 'white')} · {env_indicator_main}"
         f"\n{colored('➤', 'blue')} "
     )
 
@@ -8039,7 +8039,7 @@ def get_main_25_pin(current_dir, env_indicator_main):
 def get_main_26_pin(current_dir, env_indicator_main):
     aurora = colored('≈≈≈', 'blue')
     return (
-        f"\n{aurora} {colored(getpass.getuser()+'@Peharge', 'white', attrs=['bold'])} {aurora}"
+        f"\n{aurora} {colored(getpass.getuser() + colored("㋐", attrs=["bold"]) + 'Peharge', 'white', attrs=['bold'])} {aurora}"
         f"\n{colored(current_dir, 'blue')} {colored('~', 'white')} {env_indicator_main}"
         f"\n{colored('➤', 'blue')} "
     )
@@ -8049,7 +8049,7 @@ def get_main_27_pin(current_dir, env_indicator_main):
     hexg = colored('⬡', 'blue')
     return (
         f"\n{hexg*2} {colored('HEXGRID', 'white', attrs=['bold'])} {hexg*2}"
-        f"\n{colored(getpass.getuser()+'@Peharge', 'blue')} {hexg} {colored(current_dir, 'white')} {hexg} {env_indicator_main}"
+        f"\n{colored(getpass.getuser() + colored("㋐", attrs=["bold"]) + 'Peharge', 'blue')} {hexg} {colored(current_dir, 'white')} {hexg} {env_indicator_main}"
         f"\n{colored('›', 'blue')} "
     )
 
@@ -8057,7 +8057,7 @@ def get_main_27_pin(current_dir, env_indicator_main):
 def get_main_28_pin(current_dir, env_indicator_main):
     beacon = colored('✦', 'blue')
     return (
-        f"\n{beacon} {colored(getpass.getuser(), 'white')}@{colored('Peharge', 'blue')} {beacon}"
+        f"\n{beacon} {colored(getpass.getuser(), 'white')}" + colored("㋐", attrs=["bold"]) + f"{colored('Peharge', 'blue')} {beacon}"
         f"\n{colored('Dir:', 'white')} {colored(current_dir, 'blue')} {beacon} {env_indicator_main}"
         f"\n{colored('❯', 'blue')} "
     )
@@ -8066,7 +8066,7 @@ def get_main_28_pin(current_dir, env_indicator_main):
 def get_main_29_pin(current_dir, env_indicator_main):
     binf = colored('1010', 'blue')
     return (
-        f"\n{binf} {colored(getpass.getuser()+'@Peharge', 'white', attrs=['bold'])} {binf}"
+        f"\n{binf} {colored(getpass.getuser() + colored("㋐", attrs=["bold"]) + 'Peharge', 'white', attrs=['bold'])} {binf}"
         f"\n{colored(current_dir, 'blue')} | {env_indicator_main}"
         f"\n{colored('►', 'blue')} "
     )
@@ -8075,7 +8075,7 @@ def get_main_29_pin(current_dir, env_indicator_main):
 def get_main_30_pin(current_dir, env_indicator_main):
     mesh = colored('╳', 'blue')
     return (
-        f"\n{mesh}{mesh}{mesh} {colored(getpass.getuser(), 'white')}@{colored('Peharge', 'blue')} {mesh}{mesh}{mesh}"
+        f"\n{mesh}{mesh}{mesh} {colored(getpass.getuser(), 'white')}" + colored("㋐", attrs=["bold"]) + f"{colored('Peharge', 'blue')} {mesh}{mesh}{mesh}"
         f"\n{colored(current_dir, 'blue')} {mesh} {env_indicator_main}"
         f"\n{colored('❯', 'blue')} "
     )
@@ -8084,7 +8084,7 @@ def get_main_30_pin(current_dir, env_indicator_main):
 def get_main_31_pin(current_dir, env_indicator_main):
     star = colored('✺', 'blue')
     return (
-        f"\n{star*2} {colored(getpass.getuser()+'@Peharge', 'white', attrs=['bold'])} {star*2}"
+        f"\n{star*2} {colored(getpass.getuser() + colored("㋐", attrs=["bold"]) + 'Peharge', 'white', attrs=['bold'])} {star*2}"
         f"\n{colored('📂', 'white')} {colored(current_dir, 'blue')}   {env_indicator_main}"
         f"\n{colored('➤', 'blue')} "
     )
@@ -8095,7 +8095,7 @@ def get_main_32_pin(current_dir, env_indicator_main):
     rt = colored('═╗', 'blue')
     lb = colored('╚═', 'blue')
     rb = colored('═╝', 'blue')
-    header = f"{lf}{colored(getpass.getuser()+'@Peharge', 'white')}{rt}"
+    header = f"{lf}{colored(getpass.getuser() + colored("㋐", attrs=["bold"]) + 'Peharge', 'white')}{rt}"
     footer = f"{lb}{colored(current_dir+' | '+env_indicator_main, 'blue')}{rb}"
     return f"\n{header}\n{footer}\n{colored('►', 'blue')} "
 
@@ -8104,7 +8104,7 @@ def get_main_33_pin(current_dir, env_indicator_main):
     q = colored('⟐', 'blue')
     return (
         f"\n{q} {colored('Q-PULSE', 'white', attrs=['bold'])} {q}"
-        f"\n{colored(getpass.getuser()+'@Peharge', 'blue')} • {colored(current_dir, 'white')} • {env_indicator_main}"
+        f"\n{colored(getpass.getuser() + colored("㋐", attrs=["bold"]) + 'Peharge', 'blue')} • {colored(current_dir, 'white')} • {env_indicator_main}"
         f"\n{colored('❯', 'blue')} "
     )
 
@@ -8112,7 +8112,7 @@ def get_main_33_pin(current_dir, env_indicator_main):
 def get_main_34_pin(current_dir, env_indicator_main):
     arc = colored('◥◣', 'blue')
     return (
-        f"\n{arc} {colored(getpass.getuser(), 'white')}@{colored('Peharge', 'blue')} {arc}"
+        f"\n{arc} {colored(getpass.getuser(), 'white')}" + colored("㋐", attrs=["bold"]) + f"{colored('Peharge', 'blue')} {arc}"
         f"\n{colored(current_dir, 'blue')} [{env_indicator_main}]"
         f"\n{colored('➤', 'blue')} "
     )
@@ -8121,7 +8121,7 @@ def get_main_34_pin(current_dir, env_indicator_main):
 def get_main_35_pin(current_dir, env_indicator_main):
     bar = colored('━', 'blue')
     return (
-        f"\n{bar*4} {colored(getpass.getuser()+'@Peharge', 'white', attrs=['bold'])} {bar*4}"
+        f"\n{bar*4} {colored(getpass.getuser() + colored("㋐", attrs=["bold"]) + 'Peharge', 'white', attrs=['bold'])} {bar*4}"
         f"\n{colored(current_dir, 'blue')} {bar} {env_indicator_main}"
         f"\n{colored('›', 'blue')} "
     )
