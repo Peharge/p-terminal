@@ -1977,19 +1977,19 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "themes":
-        print("""alternative", "aptscience", "arc_dark", "aurelia", "ayu_mirage", "blue", "blueglass", "cyberlife", "dark", "dracula", 
-        "fallout_pipboy", "glass", "glassmain", "green", "greenglass", "gruvbox_dark", "hackerman", "light", "main", "material_dark", 
-        "mavis_1", "mavis_3", "mavis_4", "mint", "monokai", "nord", "one_dark", "p_term", "red", "redglass", "solarized_dark", "spiderman", 
-        "tokyo_night", "ubuntu", "ubuntuglass", "violetglass", "yellowglass""")
+        print("alternative", "aptscience", "arc_dark", "aurelia", "ayu_mirage", "blue", "blueglass", "cyberlife", "dark", "dracula",
+        "fallout_pipboy", "glass", "glassmain", "green", "greenglass", "gruvbox_dark", "hackerman", "light", "main", "material_dark",
+        "mavis_1", "mavis_3", "mavis_4", "mint", "monokai", "nord", "one_dark", "p_term", "red", "redglass", "solarized_dark", "spiderman",
+        "tokyo_night", "ubuntu", "ubuntuglass", "violetglass", "yellowglass")
         return True
 
     if user_input.lower() == "pin":
-        print("""main/main-1", "main-3", "main-4", "main-5", "main-6", "main-7", "main-8", "main-9", "main-10", "main-11", "main-12", "main-13", "main-14", 
-        "main-15", "main-16", "main-17", "main-18", "main-19", "main-20", "main-21", "main-22", "main-23", "main-24", "main-25", "main-26", "main-27", 
-        "main-28", "main-29", "main-30", "main-31", "main-32", "main-33", "main-34", "main-35", "evil/evil-1", "evil-2", "evil-3", "evil-4", "evil-5", 
-        "stable/stable-1", "stable-2", "stable-3", "stable-4", "stable-5", "cool/cool-1", "cool-2", "cool-3", "cool-4", "cool-5", "cool-6", "cool-7", 
-        "cool-8", "cool-9", "cool-10", "cool-11", "cool-12", "cool-13", "cool-14", "cool-15", "cool-16", "cool-17", "cool-18", "cool-19", "cool-20", 
-        "cool-21", "cool-22", "cool-23""")
+        print("main/main-1", "main-3", "main-4", "main-5", "main-6", "main-7", "main-8", "main-9", "main-10", "main-11", "main-12", "main-13", "main-14",
+        "main-15", "main-16", "main-17", "main-18", "main-19", "main-20", "main-21", "main-22", "main-23", "main-24", "main-25", "main-26", "main-27",
+        "main-28", "main-29", "main-30", "main-31", "main-32", "main-33", "main-34", "main-35", "evil/evil-1", "evil-2", "evil-3", "evil-4", "evil-5",
+        "stable/stable-1", "stable-2", "stable-3", "stable-4", "stable-5", "cool/cool-1", "cool-2", "cool-3", "cool-4", "cool-5", "cool-6", "cool-7",
+        "cool-8", "cool-9", "cool-10", "cool-11", "cool-12", "cool-13", "cool-14", "cool-15", "cool-16", "cool-17", "cool-18", "cool-19", "cool-20",
+        "cool-21", "cool-22", "cool-23")
         return True
 
     if user_input.startswith("launch "):
