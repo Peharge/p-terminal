@@ -1,5 +1,5 @@
 <p align="center">
- <img width="300" src="./icons/p-term-icon-3.png" alt="p-terminal"/>
+ <img width="350" src="./icons/p-term-icon-3.png" alt="p-terminal"/>
 </p>
 
 <br>
