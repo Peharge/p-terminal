@@ -61,15 +61,7 @@
 #
 # Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 
-import sys
-import getpass
-import subprocess
-import threading
-import time
-import importlib.util
 import os
-from dotenv import load_dotenv
-from subprocess import run
 from datetime import datetime
 
 def timestamp() -> str:
@@ -77,8 +69,6 @@ def timestamp() -> str:
     now = datetime.now()
     return now.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
 
-
-required_packages = ["requests", "py-cpuinfo", "psutil"]
 
 def activate_virtualenv(venv_path):
     """Aktiviert eine bestehende virtuelle Umgebung."""
@@ -94,25 +84,10 @@ def activate_virtualenv(venv_path):
     os.environ["PATH"] = os.path.join(venv_path, "Scripts") + os.pathsep + os.environ["PATH"]
     print(f"[{timestamp()}] [INFO] Virtual environment {venv_path} enabled.")
 
-def ensure_packages_installed(packages):
-    """Stellt sicher, dass alle erforderlichen Pakete installiert sind."""
-    for package in packages:
-        if importlib.util.find_spec(package) is None:
-            print(f"Installing {package}...")
-            try:
-                subprocess.run([sys.executable, "-m", "pip", "install", package], check=True, stdout=subprocess.DEVNULL,
-                               stderr=subprocess.DEVNULL)
-                print(f"[{timestamp()}] [INFO] {package} installed successfully.")
-            except subprocess.CalledProcessError:
-                print(f"[{timestamp()}] [INFO] Failed to install {package}. Please install it manually.")
-        else:
-            print(f"[{timestamp()}] [INFO] {package} is already installed.")
-
 
 # Virtuelle Umgebung aktivieren und Pakete sicherstellen
 venv_path = f"C:\\Users\\{os.getlogin()}\\p-terminal\\pp-term\\.env"
 activate_virtualenv(venv_path)
-ensure_packages_installed(required_packages)
 
 import sys
 import os
