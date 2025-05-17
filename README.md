@@ -44,13 +44,12 @@ Thank you for your interest in Peharge Terminal. We greatly appreciate that ‚ù§Ô
 
 # **_NEWS_**
 
-**[23.04.2025]** Developmentstart of P-Term and PP-Ptem<br>
+**[23.04.2025]** Development start of P-Term and PP-Ptem<br>
 **[24.04.2025]** PP-Term EAP release: [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat)<br>
-**[28.08.2025]** PP-Term 1 release<br>
 **[01.05.2025]** PP-Term 3 EAP release<br>
 **[08.05.2025]** PP-Term 3 release<br>
 **[11.05.2025]** PP-Term 4 EAP release<br>
-**[01.08.2025]** PP-Term 4 release<br>
+**[17.05.2025]** PP-Term 4 release<br>
 **[01.08.2025]** P-Term 1 release
 
 </div>
