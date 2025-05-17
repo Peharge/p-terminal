@@ -533,6 +533,7 @@ def handle_special_commands(user_input):
         "p pip ls": "pp-commands\\p-python-frameworks.py",  # new
         "p git ls": "pp-commands\\p-git.py", # new
         "p git": "pp-commands\\p-git.py",  # new
+        "p git p-terminal-old": "pp-commands\\p-git-p-terminal-old.py",  # new
         "p git p-terminal": "pp-commands\\p-git.py",  # new
         "p git mavis": "pp-commands\\p-git-mavis.py",  # new
         "p git mavis-web": "pp-commands\\p-git-mavis-web.py",  # new
