@@ -621,13 +621,15 @@ etc.
 <img width="600" src="https://peharge.github.io/MAVIS-web/images/p-term-img.png" alt="pp-term"/><br><br>
 </div>
 
-<div align="center">
-
 # **_Install PP-Terminal_**
 
 soon
 
-</div>
+# **_P-Term Commands_**
+
+- `p` - Peharge command
+
+soon more
 
 # Problems
 
