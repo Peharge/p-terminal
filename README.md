@@ -55,7 +55,8 @@ Thank you for your interest in Peharge Terminal. We greatly appreciate that ❤�
 
 Why show the standard? The PP Terminal does it all<br>
 — but we show you what sets it apart.<br><br><br>
-<img width="800" src="https://github.com/Peharge/p-terminal-images/blob/main/images/pp-term-banner-6.png" alt="pp-term"/>
+<img width="600" src="https://peharge.github.io/MAVIS-web/images/pp-term-img.png" alt="pp-term"/><br><br><br>
+[Download PP-Term](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) [PP-Term Commands](https://peharge.github.io/MAVIS-web/commands-pp-term.html)
 </div>
 
 | Information                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | Image                                                                   |
