@@ -7898,6 +7898,235 @@ def get_main_10_pin(current_dir, env_indicator_main):
     )
 
 
+def get_main_11_pin(current_dir, env_indicator_main):
+    circuit = colored('❖❖', 'blue')
+    return (
+        f"\n{circuit} {colored(getpass.getuser()+'@Peharge', 'white', attrs=['bold'])}"
+        f" {colored('⟿', 'blue')} {colored(current_dir, 'white')}"
+        f" {colored('⟿', 'blue')} {env_indicator_main}"
+        f"\n{circuit} {colored(timestamp(), 'white')} {colored('❯', 'blue')} "
+    )
+
+
+def get_main_12_pin(current_dir, env_indicator_main):
+    wave = colored('〰️', 'blue')
+    return (
+        f"{wave}{wave}{colored('╼', 'white')} {colored(getpass.getuser(), 'white')}@{colored('Peharge', 'blue')}"
+        f" {wave}{wave}{colored('╾', 'white')} {colored(current_dir, 'white')}"
+        f" {wave}{wave}{colored('╼', 'white')} {env_indicator_main}"
+        f"\n{colored('▶', 'blue')} "
+    )
+
+
+def get_main_13_pin(current_dir, env_indicator_main):
+    diamond = colored('◆', 'blue')
+    return (
+        f"\n{diamond*3} {colored(getpass.getuser()+'@Peharge', 'white', attrs=['bold'])} {diamond*3}"
+        f"\n {colored(current_dir, 'blue')} {colored('|', 'white')} {env_indicator_main}"
+        f"\n{colored('⇨', 'blue')} "
+    )
+
+
+def get_main_14_pin(current_dir, env_indicator_main):
+    pulse = colored('•', 'blue')
+    return (
+        f"\n{pulse} {colored('GRID>', 'white', attrs=['bold'])} {colored(getpass.getuser(), 'blue')}@{colored('Peharge', 'white')}"
+        f" {pulse}\n{pulse} {colored(current_dir, 'blue')} {pulse} {env_indicator_main}"
+        f"\n{pulse} {colored('»', 'blue')} "
+    )
+
+
+def get_main_15_pin(current_dir, env_indicator_main):
+    sl = colored('⧸', 'blue')
+    return (
+        f"\n{sl}{sl}{sl} {colored(getpass.getuser()+'@Peharge', 'white', attrs=['bold'])} {sl}{sl}{sl}"
+        f"\n {colored(current_dir, 'blue')} {sl} {env_indicator_main}"
+        f"\n{colored('❯', 'blue')} "
+    )
+
+
+def get_main_16_pin(current_dir, env_indicator_main):
+    return (
+        f"\n{colored('▯▯▯▯', 'blue')} {colored(getpass.getuser()+'·Peharge', 'white', attrs=['bold'])}"
+        f" {colored('⇢', 'blue')} {colored(current_dir, 'white')}"
+        f" {colored('⇢', 'blue')} {env_indicator_main}"
+        f"\n{colored('▯▯▯▯', 'blue')} {colored(timestamp(), 'white')} {colored('›', 'blue')} "
+    )
+
+
+def get_main_17_pin(current_dir, env_indicator_main):
+    bar = colored('▮', 'blue')
+    return (
+        f"\n{bar*3} {colored('DATAPULSE', 'white', attrs=['bold'])} {bar*3}"
+        f"\n{bar} {colored(getpass.getuser()+'@Peharge', 'blue')} {bar}"
+        f"\n{bar} {colored(current_dir, 'white')} {bar} {env_indicator_main}"
+        f"\n{bar*3} {colored('▶', 'white')} "
+    )
+
+
+def get_main_18_pin(current_dir, env_indicator_main):
+    node = colored('◉', 'blue')
+    return (
+        f"\n{node} {colored(getpass.getuser(), 'white')}@{colored('Peharge', 'blue')}"
+        f" {node} {colored(current_dir, 'white')} {node} {env_indicator_main}"
+        f"\n{node} {colored('❯', 'white')} "
+    )
+
+
+def get_main_19_pin(current_dir, env_indicator_main):
+    grid = colored('⊡', 'blue')
+    return (
+        f"\n{grid}{grid}{grid} {colored('QUANTUM', 'white', attrs=['bold'])} {grid}{grid}{grid}"
+        f"\n{colored(getpass.getuser()+'@Peharge', 'blue')} | {colored(current_dir, 'white')} | {env_indicator_main}"
+        f"\n{colored('▸▸', 'blue')} "
+    )
+
+
+def get_main_20_pin(current_dir, env_indicator_main):
+    return (
+        f"\n{colored('~', 'blue')} {colored(getpass.getuser()+'@Peharge', 'white')} {colored('~', 'blue')}"
+        f" {colored(current_dir, 'blue')} {colored('/', 'white')} {env_indicator_main}"
+        f"\n{colored('❯', 'blue')} "
+    )
+
+
+def get_main_21_pin(current_dir, env_indicator_main):
+    flow = colored('»', 'blue')
+    return (
+        f"\n{flow*2} {colored('BYTEFLOW', 'white', attrs=['bold'])} {flow*2}"
+        f"\n{flow} {colored(getpass.getuser()+'@Peharge', 'blue')} {flow}"
+        f"\n{flow} {colored(current_dir, 'white')} {flow} {env_indicator_main}"
+        f"\n{flow*2} {colored('›', 'white')} "
+    )
+
+
+def get_main_22_pin(current_dir, env_indicator_main):
+    prism = colored('◇', 'blue')
+    return (
+        f"\n{prism*2} {colored(getpass.getuser()+'@Peharge', 'white')} {prism*2}"
+        f"\n{colored(current_dir, 'blue')} {colored('⇄', 'white')} {env_indicator_main}"
+        f"\n{colored('❯❯', 'blue')} "
+    )
+
+
+def get_main_23_pin(current_dir, env_indicator_main):
+    return (
+        f"\n{colored('[', 'blue')}{colored(getpass.getuser()+'@Peharge', 'white')}{colored(']', 'blue')}"
+        f"{colored('<', 'white')}{colored(current_dir, 'blue')}{colored('>', 'white')}"
+        f"{colored('[', 'blue')}{env_indicator_main}{colored(']', 'white')}"
+        f"\n{colored('›', 'blue')} "
+    )
+
+
+def get_main_24_pin(current_dir, env_indicator_main):
+    slash = colored('╱', 'blue')
+    return (
+        f"\n{slash*3} {colored(getpass.getuser()+'@Peharge', 'white')} {slash*3}"
+        f"\n{slash} {colored(current_dir, 'blue')} {slash} {env_indicator_main}"
+        f"\n{colored('❯', 'blue')} "
+    )
+
+
+def get_main_25_pin(current_dir, env_indicator_main):
+    ring = colored('◯', 'blue')
+    return (
+        f"\n{ring} {colored('PEHARGE', 'white', attrs=['bold'])} {ring}"
+        f"\n{colored(getpass.getuser()+'@Peharge', 'blue')} · {colored(current_dir, 'white')} · {env_indicator_main}"
+        f"\n{colored('➤', 'blue')} "
+    )
+
+
+def get_main_26_pin(current_dir, env_indicator_main):
+    aurora = colored('≈≈≈', 'blue')
+    return (
+        f"\n{aurora} {colored(getpass.getuser()+'@Peharge', 'white', attrs=['bold'])} {aurora}"
+        f"\n{colored(current_dir, 'blue')} {colored('~', 'white')} {env_indicator_main}"
+        f"\n{colored('➤', 'blue')} "
+    )
+
+
+def get_main_27_pin(current_dir, env_indicator_main):
+    hexg = colored('⬡', 'blue')
+    return (
+        f"\n{hexg*2} {colored('HEXGRID', 'white', attrs=['bold'])} {hexg*2}"
+        f"\n{colored(getpass.getuser()+'@Peharge', 'blue')} {hexg} {colored(current_dir, 'white')} {hexg} {env_indicator_main}"
+        f"\n{colored('›', 'blue')} "
+    )
+
+
+def get_main_28_pin(current_dir, env_indicator_main):
+    beacon = colored('✦', 'blue')
+    return (
+        f"\n{beacon} {colored(getpass.getuser(), 'white')}@{colored('Peharge', 'blue')} {beacon}"
+        f"\n{colored('Dir:', 'white')} {colored(current_dir, 'blue')} {beacon} {env_indicator_main}"
+        f"\n{colored('❯', 'blue')} "
+    )
+
+
+def get_main_29_pin(current_dir, env_indicator_main):
+    binf = colored('1010', 'blue')
+    return (
+        f"\n{binf} {colored(getpass.getuser()+'@Peharge', 'white', attrs=['bold'])} {binf}"
+        f"\n{colored(current_dir, 'blue')} | {env_indicator_main}"
+        f"\n{colored('►', 'blue')} "
+    )
+
+
+def get_main_30_pin(current_dir, env_indicator_main):
+    mesh = colored('╳', 'blue')
+    return (
+        f"\n{mesh}{mesh}{mesh} {colored(getpass.getuser(), 'white')}@{colored('Peharge', 'blue')} {mesh}{mesh}{mesh}"
+        f"\n{colored(current_dir, 'blue')} {mesh} {env_indicator_main}"
+        f"\n{colored('❯', 'blue')} "
+    )
+
+
+def get_main_31_pin(current_dir, env_indicator_main):
+    star = colored('✺', 'blue')
+    return (
+        f"\n{star*2} {colored(getpass.getuser()+'@Peharge', 'white', attrs=['bold'])} {star*2}"
+        f"\n{colored('📂', 'white')} {colored(current_dir, 'blue')}   {env_indicator_main}"
+        f"\n{colored('➤', 'blue')} "
+    )
+
+
+def get_main_32_pin(current_dir, env_indicator_main):
+    lf = colored('╔═', 'blue')
+    rt = colored('═╗', 'blue')
+    lb = colored('╚═', 'blue')
+    rb = colored('═╝', 'blue')
+    header = f"{lf}{colored(getpass.getuser()+'@Peharge', 'white')}{rt}"
+    footer = f"{lb}{colored(current_dir+' | '+env_indicator_main, 'blue')}{rb}"
+    return f"\n{header}\n{footer}\n{colored('►', 'blue')} "
+
+
+def get_main_33_pin(current_dir, env_indicator_main):
+    q = colored('⟐', 'blue')
+    return (
+        f"\n{q} {colored('Q-PULSE', 'white', attrs=['bold'])} {q}"
+        f"\n{colored(getpass.getuser()+'@Peharge', 'blue')} • {colored(current_dir, 'white')} • {env_indicator_main}"
+        f"\n{colored('❯', 'blue')} "
+    )
+
+
+def get_main_34_pin(current_dir, env_indicator_main):
+    arc = colored('◥◣', 'blue')
+    return (
+        f"\n{arc} {colored(getpass.getuser(), 'white')}@{colored('Peharge', 'blue')} {arc}"
+        f"\n{colored(current_dir, 'blue')} [{env_indicator_main}]"
+        f"\n{colored('➤', 'blue')} "
+    )
+
+
+def get_main_35_pin(current_dir, env_indicator_main):
+    bar = colored('━', 'blue')
+    return (
+        f"\n{bar*4} {colored(getpass.getuser()+'@Peharge', 'white', attrs=['bold'])} {bar*4}"
+        f"\n{colored(current_dir, 'blue')} {bar} {env_indicator_main}"
+        f"\n{colored('›', 'blue')} "
+    )
+
+
 def get_evil_pin(current_dir, env_indicator):
     return (
         f"\n{white}┌──({reset}{red}root"
@@ -9330,6 +9559,181 @@ def main():
                 user_input = input().strip()
                 history.append(user_input)
 
+            elif state == "main-11":
+                setup_autocomplete()
+                pin = get_main_11_pin(current_dir, env_indicator_main)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+            elif state == "main-12":
+                setup_autocomplete()
+                pin = get_main_12_pin(current_dir, env_indicator_main)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+            elif state == "main-13":
+                setup_autocomplete()
+                pin = get_main_13_pin(current_dir, env_indicator_main)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+            elif state == "main-14":
+                setup_autocomplete()
+                pin = get_main_14_pin(current_dir, env_indicator_main)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+            elif state == "main-15":
+                setup_autocomplete()
+                pin = get_main_15_pin(current_dir, env_indicator_main)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+            elif state == "main-16":
+                setup_autocomplete()
+                pin = get_main_16_pin(current_dir, env_indicator_main)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+            elif state == "main-17":
+                setup_autocomplete()
+                pin = get_main_17_pin(current_dir, env_indicator_main)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+            elif state == "main-18":
+                setup_autocomplete()
+                pin = get_main_18_pin(current_dir, env_indicator_main)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+            elif state == "main-19":
+                setup_autocomplete()
+                pin = get_main_19_pin(current_dir, env_indicator_main)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+            elif state == "main-20":
+                setup_autocomplete()
+                pin = get_main_20_pin(current_dir, env_indicator_main)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+            elif state == "main-21":
+                setup_autocomplete()
+                pin = get_main_21_pin(current_dir, env_indicator_main)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+            elif state == "main-22":
+                setup_autocomplete()
+                pin = get_main_22_pin(current_dir, env_indicator_main)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+            elif state == "main-23":
+                setup_autocomplete()
+                pin = get_main_23_pin(current_dir, env_indicator_main)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+            elif state == "main-24":
+                setup_autocomplete()
+                pin = get_main_24_pin(current_dir, env_indicator_main)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+            elif state == "main-25":
+                setup_autocomplete()
+                pin = get_main_25_pin(current_dir, env_indicator_main)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+            elif state == "main-26":
+                setup_autocomplete()
+                pin = get_main_26_pin(current_dir, env_indicator_main)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+            elif state == "main-27":
+                setup_autocomplete()
+                pin = get_main_27_pin(current_dir, env_indicator_main)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+            elif state == "main-28":
+                setup_autocomplete()
+                pin = get_main_28_pin(current_dir, env_indicator_main)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+            elif state == "main-29":
+                setup_autocomplete()
+                pin = get_main_29_pin(current_dir, env_indicator_main)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+            elif state == "main-30":
+                setup_autocomplete()
+                pin = get_main_30_pin(current_dir, env_indicator_main)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+            elif state == "main-31":
+                setup_autocomplete()
+                pin = get_main_31_pin(current_dir, env_indicator_main)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+            elif state == "main-32":
+                setup_autocomplete()
+                pin = get_main_32_pin(current_dir, env_indicator_main)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+            elif state == "main-33":
+                setup_autocomplete()
+                pin = get_main_33_pin(current_dir, env_indicator_main)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+            elif state == "main-34":
+                setup_autocomplete()
+                pin = get_main_34_pin(current_dir, env_indicator_main)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+            elif state == "main-35":
+                setup_autocomplete()
+                pin = get_main_35_pin(current_dir, env_indicator_main)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
             elif state == "evil":
                 setup_autocomplete()
                 pin = get_evil_pin(current_dir, env_indicator)
@@ -9542,6 +9946,106 @@ def main():
 
             elif user_input.lower() == "pin main-10":
                 state = "main-10"
+                continue
+
+            elif user_input.lower() == "pin main-11":
+                state = "main-11"
+                continue
+
+            elif user_input.lower() == "pin main-12":
+                state = "main-12"
+                continue
+
+            elif user_input.lower() == "pin main-13":
+                state = "main-13"
+                continue
+
+            elif user_input.lower() == "pin main-14":
+                state = "main-14"
+                continue
+
+            elif user_input.lower() == "pin main-15":
+                state = "main-15"
+                continue
+
+            elif user_input.lower() == "pin main-16":
+                state = "main-16"
+                continue
+
+            elif user_input.lower() == "pin main-17":
+                state = "main-17"
+                continue
+
+            elif user_input.lower() == "pin main-18":
+                state = "main-18"
+                continue
+
+            elif user_input.lower() == "pin main-19":
+                state = "main-19"
+                continue
+
+            elif user_input.lower() == "pin main-20":
+                state = "main-20"
+                continue
+
+            elif user_input.lower() == "pin main-21":
+                state = "main-21"
+                continue
+
+            elif user_input.lower() == "pin main-22":
+                state = "main-22"
+                continue
+
+            elif user_input.lower() == "pin main-23":
+                state = "main-23"
+                continue
+
+            elif user_input.lower() == "pin main-24":
+                state = "main-24"
+                continue
+
+            elif user_input.lower() == "pin main-25":
+                state = "main-25"
+                continue
+
+            elif user_input.lower() == "pin main-26":
+                state = "main-26"
+                continue
+
+            elif user_input.lower() == "pin main-27":
+                state = "main-27"
+                continue
+
+            elif user_input.lower() == "pin main-28":
+                state = "main-28"
+                continue
+
+            elif user_input.lower() == "pin main-29":
+                state = "main-29"
+                continue
+
+            elif user_input.lower() == "pin main-30":
+                state = "main-30"
+                continue
+
+            elif user_input.lower() == "pin main-31":
+                state = "main-31"
+                continue
+
+            elif user_input.lower() == "pin main-32":
+                state = "main-32"
+                continue
+
+            elif user_input.lower() == "pin main-33":
+                state = "main-33"
+                continue
+
+            elif user_input.lower() == "pin main-34":
+                state = "main-34"
+                continue
+
+            elif user_input.lower() == "pin main-35":
+                state = "main-35"
                 continue
 
             elif user_input.lower() == "pin evil":
