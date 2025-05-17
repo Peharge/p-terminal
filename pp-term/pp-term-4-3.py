@@ -139,6 +139,8 @@ cyan = "\033[96m"
 white = "\033[97m"
 black = "\033[30m"
 orange = "\033[38;5;214m"
+purple = "\033[95m"
+dim = "\033[2m"
 reset = "\033[0m"
 bold = "\033[1m"
 
@@ -7853,6 +7855,49 @@ def get_main_5_pin(current_dir, env_indicator_3):
     )
 
 
+def get_main_6_pin(current_dir, env_indicator_main):
+    return (
+        f"\n{blue}🌌 [{white}{bold}{getpass.getuser()}" + colored("㋐", attrs=["bold"])+ f"Peharge{reset}{blue}]"
+        f" {dim}{timestamp()}{reset} "
+        f"{white}[{current_dir}]{reset} {env_indicator_main}"
+        f"\n{blue}➤{reset} "
+    )
+
+
+def get_main_7_pin(current_dir, env_indicator_main):
+    return (
+        f"\n{blue}╭─ {white}{bold}{getpass.getuser()}" + colored("㋐", attrs=["bold"])+ f"Peharge{reset}{blue}"
+        f"\n├─ 📁 {white}{current_dir}{blue}"
+        f"\n╰─ 🌐 {env_indicator_main}{reset}"
+        f"\n{blue}λ{reset} "
+    )
+
+
+def get_main_8_pin(current_dir, env_indicator_main):
+    return (
+        f"\n{blue}[{white}{getpass.getuser()}" + colored("㋐", attrs=["bold"])+ f"Peharge{blue}]{reset}:{white}{current_dir}{reset} {blue}{env_indicator_main}{reset} ➤ "
+    )
+
+
+def get_main_9_pin(current_dir, env_indicator_main):
+    brain = "🧠"
+    return (
+        f"\n{blue}{brain} {bold}AI{reset} {white}| {getpass.getuser()}" + colored("㋐", attrs=["bold"])+ "Peharge"
+        f" | {current_dir} | {env_indicator_main}"
+        f"\n{blue}└─▶{reset} "
+    )
+
+
+def get_main_10_pin(current_dir, env_indicator_main):
+    chip = "🧬"
+    bolt = "⚡"
+    return (
+        f"\n{blue}{chip} SYSTEM {white}| {bold}{getpass.getuser()}" + colored("㋐", attrs=["bold"])+ f"Peharge{reset} {blue}| {current_dir}{reset}"
+        f"\n{white}{bolt} ENV: {env_indicator_main}{reset}"
+        f"\n{blue}⟩{reset} "
+    )
+
+
 def get_evil_pin(current_dir, env_indicator):
     return (
         f"\n{white}┌──({reset}{red}root"
@@ -9164,6 +9209,12 @@ def main():
             else:
                 display_env_path = active_env_path
 
+            env_indicator_main = (
+                f"{display_env_path}"
+                if env_active else
+                f"{red}no venv recorded{reset}"
+            )
+
             env_indicator = (
                 f"{white}[{reset}{display_env_path}{white}]{reset}"
                 if env_active else
@@ -9239,6 +9290,42 @@ def main():
             elif state == "main-5":
                 setup_autocomplete()
                 pin = get_main_5_pin(current_dir, env_indicator_3)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+            elif state == "main-6":
+                setup_autocomplete()
+                pin = get_main_6_pin(current_dir, env_indicator_main)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+
+            elif state == "main-7":
+                setup_autocomplete()
+                pin = get_main_7_pin(current_dir, env_indicator_main)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+            elif state == "main-8":
+                setup_autocomplete()
+                pin = get_main_8_pin(current_dir, env_indicator_main)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+            elif state == "main-9":
+                setup_autocomplete()
+                pin = get_main_9_pin(current_dir, env_indicator_main)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+            elif state == "main-10":
+                setup_autocomplete()
+                pin = get_main_10_pin(current_dir, env_indicator_main)
                 print(pin, end='')
                 user_input = input().strip()
                 history.append(user_input)
@@ -9435,6 +9522,26 @@ def main():
 
             elif user_input.lower() == "pin main-5":
                 state = "main-5"
+                continue
+
+            elif user_input.lower() == "pin main-6":
+                state = "main-6"
+                continue
+
+            elif user_input.lower() == "pin main-7":
+                state = "main-7"
+                continue
+
+            elif user_input.lower() == "pin main-8":
+                state = "main-8"
+                continue
+
+            elif user_input.lower() == "pin main-9":
+                state = "main-9"
+                continue
+
+            elif user_input.lower() == "pin main-10":
+                state = "main-10"
                 continue
 
             elif user_input.lower() == "pin evil":
