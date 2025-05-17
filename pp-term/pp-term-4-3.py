@@ -7911,7 +7911,7 @@ def get_main_11_pin(current_dir, env_indicator_main):
 def get_main_12_pin(current_dir, env_indicator_main):
     wave = colored('〰️', 'blue')
     return (
-        f"{wave}{wave}{colored('╼', 'white')} {colored(getpass.getuser(), 'white')}@{colored('Peharge', 'blue')}"
+        f"\n{wave}{wave}{colored('╼', 'white')} {colored(getpass.getuser(), 'white')}@{colored('Peharge', 'blue')}"
         f" {wave}{wave}{colored('╾', 'white')} {colored(current_dir, 'white')}"
         f" {wave}{wave}{colored('╼', 'white')} {env_indicator_main}"
         f"\n{colored('▶', 'blue')} "
