@@ -152,7 +152,7 @@ set PS1_PATH=%SCRIPT_DIR%%PS1_FILE%
 
 REM Prüfen, ob die PS1-Datei existiert
 if not exist "%PS1_PATH%" (
-    echo [ERROR] PowerShell-Skript nicht gefunden: "%PS1_PATH%"
+    call :Log ERROR "PowerShell script not found: %PS1_PATH%"
     pause
     exit /b 1
 )
