@@ -32,7 +32,7 @@
 
 <div align="center">
 
-The coolest terminal in the world<br>
+"The coolest terminal in the world"<br>
 A warm welcome, to P-Term (C/C++) and PP-Term (Python)<br>
 Peharge Projects 2025<br>
 Thank you for your interest in Peharge Terminal. We greatly appreciate that ❤️<br><br>
