@@ -66,63 +66,49 @@ import json
 import subprocess
 from datetime import datetime
 import sys
-# import getpass
-from datetime import datetime
-
-def timestamp() -> str:
-    """Returns current time formatted with milliseconds"""
-    now = datetime.now()
-    return now.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
-
-
-# Farbcodes definieren
-red = "\033[91m"
-green = "\033[92m"
-yellow = "\033[93m"
-blue = "\033[94m"
-magenta = "\033[95m"
-cyan = "\033[96m"
-white = "\033[97m"
-black = "\033[30m"
-orange = "\033[38;5;214m"
-reset = "\033[0m"
-bold = "\033[1m"
 
 sys.stdout.reconfigure(encoding='utf-8')
-# user_name = getpass.getuser()
 
-# Lokale JSON-Datei, in der das Datum gespeichert wird
-DATA_FILE = os.path.join(os.path.expanduser("~"), "p-terminal", "pp-term", "update", "last_update.json")
+# === Constants ===
+BASE_DIR = os.path.join(os.path.expanduser("~"), "p-terminal", "pp-term", "update")
+DATA_FILE = os.path.join(BASE_DIR, "last_update.json")
+BATCH_FILE = os.path.join(BASE_DIR, "update-p-terminal-repository.bat")
 
-print(f"{DATA_FILE}")
 
-# Pfad zum Batch-Skript
-image_dir = os.path.join(os.path.expanduser("~"), "p-terminal", "pp-term", "update")
-batch_file = os.path.join(image_dir, "update-p-terminal-repository.bat")
+def timestamp() -> str:
+    """Returns the current time formatted with milliseconds"""
+    return datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
 
 
 def read_last_update():
-    """Liest das letzte gespeicherte Datum aus der JSON-Datei."""
-    if os.path.exists(DATA_FILE):
-        with open(DATA_FILE, "r") as file:
-            data = json.load(file)
-            return data.get("last_update")
+    """Reads the last saved date from the JSON file."""
+    try:
+        if os.path.exists(DATA_FILE):
+            with open(DATA_FILE, "r", encoding="utf-8") as file:
+                data = json.load(file)
+                return data.get("last_update")
+    except (json.JSONDecodeError, IOError) as e:
+        print(f"[{timestamp()}] [ERROR] Error reading update file: {e}")
     return None
 
 
 def write_last_update():
-    """Speichert das aktuelle Datum in die JSON-Datei."""
-    current_date = datetime.now().strftime("%d.%m.%Y")
-    data = {"last_update": current_date}
-    with open(DATA_FILE, "w") as file:
-        json.dump(data, file)
-    return current_date
+    """Saves the current date into the JSON file."""
+    try:
+        os.makedirs(os.path.dirname(DATA_FILE), exist_ok=True)
+        current_date = datetime.now().strftime("%d.%m.%Y")
+        with open(DATA_FILE, "w", encoding="utf-8") as file:
+            json.dump({"last_update": current_date}, file)
+        return current_date
+    except IOError as e:
+        print(f"[{timestamp()}] [ERROR] Error writing update file: {e}")
+        return None
 
 
 def prompt_for_update():
-    """Fragt den Benutzer, ob ein Update durchgeführt werden soll."""
+    """Asks the user whether to perform an update."""
     while True:
-        choice = input(f"Would you like to perform an update? [y/n]:").strip().lower()
+        choice = input("Would you like to perform an update? [y/n]: ").strip().lower()
         if choice in {"y", "yes"}:
             return True
         elif choice in {"n", "no"}:
@@ -132,34 +118,45 @@ def prompt_for_update():
 
 
 def perform_update():
-    """Führt das Update durch, indem das Batch-Skript ausgeführt wird."""
-    if os.path.exists(batch_file):
-        print(f"Start update...")
-        subprocess.run(batch_file, shell=True)  # Führt das Skript aus
-        print(f"[{timestamp()}] [INFO] Update completed.")
-        write_last_update()  # Aktualisiert das Datum auf heute
-    else:
-        print(f"[{timestamp()}] [ERROR] Batch file not found: {batch_file}")
+    """Performs the update by running the batch script."""
+    if not os.path.exists(BATCH_FILE):
+        print(f"[{timestamp()}] [ERROR] Batch file not found: {BATCH_FILE}")
+        return
+
+    if sys.platform != "win32":
+        print(f"[{timestamp()}] [ERROR] Update script can only be executed on Windows.")
+        return
+
+    print(f"[{timestamp()}] [INFO] Starting update...")
+    subprocess.run(BATCH_FILE, shell=True)
+    print(f"[{timestamp()}] [INFO] Update completed.")
+    write_last_update()
 
 
 def main():
-    title = f"P-Terminal Repository Update (experimental):"
+    title = "P-Terminal Repository Update (experimental):"
     line = "-" * len(title)
 
     print(f"\n{title}")
     print(f"{line}\n")
-    print("Please note that this update function is not yet 100% reliable and errors may occur. \nTherefore, we recommend using the git pull https://github.com/Peharge/p-terminal.git command instead. \nHowever, if this is not possible...\n")
+    print("Please note: This update function is experimental. Errors may occur.")
+    print("We recommend using the following command instead:")
+    print("git pull https://github.com/Peharge/p-terminal.git")
+    print("If that's not possible, you can continue here...\n")
+
+    print(f"[{timestamp()}] [INFO] Update data path: {DATA_FILE}")
 
     last_update = read_last_update()
     if last_update:
-        print(f"[{timestamp()}] [INFO] P-Terminal - Last update: {last_update}")
+        print(f"[{timestamp()}] [INFO] Last update: {last_update}")
     else:
-        print(f"[{timestamp()}] [INFO] P-Terminal - No update date found.")
+        print(f"[{timestamp()}] [INFO] No previous update date found.")
 
     if prompt_for_update():
         perform_update()
     else:
         print(f"[{timestamp()}] [INFO] Update aborted.")
+
 
 if __name__ == "__main__":
     main()
