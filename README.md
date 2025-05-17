@@ -54,8 +54,8 @@ Thank you for your interest in Peharge Terminal. We greatly appreciate that ❤�
 # **_PP-Terminal 3_**
 
 Why show the standard? The PP Terminal does it all<br>
-— but we show you what sets it apart.<br><br>
-<img width="400" src="https://github.com/Peharge/p-terminal-images/blob/main/images/pp-term-banner-6.png" alt="pp-term"/>
+— but we show you what sets it apart.<br><br><br>
+<img width="800" src="https://github.com/Peharge/p-terminal-images/blob/main/images/pp-term-banner-6.png" alt="pp-term"/>
 </div>
 
 | Information                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | Image                                                                   |
