@@ -68,15 +68,22 @@ set USERNAME=%USERNAME%
 set PYTHON_PATH=C:\Users\%USERNAME%\p-terminal\pp-term\.env\Scripts\python.exe
 set SCRIPT_PATH_1=C:\Users\%USERNAME%\p-terminal\pp-term\update\update.py
 
+:: Global Settings
+set "SCRIPT_DIR=%~dp0"
+set "LOGFILE=C:\Users\julia\p-terminal\pp-term\WSL_Diagnostics.log"
+set "MAX_DRIFT=300"          & rem Maximum allowed time drift in seconds
+set "PING_ADDR=8.8.8.8"      & rem Default ping target
+set "TEST_DOMAIN=example.com"
+
 REM Check if Python interpreter exists
 if not exist "%PYTHON_PATH%" (
-    echo Error: Python interpreter not found: %PYTHON_PATH%
+    call :Log ERROR "Python interpreter not found: %PYTHON_PATH%"
     exit /b 1
 )
 
 REM Check if script exists
 if not exist "%SCRIPT_PATH_1%" (
-    echo Error: Script not found: %SCRIPT_PATH_1%
+    call :Log ERROR "Script not found: %SCRIPT_PATH_1%"
     exit /b 1
 )
 
@@ -85,7 +92,53 @@ REM Execute the Python script
 
 REM Output success message
 echo.
-echo The scripts have been executed, Ollama has been started, and the browser has been opened.
+call :Log INFO "The scripts have been executed."
 
 REM Wait for user input before exiting
 pause
+
+:: Functions
+:InitLog
+    (echo [%DATE% %TIME%] [LOG INIT] Log created >"%LOGFILE%"
+    ) 2>nul
+    goto :eof
+
+:Timestamp
+    rem Set TS variable to timestamp YYYY-MM-DD HH:MM:SS.mmm
+    for /F "tokens=* delims=" %%D in ('powershell -NoProfile -Command "Get-Date -Format 'yyyy-MM-dd HH:mm:ss.fff'"') do set "TS=%%D"
+    goto :eof
+
+:Log
+    rem call :Log LEVEL Message
+    setlocal EnableDelayedExpansion
+    call :Timestamp
+    set "LEVEL=%~1"
+    shift
+    set "MSG="
+    :buildMsg
+    if "%~1"=="" goto continueLog
+    set "MSG=!MSG! %~1"
+    shift
+    goto buildMsg
+
+:continueLog
+    set "MSG=!MSG:~1!"  & rem entfernt führendes Leerzeichen
+    echo [!TS!] [!LEVEL!] !MSG!
+    >>"%LOGFILE%" echo [!TS!] [!LEVEL!] !MSG!
+    endlocal
+    goto :eof
+
+:Run
+    rem call :Run command arguments
+    setlocal
+    set "CMD=%*"
+    rem echo [COMMAND] %CMD%
+    >>"%LOGFILE%" echo [COMMAND] %CMD%
+    cmd /C %CMD%
+    endlocal
+    goto :eof
+
+:BlankLine
+    echo.
+    goto :eof
+
