@@ -54,7 +54,7 @@ Thank you for your interest in Peharge Terminal. We greatly appreciate that ❤�
 # **_PP-Terminal 3_**
 
 Why show the standard? The PP Terminal does it all<br>
-— but we show you what sets it apart.
+— but we show you what sets it apart.<br>
 <img width="400" src="https://peharge.github.io/MAVIS-web/images/pp-term-img.png" alt="pp-term"/>
 </div>
 
