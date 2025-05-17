@@ -14,14 +14,14 @@
     <img src="./icons/peharge-banner-3.svg" alt="peharge"/>
     <img src="./icons/MAVIS-icon-banner-3.svg" alt="mavis">
     <img src="./icons/MAVIS-launcher-icon-banner-3.svg" alt="mavis-launcher">
-    <img src="./icons/MAVIS-terminal-icon-banner-3.svg" alt="mavis-terminal">
+    <img src="./icons/MAVIS-terminal-icon-banner-3.svg" alt="mavis-terminal"><br>
     <img alt="c++" src="https://img.shields.io/badge/-C++-555555?style=flat&logo=cplusplus">
     <img alt="c" src="https://img.shields.io/badge/C-555555?logo=C&logoColor=white">
     <img alt="rust" src="https://img.shields.io/badge/Rust-555555?logo=rust&logoColor=white">
     <img alt="python" src="https://img.shields.io/badge/Python-3.11 / 3.12 / (3.13)-555555?&style=flat&logo=Python&logoColor=white">
     <img alt="batch" src="https://img.shields.io/badge/Bat-555555?style=flat&logo=bat">
     <img alt="bash" src="https://img.shields.io/badge/Shell-555555?&style=flat&logo=gnu-bash&logoColor=white">
-	<img alt="bash" src="https://img.shields.io/badge/WSL-555555?logo=linux&logoColor=white"><br><br>
+	<img alt="bash" src="https://img.shields.io/badge/WSL-555555?logo=linux&logoColor=white"><br>
     <img alt="bash" src="https://img.shields.io/badge/Visual_Studio-555555?logo=visualstudio">
     <img alt="bash" src="https://img.shields.io/badge/PyCharm-555555?logo=pycharm">
     <img alt="bash" src="https://img.shields.io/badge/CLion-555555?logo=clion">
@@ -58,23 +58,158 @@ Why show the standard? The PP Terminal does it all<br>
 <img width="600" src="https://peharge.github.io/MAVIS-web/images/pp-term-img.png" alt="pp-term"/><br><br>
 </div>
 
-| Information                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | Image                                                                   |
-|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------|
-| **What can the PP terminal do** <br>PP-Terminal isn't just another terminal—it's a powerful all-in-one tool that brings together system monitoring, game fun, and cutting-edge AI interaction. With PP-Terminal, you don’t just get the basics; you get seamless access to Linux tools on Windows, instant AI model queries like Qwen 3, and much more. Experience the ultimate flexibility, all in one terminal. Why settle for less when you can have it all?                                                                                     | ![img1](https://peharge.github.io/MAVIS-web/images/pp-term-img.png)     |
-| **PP-Terminal Design** <br>PP-Terminal blends sleek, modern design with powerful, intelligent performance to create a seamless, future-ready experience. Whether you're an individual user or a business, PP-Terminal elevates your workflow with unmatched efficiency and versatility. Step into the future of terminal technology — where every command counts.                                                                                                                                                                                   | ![img3](https://peharge.github.io/MAVIS-web/images/pp-term-ads-3.png)   |
-| **Linux** <br>The PP-Termin supports a wide range of Linux distributions, offering maximum flexibility and compatibility.The PP-Terminal supports a wide range of Linux distributions, offering maximum flexibility and compatibility.                                                                                                                                                                                                                                                                                                              | ![img4](https://peharge.github.io/MAVIS-web/images/pp-term-ads-4.png)   |
-| **Search** <br>But that's not all. With PP-Terminal, you can also search websites directly from the terminal. Use the ps command followed by a keyword to search for processes, or go further with commands like ps-github, ps-huggingface, or ps-arxiv to search directly on these platforms' websites. This makes it easier than ever to find exactly what you're looking for while working in your terminal.                                                                                                                                     | ![img5](https://peharge.github.io/MAVIS-web/images/pp-term-ads-5.png)   |
-| **Peharge AI** <br>PP-Terminal goes beyond traditional system tools—it's also your gateway to powerful AI models. With simple commands like 'pa [promt]', 'pa qwen3:30b' or 'pa llama4:maverick', you can access advanced AI models and start interacting right from your terminal                                                                                                                                                                                                                                                                  | ![img6](https://peharge.github.io/MAVIS-web/images/pp-term-ads-6.png)   |
-| **GIT** <br>PP-Terminal not only offers powerful terminal commands but also integrates Git seamlessly with a range of commands like 'p git', 'git ls all', 'gitk' and more. Whether you’re managing code repositories or visualizing your Git history, PP-Terminal makes it effortless.                                                                                                                                                                                                                                                             | ![img8](https://peharge.github.io/MAVIS-web/images/pp-term-ads-8.png)   |
-| **System administration** <br>The pp-terminal can solve everything you want in the terminal but also graphically...                                                                                                                                                                                                                                                                                                                                                                                                                                 | ![img9](https://peharge.github.io/MAVIS-web/images/pp-term-ads-9.png)   |
-| **File administration** <br>PP-Terminal makes managing your files a breeze with commands like 'p ls', 'p ls [project]', 'nano [filename]', 'vim [filename]' and 'eamcs [filename]'. Navigate your directories, edit files, and manage projects with ease, all from the power of one terminal.                                                                                                                                                                                                                                                       | ![img10](https://peharge.github.io/MAVIS-web/images/pp-term-ads-10.png) |
-| **SIMON ext.** <br>The pp-terminal collaborates with SIMON, also developed by PP-Terminal developers, to utilize cutting-edge imaging technologies and enable more precise cancer diagnoses. Through innovative procedures such as X-rays, CT, MRI, PET, DEXA, and fluoroscopy, the system helps gain vital time and improve the chances of recovery. PP-Terminal – Technology that saves lives.                                                                                                                                                    | ![img11](https://peharge.github.io/MAVIS-web/images/pp-term-ads-11.png) |
-| **Framework administration** <br>PP-Terminal simplifies managing frameworks and packages directly from the terminal with commands like 'p pip' for Python package management, and more. Whether you're installing dependencies, updating frameworks, or managing environments, PP-Terminal provides a seamless and efficient experience.                                                                                                                                                                                                            | ![img13](https://peharge.github.io/MAVIS-web/images/pp-term-ads-13.png) |
-| **LINUX OS administration** <br>PP-Terminal makes managing WSL (Windows Subsystem for Linux) and Linux distributions easier than ever. With the command 'p wsl', you can quickly view all information about your WSL environments. Additionally, 'p [distro]' displays all details related to a specific Linux distribution, giving you a comprehensive overview in just one command.                                                                                                                                                               | ![img14](https://peharge.github.io/MAVIS-web/images/pp-term-ads-14.png) |
-| **Search** <br>PP-Terminal includes an interactive browser, allowing you to easily visit websites like ollama.com by simply typing commands like 'p ollama.com'.                                                                                                                                                                                                                                                                                                                                                                                    | ![img14](https://peharge.github.io/MAVIS-web/images/pp-term-ads-16.png) |
-| **Games** <br>PP-Terminal isn't just about powerful system tools—it also adds a bit of fun to your command line experience. Take a break with classic games and playful features that will make your terminal sessions even more enjoyable. You can play classic games like Tetris, Pacman, or even Chess —all directly in the terminal window! Plus, enjoy fun animations, like watching a train pass by for a cool, retro vibe. PP-Terminal brings a little bit of play into your productivity. After all, why not have fun while you're working? | ![img15](https://peharge.github.io/MAVIS-web/images/pp-term-ads-15.png) |
-| **Emacs** <br>PP-Terminal lets you interact with various Linux distributions, enabling you to launch applications like Emacs, Vim, Neovim, GNU nano, Kate, Gedit, Geany, VS Code, VSCodium, Eclipse, IntelliJ IDEA, PyCharm, Atom, Sublime Text, Kakoune, Lite XL etc. directly through the interactive interface.                                                                                                                                                                                                                                  | ![img16](https://peharge.github.io/MAVIS-web/images/pp-term-ads-18.png) |
-| **More Linux tools** <br>PP-Terminal brings the full range of advanced Linux command-line tools to your Windows machine, without compromise. With support for essential utilities like htop, btop, atop, glances, ncdu, fzf, bat, gitui, lazygit, starship, and more, PP-Terminal gives you everything you need for system monitoring, file management, and Git workflow—all in one sleek, native terminal experience.                                                                                                                              | ![img18](https://peharge.github.io/MAVIS-web/images/pp-term-ads-19.png) |
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <strong>What can the PP terminal do?</strong><br><br>PP-Terminal isn't just another terminal—it's a powerful all-in-one tool that brings together system monitoring, game fun, and cutting-edge AI interaction. With PP-Terminal, you don’t just get the basics; you get seamless access to Linux tools on Windows, instant AI model queries like Qwen 3, and much more. Experience the ultimate flexibility, all in one terminal. Why settle for less when you can have it all?
+	        </td>
+    <td width="50%" valign="top" align="center">
+      <img src="https://peharge.github.io/MAVIS-web/images/pp-term-img.png" width="100%">
+    </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <strong>PP-Terminal Design</strong><br><br>PP-Terminal blends sleek, modern design with powerful, intelligent performance to create a seamless, future-ready experience. Whether you're an individual user or a business, PP-Terminal elevates your workflow with unmatched efficiency and versatility. Step into the future of terminal technology — where every command counts.                                                                                                                                                                        </td>
+    <td width="50%" valign="top" align="center">
+      <img src="https://peharge.github.io/MAVIS-web/images/pp-term-ads-3.png" width="100%">
+    </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <strong>Linux</strong><br><br>The PP-Termin supports a wide range of Linux distributions, offering maximum flexibility and compatibility.The PP-Terminal supports a wide range of Linux distributions, offering maximum flexibility and compatibility.                           </td>
+    <td width="50%" valign="top" align="center">
+      <img src="https://peharge.github.io/MAVIS-web/images/pp-term-ads-4.png" width="100%">
+    </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <strong>Search</strong><br><br>But that's not all. With PP-Terminal, you can also search websites directly from the terminal. Use the ps command followed by a keyword to search for processes, or go further with commands like ps-github, ps-huggingface, or ps-arxiv to search directly on these platforms' websites. This makes it easier than ever to find exactly what you're looking for while working in your terminal.                                                                                                                         </td>
+    <td width="50%" valign="top" align="center">
+      <img src="https://peharge.github.io/MAVIS-web/images/pp-term-ads-5.png" width="100%">
+    </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <strong>Peharge AI</strong><br><br>PP-Terminal goes beyond traditional system tools—it's also your gateway to powerful AI models. With simple commands like 'pa [promt]', 'pa qwen3:30b' or 'pa llama4:maverick', you can access advanced AI models and start interacting right from your terminal                                                                                                                                                                                                                                                           </td>
+    <td width="50%" valign="top" align="center">
+      <img src="https://peharge.github.io/MAVIS-web/images/pp-term-ads-6.png" width="100%">
+    </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <strong>GIT</strong><br><br>PP-Terminal not only offers powerful terminal commands but also integrates Git seamlessly with a range of commands like 'p git', 'git ls all', 'gitk' and more. Whether you’re managing code repositories or visualizing your Git history, PP-Terminal makes it effortless.                                                                                                                                                                                                                                                </td>
+    <td width="50%" valign="top" align="center">
+      <img src="https://peharge.github.io/MAVIS-web/images/pp-term-ads-8.png" width="100%">
+    </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <strong>System administration</strong><br><br>The pp-terminal can solve everything you want in the terminal but also graphically...                                                                                                                                                                                                                                                                                                                                                                                                                           </td>
+    <td width="50%" valign="top" align="center">
+      <img src="https://peharge.github.io/MAVIS-web/images/pp-term-ads-9.png" width="100%">
+    </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <strong>File administration</strong><br><br>PP-Terminal makes managing your files a breeze with commands like 'p ls', 'p ls [project]', 'nano [filename]', 'vim [filename]' and 'eamcs [filename]'. Navigate your directories, edit files, and manage projects with ease, all from the power of one terminal.
+</td>
+    <td width="50%" valign="top" align="center">
+      <img src="https://peharge.github.io/MAVIS-web/images/pp-term-ads-10.png" width="100%">
+    </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <strong>SIMON ext.</strong><br><br>The pp-terminal collaborates with SIMON, also developed by PP-Terminal developers, to utilize cutting-edge imaging technologies and enable more precise cancer diagnoses. Through innovative procedures such as X-rays, CT, MRI, PET, DEXA, and fluoroscopy, the system helps gain vital time and improve the chances of recovery. PP-Terminal – Technology that saves lives.                                                                                                                                            </td>
+    <td width="50%" valign="top" align="center">
+      <img src="https://peharge.github.io/MAVIS-web/images/pp-term-ads-11.png" width="100%">
+    </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <strong>Framework administration</strong><br><br>PP-Terminal simplifies managing frameworks and packages directly from the terminal with commands like 'p pip' for Python package management, and more. Whether you're installing dependencies, updating frameworks, or managing environments, PP-Terminal provides a seamless and efficient experience.                                                                                                                                                                                                      </td>
+    <td width="50%" valign="top" align="center">
+      <img src="https://peharge.github.io/MAVIS-web/images/pp-term-ads-13.png" width="100%">
+    </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <strong>LINUX OS administration</strong><br><br>PP-Terminal makes managing WSL (Windows Subsystem for Linux) and Linux distributions easier than ever. With the command 'p wsl', you can quickly view all information about your WSL environments. Additionally, 'p [distro]' displays all details related to a specific Linux distribution, giving you a comprehensive overview in just one command.                                                                                                                                                      </td>
+    <td width="50%" valign="top" align="center">
+      <img src="https://peharge.github.io/MAVIS-web/images/pp-term-ads-14.png" width="100%">
+    </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <strong>Search</strong><br><br>PP-Terminal includes an interactive browser, allowing you to easily visit websites like ollama.com by simply typing commands like 'p ollama.com'.                                                                                                                                                                                                                                                                                                                                                                              </td>
+    <td width="50%" valign="top" align="center">
+      <img src="https://peharge.github.io/MAVIS-web/images/pp-term-ads-16.png" width="100%">
+    </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <strong>Games</strong><br><br>PP-Terminal isn't just about powerful system tools—it also adds a bit of fun to your command line experience. Take a break with classic games and playful features that will make your terminal sessions even more enjoyable. You can play classic games like Tetris, Pacman, or even Chess —all directly in the terminal window! Plus, enjoy fun animations, like watching a train pass by for a cool, retro vibe. PP-Terminal brings a little bit of play into your productivity. After all, why not have fun while you're working?
+</td>
+    <td width="50%" valign="top" align="center">
+      <img src="https://peharge.github.io/MAVIS-web/images/pp-term-ads-15.png" width="100%">
+    </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <strong>Emacs</strong><br><br>PP-Terminal lets you interact with various Linux distributions, enabling you to launch applications like Emacs, Vim, Neovim, GNU nano, Kate, Gedit, Geany, VS Code, VSCodium, Eclipse, IntelliJ IDEA, PyCharm, Atom, Sublime Text, Kakoune, Lite XL etc. directly through the interactive interface.                                                                                                                                                                                                                          </td>
+    <td width="50%" valign="top" align="center">
+      <img src="https://peharge.github.io/MAVIS-web/images/pp-term-ads-18.png" width="100%">
+    </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <strong>More Linux tools</strong><br><br>PP-Terminal brings the full range of advanced Linux command-line tools to your Windows machine, without compromise. With support for essential utilities like htop, btop, atop, glances, ncdu, fzf, bat, gitui, lazygit, starship, and more, PP-Terminal gives you everything you need for system monitoring, file management, and Git workflow—all in one sleek, native terminal experience.                                                                                                                       </td>
+    <td width="50%" valign="top" align="center">
+      <img src="https://peharge.github.io/MAVIS-web/images/pp-term-ads-19.png" width="100%">
+    </td>
+  </tr>
+</table>
 
 # Install
 
