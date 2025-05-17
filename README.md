@@ -657,7 +657,6 @@ The commit history can be found at: https://github.com/Peharge/p-terminal-old
 <div align="center">
 
 ## **_Peharge Terminal_**
-
 #### **_Peharge Projects 2025_**
 
 </div>
