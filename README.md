@@ -619,7 +619,7 @@ etc.
 
 <div align="center">
 
-# **_P-Terminal 1_**<br>
+# **_P-Terminal 1 (SOON)_**<br>
 [`Download P-Term (SOON) [Windows]`](https://github.com/Peharge/p-terminal/blob/main/p-term/run-p-term.bat) [`P-Term Commands`](https://peharge.github.io/MAVIS-web/commands-p-term.html)<br><br>
 <img width="600" src="https://peharge.github.io/MAVIS-web/images/p-term-img.png" alt="pp-term"/><br><br>
 </div>
