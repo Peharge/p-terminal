@@ -34,20 +34,24 @@ The coolest terminal in the world<br>
 A warm welcome, to P-Term (C/C++) and PP-Term (Python)<br>
 Peharge Projects 2025<br>
 Thank you for your interest in Peharge Terminal. We greatly appreciate that ❤️<br><br>
-[`P-Terminal.com`](https://peharge.github.io/MAVIS-web/p-term.html) [`Download PP-Term`](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) [`Download P-Term (SOON)`](https://github.com/Peharge/p-terminal/blob/main/p-term/run-p-term.bat)
+[`P-Terminal.com`](https://peharge.github.io/MAVIS-web/p-term.html) [`Download PP-Term`](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) [`Download P-Term (SOON)`](https://github.com/Peharge/p-terminal/blob/main/p-term/run-p-term.bat) [`LICENSE`](LICENSE)
 
 </div>
 
+<div align="center">
+
 # NEWS
 
-- **[23.04.2025]** Developmentstart of P-Term and PP-Ptem
-- **[24.04.2025]** PP-Term EAP release: [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat)
-- **[28.08.2025]** PP-Term 1 release
-- **[01.05.2025]** PP-Term 3 EAP release
-- **[08.05.2025]** PP-Term 3 release
-- **[11.05.2025]** PP-Term 4 EAP release
-- **[01.08.2025]** PP-Term 4 release
-- **[01.08.2025]** P-Term 1 release
+**[23.04.2025]** Developmentstart of P-Term and PP-Ptem<br>
+**[24.04.2025]** PP-Term EAP release: [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat)<br>
+**[28.08.2025]** PP-Term 1 release<br>
+**[01.05.2025]** PP-Term 3 EAP release<br>
+**[08.05.2025]** PP-Term 3 release<br>
+**[11.05.2025]** PP-Term 4 EAP release<br>
+**[01.08.2025]** PP-Term 4 release<br>
+**[01.08.2025]** P-Term 1 release
+
+</div>
 
 <div align="center">
 
