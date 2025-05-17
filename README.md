@@ -36,7 +36,7 @@
 A warm welcome, to P-Term (C/C++) and PP-Term (Python)<br>
 Peharge Projects 2025<br>
 Thank you for your interest in Peharge Terminal. We greatly appreciate that ❤️<br><br>
-[`P-Terminal.com`](https://peharge.github.io/MAVIS-web/p-term.html) [`Download PP-Term`](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) [`Download P-Term (SOON)`](https://github.com/Peharge/p-terminal/blob/main/p-term/run-p-term.bat) [`LICENSE`](LICENSE)
+[`P-Terminal.com`](https://peharge.github.io/MAVIS-web/p-term.html) [`Download PP-Term [Windows]`](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) [`Download P-Term (SOON) [Windows]`](https://github.com/Peharge/p-terminal/blob/main/p-term/run-p-term.bat) [`LICENSE`](LICENSE)
 
 </div>
 
@@ -65,7 +65,7 @@ Thank you for your interest in Peharge Terminal. We greatly appreciate that ❤�
 # **_PP-Terminal 4_**
 
 Why show the standard? The PP Terminal does it all<br>
-— but we show you what sets it apart.<br><br>[`Download PP-Term`](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) [`PP-Term Commands`](https://peharge.github.io/MAVIS-web/commands-pp-term.html)<br><br>
+— but we show you what sets it apart.<br><br>[`Download PP-Term [Windows]`](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) [`PP-Term Commands`](https://peharge.github.io/MAVIS-web/commands-pp-term.html)<br><br>
 <img width="1500" src="https://github.com/Peharge/p-terminal-images/raw/main/images/pp-term-banner-8.png" alt="pp-term"/><br><br>
 </div>
 
@@ -620,7 +620,7 @@ etc.
 <div align="center">
 
 # **_P-Terminal 1_**<br>
-[`Download P-Term (SOON)`](https://github.com/Peharge/p-terminal/blob/main/p-term/run-p-term.bat) [`P-Term Commands`](https://peharge.github.io/MAVIS-web/commands-p-term.html)<br><br>
+[`Download P-Term (SOON) [Windows]`](https://github.com/Peharge/p-terminal/blob/main/p-term/run-p-term.bat) [`P-Term Commands`](https://peharge.github.io/MAVIS-web/commands-p-term.html)<br><br>
 <img width="600" src="https://peharge.github.io/MAVIS-web/images/p-term-img.png" alt="pp-term"/><br><br>
 </div>
 
@@ -647,7 +647,7 @@ The commit history can be found at: https://github.com/Peharge/p-terminal-old
 
 <div align="center">
 
-[`P-Terminal.com`](https://peharge.github.io/MAVIS-web/p-term.html) [`Download PP-Term`](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) [`Download P-Term (SOON)`](https://github.com/Peharge/p-terminal/blob/main/p-term/run-p-term.bat)
+[`P-Terminal.com`](https://peharge.github.io/MAVIS-web/p-term.html) [`Download PP-Term [Windows]`](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) [`Download P-Term (SOON) [Windows]`](https://github.com/Peharge/p-terminal/blob/main/p-term/run-p-term.bat)
 
 [`PP-Term Commands`](https://peharge.github.io/MAVIS-web/commands-pp-term.html) [`P-Term Commands`](https://peharge.github.io/MAVIS-web/commands-p-term.html)
 
