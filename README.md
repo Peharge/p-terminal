@@ -2,9 +2,13 @@
  <img width="400" src="./icons/p-term-icon-3.png" alt="peharge"/>
 </p>
 
+<div align="center">
+
 # **_P-Terminal_**
 
-<p align="left">
+</div>
+
+<p align="center">
     <img src="./icons/p-term-banner-3.svg" alt="peharge"/>
     <img src="./icons/pp-term-banner-3.svg" alt="peharge"/>
     <img src="./icons/peharge-banner-3.svg" alt="peharge"/>
@@ -24,9 +28,16 @@
     <img alt="bash" src="https://img.shields.io/badge/RustRover-555555?logo=rustrover">
 </p>
 
-In development: Peharge Terminal: The coolest terminal in the world - More [p-terminal.com](https://peharge.github.io/MAVIS-web/p-term.html).
+<div align="center">
 
-The commit history can be found at: https://github.com/Peharge/p-terminal-old
+The coolest terminal in the world<br>
+A warm welcome, to P-Term (C/C++) and PP-Term (Python)<br>
+Peharge Projects 2025<br>
+Thank you for your interest in Peharge Terminal. We greatly appreciate that ❤️<br>
+More [p-terminal.com](https://peharge.github.io/MAVIS-web/p-term.html)
+
+</div>
+
 
 # NEWS
 
@@ -439,6 +450,8 @@ etc.
 |--------------|------------------------------|--------------------------------------------------------------------------------------------------|--------------|------------|
 | P-Term       | p-term.bat                   | Die .bat  muss eine .env erstellen um `./install/cpp/install-vs.py` auszuführen!!!               | ...          | ✖          |
 | PP-Term      | run-pp-term.bat /pp-term.exe | Verbessere der Instation von PP-Term                                                             | ...          | ✖          |
+
+The commit history can be found at: https://github.com/Peharge/p-terminal-old
 
 ## Lizenz
 
