@@ -42,7 +42,7 @@ Thank you for your interest in Peharge Terminal. We greatly appreciate that ‚ù§Ô
 
 <div align="center">
 
-# NEWS
+# **_NEWS_**
 
 **[23.04.2025]** Developmentstart of P-Term and PP-Ptem<br>
 **[24.04.2025]** PP-Term EAP release: [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat)<br>
@@ -219,16 +219,12 @@ Why show the standard? The PP Terminal does it all<br>
   </tr>
 </table>
 
-# Install
+# **_Install PP-Terminal_**
 
 <p align="center">
  <img width="600" src="https://github.com/Peharge/p-terminal-images/raw/main/images/p-term-demo-5.png" alt="peharge"/>
 </p>
 
-P-Terminal:
-soon
-
-PP-Terminal:
 Download the [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) file and double-click it. You're ready to go! Have fun with pp-terminal and you can always start it with `pp-term/run-pp-term.bat` (ca. 5 min) / `pp-term/run-pp-term-fast.bat` (ca. 3-5 sek) after installation. If you want, you can further enhance your terminal with PP Terminal Themes/Pins: [PP Terminal Themes/Pins](./pp-term/THEMES.md)
 <details>
   <summary>Problems installing the PP-Terminal</summary>
@@ -364,7 +360,7 @@ To develop and run the PP Terminal, you also need the C++ extensions for Visual 
 
 </details>
 
-# Commands
+# **_PP-Term Commands_**
 
 - `p` - Peharge command  
 	- `p git` - Peharge git command - Opens a P-Term Commit Explorer  
@@ -401,6 +397,9 @@ To develop and run the PP Terminal, you also need the C++ extensions for Visual 
     - `pa qwen3:235b`
     - `pa llama4:scout`
     - `pa llama4:maverick`
+
+<details>
+  <summary>More Commands</summary>
 
 - `lx` - Linux command  
 - `lx-c` - Linux command with Peharge C compiler 
@@ -612,6 +611,23 @@ To develop and run the PP Terminal, you also need the C++ extensions for Visual 
 	- `install cool pin-4`  
 
 etc.  
+
+</details>
+
+<div align="center">
+
+# **_P-Terminal 1_**<br>
+[`Download P-Term (SOON)`](https://github.com/Peharge/p-terminal/blob/main/p-term/run-p-term.bat) [`P-Term Commands`](https://peharge.github.io/MAVIS-web/commands-p-term.html)<br><br>
+<img width="600" src="https://peharge.github.io/MAVIS-web/images/p-term-img.png" alt="pp-term"/><br><br>
+</div>
+
+<div align="center">
+
+# **_Install PP-Terminal_**
+
+soon
+
+</div>
 
 # Problems
 
