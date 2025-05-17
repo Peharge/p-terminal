@@ -79,7 +79,7 @@ Why show the standard? The PP Terminal does it all<br>
 # Install
 
 <p align="center">
- <img width="800" src="https://github.com/Peharge/p-terminal-images/raw/main/images/p-term-demo-5.png" alt="peharge"/>
+ <img width="600" src="https://github.com/Peharge/p-terminal-images/raw/main/images/p-term-demo-5.png" alt="peharge"/>
 </p>
 
 P-Terminal:
