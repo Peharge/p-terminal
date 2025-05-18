@@ -105,6 +105,21 @@ print(f"""
 {blue}MAVIS License{reset}: MIT
 
 Please note that this is an outdated version of MAVIS. To run the latest version, execute 'run mavis main' to ensure the most up-to-date version of MAVIS is launched.
+
+Note: The p-terminal repository does not include any desktop images required for MAVIS.
+Please ensure the following image files are present:
+
+/static/images/mavis-1-5-banner-1.png
+
+/static/images/mavis1.3-banner.png
+
+/static/images/mavis-4-banner-1.png
+
+/static/images/mavis-banner40.png
+
+/static/images/mavis-4-banner-3.png
+
+Alternatively, you can use MAVIS from the official repository: https://github.com/Peharge/MAVIS
 """)
 
 # Funktion zur Anzeige der 16 Farbpaletten ohne Abstände und Zahlen
