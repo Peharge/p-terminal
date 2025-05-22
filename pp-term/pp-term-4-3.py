@@ -881,28 +881,76 @@ def handle_special_commands(user_input):
         "weather": "pp-commands\\weather.py"  # new
     }
 
-    # Custom command launcher
+    # Hier alles in der if-Schleife:
     if user_input in commands:
-        script_path = f"C:\\Users\\{os.getlogin()}\\p-terminal\\pp-term\\{commands[user_input]}"
+        # 1) Skript-Pfad ermitteln
+        base = Path.home() / "p-terminal" / "pp-term"
+        script_path = base / commands[user_input]
+        if not script_path.exists():
+            logging.error(f"[ERROR] Script not found:{script_path}")
+            sys.exit(1)
 
-        # Maximale CPU-Priorität setzen (Windows-spezifisch)
+        # 2) Maximale Priorität und CPU-Affinität vorbereiten
         if platform.system() == "Windows":
-            script_priority = psutil.BELOW_NORMAL_PRIORITY_CLASS  # Höhere Priorität einstellen
+            # direkt beim Popen über creationflags setzen
+            creationflags = psutil.REALTIME_PRIORITY_CLASS
+            logging.info("[INFO] Windows REALTIME_PRIORITY_CLASS selected")
         else:
-            script_priority = psutil.NORMAL_PRIORITY_CLASS
+            # Unix: nice -20 ergibt höchste Priorität (evtl. Root-Rechte nötig)
+            # Wir setzen hier nur den Wert und übergeben ihn später ans Popen
+            nice_value = -20
+            creationflags = 0  # kein Windows-Flag
+            logging.info(f"[INFO] Unix nice value {nice_value} selected")
 
-        # Wenn der Benutzer keine Batch-Datei hat, den Python-Skript ausführen
-        if not user_input.endswith(".bat"):
-            process = multiprocessing.Process(target=run_script, args=(python_path, script_path))
-            process.start()
-            process.join()
+        # Volle CPU-Affinität auf alle physischen Kerne (oder alle logischen)
+        all_cores = list(range(psutil.cpu_count(logical=True)))
+        logging.info(f"[INFO] CPU affinity to cores {all_cores}")
+
+        # 3) Kommandozeile zusammenbauen
+        if script_path.suffix.lower() == ".bat":
+            command = [str(script_path)]
+            logging.info("[INFO] Start batch file")
         else:
-            # Batch-Datei ausführen
-            process = multiprocessing.Process(target=run_script, args=(script_path,))
-            process.start()
-            process.join()
+            command = [python_path, str(script_path)]
+            logging.info(f"[INFO] Start Python script with {python_path}")
 
-        return True
+        # 4) Prozess schnell starten
+        try:
+            # Unter Windows mit REALTIME, sonst normal
+            proc = subprocess.Popen(
+                command,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                creationflags=creationflags
+            )
+            p = psutil.Process(proc.pid)
+
+            # Unix: nice setzen
+            if platform.system() != "Windows":
+                try:
+                    p.nice(nice_value)
+                    logging.info(f"[INFO] Unix nice set: {nice_value}")
+                except Exception as e:
+                    logging.warning(f"[INFO] CPU affinity set to all cores{e}")
+
+            # CPU-Affinität
+            try:
+                p.cpu_affinity(all_cores)
+                logging.info("[INFO] CPU affinity set to all cores")
+            except Exception as e:
+                logging.warning(f"[WARING] Could not set CPU affinity:{e}")
+
+            # 5) Auf Beendigung warten
+            stdout, stderr = proc.communicate()
+            if proc.returncode != 0:
+                logging.error(f"[ERROR] Script error {proc.returncode}:\n{stderr.decode().strip()}")
+                return True
+            else:
+                logging.info(f"[INFO] Script completed successfully:\n{stdout.decode().strip()}")
+                return True
+        except Exception as e:
+            logging.exception(f"[ERROR] Error starting the script: {e}")
+            return True
 
     # Built-in Commands Erweiterung
     if user_input.lower() in ["cls", "clear"]:
