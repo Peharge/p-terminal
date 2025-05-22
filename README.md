@@ -6,7 +6,7 @@
 
 <div align="center">
 
-# **_P-Terminal_**
+# **_Peharge Terminal_**
 
 </div>
 
