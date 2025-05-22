@@ -11588,12 +11588,12 @@ def main():
             elif user_input.startswith("ninite "):
                 user_input = user_input[7:].strip()
                 print(f"[{timestamp()}] [INFO] Ninite doesn't support individual CLI commands per app. Launching Ninite installer or providing guidance.")
-                run_ninite_action(user_input)
+                run_ninite_command(user_input)
 
             elif user_input.startswith("just-install "):
                 user_input = user_input[13:].strip()
                 print(f"[{timestamp()}] [INFO] Executing the following command with just-install: {user_input}")
-                run_just_install_command(user_input)
+                run_justinstall_command(user_input)
 
             elif user_input.startswith("oneget "):
                 user_input = user_input[7:].strip()
