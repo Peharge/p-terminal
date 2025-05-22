@@ -105,6 +105,7 @@ from io import BytesIO
 from PIL import Image
 from duckduckgo_search import DDGS
 import multiprocessing
+from typing import Optional
 
 colorama.init()
 
@@ -128,6 +129,10 @@ logging.basicConfig(
 user_name = getpass.getuser()
 
 sys.stdout.reconfigure(encoding='utf-8')
+
+# Constants
+APP_NAME = "p-terminal"
+STATE_FILE = Path.home() / f".{APP_NAME}" / "current_env.json"
 
 # Farbcodes definieren (kleingeschrieben)
 red = "\033[91m"
@@ -217,6 +222,72 @@ def set_python_path():
         python_executable = os.path.abspath(DEFAULT_PYTHON_EXECUTABLE)
 
     os.environ["PYTHON_PATH"] = python_executable
+
+
+def ensure_state_dir_exists() -> None:
+    """Stellt sicher, dass das Verzeichnis für den Statusfile existiert."""
+    state_dir = STATE_FILE.parent
+    state_dir.mkdir(parents=True, exist_ok=True)
+
+
+def save_current_env(env_path: str) -> None:
+    """Speichert den angegebenen Virtualenv-Pfad als String im Statusfile."""
+    try:
+        ensure_state_dir_exists()
+        payload = {"active_env": env_path}
+        STATE_FILE.write_text(json.dumps(payload), encoding="utf-8")
+    except Exception as e:
+        logging.error(f"Error saving status file: {e}")
+
+
+def load_saved_env() -> Optional[str]:
+    """Lädt den zuletzt gespeicherten Virtualenv-Pfad (als String)."""
+    try:
+        if STATE_FILE.exists():
+            raw = STATE_FILE.read_text(encoding="utf-8")
+            data = json.loads(raw)
+            value = data.get("active_env", "")
+            if value and os.path.isdir(value):
+                return value
+    except Exception as e:
+        logging.warning(f"Error loading status file: {e}")
+    return None
+
+
+def find_env_in_current_dir() -> Optional[str]:
+    """
+    Durchsucht das aktuelle Arbeitsverzeichnis nach Virtualenvs.
+    Gibt den Pfad als String zurück.
+    """
+    cwd = os.getcwd()
+    for item in os.listdir(cwd):
+        item_path = os.path.join(cwd, item)
+        activate_path = os.path.join(item_path, "Scripts", "activate")
+        if os.path.isdir(item_path) and os.path.isfile(activate_path):
+            return os.path.abspath(item_path)
+    return None
+
+
+def find_active_env() -> str:
+    """
+    Bestimmt den aktiven Virtualenv:
+    1. Suche nach einem Env im aktuellen Verzeichnis.
+    2. Wenn anders als gespeichertes, dann speichern.
+    3. Wenn keins gefunden, dann gespeichertes verwenden.
+    4. Wenn nichts gespeichert: Fallback-Env.
+    """
+    found = find_env_in_current_dir()
+    saved = load_saved_env()
+
+    if found:
+        if found != saved:
+            save_current_env(found)
+        return found
+
+    if saved:
+        return saved
+
+    return os.path.abspath(DEFAULT_ENV_DIR)
 
 
 def run_command(command, shell=False, cwd=None, extra_env=None):
@@ -7831,25 +7902,6 @@ def run_winget_command(
             raise
 
 
-def find_active_env():
-    """Suche ein Environment im aktuellen Verzeichnis."""
-    current_dir = os.getcwd()
-
-    # Suche alle Ordner im current_dir
-    for item in os.listdir(current_dir):
-        item_path = os.path.join(current_dir, item)
-
-        # Prüfen ob Ordner und Scripts/activate vorhanden ist
-        if os.path.isdir(item_path):
-            activate_script = os.path.join(item_path, "Scripts", "activate")
-            if os.path.exists(activate_script):
-                # Treffer: Dies ist ein Environment
-                return item_path
-
-    # Nichts gefunden ➔ fallback
-    return os.path.abspath(DEFAULT_ENV_DIR)
-
-
 def get_main_pin(current_dir, env_indicator):
     return (
         f"\n{white}┌──({reset}{blue}{getpass.getuser()}"
@@ -9462,17 +9514,22 @@ def main():
 
     while True:
         try:
-            current_dir = os.getcwd()
 
-            # Aktives Env suchen
-            active_env_path = find_active_env()
-            python_path = os.path.join(active_env_path, "Scripts", "python.exe")
-            env_active = os.path.exists(python_path)
+            current_dir = Path.cwd().resolve()
+            active_env_path = Path(find_active_env()).resolve()
 
-            # Anzeige schöner machen
-            if active_env_path.startswith(current_dir):
-                display_env_path = "." + active_env_path[len(current_dir):]
-            else:
+            # Prüfe python.exe an typischen Stellen
+            env_active = any(
+                (active_env_path / p).exists()
+                for p in ["Scripts/python.exe", "python.exe", "bin/python"]
+            )
+
+            try:
+                if current_dir in active_env_path.parents or current_dir == active_env_path:
+                    display_env_path = Path(".") / active_env_path.relative_to(current_dir)
+                else:
+                    display_env_path = active_env_path
+            except Exception:
                 display_env_path = active_env_path
 
             env_indicator_main = (
