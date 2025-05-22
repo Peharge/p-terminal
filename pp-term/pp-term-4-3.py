@@ -105,7 +105,12 @@ from io import BytesIO
 from PIL import Image
 from duckduckgo_search import DDGS
 import multiprocessing
-from typing import Optional
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+try:
+    import ujson as _json  # ultraschnelles JSON
+except ImportError:
+    _json = json
 
 colorama.init()
 
@@ -226,8 +231,7 @@ def set_python_path():
 
 def ensure_state_dir_exists() -> None:
     """Stellt sicher, dass das Verzeichnis für den Statusfile existiert."""
-    state_dir = STATE_FILE.parent
-    state_dir.mkdir(parents=True, exist_ok=True)
+    STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
 
 
 def save_current_env(env_path: str) -> None:
@@ -235,7 +239,10 @@ def save_current_env(env_path: str) -> None:
     try:
         ensure_state_dir_exists()
         payload = {"active_env": env_path}
-        STATE_FILE.write_text(json.dumps(payload), encoding="utf-8")
+        # atomar schreiben: erst in temp, dann umbenennen
+        tmp = STATE_FILE.with_suffix(".tmp")
+        tmp.write_text(_json.dumps(payload), encoding="utf-8")
+        tmp.replace(STATE_FILE)
     except Exception as e:
         logging.error(f"Error saving status file: {e}")
 
@@ -243,35 +250,49 @@ def save_current_env(env_path: str) -> None:
 def load_saved_env() -> Optional[str]:
     """Lädt den zuletzt gespeicherten Virtualenv-Pfad (als String)."""
     try:
-        if STATE_FILE.exists():
+        if STATE_FILE.is_file():
             raw = STATE_FILE.read_text(encoding="utf-8")
-            data = json.loads(raw)
-            value = data.get("active_env", "")
-            if value and os.path.isdir(value):
-                return value
+            data = _json.loads(raw)
+            val = data.get("active_env", "")
+            if val and Path(val).is_dir():
+                return val
     except Exception as e:
         logging.warning(f"Error loading status file: {e}")
     return None
 
 
-def find_env_in_current_dir() -> Optional[str]:
+def _check_env_dir(path: Path) -> Optional[Path]:
+    """Hilfsfunktion: gibt den Pfad zurück, wenn es ein Env ist."""
+    activate = path / "Scripts" / "activate"
+    return path if activate.is_file() else None
+
+
+def find_env_in_current_dir(max_workers: int = None) -> Optional[str]:
     """
     Durchsucht das aktuelle Arbeitsverzeichnis nach Virtualenvs.
-    Gibt den Pfad als String zurück.
+    Nutzt Multithreading, um Verzeichnisse parallel zu prüfen.
+    Gibt den ersten gefundenen Pfad zurück.
     """
-    cwd = os.getcwd()
-    for item in os.listdir(cwd):
-        item_path = os.path.join(cwd, item)
-        activate_path = os.path.join(item_path, "Scripts", "activate")
-        if os.path.isdir(item_path) and os.path.isfile(activate_path):
-            return os.path.abspath(item_path)
+    cwd = Path.cwd()
+    # os.scandir liefert DirEntry-Objekte, sehr effizient
+    dirs = [Path(entry.path) for entry in os.scandir(cwd) if entry.is_dir()]
+    if not dirs:
+        return None
+
+    # max_workers default: Anzahl CPUs * 2
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        future_to_path = {executor.submit(_check_env_dir, d): d for d in dirs}
+        for future in as_completed(future_to_path):
+            result = future.result()
+            if result:
+                return str(result.resolve())
     return None
 
 
 def find_active_env() -> str:
     """
     Bestimmt den aktiven Virtualenv:
-    1. Suche nach einem Env im aktuellen Verzeichnis.
+    1. Suche parallel nach Env im CWD.
     2. Wenn anders als gespeichertes, dann speichern.
     3. Wenn keins gefunden, dann gespeichertes verwenden.
     4. Wenn nichts gespeichert: Fallback-Env.
@@ -287,7 +308,7 @@ def find_active_env() -> str:
     if saved:
         return saved
 
-    return os.path.abspath(DEFAULT_ENV_DIR)
+    return str(DEFAULT_ENV_DIR.resolve())
 
 
 def run_command(command, shell=False, cwd=None, extra_env=None):
