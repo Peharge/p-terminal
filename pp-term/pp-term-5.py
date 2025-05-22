@@ -1962,6 +1962,16 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
         return True
 
+    elif user_input.startswith("vs-cpp "):
+        user_input = user_input[7:].strip()
+        handle_vs_cpp_command(user_input)
+        return True
+
+    elif user_input.startswith("vs-c "):
+        user_input = user_input[5:].strip()
+        handle_vs_c_command(user_input)
+        return True
+
     if user_input.lower() == "whoami":
         print(user_name)
         return True
@@ -4184,6 +4194,89 @@ def switch_theme(user_input: str) -> bool:
     except Exception as e:
         print(f"[{timestamp()}] [ERROR] Failed to apply theme '{choice}': {e}")
 
+    return True
+
+
+def handle_vs_cpp_command(user_input: str) -> bool:
+    """
+    Verarbeitet den Befehl 'vs-cpp <datei>.cpp' oder direkt '<datei>.cpp' und kompiliert die angegebene C++-Datei
+    mit den Visual Studio Build-Tools im aktuellen Arbeitsverzeichnis.
+
+    Gibt True zurück, um die Schleife fortzusetzen.
+    """
+    parts = user_input.strip().split()
+
+    # Erlaube Eingabe mit oder ohne 'vs-cpp'
+    if len(parts) == 1 and parts[0].lower().endswith('.cpp'):
+        filename = parts[0]
+    elif len(parts) == 2 and parts[0].lower() == 'vs-cpp' and parts[1].lower().endswith('.cpp'):
+        filename = parts[1]
+    else:
+        print(f"[{timestamp()}] [ERROR] Usage: vs-cpp <filename>.cpp or simply <filename>.cpp")
+        return True
+
+    # Prüfe Datei im aktuellen Verzeichnis
+    filepath = os.path.join(os.getcwd(), filename)
+    if not os.path.isfile(filepath):
+        print(f"[{timestamp()}] [ERROR] File not found:{filename}")
+        return True
+
+    try:
+        vcvarsall = find_vcvarsall()
+    except FileNotFoundError as e:
+        print(e)
+        return True
+
+    # Initialisiere VS-Umgebung und kompiliere
+    bat_command = f'"{vcvarsall}" x64 && cl /EHsc "{filename}"'
+    # '/c' sorgt dafür, dass cmd nach Ausführung schließt
+    full_command = f'cmd.exe /c "{bat_command}"'
+
+    logging.info(f"[{timestamp()}] [INFO] Execute:{bat_command}")
+    try:
+        # check=True wirft bei Fehler eine CalledProcessError
+        subprocess.run(full_command, shell=True, check=True)
+    except KeyboardInterrupt:
+        print(f"[{timestamp()}] [INFO] Cancellation by user.")
+    except subprocess.CalledProcessError as e:
+        print(f"[{timestamp()}] [ERROR] Compilation failed (Exit {e.returncode}).")
+    return True
+
+
+def handle_vs_c_command(user_input: str) -> bool:
+    """
+    Verarbeitet C-Befehle 'vs-c <datei>.c' oder '<datei>.c'.
+    Gibt True zurück, um die Schleife fortzusetzen.
+    """
+    parts = user_input.strip().split()
+    if len(parts) == 1 and parts[0].lower().endswith('.c'):
+        filename = parts[0]
+    elif len(parts) == 2 and parts[0].lower() == 'vs-c' and parts[1].lower().endswith('.c'):
+        filename = parts[1]
+    else:
+        return False
+
+    filepath = os.path.join(os.getcwd(), filename)
+    if not os.path.isfile(filepath):
+        print(f"[{timestamp()}] [ERROR] File not found:{filename}")
+        return True
+
+    try:
+        vcvarsall = find_vcvarsall_c()
+    except FileNotFoundError as e:
+        print(e)
+        return True
+
+    bat_command = f'"{vcvarsall}" x64 && cl "{filename}"'
+    full_command = f'cmd.exe /c "{bat_command}"'
+
+    logging.info(f"[{timestamp()}] [INFO] Run C-Build: {bat_command}")
+    try:
+        subprocess.run(full_command, shell=True, check=True)
+    except KeyboardInterrupt:
+        print(f"[{timestamp()}] [INFO] Cancellation by user.")
+    except subprocess.CalledProcessError as e:
+        print(f"[{timestamp()}] [ERROR] Compilation failed (Exit {e.returncode}).")
     return True
 
 
