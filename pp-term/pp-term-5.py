@@ -1972,6 +1972,21 @@ def handle_special_commands(user_input):
         handle_vs_c_command(user_input)
         return True
 
+    if user_input.startswith("rustc "):
+        user_input = user_input[4:].strip()  # Remove the "openSUSE " prefix
+
+        command = f"rustc {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
     if user_input.lower() == "whoami":
         print(user_name)
         return True
