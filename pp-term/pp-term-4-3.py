@@ -8227,13 +8227,22 @@ def get_main_31_pin(current_dir, env_indicator_main):
     )
 
 
+
 def get_main_32_pin(current_dir, env_indicator_main):
+    # Sicherstellen, dass current_dir ein String ist
+    if isinstance(current_dir, Path):
+        current_dir = str(current_dir)
+
     lf = colored('╔═', 'blue')
     rt = colored('═╗', 'blue')
     lb = colored('╚═', 'blue')
     rb = colored('═╝', 'blue')
-    header = f"{lf}{colored(getpass.getuser() + colored("㋐", attrs=["bold"]) + 'Peharge', 'white')}{rt}"
-    footer = f"{lb}{colored(current_dir+' | '+env_indicator_main, 'blue')}{rb}"
+
+    user = getpass.getuser()
+    user_display = colored(user + colored("㋐", attrs=["bold"]) + 'Peharge', 'white')
+    header = f"{lf}{user_display}{rt}"
+    footer = f"{lb}{colored(current_dir + ' | ' + env_indicator_main, 'blue')}{rb}"
+
     return f"\n{header}\n{footer}\n{colored('►', 'blue')} "
 
 
