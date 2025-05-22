@@ -1049,7 +1049,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
         return True
 
-    if user_input.lower() == "ls count-3":
+    if user_input.lower() == "ls count2":
 
         command = f"wsl cloc *"
 
