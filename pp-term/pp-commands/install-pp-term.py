@@ -528,7 +528,7 @@ def process_packages(packages: List[str]):
         print(f"\n[{timestamp()}] [INFO] [{idx}/{len(packages)}] Checking package: {package}")
         install_or_update_package(package)
 
-print(f"\n[{timestamp()}] [INFO] All frameworks for {blue}PP-Term 4{reset} are currently being installed and updated.")
+print(f"\n[{timestamp()}] [INFO] All frameworks for {blue}PP-Term 5{reset} are currently being installed and updated.")
 
 # Paketlisten
 packages = [
