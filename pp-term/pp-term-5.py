@@ -5249,6 +5249,7 @@ def run_linux_command(command):
     except KeyboardInterrupt:
         logging.warning("[WARING] Cancellation by user.")
 
+
 # --- lx-cpp-c command---
 
 def get_project_cpp_c_paths_lx():
@@ -5403,6 +5404,7 @@ def run_linux_c_command(command):
         logging.error(f"[ERROR] Command failed: {e}")
     except KeyboardInterrupt:
         logging.warning("[WARNING] Cancellation by user.")
+
 
 # --- lx-c-c command---
 
@@ -7988,6 +7990,665 @@ def run_winget_command(
                 time.sleep(wait)
                 continue
             raise  # Fehler nach Wiederholungsversuchen weitergeben
+
+        except subprocess.TimeoutExpired as e:
+            logger.error(f"Timeout after {timeout}s (attempt {attempt})")
+            raise
+
+        except KeyboardInterrupt:
+            logger.warning("Aborted by user")
+            raise
+
+
+def run_ninite_command(
+    command: Union[str, List[str]],
+    timeout: Optional[int] = None,
+    capture_output: bool = False,
+    retries: int = 2,
+    retry_delay: float = 1.0,
+    logger: Optional[logging.Logger] = None
+) -> subprocess.CompletedProcess:
+    """
+    Führt einen Ninite-Befehl aus – superschnell, stabil und mit robustem Logger-Fallback.
+
+    Argumente:
+    command: Ninite-Befehl als String oder Liste.
+    timeout: Maximale Laufzeit in Sekunden.
+    capture_output: Gibt stdout/stderr zurück, wenn True.
+    retries: Anzahl der Wiederholungsversuche bei Exit-Fehlern.
+    retry_delay: Basisverzögerung (Sekunden) für exponentielles Backoff.
+    logger: Optionaler Logger; falls keiner, wird ein Standard-Logger konfiguriert.
+
+    Rückgabewert:
+    subprocess.CompletedProcess mit .stdout/.stderr, wenn capture_output.
+
+    Löst aus:
+    RuntimeError: Wenn ninite.exe nicht gefunden wird.
+    subprocess.CalledProcessError: Bei Exit-Code ≠ 0 (nach Wiederholungsversuchen).
+    subprocess.TimeoutExpired: Bei Timeout.
+    KeyboardInterrupt: Bei Benutzerunterbrechung.
+    """
+    # Logger-Fallback und -Konfiguration
+    if logger is None:
+        logger = logging.getLogger("run_ninite_command")
+    if not logger.handlers:
+        handler = logging.StreamHandler()
+        fmt = logging.Formatter("[%(asctime)s] [%(levelname)s] %(name)s: %(message)s")
+        handler.setFormatter(fmt)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
+
+    # Zwischenspeichern des Ninite-Pfads
+    if not hasattr(run_ninite_command, "_ninite_path"):
+        path = shutil.which("ninite")
+        if not path:
+            msg = "Ninite not found – please install and check PATH."
+            logger.error(msg)
+            raise RuntimeError(msg)
+        run_ninite_command._ninite_path = path
+    ninite_path = run_ninite_command._ninite_path
+
+    # Tokenisierung
+    args = command if isinstance(command, list) else shlex.split(command)
+    cmd = [ninite_path] + args
+
+    logger.debug(f"Starting Ninite: {' '.join(cmd)} (timeout={timeout}, retries={retries})")
+
+    # Ausführung mit Wiederholungsversuchen
+    attempt = 0
+    while True:
+        attempt += 1
+        try:
+            start = time.perf_counter()
+            result = subprocess.run(
+                cmd,
+                shell=False,
+                stdout=subprocess.PIPE if capture_output else None,
+                stderr=subprocess.PIPE if capture_output else None,
+                text=True,
+                timeout=timeout,
+                check=True
+            )
+            duration = time.perf_counter() - start
+            logger.info(f"Ninite succeeded in {duration:.2f}s (attempt {attempt})")
+            return result
+
+        except subprocess.CalledProcessError as e:
+            stderr = (e.stderr or "").strip() or "<no stderr>"
+            logger.error(f"Exit code {e.returncode} (attempt {attempt}): {stderr}")
+            if attempt <= retries:
+                wait = retry_delay * (2 ** (attempt - 1))
+                logger.warning(f"Retrying in {wait:.1f}s…")
+                time.sleep(wait)
+                continue
+            raise
+
+        except subprocess.TimeoutExpired as e:
+            logger.error(f"Timeout after {timeout}s (attempt {attempt})")
+            raise
+
+        except KeyboardInterrupt:
+            logger.warning("Aborted by user")
+            raise
+
+
+def run_justinstall_command(
+    command: Union[str, List[str]],
+    timeout: Optional[int] = None,
+    capture_output: bool = False,
+    retries: int = 2,
+    retry_delay: float = 1.0,
+    logger: Optional[logging.Logger] = None
+) -> subprocess.CompletedProcess:
+    """
+    Führt einen Just-Install-Befehl aus – superschnell, stabil und mit robustem Logger-Fallback.
+
+    Argumente:
+    command: Just-Install-Befehl als String oder Liste.
+    timeout: Maximale Laufzeit in Sekunden.
+    capture_output: Gibt stdout/stderr zurück, wenn True.
+    retries: Anzahl der Wiederholungsversuche bei Exit-Fehlern.
+    retry_delay: Basisverzögerung (Sekunden) für exponentielles Backoff.
+    logger: Optionaler Logger; falls keiner, wird ein Standard-Logger konfiguriert.
+
+    Rückgabewert:
+    subprocess.CompletedProcess mit .stdout/.stderr, wenn capture_output.
+
+    Löst aus:
+    RuntimeError: Wenn just-install.exe nicht gefunden wird.
+    subprocess.CalledProcessError: Bei Exit-Code ≠ 0 (nach Wiederholungsversuchen).
+    subprocess.TimeoutExpired: Bei Timeout.
+    KeyboardInterrupt: Bei Benutzerunterbrechung.
+    """
+    # Logger-Fallback und -Konfiguration
+    if logger is None:
+        logger = logging.getLogger("run_justinstall_command")
+    if not logger.handlers:
+        handler = logging.StreamHandler()
+        fmt = logging.Formatter("[%(asctime)s] [%(levelname)s] %(name)s: %(message)s")
+        handler.setFormatter(fmt)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
+
+    # Zwischenspeichern des Just-Install-Pfads
+    if not hasattr(run_justinstall_command, "_justinstall_path"):
+        path = shutil.which("just-install")
+        if not path:
+            msg = "Just-Install not found – please install and check PATH."
+            logger.error(msg)
+            raise RuntimeError(msg)
+        run_justinstall_command._justinstall_path = path
+    justinstall_path = run_justinstall_command._justinstall_path
+
+    # Tokenisierung
+    args = command if isinstance(command, list) else shlex.split(command)
+    cmd = [justinstall_path] + args
+
+    logger.debug(f"Starting Just-Install: {' '.join(cmd)} (timeout={timeout}, retries={retries})")
+
+    # Ausführung mit Wiederholungsversuchen
+    attempt = 0
+    while True:
+        attempt += 1
+        try:
+            start = time.perf_counter()
+            result = subprocess.run(
+                cmd,
+                shell=False,
+                stdout=subprocess.PIPE if capture_output else None,
+                stderr=subprocess.PIPE if capture_output else None,
+                text=True,
+                timeout=timeout,
+                check=True
+            )
+            duration = time.perf_counter() - start
+            logger.info(f"Just-Install succeeded in {duration:.2f}s (attempt {attempt})")
+            return result
+
+        except subprocess.CalledProcessError as e:
+            stderr = (e.stderr or "").strip() or "<no stderr>"
+            logger.error(f"Exit code {e.returncode} (attempt {attempt}): {stderr}")
+            if attempt <= retries:
+                wait = retry_delay * (2 ** (attempt - 1))
+                logger.warning(f"Retrying in {wait:.1f}s…")
+                time.sleep(wait)
+                continue
+            raise
+
+        except subprocess.TimeoutExpired as e:
+            logger.error(f"Timeout after {timeout}s (attempt {attempt})")
+            raise
+
+        except KeyboardInterrupt:
+            logger.warning("Aborted by user")
+            raise
+
+
+def run_oneget_command(
+    command: Union[str, List[str]],
+    timeout: Optional[int] = None,
+    capture_output: bool = False,
+    retries: int = 2,
+    retry_delay: float = 1.0,
+    logger: Optional[logging.Logger] = None
+) -> subprocess.CompletedProcess:
+    """
+    Führt einen OneGet-Befehl aus – superschnell, stabil und mit robustem Logger-Fallback.
+
+    Argumente:
+    command: OneGet/PackageManagement-Befehl als String oder Liste.
+    timeout: Maximale Laufzeit in Sekunden.
+    capture_output: Gibt stdout/stderr zurück, wenn True.
+    retries: Anzahl der Wiederholungsversuche bei Exit-Fehlern.
+    retry_delay: Basisverzögerung (Sekunden) für exponentielles Backoff.
+    logger: Optionaler Logger; falls keiner, wird ein Standard-Logger konfiguriert.
+
+    Rückgabewert:
+    subprocess.CompletedProcess mit .stdout/.stderr, wenn capture_output.
+
+    Löst aus:
+    RuntimeError: Wenn oneget/PackageManagement nicht gefunden wird.
+    subprocess.CalledProcessError: Bei Exit-Code ≠ 0 (nach Wiederholungsversuchen).
+    subprocess.TimeoutExpired: Bei Timeout.
+    KeyboardInterrupt: Bei Benutzerunterbrechung.
+    """
+    # Logger-Fallback und -Konfiguration
+    if logger is None:
+        logger = logging.getLogger("run_oneget_command")
+    if not logger.handlers:
+        handler = logging.StreamHandler()
+        fmt = logging.Formatter("[%(asctime)s] [%(levelname)s] %(name)s: %(message)s")
+        handler.setFormatter(fmt)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
+
+    # Zwischenspeichern des OneGet-Pfads (PowerShell erforderlich)
+    if not hasattr(run_oneget_command, "_powershell_path"):
+        path = shutil.which("powershell")
+        if not path:
+            msg = "PowerShell not found – please install and check PATH."
+            logger.error(msg)
+            raise RuntimeError(msg)
+        run_oneget_command._powershell_path = path
+    powershell_path = run_oneget_command._powershell_path
+
+    # Tokenisierung und Befehlszusammenbau
+    # OneGet läuft als PowerShell-Modul, daher wird das Kommando als PowerShell-Argument übergeben
+    ps_command = command if isinstance(command, str) else " ".join(command)
+    # Sicherstellen, dass das Kommando in Anführungszeichen ist, falls nötig
+    ps_args = [
+        powershell_path,
+        "-NoProfile",
+        "-NonInteractive",
+        "-Command",
+        ps_command
+    ]
+
+    logger.debug(f"Starting OneGet: {' '.join(ps_args)} (timeout={timeout}, retries={retries})")
+
+    # Ausführung mit Wiederholungsversuchen
+    attempt = 0
+    while True:
+        attempt += 1
+        try:
+            start = time.perf_counter()
+            result = subprocess.run(
+                ps_args,
+                shell=False,
+                stdout=subprocess.PIPE if capture_output else None,
+                stderr=subprocess.PIPE if capture_output else None,
+                text=True,
+                timeout=timeout,
+                check=True
+            )
+            duration = time.perf_counter() - start
+            logger.info(f"OneGet succeeded in {duration:.2f}s (attempt {attempt})")
+            return result
+
+        except subprocess.CalledProcessError as e:
+            stderr = (e.stderr or "").strip() or "<no stderr>"
+            logger.error(f"Exit code {e.returncode} (attempt {attempt}): {stderr}")
+            if attempt <= retries:
+                wait = retry_delay * (2 ** (attempt - 1))
+                logger.warning(f"Retrying in {wait:.1f}s…")
+                time.sleep(wait)
+                continue
+            raise
+
+        except subprocess.TimeoutExpired as e:
+            logger.error(f"Timeout after {timeout}s (attempt {attempt})")
+            raise
+
+        except KeyboardInterrupt:
+            logger.warning("Aborted by user")
+            raise
+
+
+def run_boxstarter_command(
+    command: Union[str, List[str]],
+    timeout: Optional[int] = None,
+    capture_output: bool = False,
+    retries: int = 2,
+    retry_delay: float = 1.0,
+    logger: Optional[logging.Logger] = None
+) -> subprocess.CompletedProcess:
+    """
+    Führt einen Boxstarter-Befehl aus – superschnell, stabil und mit robustem Logger-Fallback.
+
+    Argumente:
+    command: Boxstarter-Befehl als String oder Liste.
+    timeout: Maximale Laufzeit in Sekunden.
+    capture_output: Gibt stdout/stderr zurück, wenn True.
+    retries: Anzahl der Wiederholungsversuche bei Exit-Fehlern.
+    retry_delay: Basisverzögerung (Sekunden) für exponentielles Backoff.
+    logger: Optionaler Logger; falls keiner, wird ein Standard-Logger konfiguriert.
+
+    Rückgabewert:
+    subprocess.CompletedProcess mit .stdout/.stderr, wenn capture_output.
+
+    Löst aus:
+    RuntimeError: Wenn Boxstarter (BoxstarterShell) nicht gefunden wird.
+    subprocess.CalledProcessError: Bei Exit-Code ≠ 0 (nach Wiederholungsversuchen).
+    subprocess.TimeoutExpired: Bei Timeout.
+    KeyboardInterrupt: Bei Benutzerunterbrechung.
+    """
+    # Logger-Fallback und -Konfiguration
+    if logger is None:
+        logger = logging.getLogger("run_boxstarter_command")
+    if not logger.handlers:
+        handler = logging.StreamHandler()
+        fmt = logging.Formatter("[%(asctime)s] [%(levelname)s] %(name)s: %(message)s")
+        handler.setFormatter(fmt)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
+
+    # Zwischenspeichern des PowerShell-Pfads (Boxstarter ist ein PowerShell-Modul)
+    if not hasattr(run_boxstarter_command, "_powershell_path"):
+        path = shutil.which("powershell")
+        if not path:
+            msg = "PowerShell not found – please install and check PATH."
+            logger.error(msg)
+            raise RuntimeError(msg)
+        run_boxstarter_command._powershell_path = path
+    powershell_path = run_boxstarter_command._powershell_path
+
+    # Tokenisierung und Befehlskonstruktion
+    # Boxstarter läuft als PowerShell-Modul, daher: Import-Module und dann Befehl ausführen
+    box_command = command if isinstance(command, str) else " ".join(command)
+    ps_command = f"Import-Module -Name Boxstarter; {box_command}"
+
+    ps_args = [
+        powershell_path,
+        "-NoProfile",
+        "-NonInteractive",
+        "-Command",
+        ps_command
+    ]
+
+    logger.debug(f"Starting Boxstarter: {' '.join(ps_args)} (timeout={timeout}, retries={retries})")
+
+    # Ausführung mit Wiederholungsversuchen
+    attempt = 0
+    while True:
+        attempt += 1
+        try:
+            start = time.perf_counter()
+            result = subprocess.run(
+                ps_args,
+                shell=False,
+                stdout=subprocess.PIPE if capture_output else None,
+                stderr=subprocess.PIPE if capture_output else None,
+                text=True,
+                timeout=timeout,
+                check=True
+            )
+            duration = time.perf_counter() - start
+            logger.info(f"Boxstarter succeeded in {duration:.2f}s (attempt {attempt})")
+            return result
+
+        except subprocess.CalledProcessError as e:
+            stderr = (e.stderr or "").strip() or "<no stderr>"
+            logger.error(f"Exit code {e.returncode} (attempt {attempt}): {stderr}")
+            if attempt <= retries:
+                wait = retry_delay * (2 ** (attempt - 1))
+                logger.warning(f"Retrying in {wait:.1f}s…")
+                time.sleep(wait)
+                continue
+            raise
+
+        except subprocess.TimeoutExpired as e:
+            logger.error(f"Timeout after {timeout}s (attempt {attempt})")
+            raise
+
+        except KeyboardInterrupt:
+            logger.warning("Aborted by user")
+            raise
+
+
+def run_npackd_command(
+    command: Union[str, List[str]],
+    timeout: Optional[int] = None,
+    capture_output: bool = False,
+    retries: int = 2,
+    retry_delay: float = 1.0,
+    logger: Optional[logging.Logger] = None
+) -> subprocess.CompletedProcess:
+    """
+    Führt einen Npackd-Befehl aus – superschnell, stabil und mit robustem Logger-Fallback.
+
+    Argumente:
+    command: NpackdCL-Befehl als String oder Liste.
+    timeout: Maximale Laufzeit in Sekunden.
+    capture_output: Gibt stdout/stderr zurück, wenn True.
+    retries: Anzahl der Wiederholungsversuche bei Exit-Fehlern.
+    retry_delay: Basisverzögerung (Sekunden) für exponentielles Backoff.
+    logger: Optionaler Logger; falls keiner, wird ein Standard-Logger konfiguriert.
+
+    Rückgabewert:
+    subprocess.CompletedProcess mit .stdout/.stderr, wenn capture_output.
+
+    Löst aus:
+    RuntimeError: Wenn NpackdCL.exe nicht gefunden wird.
+    subprocess.CalledProcessError: Bei Exit-Code ≠ 0 (nach Wiederholungsversuchen).
+    subprocess.TimeoutExpired: Bei Timeout.
+    KeyboardInterrupt: Bei Benutzerunterbrechung.
+    """
+    # Logger-Fallback und -Konfiguration
+    if logger is None:
+        logger = logging.getLogger("run_npackd_command")
+    if not logger.handlers:
+        handler = logging.StreamHandler()
+        fmt = logging.Formatter("[%(asctime)s] [%(levelname)s] %(name)s: %(message)s")
+        handler.setFormatter(fmt)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
+
+    # Zwischenspeichern des NpackdCL-Pfads
+    if not hasattr(run_npackd_command, "_npackdcl_path"):
+        path = shutil.which("NpackdCL") or shutil.which("npackdcl")
+        if not path:
+            msg = "NpackdCL.exe not found – please install and check PATH."
+            logger.error(msg)
+            raise RuntimeError(msg)
+        run_npackd_command._npackdcl_path = path
+    npackdcl_path = run_npackd_command._npackdcl_path
+
+    # Tokenisierung
+    args = command if isinstance(command, list) else shlex.split(command)
+    cmd = [npackdcl_path] + args
+
+    logger.debug(f"Starting Npackd: {' '.join(cmd)} (timeout={timeout}, retries={retries})")
+
+    # Ausführung mit Wiederholungsversuchen
+    attempt = 0
+    while True:
+        attempt += 1
+        try:
+            start = time.perf_counter()
+            result = subprocess.run(
+                cmd,
+                shell=False,
+                stdout=subprocess.PIPE if capture_output else None,
+                stderr=subprocess.PIPE if capture_output else None,
+                text=True,
+                timeout=timeout,
+                check=True
+            )
+            duration = time.perf_counter() - start
+            logger.info(f"Npackd succeeded in {duration:.2f}s (attempt {attempt})")
+            return result
+
+        except subprocess.CalledProcessError as e:
+            stderr = (e.stderr or "").strip() or "<no stderr>"
+            logger.error(f"Exit code {e.returncode} (attempt {attempt}): {stderr}")
+            if attempt <= retries:
+                wait = retry_delay * (2 ** (attempt - 1))
+                logger.warning(f"Retrying in {wait:.1f}s…")
+                time.sleep(wait)
+                continue
+            raise
+
+        except subprocess.TimeoutExpired as e:
+            logger.error(f"Timeout after {timeout}s (attempt {attempt})")
+            raise
+
+        except KeyboardInterrupt:
+            logger.warning("Aborted by user")
+            raise
+
+
+def run_zero_install_command(
+    command: Union[str, List[str]],
+    timeout: Optional[int] = None,
+    capture_output: bool = False,
+    retries: int = 2,
+    retry_delay: float = 1.0,
+    logger: Optional[logging.Logger] = None
+) -> subprocess.CompletedProcess:
+    """
+    Führt einen Zero Install (0install)-Befehl aus – stabil, performant, mit Wiederholungslogik und Logging.
+
+    Argumente:
+    Befehl: 0install-Befehl als String oder Liste.
+    Timeout: Maximale Ausführungszeit in Sekunden.
+    Capture_Output: Wenn True, werden stdout/stderr erfasst.
+    Retrys: Anzahl der Wiederholungen bei Fehlern.
+    Retry_Delay: Anfangsverzögerung für Backoff (Sekunden).
+    Logger: Optionaler Logger; bei None wird ein Standardlogger genutzt.
+
+    Rückgabewert:
+    subprocess.CompletedProcess – enthält stdout/stderr bei Bedarf.
+
+    Löst aus:
+    RuntimeError: Wenn 0install nicht gefunden wird.
+    subprocess.CalledProcessError: Wenn der Befehl mit Fehlercode endet.
+    subprocess.TimeoutExpired: Wenn ein Timeout erreicht wird.
+    KeyboardInterrupt: Bei Benutzerunterbrechung.
+    """
+    if logger is None:
+        logger = logging.getLogger("run_zero_install_command")
+    if not logger.handlers:
+        handler = logging.StreamHandler()
+        fmt = logging.Formatter("[%(asctime)s] [%(levelname)s] %(name)s: %(message)s")
+        handler.setFormatter(fmt)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
+
+    # Suche und Cache von 0install
+    if not hasattr(run_zero_install_command, "_zinst_path"):
+        path = shutil.which("0install")
+        if not path:
+            msg = "Zero Install (0install) not found – please install and ensure it's in PATH."
+            logger.error(msg)
+            raise RuntimeError(msg)
+        run_zero_install_command._zinst_path = path
+    zinst_path = run_zero_install_command._zinst_path
+
+    # Kommando parsen
+    args = command if isinstance(command, list) else shlex.split(command)
+    cmd = [zinst_path] + args
+
+    logger.debug(f"Running Zero Install: {' '.join(cmd)} (timeout={timeout}, retries={retries})")
+
+    attempt = 0
+    while True:
+        attempt += 1
+        try:
+            start = time.perf_counter()
+            result = subprocess.run(
+                cmd,
+                shell=False,
+                stdout=subprocess.PIPE if capture_output else None,
+                stderr=subprocess.PIPE if capture_output else None,
+                text=True,
+                timeout=timeout,
+                check=True
+            )
+            duration = time.perf_counter() - start
+            logger.info(f"Zero Install succeeded in {duration:.2f}s (attempt {attempt})")
+            return result
+
+        except subprocess.CalledProcessError as e:
+            stderr = (e.stderr or "").strip() or "<no stderr>"
+            logger.error(f"Exit code {e.returncode} (attempt {attempt}): {stderr}")
+            if attempt <= retries:
+                wait = retry_delay * (2 ** (attempt - 1))
+                logger.warning(f"Retrying in {wait:.1f}s…")
+                time.sleep(wait)
+                continue
+            raise
+
+        except subprocess.TimeoutExpired:
+            logger.error(f"Timeout after {timeout}s (attempt {attempt})")
+            raise
+
+        except KeyboardInterrupt:
+            logger.warning("Aborted by user")
+            raise
+
+
+def run_appget_command(
+    command: Union[str, List[str]],
+    timeout: Optional[int] = None,
+    capture_output: bool = False,
+    retries: int = 2,
+    retry_delay: float = 1.0,
+    logger: Optional[logging.Logger] = None
+) -> subprocess.CompletedProcess:
+    """
+    Führt einen AppGet-Befehl aus – superschnell, stabil und mit robustem Logger-Fallback.
+
+    Argumente:
+    command: AppGet-Befehl als String oder Liste.
+    timeout: Maximale Laufzeit in Sekunden.
+    capture_output: Gibt stdout/stderr zurück, wenn True.
+    retries: Anzahl der Wiederholungsversuche bei Exit-Fehlern.
+    retry_delay: Basisverzögerung (Sekunden) für exponentielles Backoff.
+    logger: Optionaler Logger; falls keiner, wird ein Standard-Logger konfiguriert.
+
+    Rückgabewert:
+    subprocess.CompletedProcess mit .stdout/.stderr, wenn capture_output.
+
+    Löst aus:
+    RuntimeError: Wenn appget.exe nicht gefunden wird.
+    subprocess.CalledProcessError: Bei Exit-Code ≠ 0 (nach Wiederholungsversuchen).
+    subprocess.TimeoutExpired: Bei Timeout.
+    KeyboardInterrupt: Bei Benutzerunterbrechung.
+    """
+    # Logger-Fallback und -Konfiguration
+    if logger is None:
+        logger = logging.getLogger("run_appget_command")
+    if not logger.handlers:
+        handler = logging.StreamHandler()
+        fmt = logging.Formatter("[%(asctime)s] [%(levelname)s] %(name)s: %(message)s")
+        handler.setFormatter(fmt)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
+
+    # Zwischenspeichern des AppGet-Pfads
+    if not hasattr(run_appget_command, "_appget_path"):
+        path = shutil.which("appget")
+        if not path:
+            msg = "AppGet not found – please install and check PATH."
+            logger.error(msg)
+            raise RuntimeError(msg)
+        run_appget_command._appget_path = path
+    appget_path = run_appget_command._appget_path
+
+    # Tokenisierung
+    args = command if isinstance(command, list) else shlex.split(command)
+    cmd = [appget_path] + args
+
+    logger.debug(f"Starting AppGet: {' '.join(cmd)} (timeout={timeout}, retries={retries})")
+
+    # Ausführung mit Wiederholungsversuchen
+    attempt = 0
+    while True:
+        attempt += 1
+        try:
+            start = time.perf_counter()
+            result = subprocess.run(
+                cmd,
+                shell=False,
+                stdout=subprocess.PIPE if capture_output else None,
+                stderr=subprocess.PIPE if capture_output else None,
+                text=True,
+                timeout=timeout,
+                check=True
+            )
+            duration = time.perf_counter() - start
+            logger.info(f"AppGet succeeded in {duration:.2f}s (attempt {attempt})")
+            return result
+
+        except subprocess.CalledProcessError as e:
+            stderr = (e.stderr or "").strip() or "<no stderr>"
+            logger.error(f"Exit code {e.returncode} (attempt {attempt}): {stderr}")
+            if attempt <= retries:
+                wait = retry_delay * (2 ** (attempt - 1))
+                logger.warning(f"Retrying in {wait:.1f}s…")
+                time.sleep(wait)
+                continue
+            raise
 
         except subprocess.TimeoutExpired as e:
             logger.error(f"Timeout after {timeout}s (attempt {attempt})")
@@ -10922,6 +11583,41 @@ def main():
                 user_input = user_input[6:].strip()
                 print(f"[{timestamp()}] [INFO] Executing the following command with winget : {user_input}")
                 run_winget_command(user_input)
+
+            elif user_input.startswith("ninite "):
+                user_input = user_input[7:].strip()
+                print(f"[{timestamp()}] [INFO] Ninite doesn't support individual CLI commands per app. Launching Ninite installer or providing guidance.")
+                run_ninite_action(user_input)
+
+            elif user_input.startswith("just-install "):
+                user_input = user_input[13:].strip()
+                print(f"[{timestamp()}] [INFO] Executing the following command with just-install: {user_input}")
+                run_just_install_command(user_input)
+
+            elif user_input.startswith("oneget "):
+                user_input = user_input[7:].strip()
+                print(f"[{timestamp()}] [INFO] Executing the following command with OneGet/PackageManagement: {user_input}")
+                run_oneget_command(user_input)
+
+            elif user_input.startswith("boxstarter "):
+                user_input = user_input[11:].strip()
+                print(f"[{timestamp()}] [INFO] Executing the following command with Boxstarter: {user_input}")
+                run_boxstarter_command(user_input)
+
+            elif user_input.startswith("npackd "):
+                user_input = user_input[7:].strip()
+                print(f"[{timestamp()}] [INFO] Executing the following command with Npackd: {user_input}")
+                run_npackd_command(user_input)
+
+            elif user_input.startswith("zero-install "):
+                user_input = user_input[13:].strip()
+                print(f"[{timestamp()}] [INFO] Executing the following command with Zero Install: {user_input}")
+                run_zero_install_command(user_input)
+
+            elif user_input.startswith("appget "):
+                user_input = user_input[7:].strip()
+                print(f"[{timestamp()}] [INFO] AppGet has been discontinued. You may want to use winget instead.")
+                run_appget_command(user_input)
 
             else:
                 run_command(user_input, shell=True)
