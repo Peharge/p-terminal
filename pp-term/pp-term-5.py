@@ -1903,7 +1903,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("g++ "):
-        user_input = user_input[4:].strip()  # Remove the "openSUSE " prefix
+        user_input = user_input[4:].strip()
 
         command = f"wsl g++ -o {user_input}"
 
@@ -1918,7 +1918,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("g++ -o "):
-        user_input = user_input[7:].strip()  # Remove the "openSUSE " prefix
+        user_input = user_input[7:].strip()
 
         command = f"wsl g++ -o {user_input}"
 
@@ -1933,7 +1933,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("gcc "):
-        user_input = user_input[4:].strip()  # Remove the "openSUSE " prefix
+        user_input = user_input[4:].strip()
 
         command = f"wsl g++ -o {user_input}"
 
@@ -1948,7 +1948,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("gcc -o "):
-        user_input = user_input[7:].strip()  # Remove the "openSUSE " prefix
+        user_input = user_input[7:].strip()
 
         command = f"wsl g++ -o {user_input}"
 
@@ -1972,8 +1972,13 @@ def handle_special_commands(user_input):
         handle_vs_c_command(user_input)
         return True
 
+    elif user_input.startswith("vs-cs "):
+        user_input = user_input[6:].strip()
+        handle_vs_cs_command(user_input)
+        return True
+
     if user_input.startswith("rustc "):
-        user_input = user_input[4:].strip()  # Remove the "openSUSE " prefix
+        user_input = user_input[4:].strip()
 
         command = f"rustc {user_input}"
 
@@ -4295,6 +4300,45 @@ def handle_vs_c_command(user_input: str) -> bool:
     return True
 
 
+def handle_vs_cs_command(user_input: str) -> bool:
+    """
+    Verarbeitet den Befehl 'vs-cs <datei>.cs' oder direkt '<datei>.cs' und kompiliert die angegebene C#-Datei.
+    """
+    parts = user_input.strip().split()
+
+    if len(parts) == 1 and parts[0].lower().endswith('.cs'):
+        filename = parts[0]
+    elif len(parts) == 2 and parts[0].lower() == 'vs-cs' and parts[1].lower().endswith('.cs'):
+        filename = parts[1]
+    else:
+        print(f"[{timestamp()}] [ERROR] Usage: vs-cs <filename>.cs or simply <filename>.cs")
+        return True
+
+    filepath = os.path.join(os.getcwd(), filename)
+    if not os.path.isfile(filepath):
+        print(f"[{timestamp()}] [ERROR] File not found: {filename}")
+        return True
+
+    try:
+        csc_path = find_csc_path()
+    except FileNotFoundError as e:
+        print(e)
+        return True
+
+    output_exe = os.path.splitext(filename)[0] + '.exe'
+    compile_cmd = f'"{csc_path}" /nologo /out:"{output_exe}" "{filename}"'
+
+    logging.info(f"[{timestamp()}] [INFO] Execute: {compile_cmd}")
+    try:
+        subprocess.run(compile_cmd, shell=True, check=True)
+        print(f"[{timestamp()}] [INFO] Compilation successful: {output_exe}")
+    except KeyboardInterrupt:
+        print(f"[{timestamp()}] [INFO] Compilation cancelled by user.")
+    except subprocess.CalledProcessError as e:
+        print(f"[{timestamp()}] [ERROR] Compilation failed (Exit {e.returncode}).")
+    return True
+
+
 def get_weather():
     print(f"[{timestamp()}] [INFO] Fetching detailed weather for Berlin... (Demo)\n")
     time.sleep(1)
@@ -5113,6 +5157,24 @@ def find_vcvarsall_c():
         logging.error("[ERROR] Visual Studio vcvarsall.bat file not found.")
         raise FileNotFoundError(f"[{timestamp()}] [ERROR] vcvarsall.bat not found. Please ensure Visual Studio is installed.")
     return vs_path
+
+
+def find_csc_path() -> str:
+    """
+    Searches for the C# compiler csc.exe in the .NET SDK or Visual Studio directory.
+    """
+    possible_paths = [
+        r"C:\Windows\Microsoft.NET\Framework\v4.0.30319\csc.exe",
+        r"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe",
+        r"C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\Roslyn\csc.exe",
+    ]
+    for path in possible_paths:
+        if os.path.isfile(path):
+            logging.info(f"[{timestamp()}] [INFO] Found csc at {path}")
+            return path
+
+    logging.error(f"[{timestamp()}] [ERROR] csc.exe not found in known locations.")
+    raise FileNotFoundError(f"[{timestamp()}] [ERROR] csc.exe not found. Please install .NET SDK or Visual Studio.")
 
 
 # --- pp command---
