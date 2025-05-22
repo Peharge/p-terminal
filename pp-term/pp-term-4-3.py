@@ -120,6 +120,7 @@ DEFAULT_PYTHON_EXECUTABLE = os.path.join(DEFAULT_ENV_DIR, "Scripts", "python.exe
 # Globales Thema
 current_theme = "dark"
 
+"""
 log_path = Path(__file__).parent / "pp-term-compiler.log"
 logging.basicConfig(
     level=logging.INFO,
@@ -127,6 +128,16 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
     handlers=[
         logging.FileHandler(log_path, encoding='utf-8'),
+        logging.StreamHandler(sys.stdout)
+    ]
+)
+"""
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="[%(asctime)s.%(msecs)03d] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+    handlers=[
         logging.StreamHandler(sys.stdout)
     ]
 )
