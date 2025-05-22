@@ -9971,6 +9971,7 @@ COMMANDS = [
     "install mavis4.3", "mavis env update", "update mavis env", "mavis update", "update mavis",
     "security", "p-terminal security", "securitycheck", "info", "mavis info", "info mavis", "p-term info",
     "info p-term", "neofetch", "fastfetch", "screenfetch", "jupyter", "run jupyter", "run ju",
+    "ninite", "just-install", "oneget", "boxstarter", "npackd", "zero-install", "appget",
     "run mavis-4", "run mavis-4-3", "run mavis-4-fast", "run mavis-4-3-fast", "run mavis-launcher-4",
     "run ollama mavis-4", "install ollama mavis-4", "change models mavis-4", "change models", "grafana",
     "run grafana", "install grafana", "account", "run qwen3:0.6b", "run qwen3:1.7b", "run qwen3:4b",
