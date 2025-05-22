@@ -9556,9 +9556,24 @@ def main():
             active_env_path = Path(find_active_env()).resolve()
 
             # Prüfe python.exe an typischen Stellen
-            env_active = any(
-                (active_env_path / p).exists()
-                for p in ["Scripts/python.exe", "python.exe", "bin/python"]
+            env_active = (
+                # Windows-Pfade
+                    (active_env_path / "Scripts/python.exe").exists() or
+                    (active_env_path / "python.exe").exists() or
+                    (active_env_path / "condabin/conda.bat").exists() or
+                    (active_env_path / "conda.exe").exists() or
+
+                    # (Unix/Linux-Pfade - eigetnlich unötig)
+                    (active_env_path / "bin/python").exists() or
+                    (active_env_path / "bin/python3").exists() or
+                    (active_env_path / "bin/python3.7").exists() or
+                    (active_env_path / "bin/python3.8").exists() or
+                    (active_env_path / "bin/python3.9").exists() or
+                    (active_env_path / "bin/python3.10").exists() or
+                    (active_env_path / "bin/python3.11").exists() or
+                    (active_env_path / "bin/python3.12").exists() or
+                    (active_env_path / "bin/python3.13").exists() or
+                    (active_env_path / "bin/conda").exists()
             )
 
             try:
