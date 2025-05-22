@@ -946,7 +946,7 @@ def handle_special_commands(user_input):
                 logging.error(f"[ERROR] Script error {proc.returncode}:\n{stderr.decode().strip()}")
                 return True
             else:
-                logging.info(f"[INFO] Script completed successfully:\n{stdout.decode().strip()}")
+                logging.info(f"[PASS] Script completed successfully: \n{stdout.decode().strip()}")
                 return True
         except Exception as e:
             logging.exception(f"[ERROR] Error starting the script: {e}")
