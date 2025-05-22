@@ -2715,15 +2715,31 @@ def handle_special_commands(user_input):
     # Python REPL starten
     if user_input.lower() == "py":
         import code
-        print(f"[{timestamp()}] [INFO] Starting Python REPL. Type 'exit()' or Ctrl-D to quit.")
+
+        print(f"[{timestamp()}] [INFO] Finding active environment...")
         try:
-            # Starte interaktive Python-Konsole mit globalem Namespace
-            code.interact(local=globals())
+            active = find_active_env()
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Could not find active environment: {e}")
+            return False  # oder anders behandeln
+
+        print(f"[{timestamp()}] [INFO] Starting Python REPL with active environment. Type 'exit()' or Ctrl-D to quit.")
+        try:
+            # Falls active ein Dictionary ist:
+            if isinstance(active, dict):
+                local_ns = active
+            else:
+                # Wenn active ein Objekt ist, dann dessen Attribute als Namespace nehmen
+                local_ns = vars(active)
+
+            # Starte interaktive Python-Konsole mit dem Namespace von active
+            code.interact(local=local_ns)
         except SystemExit:
             # exit() ruft SystemExit - einfach sauber beenden
             pass
         except Exception as e:
             print(f"[{timestamp()}] [ERROR] Unexpected error in REPL: {e}")
+
         print(f"[{timestamp()}] [INFO] Python REPL session ended.")
         return True
 
