@@ -2004,7 +2004,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error emptying trash: {str(e)}")
         return True
 
-    if user_input.lower() == "themes":
+    if user_input.lower() == "theme":
         print("alternative", "aptscience", "arc_dark", "aurelia", "ayu_mirage", "blue", "blueglass", "cyberlife", "dark", "dracula",
         "fallout_pipboy", "glass", "glassmain", "green", "greenglass", "gruvbox_dark", "hackerman", "light", "main", "material_dark",
         "mavis_1", "mavis_3", "mavis_4", "mint", "monokai", "nord", "one_dark", "p_term", "red", "redglass", "solarized_dark", "spiderman",
