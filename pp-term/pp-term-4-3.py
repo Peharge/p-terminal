@@ -205,9 +205,9 @@ Thank you so much for using PP-Terminal. We truly appreciate your support ❤️
         for key, value in versions.items():
             print(f"{blue}{key}{reset}: {value}")
     except FileNotFoundError:
-        print(f"[{timestamp()}] [INFO] Versionsdatei nicht gefunden unter {json_path}")
+        print(f"[{timestamp()}] [INFO] Version file not found under{json_path}")
     except json.JSONDecodeError:
-        print(f"[{timestamp()}] [INFO] JSON-Formatfehler in {json_path}")
+        print(f"[{timestamp()}] [ERROR] JSON format error in {json_path}")
 
     print()
 
