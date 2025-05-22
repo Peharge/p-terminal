@@ -9557,7 +9557,7 @@ def main():
 
             # Prüfe python.exe an typischen Stellen
             env_active = (
-                # Windows-Pfade
+                    # Windows-Pfade
                     (active_env_path / "Scripts/python.exe").exists() or
                     (active_env_path / "python.exe").exists() or
                     (active_env_path / "condabin/conda.bat").exists() or
