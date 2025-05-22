@@ -2772,35 +2772,48 @@ def handle_special_commands(user_input):
         return True
 
     # Python REPL starten
-    if user_input.lower() == "py":
+    if user_input.strip().lower() == "py":
         import code
+        import traceback
+        from datetime import datetime
 
-        print(f"[{timestamp()}] [INFO] Finding active environment...")
+        def timestamp():
+            return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        print(f"[{timestamp()}] [INFO] Initializing Python REPL startup sequence...")
+
         try:
             active = find_active_env()
+            if active is None:
+                raise ValueError("Active environment is None")
+            print(f"[{timestamp()}] [INFO] Active environment successfully located.")
         except Exception as e:
-            print(f"[{timestamp()}] [ERROR] Could not find active environment: {e}")
-            return False  # oder anders behandeln
+            print(f"[{timestamp()}] [ERROR] Failed to find active environment: {e}")
+            traceback.print_exc()
+        else:
+            print(f"[{timestamp()}] [INFO] Launching interactive Python REPL.")
+            print(f"[{timestamp()}] [INFO] Type 'exit()' or press Ctrl-D to quit.")
 
-        print(f"[{timestamp()}] [INFO] Starting Python REPL with active environment. Type 'exit()' or Ctrl-D to quit.")
-        try:
-            # Falls active ein Dictionary ist:
-            if isinstance(active, dict):
-                local_ns = active
-            else:
-                # Wenn active ein Objekt ist, dann dessen Attribute als Namespace nehmen
-                local_ns = vars(active)
+            try:
+                if isinstance(active, dict):
+                    local_ns = active
+                else:
+                    try:
+                        local_ns = vars(active)
+                    except TypeError:
+                        print(
+                            f"[{timestamp()}] [WARNING] Could not extract vars() from active object. Using empty namespace.")
+                        local_ns = {}
 
-            # Starte interaktive Python-Konsole mit dem Namespace von active
-            code.interact(local=local_ns)
-        except SystemExit:
-            # exit() ruft SystemExit - einfach sauber beenden
-            pass
-        except Exception as e:
-            print(f"[{timestamp()}] [ERROR] Unexpected error in REPL: {e}")
+                code.interact(local=local_ns)
 
-        print(f"[{timestamp()}] [INFO] Python REPL session ended.")
-        return True
+            except SystemExit:
+                print(f"[{timestamp()}] [INFO] Exiting REPL via SystemExit.")
+            except Exception as e:
+                print(f"[{timestamp()}] [ERROR] Unhandled exception during REPL session: {e}")
+                traceback.print_exc()
+            finally:
+                print(f"[{timestamp()}] [INFO] Python REPL session terminated.")
 
     if user_input.startswith("pb "):
         # Remove "pb " and strip any surrounding whitespace
