@@ -640,7 +640,6 @@ soon more
 |--------------|------------------------------|------------------------------------------------------------------------------------|--------------|------------|
 | P-Term       | p-term.bat                   | Die .bat  muss eine .env erstellen um `./install/cpp/install-vs.py` auszuführen!!! | ...          | ✖          |
 | PP-Term      | run-pp-term.bat /pp-term.exe | Verbessere der Instation von PP-Term                                               | ...          | 50/50 ✖    |
-| PP-Term      | pp-term-4-3.py               | Verbessere der env akv von PP-Term                                                 | ...          | ✖          |
 
 The commit history can be found at: https://github.com/Peharge/p-terminal-old
 
