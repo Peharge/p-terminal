@@ -8264,11 +8264,11 @@ def get_main_35_pin(current_dir, env_indicator_main):
     )
 
 
-def get_evil_pin(current_dir, env_indicator):
+def get_evil_pin(current_dir, env_indicator_11):
     return (
         f"\n{white}┌──({reset}{red}root"
         + colored("㋐", attrs=["bold"])
-        + f"{red}Peharge{reset}{white})-[{reset}{current_dir}{white}]-{reset}{env_indicator}"
+        + f"{red}Peharge{reset}{white})-[{reset}{reset}{current_dir}{reset}{white}]-{reset}{env_indicator_11}"
         f"\n{white}└─{reset}{red}#{reset} "
     )
 
@@ -9650,6 +9650,12 @@ def main():
                 f"{red}no venv{reset}"
             )
 
+            env_indicator_11 = (
+                f"{white}[{reset}{red}{display_env_path}{reset}{white}]{reset}"
+                if env_active else
+                f"{red}no venv{reset}"
+            )
+
             # PIN-Design je nach state
             if state == "main":
                 setup_autocomplete()
@@ -9900,7 +9906,7 @@ def main():
 
             elif state == "evil":
                 setup_autocomplete()
-                pin = get_evil_pin(current_dir, env_indicator)
+                pin = get_evil_pin(current_dir, env_indicator_11)
                 print(pin, end='')
                 user_input = input().strip()
                 history.append(user_input)
