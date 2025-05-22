@@ -9578,11 +9578,12 @@ def main():
 
             try:
                 if current_dir in active_env_path.parents or current_dir == active_env_path:
-                    display_env_path = Path(".") / active_env_path.relative_to(current_dir)
+                    display_env_path_main = Path(".") / active_env_path.relative_to(current_dir)
+                    display_env_path = ".\\" + str(display_env_path_main)
                 else:
-                    display_env_path = active_env_path
+                    display_env_path = str(active_env_path)
             except Exception:
-                display_env_path = active_env_path
+                display_env_path = str(active_env_path)
 
             env_indicator_main = (
                 f"{display_env_path}"
