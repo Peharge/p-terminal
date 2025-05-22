@@ -120,7 +120,7 @@ DEFAULT_PYTHON_EXECUTABLE = os.path.join(DEFAULT_ENV_DIR, "Scripts", "python.exe
 # Globales Thema
 current_theme = "dark"
 
-log_path = Path(__file__).parent / "peharge-compiler.log"
+log_path = Path(__file__).parent / "pp-term-compiler.log"
 logging.basicConfig(
     level=logging.INFO,
     format="[%(asctime)s.%(msecs)03d] %(message)s",
