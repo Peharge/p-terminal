@@ -7939,11 +7939,11 @@ def run_winget_command(
             raise
 
 
-def get_main_pin(current_dir, env_indicator):
+def get_main_pin(current_dir, env_indicator_10):
     return (
         f"\n{white}┌──({reset}{blue}{getpass.getuser()}"
         + colored("㋐", attrs=["bold"])
-        + f"{blue}Peharge{reset}{white})-[{reset}{current_dir}{white}]-{reset}{env_indicator}"
+        + f"{blue}Peharge{reset}{white})-[{reset}{blue}{current_dir}{reset}{white}]-{reset}{env_indicator_10}"
         f"\n{white}└─{reset}{blue}${reset} "
     )
 
@@ -9633,10 +9633,16 @@ def main():
                 f"{blue}[{reset}{red}no venv recorded{reset}{blue}]{reset}"
             )
 
+            env_indicator_10 = (
+                f"{white}[{reset}{blue}{display_env_path}{reset}{white}]{reset}"
+                if env_active else
+                f"{red}no venv{reset}"
+            )
+
             # PIN-Design je nach state
             if state == "main":
                 setup_autocomplete()
-                pin = get_main_pin(current_dir, env_indicator)
+                pin = get_main_pin(current_dir, env_indicator_10)
                 print(pin, end='')
                 # print(pin, end='', flush=True)
                 user_input = input().strip()
