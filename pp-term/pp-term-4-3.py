@@ -8268,7 +8268,7 @@ def get_evil_pin(current_dir, env_indicator_11):
     return (
         f"\n{white}┌──({reset}{red}root"
         + colored("㋐", attrs=["bold"])
-        + f"{red}Peharge{reset}{white})-[{reset}{reset}{current_dir}{reset}{white}]-{reset}{env_indicator_11}"
+        + f"{red}Peharge{reset}{white})-[{reset}{red}{current_dir}{reset}{white}]-{reset}{env_indicator_11}"
         f"\n{white}└─{reset}{red}#{reset} "
     )
 
