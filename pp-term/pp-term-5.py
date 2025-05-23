@@ -905,9 +905,23 @@ def handle_special_commands(user_input):
         "install docker": "run\\docker\\install-dockerdesktop.py",  # new
         "install vs-cpp": "run\\cpp\\install-vs-cpp.py",  # new
         "install vs-c": "run\\c\\install-vs-c.py",  # new
+        "install vs-cs": "run\\cs\\install-vs.py", # new
         "install go": "run\\go\\install-go.py",  # new
         "install julia": "run\\julia\\install-julia.py",  # new
-        "install ffmpeg": "run\\ffmpeg\\install-ffmpeg.py"  # new
+        "install ffmpeg": "run\\ffmpeg\\install-ffmpeg.py",  # new
+        "install clojure": "run\\clojure\\install-clojure.py",  # new
+        "install vs-cs": "run\\cs\\install-vs.py",  # new
+        "install dart": "run\\dart\\install-dart.py",  # new
+        "install elixir": "run\\elixir\\install-elixir.py",  # new
+        "install elm": "run\\elm\\install-elm.py",  # new
+        "install fs": "run\\fs\\install-fs.py",  # new
+        "install haskell": "run\\haskell\\install-haskell.py",  # new
+        "install kotlin": "run\\haskell\\install-kotlin.py",  # new
+        "install lua": "run\\lua\\install-lua.py",  # new
+        "install php": "run\\php\\install-php.py",  # new
+        "install scala": "run\\scala\\install-scala.py",  # new
+        "install swift": "run\\swift\\install-swift.py",  # new
+        "install typescript": "run\\typescript\\install-typescript.py"  # new
     }
 
     # Hier alles in der if-Schleife:
@@ -2819,6 +2833,327 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("swift "):
+        user_input = user_input[6:].strip()
+
+        command = f"swift {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("swiftc "):
+        user_input = user_input[7:].strip()
+
+        command = f"swift {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Note the systkas: swiftc hello.swift -o hello.exe")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("pc-swift "):
+        user_input = user_input[9:].strip()
+
+        command = f"swift {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("dart run "):
+        user_input = user_input[9:].strip()
+
+        command = f"dart run {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("dartc "):
+        user_input = user_input[6:].strip()
+
+        command = f"dart run {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("pc-dart "):
+        user_input = user_input[8:].strip()
+
+        command = f"dart run {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("ghc "):
+        user_input = user_input[4:].strip()
+
+        command = f"ghc {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Note the systkas: ghc hello.hs -o hello.exe")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("ghci "):
+        user_input = user_input[5:].strip()
+
+        command = f"ghci {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("pc-haskell "):
+        user_input = user_input[11:].strip()
+
+        command = f"ghci {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("dotnet fsi "):
+        user_input = user_input[11:].strip()
+
+        command = f"dotnet fsi {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("pc-fs "):
+        user_input = user_input[6:].strip()
+
+        command = f"dotnet fsi {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("scalac "):
+        user_input = user_input[7:].strip()
+
+        command = f"scalac {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("pc-scala "):
+        user_input = user_input[9:].strip()
+
+        command = f"scalac {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("clj "):
+        user_input = user_input[4:].strip()
+
+        command = f"clj {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("pc-clj "):
+        user_input = user_input[7:].strip()
+
+        command = f"clj {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("ocamlc "):
+        user_input = user_input[7:].strip()
+
+        command = f"ocamlc {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Note the systkas: ocamlc hello.ml -o hello.exe")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("pc-ocaml "):
+        user_input = user_input[9:].strip()
+
+        command = f"ocamlc {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Note the systkas: pc-ocaml hello.ml -o hello.exe")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("elixir "):
+        user_input = user_input[7:].strip()
+
+        command = f"elixir {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("pc-elixir "):
+        user_input = user_input[10:].strip()
+
+        command = f"elixir {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("elm make "):
+        user_input = user_input[9:].strip()
+
+        command = f"elm make {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Note the systkas: elm make src/Main.elm --output=main.js")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("pc-elm "):
+        user_input = user_input[7:].strip()
+
+        command = f"elm make {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Note the systkas: pc-elm src/Main.elm --output=main.js")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
