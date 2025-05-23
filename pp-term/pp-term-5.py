@@ -904,7 +904,9 @@ def handle_special_commands(user_input):
         "install githubdesktop": "run\\github\\install-githubdesktop.py",  # new
         "install docker": "run\\docker\\install-dockerdesktop.py",  # new
         "install vs-cpp": "run\\cpp\\install-vs-cpp.py",  # new
-        "install vs-c": "run\\c\\install-vs-c.py"  # new
+        "install vs-c": "run\\c\\install-vs-c.py",  # new
+        "install go": "run\\go\\install-go.py",  # new
+        "install julia": "run\\julia\\install-julia.py"  # new
     }
 
     # Hier alles in der if-Schleife:
