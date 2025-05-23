@@ -3651,8 +3651,8 @@ def handle_special_commands(user_input):
         compile_process = subprocess.Popen(compile_command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         # Execute the compiled program with arguments
-        run_command = f"./algol60 {user_input}"
-        run_process = subprocess.Popen(run_command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        command_3 = f"./algol60 {user_input}"
+        run_process = subprocess.Popen(command_3, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
             compile_process.wait()
