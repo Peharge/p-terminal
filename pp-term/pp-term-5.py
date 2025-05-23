@@ -2004,7 +2004,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("rustc "):
-        user_input = user_input[4:].strip()
+        user_input = user_input[6:].strip()
 
         command = f"rustc {user_input}"
 
@@ -2034,7 +2034,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("javac "):
-        user_input = user_input[5:].strip()
+        user_input = user_input[6:].strip()
 
         command = f"javac {user_input}"
 
@@ -2064,7 +2064,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("Rscript "):
-        user_input = user_input[5:].strip()
+        user_input = user_input[8:].strip()
 
         command = f"Rscript {user_input}"
 
@@ -2079,9 +2079,39 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("pythonc "):
-        user_input = user_input[5:].strip()
+        user_input = user_input[8:].strip()
 
         command = f"pyinstaller --onefile {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+    
+    if user_input.startswith("go run "):
+        user_input = user_input[7:].strip()
+
+        command = f"go run {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("julia "):
+        user_input = user_input[6:].strip()
+
+        command = f"julia  {user_input}"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
