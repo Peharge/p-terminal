@@ -443,7 +443,21 @@
         "install docker": "run\\docker\\install-dockerdesktop.py",  # new
         "install vs-cpp": "run\\cpp\\install-vs-cpp.py",  # new
         "install vs-c": "run\\c\\install-vs-c.py",  # new
+        "install vs-cs": "run\\cs\\install-vs.py", # new
         "install go": "run\\go\\install-go.py",  # new
         "install julia": "run\\julia\\install-julia.py",  # new
-        "install ffmpeg": "run\\ffmpeg\\install-ffmpeg.py"  # new
+        "install ffmpeg": "run\\ffmpeg\\install-ffmpeg.py",  # new
+        "install clojure": "run\\clojure\\install-clojure.py",  # new
+        "install vs-cs": "run\\cs\\install-vs.py",  # new
+        "install dart": "run\\dart\\install-dart.py",  # new
+        "install elixir": "run\\elixir\\install-elixir.py",  # new
+        "install elm": "run\\elm\\install-elm.py",  # new
+        "install fs": "run\\fs\\install-fs.py",  # new
+        "install haskell": "run\\haskell\\install-haskell.py",  # new
+        "install kotlin": "run\\haskell\\install-kotlin.py",  # new
+        "install lua": "run\\lua\\install-lua.py",  # new
+        "install php": "run\\php\\install-php.py",  # new
+        "install scala": "run\\scala\\install-scala.py",  # new
+        "install swift": "run\\swift\\install-swift.py",  # new
+        "install typescript": "run\\typescript\\install-typescript.py"  # new
     }
