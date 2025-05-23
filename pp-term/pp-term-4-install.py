@@ -89,7 +89,7 @@ REQUIRED_PACKAGES = [
     "typer", "click", "blessed", "prompt-toolkit", "tqdm", "watchdog", "fire", "torch",
     "torchvision", "torchaudio", "tensorflow", "tf-nightly", "notebook", "jupyterlab", "jax",
     "chardet", "plotly", "py-cpuinfo", "gputil", "tabulate", "pyqtgraph", "deep-translator",
-    "duckduckgo-search", "pillow", "GitPython", "matplotlib"
+    "duckduckgo-search", "pillow", "GitPython", "matplotlib", "pyinstaller"
 ]
 
 
