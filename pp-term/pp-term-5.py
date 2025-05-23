@@ -2261,7 +2261,27 @@ def handle_special_commands(user_input):
         handle_vs_cpp_command(user_input)
         return True
 
+    elif user_input.startswith("cppc "):
+        user_input = user_input[5:].strip()
+        handle_vs_cpp_command(user_input)
+        return True
+
+    elif user_input.startswith("pc-cpp "):
+        user_input = user_input[7:].strip()
+        handle_vs_cpp_command(user_input)
+        return True
+
     elif user_input.startswith("vs-c "):
+        user_input = user_input[5:].strip()
+        handle_vs_c_command(user_input)
+        return True
+
+    elif user_input.startswith("cs "):
+        user_input = user_input[3:].strip()
+        handle_vs_c_command(user_input)
+        return True
+
+    elif user_input.startswith("pc-c "):
         user_input = user_input[5:].strip()
         handle_vs_c_command(user_input)
         return True
@@ -2271,8 +2291,33 @@ def handle_special_commands(user_input):
         handle_vs_cs_command(user_input)
         return True
 
+    elif user_input.startswith("csc "):
+        user_input = user_input[4:].strip()
+        handle_vs_cs_command(user_input)
+        return True
+
+    elif user_input.startswith("pc-cs "):
+        user_input = user_input[6:].strip()
+        handle_vs_cs_command(user_input)
+        return True
+
     if user_input.startswith("rustc "):
         user_input = user_input[6:].strip()
+
+        command = f"rustc {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("pc-rust "):
+        user_input = user_input[8:].strip()
 
         command = f"rustc {user_input}"
 
@@ -2301,8 +2346,53 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
         return True
 
+    if user_input.startswith("nodec "):
+        user_input = user_input[6:].strip()
+
+        command = f"node {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("pc-node "):
+        user_input = user_input[8:].strip()
+
+        command = f"node {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
     if user_input.startswith("javac "):
         user_input = user_input[6:].strip()
+
+        command = f"javac {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("pc-java "):
+        user_input = user_input[8:].strip()
 
         command = f"javac {user_input}"
 
@@ -2331,6 +2421,36 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
         return True
 
+    if user_input.startswith("rubyc "):
+        user_input = user_input[6:].strip()
+
+        command = f"ruby {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("pc-ruby "):
+        user_input = user_input[8:].strip()
+
+        command = f"ruby {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
     if user_input.startswith("Rscript "):
         user_input = user_input[8:].strip()
 
@@ -2346,8 +2466,53 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
         return True
 
+    if user_input.startswith("Rscriptc "):
+        user_input = user_input[9:].strip()
+
+        command = f"Rscript {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("pc-r "):
+        user_input = user_input[5:].strip()
+
+        command = f"Rscript {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
     if user_input.startswith("pythonc "):
         user_input = user_input[8:].strip()
+
+        command = f"pyinstaller --onefile {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("pc-python "):
+        user_input = user_input[10:].strip()
 
         command = f"pyinstaller --onefile {user_input}"
 
@@ -2376,8 +2541,68 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
         return True
 
+    if user_input.startswith("goc "):
+        user_input = user_input[4:].strip()
+
+        command = f"go run {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("pc-go "):
+        user_input = user_input[6:].strip()
+
+        command = f"go run {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
     if user_input.startswith("julia "):
         user_input = user_input[6:].strip()
+
+        command = f"julia  {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("juliac "):
+        user_input = user_input[7:].strip()
+
+        command = f"julia  {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("pc-julia "):
+        user_input = user_input[9:].strip()
 
         command = f"julia  {user_input}"
 
