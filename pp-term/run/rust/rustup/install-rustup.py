@@ -61,98 +61,99 @@
 #
 # Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 
-import os
-import subprocess
 import sys
+import os
 import shutil
-import urllib.request
+import subprocess
+import logging
 from pathlib import Path
+from urllib.request import urlopen, Request
+from urllib.error import URLError, HTTPError
+import tempfile
 
-RUSTUP_URL = "https://sh.rustup.rs"
-INSTALLER_PATH = Path("/tmp/rustup-init.sh")
-LOGFILE = Path("/tmp/rustup_install.log")
-GPG_KEY_ID = "108F52B48DB57BB0"
+# Logging konfigurieren
+log_path = Path(__file__).parent / "installer.log"
+logging.basicConfig(
+    level=logging.INFO,
+    format="[%(asctime)s.%(msecs)03d] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+    handlers=[
+        logging.FileHandler(log_path, encoding='utf-8'),
+        logging.StreamHandler(sys.stdout)
+    ]
+)
 
-def log(message):
-    full_msg = f"[INFO] {message}"
-    print(full_msg)
-    with open(LOGFILE, "a") as f:
-        f.write(full_msg + "\n")
+def is_rustup_installed() -> bool:
+    """Prüft, ob rustup über den PATH aufgerufen werden kann."""
+    return shutil.which("rustup") is not None
 
-def error(message):
-    full_msg = f"[ERROR] {message}"
-    print(full_msg, file=sys.stderr)
-    with open(LOGFILE, "a") as f:
-        f.write(full_msg + "\n")
-    sys.exit(1)
-
-def check_dependencies():
-    for cmd in ["curl", "gpg", "sh"]:
-        if shutil.which(cmd) is None:
-            error(f"'{cmd}' is required but not found in PATH.")
-
-def download_installer():
-    log("Downloading rustup installer...")
+def download_rustup_installer(dest_path: Path) -> None:
+    """
+    Lädt den Windows-Installer von rustup (rustup-init.exe) herunter.
+    Die URL https://win.rustup.rs/ liefert automatisch den aktuellsten Installer.
+    """
+    url = "https://win.rustup.rs/"
+    logging.info(f"Starte Download des rustup-Installers von {url}")
     try:
-        with urllib.request.urlopen(RUSTUP_URL) as response:
-            with open(INSTALLER_PATH, 'wb') as out_file:
-                out_file.write(response.read())
-        os.chmod(INSTALLER_PATH, 0o755)
-    except Exception as e:
-        error(f"Failed to download installer: {e}")
+        req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urlopen(req) as response, open(dest_path, "wb") as out_file:
+            total = int(response.getheader('Content-Length', 0))
+            downloaded = 0
+            chunk_size = 8192
+            while True:
+                chunk = response.read(chunk_size)
+                if not chunk:
+                    break
+                out_file.write(chunk)
+                downloaded += len(chunk)
+                percent = downloaded * 100 / total if total else 0
+                logging.info(f"Download-Fortschritt: {percent:.1f}%")
+        logging.info(f"Download abgeschlossen: {dest_path}")
+    except (HTTPError, URLError) as e:
+        logging.error(f"Fehler beim Download: {e}")
+        sys.exit(1)
 
-def verify_installer():
-    sig_url = f"{RUSTUP_URL}.asc"
-    sig_path = INSTALLER_PATH.with_suffix(".asc")
-
+def run_installer(installer_path: Path) -> None:
+    """
+    Führt den heruntergeladenen rustup-Installer im Silent-Modus aus.
+    """
+    logging.info(f"Starte rustup-Installer: {installer_path}")
+    # /VERYSILENT je nach InnoSetup-Version, für rustup reicht `-y`
+    cmd = [str(installer_path), "-y"]
     try:
-        urllib.request.urlretrieve(sig_url, sig_path)
-    except Exception:
-        log("No signature file found. Skipping GPG verification.")
-        return
-
-    try:
-        subprocess.run(["gpg", "--keyserver", "hkps://keys.openpgp.org", "--recv-keys", GPG_KEY_ID], check=True)
-        subprocess.run(["gpg", "--verify", str(sig_path), str(INSTALLER_PATH)], check=True)
-        log("GPG verification successful.")
-    except subprocess.CalledProcessError:
-        error("GPG verification failed.")
-
-def run_installer():
-    log("Running rustup installer (non-interactive)...")
-    try:
-        subprocess.run([str(INSTALLER_PATH), "-y"], check=True)
+        result = subprocess.run(cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        logging.info("rustup erfolgreich installiert.")
+        logging.debug(f"Installer-Ausgabe:\n{result.stdout}")
     except subprocess.CalledProcessError as e:
-        error(f"Installer failed with exit code {e.returncode}")
+        logging.error(f"Installation fehlgeschlagen (Exit-Code {e.returncode}):\n{e.stderr}")
+        sys.exit(e.returncode)
 
-def setup_path():
-    cargo_path = Path.home() / ".cargo" / "bin"
-    bashrc = Path.home() / ".bashrc"
-
-    if str(cargo_path) not in os.environ.get("PATH", ""):
-        log("Adding ~/.cargo/bin to PATH in .bashrc")
-        with open(bashrc, "a") as f:
-            f.write(f'\nexport PATH="{cargo_path}:$PATH"\n')
-
-def verify_installation():
-    rustc = shutil.which("rustc")
-    cargo = shutil.which("cargo")
-    if rustc and cargo:
-        log("Rust installed successfully!")
-        subprocess.run(["rustc", "--version"], check=True)
-        subprocess.run(["cargo", "--version"], check=True)
+def ensure_rustup_available():
+    """
+    Prüft nach der Installation, ob rustup nun in PATH ist.
+    """
+    if is_rustup_installed():
+        logging.info("rustup steht nun zur Verfügung.")
     else:
-        error("Rust installation failed. rustc or cargo not found.")
+        logging.warning("rustup nicht im PATH gefunden. Bitte Terminal neu starten oder PATH überprüfen.")
 
 def main():
-    log("==== Starting Rustup Installation via Python ====")
-    check_dependencies()
-    download_installer()
-    verify_installer()
-    run_installer()
-    setup_path()
-    verify_installation()
-    log("==== Rustup Installation Completed Successfully ====")
+    logging.info("=== rustup-Installer gestartet ===")
+    if is_rustup_installed():
+        logging.info("rustup ist bereits installiert. Beende Prozess.")
+        return
+
+    # Temporäres Verzeichnis für den Downloader anlegen
+    with tempfile.TemporaryDirectory() as tmpdir:
+        installer_file = Path(tmpdir) / "rustup-init.exe"
+        download_rustup_installer(installer_file)
+        run_installer(installer_file)
+
+    ensure_rustup_available()
+    logging.info("=== Prozess abgeschlossen ===")
 
 if __name__ == "__main__":
+    if os.name != "nt":
+        logging.error("Dieses Skript läuft nur unter Windows.")
+        sys.exit(1)
     main()
