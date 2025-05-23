@@ -61,17 +61,16 @@
 #
 # Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 
-import sys
 import os
-import shutil
+import sys
 import subprocess
 import logging
 import tempfile
+import shutil
+from pathlib import Path
+from urllib.request import urlopen
 import json
 import zipfile
-from pathlib import Path
-from urllib.request import urlopen, Request
-from urllib.error import URLError, HTTPError
 
 # Configure logging
 log_path = Path(__file__).parent / "installer.log"
@@ -85,103 +84,85 @@ logging.basicConfig(
     ]
 )
 
-# Adoptium API for Temurin JDK 17 LTS
-API_URL = (
-    "https://api.adoptium.net/v3/assets/latest/17/ga"
-    "?architecture=x64&image_type=jdk&jvm_impl=hotspot&os=windows&vendor=eclipse"
-)
-INSTALL_DIR = Path(os.environ.get("ProgramFiles", "C:/Program Files")) / "Java"
+GO_INSTALL_DIR = Path("C:/Go")
+GO_DOWNLOAD_API = "https://go.dev/dl/?mode=json"
 
+def is_go_installed() -> bool:
+    return shutil.which("go") is not None or (GO_INSTALL_DIR / "bin" / "go.exe").exists()
 
-def is_javac_installed() -> bool:
-    """Checks if javac is available via PATH."""
-    return shutil.which("javac") is not None
+def get_latest_go_version() -> dict:
+    """Fetches metadata for the latest Go version for Windows x64."""
+    logging.info("Querying official Go download API...")
+    with urlopen(GO_DOWNLOAD_API) as resp:
+        versions = json.load(resp)
+        for v in versions:
+            for f in v["files"]:
+                if f["os"] == "windows" and f["arch"] == "amd64" and f["kind"] == "archive":
+                    logging.info(f"Latest version found: {v['version']}")
+                    return {
+                        "version": v["version"],
+                        "filename": f["filename"],
+                        "url": "https://go.dev/dl/" + f["filename"]
+                    }
+    logging.error("No matching Go version found.")
+    sys.exit(1)
 
+def download_go_zip(info: dict, dest: Path):
+    """Downloads the Go ZIP archive."""
+    logging.info(f"Downloading Go {info['version']} from {info['url']}")
+    with urlopen(info["url"]) as resp, open(dest, "wb") as out_file:
+        shutil.copyfileobj(resp, out_file)
+    logging.info(f"Download complete: {dest}")
 
-def fetch_asset_info() -> dict:
-    """
-    Calls Adoptium API and returns the first asset object.
-    """
-    logging.info(f"Fetching asset data from {API_URL}")
+def extract_go(zip_path: Path):
+    """Extracts the ZIP archive to C:/Go"""
+    if GO_INSTALL_DIR.exists():
+        logging.info("Removing old Go installation...")
+        shutil.rmtree(GO_INSTALL_DIR)
+    logging.info(f"Extracting {zip_path} to {GO_INSTALL_DIR}")
+    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+        zip_ref.extractall("C:/")
+    logging.info("Extraction complete.")
+
+def update_path():
+    """Adds Go to the PATH (only effective for future terminals)."""
+    go_bin = str(GO_INSTALL_DIR / "bin")
+    current_path = os.environ.get("PATH", "")
+    if go_bin.lower() in current_path.lower():
+        logging.info("Go is already in the PATH.")
+        return
+    logging.info(f"Adding Go to PATH: {go_bin}")
+    subprocess.run(["setx", "PATH", f"{current_path};{go_bin}"], shell=True)
+
+def verify_installation():
+    """Verifies the Go installation."""
     try:
-        req = Request(API_URL, headers={"User-Agent": "Mozilla/5.0"})
-        with urlopen(req) as resp:
-            data = json.load(resp)
-            if not data:
-                raise ValueError("Empty response from Adoptium API")
-            asset = data[0]
-            pkg = asset["binary"]["package"]
-            logging.info(f"Found version: {asset['release_name']}")
-            return {"version": asset["release_name"], "link": pkg["link"], "type": pkg["name"].split('.')[-1]}
-    except (HTTPError, URLError, ValueError) as e:
-        logging.error(f"Error retrieving asset info: {e}")
+        result = subprocess.run(["go", "version"], capture_output=True, text=True, check=True)
+        logging.info(f"Go successfully installed: {result.stdout.strip()}")
+    except Exception as e:
+        logging.error("Error verifying Go installation: " + str(e))
         sys.exit(1)
-
-
-def download_package(link: str, dest_path: Path) -> None:
-    logging.info(f"Downloading package from {link}")
-    try:
-        req = Request(link, headers={"User-Agent": "Mozilla/5.0"})
-        with urlopen(req) as response, open(dest_path, "wb") as out_file:
-            total = int(response.getheader('Content-Length', 0))
-            downloaded = 0
-            chunk_size = 8192
-            while chunk := response.read(chunk_size):
-                out_file.write(chunk)
-                downloaded += len(chunk)
-                if total:
-                    percent = downloaded * 100 / total
-                    logging.info(f"Download: {percent:.1f}%")
-        logging.info(f"Download complete: {dest_path}")
-    except (HTTPError, URLError) as e:
-        logging.error(f"Download error: {e}")
-        sys.exit(1)
-
-
-def install_from_zip(zip_path: Path, version: str) -> None:
-    target = INSTALL_DIR / version
-    logging.info(f"Extracting JDK to {target}")
-    with zipfile.ZipFile(zip_path, 'r') as zin:
-        zin.extractall(target)
-    bin_dir = next(target.glob('*/bin'), None)
-    if bin_dir:
-        path_update = str(bin_dir)
-        logging.info(f"Adding {path_update} to PATH environment variable")
-        subprocess.run(["setx", "PATH", f"%PATH%;{path_update}"], check=False)
-        logging.info("Please restart your terminal for PATH changes to take effect.")
-    else:
-        logging.warning("bin directory not found, PATH not updated.")
-
 
 def main():
-    logging.info("=== Java JDK Installer started ===")
-    if is_javac_installed():
-        logging.info("javac is already installed. Exiting.")
+    logging.info("=== Go Installer started ===")
+    if os.name != "nt":
+        logging.error("This script only works on Windows.")
+        sys.exit(1)
+
+    if is_go_installed():
+        logging.info("Go is already installed.")
         return
 
-    asset = fetch_asset_info()
-    with tempfile.TemporaryDirectory() as tmpdir:
-        file_name = f"jdk-{asset['version']}.{asset['type']}"
-        pkg_path = Path(tmpdir) / file_name
-        download_package(asset['link'], pkg_path)
-        if pkg_path.suffix.lower() == ".msi":
-            logging.info("Running MSI installer")
-            subprocess.run(["msiexec", "/i", str(pkg_path), "/quiet", "/norestart"], check=True)
-        elif pkg_path.suffix.lower() in ['.zip', '.gz']:
-            install_from_zip(pkg_path, asset['version'])
-        else:
-            logging.error(f"Unknown package type: {pkg_path.suffix}")
-            sys.exit(1)
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp_path = Path(tmp)
+        info = get_latest_go_version()
+        zip_file = tmp_path / info["filename"]
+        download_go_zip(info, zip_file)
+        extract_go(zip_file)
 
-    if is_javac_installed():
-        logging.info("javac is now available.")
-    else:
-        logging.warning("javac not found. Please check your PATH.")
-    logging.info("=== Process completed ===")
-
+    update_path()
+    verify_installation()
+    logging.info("=== Go installation completed ===")
 
 if __name__ == "__main__":
-    if os.name != "nt":
-        logging.error("This script runs on Windows only.")
-        sys.exit(1)
     main()

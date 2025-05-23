@@ -61,19 +61,17 @@
 #
 # Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 
-import sys
 import os
+import sys
 import shutil
 import subprocess
 import logging
 import tempfile
-import json
-import zipfile
 from pathlib import Path
-from urllib.request import urlopen, Request
+from urllib.request import Request, urlopen
 from urllib.error import URLError, HTTPError
 
-# Configure logging
+# --- Configure logging ---
 log_path = Path(__file__).parent / "installer.log"
 logging.basicConfig(
     level=logging.INFO,
@@ -85,103 +83,98 @@ logging.basicConfig(
     ]
 )
 
-# Adoptium API for Temurin JDK 17 LTS
-API_URL = (
-    "https://api.adoptium.net/v3/assets/latest/17/ga"
-    "?architecture=x64&image_type=jdk&jvm_impl=hotspot&os=windows&vendor=eclipse"
-)
-INSTALL_DIR = Path(os.environ.get("ProgramFiles", "C:/Program Files")) / "Java"
+# --- Constants for installation ---
+# Current Julia version and download URL (Windows x64) from the official site
+JULIA_VERSION = "1.11.5"  # Current stable release: v1.11.5 (April 14, 2025)
+JULIA_URL     = f"https://julialang-s3.julialang.org/bin/winnt/x64/1.11/julia-{JULIA_VERSION}-win64.exe"
+INSTALL_DIR   = Path("C:/Program Files/Julia") / f"Julia-{JULIA_VERSION}"
+BIN_PATH      = INSTALL_DIR / "bin"
+EXE_NAME      = BIN_PATH / "julia.exe"
 
+def is_julia_installed() -> bool:
+    """Checks whether 'julia' can already be invoked via PATH."""
+    return shutil.which("julia") is not None or EXE_NAME.exists()
 
-def is_javac_installed() -> bool:
-    """Checks if javac is available via PATH."""
-    return shutil.which("javac") is not None
-
-
-def fetch_asset_info() -> dict:
-    """
-    Calls Adoptium API and returns the first asset object.
-    """
-    logging.info(f"Fetching asset data from {API_URL}")
+def download_installer(dest: Path) -> None:
+    """Downloads the Julia installer and logs progress."""
+    logging.info(f"Starting download of Julia {JULIA_VERSION} from {JULIA_URL}")
     try:
-        req = Request(API_URL, headers={"User-Agent": "Mozilla/5.0"})
-        with urlopen(req) as resp:
-            data = json.load(resp)
-            if not data:
-                raise ValueError("Empty response from Adoptium API")
-            asset = data[0]
-            pkg = asset["binary"]["package"]
-            logging.info(f"Found version: {asset['release_name']}")
-            return {"version": asset["release_name"], "link": pkg["link"], "type": pkg["name"].split('.')[-1]}
-    except (HTTPError, URLError, ValueError) as e:
-        logging.error(f"Error retrieving asset info: {e}")
-        sys.exit(1)
-
-
-def download_package(link: str, dest_path: Path) -> None:
-    logging.info(f"Downloading package from {link}")
-    try:
-        req = Request(link, headers={"User-Agent": "Mozilla/5.0"})
-        with urlopen(req) as response, open(dest_path, "wb") as out_file:
-            total = int(response.getheader('Content-Length', 0))
+        req = Request(JULIA_URL, headers={"User-Agent": "Mozilla/5.0"})
+        with urlopen(req) as response:
+            total = int(response.getheader("Content-Length", 0))
             downloaded = 0
             chunk_size = 8192
-            while chunk := response.read(chunk_size):
-                out_file.write(chunk)
-                downloaded += len(chunk)
-                if total:
-                    percent = downloaded * 100 / total
-                    logging.info(f"Download: {percent:.1f}%")
-        logging.info(f"Download complete: {dest_path}")
+            with open(dest, "wb") as out:
+                while True:
+                    chunk = response.read(chunk_size)
+                    if not chunk:
+                        break
+                    out.write(chunk)
+                    downloaded += len(chunk)
+                    if total:
+                        pct = downloaded * 100 / total
+                        logging.info(f"Download progress: {pct:.1f}%")
+        logging.info(f"Download completed: {dest}")
     except (HTTPError, URLError) as e:
-        logging.error(f"Download error: {e}")
+        logging.error(f"Error during download: {e}")
         sys.exit(1)
 
+def run_installer(installer_path: Path) -> None:
+    """Runs the Julia installer in silent mode."""
+    logging.info(f"Starting Julia installer: {installer_path}")
+    # Inno Setup parameters: /VERYSILENT, /SUPPRESSMSGBOXES, /NORESTART
+    cmd = [str(installer_path),
+           "/VERYSILENT",
+           "/SUPPRESSMSGBOXES",
+           "/NORESTART",
+           f"/DIR={INSTALL_DIR}"]
+    try:
+        res = subprocess.run(cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        logging.info("Julia installed successfully.")
+        logging.debug(f"Installer output:\n{res.stdout}")
+    except subprocess.CalledProcessError as e:
+        logging.error(f"Installation failed (exit code {e.returncode}):\n{e.stderr}")
+        sys.exit(e.returncode)
 
-def install_from_zip(zip_path: Path, version: str) -> None:
-    target = INSTALL_DIR / version
-    logging.info(f"Extracting JDK to {target}")
-    with zipfile.ZipFile(zip_path, 'r') as zin:
-        zin.extractall(target)
-    bin_dir = next(target.glob('*/bin'), None)
-    if bin_dir:
-        path_update = str(bin_dir)
-        logging.info(f"Adding {path_update} to PATH environment variable")
-        subprocess.run(["setx", "PATH", f"%PATH%;{path_update}"], check=False)
-        logging.info("Please restart your terminal for PATH changes to take effect.")
-    else:
-        logging.warning("bin directory not found, PATH not updated.")
+def update_path():
+    """Adds Julia/bin to the system PATH (for new terminals)."""
+    julia_bin = str(BIN_PATH)
+    current = os.environ.get("PATH", "")
+    if julia_bin.lower() in current.lower():
+        logging.info("Julia/bin is already in PATH.")
+        return
+    logging.info(f"Adding Julia/bin to PATH: {julia_bin}")
+    # setx writes the new PATH value to the registry (we append)
+    subprocess.run(f'setx PATH "{current};{julia_bin}"', shell=True, check=False)
 
+def verify_installation():
+    """Validates the installation using 'julia --version'."""
+    try:
+        out = subprocess.run(["julia", "--version"], check=True, capture_output=True, text=True)
+        logging.info(f"Julia version: {out.stdout.strip()}")
+    except Exception as e:
+        logging.error(f"Error verifying Julia installation: {e}")
+        sys.exit(1)
 
 def main():
-    logging.info("=== Java JDK Installer started ===")
-    if is_javac_installed():
-        logging.info("javac is already installed. Exiting.")
+    logging.info("=== Julia installer started ===")
+    if os.name != "nt":
+        logging.error("This script only runs on Windows.")
+        sys.exit(1)
+
+    if is_julia_installed():
+        logging.info("Julia is already installed. Exiting.")
         return
 
-    asset = fetch_asset_info()
-    with tempfile.TemporaryDirectory() as tmpdir:
-        file_name = f"jdk-{asset['version']}.{asset['type']}"
-        pkg_path = Path(tmpdir) / file_name
-        download_package(asset['link'], pkg_path)
-        if pkg_path.suffix.lower() == ".msi":
-            logging.info("Running MSI installer")
-            subprocess.run(["msiexec", "/i", str(pkg_path), "/quiet", "/norestart"], check=True)
-        elif pkg_path.suffix.lower() in ['.zip', '.gz']:
-            install_from_zip(pkg_path, asset['version'])
-        else:
-            logging.error(f"Unknown package type: {pkg_path.suffix}")
-            sys.exit(1)
+    # Temporary directory for download
+    with tempfile.TemporaryDirectory() as td:
+        tmp_installer = Path(td) / f"julia-{JULIA_VERSION}-win64.exe"
+        download_installer(tmp_installer)
+        run_installer(tmp_installer)
 
-    if is_javac_installed():
-        logging.info("javac is now available.")
-    else:
-        logging.warning("javac not found. Please check your PATH.")
-    logging.info("=== Process completed ===")
-
+    update_path()
+    verify_installation()
+    logging.info("=== Julia installation complete ===")
 
 if __name__ == "__main__":
-    if os.name != "nt":
-        logging.error("This script runs on Windows only.")
-        sys.exit(1)
     main()
