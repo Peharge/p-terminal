@@ -416,5 +416,31 @@
         "flatpak": "pp-commands\\flatpak.py",  # new
         "atom": "pp-commands\\atom.py",  # new
         "lite-xl": "pp-commands\\lite-xl.py",  # new
-        "weather": "pp-commands\\weather.py"  # new
+        "weather": "pp-commands\\weather.py",  # new
+        "g++": "pp-commands\\gpp.py",  # new
+        "gcc": "pp-commands\\gcc.py",  # new
+        "install alpine-wsl": "run\\wsl\\install-alpine-wsl.py",  # new
+        "install arch-wsl": "run\\wsl\\install-arch-wsl.py",  # new
+        "install clear-wsl": "run\\wsl\\install-clear-wsl.py",  # new
+        "install debian-wsl": "run\\wsl\\install-debian-wsl.py",  # new
+        "install fedora-wsl": "run\\wsl\\install-fedora-wsl.py",  # new
+        "install kali-wsl": "run\\wsl\\install-kali-wsl.py",  # new
+        "install mint-wsl": "run\\wsl\\install-mint-wsl.py",  # new
+        "install opensuse-wsl": "run\\wsl\\install-opensuse-wsl.py",  # new
+        "install oracle-wsl": "run\\wsl\\install-oracle-wsl.py",  # new
+        "install pengwin-wsl": "run\\wsl\\install-pengwin-wsl.py",  # new
+        "install redhat-wsl": "run\\wsl\\install-redhat-wsl.py",  # new
+        "install suse-wsl": "run\\wsl\\install-suse-wsl.py",  # new
+        "install ubuntu-wsl": "run\\wsl\\install-ubuntu-wsl.py",  # new
+        "install wsl": "run\\wsl\\install-wsl.py",  # new
+        "install vs-code": "run\vs\\install-vs-code.py",  # new
+        "install rustup": "run\\rust\\rustup\\install-rustup.py",  # new
+        "install ruby": "run\\ruby\\install-ruby.py",  # new
+        "install rscript": "run\\ruby\\install-rscript.py",
+        "install pycharm": "run\\pycharm\\install-pycharm.py",  # new
+        "install nodejs": "run\\java\\javac\\install-nodejs.py",  # new
+        "install githubdesktop": "run\\github\\install-githubdesktop.py",  # new
+        "install docker": "run\\docker\\install-dockerdesktop.py",  # new
+        "install vs-cpp": "run\\cpp\\install-vs-cpp.py",  # new
+        "install vs-c": "run\\c\\install-vs-c.py"  # new
     }
