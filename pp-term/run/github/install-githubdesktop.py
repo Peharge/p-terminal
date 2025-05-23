@@ -61,9 +61,6 @@
 #
 # Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 
-#!/usr/bin/env python3
-# install_githubdesktop.py
-
 import sys
 import os
 import shutil
@@ -74,7 +71,7 @@ from pathlib import Path
 from urllib.request import urlopen, Request
 from urllib.error import URLError, HTTPError
 
-# Logging konfigurieren
+# Configure logging
 log_path = Path(__file__).parent / "installer.log"
 logging.basicConfig(
     level=logging.INFO,
@@ -86,20 +83,18 @@ logging.basicConfig(
     ]
 )
 
-# GitHub Desktop Release URL (Latest stable)
+# GitHub Desktop release URL (latest stable)
 GHD_URL = "https://central.github.com/deployments/desktop/desktop/latest/win32"
 
-
 def is_github_desktop_installed() -> bool:
-    """Prüft, ob GitHub Desktop über den Registry-Eintrag oder PATH erreichbar ist."""
-    # GitHub Desktop installiert eine Verknüpfung 'GitHubDesktop.exe' im Programme-Verzeichnis
+    """Checks whether GitHub Desktop is installed via registry or PATH."""
+    # GitHub Desktop installs GitHubDesktop.exe in the Program Files directory
     prog_path = Path(os.environ.get("ProgramFiles", "C:/Program Files")) / "GitHub Desktop" / "GitHubDesktop.exe"
     return prog_path.exists() or shutil.which("GitHubDesktop.exe") is not None
 
-
 def download_installer(dest_path: Path) -> None:
-    """Lädt das GitHub Desktop Windows-Setup herunter."""
-    logging.info(f"Starte Download von GitHub Desktop Installer von {GHD_URL}")
+    """Downloads the GitHub Desktop Windows installer."""
+    logging.info(f"Starting download of GitHub Desktop installer from {GHD_URL}")
     try:
         req = Request(GHD_URL, headers={"User-Agent": "Mozilla/5.0"})
         with urlopen(req) as response, open(dest_path, "wb") as out_file:
@@ -114,39 +109,36 @@ def download_installer(dest_path: Path) -> None:
                 downloaded += len(chunk)
                 if total:
                     percent = downloaded * 100 / total
-                    logging.info(f"Download-Fortschritt: {percent:.1f}%")
-        logging.info(f"Download abgeschlossen: {dest_path}")
+                    logging.info(f"Download progress: {percent:.1f}%")
+        logging.info(f"Download complete: {dest_path}")
     except (HTTPError, URLError) as e:
-        logging.error(f"Fehler beim Download: {e}")
+        logging.error(f"Download error: {e}")
         sys.exit(1)
 
-
 def run_installer(installer_path: Path) -> None:
-    """Führt den GitHub Desktop Installer im Silent-Modus aus."""
-    logging.info(f"Starte GitHub Desktop Installer: {installer_path}")
-    # Squirrel-based Installer unterstützt '--silent' flag
+    """Runs the GitHub Desktop installer in silent mode."""
+    logging.info(f"Launching GitHub Desktop installer: {installer_path}")
+    # Squirrel-based installer supports '--silent' flag
     cmd = [str(installer_path), "--silent"]
     try:
         result = subprocess.run(cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        logging.info("GitHub Desktop erfolgreich installiert.")
-        logging.debug(f"Installer-Ausgabe:\n{result.stdout}")
+        logging.info("GitHub Desktop installed successfully.")
+        logging.debug(f"Installer output:\n{result.stdout}")
     except subprocess.CalledProcessError as e:
-        logging.error(f"Installation fehlgeschlagen (Exit-Code {e.returncode}): {e.stderr}")
+        logging.error(f"Installation failed (exit code {e.returncode}): {e.stderr}")
         sys.exit(e.returncode)
 
-
 def ensure_installed():
-    """Überprüft abschließend, ob GitHub Desktop nun vorhanden ist."""
+    """Final check to confirm GitHub Desktop is available."""
     if is_github_desktop_installed():
-        logging.info("GitHub Desktop steht nun zur Verfügung.")
+        logging.info("GitHub Desktop is now available.")
     else:
-        logging.warning("GitHub Desktop nicht gefunden. Bitte PATH oder Installation prüfen.")
-
+        logging.warning("GitHub Desktop not found. Please check PATH or installation.")
 
 def main():
-    logging.info("=== GitHub Desktop Installer gestartet ===")
+    logging.info("=== GitHub Desktop Installer started ===")
     if is_github_desktop_installed():
-        logging.info("GitHub Desktop ist bereits installiert. Abbruch.")
+        logging.info("GitHub Desktop is already installed. Exiting.")
         return
 
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -155,10 +147,10 @@ def main():
         run_installer(installer_file)
 
     ensure_installed()
-    logging.info("=== Prozess abgeschlossen ===")
+    logging.info("=== Process completed ===")
 
 if __name__ == "__main__":
     if os.name != "nt":
-        logging.error("Dieses Skript läuft nur unter Windows.")
+        logging.error("This script only runs on Windows.")
         sys.exit(1)
     main()
