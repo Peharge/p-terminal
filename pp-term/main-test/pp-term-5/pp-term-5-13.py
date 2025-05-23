@@ -1958,21 +1958,6 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
         return True
 
-    if user_input.lower() == "g++ --version":
-        user_input = user_input[4:].strip()
-
-        command = f"wsl g++ --version"
-
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
-
-        try:
-            process.wait()
-        except KeyboardInterrupt:
-            print(f"[{timestamp()}] [INFO] Cancellation by user.")
-        except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
-        return True
-
     if user_input.startswith("gcc "):
         user_input = user_input[4:].strip()
 
@@ -1992,21 +1977,6 @@ def handle_special_commands(user_input):
         user_input = user_input[7:].strip()
 
         command = f"wsl g++ -o {user_input}"
-
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
-
-        try:
-            process.wait()
-        except KeyboardInterrupt:
-            print(f"[{timestamp()}] [INFO] Cancellation by user.")
-        except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
-        return True
-
-    if user_input.lower() == "gcc version":
-        user_input = user_input[4:].strip()
-
-        command = f"wsl gcc --version"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
