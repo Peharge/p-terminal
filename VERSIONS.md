@@ -146,3 +146,5 @@
        - PP-Terminal 5.1.1.8
        - PP-Terminal 5.1.1.9
        - PP-Terminal 5.1.1.10
+       - PP-Terminal 5.1.1.11
+       - PP-Terminal 5.1.1.13
