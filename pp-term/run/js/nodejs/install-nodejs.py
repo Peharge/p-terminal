@@ -72,7 +72,7 @@ from pathlib import Path
 from urllib.request import urlopen, Request
 from urllib.error import URLError, HTTPError
 
-# Logging konfigurieren
+# Configure logging
 log_path = Path(__file__).parent / "installer.log"
 logging.basicConfig(
     level=logging.INFO,
@@ -88,37 +88,37 @@ NODE_INDEX_URL = "https://nodejs.org/dist/index.json"
 
 
 def is_node_installed() -> bool:
-    """Prüft, ob Node.js (node) über den PATH aufgerufen werden kann."""
+    """Checks if Node.js (node) is available via PATH."""
     return shutil.which("node") is not None
 
 
 def fetch_latest_version() -> str:
     """
-    Liest die Node.js Releases JSON und liefert die neueste stabile Version (erste Eintrag).
-    Rückgabe im Format 'vX.Y.Z'.
+    Reads the Node.js releases JSON and returns the latest stable version (first entry).
+    Returns format: 'vX.Y.Z'
     """
-    logging.info(f"Hole Releases-Daten von {NODE_INDEX_URL}")
+    logging.info(f"Fetching release data from {NODE_INDEX_URL}")
     try:
         req = Request(NODE_INDEX_URL, headers={"User-Agent": "Mozilla/5.0"})
         with urlopen(req) as resp:
             data = json.load(resp)
             if not data:
-                raise ValueError("Leere Versionsliste erhalten.")
-            latest = data[0]["version"]  # z.B. "v18.16.0"
-            logging.info(f"Neueste Version ermittelt: {latest}")
+                raise ValueError("Received empty version list.")
+            latest = data[0]["version"]  # e.g. "v18.16.0"
+            logging.info(f"Latest version identified: {latest}")
             return latest
     except (HTTPError, URLError, ValueError) as e:
-        logging.error(f"Fehler beim Abruf der Version: {e}")
+        logging.error(f"Error retrieving version info: {e}")
         sys.exit(1)
 
 
 def download_installer(version: str, dest_path: Path) -> None:
     """
-    Lädt den Node.js Windows MSI-Installer für x64 herunter.
+    Downloads the Node.js Windows MSI installer for x64.
     URL: https://nodejs.org/dist/{version}/node-{version}-x64.msi
     """
     url = f"https://nodejs.org/dist/{version}/node-{version}-x64.msi"
-    logging.info(f"Starte Download des Installers von {url}")
+    logging.info(f"Starting installer download from {url}")
     try:
         req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
         with urlopen(req) as response, open(dest_path, "wb") as out_file:
@@ -133,18 +133,18 @@ def download_installer(version: str, dest_path: Path) -> None:
                 downloaded += len(chunk)
                 if total:
                     percent = downloaded * 100 / total
-                    logging.info(f"Download-Fortschritt: {percent:.1f}%")
-        logging.info(f"Download abgeschlossen: {dest_path}")
+                    logging.info(f"Download progress: {percent:.1f}%")
+        logging.info(f"Download complete: {dest_path}")
     except (HTTPError, URLError) as e:
-        logging.error(f"Fehler beim Download: {e}")
+        logging.error(f"Download error: {e}")
         sys.exit(1)
 
 
 def run_msi_installer(msi_path: Path) -> None:
     """
-    Führt den MSI-Installer im Silent-Modus via msiexec aus.
+    Runs the MSI installer in silent mode using msiexec.
     """
-    logging.info(f"Starte Installation mit msiexec: {msi_path}")
+    logging.info(f"Starting installation via msiexec: {msi_path}")
     cmd = [
         "msiexec",
         "/i", str(msi_path),
@@ -153,27 +153,27 @@ def run_msi_installer(msi_path: Path) -> None:
     ]
     try:
         result = subprocess.run(cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        logging.info("Node.js erfolgreich installiert.")
+        logging.info("Node.js installed successfully.")
         logging.debug(f"msiexec stdout:\n{result.stdout}")
     except subprocess.CalledProcessError as e:
-        logging.error(f"Installation fehlgeschlagen (Exit-Code {e.returncode}):\n{e.stderr}")
+        logging.error(f"Installation failed (exit code {e.returncode}):\n{e.stderr}")
         sys.exit(e.returncode)
 
 
 def ensure_node_available():
     """
-    Prüft nach der Installation, ob 'node' im PATH ist.
+    Checks if 'node' is now available in the PATH.
     """
     if is_node_installed():
-        logging.info("Node.js steht nun zur Verfügung.")
+        logging.info("Node.js is now available.")
     else:
-        logging.warning("Node.js nicht im PATH gefunden. Bitte Terminal neu starten oder PATH überprüfen.")
+        logging.warning("Node.js not found in PATH. Please restart your terminal or check your PATH settings.")
 
 
 def main():
-    logging.info("=== Node.js Installer gestartet ===")
+    logging.info("=== Node.js Installer started ===")
     if is_node_installed():
-        logging.info("Node.js ist bereits installiert. Beende Prozess.")
+        logging.info("Node.js is already installed. Exiting process.")
         return
 
     version = fetch_latest_version()
@@ -183,11 +183,11 @@ def main():
         run_msi_installer(msi_file)
 
     ensure_node_available()
-    logging.info("=== Prozess abgeschlossen ===")
+    logging.info("=== Process completed ===")
 
 
 if __name__ == "__main__":
     if os.name != "nt":
-        logging.error("Dieses Skript läuft nur unter Windows.")
+        logging.error("This script only runs on Windows.")
         sys.exit(1)
     main()

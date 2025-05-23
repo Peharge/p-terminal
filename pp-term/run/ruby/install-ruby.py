@@ -72,7 +72,7 @@ from pathlib import Path
 from urllib.request import urlopen, Request
 from urllib.error import URLError, HTTPError
 
-# Logging konfigurieren
+# Configure logging
 glog_path = Path(__file__).parent / "installer.log"
 logging.basicConfig(
     level=logging.INFO,
@@ -84,20 +84,20 @@ logging.basicConfig(
     ]
 )
 
-# GitHub API URL für RubyInstaller2 Releases
+# GitHub API URL for RubyInstaller2 releases
 API_URL = "https://api.github.com/repos/oneclick/rubyinstaller2/releases/latest"
 
 
 def is_ruby_installed() -> bool:
-    """Prüft, ob Ruby über den PATH aufgerufen werden kann."""
+    """Checks if Ruby can be invoked via PATH."""
     return shutil.which("ruby") is not None
 
 
 def fetch_latest_asset() -> dict:
     """
-    Ruft das neueste Release via GitHub API ab und gibt das Windows-x64 DevKit Asset.
+    Retrieves the latest release via the GitHub API and returns the Windows x64 DevKit asset.
     """
-    logging.info(f"Rufe Release-Daten ab von {API_URL}")
+    logging.info(f"Fetching release data from {API_URL}")
     try:
         req = Request(API_URL, headers={"User-Agent": "Mozilla/5.0"})
         with urlopen(req) as resp:
@@ -105,21 +105,21 @@ def fetch_latest_asset() -> dict:
             assets = data.get("assets", [])
             for asset in assets:
                 name = asset.get("name", "")
-                # DevKit enthält Entwicklungswerkzeuge, ideal für gem-Installation
+                # DevKit contains development tools, ideal for gem installation
                 if name.endswith("-x64.exe") and "devkit" in name.lower():
-                    logging.info(f"Gefundener Installer: {name}")
+                    logging.info(f"Found installer: {name}")
                     return {"name": name, "url": asset.get("browser_download_url")}
-            raise ValueError("Kein geeignetes x64 DevKit-Asset gefunden.")
+            raise ValueError("No suitable x64 DevKit asset found.")
     except (HTTPError, URLError, ValueError) as e:
-        logging.error(f"Fehler beim Abruf der Asset-Info: {e}")
+        logging.error(f"Error retrieving asset info: {e}")
         sys.exit(1)
 
 
 def download_installer(url: str, dest_path: Path) -> None:
     """
-    Lädt das RubyInstaller-Exe herunter.
+    Downloads the RubyInstaller executable.
     """
-    logging.info(f"Starte Download von {url}")
+    logging.info(f"Starting download from {url}")
     try:
         req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
         with urlopen(req) as response, open(dest_path, "wb") as out_file:
@@ -134,20 +134,20 @@ def download_installer(url: str, dest_path: Path) -> None:
                 downloaded += len(chunk)
                 if total:
                     percent = downloaded * 100 / total
-                    logging.info(f"Download-Fortschritt: {percent:.1f}%")
-        logging.info(f"Download abgeschlossen: {dest_path}")
+                    logging.info(f"Download progress: {percent:.1f}%")
+        logging.info(f"Download completed: {dest_path}")
     except (HTTPError, URLError) as e:
-        logging.error(f"Download-Fehler: {e}")
+        logging.error(f"Download error: {e}")
         sys.exit(1)
 
 
 def run_installer(installer_path: Path) -> None:
     """
-    Führt den RubyInstaller im Silent-Modus aus.
+    Runs the RubyInstaller in silent mode.
 
-    NSIS-basierte Installer unterstützen /VERYSILENT und /SUPPRESSMSGBOXES.
+    NSIS-based installers support /VERYSILENT and /SUPPRESSMSGBOXES.
     """
-    logging.info(f"Starte RubyInstaller: {installer_path}")
+    logging.info(f"Starting RubyInstaller: {installer_path}")
     cmd = [
         str(installer_path),
         "/VERYSILENT",
@@ -156,27 +156,27 @@ def run_installer(installer_path: Path) -> None:
     ]
     try:
         result = subprocess.run(cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        logging.info("Ruby erfolgreich installiert.")
-        logging.debug(f"Installer-Ausgabe:\n{result.stdout}")
+        logging.info("Ruby installed successfully.")
+        logging.debug(f"Installer output:\n{result.stdout}")
     except subprocess.CalledProcessError as e:
-        logging.error(f"Installation fehlgeschlagen (Exit-Code {e.returncode}): {e.stderr}")
+        logging.error(f"Installation failed (exit code {e.returncode}): {e.stderr}")
         sys.exit(e.returncode)
 
 
 def ensure_ruby_available():
     """
-    Prüft nach der Installation, ob ruby im PATH ist.
+    Checks after installation whether Ruby is available in the PATH.
     """
     if is_ruby_installed():
-        logging.info("Ruby steht nun zur Verfügung.")
+        logging.info("Ruby is now available.")
     else:
-        logging.warning("Ruby nicht im PATH gefunden. Bitte Terminal neu starten oder PATH überprüfen.")
+        logging.warning("Ruby not found in PATH. Please restart the terminal or check PATH settings.")
 
 
 def main():
-    logging.info("=== Ruby Installer gestartet ===")
+    logging.info("=== Ruby Installer started ===")
     if is_ruby_installed():
-        logging.info("Ruby ist bereits installiert. Abbruch.")
+        logging.info("Ruby is already installed. Exiting.")
         return
 
     asset = fetch_latest_asset()
@@ -186,10 +186,10 @@ def main():
         run_installer(installer_file)
 
     ensure_ruby_available()
-    logging.info("=== Prozess abgeschlossen ===")
+    logging.info("=== Process completed ===")
 
 if __name__ == "__main__":
     if os.name != "nt":
-        logging.error("Dieses Skript läuft nur unter Windows.")
+        logging.error("This script only runs on Windows.")
         sys.exit(1)
     main()

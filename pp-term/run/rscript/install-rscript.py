@@ -71,7 +71,7 @@ from pathlib import Path
 from urllib.request import urlopen, Request
 from urllib.error import URLError, HTTPError
 
-# Logging konfigurieren
+# Configure logging
 log_path = Path(__file__).parent / "installer.log"
 logging.basicConfig(
     level=logging.INFO,
@@ -83,18 +83,18 @@ logging.basicConfig(
     ]
 )
 
-# CRAN-Basis-URL für das aktuelle R-Installer-Executable
+# CRAN base URL for the current R installer executable
 CRAN_R_INSTALLER_URL = "https://cran.r-project.org/bin/windows/base/R-latest.exe"
 
 
 def is_rscript_installed() -> bool:
-    """Prüft, ob Rscript über den PATH aufgerufen werden kann."""
+    """Checks if Rscript can be invoked via PATH."""
     return shutil.which("Rscript") is not None
 
 
 def download_installer(dest_path: Path) -> None:
-    """Lädt den R-Windows-Installer herunter."""
-    logging.info(f"Starte Download des R-Installers von {CRAN_R_INSTALLER_URL}")
+    """Downloads the R Windows installer."""
+    logging.info(f"Starting download of R installer from {CRAN_R_INSTALLER_URL}")
     try:
         req = Request(CRAN_R_INSTALLER_URL, headers={"User-Agent": "Mozilla/5.0"})
         with urlopen(req) as response, open(dest_path, "wb") as out_file:
@@ -109,39 +109,39 @@ def download_installer(dest_path: Path) -> None:
                 downloaded += len(chunk)
                 if total:
                     percent = downloaded * 100 / total
-                    logging.info(f"Download-Fortschritt: {percent:.1f}%")
-        logging.info(f"Download abgeschlossen: {dest_path}")
+                    logging.info(f"Download progress: {percent:.1f}%")
+        logging.info(f"Download completed: {dest_path}")
     except (HTTPError, URLError) as e:
-        logging.error(f"Fehler beim Download des R-Installers: {e}")
+        logging.error(f"Error downloading R installer: {e}")
         sys.exit(1)
 
 
 def run_installer(installer_path: Path) -> None:
-    """Führt den R-Installer im Silent-Modus aus."""
-    logging.info(f"Starte R-Installer: {installer_path}")
-    # Inno Setup-basiert: /VERYSILENT /SUPPRESSMSGBOXES /NORESTART
+    """Runs the R installer in silent mode."""
+    logging.info(f"Starting R installer: {installer_path}")
+    # Inno Setup-based: /VERYSILENT /SUPPRESSMSGBOXES /NORESTART
     cmd = [str(installer_path), "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART"]
     try:
         result = subprocess.run(cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        logging.info("R erfolgreich installiert.")
-        logging.debug(f"Installer-Ausgabe:\n{result.stdout}")
+        logging.info("R successfully installed.")
+        logging.debug(f"Installer output:\n{result.stdout}")
     except subprocess.CalledProcessError as e:
-        logging.error(f"Installation fehlgeschlagen (Exit-Code {e.returncode}): {e.stderr}")
+        logging.error(f"Installation failed (exit code {e.returncode}): {e.stderr}")
         sys.exit(e.returncode)
 
 
 def ensure_rscript_available():
-    """Prüft, ob Rscript nun im PATH ist."""
+    """Checks if Rscript is now available in the PATH."""
     if is_rscript_installed():
-        logging.info("Rscript steht nun zur Verfügung.")
+        logging.info("Rscript is now available.")
     else:
-        logging.warning("Rscript nicht im PATH gefunden. Bitte Terminal neu starten oder PATH prüfen.")
+        logging.warning("Rscript not found in PATH. Please restart the terminal or check your PATH settings.")
 
 
 def main():
-    logging.info("=== R Installer gestartet ===")
+    logging.info("=== R Installer started ===")
     if is_rscript_installed():
-        logging.info("Rscript ist bereits installiert. Abbruch.")
+        logging.info("Rscript is already installed. Exiting.")
         return
 
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -150,10 +150,10 @@ def main():
         run_installer(installer_file)
 
     ensure_rscript_available()
-    logging.info("=== Prozess abgeschlossen ===")
+    logging.info("=== Process completed ===")
 
 if __name__ == "__main__":
     if os.name != "nt":
-        logging.error("Dieses Skript läuft nur unter Windows.")
+        logging.error("This script only runs on Windows.")
         sys.exit(1)
     main()
