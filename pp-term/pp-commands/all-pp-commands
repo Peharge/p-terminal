@@ -464,5 +464,11 @@ commands = {
         "install solidity": "run\\solidity\\install-solidity.py",  # new
         "install nim": "run\\nim\\install-nim.py",  # new
         "install haxe": "run\\haxe\\install-haxe.py",  # new
-        "install hack": "run\\hack\\install-hack.py"  # new
+        "install hack": "run\\hack\\install-hack.py",  # new
+        "install fortran": "run\\fortran\\install-fortran.py", # new
+        "install lisp": "run\\lisp\\install-lisp.py", # new
+        "install racket": "run\\racket\\install-racket.py", # new
+        "install g++": "pp-commands\\gpp.py",  # new
+        "install gcc": "pp-commands\\gcc.py",  # new
+        "install algol": "pp-commands\\gcc.py"  # new
     }

@@ -926,7 +926,13 @@ def handle_special_commands(user_input):
         "install solidity": "run\\solidity\\install-solidity.py",  # new
         "install nim": "run\\nim\\install-nim.py",  # new
         "install haxe": "run\\haxe\\install-haxe.py",  # new
-        "install hack": "run\\hack\\install-hack.py"  # new
+        "install hack": "run\\hack\\install-hack.py",  # new
+        "install fortran": "run\\fortran\\install-fortran.py", # new
+        "install lisp": "run\\lisp\\install-lisp.py", # new
+        "install racket": "run\\racket\\install-racket.py", # new
+        "install g++": "pp-commands\\gpp.py",  # new
+        "install gcc": "pp-commands\\gcc.py",  # new
+        "install algol": "pp-commands\\gcc.py"  # new
     }
 
     # Hier alles in der if-Schleife:
@@ -3512,6 +3518,150 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("gfortran -o "):
+        user_input = user_input[12:].strip()
+
+        command = f"gfortran -o {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Note the systkas: gfortran -o hello hello.f90")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("ifort -o "):
+        user_input = user_input[9:].strip()
+
+        command = f"ifort -o {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Note the systkas: ifort -o hello hello.f90")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("pc-fortran "):
+        user_input = user_input[11:].strip()
+
+        command = f"gfortran -o {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Note the systkas: pc-fortran hello hello.f90")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("sbcl --script "):
+        user_input = user_input[14:].strip()
+
+        command = f"sbcl --script {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("pc-lisp "):
+        user_input = user_input[8:].strip()
+
+        command = f"sbcl --script {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("racket "):
+        user_input = user_input[7:].strip()
+
+        command = f"racket {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("racketc "):
+        user_input = user_input[8:].strip()
+
+        command = f"racket {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("pc-racket "):
+        user_input = user_input[10:].strip()
+
+        command = f"racket {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("pc-algol "):
+        user_input = user_input[9:].strip()
+
+        # Compile the Algol60 source code
+        compile_command = "wsl gcc algol60.c -o algol60"
+        compile_process = subprocess.Popen(compile_command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        # Execute the compiled program with arguments
+        run_command = f"./algol60 {user_input}"
+        run_process = subprocess.Popen(run_command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            compile_process.wait()
+            run_process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing command: {e}")
+
         return True
 
     if user_input.lower() == "whoami":
