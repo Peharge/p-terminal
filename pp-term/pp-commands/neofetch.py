@@ -69,6 +69,9 @@ import time
 import importlib.util
 import os
 from datetime import datetime
+import io
+
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 def timestamp() -> str:
     """Returns current time formatted with milliseconds"""
@@ -359,8 +362,8 @@ def print_system_info(system_info: dict):
     p_terminal_ver = system_info.get("P-Terminal Version", "Unbekannt")
     pp_terminal_ver = system_info.get("PP-Terminal Version", "Unbekannt")
     launcher_ver = system_info.get("PP-Terminal Launcher Version", "Unbekannt")
-    c_compiler_ver = system_info.get("Peharge C compiler Version", "Unbekannt")
-    cpp_compiler_ver = system_info.get("Peharge C++ compiler Version", "Unbekannt")
+    p_compiler_ver = system_info.get("Peharge Compiler Version", "Unbekannt")
+    p_iq_compiler_ver = system_info.get("Peharge IQ Compiler Version", "Unbekannt")
     license_info = system_info.get("P-Terminal License", "Unbekannt")
 
     title = f"PP-Terminal - {os.getlogin()}"
@@ -373,8 +376,8 @@ def print_system_info(system_info: dict):
     print(f"          ████████████████████████                                       {blue}P-Terminal Version{reset}: {p_terminal_ver}")
     print(f"       ██████████████████████████████                                    {blue}PP-Terminal Version{reset}: {pp_terminal_ver}")
     print(f"       █████████████████████████████████                                 {blue}PP-Terminal Launcher Version{reset}: {launcher_ver}")
-    print(f"       ████████████████████████████████████                              {blue}Peharge C Compiler Version{reset}: {c_compiler_ver}")
-    print(f"       ███████████████████████████████████████                           {blue}Peharge C++ Compiler Version{reset}: {cpp_compiler_ver}")
+    print(f"       ████████████████████████████████████                              {blue}Peharge Compiler Version{reset}: {p_compiler_ver}")
+    print(f"       ███████████████████████████████████████                           {blue}Peharge IQ Compiler Version{reset}: {p_iq_compiler_ver}")
     print(f"       ██████████████████████████████████████████                        {blue}P-Terminal License{reset}: {license_info}")
     print(f"       █████████████████████████████████████████████                     {blue}MAVIS Version{reset}: 4.3")
     print(f"       ████████████       █████████████████████████████                  {blue}MAVIS Launcher Version{reset}: 4")
