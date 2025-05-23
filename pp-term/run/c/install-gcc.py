@@ -61,183 +61,59 @@
 #
 # Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 
-import os
-import sys
 import subprocess
-import traceback
-import getpass
-import platform
-import shutil
+import sys
+from pathlib import Path
 import logging
 
-# Logging configuration
+# Log setup: timestamp with milliseconds
+log_path = Path(__file__).parent / "installer.log"
 logging.basicConfig(
     level=logging.INFO,
-    format="[%(asctime)s] [%(levelname)s] %(message)s",
+    format="[%(asctime)s.%(msecs)03d] %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
-    stream=sys.stdout
+    handlers=[
+        logging.FileHandler(log_path, encoding='utf-8'),
+        logging.StreamHandler(sys.stdout)
+    ]
 )
-logger = logging.getLogger(__name__)
 
-def find_gcc():
-    """
-    Searches for the GCC executable in the system path.
 
-    Returns:
-        str: Full path to the GCC executable or None if not found.
-    """
-    gcc_path = shutil.which("gcc")
-    if gcc_path:
-        logger.info("GCC found at: %s", gcc_path)
-        return gcc_path
-    else:
-        logger.error("GCC not found in the system path.")
-        return None
-
-def write_logfile(target_dir, gcc_path):
-    """
-    Writes a log file with information about the detected GCC installation.
-
-    Args:
-        target_dir (str): Target directory where the log file should be placed.
-        gcc_path (str): Path to the GCC executable.
-    """
-    log_file = os.path.join(target_dir, "gcc_installed.txt")
+def is_gcc_installed():
+    """Checks if gcc is installed."""
     try:
-        with open(log_file, "w", encoding="utf-8") as f:
-            f.write("GCC Compiler detected and ready.\n")
-            f.write(f"GCC executable path: {gcc_path}\n")
-        logger.info("Installation status logged in: %s", log_file)
-    except Exception as e:
-        logger.warning("Log file could not be written: %s", e)
-
-def verify_compiler(gcc_path, temp_dir):
-    """
-    Creates a temporary test C file and compiles it with GCC to ensure
-    that the compiler is correctly installed and functional.
-
-    Args:
-        gcc_path (str): Path to the GCC executable.
-        temp_dir (str): Temporary directory for the compilation test.
-
-    Returns:
-        bool: True if the test was successful, otherwise False.
-    """
-    logger.info("Checking GCC compiler availability...")
-
-    # Define the test files
-    test_c = os.path.join(temp_dir, "test_gcc.c")
-    exe_output = os.path.join(temp_dir, "test_gcc.exe")
-
-    # Create the test C file
-    try:
-        with open(test_c, "w", encoding="utf-8") as f:
-            f.write('#include <stdio.h>\n')
-            f.write('int main() { printf("Hello from GCC!\\n"); return 0; }\n')
-        logger.info("Test file created: %s", test_c)
-    except Exception as e:
-        logger.error("Error creating test file: %s", e)
-        return False
-
-    # Compilation with GCC
-    try:
-        compile_command = [gcc_path, test_c, "-o", exe_output]
-        result = subprocess.run(
-            compile_command,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            text=True,
-            encoding="cp850",  # Windows console encoding
-            errors="replace",
-            check=False
-        )
-        logger.info("Output of the compilation test:\n%s", result.stdout)
-    except Exception as e:
-        logger.error("Error running compilation test: %s", e)
-        return False
-
-    if os.path.exists(exe_output):
-        logger.info("Compilation successful. GCC works correctly.")
+        subprocess.run(["wsl", "which", "gcc"], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         return True
-    else:
-        logger.error("Compilation failed. Please ensure that GCC is correctly installed.")
+    except subprocess.CalledProcessError:
         return False
 
-def create_compiler_folder(target_dir, gcc_path):
-    """
-    Creates a folder in the specified target directory ('institute-gcc-compiler') with a batch file
-    that invokes the GCC compiler and runs an example compilation command.
 
-    Args:
-        target_dir (str): The directory where the "compiler" should be placed.
-        gcc_path (str): Path to the GCC executable.
-    """
-    # Create the folder if it does not exist
-    os.makedirs(target_dir, exist_ok=True)
+def install_gcc():
+    """Installs gcc if it is not installed."""
+    logging.info("[INFO] gcc is not installed. Installing gcc...")
+    subprocess.run(["wsl", "sudo", "apt", "update"], check=True)
+    subprocess.run(["wsl", "sudo", "apt", "install", "-y", "gcc"], check=True)
+    logging.info("[INFO] gcc has been successfully installed.")
 
-    batch_file = os.path.join(target_dir, "build_institute.bat")
-    try:
-        with open(batch_file, "w", encoding="utf-8") as f:
-            f.write("@echo off\n")
-            f.write("echo GCC Compiler Environment enabled.\n")
-            # Example: Change to the project directory and compile an example project
-            f.write('cd /d "%~dp0\\..\\..\\INSTITUTE_PROJECT"\n')
-            f.write("echo Start compiling the INSTITUTE project...\n")
-            # Placeholder: Adjust the gcc call to the respective project structure
-            f.write(f'"{gcc_path}" main.c -o institute_project.exe\n')
-            f.write("pause\n")
-        logger.info("Batch file created for the compiler: %s", batch_file)
-    except Exception as e:
-        logger.error("Error creating compiler batch file: %s", e)
+
+def run_gcc():
+    """Runs gcc."""
+    logging.info("[INFO] Running gcc...")
+    command = "gcc"
+    if isinstance(command, str):
+        command = f"wsl {command}"  # Embed command for WSL
+
+    process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+    process.communicate()
+
 
 def main():
-    """
-    Main function that controls the flow:
-      - Determine the project directory.
-      - Verify the GCC installation.
-      - Test compilation.
-      - Create the compiler folder with a batch file.
-      - Write a log file for the installation.
-    """
-    try:
-        if platform.system() != "Windows":
-            raise EnvironmentError("This installation script is only intended for Windows.")
+    """Main logic to check and run gcc."""
+    if not is_gcc_installed():
+        install_gcc()
 
-        username = getpass.getuser()
-        # Example project path (adjustable to the respective institution)
-        project_root = os.path.join("C:\\Users", username, "PycharmProjects", "INSTITUTE_PROJECT")
-        # Target folder for the GCC compiler
-        compiler_dir = os.path.join(project_root, "institute-gcc-compiler")
-        os.makedirs(compiler_dir, exist_ok=True)
-        logger.info("Project directory: %s", project_root)
+    run_gcc()
 
-        # Temporary directory for the compilation test
-        temp_dir = os.path.join(project_root, "gcc_test")
-        os.makedirs(temp_dir, exist_ok=True)
-
-        logger.info("Searching for the GCC compiler...")
-        gcc_path = find_gcc()
-        if not gcc_path:
-            raise FileNotFoundError("GCC could not be found. Please install GCC and ensure it is in the system path.")
-
-        # Test the GCC compiler
-        if verify_compiler(gcc_path, temp_dir):
-            write_logfile(compiler_dir, gcc_path)
-            create_compiler_folder(compiler_dir, gcc_path)
-            logger.info("GCC successfully detected and tested.")
-        else:
-            raise Exception("The compilation test failed.")
-
-        # Cleanup: Remove the temporary directory
-        shutil.rmtree(temp_dir, ignore_errors=True)
-        logger.info("Temporary files have been removed.")
-
-    except Exception as e:
-        logger.error("An error occurred during installation:")
-        logger.error(str(e))
-        logger.error("Stacktrace:\n%s", traceback.format_exc())
-        logger.error("Please ensure that GCC is correctly installed and available in the PATH.")
-        sys.exit(1)
 
 if __name__ == "__main__":
     main()
