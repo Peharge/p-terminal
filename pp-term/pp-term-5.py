@@ -920,7 +920,13 @@ def handle_special_commands(user_input):
         "install php": "run\\php\\install-php.py",  # new
         "install scala": "run\\scala\\install-scala.py",  # new
         "install swift": "run\\swift\\install-swift.py",  # new
-        "install typescript": "run\\typescript\\install-typescript.py"  # new
+        "install typescript": "run\\typescript\\install-typescript.py",  # new
+        "install zig": "run\\zig\\install-zig.py",  # new
+        "install v": "run\\v\\install-v.py",  # new
+        "install solidity": "run\\solidity\\install-solidity.py",  # new
+        "install nim": "run\\nim\\install-nim.py",  # new
+        "install haxe": "run\\haxe\\install-haxe.py",  # new
+        "install hack": "run\\hack\\install-hack.py"  # new
     }
 
     # Hier alles in der if-Schleife:
