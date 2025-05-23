@@ -155,3 +155,6 @@
        - PP-Terminal 5.1.1.19
        - PP-Terminal 5.1.1.30
        - PP-Terminal 5.1.1.31
+       - PP-Terminal 5.1.1.33
+       - PP-Terminal 5.1.1.34
+       - PP-Terminal 5.1.1.35
