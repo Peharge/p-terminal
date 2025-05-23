@@ -2574,7 +2574,7 @@ def handle_special_commands(user_input):
     if user_input.startswith("julia "):
         user_input = user_input[6:].strip()
 
-        command = f"julia  {user_input}"
+        command = f"julia {user_input}"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
@@ -2589,7 +2589,7 @@ def handle_special_commands(user_input):
     if user_input.startswith("juliac "):
         user_input = user_input[7:].strip()
 
-        command = f"julia  {user_input}"
+        command = f"julia {user_input}"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
@@ -2604,7 +2604,217 @@ def handle_special_commands(user_input):
     if user_input.startswith("pc-julia "):
         user_input = user_input[9:].strip()
 
-        command = f"julia  {user_input}"
+        command = f"julia {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("php "):
+        user_input = user_input[4:].strip()
+
+        command = f"php {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("phpc "):
+        user_input = user_input[5:].strip()
+
+        command = f"php {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("pc-php "):
+        user_input = user_input[7:].strip()
+
+        command = f"php {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("lua "):
+        user_input = user_input[4:].strip()
+
+        command = f"lua {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("luac "):
+        user_input = user_input[5:].strip()
+
+        command = f"lua {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("pc-lua "):
+        user_input = user_input[7:].strip()
+
+        command = f"lua {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("tsc "):
+        user_input = user_input[4:].strip()
+
+        command = f"tsc {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("pc-tsc "):
+        user_input = user_input[7:].strip()
+
+        command = f"tsc {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("ts-node "):
+        user_input = user_input[9:].strip()
+
+        command = f"ts-node {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("kotlinc "):
+        user_input = user_input[8:].strip()
+
+        command = f"kotlinc hello.kt -include-runtime -d {user_input}" # .jar
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("kotlinc1 "):
+        user_input = user_input[9:].strip()
+
+        command = f"kotlinc hello.kt -include-runtime -d {user_input}" # .jar
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("kotlinc2 "):
+        user_input = user_input[9:].strip()
+
+        command = f"java -jar {user_input}" # .jar
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("kotlinc3 "):
+        user_input = user_input[9:].strip()
+
+        command = f"kotlinc -script {user_input}" # .kts
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("pc-kotlin "):
+        user_input = user_input[10:].strip()
+
+        command = f"kotlinc -script {user_input}"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
