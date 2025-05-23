@@ -910,7 +910,6 @@ def handle_special_commands(user_input):
         "install julia": "run\\julia\\install-julia.py",  # new
         "install ffmpeg": "run\\ffmpeg\\install-ffmpeg.py",  # new
         "install clojure": "run\\clojure\\install-clojure.py",  # new
-        "install vs-cs": "run\\cs\\install-vs.py",  # new
         "install dart": "run\\dart\\install-dart.py",  # new
         "install elixir": "run\\elixir\\install-elixir.py",  # new
         "install elm": "run\\elm\\install-elm.py",  # new
