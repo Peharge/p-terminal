@@ -1960,7 +1960,8 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
         return True
 
-    if user_input.lower() == "g++ --version":
+    if user_input.lower() == "g++-version":
+
         command = f"wsl g++ --version"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
@@ -2003,8 +2004,8 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
         return True
 
-    if user_input.lower() == "gcc --version":
-        command = f"wsl gcc --version"
+    if user_input.lower() == "gcc-version":
+        command = f"wsl {user_input}"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
