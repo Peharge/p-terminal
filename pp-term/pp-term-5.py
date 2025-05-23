@@ -2052,6 +2052,21 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
         return True
 
+    if user_input.startswith("pythonc "):
+        user_input = user_input[5:].strip()
+
+        command = f"pyinstaller --onefile {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
     if user_input.lower() == "whoami":
         print(user_name)
         return True
