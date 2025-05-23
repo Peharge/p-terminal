@@ -2276,7 +2276,7 @@ def handle_special_commands(user_input):
         handle_vs_c_command(user_input)
         return True
 
-    elif user_input.startswith("cs "):
+    elif user_input.startswith("cc "):
         user_input = user_input[3:].strip()
         handle_vs_c_command(user_input)
         return True
