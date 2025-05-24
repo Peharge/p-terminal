@@ -2594,6 +2594,23 @@ def handle_special_commands(user_input):
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
         return True
+
+    if user_input.startswith("pc-python-all "):
+        user_input = user_input[14:].strip()
+
+        command = f"pyinstaller --onefile --noconsole --icon={user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with PyInstaller")
+            print(f"[{timestamp()}] [INFO] Note the systkas: pc-python-all mein_icon.ico meine_app.py")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
     
     if user_input.startswith("go run "):
         user_input = user_input[7:].strip()
@@ -2603,6 +2620,23 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with GO")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+        return True
+
+    if user_input.startswith("go build "):
+        user_input = user_input[9:].strip()
+
+        command = f"go build {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with GO")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -2613,11 +2647,12 @@ def handle_special_commands(user_input):
     if user_input.startswith("goc "):
         user_input = user_input[4:].strip()
 
-        command = f"go run {user_input}"
+        command = f"go build {user_input}"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with GO Build")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -2628,11 +2663,12 @@ def handle_special_commands(user_input):
     if user_input.startswith("pc-go "):
         user_input = user_input[6:].strip()
 
-        command = f"go run {user_input}"
+        command = f"go build {user_input}"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with GO Build")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -2648,6 +2684,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Julia")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -2663,6 +2700,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Julia")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -2678,6 +2716,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Julia")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -2693,6 +2732,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with PHP")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -2708,6 +2748,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with PHP")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
