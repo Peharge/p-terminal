@@ -2603,7 +2603,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile {user_input} with PyInstaller")
+            print(f"[{timestamp()}] [INFO] Compile your code with PyInstaller")
             print(f"[{timestamp()}] [INFO] Note the systkas: pc-python-all mein_icon.ico meine_app.py")
             process.wait()
         except KeyboardInterrupt:
@@ -2764,6 +2764,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with PHP")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -2779,6 +2780,24 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Lua")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.startswith("glue srlua.exe "):
+        user_input = user_input[15:].strip()
+
+        command = f"glue srlua.exe {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Compile your code with PyInstaller")
+            print(f"[{timestamp()}] [INFO] Note the systkas: glue srlua.exe script.luac myprogram.exe")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -2789,11 +2808,13 @@ def handle_special_commands(user_input):
     if user_input.startswith("luac "):
         user_input = user_input[5:].strip()
 
-        command = f"lua {user_input}"
+        command = f"glue srlua.exe {user_input}"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile your code with Glue")
+            print(f"[{timestamp()}] [INFO] Note the systkas: luac script.luac myprogram.exe")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -2809,6 +2830,24 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Lua")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.startswith("pce-lua "):
+        user_input = user_input[7:].strip()
+
+        command = f"glue srlua.exe {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Compile your code with Glue")
+            print(f"[{timestamp()}] [INFO] Note the systkas: pce-lua script.luac myprogram.exe")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -2824,6 +2863,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Tsc")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -2839,6 +2879,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Tsc")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -2854,6 +2895,39 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with TypeScript NodeJs")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.startswith("tsc "):
+        user_input = user_input[4:].strip()
+
+        command = f"ts-node {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with TypeScript NodeJs")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.startswith("pc-ts "):
+        user_input = user_input[6:].strip()
+
+        command = f"ts-node {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with TypeScript NodeJs")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -2869,6 +2943,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Kotlinc hello.kt")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -2884,6 +2959,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Kotlinc hello.kt")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -2899,6 +2975,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Java")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -2914,6 +2991,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Kotlinc")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -2929,6 +3007,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Kotlinc")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -2944,6 +3023,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Swift")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -2959,6 +3039,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile your code with Swift")
             print(f"[{timestamp()}] [INFO] Note the systkas: swiftc hello.swift -o hello.exe")
             process.wait()
         except KeyboardInterrupt:
@@ -2975,6 +3056,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Swift")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -2990,6 +3072,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Dart")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3005,6 +3088,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Dart")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3020,6 +3104,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Dart")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3035,6 +3120,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Ghc")
             print(f"[{timestamp()}] [INFO] Note the systkas: ghc hello.hs -o hello.exe")
             process.wait()
         except KeyboardInterrupt:
@@ -3051,6 +3137,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Ghci")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3066,6 +3153,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Ghci")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
