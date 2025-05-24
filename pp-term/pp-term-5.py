@@ -3919,7 +3919,7 @@ def handle_special_commands(user_input):
         try:
             parts = shlex.split(user_input, posix=not sys.platform.startswith("win"))
             if len(parts) < 2:
-                print(f"[{timestamp()}] [ERROR] Kein Ziel angegeben.")
+                print(f"[{timestamp()}] [ERROR] No destination specified.")
                 return False
             else:
                 target = parts[1]
@@ -3929,15 +3929,15 @@ def handle_special_commands(user_input):
                 if target_expanded.startswith(('http://', 'https://', 'ftp://')):
                     try:
                         webbrowser.open(target_expanded)
-                        print(f"[{timestamp()}] [PASS] URL geöffnet: {target_expanded}")
+                        print(f"[{timestamp()}] [PASS] URL opened: {target_expanded}")
                         return True
                     except Exception as e:
-                        print(f"[{timestamp()}] [ERROR] URL konnte nicht geöffnet werden: {e}")
+                        print(f"[{timestamp()}] [ERROR] URL could not be opened: {e}")
                         return False
                 else:
                     # Prüfe Existenz im Dateisystem
                     if not os.path.exists(target_expanded):
-                        print(f"[{timestamp()}] [ERROR] Nicht gefunden: {target_expanded}")
+                        print(f"[{timestamp()}] [ERROR] Not found: {target_expanded}")
                         return False
                     else:
                         try:
@@ -3948,13 +3948,13 @@ def handle_special_commands(user_input):
                             else:
                                 subprocess.Popen(["xdg-open", target_expanded])
 
-                            print(f"[{timestamp()}] [PASS] Geöffnet: {target_expanded}")
+                            print(f"[{timestamp()}] [PASS] Open: {target_expanded}")
                             return True
                         except Exception as e:
-                            print(f"[{timestamp()}] [ERROR] Öffnen fehlgeschlagen: {e}")
+                            print(f"[{timestamp()}] [ERROR] Open failed: {e}")
                             return False
         except ValueError as e:
-            print(f"[{timestamp()}] [ERROR] Parse-Fehler: {e}")
+            print(f"[{timestamp()}] [ERROR] Parse error: {e}")
             return False
 
     if user_input.lower() == "fortune":
