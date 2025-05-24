@@ -6157,7 +6157,7 @@ def handle_vs_cpp_command(user_input: str) -> bool:
     # '/c' sorgt dafür, dass cmd nach Ausführung schließt
     full_command = f'cmd.exe /c "{bat_command}"'
 
-    logging.info(f"[{timestamp()}] [INFO] Execute:{bat_command}")
+    logging.info(f"[INFO] Execute:{bat_command}")
     try:
         # check=True wirft bei Fehler eine CalledProcessError
         subprocess.run(full_command, shell=True, check=True)
@@ -6195,7 +6195,7 @@ def handle_vs_c_command(user_input: str) -> bool:
     bat_command = f'"{vcvarsall}" x64 && cl "{filename}"'
     full_command = f'cmd.exe /c "{bat_command}"'
 
-    logging.info(f"[{timestamp()}] [INFO] Run C-Build: {bat_command}")
+    logging.info(f"[INFO] Run C-Build: {bat_command}")
     try:
         subprocess.run(full_command, shell=True, check=True)
     except KeyboardInterrupt:
@@ -6233,7 +6233,7 @@ def handle_vs_cs_command(user_input: str) -> bool:
     output_exe = os.path.splitext(filename)[0] + '.exe'
     compile_cmd = f'"{csc_path}" /nologo /out:"{output_exe}" "{filename}"'
 
-    logging.info(f"[{timestamp()}] [INFO] Execute: {compile_cmd}")
+    logging.info(f"[INFO] Execute: {compile_cmd}")
     try:
         subprocess.run(compile_cmd, shell=True, check=True)
         print(f"[{timestamp()}] [INFO] Compilation successful: {output_exe}")
