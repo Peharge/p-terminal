@@ -3169,6 +3169,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Dotnet Fsi")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3184,6 +3185,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Dotnet Fsi")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3199,6 +3201,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Scalac")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3214,6 +3217,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Scalac")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3229,6 +3233,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Clj")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3244,6 +3249,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Clj")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3259,6 +3265,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile your code with ocamlc")
             print(f"[{timestamp()}] [INFO] Note the systkas: ocamlc hello.ml -o hello.exe")
             process.wait()
         except KeyboardInterrupt:
@@ -3275,6 +3282,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile your code with ocamlc")
             print(f"[{timestamp()}] [INFO] Note the systkas: pc-ocaml hello.ml -o hello.exe")
             process.wait()
         except KeyboardInterrupt:
@@ -3291,6 +3299,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Elixir")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3306,6 +3315,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Elixir")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3321,6 +3331,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile your code with Elm Make ")
             print(f"[{timestamp()}] [INFO] Note the systkas: elm make src/Main.elm --output=main.js")
             process.wait()
         except KeyboardInterrupt:
@@ -3337,6 +3348,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile your code with Elm Make ")
             print(f"[{timestamp()}] [INFO] Note the systkas: pc-elm src/Main.elm --output=main.js")
             process.wait()
         except KeyboardInterrupt:
@@ -3353,6 +3365,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with V")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3368,6 +3381,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with V")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3383,6 +3397,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Zig")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3398,6 +3413,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Zig")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3413,6 +3429,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Zig")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3428,6 +3445,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Nim")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3443,6 +3461,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Nim")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3458,6 +3477,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Nim")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3473,6 +3493,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Bazel")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3488,6 +3509,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Bazel")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3503,6 +3525,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Bazel")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3518,6 +3541,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Solc -> solc --bin --abi")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3533,6 +3557,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Solc -> solc --bin --abi")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3548,6 +3573,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Solc -> solc --bin --abi")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3563,6 +3589,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Hhvm")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3578,6 +3605,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Hhvm")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3593,6 +3621,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Hhvm")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
