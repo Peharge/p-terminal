@@ -3637,6 +3637,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Crystal")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3652,6 +3653,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Crystal")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3667,6 +3669,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Crystal")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3682,6 +3685,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile your code with Haxe")
             print(f"[{timestamp()}] [INFO] Note the systkas: haxe -main Hello -js hello.js")
             process.wait()
         except KeyboardInterrupt:
@@ -3698,6 +3702,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile your code with Haxe")
             print(f"[{timestamp()}] [INFO] Note the systkas: haxec Hello -js hello.js")
             process.wait()
         except KeyboardInterrupt:
@@ -3714,6 +3719,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile your code with Haxe")
             print(f"[{timestamp()}] [INFO] Note the systkas: pc-haxe Hello -js hello.js")
             process.wait()
         except KeyboardInterrupt:
@@ -3730,6 +3736,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile your code with Gfortran")
             print(f"[{timestamp()}] [INFO] Note the systkas: gfortran -o hello hello.f90")
             process.wait()
         except KeyboardInterrupt:
@@ -3746,6 +3753,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile your code with Ifort")
             print(f"[{timestamp()}] [INFO] Note the systkas: ifort -o hello hello.f90")
             process.wait()
         except KeyboardInterrupt:
@@ -3762,6 +3770,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile your code with Gfortran")
             print(f"[{timestamp()}] [INFO] Note the systkas: pc-fortran hello hello.f90")
             process.wait()
         except KeyboardInterrupt:
@@ -3778,6 +3787,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Sbcl")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3793,6 +3803,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Sbcl")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3808,6 +3819,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Racket")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3823,6 +3835,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Racket")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3838,6 +3851,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Racket")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3857,6 +3871,7 @@ def handle_special_commands(user_input):
         run_process = subprocess.Popen(command_3, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Gcc")
             compile_process.wait()
             run_process.wait()
         except KeyboardInterrupt:
