@@ -4776,9 +4776,6 @@ def handle_special_commands(user_input):
         import traceback
         from datetime import datetime
 
-        def timestamp():
-            return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
         print(f"[{timestamp()}] [INFO] Initializing Python REPL startup sequence...")
 
         try:
