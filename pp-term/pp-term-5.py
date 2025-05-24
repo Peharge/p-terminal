@@ -2202,6 +2202,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile your code with g++")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -2217,6 +2218,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile your code with g++")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -2246,6 +2248,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile your code with gcc")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -2261,6 +2264,7 @@ def handle_special_commands(user_input):
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
+            print(f"[{timestamp()}] [INFO] Compile your code with gcc")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -2283,46 +2287,55 @@ def handle_special_commands(user_input):
 
     elif user_input.startswith("vs-cpp "):
         user_input = user_input[7:].strip()
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 20222")
         handle_vs_cpp_command(user_input)
         return True
 
     elif user_input.startswith("cppc "):
         user_input = user_input[5:].strip()
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 20222")
         handle_vs_cpp_command(user_input)
         return True
 
     elif user_input.startswith("pc-cpp "):
         user_input = user_input[7:].strip()
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 20222")
         handle_vs_cpp_command(user_input)
         return True
 
     elif user_input.startswith("vs-c "):
         user_input = user_input[5:].strip()
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 20222")
         handle_vs_c_command(user_input)
         return True
 
     elif user_input.startswith("cc "):
         user_input = user_input[3:].strip()
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 20222")
         handle_vs_c_command(user_input)
         return True
 
     elif user_input.startswith("pc-c "):
         user_input = user_input[5:].strip()
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 20222")
         handle_vs_c_command(user_input)
         return True
 
     elif user_input.startswith("vs-cs "):
         user_input = user_input[6:].strip()
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 20222")
         handle_vs_cs_command(user_input)
         return True
 
     elif user_input.startswith("csc "):
         user_input = user_input[4:].strip()
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 20222")
         handle_vs_cs_command(user_input)
         return True
 
     elif user_input.startswith("pc-cs "):
         user_input = user_input[6:].strip()
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 20222")
         handle_vs_cs_command(user_input)
         return True
 
