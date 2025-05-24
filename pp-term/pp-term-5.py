@@ -2207,7 +2207,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("g++ -o "):
@@ -2223,7 +2223,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.lower() == "g++-version":
@@ -2237,7 +2237,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("gcc "):
@@ -2253,7 +2253,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("gcc -o "):
@@ -2269,7 +2269,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.lower() == "gcc-version":
@@ -2282,7 +2282,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     elif user_input.startswith("vs-cpp "):
@@ -2352,7 +2352,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-rust "):
@@ -2368,7 +2368,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("node "):
@@ -2384,7 +2384,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("jsc "):
@@ -2400,7 +2400,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-js "):
@@ -2416,7 +2416,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("javac "):
@@ -2432,7 +2432,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-java "):
@@ -2448,7 +2448,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("ruby "):
@@ -2464,7 +2464,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("rubyc "):
@@ -2480,7 +2480,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-ruby "):
@@ -2496,7 +2496,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("Rscript "):
@@ -2512,7 +2512,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("Rscriptc "):
@@ -2528,7 +2528,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-r "):
@@ -2544,7 +2544,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pyinstaller --onefile "):
@@ -2560,7 +2560,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pythonc "):
@@ -2576,7 +2576,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-python "):
@@ -2592,7 +2592,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-python-all "):
@@ -2609,7 +2609,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
     
     if user_input.startswith("go run "):
@@ -2625,7 +2625,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("go build "):
@@ -2641,7 +2641,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("goc "):
@@ -2657,7 +2657,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-go "):
@@ -2673,7 +2673,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("julia "):
@@ -2689,7 +2689,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("juliac "):
@@ -2705,7 +2705,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-julia "):
@@ -2721,7 +2721,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("php "):
@@ -2737,7 +2737,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("phpc "):
@@ -2753,7 +2753,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-php "):
@@ -2768,7 +2768,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("lua "):
@@ -2783,7 +2783,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("luac "):
@@ -2798,7 +2798,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-lua "):
@@ -2813,7 +2813,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("tsc "):
@@ -2828,7 +2828,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-tsc "):
@@ -2843,7 +2843,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("ts-node "):
@@ -2858,7 +2858,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("kotlinc "):
@@ -2873,7 +2873,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("kotlinc1 "):
@@ -2888,7 +2888,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("kotlinc2 "):
@@ -2903,7 +2903,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("kotlinc3 "):
@@ -2918,7 +2918,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-kotlin "):
@@ -2933,7 +2933,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("swift "):
@@ -2948,7 +2948,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("swiftc "):
@@ -2964,7 +2964,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-swift "):
@@ -2979,7 +2979,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("dart run "):
@@ -2994,7 +2994,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("dartc "):
@@ -3009,7 +3009,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-dart "):
@@ -3024,7 +3024,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("ghc "):
@@ -3040,7 +3040,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("ghci "):
@@ -3055,7 +3055,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-haskell "):
@@ -3070,7 +3070,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("dotnet fsi "):
@@ -3085,7 +3085,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-fs "):
@@ -3100,7 +3100,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("scalac "):
@@ -3115,7 +3115,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-scala "):
@@ -3130,7 +3130,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("clj "):
@@ -3145,7 +3145,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-clj "):
@@ -3160,7 +3160,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("ocamlc "):
@@ -3176,7 +3176,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-ocaml "):
@@ -3192,7 +3192,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("elixir "):
@@ -3207,7 +3207,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-elixir "):
@@ -3222,7 +3222,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("elm make "):
@@ -3238,7 +3238,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-elm "):
@@ -3254,7 +3254,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("v run "):
@@ -3269,7 +3269,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-v "):
@@ -3284,7 +3284,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
     
     if user_input.startswith("zig build-exe "):
@@ -3299,7 +3299,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
     
     if user_input.startswith("zigc "):
@@ -3314,7 +3314,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
     
     if user_input.startswith("pc-zig "):
@@ -3329,7 +3329,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
     
     if user_input.startswith("nim compile "):
@@ -3344,7 +3344,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("nimc "):
@@ -3359,7 +3359,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-nim "):
@@ -3374,7 +3374,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("bazel run //explorer -- ./"):
@@ -3389,7 +3389,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("carbanc "):
@@ -3404,7 +3404,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-carban "):
@@ -3419,7 +3419,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("solc --bin --abi "):
@@ -3434,7 +3434,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("solidityc "):
@@ -3449,7 +3449,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-solidity "):
@@ -3464,7 +3464,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("hhvm "):
@@ -3479,7 +3479,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("hackc "):
@@ -3494,7 +3494,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-hack "):
@@ -3509,7 +3509,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("crystal run "):
@@ -3524,7 +3524,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("crystalc "):
@@ -3539,7 +3539,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-crystal "):
@@ -3554,7 +3554,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("haxe -main "):
@@ -3570,7 +3570,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("haxec "):
@@ -3586,7 +3586,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-haxe "):
@@ -3602,7 +3602,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("gfortran -o "):
@@ -3618,7 +3618,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("ifort -o "):
@@ -3634,7 +3634,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-fortran "):
@@ -3650,7 +3650,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("sbcl --script "):
@@ -3665,7 +3665,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-lisp "):
@@ -3680,7 +3680,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("racket "):
@@ -3695,7 +3695,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("racketc "):
@@ -3710,7 +3710,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-racket "):
@@ -3725,7 +3725,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
     if user_input.startswith("pc-algol "):
