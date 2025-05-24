@@ -4774,7 +4774,6 @@ def handle_special_commands(user_input):
     if user_input.strip().lower() == "py":
         import code
         import traceback
-        from datetime import datetime
 
         print(f"[{timestamp()}] [INFO] Initializing Python REPL startup sequence...")
 
