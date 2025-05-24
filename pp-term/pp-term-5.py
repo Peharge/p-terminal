@@ -3903,13 +3903,11 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "time":
-        now = datetime.datetime.now()
-        print(now.strftime("%H:%M:%S"))
+        print(f"{timestamp()}")
         return True
 
     if user_input.lower() == "date":
-        today = datetime.date.today()
-        print(today.strftime("%Y-%m-%d"))
+        print(f"{timestamp()}")
         return True
 
     if user_input.lower() == "weather easy":
@@ -3917,24 +3915,46 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("open "):
-        path = user_input[5:].strip()
-
-        # Check if file exists
-        if not os.path.exists(path):
-            print(f"[{timestamp()}] [ERROR] File not found: {path}")
-            return False
-
+        # Extrahiere und parse den Zielpfad / die URL
         try:
-            if sys.platform.startswith("win"):
-                os.startfile(path)  # Windows
-            elif sys.platform.startswith("darwin"):
-                subprocess.Popen(["open", path])  # macOS
+            parts = shlex.split(user_input, posix=not sys.platform.startswith("win"))
+            if len(parts) < 2:
+                print(f"[{timestamp()}] [ERROR] Kein Ziel angegeben.")
+                return False
             else:
-                subprocess.Popen(["xdg-open", path])  # Linux
-            print(f"[{timestamp()}] [PASS] Opened: {path}")
-            return True
-        except Exception as e:
-            print(f"[{timestamp()}] [ERROR] Error while opening: {e}")
+                target = parts[1]
+                target_expanded = os.path.expandvars(os.path.expanduser(target))
+
+                # URL erkennen
+                if target_expanded.startswith(('http://', 'https://', 'ftp://')):
+                    try:
+                        webbrowser.open(target_expanded)
+                        print(f"[{timestamp()}] [PASS] URL geöffnet: {target_expanded}")
+                        return True
+                    except Exception as e:
+                        print(f"[{timestamp()}] [ERROR] URL konnte nicht geöffnet werden: {e}")
+                        return False
+                else:
+                    # Prüfe Existenz im Dateisystem
+                    if not os.path.exists(target_expanded):
+                        print(f"[{timestamp()}] [ERROR] Nicht gefunden: {target_expanded}")
+                        return False
+                    else:
+                        try:
+                            if sys.platform.startswith("win"):
+                                os.startfile(target_expanded)
+                            elif sys.platform.startswith("darwin"):
+                                subprocess.Popen(["open", target_expanded])
+                            else:
+                                subprocess.Popen(["xdg-open", target_expanded])
+
+                            print(f"[{timestamp()}] [PASS] Geöffnet: {target_expanded}")
+                            return True
+                        except Exception as e:
+                            print(f"[{timestamp()}] [ERROR] Öffnen fehlgeschlagen: {e}")
+                            return False
+        except ValueError as e:
+            print(f"[{timestamp()}] [ERROR] Parse-Fehler: {e}")
             return False
 
     if user_input.lower() == "fortune":
