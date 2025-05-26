@@ -6672,7 +6672,7 @@ def get_response_from_ollama_llama4_scout(user_message, ollama):
         return f"[{timestamp()}] [ERROR] {e}"
 
 
-def get_response_from_ollama_llama4(user_message, ollama):
+def get_response_from_ollama_llama4_maverick(user_message, ollama):
     """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
     try:
         response = ollama.chat(
