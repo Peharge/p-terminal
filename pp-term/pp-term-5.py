@@ -802,6 +802,10 @@ def handle_special_commands(user_input):
         "p copy": "pp-commands\\copy.py",  # new
         "p claude": "pp-commands\\claude.py",  # new
         "p chatgpt": "pp-commands\\chatgpt.py",  # new
+        "p savannah gnu": "pp-commands\\p-savannah-gnu.py",  # new
+        "p gnu": "pp-commands\\p-gnu.py",  # new
+        "p gnu software": "pp-commands\\p-gnu-software.py",  # new
+        "p git.com": "pp-commands\\p-git-com.py",  # new
         "run mavis main": "pp-commands\\run-mavis-main.py", # new
         "run mavis main fast": "pp-commands\\run-mavis-main-fast.py",  # new
         "htop": "pp-commands\\htop.py",  # new
@@ -932,7 +936,15 @@ def handle_special_commands(user_input):
         "install racket": "run\\racket\\install-racket.py", # new
         "install g++": "pp-commands\\gpp.py",  # new
         "install gcc": "pp-commands\\gcc.py",  # new
-        "install algol": "pp-commands\\gcc.py"  # new
+        "install algol": "pp-commands\\gcc.py",  # new
+        "update ollama": "pp-commands\\update-ollama.py",  # new
+        "update git": "pp-commands\\update-git.py",  # new
+        "update visual studio build tools": "pp-commands\\update-vsb.py",  # new
+        "update vsb": "pp-commands\\update-vsb.py",  # new
+        "update rustup": "pp-commands\\update-rustup.py",  # new
+        "update docker": "pp-commands\\update-docker.py",  # new
+        "update wsl": "pp-commands\\update-wsl.py",  # new
+        "update powershell": "pp-commands\\update-powershell.py"  # new
     }
 
     # Hier alles in der if-Schleife:
