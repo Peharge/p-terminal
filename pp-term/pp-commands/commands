@@ -1,22 +1,25 @@
+COMMANDS = [
     "p", "p git", "p git mavis", "p git mavis-web", "p git simon", "p htop", "p ls", "p ls mavis",
     "ps ls mavis-web", "p ls simon", "p simon", "p wsl", "p pip", "p models", "p ubuntu", "gitk", "git ls all", "git ls hole",
     "pp", "pp-cpp", "pp-c", "pp-p", "ps", "ps-github", "ps-huggingface", "ps-ollama", "ps-stackoverflow", "nano",
     "htop", "btop", "atop", "glances", "ncdu", "fzf", "bat", "gitui", "lazygit", "starship",
-    "emacs", "vim", "nvim", "nano", "kate", "gedit", "geany", "code",
+    "emacs", "vim", "nvim", "nano", "kate", "gedit", "geany", "code", "ps-all", "pps", "pb", "pt",
     "vscodium", "eclipse", "idea", "pycharm", "atom", "sublime_text", "kakoune", "lite-xl",
     "ps-arxiv", "pa", "run mavis main", "lx", "lx-c", "lx-p", "lx-cpp-c", "lx-c-c", "lx-p-c", "ubuntu", "ubuntu-c",
     "ubuntu-p", "debian", "debian-c", "debian-p", "kali", "kali-c", "kali-p", "hack", "arch", "arch-c",
     "arch-p", "opensuse", "opensuse-c", "opensuse-p", "mint", "mint-c", "mint-p", "fedora", "fedora-c",
     "fedora-p", "redhat", "redhat-c", "redhat-p", "sles", "sles-c", "sles-p", "pengwin", "pengwin-c",
     "pengwin-p", "oracle", "oracle-c", "oracle-p", "cd", "cls", "clear", "dir", "ls", "mkdir", "rmdir",
+    "vc-cpp", "vc-c", "vc-cs", "g++", "gcc", "rustc", "node", "javac", "ruby", "Rscript", "pythonc", "go run", "julia",
     "del", "rm", "echo", "type", "cat", "exit", "alpine", "scoop", "choco", "winget", "speedtest", "kill",
-    "download", "cputemp", "chucknorris", "theme", "cleantemp", "selfupdate", "tree", "py", "ask", "pa", "pa google.com"
+    "download", "cputemp", "chucknorris", "theme", "cleantemp", "selfupdate", "tree", "py", "ask", "pb google.com"
     "weather", "whoami", "hostname", "ip", "os", "time", "date", "open", "fortune", "history", "search",
     "zip", "unzip", "sysinfo", "clip set", "clip get", "ping", "emptytrash", "launch", "doctor", "hole doctor",
     "mavis env install", "install mavis env", "install mavis3", "install mavis3.3", "install mavis4",
     "install mavis4.3", "mavis env update", "update mavis env", "mavis update", "update mavis",
     "security", "p-terminal security", "securitycheck", "info", "mavis info", "info mavis", "p-term info",
     "info p-term", "neofetch", "fastfetch", "screenfetch", "jupyter", "run jupyter", "run ju",
+    "ninite", "just-install", "oneget", "boxstarter", "npackd", "zero-install", "appget",
     "run mavis-4", "run mavis-4-3", "run mavis-4-fast", "run mavis-4-3-fast", "run mavis-launcher-4",
     "run ollama mavis-4", "install ollama mavis-4", "change models mavis-4", "change models", "grafana",
     "run grafana", "install grafana", "account", "run qwen3:0.6b", "run qwen3:1.7b", "run qwen3:4b",
@@ -183,3 +186,4 @@
     "ollama run llama3 --prompt 'Erkläre Quantencomputing.'", "ollama run mistral:7b --format markdown", "ollama run codellama:13b --verbose", "ollama run gemma:2b --mirostat 1", "ollama run phi:1.5 --temperature 0.5",
     "ollama serve", "ollama version", "ollama help", "ollama help run", "ollama help create",
     "ollama list --format json", "ollama pull llama3:13b", "ollama run --system 'Du bist ein hilfreicher Assistent.'", "ollama run llama3 --verbose", "ollama run llama3 --mirostat 1"
+]
