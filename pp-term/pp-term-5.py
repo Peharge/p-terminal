@@ -5017,7 +5017,7 @@ def handle_special_commands(user_input):
 
         return True
 
-    if user_input.startswith("pa qwen3:0.6b "):
+    if user_input.startswith("pa-qwen3:0.6b "):
         user_input = user_input[14:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
@@ -5035,7 +5035,7 @@ def handle_special_commands(user_input):
 
         return True
 
-    if user_input.startswith("pa qwen3:1.7b "):
+    if user_input.startswith("pa-qwen3:1.7b "):
         user_input = user_input[14:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
@@ -5053,7 +5053,7 @@ def handle_special_commands(user_input):
 
         return True
 
-    if user_input.startswith("pa qwen3:4b "):
+    if user_input.startswith("pa-qwen3:4b "):
         user_input = user_input[12:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
@@ -5071,7 +5071,7 @@ def handle_special_commands(user_input):
 
         return True
 
-    if user_input.startswith("pa qwen3:8b "):
+    if user_input.startswith("pa-qwen3:8b "):
         user_input = user_input[12:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
@@ -5089,7 +5089,7 @@ def handle_special_commands(user_input):
 
         return True
 
-    if user_input.startswith("pa qwen3:14b "):
+    if user_input.startswith("pa-qwen3:14b "):
         user_input = user_input[13:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
@@ -5107,7 +5107,7 @@ def handle_special_commands(user_input):
 
         return True
 
-    if user_input.startswith("pa qwen3:32b "):
+    if user_input.startswith("pa-qwen3:32b "):
         user_input = user_input[13:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
@@ -5125,7 +5125,7 @@ def handle_special_commands(user_input):
 
         return True
 
-    if user_input.startswith("pa qwen3:30b "):
+    if user_input.startswith("pa-qwen3:30b "):
         user_input = user_input[13:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
@@ -5143,7 +5143,7 @@ def handle_special_commands(user_input):
 
         return True
 
-    if user_input.startswith("pa qwen3:235b "):
+    if user_input.startswith("pa-qwen3:235b "):
         user_input = user_input[14:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
@@ -5161,7 +5161,7 @@ def handle_special_commands(user_input):
 
         return True
 
-    if user_input.startswith("pa llama4:scout "):
+    if user_input.startswith("pa-llama4:scout "):
         user_input = user_input[16:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
@@ -5179,7 +5179,7 @@ def handle_special_commands(user_input):
 
         return True
 
-    if user_input.startswith("pa llama4:maverick "):
+    if user_input.startswith("pa-llama4:maverick "):
         user_input = user_input[19:].strip()
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
@@ -5191,6 +5191,224 @@ def handle_special_commands(user_input):
         check_ollama_update()
 
         response = get_response_from_ollama_llama4_maverick(user_input, ollama)
+
+        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        type_out_text(response)
+
+        return True
+
+    if user_input.startswith("pa-deepseek-r1:1.5b "):
+        user_input = user_input[19:].strip()
+        ollama_installed = check_command_installed("ollama")
+        if ollama_installed:
+            print(f"[{timestamp()}] [INFO] Ollama is installed.")
+        else:
+            print(f"[{timestamp()}] [ERROR] Ollama is not installed. Please install it to proceed.")
+
+        start_ollama()
+        check_ollama_update()
+
+        response = get_response_from_ollama_deepseek_r1_1_5(user_input, ollama)
+
+        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        type_out_text(response)
+
+        return True
+
+    if user_input.startswith("pa-deepseek-r1:7b "):
+        user_input = user_input[19:].strip()
+        ollama_installed = check_command_installed("ollama")
+        if ollama_installed:
+            print(f"[{timestamp()}] [INFO] Ollama is installed.")
+        else:
+            print(f"[{timestamp()}] [ERROR] Ollama is not installed. Please install it to proceed.")
+
+        start_ollama()
+        check_ollama_update()
+
+        response = get_response_from_ollama_deepseek_r1_7(user_input, ollama)
+
+        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        type_out_text(response)
+
+        return True
+
+    if user_input.startswith("pa-deepseek-r1:8b "):
+        user_input = user_input[19:].strip()
+        ollama_installed = check_command_installed("ollama")
+        if ollama_installed:
+            print(f"[{timestamp()}] [INFO] Ollama is installed.")
+        else:
+            print(f"[{timestamp()}] [ERROR] Ollama is not installed. Please install it to proceed.")
+
+        start_ollama()
+        check_ollama_update()
+
+        response = get_response_from_ollama_deepseek_r1_8(user_input, ollama)
+
+        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        type_out_text(response)
+
+        return True
+
+    if user_input.startswith("pa-deepseek-r1:14b "):
+        user_input = user_input[19:].strip()
+        ollama_installed = check_command_installed("ollama")
+        if ollama_installed:
+            print(f"[{timestamp()}] [INFO] Ollama is installed.")
+        else:
+            print(f"[{timestamp()}] [ERROR] Ollama is not installed. Please install it to proceed.")
+
+        start_ollama()
+        check_ollama_update()
+
+        response = get_response_from_ollama_deepseek_r1_14(user_input, ollama)
+
+        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        type_out_text(response)
+
+        return True
+
+    if user_input.startswith("pa-deepseek-r1:32b "):
+        user_input = user_input[19:].strip()
+        ollama_installed = check_command_installed("ollama")
+        if ollama_installed:
+            print(f"[{timestamp()}] [INFO] Ollama is installed.")
+        else:
+            print(f"[{timestamp()}] [ERROR] Ollama is not installed. Please install it to proceed.")
+
+        start_ollama()
+        check_ollama_update()
+
+        response = get_response_from_ollama_deepseek_r1_32(user_input, ollama)
+
+        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        type_out_text(response)
+
+        return True
+    
+    if user_input.startswith("pa-deepseek-r1:70b "):
+        user_input = user_input[19:].strip()
+        ollama_installed = check_command_installed("ollama")
+        if ollama_installed:
+            print(f"[{timestamp()}] [INFO] Ollama is installed.")
+        else:
+            print(f"[{timestamp()}] [ERROR] Ollama is not installed. Please install it to proceed.")
+
+        start_ollama()
+        check_ollama_update()
+
+        response = get_response_from_ollama_deepseek_r1_70(user_input, ollama)
+
+        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        type_out_text(response)
+
+        return True
+
+    if user_input.startswith("pa-deepseek-r1:671b "):
+        user_input = user_input[19:].strip()
+        ollama_installed = check_command_installed("ollama")
+        if ollama_installed:
+            print(f"[{timestamp()}] [INFO] Ollama is installed.")
+        else:
+            print(f"[{timestamp()}] [ERROR] Ollama is not installed. Please install it to proceed.")
+
+        start_ollama()
+        check_ollama_update()
+
+        response = get_response_from_ollama_deepseek_r1_671(user_input, ollama)
+
+        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        type_out_text(response)
+
+        return True
+
+
+    if user_input.startswith("pa-gemma3:1b "):
+        user_input = user_input[19:].strip()
+        ollama_installed = check_command_installed("ollama")
+        if ollama_installed:
+            print(f"[{timestamp()}] [INFO] Ollama is installed.")
+        else:
+            print(f"[{timestamp()}] [ERROR] Ollama is not installed. Please install it to proceed.")
+
+        start_ollama()
+        check_ollama_update()
+
+        response = get_response_from_ollama_gemma3_1(user_input, ollama)
+
+        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        type_out_text(response)
+
+        return True
+
+    if user_input.startswith("pa-gemma3:4b "):
+        user_input = user_input[19:].strip()
+        ollama_installed = check_command_installed("ollama")
+        if ollama_installed:
+            print(f"[{timestamp()}] [INFO] Ollama is installed.")
+        else:
+            print(f"[{timestamp()}] [ERROR] Ollama is not installed. Please install it to proceed.")
+
+        start_ollama()
+        check_ollama_update()
+
+        response = get_response_from_ollama_gemma3_4(user_input, ollama)
+
+        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        type_out_text(response)
+
+        return True
+
+    if user_input.startswith("pa-gemma3:12b "):
+        user_input = user_input[19:].strip()
+        ollama_installed = check_command_installed("ollama")
+        if ollama_installed:
+            print(f"[{timestamp()}] [INFO] Ollama is installed.")
+        else:
+            print(f"[{timestamp()}] [ERROR] Ollama is not installed. Please install it to proceed.")
+
+        start_ollama()
+        check_ollama_update()
+
+        response = get_response_from_ollama_gemma3_12(user_input, ollama)
+
+        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        type_out_text(response)
+
+        return True
+
+    if user_input.startswith("pa-gemma3:27b "):
+        user_input = user_input[19:].strip()
+        ollama_installed = check_command_installed("ollama")
+        if ollama_installed:
+            print(f"[{timestamp()}] [INFO] Ollama is installed.")
+        else:
+            print(f"[{timestamp()}] [ERROR] Ollama is not installed. Please install it to proceed.")
+
+        start_ollama()
+        check_ollama_update()
+
+        response = get_response_from_ollama_gemma3_27(user_input, ollama)
+
+        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        type_out_text(response)
+
+        return True
+
+
+    if user_input.startswith("pa-devstral "):
+        user_input = user_input[19:].strip()
+        ollama_installed = check_command_installed("ollama")
+        if ollama_installed:
+            print(f"[{timestamp()}] [INFO] Ollama is installed.")
+        else:
+            print(f"[{timestamp()}] [ERROR] Ollama is not installed. Please install it to proceed.")
+
+        start_ollama()
+        check_ollama_update()
+
+        response = get_response_from_ollama_devstral(user_input, ollama)
 
         print(f"{blue}🤖 AI says{reset}:", end=" ")
         type_out_text(response)
@@ -6454,11 +6672,154 @@ def get_response_from_ollama_llama4_scout(user_message, ollama):
         return f"[{timestamp()}] [ERROR] {e}"
 
 
-def get_response_from_ollama_llama4_maverick(user_message, ollama):
+def get_response_from_ollama_llama4(user_message, ollama):
     """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
     try:
         response = ollama.chat(
             model="llama4:maverick",  # Modellname
+            messages=[{"role": "user", "content": user_message}]
+        )
+        return response['message']['content']
+    except Exception as e:
+        return f"[{timestamp()}] [ERROR] {e}"
+
+
+def get_response_from_deepseek_r1_1_5(user_message, ollama):
+    """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
+    try:
+        response = ollama.chat(
+            model="deepseek-r1:1.5b",  # Modellname
+            messages=[{"role": "user", "content": user_message}]
+        )
+        return response['message']['content']
+    except Exception as e:
+        return f"[{timestamp()}] [ERROR] {e}"
+
+
+def get_response_from_deepseek_r1_7(user_message, ollama):
+    """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
+    try:
+        response = ollama.chat(
+            model="deepseek-r1:7b",  # Modellname
+            messages=[{"role": "user", "content": user_message}]
+        )
+        return response['message']['content']
+    except Exception as e:
+        return f"[{timestamp()}] [ERROR] {e}"
+
+
+def get_response_from_deepseek_r1_8(user_message, ollama):
+    """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
+    try:
+        response = ollama.chat(
+            model="deepseek-r1:8b",  # Modellname
+            messages=[{"role": "user", "content": user_message}]
+        )
+        return response['message']['content']
+    except Exception as e:
+        return f"[{timestamp()}] [ERROR] {e}"
+
+def get_response_from_deepseek_r1_14(user_message, ollama):
+    """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
+    try:
+        response = ollama.chat(
+            model="deepseek-r1:14b",  # Modellname
+            messages=[{"role": "user", "content": user_message}]
+        )
+        return response['message']['content']
+    except Exception as e:
+        return f"[{timestamp()}] [ERROR] {e}"
+
+
+def get_response_from_deepseek_r1_32(user_message, ollama):
+    """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
+    try:
+        response = ollama.chat(
+            model="deepseek-r1:32b",  # Modellname
+            messages=[{"role": "user", "content": user_message}]
+        )
+        return response['message']['content']
+    except Exception as e:
+        return f"[{timestamp()}] [ERROR] {e}"
+
+
+def get_response_from_deepseek_r1_70(user_message, ollama):
+    """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
+    try:
+        response = ollama.chat(
+            model="deepseek-r1:70b",  # Modellname
+            messages=[{"role": "user", "content": user_message}]
+        )
+        return response['message']['content']
+    except Exception as e:
+        return f"[{timestamp()}] [ERROR] {e}"
+
+
+def get_response_from_deepseek_r1_671(user_message, ollama):
+    """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
+    try:
+        response = ollama.chat(
+            model="deepseek-r1:671b",  # Modellname
+            messages=[{"role": "user", "content": user_message}]
+        )
+        return response['message']['content']
+    except Exception as e:
+        return f"[{timestamp()}] [ERROR] {e}"
+
+
+def get_response_from_gemma3_1(user_message, ollama):
+    """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
+    try:
+        response = ollama.chat(
+            model="gemma3:1b",  # Modellname
+            messages=[{"role": "user", "content": user_message}]
+        )
+        return response['message']['content']
+    except Exception as e:
+        return f"[{timestamp()}] [ERROR] {e}"
+
+
+def get_response_from_gemma3_4(user_message, ollama):
+    """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
+    try:
+        response = ollama.chat(
+            model="gemma3:4b",  # Modellname
+            messages=[{"role": "user", "content": user_message}]
+        )
+        return response['message']['content']
+    except Exception as e:
+        return f"[{timestamp()}] [ERROR] {e}"
+
+
+def get_response_from_gemma3_12(user_message, ollama):
+    """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
+    try:
+        response = ollama.chat(
+            model="gemma3:12b",  # Modellname
+            messages=[{"role": "user", "content": user_message}]
+        )
+        return response['message']['content']
+    except Exception as e:
+        return f"[{timestamp()}] [ERROR] {e}"
+
+
+def get_response_from_gemma3_27(user_message, ollama):
+    """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
+    try:
+        response = ollama.chat(
+            model="gemma3:27b",  # Modellname
+            messages=[{"role": "user", "content": user_message}]
+        )
+        return response['message']['content']
+    except Exception as e:
+        return f"[{timestamp()}] [ERROR] {e}"
+
+
+def get_response_from_devstral(user_message, ollama):
+    """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
+    try:
+        response = ollama.chat(
+            model="devstral",  # Modellname
             messages=[{"role": "user", "content": user_message}]
         )
         return response['message']['content']
@@ -12113,7 +12474,7 @@ COMMANDS = [
     "pengwin-p", "oracle", "oracle-c", "oracle-p", "cd", "cls", "clear", "dir", "ls", "mkdir", "rmdir",
     "vc-cpp", "vc-c", "vc-cs", "g++", "gcc", "rustc", "node", "javac", "ruby", "Rscript", "pythonc", "go run", "julia",
     "del", "rm", "echo", "type", "cat", "exit", "alpine", "scoop", "choco", "winget", "speedtest", "kill",
-    "download", "cputemp", "chucknorris", "theme", "cleantemp", "selfupdate", "tree", "py", "ask", "pa", "pa google.com"
+    "download", "cputemp", "chucknorris", "theme", "cleantemp", "selfupdate", "tree", "py", "ask", "pb google.com"
     "weather", "whoami", "hostname", "ip", "os", "time", "date", "open", "fortune", "history", "search",
     "zip", "unzip", "sysinfo", "clip set", "clip get", "ping", "emptytrash", "launch", "doctor", "hole doctor",
     "mavis env install", "install mavis env", "install mavis3", "install mavis3.3", "install mavis4",
