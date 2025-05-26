@@ -6684,7 +6684,7 @@ def get_response_from_ollama_llama4(user_message, ollama):
         return f"[{timestamp()}] [ERROR] {e}"
 
 
-def get_response_from_deepseek_r1_1_5(user_message, ollama):
+def get_response_from_ollama_deepseek_r1_1_5(user_message, ollama):
     """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
     try:
         response = ollama.chat(
@@ -6696,7 +6696,7 @@ def get_response_from_deepseek_r1_1_5(user_message, ollama):
         return f"[{timestamp()}] [ERROR] {e}"
 
 
-def get_response_from_deepseek_r1_7(user_message, ollama):
+def get_response_from_ollama_deepseek_r1_7(user_message, ollama):
     """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
     try:
         response = ollama.chat(
@@ -6708,7 +6708,7 @@ def get_response_from_deepseek_r1_7(user_message, ollama):
         return f"[{timestamp()}] [ERROR] {e}"
 
 
-def get_response_from_deepseek_r1_8(user_message, ollama):
+def get_response_from_ollama_deepseek_r1_8(user_message, ollama):
     """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
     try:
         response = ollama.chat(
@@ -6719,7 +6719,7 @@ def get_response_from_deepseek_r1_8(user_message, ollama):
     except Exception as e:
         return f"[{timestamp()}] [ERROR] {e}"
 
-def get_response_from_deepseek_r1_14(user_message, ollama):
+def get_response_from_ollama_deepseek_r1_14(user_message, ollama):
     """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
     try:
         response = ollama.chat(
@@ -6731,7 +6731,7 @@ def get_response_from_deepseek_r1_14(user_message, ollama):
         return f"[{timestamp()}] [ERROR] {e}"
 
 
-def get_response_from_deepseek_r1_32(user_message, ollama):
+def get_response_from_ollama_deepseek_r1_32(user_message, ollama):
     """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
     try:
         response = ollama.chat(
@@ -6743,7 +6743,7 @@ def get_response_from_deepseek_r1_32(user_message, ollama):
         return f"[{timestamp()}] [ERROR] {e}"
 
 
-def get_response_from_deepseek_r1_70(user_message, ollama):
+def get_response_from_ollama_deepseek_r1_70(user_message, ollama):
     """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
     try:
         response = ollama.chat(
@@ -6755,7 +6755,7 @@ def get_response_from_deepseek_r1_70(user_message, ollama):
         return f"[{timestamp()}] [ERROR] {e}"
 
 
-def get_response_from_deepseek_r1_671(user_message, ollama):
+def get_response_from_ollama_deepseek_r1_671(user_message, ollama):
     """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
     try:
         response = ollama.chat(
@@ -6767,7 +6767,7 @@ def get_response_from_deepseek_r1_671(user_message, ollama):
         return f"[{timestamp()}] [ERROR] {e}"
 
 
-def get_response_from_gemma3_1(user_message, ollama):
+def get_response_from_ollama_gemma3_1(user_message, ollama):
     """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
     try:
         response = ollama.chat(
@@ -6779,7 +6779,7 @@ def get_response_from_gemma3_1(user_message, ollama):
         return f"[{timestamp()}] [ERROR] {e}"
 
 
-def get_response_from_gemma3_4(user_message, ollama):
+def get_response_from_ollama_gemma3_4(user_message, ollama):
     """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
     try:
         response = ollama.chat(
@@ -6791,7 +6791,7 @@ def get_response_from_gemma3_4(user_message, ollama):
         return f"[{timestamp()}] [ERROR] {e}"
 
 
-def get_response_from_gemma3_12(user_message, ollama):
+def get_response_from_ollama_gemma3_12(user_message, ollama):
     """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
     try:
         response = ollama.chat(
@@ -6803,7 +6803,7 @@ def get_response_from_gemma3_12(user_message, ollama):
         return f"[{timestamp()}] [ERROR] {e}"
 
 
-def get_response_from_gemma3_27(user_message, ollama):
+def get_response_from_ollama_gemma3_27(user_message, ollama):
     """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
     try:
         response = ollama.chat(
@@ -6815,7 +6815,7 @@ def get_response_from_gemma3_27(user_message, ollama):
         return f"[{timestamp()}] [ERROR] {e}"
 
 
-def get_response_from_devstral(user_message, ollama):
+def get_response_from_ollama_devstral(user_message, ollama):
     """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
     try:
         response = ollama.chat(
