@@ -177,3 +177,9 @@
        - PP-Terminal 5.1.1.56
      - PP-Terminal 5.1.3
        - PP-Terminal 5.1.3.1
+
+# IQ Compiler
+
+  - IQ Compiler 1
+    - IQ Compiler 1.1
+      - IQ Compiler 1.1.1
