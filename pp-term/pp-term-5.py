@@ -734,8 +734,9 @@ def handle_special_commands(user_input):
         "fun dragon": "pp-commands\\fun-dragon.py",  # new
         "fun figlet": "pp-commands\\fun-figlet.py",  # new
         "fun fortune": "pp-commands\\fun-fortune.py",  # new
-        "fun install": "pp-commands\\fun-install.py",  # new
-        "install fun": "pp-commands\\fun-install.py",  # new
+        "install fun main": "pp-commands\\fun-install.py",  # new
+        "install fun games main": "pp-commands\\fun-install.py",  # new
+        "install fun calc main": "pp-commands\\fun-install.py",  # new
         "fun ponysay": "pp-commands\\fun-ponysay.py",  # new
         "fun telnet": "pp-commands\\fun-telnet.py",  # new
         "fun train": "pp-commands\\fun-train.py",  # new
@@ -762,6 +763,35 @@ def handle_special_commands(user_input):
         "fun aquarium": "pp-commands\\fun-asciiquarium.py",  # new
         "fun aqua": "pp-commands\\fun-asciiquarium.py",  # new
         "fun bb": "pp-commands\\fun-bb.py",  # new
+        "install fun": "pp-commands\\fun-matrix.py",  # new
+        "finstall un sl": "pp-commands\\fun-sl.py",  # new
+        "install fun aafire": "pp-commands\\fun-aafire.py",  # new
+        "install fun cmatrix": "pp-commands\\fun-cmatrix.py",  # new
+        "install fun cow": "pp-commands\\fun-cow.py",  # new
+        "install fun dragon": "pp-commands\\fun-dragon.py",  # new
+        "install fun figlet": "pp-commands\\fun-figlet.py",  # new
+        "install fun fortune": "pp-commands\\fun-fortune.py",  # new
+        "install fun ponysay": "pp-commands\\fun-ponysay.py",  # new
+        "install fun telnet": "pp-commands\\fun-telnet.py",  # new
+        "install fun train": "pp-commands\\fun-train.py",  # new
+        "install fun install games": "pp-commands\\fun-install-games.py",  # new
+        "install fun bastet": "pp-commands\\fun-bashtet.py",  # new
+        "install fun chess": "pp-commands\\fun-gnuchess.py",  # new
+        "install fun moon-buggy": "pp-commands\\fun-moon-buggy.py",  # new
+        "install fun nethack": "pp-commands\\fun-nethack-console.py",  # new
+        "install fun nsnake": "pp-commands\\fun-nsnake.py",  # new
+        "install fun pacman": "pp-commands\\fun-pacman4console.py",  # new
+        "install fun tictactoe": "pp-commands\\fun-tictactoe-ng.py",  # new
+        "install fun tint": "pp-commands\\fun-tint.py",  # new
+        "install fun tetris": "pp-commands\\fun-vitetris.py",  # new
+        "install fun calculator": "pp-commands\\fun-calc.py",  # new
+        "install fun calc": "pp-commands\\fun-calc.py",  # new
+        "install fun install calculator": "pp-commands\\fun-install-calc.py",  # new
+        "install fun matrix": "pp-commands\\fun-matrix.py",  # new
+        "install fun matrix green": "pp-commands\\fun-matrix-green.py",  # new
+        "install fun aquarium": "pp-commands\\fun-asciiquarium.py",  # new
+        "install fun aqua": "pp-commands\\fun-asciiquarium.py",  # new
+        "install fun bb": "pp-commands\\fun-bb.py",  # new
         "install cool pin": "pp-commands\\theme-pcc.py", # new
         "install cool pin-2": "pp-commands\\theme-pcc-2.py",  # new
         "install cool pin-3": "pp-commands\\theme-pcc-3.py",  # new
