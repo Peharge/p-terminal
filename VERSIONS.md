@@ -169,3 +169,7 @@
        - PP-Terminal 5.1.1.46
        - PP-Terminal 5.1.1.48
        - PP-Terminal 5.1.1.49
+       - PP-Terminal 5.1.1.50
+       - PP-Terminal 5.1.1.51
+       - PP-Terminal 5.1.1.53
+       - PP-Terminal 5.1.1.54
