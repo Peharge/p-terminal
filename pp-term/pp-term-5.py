@@ -13774,6 +13774,72 @@ def main():
                 user_input = f"Remove-Item -LiteralPath '{current_dir}\\{user_input_file}' -Recurse -Force"
                 run_command_with_admin_python_privileges(user_input)
 
+            elif user_input.startswith("pp-mkdir "):
+                # Create new directory
+                folder_name = user_input[9:].strip()
+                folder_path = os.path.join(current_dir, folder_name)
+                cmd = f"New-Item -ItemType Directory -Path '{folder_path}' -Force"
+                run_command_with_admin_python_privileges(cmd)
+                logging.info(f"[SUCCESS] Created folder: {folder_path}")
+
+            elif user_input.startswith("pp-cp "):
+                # Copy source to destination
+                parts = user_input[6:].strip().split()
+                if len(parts) < 2:
+                    logging.info("[USAGE] pp-cp <source> <destination>")
+                else:
+                    source = os.path.join(current_dir, parts[0])
+                    destination = os.path.join(current_dir, parts[1])
+                    cmd = f"Copy-Item -Path '{source}' -Destination '{destination}' -Recurse -Force"
+                    run_command_with_admin_python_privileges(cmd)
+                    logging.info(f"[SUCCESS] Copied from '{source}' to '{destination}'")
+
+            elif user_input.startswith("pp-mv "):
+                # Move source to destination
+                parts = user_input[6:].strip().split()
+                if len(parts) < 2:
+                    logging.info("[USAGE] pp-mv <source> <destination>")
+                else:
+                    source = os.path.join(current_dir, parts[0])
+                    destination = os.path.join(current_dir, parts[1])
+                    cmd = f"Move-Item -Path '{source}' -Destination '{destination}' -Force"
+                    run_command_with_admin_python_privileges(cmd)
+                    logging.info(f"[SUCCESS] Moved from '{source}' to '{destination}'")
+
+            elif user_input.startswith("pp-touch "):
+                # Create new empty file
+                file_name = user_input[9:].strip()
+                file_path = os.path.join(current_dir, file_name)
+                cmd = f"New-Item -ItemType File -Path '{file_path}' -Force"
+                run_command_with_admin_python_privileges(cmd)
+                logging.info(f"[SUCCESS] Created file: {file_path}")
+
+            elif user_input.startswith("pp-cat "):
+                # Display content of file
+                file_name = user_input[7:].strip()
+                file_path = os.path.join(current_dir, file_name)
+                if not os.path.isfile(file_path):
+                    logging.info(f"[ERROR] File not found: {file_path}")
+                else:
+                    cmd = f"Get-Content -Path '{file_path}'"
+                    run_command_with_admin_python_privileges(cmd)
+
+            elif user_input.strip() == "pp-ls":
+                # List directory contents
+                cmd = f"Get-ChildItem -Path '{current_dir}'"
+                run_command_with_admin_python_privileges(cmd)
+
+            elif user_input.startswith("pp-open "):
+                # Open file with default app
+                file_name = user_input[8:].strip()
+                file_path = os.path.join(current_dir, file_name)
+                if not os.path.exists(file_path):
+                    logging.info(f"[ERROR] File does not exist: {file_path}")
+                else:
+                    cmd = f"Start-Process '{file_path}'"
+                    run_command_with_admin_python_privileges(cmd)
+                    logging.info(f"[SUCCESS] Opened: {file_path}")
+
             elif user_input.startswith("pp-cpp "):
                 user_input = user_input[7:]
                 run_command_with_admin_privileges(user_input)
