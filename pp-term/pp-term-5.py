@@ -7756,11 +7756,11 @@ def confirm_execution(command: str, dangerous: bool) -> bool:
     Fragt den Benutzer, ob der Befehl ausgeführt werden darf.
     Bei gefährlichen Befehlen erfolgt eine deutliche Warnung.
     """
-    logging.warning(f"[INFO] You are about to run the following command with admin privileges: {command}\n")
+    logging.warning(f"[INFO] You are about to run the following command with admin privileges: {command}")
     if dangerous:
         logging.warning("[WARING] This command is considered potentially - critical - or - system-threatening - !")
 
-    answer = input("Continue? [y/n]: ").strip().lower()
+    answer = input("\nContinue? [y/n]: ").strip().lower()
     return answer in ['y', 'yes']
 
 
