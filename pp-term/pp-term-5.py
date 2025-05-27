@@ -7758,7 +7758,7 @@ def confirm_execution(command: str, dangerous: bool) -> bool:
     """
     logging.warning(f"[INFO] You are about to run the following command with admin privileges: {command}")
     if dangerous:
-        logging.warning("[WARING] This command is considered potentially - critical - or - system-threatening - !")
+        logging.warning(f"[WARING] This command is considered potentially {red}critical{reset} or {red}system-threatening{reset}!")
 
     answer = input("\nContinue? [y/n]: ").strip().lower()
     print("")
