@@ -165,8 +165,8 @@ dim = "\033[2m"
 reset = "\033[0m"
 bold = "\033[1m"
 
-def loading_bar(text: str = "Processing", duration: int = 3, color: str = "") -> None:
 
+def loading_bar(text: str = "Processing", duration: int = 3, color: str = "") -> None:
     print(f"{color}{text} ", end="", flush=True)
     for _ in range(duration):
         print(".", end="", flush=True)
@@ -463,10 +463,10 @@ def handle_special_commands(user_input):
     commands = {
         "mavis env install": "mavis-install\\install-info-mavis-4.py",
         "install mavis env": "mavis-install\\install-info-mavis-4.py",
-        "install mavis3": "mavis-install\\install-info-mavis-4.py", # new
-        "install mavis3.3": "mavis-install\\install-info-mavis-4.py", # new
-        "install mavis4": "mavis-install\\install-info-mavis-4.py", # new
-        "install mavis4.3": "mavis-install\\install-info-mavis-4.py", # new
+        "install mavis3": "mavis-install\\install-info-mavis-4.py",  # new
+        "install mavis3.3": "mavis-install\\install-info-mavis-4.py",  # new
+        "install mavis4": "mavis-install\\install-info-mavis-4.py",  # new
+        "install mavis4.3": "mavis-install\\install-info-mavis-4.py",  # new
         "mavis env update": "mavis-install\\install-info-mavis-4.py",
         "update mavis env": "mavis-install\\install-info-mavis-4.py",
         "mavis update": "mavis-update\\update-mavis-repository-windows.py",
@@ -480,13 +480,13 @@ def handle_special_commands(user_input):
         "p-term info": "pp-commands\\info.py",
         "info p-term": "pp-commands\\info.py",
         "neofetch": "pp-commands\\neofetch.py",
-        "fastfetch": "pp-commands\\neofetch.py", # new
-        "screenfetch": "pp-commands\\neofetch.py", # new
+        "fastfetch": "pp-commands\\neofetch.py",  # new
+        "screenfetch": "pp-commands\\neofetch.py",  # new
         "jupyter": "mavis-run-jup\\run-jup.py",
         "run jupyter": "mavis-run-jup\\run-jup.py",
-        "run ju": "mavis-run-jup\\run-jup.py", # new
-        "run mavis-4": "pp-commands\\run-mavis-4.py", # new
-        "run mavis-4-3": "pp-commands\\run-mavis-4-3.py", # new
+        "run ju": "mavis-run-jup\\run-jup.py",  # new
+        "run mavis-4": "pp-commands\\run-mavis-4.py",  # new
+        "run mavis-4-3": "pp-commands\\run-mavis-4-3.py",  # new
         "run mavis-4-fast": "mavis-4-main.py",  # new
         "run mavis-4-3-fast": "mavis-4-3-main.py",  # new
         "run mavis-launcher-4": "pp-commands\\run-launcher-4.py",  # new
@@ -518,11 +518,11 @@ def handle_special_commands(user_input):
         "run llama3:8b": "pp-commands\\llama-3-8b.py",
         "run llama3:70b": "pp-commands\\llama-3-70b.py",
         "run mistral": "pp-commands\\mistral.py",
-        "run mistral-large": "pp-commands\\mistral-large.py", #new
-        "run mistral-nemo": "pp-commands\\mistral-nemo.py", #new
-        "run mistral-openorca": "pp-commands\\mistral-openorca.py", #new
-        "run mistral-small:22b": "pp-commands\\mistral-small-22b.py", #new
-        "run mistral-small:24b": "pp-commands\\mistral-small-24b.py", #new
+        "run mistral-large": "pp-commands\\mistral-large.py",  # new
+        "run mistral-nemo": "pp-commands\\mistral-nemo.py",  # new
+        "run mistral-openorca": "pp-commands\\mistral-openorca.py",  # new
+        "run mistral-small:22b": "pp-commands\\mistral-small-22b.py",  # new
+        "run mistral-small:24b": "pp-commands\\mistral-small-24b.py",  # new
         "run phi4": "pp-commands\\phi-4.py",
         "run qwen2.5:0.5b": "pp-commands\\qwen-2-5-0.5b.py",
         "run qwen2.5:1.5b": "pp-commands\\qwen-2-5-1.5b.py",
@@ -537,7 +537,7 @@ def handle_special_commands(user_input):
         "run qwen2.5-coder:7b": "pp-commands\\qwen-2-5-coder-0.5b.py",
         "run qwen2.5-coder:14b": "pp-commands\\qwen-2-5-coder-0.5b.py",
         "run qwen2.5-coder:32b": "pp-commands\\qwen-2-5-coder-0.5b.py",
-        "run qwen3:0.6b": "pp-commands\\qwen-3-0-6b.py", # new
+        "run qwen3:0.6b": "pp-commands\\qwen-3-0-6b.py",  # new
         "run qwen3:1.7b": "pp-commands\\qwen-3-1-7b.py",  # new
         "run qwen3:4b": "pp-commands\\qwen-3-4b.py",  # new
         "run qwen3:8b": "pp-commands\\qwen-3-8b.py",  # new
@@ -545,16 +545,16 @@ def handle_special_commands(user_input):
         "run qwen3:32b": "pp-commands\\qwen-3-32.py",  # new
         "run qwen3:30b": "pp-commands\\qwen-3-30.py",  # new
         "run qwen3:235b": "pp-commands\\qwen-3-235.py",  # new
-        "run gemma3:1b": "pp-commands\\gemma-3-1b.py", # new
-        "run gemma3:4b": "pp-commands\\gemma-3-4b.py", # new
-        "run gemma3:12b": "pp-commands\\gemma-3-12b.py", # new
-        "run gemma3:27b": "pp-commands\\gemma-3-27b.py", # new
-        "run qwq": "pp-commands\\qwq.py", # new
-        "run command-a": "pp-commands\\command-a.py", #new
-        "run phi4-mini": "pp-commands\\phi-4-mini.py", #new
-        "run granite3.2:8b": "pp-commands\\granite-3-2-8b.py", # new
-        "run granite3.2:2b": "pp-commands\\granite-3-2-2b.py", # new
-        "run granite3.2-vision:2b": "pp-commands\\granite-3-2-2b-vision.py", # new
+        "run gemma3:1b": "pp-commands\\gemma-3-1b.py",  # new
+        "run gemma3:4b": "pp-commands\\gemma-3-4b.py",  # new
+        "run gemma3:12b": "pp-commands\\gemma-3-12b.py",  # new
+        "run gemma3:27b": "pp-commands\\gemma-3-27b.py",  # new
+        "run qwq": "pp-commands\\qwq.py",  # new
+        "run command-a": "pp-commands\\command-a.py",  # new
+        "run phi4-mini": "pp-commands\\phi-4-mini.py",  # new
+        "run granite3.2:8b": "pp-commands\\granite-3-2-8b.py",  # new
+        "run granite3.2:2b": "pp-commands\\granite-3-2-2b.py",  # new
+        "run granite3.2-vision:2b": "pp-commands\\granite-3-2-2b-vision.py",  # new
         "run qwen2.5-omni:7b": "pp-commands\\qwen-2-5-omni-7b.py",  # new
         "run qvq:72b": "pp-commands\\qvq-72b.py",  # new
         "run qwen2.5-vl:32b": "pp-commands\\qwen-2-5-vl-32b.py",  # new
@@ -564,7 +564,7 @@ def handle_special_commands(user_input):
         "run llama4-maverick:17b hg": "pp-commands\\llama-4-maverick-17b.py",  # new
         "run llama4-scout:17b hg": "pp-commands\\llama-4-scout-17b.py",  # new
         "run deepcoder:1.5b": "pp-commands\\deepcoder-1-5b.py",  # new
-        "run deepcoder:14b": "pp-commands\\deepcoder-14b.py", # new
+        "run deepcoder:14b": "pp-commands\\deepcoder-14b.py",  # new
         "run mistral-small3.1": "pp-commands\\mistral-small-3-1.py",  # new
         "install deepseek-r1:1.5b": "pp-commands\\deepseek-r1-1-5b.py",
         "install deepseek-r1:7b": "pp-commands\\deepseek-r1-7b.py",
@@ -583,11 +583,11 @@ def handle_special_commands(user_input):
         "install llama3:8b": "pp-commands\\llama-3-8b.py",
         "install llama3:70b": "pp-commands\\llama-3-70b.py",
         "install mistral": "pp-commands\\mistral.py",
-        "install mistral-large": "pp-commands\\mistral-large.py", #new
-        "install mistral-nemo": "pp-commands\\mistral-nemo.py", #new
-        "install mistral-openorca": "pp-commands\\mistral-openorca.py", #new
-        "install mistral-small:22b": "pp-commands\\mistral-small-22b.py", #new
-        "install mistral-small:24b": "pp-commands\\mistral-small-24b.py", #new
+        "install mistral-large": "pp-commands\\mistral-large.py",  # new
+        "install mistral-nemo": "pp-commands\\mistral-nemo.py",  # new
+        "install mistral-openorca": "pp-commands\\mistral-openorca.py",  # new
+        "install mistral-small:22b": "pp-commands\\mistral-small-22b.py",  # new
+        "install mistral-small:24b": "pp-commands\\mistral-small-24b.py",  # new
         "install phi4": "pp-commands\\phi-4.py",
         "install qwen2.5:0.5b": "pp-commands\\qwen-2-5-0.5b.py",
         "install qwen2.5:1.5b": "pp-commands\\qwen-2-5-1.5b.py",
@@ -602,16 +602,16 @@ def handle_special_commands(user_input):
         "install qwen2.5-coder:7b": "pp-commands\\qwen-2-5-coder-0.5b.py",
         "install qwen2.5-coder:14b": "pp-commands\\qwen-2-5-coder-0.5b.py",
         "install qwen2.5-coder:32b": "pp-commands\\qwen-2-5-coder-0.5b.py",
-        "install gemma3:1b": "pp-commands\\gemma-3-1b.py", # new
-        "install gemma3:4b": "pp-commands\\gemma-3-4b.py", # new
-        "install gemma3:12b": "pp-commands\\gemma-3-12b.py", # new
-        "install gemma3:27b": "pp-commands\\gemma-3-27b.py", # new
-        "install qwq": "pp-commands\\qwq.py", # new
-        "install command-a": "pp-commands\\command-a.py", # new
-        "install phi4-mini": "pp-commands\\phi-4-mini.py", # new
-        "install granite3.2:8b": "pp-commands\\granite-3-2-8b.py", # new
-        "install granite3.2:2b": "pp-commands\\granite-3-2-2b.py", # new
-        "install granite3.2-vision:2b": "pp-commands\\granite-3-2-2b-vision.py", # new
+        "install gemma3:1b": "pp-commands\\gemma-3-1b.py",  # new
+        "install gemma3:4b": "pp-commands\\gemma-3-4b.py",  # new
+        "install gemma3:12b": "pp-commands\\gemma-3-12b.py",  # new
+        "install gemma3:27b": "pp-commands\\gemma-3-27b.py",  # new
+        "install qwq": "pp-commands\\qwq.py",  # new
+        "install command-a": "pp-commands\\command-a.py",  # new
+        "install phi4-mini": "pp-commands\\phi-4-mini.py",  # new
+        "install granite3.2:8b": "pp-commands\\granite-3-2-8b.py",  # new
+        "install granite3.2:2b": "pp-commands\\granite-3-2-2b.py",  # new
+        "install granite3.2-vision:2b": "pp-commands\\granite-3-2-2b-vision.py",  # new
         "install qwen-2-5-omni:7b": "pp-commands\\qwen-2-5-omni-7b.py",  # new
         "install qvq:72b": "pp-commands\\qvq-72b.py",  # new
         "install qwen-2-5-vl:32b": "pp-commands\\qwen-2-5-vl-32b.py",  # new
@@ -625,16 +625,16 @@ def handle_special_commands(user_input):
         "image generation": "pp-commands\\stable-diffusion-3-5-large-turbo.py",
         "video generation": "pp-commands\\wan-2-1-t2v-14b.py",
         "run mavis": "mavis-installer-3-main-windows.py",
-        "p run all": "pp-commands\\p-run-all.py", # new
-        "p htop": "pp-commands\\p-htop.py", # new
-        "p run gemma3": "pp-commands\\p-gemma-3.py", # new
-        "p run deepseek-r1": "pp-commands\\p-deepseek-r1.py", # new
-        "p run qwen2.5": "pp-commands\\p-qwen-2-5.py", # new
-        "p run qwen2.5-coder": "pp-commands\\p-qwen-2-5-coder.py", # new
-        "p python frameworks": "pp-commands\\p-python-frameworks.py", # new
-        "p pip list": "pp-commands\\p-python-frameworks.py", # new
+        "p run all": "pp-commands\\p-run-all.py",  # new
+        "p htop": "pp-commands\\p-htop.py",  # new
+        "p run gemma3": "pp-commands\\p-gemma-3.py",  # new
+        "p run deepseek-r1": "pp-commands\\p-deepseek-r1.py",  # new
+        "p run qwen2.5": "pp-commands\\p-qwen-2-5.py",  # new
+        "p run qwen2.5-coder": "pp-commands\\p-qwen-2-5-coder.py",  # new
+        "p python frameworks": "pp-commands\\p-python-frameworks.py",  # new
+        "p pip list": "pp-commands\\p-python-frameworks.py",  # new
         "p pip ls": "pp-commands\\p-python-frameworks.py",  # new
-        "p git ls": "pp-commands\\p-git.py", # new
+        "p git ls": "pp-commands\\p-git.py",  # new
         "p git": "pp-commands\\p-git.py",  # new
         "p git p-terminal-old": "pp-commands\\p-git-p-terminal-old.py",  # new
         "p git p-terminal": "pp-commands\\p-git.py",  # new
@@ -649,7 +649,7 @@ def handle_special_commands(user_input):
         "p git transformer": "pp-commands\\p-git-transformer.py",  # new
         "p git slicer": "pp-commands\\p-git-slicer.py",  # new
         "p git linux": "pp-commands\\p-git-linux.py",  # new
-        "p ls": "pp-commands\\p-ls.py", # new
+        "p ls": "pp-commands\\p-ls.py",  # new
         "p ls pp-term": "pp-commands\\p-ls.py",  # new
         "p ls p-terminal": "pp-commands\\p-ls-p-terminal.py",  # new
         "p ls mavis": "pp-commands\\p-ls-mavis.py",  # new
@@ -695,9 +695,9 @@ def handle_special_commands(user_input):
         "p mavis": "pp-commands\\p-github-mavis.py",  # new
         "p mavis.com": "pp-commands\\p-mavis.py",  # new
         "p simon": "pp-commands\\p-simon.py",  # new
-        "p simon.com": "pp-commands\\p-simon-git.py", # new
+        "p simon.com": "pp-commands\\p-simon-git.py",  # new
         "wsl info": "pp-commands\\wsl-info.py",  # new
-        "p wsl": "pp-commands\\p-wsl.py", # new
+        "p wsl": "pp-commands\\p-wsl.py",  # new
         "p pip": "pp-commands\\p-pip.py",  # new
         "p ubuntu": "pp-commands\\p-wsl-ubuntu.py",  # new
         "p debian": "pp-commands\\p-wsl-debian.py",  # new
@@ -717,14 +717,14 @@ def handle_special_commands(user_input):
         "p screenfetch": "pp-commands\\p-neofetch.py",  # new
         "p vswhere": "pp-commands\\p-vswhere.py",  # new
         "p speedtest": "pp-commands\\p-speedtest.py",  # new
-        "install 3d-slicer": "run\\simon\\3d-slicer\\install-3d-slicer.py", # new
+        "install 3d-slicer": "run\\simon\\3d-slicer\\install-3d-slicer.py",  # new
         "run 3d-slicer": "run\\simon\\3d-slicer\\run-3d-slicer.py",  # new
         "install simon": "run\\simon\\install-simon-1.py",  # new
         "run simon": "mavis-run-jup\\run-jup.py",  # new
-        "jupyter --version": "pp-commands\\jupyter-version.py", # new
+        "jupyter --version": "pp-commands\\jupyter-version.py",  # new
         "grafana --version": "pp-commands\\grafana-version.py",  # new
         "3d-slicer --version": "pp-commands\\3d-slicer-version.py",  # new
-        "doctor": "pp-commands\\doctor.py", # new
+        "doctor": "pp-commands\\doctor.py",  # new
         "hole doctor": "pp-commands\\doctor-hole.py",  # new
         "fun": "pp-commands\\fun-matrix.py",  # new
         "fun sl": "pp-commands\\fun-sl.py",  # new
@@ -792,7 +792,7 @@ def handle_special_commands(user_input):
         "install fun aquarium": "pp-commands\\fun-asciiquarium.py",  # new
         "install fun aqua": "pp-commands\\fun-asciiquarium.py",  # new
         "install fun bb": "pp-commands\\fun-bb.py",  # new
-        "install cool pin": "pp-commands\\theme-pcc.py", # new
+        "install cool pin": "pp-commands\\theme-pcc.py",  # new
         "install cool pin-2": "pp-commands\\theme-pcc-2.py",  # new
         "install cool pin-3": "pp-commands\\theme-pcc-3.py",  # new
         "install cool pin-4": "pp-commands\\theme-pcc-4.py",  # new
@@ -814,13 +814,13 @@ def handle_special_commands(user_input):
         "install cool pin-21": "pp-commands\\theme-pcc-21.py",  # new
         "install cool pin-22": "pp-commands\\theme-pcc-22.py",  # new
         "install cool pin-23": "pp-commands\\theme-pcc-23.py",  # new
-        "run githubdesktop": "pp-commands\\run-githubdesktop.py", # new
-        "run dockerdesktop": "pp-commands\\run-dockerdesktop.py", # new
+        "run githubdesktop": "pp-commands\\run-githubdesktop.py",  # new
+        "run dockerdesktop": "pp-commands\\run-dockerdesktop.py",  # new
         "run pycharm": "pp-commands\\run-pycharm.py",  # new
         "run vs-code": "pp-commands\\run-vs-code.py",  # new
         "run vs": "pp-commands\\run-vs.py",  # new
-        "p map": "pp-commands\\p-map.py", # new
-        "p weather": "pp-commands\\p-weather.py", # new
+        "p map": "pp-commands\\p-map.py",  # new
+        "p weather": "pp-commands\\p-weather.py",  # new
         "p you": "pp-commands\\you.py",  # new
         "p qwen": "pp-commands\\qwen.py",  # new
         "p poe": "pp-commands\\poe.py",  # new
@@ -837,10 +837,10 @@ def handle_special_commands(user_input):
         "p gnu": "pp-commands\\p-gnu.py",  # new
         "p gnu software": "pp-commands\\p-gnu-software.py",  # new
         "p git.com": "pp-commands\\p-git-com.py",  # new
-        "run mavis main": "pp-commands\\run-mavis-main.py", # new
+        "run mavis main": "pp-commands\\run-mavis-main.py",  # new
         "run mavis main fast": "pp-commands\\run-mavis-main-fast.py",  # new
         "htop": "pp-commands\\htop.py",  # new
-        "bashtop": "pp-commands\\bashtop.py", # new
+        "bashtop": "pp-commands\\bashtop.py",  # new
         "taskmanager": "pp-commands\\bashtop.py",  # new
         "btop": "pp-commands\\btop.py",  # new
         "atop": "pp-commands\\atop.py",  # new
@@ -871,23 +871,23 @@ def handle_special_commands(user_input):
         "zoxide": "pp-commands\\zoxide.py",  # new
         "starship": "pp-commands\\starship.py",  # new
         "nala": "pp-commands\\nala.py",  # new
-        "bpytop": "pp-commands\\bpytop.py", # new
-        "belnder": "pp-commands\\belnder.py", # new
-        "clion": "pp-commands\\clion.py", # new
-        "community": "pp-commands\\community.py", # new
-        "intellij": "pp-commands\\intellij.py", # new
-        "pycharm": "pp-commands\\pycharm.py", # new
-        "rider": "pp-commands\\rider.py", # new
-        "vs-code": "pp-commands\\vs-code.py", # new
-        "webstorm": "pp-commands\\webstorm.py", # new
+        "bpytop": "pp-commands\\bpytop.py",  # new
+        "belnder": "pp-commands\\belnder.py",  # new
+        "clion": "pp-commands\\clion.py",  # new
+        "community": "pp-commands\\community.py",  # new
+        "intellij": "pp-commands\\intellij.py",  # new
+        "pycharm": "pp-commands\\pycharm.py",  # new
+        "rider": "pp-commands\\rider.py",  # new
+        "vs-code": "pp-commands\\vs-code.py",  # new
+        "webstorm": "pp-commands\\webstorm.py",  # new
         "golab": "pp-commands\\golab.py",  # new
         "phpstorm": "pp-commands\\phpstorm.py",  # new
         "githubdesktop": "pp-commands\\githubdesktop.py",  # new
-        "nvim": "pp-commands\\nvim.py", # new
-        "code": "pp-commands\\code.py", # new
-        "micro": "pp-commands\\micro.py", # new
-        "gedit": "pp-commands\\gedit.py", # new
-        "update": "pp-commands\\update.py", # new
+        "nvim": "pp-commands\\nvim.py",  # new
+        "code": "pp-commands\\code.py",  # new
+        "micro": "pp-commands\\micro.py",  # new
+        "gedit": "pp-commands\\gedit.py",  # new
+        "update": "pp-commands\\update.py",  # new
         "selfupdate": "pp-commands\\update.py",  # new
         "update pp-term": "pp-commands\\updade.py",  # new
         "kakoune": "pp-commands\\kakoune.py",  # new
@@ -940,7 +940,7 @@ def handle_special_commands(user_input):
         "install docker": "run\\docker\\install-dockerdesktop.py",  # new
         "install vs-cpp": "run\\cpp\\install-vs-cpp.py",  # new
         "install vs-c": "run\\c\\install-vs-c.py",  # new
-        "install vs-cs": "run\\cs\\install-vs.py", # new
+        "install vs-cs": "run\\cs\\install-vs.py",  # new
         "install go": "run\\go\\install-go.py",  # new
         "install julia": "run\\julia\\install-julia.py",  # new
         "install ffmpeg": "run\\ffmpeg\\install-ffmpeg.py",  # new
@@ -962,9 +962,9 @@ def handle_special_commands(user_input):
         "install nim": "run\\nim\\install-nim.py",  # new
         "install haxe": "run\\haxe\\install-haxe.py",  # new
         "install hack": "run\\hack\\install-hack.py",  # new
-        "install fortran": "run\\fortran\\install-fortran.py", # new
-        "install lisp": "run\\lisp\\install-lisp.py", # new
-        "install racket": "run\\racket\\install-racket.py", # new
+        "install fortran": "run\\fortran\\install-fortran.py",  # new
+        "install lisp": "run\\lisp\\install-lisp.py",  # new
+        "install racket": "run\\racket\\install-racket.py",  # new
         "install g++": "pp-commands\\gpp.py",  # new
         "install gcc": "pp-commands\\gcc.py",  # new
         "install algol": "pp-commands\\gcc.py",  # new
@@ -1204,7 +1204,8 @@ def handle_special_commands(user_input):
 
         command = f"git log --graph --all --color --decorate --pretty=format:'%C(yellow)%h%Creset - %Cgreen%ad%Creset - %s %C(red)[%an]%Creset' --date=short"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1218,7 +1219,8 @@ def handle_special_commands(user_input):
 
         command = f"git log --pretty=format:'%Cred%h%Creset - %Cgreen%cd%Creset - %s %C(bold blue)<%an>%Creset' --date=short"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1232,7 +1234,8 @@ def handle_special_commands(user_input):
 
         command = f"tig"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1242,12 +1245,12 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
         return True
 
-
     if user_input.lower() == "git lazy":
 
         command = f"lazygit"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1261,7 +1264,8 @@ def handle_special_commands(user_input):
 
         command = "gitk --all"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1275,7 +1279,8 @@ def handle_special_commands(user_input):
 
         command = "git status -sb"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1289,7 +1294,8 @@ def handle_special_commands(user_input):
 
         command = "git diff --color-word"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1303,7 +1309,8 @@ def handle_special_commands(user_input):
 
         command = "git branch -vv -a"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1317,7 +1324,8 @@ def handle_special_commands(user_input):
 
         command = "git stash list --pretty=format:'%C(yellow)%gd%Creset %Cgreen%cr%Creset %s %C(red)[%an]'"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1331,7 +1339,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl cloc ."
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1345,7 +1354,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl cloc ."
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1359,7 +1369,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl cloc ."
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1373,7 +1384,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl cloc *"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1387,7 +1399,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl cloc *"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1401,7 +1414,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1415,7 +1429,8 @@ def handle_special_commands(user_input):
         user_input = user_input[13:].strip()
         command = f"wsl cloc --exclude-dir={user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1429,7 +1444,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1443,7 +1459,8 @@ def handle_special_commands(user_input):
         user_input = user_input[14:].strip()
         command = f"wsl cloc --include-lang={user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1457,7 +1474,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl cloc --by-file"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1471,7 +1489,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl cloc --by-file"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1485,7 +1504,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl cloc --csv"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1499,7 +1519,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl cloc --csv"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1513,7 +1534,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl cloc --json"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1527,7 +1549,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl cloc --json"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1541,7 +1564,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl cloc --quiet"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1555,7 +1579,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl cloc --quiet"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1569,7 +1594,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl cloc --help"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1583,7 +1609,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl cloc --help"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1597,7 +1624,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl cloc --versions"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1611,7 +1639,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl cloc --versions"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1625,7 +1654,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl du -sh ."
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1639,7 +1669,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl tree -L 2"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1653,7 +1684,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl find . -name '*.py'"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1668,7 +1700,8 @@ def handle_special_commands(user_input):
         user_input = user_input[5:]
         command = f"wsl grep -rnw . -e '{user_input}'"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1697,7 +1730,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl make"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1711,7 +1745,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl black ."
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1725,7 +1760,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl top"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1739,7 +1775,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl df -h"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1753,7 +1790,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1767,7 +1805,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1781,7 +1820,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1795,7 +1835,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1809,7 +1850,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1823,7 +1865,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1837,7 +1880,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1851,7 +1895,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1865,7 +1910,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1879,7 +1925,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1893,7 +1940,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1907,7 +1955,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1921,7 +1970,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1935,7 +1985,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1949,7 +2000,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1963,7 +2015,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1977,7 +2030,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -1991,7 +2045,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -2005,7 +2060,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -2019,7 +2075,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -2033,7 +2090,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -2047,7 +2105,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -2061,7 +2120,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -2075,7 +2135,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -2089,7 +2150,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -2103,7 +2165,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -2117,7 +2180,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -2131,7 +2195,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -2145,7 +2210,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -2159,7 +2225,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -2173,7 +2240,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -2187,7 +2255,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -2201,7 +2270,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -2215,7 +2285,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -2229,7 +2300,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -2243,7 +2315,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -2257,7 +2330,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -2271,7 +2345,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -2285,7 +2360,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -2299,7 +2375,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -2314,7 +2391,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl g++ -o {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile your code with g++")
@@ -2330,7 +2408,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl g++ -o {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile your code with g++")
@@ -2345,7 +2424,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl g++ --version"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -2360,7 +2440,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl gcc++ -o {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile your code with gcc")
@@ -2376,7 +2457,8 @@ def handle_special_commands(user_input):
 
         command = f"wsl gcc -o {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile your code with gcc")
@@ -2390,7 +2472,8 @@ def handle_special_commands(user_input):
     if user_input.lower() == "gcc-version":
         command = f"wsl {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             process.wait()
@@ -2459,7 +2542,8 @@ def handle_special_commands(user_input):
 
         command = f"rustc {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with rustup")
@@ -2475,7 +2559,8 @@ def handle_special_commands(user_input):
 
         command = f"rustc {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with rustup")
@@ -2491,7 +2576,8 @@ def handle_special_commands(user_input):
 
         command = f"node {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with nodejs")
@@ -2507,7 +2593,8 @@ def handle_special_commands(user_input):
 
         command = f"node {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with NodeJs")
@@ -2523,7 +2610,8 @@ def handle_special_commands(user_input):
 
         command = f"node {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with NodeJs")
@@ -2539,7 +2627,8 @@ def handle_special_commands(user_input):
 
         command = f"javac {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Java - JDK")
@@ -2555,7 +2644,8 @@ def handle_special_commands(user_input):
 
         command = f"javac {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Java - JDK")
@@ -2571,7 +2661,8 @@ def handle_special_commands(user_input):
 
         command = f"ruby {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Ruby")
@@ -2587,7 +2678,8 @@ def handle_special_commands(user_input):
 
         command = f"ruby {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Ruby")
@@ -2603,7 +2695,8 @@ def handle_special_commands(user_input):
 
         command = f"ruby {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Ruby")
@@ -2619,7 +2712,8 @@ def handle_special_commands(user_input):
 
         command = f"Rscript {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Rscript")
@@ -2635,7 +2729,8 @@ def handle_special_commands(user_input):
 
         command = f"Rscript {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Rscript")
@@ -2651,7 +2746,8 @@ def handle_special_commands(user_input):
 
         command = f"Rscript {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Rscript")
@@ -2667,7 +2763,8 @@ def handle_special_commands(user_input):
 
         command = f"pyinstaller --onefile {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with PyInstaller")
@@ -2683,7 +2780,8 @@ def handle_special_commands(user_input):
 
         command = f"pyinstaller --onefile {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with PyInstaller")
@@ -2699,7 +2797,8 @@ def handle_special_commands(user_input):
 
         command = f"pyinstaller --onefile {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with PyInstaller")
@@ -2715,7 +2814,8 @@ def handle_special_commands(user_input):
 
         command = f"pyinstaller --onefile --noconsole --icon={user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile your code with PyInstaller")
@@ -2732,7 +2832,8 @@ def handle_special_commands(user_input):
 
         command = f"go run {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with GO")
@@ -2748,7 +2849,8 @@ def handle_special_commands(user_input):
 
         command = f"go build {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with GO")
@@ -2764,7 +2866,8 @@ def handle_special_commands(user_input):
 
         command = f"go build {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with GO Build")
@@ -2780,7 +2883,8 @@ def handle_special_commands(user_input):
 
         command = f"go build {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with GO Build")
@@ -2796,7 +2900,8 @@ def handle_special_commands(user_input):
 
         command = f"julia {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Julia")
@@ -2812,7 +2917,8 @@ def handle_special_commands(user_input):
 
         command = f"julia {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Julia")
@@ -2828,7 +2934,8 @@ def handle_special_commands(user_input):
 
         command = f"julia {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Julia")
@@ -2844,7 +2951,8 @@ def handle_special_commands(user_input):
 
         command = f"php {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with PHP")
@@ -2860,7 +2968,8 @@ def handle_special_commands(user_input):
 
         command = f"php {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with PHP")
@@ -2876,7 +2985,8 @@ def handle_special_commands(user_input):
 
         command = f"php {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with PHP")
@@ -2892,7 +3002,8 @@ def handle_special_commands(user_input):
 
         command = f"lua {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Lua")
@@ -2908,7 +3019,8 @@ def handle_special_commands(user_input):
 
         command = f"glue srlua.exe {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile your code with PyInstaller")
@@ -2925,7 +3037,8 @@ def handle_special_commands(user_input):
 
         command = f"glue srlua.exe {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile your code with Glue")
@@ -2942,7 +3055,8 @@ def handle_special_commands(user_input):
 
         command = f"lua {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Lua")
@@ -2958,7 +3072,8 @@ def handle_special_commands(user_input):
 
         command = f"glue srlua.exe {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile your code with Glue")
@@ -2975,7 +3090,8 @@ def handle_special_commands(user_input):
 
         command = f"tsc {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Tsc")
@@ -2991,7 +3107,8 @@ def handle_special_commands(user_input):
 
         command = f"tsc {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Tsc")
@@ -3007,7 +3124,8 @@ def handle_special_commands(user_input):
 
         command = f"ts-node {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with TypeScript NodeJs")
@@ -3023,7 +3141,8 @@ def handle_special_commands(user_input):
 
         command = f"ts-node {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with TypeScript NodeJs")
@@ -3039,7 +3158,8 @@ def handle_special_commands(user_input):
 
         command = f"ts-node {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with TypeScript NodeJs")
@@ -3053,9 +3173,10 @@ def handle_special_commands(user_input):
     if user_input.startswith("kotlinc "):
         user_input = user_input[8:].strip()
 
-        command = f"kotlinc hello.kt -include-runtime -d {user_input}" # .jar
+        command = f"kotlinc hello.kt -include-runtime -d {user_input}"  # .jar
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Kotlinc hello.kt")
@@ -3069,9 +3190,10 @@ def handle_special_commands(user_input):
     if user_input.startswith("kotlinc1 "):
         user_input = user_input[9:].strip()
 
-        command = f"kotlinc hello.kt -include-runtime -d {user_input}" # .jar
+        command = f"kotlinc hello.kt -include-runtime -d {user_input}"  # .jar
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Kotlinc hello.kt")
@@ -3085,9 +3207,10 @@ def handle_special_commands(user_input):
     if user_input.startswith("kotlinc2 "):
         user_input = user_input[9:].strip()
 
-        command = f"java -jar {user_input}" # .jar
+        command = f"java -jar {user_input}"  # .jar
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Java")
@@ -3101,9 +3224,10 @@ def handle_special_commands(user_input):
     if user_input.startswith("kotlinc3 "):
         user_input = user_input[9:].strip()
 
-        command = f"kotlinc -script {user_input}" # .kts
+        command = f"kotlinc -script {user_input}"  # .kts
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Kotlinc")
@@ -3119,7 +3243,8 @@ def handle_special_commands(user_input):
 
         command = f"kotlinc -script {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Kotlinc")
@@ -3135,7 +3260,8 @@ def handle_special_commands(user_input):
 
         command = f"swift {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Swift")
@@ -3151,7 +3277,8 @@ def handle_special_commands(user_input):
 
         command = f"swift {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile your code with Swift")
@@ -3168,7 +3295,8 @@ def handle_special_commands(user_input):
 
         command = f"swift {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Swift")
@@ -3184,7 +3312,8 @@ def handle_special_commands(user_input):
 
         command = f"dart run {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Dart")
@@ -3200,7 +3329,8 @@ def handle_special_commands(user_input):
 
         command = f"dart run {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Dart")
@@ -3216,7 +3346,8 @@ def handle_special_commands(user_input):
 
         command = f"dart run {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Dart")
@@ -3232,7 +3363,8 @@ def handle_special_commands(user_input):
 
         command = f"ghc {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Ghc")
@@ -3249,7 +3381,8 @@ def handle_special_commands(user_input):
 
         command = f"ghci {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Ghci")
@@ -3265,7 +3398,8 @@ def handle_special_commands(user_input):
 
         command = f"ghci {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Ghci")
@@ -3281,7 +3415,8 @@ def handle_special_commands(user_input):
 
         command = f"dotnet fsi {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Dotnet Fsi")
@@ -3297,7 +3432,8 @@ def handle_special_commands(user_input):
 
         command = f"dotnet fsi {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Dotnet Fsi")
@@ -3313,7 +3449,8 @@ def handle_special_commands(user_input):
 
         command = f"scalac {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Scalac")
@@ -3329,7 +3466,8 @@ def handle_special_commands(user_input):
 
         command = f"scalac {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Scalac")
@@ -3345,7 +3483,8 @@ def handle_special_commands(user_input):
 
         command = f"clj {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Clj")
@@ -3361,7 +3500,8 @@ def handle_special_commands(user_input):
 
         command = f"clj {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Clj")
@@ -3377,7 +3517,8 @@ def handle_special_commands(user_input):
 
         command = f"ocamlc {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile your code with ocamlc")
@@ -3394,7 +3535,8 @@ def handle_special_commands(user_input):
 
         command = f"ocamlc {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile your code with ocamlc")
@@ -3411,7 +3553,8 @@ def handle_special_commands(user_input):
 
         command = f"elixir {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Elixir")
@@ -3427,7 +3570,8 @@ def handle_special_commands(user_input):
 
         command = f"elixir {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Elixir")
@@ -3443,7 +3587,8 @@ def handle_special_commands(user_input):
 
         command = f"elm make {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile your code with Elm Make ")
@@ -3460,7 +3605,8 @@ def handle_special_commands(user_input):
 
         command = f"elm make {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile your code with Elm Make ")
@@ -3477,7 +3623,8 @@ def handle_special_commands(user_input):
 
         command = f"v run {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with V")
@@ -3493,7 +3640,8 @@ def handle_special_commands(user_input):
 
         command = f"v run {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with V")
@@ -3509,7 +3657,8 @@ def handle_special_commands(user_input):
 
         command = f"zig build-exe {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Zig")
@@ -3525,7 +3674,8 @@ def handle_special_commands(user_input):
 
         command = f"zig build-exe {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Zig")
@@ -3541,7 +3691,8 @@ def handle_special_commands(user_input):
 
         command = f"zig build-exe {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Zig")
@@ -3557,7 +3708,8 @@ def handle_special_commands(user_input):
 
         command = f"nim compile {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Nim")
@@ -3573,7 +3725,8 @@ def handle_special_commands(user_input):
 
         command = f"nim compile {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Nim")
@@ -3589,7 +3742,8 @@ def handle_special_commands(user_input):
 
         command = f"nim compile {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Nim")
@@ -3605,7 +3759,8 @@ def handle_special_commands(user_input):
 
         command = f"bazel run //explorer -- ./{user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Bazel")
@@ -3621,7 +3776,8 @@ def handle_special_commands(user_input):
 
         command = f"bazel run //explorer -- ./{user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Bazel")
@@ -3637,7 +3793,8 @@ def handle_special_commands(user_input):
 
         command = f"bazel run //explorer -- ./{user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Bazel")
@@ -3653,7 +3810,8 @@ def handle_special_commands(user_input):
 
         command = f"solc --bin --abi {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Solc -> solc --bin --abi")
@@ -3669,7 +3827,8 @@ def handle_special_commands(user_input):
 
         command = f"solc --bin --abi {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Solc -> solc --bin --abi")
@@ -3685,7 +3844,8 @@ def handle_special_commands(user_input):
 
         command = f"solc --bin --abi {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Solc -> solc --bin --abi")
@@ -3701,7 +3861,8 @@ def handle_special_commands(user_input):
 
         command = f"hhvm {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Hhvm")
@@ -3717,7 +3878,8 @@ def handle_special_commands(user_input):
 
         command = f"hhvm {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Hhvm")
@@ -3733,7 +3895,8 @@ def handle_special_commands(user_input):
 
         command = f"hhvm {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Hhvm")
@@ -3749,7 +3912,8 @@ def handle_special_commands(user_input):
 
         command = f"crystal run {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Crystal")
@@ -3765,7 +3929,8 @@ def handle_special_commands(user_input):
 
         command = f"crystal run {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Crystal")
@@ -3781,7 +3946,8 @@ def handle_special_commands(user_input):
 
         command = f"crystal run {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Crystal")
@@ -3797,7 +3963,8 @@ def handle_special_commands(user_input):
 
         command = f"haxe -main {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile your code with Haxe")
@@ -3814,7 +3981,8 @@ def handle_special_commands(user_input):
 
         command = f"haxe -main {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile your code with Haxe")
@@ -3831,7 +3999,8 @@ def handle_special_commands(user_input):
 
         command = f"haxe -main {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile your code with Haxe")
@@ -3848,7 +4017,8 @@ def handle_special_commands(user_input):
 
         command = f"gfortran -o {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile your code with Gfortran")
@@ -3865,7 +4035,8 @@ def handle_special_commands(user_input):
 
         command = f"ifort -o {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile your code with Ifort")
@@ -3882,7 +4053,8 @@ def handle_special_commands(user_input):
 
         command = f"gfortran -o {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile your code with Gfortran")
@@ -3899,7 +4071,8 @@ def handle_special_commands(user_input):
 
         command = f"sbcl --script {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Sbcl")
@@ -3915,7 +4088,8 @@ def handle_special_commands(user_input):
 
         command = f"sbcl --script {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Sbcl")
@@ -3931,7 +4105,8 @@ def handle_special_commands(user_input):
 
         command = f"racket {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Racket")
@@ -3947,7 +4122,8 @@ def handle_special_commands(user_input):
 
         command = f"racket {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Racket")
@@ -3963,7 +4139,8 @@ def handle_special_commands(user_input):
 
         command = f"racket {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Racket")
@@ -3979,11 +4156,13 @@ def handle_special_commands(user_input):
 
         # Compile the Algol60 source code
         compile_command = "wsl gcc algol60.c -o algol60"
-        compile_process = subprocess.Popen(compile_command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        compile_process = subprocess.Popen(compile_command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                           shell=True, text=True)
 
         # Execute the compiled program with arguments
         command_3 = f"./algol60 {user_input}"
-        run_process = subprocess.Popen(command_3, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+        run_process = subprocess.Popen(command_3, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                       text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Gcc")
@@ -4270,18 +4449,26 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "theme":
-        print("alternative", "aptscience", "arc_dark", "aurelia", "ayu_mirage", "blue", "blueglass", "cyberlife", "dark", "dracula",
-              "fallout_pipboy", "glass", "glassmain", "green", "greenglass", "gruvbox_dark", "hackerman", "light", "main", "material_dark",
-              "mavis_1", "mavis_3", "mavis_4", "mint", "monokai", "nord", "one_dark", "p_term", "red", "redglass", "solarized_dark", "spiderman",
+        print("alternative", "aptscience", "arc_dark", "aurelia", "ayu_mirage", "blue", "blueglass", "cyberlife",
+              "dark", "dracula",
+              "fallout_pipboy", "glass", "glassmain", "green", "greenglass", "gruvbox_dark", "hackerman", "light",
+              "main", "material_dark",
+              "mavis_1", "mavis_3", "mavis_4", "mint", "monokai", "nord", "one_dark", "p_term", "red", "redglass",
+              "solarized_dark", "spiderman",
               "tokyo_night", "ubuntu", "ubuntuglass", "violetglass", "yellowglass")
         return True
 
     if user_input.lower() == "pin":
-        print("main/main-1", "main-3", "main-4", "main-5", "main-6", "main-7", "main-8", "main-9", "main-10", "main-11", "main-12", "main-13", "main-14",
-              "main-15", "main-16", "main-17", "main-18", "main-19", "main-20", "main-21", "main-22", "main-23", "main-24", "main-25", "main-26", "main-27",
-              "main-28", "main-29", "main-30", "main-31", "main-32", "main-33", "main-34", "main-35", "evil/evil-1", "evil-2", "evil-3", "evil-4", "evil-5",
-              "stable/stable-1", "stable-2", "stable-3", "stable-4", "stable-5", "cool/cool-1", "cool-2", "cool-3", "cool-4", "cool-5", "cool-6", "cool-7",
-              "cool-8", "cool-9", "cool-10", "cool-11", "cool-12", "cool-13", "cool-14", "cool-15", "cool-16", "cool-17", "cool-18", "cool-19", "cool-20",
+        print("main/main-1", "main-3", "main-4", "main-5", "main-6", "main-7", "main-8", "main-9", "main-10", "main-11",
+              "main-12", "main-13", "main-14",
+              "main-15", "main-16", "main-17", "main-18", "main-19", "main-20", "main-21", "main-22", "main-23",
+              "main-24", "main-25", "main-26", "main-27",
+              "main-28", "main-29", "main-30", "main-31", "main-32", "main-33", "main-34", "main-35", "evil/evil-1",
+              "evil-2", "evil-3", "evil-4", "evil-5",
+              "stable/stable-1", "stable-2", "stable-3", "stable-4", "stable-5", "cool/cool-1", "cool-2", "cool-3",
+              "cool-4", "cool-5", "cool-6", "cool-7",
+              "cool-8", "cool-9", "cool-10", "cool-11", "cool-12", "cool-13", "cool-14", "cool-15", "cool-16",
+              "cool-17", "cool-18", "cool-19", "cool-20",
               "cool-21", "cool-22", "cool-23")
         return True
 
@@ -4882,6 +5069,7 @@ def handle_special_commands(user_input):
                 print(prefix + "|-- " + item)
                 if os.path.isdir(path):
                     print_tree(path, prefix + "|   ")
+
         print_tree(os.getcwd())
         return True
 
@@ -5438,7 +5626,6 @@ def handle_special_commands(user_input):
 
         return True
 
-
     if user_input.startswith("pa-gemma3:1b "):
         user_input = user_input[19:].strip()
         ollama_installed = check_command_installed("ollama")
@@ -5510,7 +5697,6 @@ def handle_special_commands(user_input):
         type_out_text(response)
 
         return True
-
 
     if user_input.startswith("pa-devstral "):
         user_input = user_input[19:].strip()
@@ -6431,7 +6617,8 @@ def switch_theme(user_input: str) -> bool:
     key = choice.lower().replace('-', '_')
 
     if key not in COLOR_SCHEMES and key not in THEME_DEFAULTS:
-        print(f"[{timestamp()}] [ERROR] Unknown theme '{choice}'. Available: {', '.join(sorted(set(COLOR_SCHEMES) | set(THEME_DEFAULTS)))}")
+        print(
+            f"[{timestamp()}] [ERROR] Unknown theme '{choice}'. Available: {', '.join(sorted(set(COLOR_SCHEMES) | set(THEME_DEFAULTS)))}")
         return True
 
     try:
@@ -6834,6 +7021,7 @@ def get_response_from_ollama_deepseek_r1_8(user_message, ollama):
     except Exception as e:
         return f"[{timestamp()}] [ERROR] {e}"
 
+
 def get_response_from_ollama_deepseek_r1_14(user_message, ollama):
     """Fragt Ollama nach einer Antwort auf die Benutzereingabe."""
     try:
@@ -6954,7 +7142,8 @@ def check_ollama_update():
                                             stdout=subprocess.PIPE, text=True).stdout.strip()
 
             if local_version != remote_version:
-                print(f"[{timestamp()}] [INFO] New Ollama version available: {remote_version} (Current: {local_version})")
+                print(
+                    f"[{timestamp()}] [INFO] New Ollama version available: {remote_version} (Current: {local_version})")
                 while True:
                     user_input = input("Do you want to update Ollama? [y/n]:").strip().lower()
                     if user_input in ["y", "yes"]:
@@ -6982,7 +7171,8 @@ def find_ollama_path():
         elif platform.system() == "Darwin":  # macOS
             return "/Applications/Ollama.app/Contents/MacOS/Ollama"
         else:
-            raise EnvironmentError(f"[{timestamp()}] [INFO] Unsupported Operating System. Ollama is not supported on this platform.")
+            raise EnvironmentError(
+                f"[{timestamp()}] [INFO] Unsupported Operating System. Ollama is not supported on this platform.")
     except Exception as e:
         raise FileNotFoundError(f"[{timestamp()}] [ERROR] Error finding Ollama path: {e}")
 
@@ -7010,7 +7200,8 @@ def start_ollama():
                 raise FileNotFoundError(f"[{timestamp()}] [ERROR] Ollama executable not found at: {ollama_path}")
 
             # Ollama starten
-            subprocess.Popen([ollama_path], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, close_fds=True if platform.system() != "Windows" else False)
+            subprocess.Popen([ollama_path], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                             close_fds=True if platform.system() != "Windows" else False)
             time.sleep(5)  # Warten, bis Ollama gestartet ist
             print(f"[{timestamp()}] [PASS] Ollama started successfully.{reset}\n")
         else:
@@ -7034,10 +7225,12 @@ def check_command_installed(command):
         print(f"[{timestamp()}] [ERROR] Error checking command {command}: {e}")
         return False
 
+
 def is_tool_installed(tool_name):
     """Prüfen Sie, ob ein Tool installiert ist."""
     result = subprocess.run(["which", tool_name], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     return result.returncode == 0
+
 
 def search_websites(command):
     """Sucht mit DuckDuckGo nach Websites, die mit dem Keyword in Zusammenhang stehen, und gibt Links zurück"""
@@ -7379,7 +7572,6 @@ def search_kaggle(command):
         'User-Agent': 'Mozilla/5.0'
     }
 
-
     print(f"\n[{timestamp()}] [INFO] Searching for: '{command}' ...\n")
     try:
         response = requests.post(url, data=params, headers=headers, timeout=10)
@@ -7408,7 +7600,6 @@ def search_geeksforgeeks(command):
     headers = {
         'User-Agent': 'Mozilla/5.0'
     }
-
 
     print(f"\n[{timestamp()}] [INFO] Searching for: '{command}' ...\n")
     try:
@@ -7525,7 +7716,8 @@ def find_vcvarsall():
     path = r"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat"
     if os.path.isfile(path):
         return path
-    raise FileNotFoundError(f"[{timestamp()}] [ERROR] vcvarsall.bat not found. Please make sure Visual Studio is installed.")
+    raise FileNotFoundError(
+        f"[{timestamp()}] [ERROR] vcvarsall.bat not found. Please make sure Visual Studio is installed.")
 
 
 def find_vcvarsall_c():
@@ -7536,7 +7728,8 @@ def find_vcvarsall_c():
     vs_path = r"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat"
     if not os.path.isfile(vs_path):
         logging.error("[ERROR] Visual Studio vcvarsall.bat file not found.")
-        raise FileNotFoundError(f"[{timestamp()}] [ERROR] vcvarsall.bat not found. Please ensure Visual Studio is installed.")
+        raise FileNotFoundError(
+            f"[{timestamp()}] [ERROR] vcvarsall.bat not found. Please ensure Visual Studio is installed.")
     return vs_path
 
 
@@ -7739,6 +7932,7 @@ FORBIDDEN_COMMANDS = [
     r"\bdiskpart\b",
     r"\breg delete\b"
 ]
+
 
 def is_dangerous_command(command: str) -> bool:
     """
@@ -11346,6 +11540,7 @@ def get_main_pin(current_dir, env_indicator_10):
               f"\n{white}└─{reset}{blue}${reset} "
     )
 
+
 def get_main_2_pin(current_dir, env_indicator_9):
     return (
             f"\n{blue}┌──({reset}{getpass.getuser()}"
@@ -11376,40 +11571,42 @@ def get_main_5_pin(current_dir, env_indicator_3):
     print("")
 
     return (
-            f"{env_indicator_3} {blue}{getpass.getuser()}" + colored("㋐", attrs=["bold"]) + f"{blue}Peharge{reset} {current_dir}:~{blue}${reset} "
+            f"{env_indicator_3} {blue}{getpass.getuser()}" + colored("㋐", attrs=[
+        "bold"]) + f"{blue}Peharge{reset} {current_dir}:~{blue}${reset} "
     )
 
 
 def get_main_6_pin(current_dir, env_indicator_main):
     return (
-            f"\n{blue}🌌 [{white}{bold}{getpass.getuser()}" + colored("㋐", attrs=["bold"])+ f"Peharge{reset}{blue}]"
-                                                                                           f" {dim}{timestamp()}{reset} "
-                                                                                           f"{white}[{current_dir}]{reset} {env_indicator_main}"
-                                                                                           f"\n{blue}➤{reset} "
+            f"\n{blue}🌌 [{white}{bold}{getpass.getuser()}" + colored("㋐", attrs=["bold"]) + f"Peharge{reset}{blue}]"
+                                                                                            f" {dim}{timestamp()}{reset} "
+                                                                                            f"{white}[{current_dir}]{reset} {env_indicator_main}"
+                                                                                            f"\n{blue}➤{reset} "
     )
 
 
 def get_main_7_pin(current_dir, env_indicator_main):
     return (
-            f"\n{blue}╭─ {white}{bold}{getpass.getuser()}" + colored("㋐", attrs=["bold"])+ f"Peharge{reset}{blue}"
-                                                                                           f"\n├─ 📁 {white}{current_dir}{blue}"
-                                                                                           f"\n╰─ 🌐 {env_indicator_main}{reset}"
-                                                                                           f"\n{blue}λ{reset} "
+            f"\n{blue}╭─ {white}{bold}{getpass.getuser()}" + colored("㋐", attrs=["bold"]) + f"Peharge{reset}{blue}"
+                                                                                            f"\n├─ 📁 {white}{current_dir}{blue}"
+                                                                                            f"\n╰─ 🌐 {env_indicator_main}{reset}"
+                                                                                            f"\n{blue}λ{reset} "
     )
 
 
 def get_main_8_pin(current_dir, env_indicator_main):
     return (
-            f"\n{blue}[{white}{getpass.getuser()}" + colored("㋐", attrs=["bold"])+ f"Peharge{blue}]{reset}:{white}{current_dir}{reset} {blue}{env_indicator_main}{reset} ➤ "
+            f"\n{blue}[{white}{getpass.getuser()}" + colored("㋐", attrs=[
+        "bold"]) + f"Peharge{blue}]{reset}:{white}{current_dir}{reset} {blue}{env_indicator_main}{reset} ➤ "
     )
 
 
 def get_main_9_pin(current_dir, env_indicator_main):
     brain = "🧠"
     return (
-            f"\n{blue}{brain} {bold}AI{reset} {white}| {getpass.getuser()}" + colored("㋐", attrs=["bold"])+ "Peharge"
-                                                                                                            f" | {current_dir} | {env_indicator_main}"
-                                                                                                            f"\n{blue}└─▶{reset} "
+            f"\n{blue}{brain} {bold}AI{reset} {white}| {getpass.getuser()}" + colored("㋐", attrs=["bold"]) + "Peharge"
+                                                                                                             f" | {current_dir} | {env_indicator_main}"
+                                                                                                             f"\n{blue}└─▶{reset} "
     )
 
 
@@ -11417,9 +11614,10 @@ def get_main_10_pin(current_dir, env_indicator_main):
     chip = "🧬"
     bolt = "⚡"
     return (
-            f"\n{blue}{chip} SYSTEM {white}| {bold}{getpass.getuser()}" + colored("㋐", attrs=["bold"])+ f"Peharge{reset} {blue}| {current_dir}{reset}"
-                                                                                                        f"\n{white}{bolt} ENV: {env_indicator_main}{reset}"
-                                                                                                        f"\n{blue}⟩{reset} "
+            f"\n{blue}{chip} SYSTEM {white}| {bold}{getpass.getuser()}" + colored("㋐", attrs=[
+        "bold"]) + f"Peharge{reset} {blue}| {current_dir}{reset}"
+                   f"\n{white}{bolt} ENV: {env_indicator_main}{reset}"
+                   f"\n{blue}⟩{reset} "
     )
 
 
@@ -11436,17 +11634,18 @@ def get_main_11_pin(current_dir, env_indicator_main):
 def get_main_12_pin(current_dir, env_indicator_main):
     wave = colored('〰️', 'blue')
     return (
-            f"\n{wave}{wave}{colored('╼', 'white')} {colored(getpass.getuser(), 'white')}" + colored("㋐", attrs=["bold"])+ f"{colored('Peharge', 'white')}"
-                                                                                                                           f" {wave}{wave}{colored('╾', 'white')} {colored(current_dir, 'white')}"
-                                                                                                                           f" {wave}{wave}{colored('╼', 'white')} {env_indicator_main}"
-                                                                                                                           f"\n{colored('▶', 'blue')} "
+            f"\n{wave}{wave}{colored('╼', 'white')} {colored(getpass.getuser(), 'white')}" + colored("㋐", attrs=[
+        "bold"]) + f"{colored('Peharge', 'white')}"
+                   f" {wave}{wave}{colored('╾', 'white')} {colored(current_dir, 'white')}"
+                   f" {wave}{wave}{colored('╼', 'white')} {env_indicator_main}"
+                   f"\n{colored('▶', 'blue')} "
     )
 
 
 def get_main_13_pin(current_dir, env_indicator_main):
     diamond = colored('◆', 'blue')
     return (
-        f"\n{diamond*3} {colored(getpass.getuser() + colored("㋐", attrs=["bold"])+ 'Peharge', 'white', attrs=['bold'])} {diamond*3}"
+        f"\n{diamond * 3} {colored(getpass.getuser() + colored("㋐", attrs=["bold"]) + 'Peharge', 'white', attrs=['bold'])} {diamond * 3}"
         f"\n {colored(current_dir, 'blue')} {colored('|', 'white')} {env_indicator_main}"
         f"\n{colored('⇨', 'blue')} "
     )
@@ -11455,16 +11654,18 @@ def get_main_13_pin(current_dir, env_indicator_main):
 def get_main_14_pin(current_dir, env_indicator_main):
     pulse = colored('•', 'blue')
     return (
-            f"\n{pulse} {colored('GRID>', 'white', attrs=['bold'])} {colored(getpass.getuser(), 'blue')}" + colored("㋐", attrs=["bold"])+ f"{colored('Peharge', 'white')}"
-                                                                                                                                          f" {pulse}\n{pulse} {colored(current_dir, 'blue')} {pulse} {env_indicator_main}"
-                                                                                                                                          f"\n{pulse} {colored('»', 'blue')} "
+            f"\n{pulse} {colored('GRID>', 'white', attrs=['bold'])} {colored(getpass.getuser(), 'blue')}" + colored("㋐",
+                                                                                                                    attrs=[
+                                                                                                                        "bold"]) + f"{colored('Peharge', 'white')}"
+                                                                                                                                   f" {pulse}\n{pulse} {colored(current_dir, 'blue')} {pulse} {env_indicator_main}"
+                                                                                                                                   f"\n{pulse} {colored('»', 'blue')} "
     )
 
 
 def get_main_15_pin(current_dir, env_indicator_main):
     sl = colored('⧸', 'blue')
     return (
-        f"\n{sl}{sl}{sl} {colored(getpass.getuser() + colored("㋐", attrs=["bold"])+ 'Peharge', 'white', attrs=['bold'])} {sl}{sl}{sl}"
+        f"\n{sl}{sl}{sl} {colored(getpass.getuser() + colored("㋐", attrs=["bold"]) + 'Peharge', 'white', attrs=['bold'])} {sl}{sl}{sl}"
         f"\n {colored(current_dir, 'blue')} {sl} {env_indicator_main}"
         f"\n{colored('❯', 'blue')} "
     )
@@ -11472,7 +11673,7 @@ def get_main_15_pin(current_dir, env_indicator_main):
 
 def get_main_16_pin(current_dir, env_indicator_main):
     return (
-        f"\n{colored('▯▯▯▯', 'blue')} {colored(getpass.getuser()+ colored("㋐", attrs=["bold"])+ 'Peharge', 'white', attrs=['bold'])}"
+        f"\n{colored('▯▯▯▯', 'blue')} {colored(getpass.getuser() + colored("㋐", attrs=["bold"]) + 'Peharge', 'white', attrs=['bold'])}"
         f" {colored('⇢', 'blue')} {colored(current_dir, 'white')}"
         f" {colored('⇢', 'blue')} {env_indicator_main}"
         f"\n{colored('▯▯▯▯', 'blue')} {colored(timestamp(), 'white')} {colored('›', 'blue')} "
@@ -11482,19 +11683,20 @@ def get_main_16_pin(current_dir, env_indicator_main):
 def get_main_17_pin(current_dir, env_indicator_main):
     bar = colored('▮', 'blue')
     return (
-        f"\n{bar*3} {colored('DATAPULSE', 'white', attrs=['bold'])} {bar*3}"
-        f"\n{bar} {colored(getpass.getuser()+ colored("㋐", attrs=["bold"]) + 'Peharge', 'blue')} {bar}"
+        f"\n{bar * 3} {colored('DATAPULSE', 'white', attrs=['bold'])} {bar * 3}"
+        f"\n{bar} {colored(getpass.getuser() + colored("㋐", attrs=["bold"]) + 'Peharge', 'blue')} {bar}"
         f"\n{bar} {colored(current_dir, 'white')} {bar} {env_indicator_main}"
-        f"\n{bar*3} {colored('▶', 'white')} "
+        f"\n{bar * 3} {colored('▶', 'white')} "
     )
 
 
 def get_main_18_pin(current_dir, env_indicator_main):
     node = colored('◉', 'blue')
     return (
-            f"\n{node} {colored(getpass.getuser(), 'white')}" + colored("㋐", attrs=["bold"]) + "{colored('Peharge', 'blue')}"
-                                                                                               f" {node} {colored(current_dir, 'white')} {node} {env_indicator_main}"
-                                                                                               f"\n{node} {colored('❯', 'white')} "
+            f"\n{node} {colored(getpass.getuser(), 'white')}" + colored("㋐",
+                                                                        attrs=["bold"]) + "{colored('Peharge', 'blue')}"
+                                                                                          f" {node} {colored(current_dir, 'white')} {node} {env_indicator_main}"
+                                                                                          f"\n{node} {colored('❯', 'white')} "
     )
 
 
@@ -11518,17 +11720,17 @@ def get_main_20_pin(current_dir, env_indicator_main):
 def get_main_21_pin(current_dir, env_indicator_main):
     flow = colored('»', 'blue')
     return (
-        f"\n{flow*2} {colored('BYTEFLOW', 'white', attrs=['bold'])} {flow*2}"
+        f"\n{flow * 2} {colored('BYTEFLOW', 'white', attrs=['bold'])} {flow * 2}"
         f"\n{flow} {colored(getpass.getuser() + colored("㋐", attrs=["bold"]) + 'Peharge', 'blue')} {flow}"
         f"\n{flow} {colored(current_dir, 'white')} {flow} {env_indicator_main}"
-        f"\n{flow*2} {colored('›', 'white')} "
+        f"\n{flow * 2} {colored('›', 'white')} "
     )
 
 
 def get_main_22_pin(current_dir, env_indicator_main):
     prism = colored('◇', 'blue')
     return (
-        f"\n{prism*2} {colored(getpass.getuser() + colored("㋐", attrs=["bold"]) + 'Peharge', 'white')} {prism*2}"
+        f"\n{prism * 2} {colored(getpass.getuser() + colored("㋐", attrs=["bold"]) + 'Peharge', 'white')} {prism * 2}"
         f"\n{colored(current_dir, 'blue')} {colored('⇄', 'white')} {env_indicator_main}"
         f"\n{colored('❯❯', 'blue')} "
     )
@@ -11546,7 +11748,7 @@ def get_main_23_pin(current_dir, env_indicator_main):
 def get_main_24_pin(current_dir, env_indicator_main):
     slash = colored('╱', 'blue')
     return (
-        f"\n{slash*3} {colored(getpass.getuser() + colored("㋐", attrs=["bold"]) + 'Peharge', 'white')} {slash*3}"
+        f"\n{slash * 3} {colored(getpass.getuser() + colored("㋐", attrs=["bold"]) + 'Peharge', 'white')} {slash * 3}"
         f"\n{slash} {colored(current_dir, 'blue')} {slash} {env_indicator_main}"
         f"\n{colored('❯', 'blue')} "
     )
@@ -11573,7 +11775,7 @@ def get_main_26_pin(current_dir, env_indicator_main):
 def get_main_27_pin(current_dir, env_indicator_main):
     hexg = colored('⬡', 'blue')
     return (
-        f"\n{hexg*2} {colored('HEXGRID', 'white', attrs=['bold'])} {hexg*2}"
+        f"\n{hexg * 2} {colored('HEXGRID', 'white', attrs=['bold'])} {hexg * 2}"
         f"\n{colored(getpass.getuser() + colored("㋐", attrs=["bold"]) + 'Peharge', 'blue')} {hexg} {colored(current_dir, 'white')} {hexg} {env_indicator_main}"
         f"\n{colored('›', 'blue')} "
     )
@@ -11582,9 +11784,10 @@ def get_main_27_pin(current_dir, env_indicator_main):
 def get_main_28_pin(current_dir, env_indicator_main):
     beacon = colored('✦', 'blue')
     return (
-            f"\n{beacon} {colored(getpass.getuser(), 'white')}" + colored("㋐", attrs=["bold"]) + f"{colored('Peharge', 'blue')} {beacon}"
-                                                                                                 f"\n{colored('Dir:', 'white')} {colored(current_dir, 'blue')} {beacon} {env_indicator_main}"
-                                                                                                 f"\n{colored('❯', 'blue')} "
+            f"\n{beacon} {colored(getpass.getuser(), 'white')}" + colored("㋐", attrs=[
+        "bold"]) + f"{colored('Peharge', 'blue')} {beacon}"
+                   f"\n{colored('Dir:', 'white')} {colored(current_dir, 'blue')} {beacon} {env_indicator_main}"
+                   f"\n{colored('❯', 'blue')} "
     )
 
 
@@ -11600,20 +11803,20 @@ def get_main_29_pin(current_dir, env_indicator_main):
 def get_main_30_pin(current_dir, env_indicator_main):
     mesh = colored('╳', 'blue')
     return (
-            f"\n{mesh}{mesh}{mesh} {colored(getpass.getuser(), 'white')}" + colored("㋐", attrs=["bold"]) + f"{colored('Peharge', 'blue')} {mesh}{mesh}{mesh}"
-                                                                                                           f"\n{colored(current_dir, 'blue')} {mesh} {env_indicator_main}"
-                                                                                                           f"\n{colored('❯', 'blue')} "
+            f"\n{mesh}{mesh}{mesh} {colored(getpass.getuser(), 'white')}" + colored("㋐", attrs=[
+        "bold"]) + f"{colored('Peharge', 'blue')} {mesh}{mesh}{mesh}"
+                   f"\n{colored(current_dir, 'blue')} {mesh} {env_indicator_main}"
+                   f"\n{colored('❯', 'blue')} "
     )
 
 
 def get_main_31_pin(current_dir, env_indicator_main):
     star = colored('✺', 'blue')
     return (
-        f"\n{star*2} {colored(getpass.getuser() + colored("㋐", attrs=["bold"]) + 'Peharge', 'white', attrs=['bold'])} {star*2}"
+        f"\n{star * 2} {colored(getpass.getuser() + colored("㋐", attrs=["bold"]) + 'Peharge', 'white', attrs=['bold'])} {star * 2}"
         f"\n{colored('📂', 'white')} {colored(current_dir, 'blue')}   {env_indicator_main}"
         f"\n{colored('➤', 'blue')} "
     )
-
 
 
 def get_main_32_pin(current_dir, env_indicator_main):
@@ -11646,16 +11849,17 @@ def get_main_33_pin(current_dir, env_indicator_main):
 def get_main_34_pin(current_dir, env_indicator_main):
     arc = colored('◥◣', 'blue')
     return (
-            f"\n{arc} {colored(getpass.getuser(), 'white')}" + colored("㋐", attrs=["bold"]) + f"{colored('Peharge', 'blue')} {arc}"
-                                                                                              f"\n{colored(current_dir, 'blue')} [{env_indicator_main}]"
-                                                                                              f"\n{colored('➤', 'blue')} "
+            f"\n{arc} {colored(getpass.getuser(), 'white')}" + colored("㋐", attrs=[
+        "bold"]) + f"{colored('Peharge', 'blue')} {arc}"
+                   f"\n{colored(current_dir, 'blue')} [{env_indicator_main}]"
+                   f"\n{colored('➤', 'blue')} "
     )
 
 
 def get_main_35_pin(current_dir, env_indicator_main):
     bar = colored('━', 'blue')
     return (
-        f"\n{bar*4} {colored(getpass.getuser() + colored("㋐", attrs=["bold"]) + 'Peharge', 'white', attrs=['bold'])} {bar*4}"
+        f"\n{bar * 4} {colored(getpass.getuser() + colored("㋐", attrs=["bold"]) + 'Peharge', 'white', attrs=['bold'])} {bar * 4}"
         f"\n{colored(current_dir, 'blue')} {bar} {env_indicator_main}"
         f"\n{colored('›', 'blue')} "
     )
@@ -11700,7 +11904,8 @@ def get_evil_5_pin(current_dir, env_indicator_3):
     print("")
 
     return (
-            f"{env_indicator_3} {red}root" + colored("㋐", attrs=["bold"]) + f"{red}Peharge{reset} {current_dir}:~{red}#{reset} "
+            f"{env_indicator_3} {red}root" + colored("㋐", attrs=[
+        "bold"]) + f"{red}Peharge{reset} {current_dir}:~{red}#{reset} "
     )
 
 
@@ -11725,7 +11930,8 @@ def get_stable_3_pin(current_dir, env_indicator_3):
     print("")
 
     return (
-            f"{env_indicator_3} {getpass.getuser()}" + colored("㋐", attrs=["bold"]) + f"Peharge{reset} {current_dir}:~$ "
+            f"{env_indicator_3} {getpass.getuser()}" + colored("㋐",
+                                                               attrs=["bold"]) + f"Peharge{reset} {current_dir}:~$ "
     )
 
 
@@ -11818,7 +12024,7 @@ def get_cool_2_pin():
             stderr=subprocess.PIPE,
             text=True,
             encoding='utf-8',  # wichtig für korrekte Grafikzeichen
-            shell=True         # in Windows häufig nötig für PATH-Auflösung
+            shell=True  # in Windows häufig nötig für PATH-Auflösung
         )
     except FileNotFoundError:
         return f"[{timestamp()}] [ERROR] oh-my-posh was not found. Is it in the PATH?"
@@ -11856,7 +12062,7 @@ def get_cool_3_pin():
             stderr=subprocess.PIPE,
             text=True,
             encoding='utf-8',  # wichtig für korrekte Grafikzeichen
-            shell=True         # in Windows häufig nötig für PATH-Auflösung
+            shell=True  # in Windows häufig nötig für PATH-Auflösung
         )
     except FileNotFoundError:
         return f"[{timestamp()}] [ERROR] oh-my-posh was not found. Is it in the PATH?"
@@ -11933,7 +12139,7 @@ def get_cool_5_pin():
             stderr=subprocess.PIPE,
             text=True,
             encoding='utf-8',  # wichtig für korrekte Grafikzeichen
-            shell=True         # in Windows häufig nötig für PATH-Auflösung
+            shell=True  # in Windows häufig nötig für PATH-Auflösung
         )
     except FileNotFoundError:
         return f"[{timestamp()}] [ERROR] oh-my-posh was not found. Is it in the PATH?"
@@ -11971,7 +12177,7 @@ def get_cool_6_pin():
             stderr=subprocess.PIPE,
             text=True,
             encoding='utf-8',  # wichtig für korrekte Grafikzeichen
-            shell=True         # in Windows häufig nötig für PATH-Auflösung
+            shell=True  # in Windows häufig nötig für PATH-Auflösung
         )
     except FileNotFoundError:
         return f"[{timestamp()}] [ERROR] oh-my-posh was not found. Is it in the PATH?"
@@ -12009,7 +12215,7 @@ def get_cool_7_pin():
             stderr=subprocess.PIPE,
             text=True,
             encoding='utf-8',  # wichtig für korrekte Grafikzeichen
-            shell=True         # in Windows häufig nötig für PATH-Auflösung
+            shell=True  # in Windows häufig nötig für PATH-Auflösung
         )
     except FileNotFoundError:
         return f"[{timestamp()}] [ERROR] oh-my-posh was not found. Is it in the PATH?"
@@ -12632,7 +12838,8 @@ def get_cool_23_pin():
 
 COMMANDS = [
     "p", "p git", "p git mavis", "p git mavis-web", "p git simon", "p htop", "p ls", "p ls mavis",
-    "ps ls mavis-web", "p ls simon", "p simon", "p wsl", "p pip", "p models", "p ubuntu", "gitk", "git ls all", "git ls hole",
+    "ps ls mavis-web", "p ls simon", "p simon", "p wsl", "p pip", "p models", "p ubuntu", "gitk", "git ls all",
+    "git ls hole",
     "pp", "pp-cpp", "pp-c", "pp-p", "ps", "ps-github", "ps-huggingface", "ps-ollama", "ps-stackoverflow", "nano",
     "htop", "btop", "atop", "glances", "ncdu", "fzf", "bat", "gitui", "lazygit", "starship",
     "emacs", "vim", "nvim", "nano", "kate", "gedit", "geany", "code", "ps-all", "pps", "pb", "pt",
@@ -12645,7 +12852,8 @@ COMMANDS = [
     "vc-cpp", "vc-c", "vc-cs", "g++", "gcc", "rustc", "node", "javac", "ruby", "Rscript", "pythonc", "go run", "julia",
     "del", "rm", "echo", "type", "cat", "exit", "alpine", "scoop", "choco", "winget", "speedtest", "kill",
     "download", "cputemp", "chucknorris", "theme", "cleantemp", "selfupdate", "tree", "py", "ask", "pb google.com"
-                                                                                                   "weather", "whoami", "hostname", "ip", "os", "time", "date", "open", "fortune", "history", "search",
+                                                                                                   "weather", "whoami",
+    "hostname", "ip", "os", "time", "date", "open", "fortune", "history", "search",
     "zip", "unzip", "sysinfo", "clip set", "clip get", "ping", "emptytrash", "launch", "doctor", "hole doctor",
     "mavis env install", "install mavis env", "install mavis3", "install mavis3.3", "install mavis4",
     "install mavis4.3", "mavis env update", "update mavis env", "mavis update", "update mavis",
@@ -12662,15 +12870,17 @@ COMMANDS = [
     "run mistral-large", "run mistral-nemo", "run mistral-openorca", "run mistral-small:22b",
     "run mistral-small:24b", "run phi4", "run qwen2.5:0.5b", "run qwen2.5:1.5b", "run qwen2.5:3b", "run qwen2.5:7b",
     "run qwen2.5:14b", "run qwen2.5:32b", "run qwen2.5:72b", "run qwen2.5-coder:0.5b", "run qwen2.5-coder:1.5b",
-    "run qwen2.5-coder:3b", "run qwen2.5-coder:7b", "run qwen2.5-coder:14b", "run qwen2.5-coder:32b", "run gemma3:1b", "run gemma3:4b",
+    "run qwen2.5-coder:3b", "run qwen2.5-coder:7b", "run qwen2.5-coder:14b", "run qwen2.5-coder:32b", "run gemma3:1b",
+    "run gemma3:4b",
     "run gemma3:12b", "run gemma3:27b", "run qwq", "run command-a", "run phi4-mini", "run granite3.2:8b",
     "run granite3.2:2b", "run granite3.2-vision:2b", "run qwen-2-5-omni:7b", "run qvq:72b", "run qwen-2-5-vl:32b",
     "run qwen-2-5-vl:72b", "run llama-4-maverick:17b", "run llama-4-scout:17b", "run deepcoder:1.5b",
     "run deepcoder:14b", "run mistral-small3.1", "help", "image generation", "video generation", "models",
     "models ls", "install 3d-slicer", "run 3d-slicer", "install simon", "run simon", "jupyter --version",
     "grafana --version", "3d-slicer --version", "pin-evil", "pin-main", "pin-cool", "pin-cool-3", "pin-cool-4",
-    "p install", "p uninstall", "p upgrade", "p list", "p show", "p freeze", "p search", "install cool pin", "install cool pin-3", "install cool pin-4"
-                                                                                                                                   "p check", "p config", "p debug", "p cache", "p download", "p verify", "p wheel",
+    "p install", "p uninstall", "p upgrade", "p list", "p show", "p freeze", "p search", "install cool pin",
+    "install cool pin-3", "install cool pin-4"
+                          "p check", "p config", "p debug", "p cache", "p download", "p verify", "p wheel",
     "p completion", "pip install", "pip uninstall", "pip list", "pip show", "pip freeze",
     "pip search", "pip check", "pip config", "pip debug", "pip cache", "pip download",
     "pip verify", "pip wheel", "pip completion", "ollama install", "ollama uninstall",
@@ -12711,66 +12921,104 @@ COMMANDS = [
     "powershell group-object", "powershell sort-object", "powershell select-object",
     "powershell where-object", "powershell foreach-object", "powershell new-object",
     "powershell compare-object", "powershell test-connection", "powershell foreach",
-    "ubuntu neofetch", "ubuntu install git", "ubuntu install htop","ubuntu ls", "ubuntu list files",
+    "ubuntu neofetch", "ubuntu install git", "ubuntu install htop", "ubuntu ls", "ubuntu list files",
     "ubuntu install python", "ubuntu install pip", "ubuntu check system info", "ubuntu update system",
     "ubuntu install models", "ubuntu clear terminal", "ubuntu show processes", "ubuntu search files",
     "ubuntu create directory", "ubuntu remove directory", "ubuntu install wget", "ubuntu find text in files",
     "ubuntu compress files", "ubuntu extract files", "ubuntu setup firewall", "ubuntu restart network",
     "ubuntu check disk usage", "ubuntu monitor network traffic", "ubuntu install curl", "ubuntu install snap",
-    "ubuntu install docker", "arch neofetch", "arch install git", "arch install htop","arch list files",
-    "arch install python","arch install pip","arch check system info","arch update system","arch install models",
-    "arch clear terminal","arch show processes","arch search files","arch create directory","arch remove directory",
+    "ubuntu install docker", "arch neofetch", "arch install git", "arch install htop", "arch list files",
+    "arch install python", "arch install pip", "arch check system info", "arch update system", "arch install models",
+    "arch clear terminal", "arch show processes", "arch search files", "arch create directory", "arch remove directory",
     "arch install wget", "arch find text in files", "arch compress files", "arch extract files", "arch setup firewall",
-    "arch restart network", "arch check disk usage", "arch monitor network traffic", "arch install curl", "arch install snap",
+    "arch restart network", "arch check disk usage", "arch monitor network traffic", "arch install curl",
+    "arch install snap",
     "arch install docker", "arch sudo pacman -S", "arch sudo pacman -R", "arch sudo pacman -Syu", "arch ls"
-                                                                                                  "kali neofetch", "kali install git", "kali install htop", "kali list files", "kali install python",
+                                                                                                  "kali neofetch",
+    "kali install git", "kali install htop", "kali list files", "kali install python",
     "kali install pip", "kali check system info", "kali update system", "kali install models", "kali clear terminal",
     "kali show processes", "kali search files", "kali create directory", "kali remove directory", "kali install wget",
-    "kali find text in files", "kali compress files", "kali extract files", "kali setup firewall", "kali restart network",
-    "kali check disk usage", "kali monitor network traffic", "kali install curl", "kali install snap", "kali install docker", "kali ls",
+    "kali find text in files", "kali compress files", "kali extract files", "kali setup firewall",
+    "kali restart network",
+    "kali check disk usage", "kali monitor network traffic", "kali install curl", "kali install snap",
+    "kali install docker", "kali ls",
     "mint install docker", "mint install nmap", "mint install metasploit", "mint install wireshark",
-    "mint install burpsuite", "mint install sqlmap", "mint install git", "mint install python3-pip", "mint install curl",
+    "mint install burpsuite", "mint install sqlmap", "mint install git", "mint install python3-pip",
+    "mint install curl",
     "mint install vim", "mint install htop", "mint install gparted", "mint install vlc", "mint install thunderbird",
     "mint update", "mint upgrade", "mint autoremove", "mint clean", "mint ls", "mint cd /etc", "mint cd ~",
-    "mint mkdir test", "mint mkdir -p ~/Projekte/python", "mint rm file.txt", "mint rm -rf testordner", "mint cp a.txt b.txt",
-    "mint mv a.txt ~/Dokumente/", "mint touch neu.txt", "mint cat /etc/os-release", "mint nano ~/.bashrc", "mint sudo reboot",
+    "mint mkdir test", "mint mkdir -p ~/Projekte/python", "mint rm file.txt", "mint rm -rf testordner",
+    "mint cp a.txt b.txt",
+    "mint mv a.txt ~/Dokumente/", "mint touch neu.txt", "mint cat /etc/os-release", "mint nano ~/.bashrc",
+    "mint sudo reboot",
     "mint sudo shutdown now", "mint ping 8.8.8.8", "mint ifconfig", "mint ip a", "mint netstat -tuln", "mint ss -tulpn",
-    "mint systemctl status", "mint systemctl restart NetworkManager", "mint ps aux", "mint top", "mint whoami", "mint uname -a",
+    "mint systemctl status", "mint systemctl restart NetworkManager", "mint ps aux", "mint top", "mint whoami",
+    "mint uname -a",
     "mint df -h", "mint free -m", "mint history", "mint clear", "mint echo 'Hallo Mint!'", "mint chmod +x script.sh",
-    "mint chown user:user file.txt", "mint find / -name '*.conf'", "mint grep 'password' /etc/passwd", "mint wget https://example.com/datei.zip",
+    "mint chown user:user file.txt", "mint find / -name '*.conf'", "mint grep 'password' /etc/passwd",
+    "mint wget https://example.com/datei.zip",
     "mint unzip datei.zip", "mint tar -xvf archiv.tar", "mint curl -I https://example.com", "debian install docker",
-    "debian install nmap", "debian install metasploit", "debian install wireshark", "debian install burpsuite", "debian install sqlmap",
-    "debian install git", "debian install python3-pip", "debian install curl", "debian install vim", "debian install htop",
-    "debian install gparted", "debian install vlc", "debian install thunderbird", "debian update", "debian upgrade", "debian autoremove",
-    "debian clean", "debian ls", "debian cd /etc", "debian cd ~", "debian mkdir test", "debian mkdir -p ~/Projekte/python",
-    "debian rm file.txt", "debian rm -rf testordner", "debian cp a.txt b.txt", "debian mv a.txt ~/Dokumente/", "debian touch neu.txt",
-    "debian cat /etc/os-release", "debian nano ~/.bashrc", "debian sudo reboot", "debian sudo shutdown now", "debian ping 8.8.8.8",
-    "debian ifconfig", "debian ip a", "debian netstat -tuln", "debian ss -tulpn", "debian systemctl status", "debian systemctl restart NetworkManager",
-    "debian ps aux", "debian top", "debian whoami", "debian uname -a", "debian df -h", "debian free -m", "debian history", "debian clear",
-    "debian echo 'Hallo Debian!'", "debian chmod +x script.sh", "debian chown user:user file.txt", "debian find / -name '*.conf'",
+    "debian install nmap", "debian install metasploit", "debian install wireshark", "debian install burpsuite",
+    "debian install sqlmap",
+    "debian install git", "debian install python3-pip", "debian install curl", "debian install vim",
+    "debian install htop",
+    "debian install gparted", "debian install vlc", "debian install thunderbird", "debian update", "debian upgrade",
+    "debian autoremove",
+    "debian clean", "debian ls", "debian cd /etc", "debian cd ~", "debian mkdir test",
+    "debian mkdir -p ~/Projekte/python",
+    "debian rm file.txt", "debian rm -rf testordner", "debian cp a.txt b.txt", "debian mv a.txt ~/Dokumente/",
+    "debian touch neu.txt",
+    "debian cat /etc/os-release", "debian nano ~/.bashrc", "debian sudo reboot", "debian sudo shutdown now",
+    "debian ping 8.8.8.8",
+    "debian ifconfig", "debian ip a", "debian netstat -tuln", "debian ss -tulpn", "debian systemctl status",
+    "debian systemctl restart NetworkManager",
+    "debian ps aux", "debian top", "debian whoami", "debian uname -a", "debian df -h", "debian free -m",
+    "debian history", "debian clear",
+    "debian echo 'Hallo Debian!'", "debian chmod +x script.sh", "debian chown user:user file.txt",
+    "debian find / -name '*.conf'",
     "debian grep 'password' /etc/passwd", "debian wget https://example.com/datei.zip", "debian unzip datei.zip",
-    "debian tar -xvf archiv.tar", "debian curl -I https://example.com", "opensuse install docker", "opensuse install nmap",
-    "opensuse install metasploit", "opensuse install wireshark", "opensuse install burpsuite", "opensuse install sqlmap", "opensuse install git",
-    "opensuse install python3-pip", "opensuse install curl", "opensuse install vim", "opensuse install htop", "opensuse install gparted",
-    "opensuse install vlc", "opensuse install thunderbird", "opensuse update", "opensuse upgrade", "opensuse autoremove",
-    "opensuse clean", "opensuse ls", "opensuse cd /etc", "opensuse cd ~", "opensuse mkdir test", "opensuse mkdir -p ~/Projekte/python",
+    "debian tar -xvf archiv.tar", "debian curl -I https://example.com", "opensuse install docker",
+    "opensuse install nmap",
+    "opensuse install metasploit", "opensuse install wireshark", "opensuse install burpsuite",
+    "opensuse install sqlmap", "opensuse install git",
+    "opensuse install python3-pip", "opensuse install curl", "opensuse install vim", "opensuse install htop",
+    "opensuse install gparted",
+    "opensuse install vlc", "opensuse install thunderbird", "opensuse update", "opensuse upgrade",
+    "opensuse autoremove",
+    "opensuse clean", "opensuse ls", "opensuse cd /etc", "opensuse cd ~", "opensuse mkdir test",
+    "opensuse mkdir -p ~/Projekte/python",
     "opensuse rm file.txt", "opensuse rm -rf testordner", "opensuse cp a.txt b.txt", "opensuse mv a.txt ~/Dokumente/",
-    "opensuse touch neu.txt",  "opensuse cat /etc/os-release", "opensuse nano ~/.bashrc", "opensuse sudo reboot", "opensuse sudo shutdown now",
+    "opensuse touch neu.txt", "opensuse cat /etc/os-release", "opensuse nano ~/.bashrc", "opensuse sudo reboot",
+    "opensuse sudo shutdown now",
     "opensuse ping 8.8.8.8", "opensuse ifconfig", "opensuse ip a", "opensuse netstat -tuln", "opensuse ss -tulpn",
-    "opensuse systemctl status", "opensuse systemctl restart NetworkManager", "opensuse ps aux", "opensuse top", "opensuse whoami",
-    "opensuse uname -a", "opensuse df -h", "opensuse free -m", "opensuse history", "opensuse clear", "opensuse echo 'Hallo openSUSE!'",
-    "opensuse chmod +x script.sh", "opensuse chown user:user file.txt", "opensuse find / -name '*.conf'", "opensuse grep 'password' /etc/passwd",
-    "opensuse wget https://example.com/datei.zip", "opensuse unzip datei.zip", "opensuse tar -xvf archiv.tar", "opensuse curl -I https://example.com",
-    "fedora install docker", "fedora install nmap", "fedora install metasploit", "fedora install wireshark", "fedora install burpsuite",
-    "fedora install sqlmap", "fedora install git", "fedora install python3-pip", "fedora install curl", "fedora install vim", "fedora install htop",
-    "fedora install gparted", "fedora install vlc", "fedora install thunderbird", "fedora update", "fedora upgrade", "fedora autoremove", "fedora clean",
-    "fedora ls", "fedora cd /etc", "fedora cd ~", "fedora mkdir test", "fedora mkdir -p ~/Projekte/python", "fedora rm file.txt",
-    "fedora rm -rf testordner", "fedora cp a.txt b.txt", "fedora mv a.txt ~/Dokumente/", "fedora touch neu.txt", "fedora cat /etc/os-release",
-    "fedora nano ~/.bashrc""fedora sudo reboot", "fedora sudo shutdown now", "fedora ping 8.8.8.8", "fedora ifconfig", "fedora ip a",
-    "fedora netstat -tuln", "fedora ss -tulpn", "fedora systemctl status", "fedora systemctl restart NetworkManager", "fedora ps aux", "fedora top",
-    "fedora whoami", "fedora uname -a", "fedora df -h", "fedora free -m", "fedora history", "fedora clear", "fedora echo 'Hallo Fedora!'",
-    "fedora chmod +x script.sh", "fedora chown user:user file.txt", "fedora find / -name '*.conf'", "fedora grep 'password' /etc/passwd",
-    "fedora wget https://example.com/datei.zip", "fedora unzip datei.zip", "fedora tar -xvf archiv.tar", "fedora curl -I https://example.com",
+    "opensuse systemctl status", "opensuse systemctl restart NetworkManager", "opensuse ps aux", "opensuse top",
+    "opensuse whoami",
+    "opensuse uname -a", "opensuse df -h", "opensuse free -m", "opensuse history", "opensuse clear",
+    "opensuse echo 'Hallo openSUSE!'",
+    "opensuse chmod +x script.sh", "opensuse chown user:user file.txt", "opensuse find / -name '*.conf'",
+    "opensuse grep 'password' /etc/passwd",
+    "opensuse wget https://example.com/datei.zip", "opensuse unzip datei.zip", "opensuse tar -xvf archiv.tar",
+    "opensuse curl -I https://example.com",
+    "fedora install docker", "fedora install nmap", "fedora install metasploit", "fedora install wireshark",
+    "fedora install burpsuite",
+    "fedora install sqlmap", "fedora install git", "fedora install python3-pip", "fedora install curl",
+    "fedora install vim", "fedora install htop",
+    "fedora install gparted", "fedora install vlc", "fedora install thunderbird", "fedora update", "fedora upgrade",
+    "fedora autoremove", "fedora clean",
+    "fedora ls", "fedora cd /etc", "fedora cd ~", "fedora mkdir test", "fedora mkdir -p ~/Projekte/python",
+    "fedora rm file.txt",
+    "fedora rm -rf testordner", "fedora cp a.txt b.txt", "fedora mv a.txt ~/Dokumente/", "fedora touch neu.txt",
+    "fedora cat /etc/os-release",
+    "fedora nano ~/.bashrc""fedora sudo reboot", "fedora sudo shutdown now", "fedora ping 8.8.8.8", "fedora ifconfig",
+    "fedora ip a",
+    "fedora netstat -tuln", "fedora ss -tulpn", "fedora systemctl status", "fedora systemctl restart NetworkManager",
+    "fedora ps aux", "fedora top",
+    "fedora whoami", "fedora uname -a", "fedora df -h", "fedora free -m", "fedora history", "fedora clear",
+    "fedora echo 'Hallo Fedora!'",
+    "fedora chmod +x script.sh", "fedora chown user:user file.txt", "fedora find / -name '*.conf'",
+    "fedora grep 'password' /etc/passwd",
+    "fedora wget https://example.com/datei.zip", "fedora unzip datei.zip", "fedora tar -xvf archiv.tar",
+    "fedora curl -I https://example.com",
     "Get-Process", "Get-Service", "Get-ChildItem", "Get-Help", "Get-Command",
     "Set-ExecutionPolicy", "Start-Service", "Stop-Service", "Restart-Computer", "Get-EventLog",
     "Get-Content", "Set-Content", "Out-File", "Get-Location", "Set-Location",
@@ -12801,28 +13049,41 @@ COMMANDS = [
     "New-Guid", "Get-Random", "New-Object", "Get-Credential", "Register-ScheduledTask",
     "pip install requests", "pip install numpy", "pip install pandas", "pip install flask", "pip install django",
     "pip uninstall requests", "pip uninstall numpy", "pip list", "pip show flask", "pip freeze",
-    "pip install -r requirements.txt", "pip check", "pip cache purge", "pip search fastapi", "pip install --upgrade pip",
-    "pip install matplotlib", "pip install scikit-learn", "pip install beautifulsoup4", "pip install selenium", "pip install jupyter",
+    "pip install -r requirements.txt", "pip check", "pip cache purge", "pip search fastapi",
+    "pip install --upgrade pip",
+    "pip install matplotlib", "pip install scikit-learn", "pip install beautifulsoup4", "pip install selenium",
+    "pip install jupyter",
     "pip install pytest", "pip install ipython", "pip install virtualenv", "pip install wheel", "pip install pipenv",
-    "pip download requests", "pip install --user numpy", "pip install --no-cache-dir flask", "pip show numpy", "pip uninstall -y pandas",
-    "pip install -e .", "pip install git+https://github.com/psf/requests.git", "pip install 'requests<3.0'", "pip install torch", "pip install transformers",
-    "pip config list", "pip config get global.index-url", "pip config set global.index-url https://pypi.org/simple", "pip install --pre pandas", "pip install fastapi[all]",
-    "pip install openpyxl", "pip install pydantic", "pip install uvicorn", "pip install rich", "pip install tqdm", "python"
-                                                                                                                   "ollama run qwen3", "ollama run gemma3", "ollama run deepseek-r1", "ollama run llama3", "ollama run mistral:7b",
+    "pip download requests", "pip install --user numpy", "pip install --no-cache-dir flask", "pip show numpy",
+    "pip uninstall -y pandas",
+    "pip install -e .", "pip install git+https://github.com/psf/requests.git", "pip install 'requests<3.0'",
+    "pip install torch", "pip install transformers",
+    "pip config list", "pip config get global.index-url", "pip config set global.index-url https://pypi.org/simple",
+    "pip install --pre pandas", "pip install fastapi[all]",
+    "pip install openpyxl", "pip install pydantic", "pip install uvicorn", "pip install rich", "pip install tqdm",
+    "python"
+    "ollama run qwen3", "ollama run gemma3", "ollama run deepseek-r1", "ollama run llama3", "ollama run mistral:7b",
     "ollama run codellama:13b", "ollama run gemma:2b", "ollama run phi:1.5",
-    "ollama pull llama3", "ollama pull mistral:7b", "ollama pull codellama:13b", "ollama pull gemma:2b", "ollama pull phi:1.5",
+    "ollama pull llama3", "ollama pull mistral:7b", "ollama pull codellama:13b", "ollama pull gemma:2b",
+    "ollama pull phi:1.5",
     "ollama list", "ollama show llama3", "ollama show mistral:7b", "ollama show codellama:13b", "ollama show gemma:2b",
-    "ollama delete llama3", "ollama delete mistral:7b", "ollama delete codellama:13b", "ollama delete gemma:2b", "ollama delete phi:1.5",
-    "ollama create mymodel -f Modelfile", "ollama push mymodel", "ollama run mymodel", "ollama run mymodel --verbose", "ollama run mymodel --mirostat 1",
-    "ollama run llama3 --temperature 0.7", "ollama run llama3 --top-k 50", "ollama run llama3 --top-p 0.95", "ollama run llama3 --repeat-penalty 1.2", "ollama run llama3 --num-predict 100",
-    "ollama run llama3 --prompt 'Erkläre Quantencomputing.'", "ollama run mistral:7b --format markdown", "ollama run codellama:13b --verbose", "ollama run gemma:2b --mirostat 1", "ollama run phi:1.5 --temperature 0.5",
+    "ollama delete llama3", "ollama delete mistral:7b", "ollama delete codellama:13b", "ollama delete gemma:2b",
+    "ollama delete phi:1.5",
+    "ollama create mymodel -f Modelfile", "ollama push mymodel", "ollama run mymodel", "ollama run mymodel --verbose",
+    "ollama run mymodel --mirostat 1",
+    "ollama run llama3 --temperature 0.7", "ollama run llama3 --top-k 50", "ollama run llama3 --top-p 0.95",
+    "ollama run llama3 --repeat-penalty 1.2", "ollama run llama3 --num-predict 100",
+    "ollama run llama3 --prompt 'Erkläre Quantencomputing.'", "ollama run mistral:7b --format markdown",
+    "ollama run codellama:13b --verbose", "ollama run gemma:2b --mirostat 1", "ollama run phi:1.5 --temperature 0.5",
     "ollama serve", "ollama version", "ollama help", "ollama help run", "ollama help create",
-    "ollama list --format json", "ollama pull llama3:13b", "ollama run --system 'Du bist ein hilfreicher Assistent.'", "ollama run llama3 --verbose", "ollama run llama3 --mirostat 1"
+    "ollama list --format json", "ollama pull llama3:13b", "ollama run --system 'Du bist ein hilfreicher Assistent.'",
+    "ollama run llama3 --verbose", "ollama run llama3 --mirostat 1"
 ]
 
 # Verlauf und Index
 history = []
 history_index = -1
+
 
 def setup_autocomplete(commands=None):
     """
@@ -14014,7 +14275,8 @@ def main():
             elif user_input.startswith("lx "):
                 user_input = user_input[3:].strip()
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Linux: {user_input}")
                     run_linux_command(user_input)
@@ -14022,7 +14284,8 @@ def main():
             elif user_input.startswith("lx-cpp "):
                 user_input = user_input[7:].strip()
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Linux: {user_input}")
                     run_linux_command(user_input)
@@ -14030,7 +14293,8 @@ def main():
             elif user_input.startswith("lx-cpp-c "):
                 user_input = user_input[9:].strip()
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Linux: {user_input}")
                     run_linux_cpp_c_command(user_input)
@@ -14038,7 +14302,8 @@ def main():
             elif user_input.startswith("lx-c "):
                 user_input = user_input[5:].strip()
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Linux: {user_input}")
                     run_linux_c_command(user_input)
@@ -14046,7 +14311,8 @@ def main():
             elif user_input.startswith("lx-c-c "):
                 user_input = user_input[7:].strip()
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Linux: {user_input}")
                     run_linux_c_c_command(user_input)
@@ -14054,7 +14320,8 @@ def main():
             elif user_input.startswith("lx-p "):
                 user_input = user_input[5:].strip()
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Linux: {user_input}")
                     run_linux_python_command(user_input)
@@ -14062,7 +14329,8 @@ def main():
             elif user_input.startswith("lx-p-c "):
                 user_input = user_input[6:].strip()
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Linux: {user_input}")
                     run_linux_p_c_command(user_input)
@@ -14070,7 +14338,8 @@ def main():
             elif user_input.startswith("linux "):
                 user_input = user_input[6:].strip()
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Linux: {user_input}")
                     run_linux_command(user_input)
@@ -14078,7 +14347,8 @@ def main():
             elif user_input.startswith("ubuntu "):
                 user_input = user_input[7:].strip()
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Ubuntu: {user_input}")
                     run_ubuntu_command(user_input)
@@ -14086,7 +14356,8 @@ def main():
             elif user_input.startswith("ubuntu-c "):
                 user_input = user_input[9:].strip()
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Ubuntu: {user_input}")
                     run_ubuntu_c_command(user_input)
@@ -14094,7 +14365,8 @@ def main():
             elif user_input.startswith("ubuntu-p "):
                 user_input = user_input[9:].strip()
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Ubuntu: {user_input}")
                     run_ubuntu_python_command(user_input)
@@ -14102,7 +14374,8 @@ def main():
             elif user_input.startswith("debian "):
                 user_input = user_input[7:].strip()  # Remove the "debian " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Debian: {user_input}")
                     run_debian_command(user_input)
@@ -14110,7 +14383,8 @@ def main():
             elif user_input.startswith("debian-c "):
                 user_input = user_input[9:].strip()  # Remove the "debian " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Debian: {user_input}")
                     run_debian_c_command(user_input)
@@ -14118,7 +14392,8 @@ def main():
             elif user_input.startswith("debian-p "):
                 user_input = user_input[9:].strip()  # Remove the "debian " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Debian: {user_input}")
                     run_debian_python_command(user_input)
@@ -14126,7 +14401,8 @@ def main():
             elif user_input.startswith("kali "):
                 user_input = user_input[5:].strip()  # Remove the "kali " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Kali: {user_input}")
                     run_kali_command(user_input)
@@ -14134,7 +14410,8 @@ def main():
             elif user_input.startswith("kali-c "):
                 user_input = user_input[7:].strip()  # Remove the "kali " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Kali: {user_input}")
                     run_kali_c_command(user_input)
@@ -14142,7 +14419,8 @@ def main():
             elif user_input.startswith("kali-p "):
                 user_input = user_input[7:].strip()  # Remove the "kali " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Kali: {user_input}")
                     run_kali_python_command(user_input)
@@ -14150,7 +14428,8 @@ def main():
             elif user_input.startswith("hack "):
                 user_input = user_input[5:].strip()  # Remove the "kali " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Kali: {user_input}")
                     run_kali_command(user_input)
@@ -14158,7 +14437,8 @@ def main():
             elif user_input.startswith("arch "):
                 user_input = user_input[5:].strip()  # Remove the "arch " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Arch: {user_input}")
                     run_arch_command(user_input)
@@ -14166,7 +14446,8 @@ def main():
             elif user_input.startswith("arch-c "):
                 user_input = user_input[7:].strip()  # Remove the "arch " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Arch: {user_input}")
                     run_arch_c_command(user_input)
@@ -14174,7 +14455,8 @@ def main():
             elif user_input.startswith("arch-p "):
                 user_input = user_input[7:].strip()  # Remove the "arch " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Arch: {user_input}")
                     run_arch_python_command(user_input)
@@ -14182,7 +14464,8 @@ def main():
             elif user_input.startswith("openSUSE "):
                 user_input = user_input[9:].strip()  # Remove the "openSUSE " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on openSUSE: {user_input}")
                     run_opensuse_command(user_input)
@@ -14190,7 +14473,8 @@ def main():
             elif user_input.startswith("openSUSE-c "):
                 user_input = user_input[11:].strip()  # Remove the "openSUSE " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on openSUSE: {user_input}")
                     run_opensuse_c_command(user_input)
@@ -14198,7 +14482,8 @@ def main():
             elif user_input.startswith("openSUSE-p "):
                 user_input = user_input[11:].strip()  # Remove the "openSUSE " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on openSUSE: {user_input}")
                     run_opensuse_python_command(user_input)
@@ -14206,7 +14491,8 @@ def main():
             elif user_input.startswith("mint "):
                 user_input = user_input[5:].strip()  # Remove the "mint " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on openSUSE: {user_input}")
                     run_mint_command(user_input)
@@ -14214,7 +14500,8 @@ def main():
             elif user_input.startswith("mint-c "):
                 user_input = user_input[7:].strip()  # Remove the "mint " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on openSUSE: {user_input}")
                     run_mint_c_command(user_input)
@@ -14222,7 +14509,8 @@ def main():
             elif user_input.startswith("mint-p "):
                 user_input = user_input[7:].strip()  # Remove the "mint " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on openSUSE: {user_input}")
                     run_mint_python_command(user_input)
@@ -14230,7 +14518,8 @@ def main():
             elif user_input.startswith("fedora "):
                 user_input = user_input[7:].strip()  # Remove the "fedora " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Fedora: {user_input}")
                     run_fedora_command(user_input)
@@ -14238,7 +14527,8 @@ def main():
             elif user_input.startswith("fedora-c "):
                 user_input = user_input[9:].strip()  # Remove the "fedora " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Fedora: {user_input}")
                     run_fedora_c_command(user_input)
@@ -14246,7 +14536,8 @@ def main():
             elif user_input.startswith("fedora-p "):
                 user_input = user_input[9:].strip()  # Remove the "fedora " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Fedora: {user_input}")
                     run_fedora_python_command(user_input)
@@ -14254,7 +14545,8 @@ def main():
             elif user_input.startswith("redhat "):
                 user_input = user_input[7:].strip()  # Remove the "redhat " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on RedHat: {user_input}")
                     run_redhat_command(user_input)
@@ -14262,7 +14554,8 @@ def main():
             elif user_input.startswith("redhat-c "):
                 user_input = user_input[9:].strip()  # Remove the "redhat " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on RedHat: {user_input}")
                     run_redhat_c_command(user_input)
@@ -14270,7 +14563,8 @@ def main():
             elif user_input.startswith("redhat-p "):
                 user_input = user_input[9:].strip()  # Remove the "redhat " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on RedHat: {user_input}")
                     run_redhat_python_command(user_input)
@@ -14278,7 +14572,8 @@ def main():
             elif user_input.startswith("sles "):
                 user_input = user_input[7:].strip()  # Remove the "sles " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on SLES: {user_input}")
                     run_sles_command(user_input)
@@ -14286,7 +14581,8 @@ def main():
             elif user_input.startswith("sles-c "):
                 user_input = user_input[9:].strip()  # Remove the "sles " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on SLES: {user_input}")
                     run_sles_c_command(user_input)
@@ -14294,7 +14590,8 @@ def main():
             elif user_input.startswith("sles-p "):
                 user_input = user_input[9:].strip()  # Remove the "sles " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on SLES: {user_input}")
                     run_sles_python_command(user_input)
@@ -14302,7 +14599,8 @@ def main():
             elif user_input.startswith("pengwin "):
                 user_input = user_input[7:].strip()  # Remove the "pengwin " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Pengwin: {user_input}")
                     run_pengwin_command(user_input)
@@ -14310,7 +14608,8 @@ def main():
             elif user_input.startswith("pengwin-c "):
                 user_input = user_input[9:].strip()  # Remove the "pengwin " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Pengwin: {user_input}")
                     run_pengwin_c_command(user_input)
@@ -14318,7 +14617,8 @@ def main():
             elif user_input.startswith("pengwin-p "):
                 user_input = user_input[9:].strip()  # Remove the "pengwin " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Pengwin: {user_input}")
                     run_pengwin_python_command(user_input)
@@ -14326,7 +14626,8 @@ def main():
             elif user_input.startswith("oracle "):
                 user_input = user_input[7:].strip()  # Remove the "oracle " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Oracle: {user_input}")
                     run_oracle_command(user_input)
@@ -14334,7 +14635,8 @@ def main():
             elif user_input.startswith("oracle-c "):
                 user_input = user_input[9:].strip()  # Remove the "oracle " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Oracle: {user_input}")
                     run_oracle_c_command(user_input)
@@ -14342,7 +14644,8 @@ def main():
             elif user_input.startswith("oracle-p "):
                 user_input = user_input[9:].strip()  # Remove the "oracle " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Oracle: {user_input}")
                     run_oracle_python_command(user_input)
@@ -14350,7 +14653,8 @@ def main():
             elif user_input.startswith("alpine "):
                 user_input = user_input[7:].strip()  # Remove the "alpine " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Alpine: {user_input}")
                     run_alpine_command(user_input)
@@ -14358,7 +14662,8 @@ def main():
             elif user_input.startswith("alpine-c "):
                 user_input = user_input[9:].strip()  # Remove the "alpine " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Alpine: {user_input}")
                     run_alpine_c_command(user_input)
@@ -14366,7 +14671,8 @@ def main():
             elif user_input.startswith("alpine-p "):
                 user_input = user_input[9:].strip()  # Remove the "alpine " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Alpine: {user_input}")
                     run_alpine_python_command(user_input)
@@ -14374,7 +14680,8 @@ def main():
             elif user_input.startswith("clear "):
                 user_input = user_input[7:].strip()  # Remove the "clear " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Clear: {user_input}")
                     run_clear_command(user_input)
@@ -14382,7 +14689,8 @@ def main():
             elif user_input.startswith("clear-c "):
                 user_input = user_input[9:].strip()  # Remove the "clear " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Clear: {user_input}")
                     run_clear_c_command(user_input)
@@ -14390,7 +14698,8 @@ def main():
             elif user_input.startswith("clear-p "):
                 user_input = user_input[9:].strip()  # Remove the "clear " prefix
                 if not is_wsl_installed():
-                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Clear: {user_input}")
                     run_clear_python_command(user_input)
@@ -14422,7 +14731,8 @@ def main():
 
             elif user_input.startswith("ninite "):
                 user_input = user_input[7:].strip()
-                print(f"[{timestamp()}] [INFO] Ninite doesn't support individual CLI commands per app. Launching Ninite installer or providing guidance.")
+                print(
+                    f"[{timestamp()}] [INFO] Ninite doesn't support individual CLI commands per app. Launching Ninite installer or providing guidance.")
                 run_ninite_command(user_input)
 
             elif user_input.startswith("just-install "):
@@ -14432,7 +14742,8 @@ def main():
 
             elif user_input.startswith("oneget "):
                 user_input = user_input[7:].strip()
-                print(f"[{timestamp()}] [INFO] Executing the following command with OneGet/PackageManagement: {user_input}")
+                print(
+                    f"[{timestamp()}] [INFO] Executing the following command with OneGet/PackageManagement: {user_input}")
                 run_oneget_command(user_input)
 
             elif user_input.startswith("boxstarter "):
