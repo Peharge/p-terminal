@@ -638,8 +638,8 @@ soon more
 <div align="center">
 
 # **_Peharge Terminal Community_**<br>
-[`Download P-Term (SOON) [Windows]`](https://github.com/Peharge/p-terminal/blob/main/p-term/run-p-term.bat) [`P-Term Commands`](https://peharge.github.io/MAVIS-web/commands-p-term.html)<br><br>
-<img width="300" src="https://github.com/Peharge/p-terminal-images/blob/main/images/banner-3.png" alt="pp-term"/><br><br>
+<img width="400" src="https://github.com/Peharge/p-terminal-images/blob/main/images/banner-3.png" alt="pp-term"/><br><br>
+[`soon`](...) [`soon`](...) [`soon`](...)<br><br>
 soon
 </div>
 
