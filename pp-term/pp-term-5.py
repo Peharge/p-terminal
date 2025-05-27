@@ -648,6 +648,7 @@ def handle_special_commands(user_input):
         "p git ollama": "pp-commands\\p-git-ollama.py",  # new
         "p git transformer": "pp-commands\\p-git-transformer.py",  # new
         "p git slicer": "pp-commands\\p-git-slicer.py",  # new
+        "p git linux": "pp-commands\\p-git-linux.py",  # new
         "p ls": "pp-commands\\p-ls.py", # new
         "p ls pp-term": "pp-commands\\p-ls.py",  # new
         "p ls p-terminal": "pp-commands\\p-ls-p-terminal.py",  # new
@@ -937,6 +938,78 @@ def handle_special_commands(user_input):
         "install g++": "pp-commands\\gpp.py",  # new
         "install gcc": "pp-commands\\gcc.py",  # new
         "install algol": "pp-commands\\gcc.py",  # new
+        "install htop": "pp-commands\\htop.py",  # new
+        "install bashtop": "pp-commands\\bashtop.py",  # new
+        "install taskmanager": "pp-commands\\bashtop.py",  # new
+        "install btop": "pp-commands\\btop.py",  # new
+        "install atop": "pp-commands\\atop.py",  # new
+        "install emacs": "pp-commands\\emacs.py",  # new
+        "install vim": "pp-commands\\vim.py",  # new
+        "install nano": "pp-commands\\nano.py",  # new
+        "install dstat": "pp-commands\\dstat.py",  # new
+        "install nmon": "pp-commands\\nmon.py",  # new
+        "install glances": "pp-commands\\glances.py",  # new
+        "install iftop": "pp-commands\\iftop.py",  # new
+        "install nethogs": "pp-commands\\nethogs.py",  # new
+        "install bmon": "pp-commands\\bmon.py",  # new
+        "install tcpdump": "pp-commands\\tcpdump.py",  # new
+        "install speedtest-cli": "pp-commands\\speedtest-cli.py",  # new
+        "install ncdu": "pp-commands\\ncdu.py",  # new
+        "install duf": "pp-commands\\duf.py",  # new
+        "install lsblk": "pp-commands\\lsblk.py",  # new
+        "install iotop": "pp-commands\\iotop.py",  # new
+        "install fzf": "pp-commands\\fzf.py",  # new
+        "install fd": "pp-commands\\fd.py",  # new
+        "install ripgrep": "pp-commands\\ripgrep.py",  # new
+        "install tmux": "pp-commands\\tmux.py",  # new
+        "install bat": "pp-commands\\bat.py",  # new
+        "install exa": "pp-commands\\exa.py",  # new
+        "install tldr": "pp-commands\\tldr.py",  # new
+        "install gitui": "pp-commands\\gitui.py",  # new
+        "install lazygit": "pp-commands\\lazygit.py",  # new
+        "install zoxide": "pp-commands\\zoxide.py",  # new
+        "install starship": "pp-commands\\starship.py",  # new
+        "install nala": "pp-commands\\nala.py",  # new
+        "install bpytop": "pp-commands\\bpytop.py",  # new
+        "install belnder": "pp-commands\\belnder.py",  # new
+        "install clion": "pp-commands\\clion.py",  # new
+        "install community": "pp-commands\\community.py",  # new
+        "install intellij": "pp-commands\\intellij.py",  # new
+        "install rider": "pp-commands\\rider.py",  # new
+        "install webstorm": "pp-commands\\webstorm.py",  # new
+        "install golab": "pp-commands\\golab.py",  # new
+        "install phpstorm": "pp-commands\\phpstorm.py",  # new
+        "install nvim": "pp-commands\\nvim.py",  # new
+        "install code": "pp-commands\\code.py",  # new
+        "install micro": "pp-commands\\micro.py",  # new
+        "install gedit": "pp-commands\\gedit.py",  # new
+        "install update": "pp-commands\\update.py",  # new
+        "install selfupdate": "pp-commands\\update.py",  # new
+        "install update pp-term": "pp-commands\\updade.py",  # new
+        "install kakoune": "pp-commands\\kakoune.py",  # new
+        "install helix": "pp-commands\\helix.py",  # new
+        "install jed": "pp-commands\\jed.py",  # new
+        "install joe": "pp-commands\\joe.py",  # new
+        "install mg": "pp-commands\\mg.py",  # new
+        "install acme": "pp-commands\\acme.py",  # new
+        "install geany": "pp-commands\\geany.py",  # new
+        "install kate": "pp-commands\\kate.py",  # new
+        "install mousepad": "pp-commands\\mousepad.py",  # new
+        "install xed": "pp-commands\\xed.py",  # new
+        "install entr": "pp-commands\\entr.py",  # new
+        "install asdf": "pp-commands\\asdf.py",  # new
+        "install direnv": "pp-commands\\direnv.py",  # new
+        "install nmap": "pp-commands\\nmap.py",  # new
+        "install iperf3": "pp-commands\\iperf3.py",  # new
+        "install glow": "pp-commands\\glow.py",  # new
+        "install ranger": "pp-commands\\ranger.py",  # new
+        "install espanso": "pp-commands\\espanso.py",  # new
+        "install plasma-workspace": "pp-commands\\plasma-workspace.py",  # new
+        "install syncthing": "pp-commands\\syncthing.py",  # new
+        "install flatpak": "pp-commands\\flatpak.py",  # new
+        "install atom": "pp-commands\\atom.py",  # new
+        "install lite-xl": "pp-commands\\lite-xl.py",  # new
+        "install weather": "pp-commands\\weather.py",  # new
         "update ollama": "pp-commands\\update-ollama.py",  # new
         "update git": "pp-commands\\update-git.py",  # new
         "update visual studio build tools": "pp-commands\\update-vsb.py",  # new
