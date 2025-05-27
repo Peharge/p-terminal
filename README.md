@@ -639,7 +639,8 @@ soon more
 
 # **_Peharge Terminal Community_**<br>
 [`Download P-Term (SOON) [Windows]`](https://github.com/Peharge/p-terminal/blob/main/p-term/run-p-term.bat) [`P-Term Commands`](https://peharge.github.io/MAVIS-web/commands-p-term.html)<br><br>
-<img width="600" src="https://peharge.github.io/MAVIS-web/images/banner-3.png" alt="pp-term"/><br><br>
+<img width="600" src="https://github.com/Peharge/p-terminal-images/blob/main/images/banner-3.png" alt="pp-term"/><br><br>
+soon
 </div>
 
 # Problems
