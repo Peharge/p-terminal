@@ -55,7 +55,7 @@ Thank you for your interest in Peharge Terminal. We greatly appreciate that â¤ï
 **[18.05.2025]** PP-Term 4.3 EAP release<br>
 **[21.05.2025]** PP-Term 4.3 release<br>
 **[23.05.2025]** PP-Term 5 EAP release<br>
-**[27.05.2025]** PP-Term 5 release
+**[27.05.2025]** PP-Term 5 release<br>
 **[01.08.2025]** P-Term 1 release
 
 </div>
