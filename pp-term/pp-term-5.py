@@ -13840,6 +13840,67 @@ def main():
                     run_command_with_admin_python_privileges(cmd)
                     logging.info(f"[SUCCESS] Opened: {file_path}")
 
+            elif user_input.startswith("pp-zip "):
+                parts = user_input[7:].strip().split()
+                if len(parts) < 2:
+                    logging.info("[USAGE] pp-zip <source_folder> <zip_filename>")
+                else:
+                    source = os.path.join(current_dir, parts[0])
+                    zipfile = os.path.join(current_dir, parts[1])
+                    cmd = f"Compress-Archive -Path '{source}\\*' -DestinationPath '{zipfile}' -Force"
+                    run_command_with_admin_python_privileges(cmd)
+                    logging.info(f"[SUCCESS] Compressed '{source}' → '{zipfile}'")
+
+            elif user_input.startswith("pp-unzip "):
+                parts = user_input[9:].strip().split()
+                if len(parts) < 2:
+                    logging.info("[USAGE] pp-unzip <zip_file> <destination>")
+                else:
+                    zipfile = os.path.join(current_dir, parts[0])
+                    destination = os.path.join(current_dir, parts[1])
+                    cmd = f"Expand-Archive -Path '{zipfile}' -DestinationPath '{destination}' -Force"
+                    run_command_with_admin_python_privileges(cmd)
+                    logging.info(f"[SUCCESS] Extracted '{zipfile}' → '{destination}'")
+
+            elif user_input.startswith("pp-search "):
+                keyword = user_input[10:].strip()
+                cmd = f"Select-String -Path '{current_dir}\\*' -Pattern '{keyword}' -CaseSensitive:$false -SimpleMatch"
+                run_command_with_admin_python_privileges(cmd)
+
+            elif user_input.strip() == "pp-netstat":
+                cmd = "netstat -ano"
+                run_command_with_admin_python_privileges(cmd)
+
+            elif user_input.startswith("pp-ping "):
+                host = user_input[8:].strip()
+                cmd = f"Test-Connection -ComputerName '{host}' -Count 4"
+                run_command_with_admin_python_privileges(cmd)
+
+            elif user_input.strip() == "pp-ipconfig":
+                cmd = "ipconfig /all"
+                run_command_with_admin_python_privileges(cmd)
+
+            elif user_input.strip() == "pp-users":
+                cmd = "Get-LocalUser | Format-Table Name,Enabled,LastLogon"
+                run_command_with_admin_python_privileges(cmd)
+
+            elif user_input.strip() == "pp-services":
+                cmd = "Get-Service | Where-Object {$_.Status -eq 'Running'} | Sort-Object Status,DisplayName"
+                run_command_with_admin_python_privileges(cmd)
+
+            elif user_input.startswith("pp-kill "):
+                target = user_input[8:].strip()
+                if target.isdigit():
+                    cmd = f"Stop-Process -Id {target} -Force"
+                else:
+                    cmd = f"Stop-Process -Name '{target}' -Force"
+                run_command_with_admin_python_privileges(cmd)
+                logging.info(f"[SUCCESS] Process '{target}' terminated.")
+
+            elif user_input.strip() == "pp-procs":
+                cmd = "Get-Process | Sort-Object CPU -Descending | Select-Object -First 15 Name,Id,CPU,WorkingSet"
+                run_command_with_admin_python_privileges(cmd)
+
             elif user_input.startswith("pp-cpp "):
                 user_input = user_input[7:]
                 run_command_with_admin_privileges(user_input)
