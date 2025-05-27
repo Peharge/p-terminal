@@ -4127,7 +4127,7 @@ def handle_special_commands(user_input):
             # Befehl und Ordner aus der Eingabe extrahieren
             parts = user_input.split(maxsplit=1)
             if len(parts) < 2:
-                print("Usage: zip <folder>")
+                print(f"[{timestamp()}] [INFO] Usage: zip <folder>")
                 return True
 
             _, folder = parts
@@ -7839,15 +7839,15 @@ def is_wsl_installed():
         return True
     except FileNotFoundError:
         # Ausführbare WSL-Datei nicht gefunden, d. h. WSL ist nicht installiert
-        print("Error: WSL is not installed or not found on the system.")
+        print(f"[{timestamp()}] [ERROR] WSL is not installed or not found on the system.")
         return False
     except subprocess.CalledProcessError:
         # WSL wurde gefunden, aber beim Ausführen des Befehls ist ein Fehler aufgetreten
-        print("Error: WSL is installed, but an error occurred while executing the command.")
+        print(f"[{timestamp()}] [ERROR] WSL is installed, but an error occurred while executing the command.")
         return False
     except Exception as e:
         # Fangen Sie alle unerwarteten Ausnahmen ab
-        print(f"Unexpected error occurred while checking if WSL is installed: {e}")
+        print(f"[{timestamp()}] [ERROR] Unexpected error occurred while checking if WSL is installed: {e}")
         return False
 
 
