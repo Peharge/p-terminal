@@ -13771,7 +13771,7 @@ def main():
 
             elif user_input.startswith("pp-rm "):
                 user_input_file = user_input[6:]
-                user_input = f"Remove - Item - LiteralPath'{current_dir}\\{user_input_file}' - Recurse - Force"
+                user_input = f"Remove-Item -LiteralPath '{current_dir}\\{user_input_file}' -Recurse -Force"
                 run_command_with_admin_python_privileges(user_input)
 
             elif user_input.startswith("pp-cpp "):
