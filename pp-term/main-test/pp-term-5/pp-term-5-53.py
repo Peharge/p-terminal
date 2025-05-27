@@ -1199,7 +1199,7 @@ def handle_special_commands(user_input):
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
         return True
-    
+
     if user_input.lower() == "git ls all":
 
         command = f"git log --graph --all --color --decorate --pretty=format:'%C(yellow)%h%Creset - %Cgreen%ad%Creset - %s %C(red)[%an]%Creset' --date=short"
@@ -2726,7 +2726,7 @@ def handle_special_commands(user_input):
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
-    
+
     if user_input.startswith("go run "):
         user_input = user_input[7:].strip()
 
@@ -3503,7 +3503,7 @@ def handle_special_commands(user_input):
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
-    
+
     if user_input.startswith("zig build-exe "):
         user_input = user_input[14:].strip()
 
@@ -3519,7 +3519,7 @@ def handle_special_commands(user_input):
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
-    
+
     if user_input.startswith("zigc "):
         user_input = user_input[5:].strip()
 
@@ -3535,7 +3535,7 @@ def handle_special_commands(user_input):
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
-    
+
     if user_input.startswith("pc-zig "):
         user_input = user_input[7:].strip()
 
@@ -3551,7 +3551,7 @@ def handle_special_commands(user_input):
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
-    
+
     if user_input.startswith("nim compile "):
         user_input = user_input[12:].strip()
 
@@ -4271,18 +4271,18 @@ def handle_special_commands(user_input):
 
     if user_input.lower() == "theme":
         print("alternative", "aptscience", "arc_dark", "aurelia", "ayu_mirage", "blue", "blueglass", "cyberlife", "dark", "dracula",
-        "fallout_pipboy", "glass", "glassmain", "green", "greenglass", "gruvbox_dark", "hackerman", "light", "main", "material_dark",
-        "mavis_1", "mavis_3", "mavis_4", "mint", "monokai", "nord", "one_dark", "p_term", "red", "redglass", "solarized_dark", "spiderman",
-        "tokyo_night", "ubuntu", "ubuntuglass", "violetglass", "yellowglass")
+              "fallout_pipboy", "glass", "glassmain", "green", "greenglass", "gruvbox_dark", "hackerman", "light", "main", "material_dark",
+              "mavis_1", "mavis_3", "mavis_4", "mint", "monokai", "nord", "one_dark", "p_term", "red", "redglass", "solarized_dark", "spiderman",
+              "tokyo_night", "ubuntu", "ubuntuglass", "violetglass", "yellowglass")
         return True
 
     if user_input.lower() == "pin":
         print("main/main-1", "main-3", "main-4", "main-5", "main-6", "main-7", "main-8", "main-9", "main-10", "main-11", "main-12", "main-13", "main-14",
-        "main-15", "main-16", "main-17", "main-18", "main-19", "main-20", "main-21", "main-22", "main-23", "main-24", "main-25", "main-26", "main-27",
-        "main-28", "main-29", "main-30", "main-31", "main-32", "main-33", "main-34", "main-35", "evil/evil-1", "evil-2", "evil-3", "evil-4", "evil-5",
-        "stable/stable-1", "stable-2", "stable-3", "stable-4", "stable-5", "cool/cool-1", "cool-2", "cool-3", "cool-4", "cool-5", "cool-6", "cool-7",
-        "cool-8", "cool-9", "cool-10", "cool-11", "cool-12", "cool-13", "cool-14", "cool-15", "cool-16", "cool-17", "cool-18", "cool-19", "cool-20",
-        "cool-21", "cool-22", "cool-23")
+              "main-15", "main-16", "main-17", "main-18", "main-19", "main-20", "main-21", "main-22", "main-23", "main-24", "main-25", "main-26", "main-27",
+              "main-28", "main-29", "main-30", "main-31", "main-32", "main-33", "main-34", "main-35", "evil/evil-1", "evil-2", "evil-3", "evil-4", "evil-5",
+              "stable/stable-1", "stable-2", "stable-3", "stable-4", "stable-5", "cool/cool-1", "cool-2", "cool-3", "cool-4", "cool-5", "cool-6", "cool-7",
+              "cool-8", "cool-9", "cool-10", "cool-11", "cool-12", "cool-13", "cool-14", "cool-15", "cool-16", "cool-17", "cool-18", "cool-19", "cool-20",
+              "cool-21", "cool-22", "cool-23")
         return True
 
     if user_input.startswith("launch "):
@@ -5401,7 +5401,7 @@ def handle_special_commands(user_input):
         type_out_text(response)
 
         return True
-    
+
     if user_input.startswith("pa-deepseek-r1:70b "):
         user_input = user_input[19:].strip()
         ollama_installed = check_command_installed("ollama")
@@ -10402,12 +10402,12 @@ def run_clear_python_command(command):
 
 
 def run_scoop_command(
-    command: Union[str, List[str]],
-    timeout: Optional[int] = None,
-    capture_output: bool = False,
-    retries: int = 2,
-    retry_delay: float = 1.0,
-    logger: Optional[logging.Logger] = None
+        command: Union[str, List[str]],
+        timeout: Optional[int] = None,
+        capture_output: bool = False,
+        retries: int = 2,
+        retry_delay: float = 1.0,
+        logger: Optional[logging.Logger] = None
 ) -> subprocess.CompletedProcess:
     """
     Führt einen Scoop-Befehl aus – superschnell, stabil und mit robustem Logger-Fallback.
@@ -10495,12 +10495,12 @@ def run_scoop_command(
 
 
 def run_choco_command(
-    command: Union[str, List[str]],
-    timeout: Optional[int] = None,
-    capture_output: bool = False,
-    retries: int = 2,
-    retry_delay: float = 1.0,
-    logger: Optional[logging.Logger] = None
+        command: Union[str, List[str]],
+        timeout: Optional[int] = None,
+        capture_output: bool = False,
+        retries: int = 2,
+        retry_delay: float = 1.0,
+        logger: Optional[logging.Logger] = None
 ) -> subprocess.CompletedProcess:
     """
     Führt einen Chocolatey-Befehl aus – superschnell, stabil und mit robustem Logger-Fallback.
@@ -10588,12 +10588,12 @@ def run_choco_command(
 
 
 def run_winget_command(
-    command: Union[str, List[str]],
-    timeout: Optional[int] = None,
-    capture_output: bool = False,
-    retries: int = 2,
-    retry_delay: float = 1.0,
-    logger: Optional[logging.Logger] = None
+        command: Union[str, List[str]],
+        timeout: Optional[int] = None,
+        capture_output: bool = False,
+        retries: int = 2,
+        retry_delay: float = 1.0,
+        logger: Optional[logging.Logger] = None
 ) -> subprocess.CompletedProcess:
     """
     Führt einen Winget-Befehl aus – superschnell, stabil und mit robustem Logger-Fallback.
@@ -10680,12 +10680,12 @@ def run_winget_command(
 
 
 def run_ninite_command(
-    command: Union[str, List[str]],
-    timeout: Optional[int] = None,
-    capture_output: bool = False,
-    retries: int = 2,
-    retry_delay: float = 1.0,
-    logger: Optional[logging.Logger] = None
+        command: Union[str, List[str]],
+        timeout: Optional[int] = None,
+        capture_output: bool = False,
+        retries: int = 2,
+        retry_delay: float = 1.0,
+        logger: Optional[logging.Logger] = None
 ) -> subprocess.CompletedProcess:
     """
     Führt einen Ninite-Befehl aus – superschnell, stabil und mit robustem Logger-Fallback.
@@ -10772,12 +10772,12 @@ def run_ninite_command(
 
 
 def run_justinstall_command(
-    command: Union[str, List[str]],
-    timeout: Optional[int] = None,
-    capture_output: bool = False,
-    retries: int = 2,
-    retry_delay: float = 1.0,
-    logger: Optional[logging.Logger] = None
+        command: Union[str, List[str]],
+        timeout: Optional[int] = None,
+        capture_output: bool = False,
+        retries: int = 2,
+        retry_delay: float = 1.0,
+        logger: Optional[logging.Logger] = None
 ) -> subprocess.CompletedProcess:
     """
     Führt einen Just-Install-Befehl aus – superschnell, stabil und mit robustem Logger-Fallback.
@@ -10864,12 +10864,12 @@ def run_justinstall_command(
 
 
 def run_oneget_command(
-    command: Union[str, List[str]],
-    timeout: Optional[int] = None,
-    capture_output: bool = False,
-    retries: int = 2,
-    retry_delay: float = 1.0,
-    logger: Optional[logging.Logger] = None
+        command: Union[str, List[str]],
+        timeout: Optional[int] = None,
+        capture_output: bool = False,
+        retries: int = 2,
+        retry_delay: float = 1.0,
+        logger: Optional[logging.Logger] = None
 ) -> subprocess.CompletedProcess:
     """
     Führt einen OneGet-Befehl aus – superschnell, stabil und mit robustem Logger-Fallback.
@@ -10964,12 +10964,12 @@ def run_oneget_command(
 
 
 def run_boxstarter_command(
-    command: Union[str, List[str]],
-    timeout: Optional[int] = None,
-    capture_output: bool = False,
-    retries: int = 2,
-    retry_delay: float = 1.0,
-    logger: Optional[logging.Logger] = None
+        command: Union[str, List[str]],
+        timeout: Optional[int] = None,
+        capture_output: bool = False,
+        retries: int = 2,
+        retry_delay: float = 1.0,
+        logger: Optional[logging.Logger] = None
 ) -> subprocess.CompletedProcess:
     """
     Führt einen Boxstarter-Befehl aus – superschnell, stabil und mit robustem Logger-Fallback.
@@ -11065,12 +11065,12 @@ def run_boxstarter_command(
 
 
 def run_npackd_command(
-    command: Union[str, List[str]],
-    timeout: Optional[int] = None,
-    capture_output: bool = False,
-    retries: int = 2,
-    retry_delay: float = 1.0,
-    logger: Optional[logging.Logger] = None
+        command: Union[str, List[str]],
+        timeout: Optional[int] = None,
+        capture_output: bool = False,
+        retries: int = 2,
+        retry_delay: float = 1.0,
+        logger: Optional[logging.Logger] = None
 ) -> subprocess.CompletedProcess:
     """
     Führt einen Npackd-Befehl aus – superschnell, stabil und mit robustem Logger-Fallback.
@@ -11157,12 +11157,12 @@ def run_npackd_command(
 
 
 def run_zero_install_command(
-    command: Union[str, List[str]],
-    timeout: Optional[int] = None,
-    capture_output: bool = False,
-    retries: int = 2,
-    retry_delay: float = 1.0,
-    logger: Optional[logging.Logger] = None
+        command: Union[str, List[str]],
+        timeout: Optional[int] = None,
+        capture_output: bool = False,
+        retries: int = 2,
+        retry_delay: float = 1.0,
+        logger: Optional[logging.Logger] = None
 ) -> subprocess.CompletedProcess:
     """
     Führt einen Zero Install (0install)-Befehl aus – stabil, performant, mit Wiederholungslogik und Logging.
@@ -11247,12 +11247,12 @@ def run_zero_install_command(
 
 
 def run_appget_command(
-    command: Union[str, List[str]],
-    timeout: Optional[int] = None,
-    capture_output: bool = False,
-    retries: int = 2,
-    retry_delay: float = 1.0,
-    logger: Optional[logging.Logger] = None
+        command: Union[str, List[str]],
+        timeout: Optional[int] = None,
+        capture_output: bool = False,
+        retries: int = 2,
+        retry_delay: float = 1.0,
+        logger: Optional[logging.Logger] = None
 ) -> subprocess.CompletedProcess:
     """
     Führt einen AppGet-Befehl aus – superschnell, stabil und mit robustem Logger-Fallback.
@@ -11340,27 +11340,27 @@ def run_appget_command(
 
 def get_main_pin(current_dir, env_indicator_10):
     return (
-        f"\n{white}┌──({reset}{blue}{getpass.getuser()}"
-        + colored("㋐", attrs=["bold"])
-        + f"{blue}Peharge{reset}{white})-[{reset}{blue}{current_dir}{reset}{white}]-{reset}{env_indicator_10}"
-        f"\n{white}└─{reset}{blue}${reset} "
+            f"\n{white}┌──({reset}{blue}{getpass.getuser()}"
+            + colored("㋐", attrs=["bold"])
+            + f"{blue}Peharge{reset}{white})-[{reset}{blue}{current_dir}{reset}{white}]-{reset}{env_indicator_10}"
+              f"\n{white}└─{reset}{blue}${reset} "
     )
 
 def get_main_2_pin(current_dir, env_indicator_9):
     return (
-        f"\n{blue}┌──({reset}{getpass.getuser()}"
-        + colored("㋐", attrs=["bold"])
-        + f"Peharge{blue})-[{reset}{current_dir}{blue}]-{reset}{env_indicator_9}"
-        f"\n{blue}└─{reset}{blue}${reset} "
+            f"\n{blue}┌──({reset}{getpass.getuser()}"
+            + colored("㋐", attrs=["bold"])
+            + f"Peharge{blue})-[{reset}{current_dir}{blue}]-{reset}{env_indicator_9}"
+              f"\n{blue}└─{reset}{blue}${reset} "
     )
 
 
 def get_main_3_pin(current_dir, env_indicator_5):
     return (
-        f"\n{green}┌──({reset}{blue}{getpass.getuser()}"
-        + colored("㋐", attrs=["bold"])
-        + f"{blue}Peharge{reset}{green})-[{reset}{current_dir}{green}]-{reset}{env_indicator_5}"
-        f"\n{green}└─{reset}{blue}${reset} "
+            f"\n{green}┌──({reset}{blue}{getpass.getuser()}"
+            + colored("㋐", attrs=["bold"])
+            + f"{blue}Peharge{reset}{green})-[{reset}{current_dir}{green}]-{reset}{env_indicator_5}"
+              f"\n{green}└─{reset}{blue}${reset} "
     )
 
 
@@ -11376,40 +11376,40 @@ def get_main_5_pin(current_dir, env_indicator_3):
     print("")
 
     return (
-        f"{env_indicator_3} {blue}{getpass.getuser()}" + colored("㋐", attrs=["bold"]) + f"{blue}Peharge{reset} {current_dir}:~{blue}${reset} "
+            f"{env_indicator_3} {blue}{getpass.getuser()}" + colored("㋐", attrs=["bold"]) + f"{blue}Peharge{reset} {current_dir}:~{blue}${reset} "
     )
 
 
 def get_main_6_pin(current_dir, env_indicator_main):
     return (
-        f"\n{blue}🌌 [{white}{bold}{getpass.getuser()}" + colored("㋐", attrs=["bold"])+ f"Peharge{reset}{blue}]"
-        f" {dim}{timestamp()}{reset} "
-        f"{white}[{current_dir}]{reset} {env_indicator_main}"
-        f"\n{blue}➤{reset} "
+            f"\n{blue}🌌 [{white}{bold}{getpass.getuser()}" + colored("㋐", attrs=["bold"])+ f"Peharge{reset}{blue}]"
+                                                                                           f" {dim}{timestamp()}{reset} "
+                                                                                           f"{white}[{current_dir}]{reset} {env_indicator_main}"
+                                                                                           f"\n{blue}➤{reset} "
     )
 
 
 def get_main_7_pin(current_dir, env_indicator_main):
     return (
-        f"\n{blue}╭─ {white}{bold}{getpass.getuser()}" + colored("㋐", attrs=["bold"])+ f"Peharge{reset}{blue}"
-        f"\n├─ 📁 {white}{current_dir}{blue}"
-        f"\n╰─ 🌐 {env_indicator_main}{reset}"
-        f"\n{blue}λ{reset} "
+            f"\n{blue}╭─ {white}{bold}{getpass.getuser()}" + colored("㋐", attrs=["bold"])+ f"Peharge{reset}{blue}"
+                                                                                           f"\n├─ 📁 {white}{current_dir}{blue}"
+                                                                                           f"\n╰─ 🌐 {env_indicator_main}{reset}"
+                                                                                           f"\n{blue}λ{reset} "
     )
 
 
 def get_main_8_pin(current_dir, env_indicator_main):
     return (
-        f"\n{blue}[{white}{getpass.getuser()}" + colored("㋐", attrs=["bold"])+ f"Peharge{blue}]{reset}:{white}{current_dir}{reset} {blue}{env_indicator_main}{reset} ➤ "
+            f"\n{blue}[{white}{getpass.getuser()}" + colored("㋐", attrs=["bold"])+ f"Peharge{blue}]{reset}:{white}{current_dir}{reset} {blue}{env_indicator_main}{reset} ➤ "
     )
 
 
 def get_main_9_pin(current_dir, env_indicator_main):
     brain = "🧠"
     return (
-        f"\n{blue}{brain} {bold}AI{reset} {white}| {getpass.getuser()}" + colored("㋐", attrs=["bold"])+ "Peharge"
-        f" | {current_dir} | {env_indicator_main}"
-        f"\n{blue}└─▶{reset} "
+            f"\n{blue}{brain} {bold}AI{reset} {white}| {getpass.getuser()}" + colored("㋐", attrs=["bold"])+ "Peharge"
+                                                                                                            f" | {current_dir} | {env_indicator_main}"
+                                                                                                            f"\n{blue}└─▶{reset} "
     )
 
 
@@ -11417,9 +11417,9 @@ def get_main_10_pin(current_dir, env_indicator_main):
     chip = "🧬"
     bolt = "⚡"
     return (
-        f"\n{blue}{chip} SYSTEM {white}| {bold}{getpass.getuser()}" + colored("㋐", attrs=["bold"])+ f"Peharge{reset} {blue}| {current_dir}{reset}"
-        f"\n{white}{bolt} ENV: {env_indicator_main}{reset}"
-        f"\n{blue}⟩{reset} "
+            f"\n{blue}{chip} SYSTEM {white}| {bold}{getpass.getuser()}" + colored("㋐", attrs=["bold"])+ f"Peharge{reset} {blue}| {current_dir}{reset}"
+                                                                                                        f"\n{white}{bolt} ENV: {env_indicator_main}{reset}"
+                                                                                                        f"\n{blue}⟩{reset} "
     )
 
 
@@ -11436,10 +11436,10 @@ def get_main_11_pin(current_dir, env_indicator_main):
 def get_main_12_pin(current_dir, env_indicator_main):
     wave = colored('〰️', 'blue')
     return (
-        f"\n{wave}{wave}{colored('╼', 'white')} {colored(getpass.getuser(), 'white')}" + colored("㋐", attrs=["bold"])+ f"{colored('Peharge', 'white')}"
-        f" {wave}{wave}{colored('╾', 'white')} {colored(current_dir, 'white')}"
-        f" {wave}{wave}{colored('╼', 'white')} {env_indicator_main}"
-        f"\n{colored('▶', 'blue')} "
+            f"\n{wave}{wave}{colored('╼', 'white')} {colored(getpass.getuser(), 'white')}" + colored("㋐", attrs=["bold"])+ f"{colored('Peharge', 'white')}"
+                                                                                                                           f" {wave}{wave}{colored('╾', 'white')} {colored(current_dir, 'white')}"
+                                                                                                                           f" {wave}{wave}{colored('╼', 'white')} {env_indicator_main}"
+                                                                                                                           f"\n{colored('▶', 'blue')} "
     )
 
 
@@ -11455,9 +11455,9 @@ def get_main_13_pin(current_dir, env_indicator_main):
 def get_main_14_pin(current_dir, env_indicator_main):
     pulse = colored('•', 'blue')
     return (
-        f"\n{pulse} {colored('GRID>', 'white', attrs=['bold'])} {colored(getpass.getuser(), 'blue')}" + colored("㋐", attrs=["bold"])+ f"{colored('Peharge', 'white')}"
-        f" {pulse}\n{pulse} {colored(current_dir, 'blue')} {pulse} {env_indicator_main}"
-        f"\n{pulse} {colored('»', 'blue')} "
+            f"\n{pulse} {colored('GRID>', 'white', attrs=['bold'])} {colored(getpass.getuser(), 'blue')}" + colored("㋐", attrs=["bold"])+ f"{colored('Peharge', 'white')}"
+                                                                                                                                          f" {pulse}\n{pulse} {colored(current_dir, 'blue')} {pulse} {env_indicator_main}"
+                                                                                                                                          f"\n{pulse} {colored('»', 'blue')} "
     )
 
 
@@ -11492,9 +11492,9 @@ def get_main_17_pin(current_dir, env_indicator_main):
 def get_main_18_pin(current_dir, env_indicator_main):
     node = colored('◉', 'blue')
     return (
-        f"\n{node} {colored(getpass.getuser(), 'white')}" + colored("㋐", attrs=["bold"]) + "{colored('Peharge', 'blue')}"
-        f" {node} {colored(current_dir, 'white')} {node} {env_indicator_main}"
-        f"\n{node} {colored('❯', 'white')} "
+            f"\n{node} {colored(getpass.getuser(), 'white')}" + colored("㋐", attrs=["bold"]) + "{colored('Peharge', 'blue')}"
+                                                                                               f" {node} {colored(current_dir, 'white')} {node} {env_indicator_main}"
+                                                                                               f"\n{node} {colored('❯', 'white')} "
     )
 
 
@@ -11582,9 +11582,9 @@ def get_main_27_pin(current_dir, env_indicator_main):
 def get_main_28_pin(current_dir, env_indicator_main):
     beacon = colored('✦', 'blue')
     return (
-        f"\n{beacon} {colored(getpass.getuser(), 'white')}" + colored("㋐", attrs=["bold"]) + f"{colored('Peharge', 'blue')} {beacon}"
-        f"\n{colored('Dir:', 'white')} {colored(current_dir, 'blue')} {beacon} {env_indicator_main}"
-        f"\n{colored('❯', 'blue')} "
+            f"\n{beacon} {colored(getpass.getuser(), 'white')}" + colored("㋐", attrs=["bold"]) + f"{colored('Peharge', 'blue')} {beacon}"
+                                                                                                 f"\n{colored('Dir:', 'white')} {colored(current_dir, 'blue')} {beacon} {env_indicator_main}"
+                                                                                                 f"\n{colored('❯', 'blue')} "
     )
 
 
@@ -11600,9 +11600,9 @@ def get_main_29_pin(current_dir, env_indicator_main):
 def get_main_30_pin(current_dir, env_indicator_main):
     mesh = colored('╳', 'blue')
     return (
-        f"\n{mesh}{mesh}{mesh} {colored(getpass.getuser(), 'white')}" + colored("㋐", attrs=["bold"]) + f"{colored('Peharge', 'blue')} {mesh}{mesh}{mesh}"
-        f"\n{colored(current_dir, 'blue')} {mesh} {env_indicator_main}"
-        f"\n{colored('❯', 'blue')} "
+            f"\n{mesh}{mesh}{mesh} {colored(getpass.getuser(), 'white')}" + colored("㋐", attrs=["bold"]) + f"{colored('Peharge', 'blue')} {mesh}{mesh}{mesh}"
+                                                                                                           f"\n{colored(current_dir, 'blue')} {mesh} {env_indicator_main}"
+                                                                                                           f"\n{colored('❯', 'blue')} "
     )
 
 
@@ -11646,9 +11646,9 @@ def get_main_33_pin(current_dir, env_indicator_main):
 def get_main_34_pin(current_dir, env_indicator_main):
     arc = colored('◥◣', 'blue')
     return (
-        f"\n{arc} {colored(getpass.getuser(), 'white')}" + colored("㋐", attrs=["bold"]) + f"{colored('Peharge', 'blue')} {arc}"
-        f"\n{colored(current_dir, 'blue')} [{env_indicator_main}]"
-        f"\n{colored('➤', 'blue')} "
+            f"\n{arc} {colored(getpass.getuser(), 'white')}" + colored("㋐", attrs=["bold"]) + f"{colored('Peharge', 'blue')} {arc}"
+                                                                                              f"\n{colored(current_dir, 'blue')} [{env_indicator_main}]"
+                                                                                              f"\n{colored('➤', 'blue')} "
     )
 
 
@@ -11663,28 +11663,28 @@ def get_main_35_pin(current_dir, env_indicator_main):
 
 def get_evil_pin(current_dir, env_indicator_11):
     return (
-        f"\n{white}┌──({reset}{red}root"
-        + colored("㋐", attrs=["bold"])
-        + f"{red}Peharge{reset}{white})-[{reset}{red}{current_dir}{reset}{white}]-{reset}{env_indicator_11}"
-        f"\n{white}└─{reset}{red}#{reset} "
+            f"\n{white}┌──({reset}{red}root"
+            + colored("㋐", attrs=["bold"])
+            + f"{red}Peharge{reset}{white})-[{reset}{red}{current_dir}{reset}{white}]-{reset}{env_indicator_11}"
+              f"\n{white}└─{reset}{red}#{reset} "
     )
 
 
 def get_evil_2_pin(current_dir, env_indicator_4):
     return (
-        f"\n{red}┌──({reset}{getpass.getuser()}"
-        + colored("㋐", attrs=["bold"])
-        + f"Peharge{red})-[{reset}{current_dir}{red}]-{reset}{env_indicator_4}"
-        f"\n{red}└─{reset}{red}#{reset} "
+            f"\n{red}┌──({reset}{getpass.getuser()}"
+            + colored("㋐", attrs=["bold"])
+            + f"Peharge{red})-[{reset}{current_dir}{red}]-{reset}{env_indicator_4}"
+              f"\n{red}└─{reset}{red}#{reset} "
     )
 
 
 def get_evil_3_pin(current_dir, env_indicator_9):
     return (
-        f"\n{blue}┌──({reset}{red}root"
-        + colored("㋐", attrs=["bold"])
-        + f"{red}Peharge{reset}{blue})-[{reset}{current_dir}{blue}]-{reset}{env_indicator_9}"
-        f"\n{blue}└─{reset}{red}#{reset} "
+            f"\n{blue}┌──({reset}{red}root"
+            + colored("㋐", attrs=["bold"])
+            + f"{red}Peharge{reset}{blue})-[{reset}{current_dir}{blue}]-{reset}{env_indicator_9}"
+              f"\n{blue}└─{reset}{red}#{reset} "
     )
 
 
@@ -11700,16 +11700,16 @@ def get_evil_5_pin(current_dir, env_indicator_3):
     print("")
 
     return (
-        f"{env_indicator_3} {red}root" + colored("㋐", attrs=["bold"]) + f"{red}Peharge{reset} {current_dir}:~{red}#{reset} "
+            f"{env_indicator_3} {red}root" + colored("㋐", attrs=["bold"]) + f"{red}Peharge{reset} {current_dir}:~{red}#{reset} "
     )
 
 
 def get_stable_pin(current_dir, env_indicator_6):
     return (
-        f"\n┌──({getpass.getuser()}"
-        + colored("㋐", attrs=["bold"])
-        + f"Peharge)-[{current_dir}]-{env_indicator_6}"
-        f"\n└─$ "
+            f"\n┌──({getpass.getuser()}"
+            + colored("㋐", attrs=["bold"])
+            + f"Peharge)-[{current_dir}]-{env_indicator_6}"
+              f"\n└─$ "
     )
 
 
@@ -11725,16 +11725,16 @@ def get_stable_3_pin(current_dir, env_indicator_3):
     print("")
 
     return (
-        f"{env_indicator_3} {getpass.getuser()}" + colored("㋐", attrs=["bold"]) + f"Peharge{reset} {current_dir}:~$ "
+            f"{env_indicator_3} {getpass.getuser()}" + colored("㋐", attrs=["bold"]) + f"Peharge{reset} {current_dir}:~$ "
     )
 
 
 def get_stable_4_pin(current_dir, env_indicator_6):
     return (
-        f"\n┌──(root"
-        + colored("㋐", attrs=["bold"])
-        + f"Peharge)-[{current_dir}]-{env_indicator_6}"
-        f"\n└─# "
+            f"\n┌──(root"
+            + colored("㋐", attrs=["bold"])
+            + f"Peharge)-[{current_dir}]-{env_indicator_6}"
+              f"\n└─# "
     )
 
 
@@ -11750,7 +11750,7 @@ def get_stable_6_pin(current_dir, env_indicator_8):
     print("")
 
     return (
-        f"{env_indicator_8} root" + colored("㋐", attrs=["bold"]) + f"Peharge{reset} {current_dir}:~# "
+            f"{env_indicator_8} root" + colored("㋐", attrs=["bold"]) + f"Peharge{reset} {current_dir}:~# "
     )
 
 
@@ -11791,8 +11791,8 @@ def get_cool_pin():
         return result.stdout
     else:
         return f"[{timestamp()}] [ERROR] Error running oh-my-posh:\n{result.stderr}"
-    
-    
+
+
 def get_cool_2_pin():
     """
     Ruft eine gerenderte Oh-My-Posh-Prompt basierend auf einer bestimmten Theme-Konfiguration ab.
@@ -12645,7 +12645,7 @@ COMMANDS = [
     "vc-cpp", "vc-c", "vc-cs", "g++", "gcc", "rustc", "node", "javac", "ruby", "Rscript", "pythonc", "go run", "julia",
     "del", "rm", "echo", "type", "cat", "exit", "alpine", "scoop", "choco", "winget", "speedtest", "kill",
     "download", "cputemp", "chucknorris", "theme", "cleantemp", "selfupdate", "tree", "py", "ask", "pb google.com"
-    "weather", "whoami", "hostname", "ip", "os", "time", "date", "open", "fortune", "history", "search",
+                                                                                                   "weather", "whoami", "hostname", "ip", "os", "time", "date", "open", "fortune", "history", "search",
     "zip", "unzip", "sysinfo", "clip set", "clip get", "ping", "emptytrash", "launch", "doctor", "hole doctor",
     "mavis env install", "install mavis env", "install mavis3", "install mavis3.3", "install mavis4",
     "install mavis4.3", "mavis env update", "update mavis env", "mavis update", "update mavis",
@@ -12670,7 +12670,7 @@ COMMANDS = [
     "models ls", "install 3d-slicer", "run 3d-slicer", "install simon", "run simon", "jupyter --version",
     "grafana --version", "3d-slicer --version", "pin-evil", "pin-main", "pin-cool", "pin-cool-3", "pin-cool-4",
     "p install", "p uninstall", "p upgrade", "p list", "p show", "p freeze", "p search", "install cool pin", "install cool pin-3", "install cool pin-4"
-    "p check", "p config", "p debug", "p cache", "p download", "p verify", "p wheel",
+                                                                                                                                   "p check", "p config", "p debug", "p cache", "p download", "p verify", "p wheel",
     "p completion", "pip install", "pip uninstall", "pip list", "pip show", "pip freeze",
     "pip search", "pip check", "pip config", "pip debug", "pip cache", "pip download",
     "pip verify", "pip wheel", "pip completion", "ollama install", "ollama uninstall",
@@ -12723,7 +12723,7 @@ COMMANDS = [
     "arch install wget", "arch find text in files", "arch compress files", "arch extract files", "arch setup firewall",
     "arch restart network", "arch check disk usage", "arch monitor network traffic", "arch install curl", "arch install snap",
     "arch install docker", "arch sudo pacman -S", "arch sudo pacman -R", "arch sudo pacman -Syu", "arch ls"
-    "kali neofetch", "kali install git", "kali install htop", "kali list files", "kali install python",
+                                                                                                  "kali neofetch", "kali install git", "kali install htop", "kali list files", "kali install python",
     "kali install pip", "kali check system info", "kali update system", "kali install models", "kali clear terminal",
     "kali show processes", "kali search files", "kali create directory", "kali remove directory", "kali install wget",
     "kali find text in files", "kali compress files", "kali extract files", "kali setup firewall", "kali restart network",
@@ -12808,7 +12808,7 @@ COMMANDS = [
     "pip install -e .", "pip install git+https://github.com/psf/requests.git", "pip install 'requests<3.0'", "pip install torch", "pip install transformers",
     "pip config list", "pip config get global.index-url", "pip config set global.index-url https://pypi.org/simple", "pip install --pre pandas", "pip install fastapi[all]",
     "pip install openpyxl", "pip install pydantic", "pip install uvicorn", "pip install rich", "pip install tqdm", "python"
-    "ollama run qwen3", "ollama run gemma3", "ollama run deepseek-r1", "ollama run llama3", "ollama run mistral:7b",
+                                                                                                                   "ollama run qwen3", "ollama run gemma3", "ollama run deepseek-r1", "ollama run llama3", "ollama run mistral:7b",
     "ollama run codellama:13b", "ollama run gemma:2b", "ollama run phi:1.5",
     "ollama pull llama3", "ollama pull mistral:7b", "ollama pull codellama:13b", "ollama pull gemma:2b", "ollama pull phi:1.5",
     "ollama list", "ollama show llama3", "ollama show mistral:7b", "ollama show codellama:13b", "ollama show gemma:2b",
@@ -12967,7 +12967,7 @@ def main():
 
             # Prüfe python.exe an typischen Stellen
             env_active = (
-                    # Windows-Pfade
+                # Windows-Pfade
                     (active_env_path / "Scripts/python.exe").exists() or
                     (active_env_path / "python.exe").exists() or
                     (active_env_path / "condabin/conda.bat").exists() or
