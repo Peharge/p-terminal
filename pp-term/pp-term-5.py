@@ -12975,7 +12975,26 @@ def main():
 
                     # (Unix/Linux-Pfade - eigetnlich unötig)
                     (active_env_path / "bin/python").exists() or
+                    (active_env_path / "bin/python1.4").exists() or
+                    (active_env_path / "bin/python1.5").exists() or
+                    (active_env_path / "bin/python1.6").exists() or
+                    (active_env_path / "bin/python2").exists() or
+                    (active_env_path / "bin/python2.0").exists() or
+                    (active_env_path / "bin/python2.1").exists() or
+                    (active_env_path / "bin/python2.2").exists() or
+                    (active_env_path / "bin/python2.3").exists() or
+                    (active_env_path / "bin/python2.4").exists() or
+                    (active_env_path / "bin/python2.5").exists() or
+                    (active_env_path / "bin/python2.6").exists() or
+                    (active_env_path / "bin/python2.7").exists() or
                     (active_env_path / "bin/python3").exists() or
+                    (active_env_path / "bin/python3.0").exists() or
+                    (active_env_path / "bin/python3.1").exists() or
+                    (active_env_path / "bin/python3.2").exists() or
+                    (active_env_path / "bin/python3.3").exists() or
+                    (active_env_path / "bin/python3.4").exists() or
+                    (active_env_path / "bin/python3.5").exists() or
+                    (active_env_path / "bin/python3.6").exists() or
                     (active_env_path / "bin/python3.7").exists() or
                     (active_env_path / "bin/python3.8").exists() or
                     (active_env_path / "bin/python3.9").exists() or
