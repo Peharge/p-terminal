@@ -7761,6 +7761,7 @@ def confirm_execution(command: str, dangerous: bool) -> bool:
         logging.warning("[WARING] This command is considered potentially - critical - or - system-threatening - !")
 
     answer = input("\nContinue? [y/n]: ").strip().lower()
+    print("")
     return answer in ['y', 'yes']
 
 
@@ -7810,11 +7811,11 @@ def run_command_with_admin_python_privileges(command: str):
                 ]
 
                 subprocess.run(ps_cmd, check=True)
-            logging.warning("\n[PASS] Execution completed.")
+            logging.warning("[PASS] Execution completed.")
         except subprocess.CalledProcessError as e:
-            logging.warning(f"\n[ERROR] {e}")
+            logging.warning(f"[ERROR] {e}")
         except Exception as e:
-            logging.warning(f"\n[ERROR] Unexpected error: {e}")
+            logging.warning(f"[ERROR] Unexpected error: {e}")
 
     else:
         safe_cmd = command.replace("'", "'\"'\"'")
@@ -7824,11 +7825,11 @@ def run_command_with_admin_python_privileges(command: str):
                 ["sudo", "bash", "-c", full_script],
                 check=True
             )
-            logging.warning("\n[PASS] Execution completed.")
+            logging.warning("[PASS] Execution completed.")
         except subprocess.CalledProcessError as e:
-            logging.warning(f"\n[ERROR] Execution error: {e}")
+            logging.warning(f"[ERROR] Execution error: {e}")
         except Exception as e:
-            logging.warning(f"\n[ERROR] Unexpected error: {e}")
+            logging.warning(f"[ERROR] Unexpected error: {e}")
 
 
 def is_wsl_installed():
