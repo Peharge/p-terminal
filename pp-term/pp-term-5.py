@@ -13794,6 +13794,11 @@ def main():
                 user_input = f"Remove-Item -LiteralPath '{current_dir}\\{user_input_file}' -Recurse -Force"
                 run_command_with_admin_python_privileges(user_input)
 
+            elif user_input.startswith("pp-del "):
+                user_input_file = user_input[7:]
+                user_input = f"Remove-Item -LiteralPath '{current_dir}\\{user_input_file}' -Recurse -Force"
+                run_command_with_admin_python_privileges(user_input)
+
             elif user_input.startswith("pp-mkdir "):
                 # Create new directory
                 folder_name = user_input[9:].strip()
