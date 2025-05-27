@@ -7716,64 +7716,119 @@ def run_command_with_admin_c_privileges(command):
 
 # --- pp-p command---
 
+import os
+import re
+import sys
+import subprocess
+import ctypes
+
+# Kritische Befehle – nur mit Warnung
+FORBIDDEN_COMMANDS = [
+    r"\brm\b",
+    r"\bRemove-Item\b",
+    r"\bdel\b",
+    r"\bFormat-Volume\b",
+    r"\bShutdown\b",
+    r"\bStop-Computer\b",
+    r"\bClear-Content\b",
+    r"\bSet-Content\b",
+    r"\bRemove-ItemProperty\b",
+    r"\bRemove-Module\b",
+    r"\bsudo\s+rm\b",
+    r"\bmkfs\b",
+    r"\bdiskpart\b",
+    r"\breg delete\b"
+]
+
+def is_dangerous_command(command: str) -> bool:
+    """
+    Prüft, ob der Befehl als gefährlich eingestuft wird.
+    """
+    for pattern in FORBIDDEN_COMMANDS:
+        if re.search(pattern, command, re.IGNORECASE):
+            return True
+    return False
+
+
+# Interaktive Sicherheitsabfrage
+def confirm_execution(command: str, dangerous: bool) -> bool:
+    """
+    Fragt den Benutzer, ob der Befehl ausgeführt werden darf.
+    Bei gefährlichen Befehlen erfolgt eine deutliche Warnung.
+    """
+    logging.warning(f"[INFO] You are about to run the following command with admin privileges: {command}\n")
+    if dangerous:
+        logging.warning("[WARING] This command is considered potentially - critical - or - system-threatening - !")
+
+    answer = input("Continue? [y/n]: ").strip().lower()
+    return answer in ['y', 'yes']
+
+
+# Admin-Befehl ausführen (plattformsicher)
 def run_command_with_admin_python_privileges(command: str):
     """
-    Führt einen Shell-Befehl im aktuellen Arbeitsverzeichnis mit Admin-Rechten aus.
-    - Windows: erhöhte PowerShell bleibt nach Ausführung geöffnet.
-    - Unix: sudo mit Eingabeaufforderung zum Schließen.
+    Führt einen Shell-/PowerShell-Befehl mit Adminrechten aus,
+    erlaubt auch gefährliche Befehle nach ausdrücklicher Zustimmung.
     """
+    import platform
+
     working_dir = os.getcwd()
+    dangerous = is_dangerous_command(command)
 
-    # Windows-Plattform
+    if not confirm_execution(command, dangerous):
+        logging.warning("Aborted.")
+        return
+
     if sys.platform == "win32":
-        if ctypes.windll.shell32.IsUserAnAdmin():
-            # Bereits erhöht
-            subprocess.run(command, shell=True, cwd=working_dir)
+        try:
+            if ctypes.windll.shell32.IsUserAnAdmin():
+                subprocess.run(command, shell=True, cwd=working_dir, check=True)
+            else:
+                ps_script = (
+                    f"Set-Location -LiteralPath '{working_dir}'; "
+                    f"{command}; "
+                    "Read-Host 'Press Enter to exit…'"
+                )
 
-            print("Completed!")
-        else:
-            # Skript zusammenbauen
-            # 1) Wechsel in das Arbeitsverzeichnis, 2) Befehl, 3) Read-Host, damit es offen bleibt
-            script = f"Set-Location -LiteralPath '{working_dir}'; {command}; Read-Host 'Press Enter to exit…'"
+                args = [
+                    "-NoProfile",
+                    "-NoExit",
+                    "-Command",
+                    ps_script.replace('"', '`"')
+                ]
 
-            # ArgumentList-Array literal: PowerShell versteht das als echtes Array
-            # Wir verwenden doppelte Anführungszeichen und escapen sie in Python
-            args = [
-                "-NoProfile",
-                "-NoExit",
-                "-Command",
-                script.replace('"', '`"')
-            ]
-            # Jetzt das Array-Literal für PowerShell bauen:
-            arg_list_literal = "@(" + ",".join(f'"{a}"' for a in args) + ")"
+                arg_list_literal = "@(" + ",".join(f'"{a}"' for a in args) + ")"
 
-            # Finaler Start-Process-Aufruf:
-            ps_cmd = [
-                "powershell",
-                "-NoProfile",
-                "-Command",
-                "Start-Process",
-                "-FilePath", "powershell",
-                "-ArgumentList", arg_list_literal,
-                "-Verb", "RunAs"
-            ]
+                ps_cmd = [
+                    "powershell",
+                    "-NoProfile",
+                    "-Command",
+                    "Start-Process",
+                    "-FilePath", "powershell",
+                    "-ArgumentList", arg_list_literal,
+                    "-Verb", "RunAs"
+                ]
 
-            # Kein shell=True – wir übergeben schon das fertige List-Objekt
-            subprocess.run(ps_cmd, shell=False)
+                subprocess.run(ps_cmd, check=True)
+            logging.warning("[PASS] Execution completed.")
+        except subprocess.CalledProcessError as e:
+            logging.warning(f"[ERROR] {e}")
+        except Exception as e:
+            logging.warning(f"[ERROR] Unexpected error: {e}")
 
-            print("Completed!")
-
-    # Unix-Variante
     else:
         safe_cmd = command.replace("'", "'\"'\"'")
-        sudo_script = f"cd '{working_dir}' && {safe_cmd}; echo; read -p '[Press Enter to close]' _"
+        full_script = f"cd '{working_dir}' && {safe_cmd}; echo; read -p '[Drücke Enter zum Schließen]' _"
         try:
             subprocess.run(
-                ["sudo", "bash", "-c", sudo_script],
+                ["sudo", "bash", "-c", full_script],
                 check=True
             )
+            logging.warning("[PASS] Execution completed.")
         except subprocess.CalledProcessError as e:
-            print(f"Execution error: {e}")
+            logging.warning(f"[ERROR] Execution error: {e}")
+        except Exception as e:
+            logging.warning(f"[ERROR] Unexpected error: {e}")
 
 
 def is_wsl_installed():
@@ -13712,6 +13767,11 @@ def main():
 
             elif user_input.startswith("pp "):
                 user_input = user_input[3:]
+                run_command_with_admin_python_privileges(user_input)
+
+            elif user_input.startswith("pp-rm "):
+                user_input_file = user_input[6:]
+                user_input = f"Remove - Item - LiteralPath'{current_dir}\\{user_input_file}' - Recurse - Force"
                 run_command_with_admin_python_privileges(user_input)
 
             elif user_input.startswith("pp-cpp "):
