@@ -14026,8 +14026,24 @@ def main():
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Linux: {user_input}")
                     run_linux_command(user_input)
+                    
+            elif user_input.startswith("pl "):
+                user_input = user_input[3:].strip()
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Linux: {user_input}")
+                    run_linux_command(user_input)
 
             elif user_input.startswith("lx-cpp "):
+                user_input = user_input[7:].strip()
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Linux: {user_input}")
+                    run_linux_command(user_input)
+                    
+            elif user_input.startswith("pl-cpp "):
                 user_input = user_input[7:].strip()
                 if not is_wsl_installed():
                     print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
@@ -14042,8 +14058,24 @@ def main():
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Linux: {user_input}")
                     run_linux_cpp_c_command(user_input)
+                    
+            elif user_input.startswith("pl-cpp-c "):
+                user_input = user_input[9:].strip()
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Linux: {user_input}")
+                    run_linux_cpp_c_command(user_input)
 
             elif user_input.startswith("lx-c "):
+                user_input = user_input[5:].strip()
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Linux: {user_input}")
+                    run_linux_c_command(user_input)
+                    
+            elif user_input.startswith("pl-c "):
                 user_input = user_input[5:].strip()
                 if not is_wsl_installed():
                     print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
@@ -14058,6 +14090,14 @@ def main():
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Linux: {user_input}")
                     run_linux_c_c_command(user_input)
+                    
+            elif user_input.startswith("pl-c-c "):
+                user_input = user_input[7:].strip()
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Linux: {user_input}")
+                    run_linux_c_c_command(user_input)
 
             elif user_input.startswith("lx-p "):
                 user_input = user_input[5:].strip()
@@ -14066,8 +14106,24 @@ def main():
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Linux: {user_input}")
                     run_linux_python_command(user_input)
+                    
+            elif user_input.startswith("pl-p "):
+                user_input = user_input[5:].strip()
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Linux: {user_input}")
+                    run_linux_python_command(user_input)
 
             elif user_input.startswith("lx-p-c "):
+                user_input = user_input[6:].strip()
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Linux: {user_input}")
+                    run_linux_p_c_command(user_input)
+                    
+            elif user_input.startswith("pl-p-c "):
                 user_input = user_input[6:].strip()
                 if not is_wsl_installed():
                     print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
@@ -14091,6 +14147,22 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on Ubuntu: {user_input}")
                     run_ubuntu_command(user_input)
 
+            elif user_input.startswith("pl-u "):
+                user_input = user_input[5:].strip()
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Ubuntu: {user_input}")
+                    run_ubuntu_command(user_input)
+
+            elif user_input.startswith("pl-ubuntu "):
+                user_input = user_input[10:].strip()
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Ubuntu: {user_input}")
+                    run_ubuntu_command(user_input)
+
             elif user_input.startswith("ubuntu-c "):
                 user_input = user_input[9:].strip()
                 if not is_wsl_installed():
@@ -14099,8 +14171,41 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on Ubuntu: {user_input}")
                     run_ubuntu_c_command(user_input)
 
+            elif user_input.startswith("pl-u-c "):
+                user_input = user_input[7:].strip()
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Ubuntu: {user_input}")
+                    run_ubuntu_c_command(user_input)
+
+            elif user_input.startswith("pl-ubuntu-c "):
+                user_input = user_input[12:].strip()
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Ubuntu: {user_input}")
+                    run_ubuntu_c_command(user_input)
+
+
             elif user_input.startswith("ubuntu-p "):
                 user_input = user_input[9:].strip()
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Ubuntu: {user_input}")
+                    run_ubuntu_python_command(user_input)
+
+            elif user_input.startswith("pl-u-p "):
+                user_input = user_input[9:].strip()
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Ubuntu: {user_input}")
+                    run_ubuntu_python_command(user_input)
+                    
+            elif user_input.startswith("pl-ubuntu-p "):
+                user_input = user_input[12:].strip()
                 if not is_wsl_installed():
                     print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
@@ -14115,8 +14220,40 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on Debian: {user_input}")
                     run_debian_command(user_input)
 
+            elif user_input.startswith("pl-d "):
+                user_input = user_input[5:].strip()  # Remove the "debian " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Debian: {user_input}")
+                    run_debian_command(user_input)
+
+            elif user_input.startswith("pl-debian "):
+                user_input = user_input[10:].strip()  # Remove the "debian " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Debian: {user_input}")
+                    run_debian_command(user_input)
+
             elif user_input.startswith("debian-c "):
                 user_input = user_input[9:].strip()  # Remove the "debian " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Debian: {user_input}")
+                    run_debian_c_command(user_input)
+
+            elif user_input.startswith("pl-d-c "):
+                user_input = user_input[7:].strip()  # Remove the "debian " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Debian: {user_input}")
+                    run_debian_c_command(user_input)
+
+            elif user_input.startswith("pl-debian-c "):
+                user_input = user_input[12:].strip()  # Remove the "debian " prefix
                 if not is_wsl_installed():
                     print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
@@ -14131,7 +14268,31 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on Debian: {user_input}")
                     run_debian_python_command(user_input)
 
+            elif user_input.startswith("pl-d-p "):
+                user_input = user_input[7:].strip()  # Remove the "debian " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Debian: {user_input}")
+                    run_debian_python_command(user_input)
+
+            elif user_input.startswith("pl-debian-p "):
+                user_input = user_input[12:].strip()  # Remove the "debian " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Debian: {user_input}")
+                    run_debian_python_command(user_input)
+
             elif user_input.startswith("kali "):
+                user_input = user_input[5:].strip()  # Remove the "kali " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Kali: {user_input}")
+                    run_kali_command(user_input)
+
+            elif user_input.startswith("pl-k "):
                 user_input = user_input[5:].strip()  # Remove the "kali " prefix
                 if not is_wsl_installed():
                     print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
@@ -14147,8 +14308,40 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on Kali: {user_input}")
                     run_kali_c_command(user_input)
 
+            elif user_input.startswith("pl-k-c "):
+                user_input = user_input[7:].strip()  # Remove the "kali " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Kali: {user_input}")
+                    run_kali_c_command(user_input)
+
+            elif user_input.startswith("pl-kali-c "):
+                user_input = user_input[10:].strip()  # Remove the "kali " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Kali: {user_input}")
+                    run_kali_c_command(user_input)
+
             elif user_input.startswith("kali-p "):
                 user_input = user_input[7:].strip()  # Remove the "kali " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Kali: {user_input}")
+                    run_kali_python_command(user_input)
+
+            elif user_input.startswith("pl-k-p "):
+                user_input = user_input[7:].strip()  # Remove the "kali " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Kali: {user_input}")
+                    run_kali_python_command(user_input)
+
+            elif user_input.startswith("pl-kali-p "):
+                user_input = user_input[10:].strip()  # Remove the "kali " prefix
                 if not is_wsl_installed():
                     print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
@@ -14171,8 +14364,40 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on Arch: {user_input}")
                     run_arch_command(user_input)
 
+            elif user_input.startswith("pl-a "):
+                user_input = user_input[5:].strip()  # Remove the "arch " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Arch: {user_input}")
+                    run_arch_command(user_input)
+
+            elif user_input.startswith("pl-arch "):
+                user_input = user_input[8:].strip()  # Remove the "arch " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Arch: {user_input}")
+                    run_arch_command(user_input)
+
             elif user_input.startswith("arch-c "):
                 user_input = user_input[7:].strip()  # Remove the "arch " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Arch: {user_input}")
+                    run_arch_c_command(user_input)
+                    
+            elif user_input.startswith("pl-a-c "):
+                user_input = user_input[7:].strip()  # Remove the "arch " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Arch: {user_input}")
+                    run_arch_c_command(user_input)
+                    
+            elif user_input.startswith("pl-arch-c "):
+                user_input = user_input[10:].strip()  # Remove the "arch " prefix
                 if not is_wsl_installed():
                     print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
@@ -14187,8 +14412,32 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on Arch: {user_input}")
                     run_arch_python_command(user_input)
 
+            elif user_input.startswith("pl-a-p "):
+                user_input = user_input[7:].strip()  # Remove the "arch " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Arch: {user_input}")
+                    run_arch_python_command(user_input)
+
+            elif user_input.startswith("pl-arch-p "):
+                user_input = user_input[10:].strip()  # Remove the "arch " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Arch: {user_input}")
+                    run_arch_python_command(user_input)
+
             elif user_input.startswith("openSUSE "):
                 user_input = user_input[9:].strip()  # Remove the "openSUSE " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on openSUSE: {user_input}")
+                    run_opensuse_command(user_input)
+
+            elif user_input.startswith("pl-openSUSE "):
+                user_input = user_input[12:].strip()  # Remove the "openSUSE " prefix
                 if not is_wsl_installed():
                     print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
@@ -14203,8 +14452,24 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on openSUSE: {user_input}")
                     run_opensuse_c_command(user_input)
 
+            elif user_input.startswith("pl-openSUSE-c "):
+                user_input = user_input[14:].strip()  # Remove the "openSUSE " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on openSUSE: {user_input}")
+                    run_opensuse_c_command(user_input)
+
             elif user_input.startswith("openSUSE-p "):
                 user_input = user_input[11:].strip()  # Remove the "openSUSE " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on openSUSE: {user_input}")
+                    run_opensuse_python_command(user_input)
+
+            elif user_input.startswith("pl-openSUSE-p "):
+                user_input = user_input[14:].strip()  # Remove the "openSUSE " prefix
                 if not is_wsl_installed():
                     print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
@@ -14219,8 +14484,24 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on openSUSE: {user_input}")
                     run_mint_command(user_input)
 
+            elif user_input.startswith("pl-mint "):
+                user_input = user_input[8:].strip()  # Remove the "mint " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on openSUSE: {user_input}")
+                    run_mint_command(user_input)
+
             elif user_input.startswith("mint-c "):
                 user_input = user_input[7:].strip()  # Remove the "mint " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on openSUSE: {user_input}")
+                    run_mint_c_command(user_input)
+
+            elif user_input.startswith("pl-mint-c "):
+                user_input = user_input[10:].strip()  # Remove the "mint " prefix
                 if not is_wsl_installed():
                     print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
@@ -14235,8 +14516,24 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on openSUSE: {user_input}")
                     run_mint_python_command(user_input)
 
+            elif user_input.startswith("pl-mint-p "):
+                user_input = user_input[10:].strip()  # Remove the "mint " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on openSUSE: {user_input}")
+                    run_mint_python_command(user_input)
+
             elif user_input.startswith("fedora "):
                 user_input = user_input[7:].strip()  # Remove the "fedora " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Fedora: {user_input}")
+                    run_fedora_command(user_input)
+
+            elif user_input.startswith("pl-fedora "):
+                user_input = user_input[10:].strip()  # Remove the "fedora " prefix
                 if not is_wsl_installed():
                     print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
@@ -14251,8 +14548,24 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on Fedora: {user_input}")
                     run_fedora_c_command(user_input)
 
+            elif user_input.startswith("pl-fedora-c "):
+                user_input = user_input[12:].strip()  # Remove the "fedora " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Fedora: {user_input}")
+                    run_fedora_c_command(user_input)
+
             elif user_input.startswith("fedora-p "):
                 user_input = user_input[9:].strip()  # Remove the "fedora " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Fedora: {user_input}")
+                    run_fedora_python_command(user_input)
+
+            elif user_input.startswith("pl-fedora-p "):
+                user_input = user_input[12:].strip()  # Remove the "fedora " prefix
                 if not is_wsl_installed():
                     print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
@@ -14267,8 +14580,24 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on RedHat: {user_input}")
                     run_redhat_command(user_input)
 
+            elif user_input.startswith("pl-redhat "):
+                user_input = user_input[10:].strip()  # Remove the "redhat " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on RedHat: {user_input}")
+                    run_redhat_command(user_input)
+
             elif user_input.startswith("redhat-c "):
                 user_input = user_input[9:].strip()  # Remove the "redhat " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on RedHat: {user_input}")
+                    run_redhat_c_command(user_input)
+
+            elif user_input.startswith("pl-redhat-c "):
+                user_input = user_input[12:].strip()  # Remove the "redhat " prefix
                 if not is_wsl_installed():
                     print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
@@ -14283,8 +14612,24 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on RedHat: {user_input}")
                     run_redhat_python_command(user_input)
 
+            elif user_input.startswith("pl-redhat-p "):
+                user_input = user_input[12:].strip()  # Remove the "redhat " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on RedHat: {user_input}")
+                    run_redhat_python_command(user_input)
+
             elif user_input.startswith("sles "):
                 user_input = user_input[7:].strip()  # Remove the "sles " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on SLES: {user_input}")
+                    run_sles_command(user_input)
+
+            elif user_input.startswith("pl-sles "):
+                user_input = user_input[10:].strip()  # Remove the "sles " prefix
                 if not is_wsl_installed():
                     print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
@@ -14299,8 +14644,24 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on SLES: {user_input}")
                     run_sles_c_command(user_input)
 
+            elif user_input.startswith("pl-sles-c "):
+                user_input = user_input[12:].strip()  # Remove the "sles " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on SLES: {user_input}")
+                    run_sles_c_command(user_input)
+
             elif user_input.startswith("sles-p "):
                 user_input = user_input[9:].strip()  # Remove the "sles " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on SLES: {user_input}")
+                    run_sles_python_command(user_input)
+
+            elif user_input.startswith("pl-sles-p "):
+                user_input = user_input[12:].strip()  # Remove the "sles " prefix
                 if not is_wsl_installed():
                     print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
@@ -14315,8 +14676,32 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on Pengwin: {user_input}")
                     run_pengwin_command(user_input)
 
+            elif user_input.startswith("pengwin "):
+                user_input = user_input[7:].strip()  # Remove the "pengwin " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Pengwin: {user_input}")
+                    run_pengwin_command(user_input)
+
+            elif user_input.startswith("pl-pengwin "):
+                user_input = user_input[10:].strip()  # Remove the "pengwin " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Pengwin: {user_input}")
+                    run_pengwin_command(user_input)
+
             elif user_input.startswith("pengwin-c "):
                 user_input = user_input[9:].strip()  # Remove the "pengwin " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Pengwin: {user_input}")
+                    run_pengwin_c_command(user_input)
+
+            elif user_input.startswith("pl-pengwin-c "):
+                user_input = user_input[12:].strip()  # Remove the "pengwin " prefix
                 if not is_wsl_installed():
                     print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
@@ -14331,8 +14716,24 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on Pengwin: {user_input}")
                     run_pengwin_python_command(user_input)
 
+            elif user_input.startswith("pl-pengwin-p "):
+                user_input = user_input[12:].strip()  # Remove the "pengwin " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Pengwin: {user_input}")
+                    run_pengwin_python_command(user_input)
+
             elif user_input.startswith("oracle "):
                 user_input = user_input[7:].strip()  # Remove the "oracle " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Oracle: {user_input}")
+                    run_oracle_command(user_input)
+                    
+            elif user_input.startswith("pl-oracle "):
+                user_input = user_input[10:].strip()  # Remove the "oracle " prefix
                 if not is_wsl_installed():
                     print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
@@ -14347,8 +14748,24 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on Oracle: {user_input}")
                     run_oracle_c_command(user_input)
 
+            elif user_input.startswith("pl-oracle-c "):
+                user_input = user_input[12:].strip()  # Remove the "oracle " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Oracle: {user_input}")
+                    run_oracle_c_command(user_input)
+
             elif user_input.startswith("oracle-p "):
                 user_input = user_input[9:].strip()  # Remove the "oracle " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Oracle: {user_input}")
+                    run_oracle_python_command(user_input)
+
+            elif user_input.startswith("pl-oracle-p "):
+                user_input = user_input[12:].strip()  # Remove the "oracle " prefix
                 if not is_wsl_installed():
                     print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
@@ -14363,8 +14780,24 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on Alpine: {user_input}")
                     run_alpine_command(user_input)
 
+            elif user_input.startswith("pl-alpine "):
+                user_input = user_input[10:].strip()  # Remove the "alpine " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Alpine: {user_input}")
+                    run_alpine_command(user_input)
+
             elif user_input.startswith("alpine-c "):
                 user_input = user_input[9:].strip()  # Remove the "alpine " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Alpine: {user_input}")
+                    run_alpine_c_command(user_input)
+
+            elif user_input.startswith("pl-alpine-c "):
+                user_input = user_input[12:].strip()  # Remove the "alpine " prefix
                 if not is_wsl_installed():
                     print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
@@ -14379,8 +14812,24 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on Alpine: {user_input}")
                     run_alpine_python_command(user_input)
 
+            elif user_input.startswith("pl-alpine-p "):
+                user_input = user_input[12:].strip()  # Remove the "alpine " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Alpine: {user_input}")
+                    run_alpine_python_command(user_input)
+
             elif user_input.startswith("clear "):
                 user_input = user_input[7:].strip()  # Remove the "clear " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Clear: {user_input}")
+                    run_clear_command(user_input)
+
+            elif user_input.startswith("pl-clear "):
+                user_input = user_input[10:].strip()  # Remove the "clear " prefix
                 if not is_wsl_installed():
                     print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
@@ -14395,8 +14844,24 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on Clear: {user_input}")
                     run_clear_c_command(user_input)
 
+            elif user_input.startswith("pl-clear-c "):
+                user_input = user_input[12:].strip()  # Remove the "clear " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Clear: {user_input}")
+                    run_clear_c_command(user_input)
+
             elif user_input.startswith("clear-p "):
                 user_input = user_input[9:].strip()  # Remove the "clear " prefix
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Clear: {user_input}")
+                    run_clear_python_command(user_input)
+
+            elif user_input.startswith("pl-clear-p "):
+                user_input = user_input[12:].strip()  # Remove the "clear " prefix
                 if not is_wsl_installed():
                     print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
