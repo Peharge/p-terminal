@@ -1388,7 +1388,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() in ["dir2", "ls2"]:
-        command = f"""Powershell ls"""
+        command = "Powershell ls"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
@@ -1401,7 +1401,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() in ["dir3", "ls3"]:
-        command = f"""wsl ls"""
+        command = "wsl ls"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
