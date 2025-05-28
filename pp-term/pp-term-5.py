@@ -180,6 +180,10 @@ def timestamp() -> str:
     return now.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
 
 
+def hyperlink(text, url):
+    return f"\033]8;;{url}\033\\{text}\033]8;;\033\\"
+
+
 def print_banner():
     print(f"""
 {blue}██████╗ ██████╗{reset}{white}    ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗     {reset}
@@ -191,7 +195,8 @@ def print_banner():
 """)
     print(f"""A warm welcome, {blue}{user_name}{reset}, to Peharge Python Terminal!
 Developed by Peharge and JK (Peharge Projects 2025)
-Thank you so much for using PP-Terminal. We truly appreciate your support ❤️""")
+Thank you so much for using PP-Terminal. We truly appreciate your support ❤️
+{hyperlink("GitHub Repository", "https://github.com/Peharge/p-terminal")} {hyperlink("Project Website", "https://peharge.github.io/MAVIS-web/p-term.html")} {hyperlink("Project Website", "https://github.com/Peharge/p-terminalblob/main/LEARN.md")}""")
 
     print()
 
