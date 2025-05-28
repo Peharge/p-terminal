@@ -4723,7 +4723,7 @@ def handle_special_commands(user_input):
     if user_input.lower() == "pff7":
         current_dir = Path.cwd().resolve()
 
-        command = 'Get-ChildItem -Path "C:\Pfad\zum\Ordner" -Recurse | Where-Object { -not $_.PSIsContainer }'
+        command = f'Get-ChildItem -Path "{current_dir}" -Recurse | Where-Object {{ -not $_.PSIsContainer }}'
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
