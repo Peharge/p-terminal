@@ -245,6 +245,19 @@ def set_python_path():
     os.environ["PYTHON_PATH"] = python_executable
 
 
+def set_python_path_3(env_path: str) -> None:
+    """Setzt PYTHON_PATH basierend auf dem gefundenen Environment."""
+    active_env = find_active_env()
+
+    python_executable = os.path.join(active_env, "Scripts", "python.exe")
+
+    if not os.path.exists(python_executable):
+        # Fallback auf default
+        python_executable = os.path.abspath(DEFAULT_PYTHON_EXECUTABLE)
+
+    os.environ["PYTHON_PATH"] = python_executable
+
+
 def ensure_state_dir_exists() -> None:
     """Stellt sicher, dass das Verzeichnis für den Statusfile existiert."""
     STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
@@ -305,15 +318,23 @@ def find_env_in_current_dir(max_workers: int = None) -> Optional[str]:
     return None
 
 
-def find_active_env() -> str:
+def find_active_env(user_provided: Optional[str] = None) -> str:
     """
     Bestimmt den aktiven Virtualenv:
-    1. Suche parallel nach Env im CWD.
-    2. Wenn anders als gespeichertes, dann speichern.
-    3. Wenn keins gefunden, dann gespeichertes verwenden.
-    4. Wenn nichts gespeichert: Fallback-Env.
+    1. Wenn user_provided gesetzt: speichert und gibt ihn zurück.
+    2. Suche parallel nach Env im CWD.
+    3. Wenn gefunden und anders als gespeichertes, dann speichern.
+    4. Wenn gespeichert vorhanden: verwende es.
+    5. Fallback auf DEFAULT_ENV_DIR.
     """
+    # 1. User-spezifisches Env
+    if user_provided:
+        save_current_env(user_provided)
+        return user_provided
+
+    # 2. Suche im CWD
     found = find_env_in_current_dir()
+    # 3. Aus gespeicherter Datei
     saved = load_saved_env()
 
     if found:
@@ -324,6 +345,7 @@ def find_active_env() -> str:
     if saved:
         return saved
 
+    # 5. Fallback
     return str(DEFAULT_ENV_DIR.resolve())
 
 
@@ -15072,6 +15094,20 @@ def main():
             elif user_input.lower() == "pin cool-23":
                 state = "cool-23"
                 continue
+
+            elif user_input.startswith("p-venv "):
+
+                env_name = user_input[7:].strip()
+
+                env_path = str((current_dir / env_name).resolve())
+
+                # setzt und speichert das aktive Env
+
+                active = find_active_env(env_path)
+
+                set_python_path_3(active)
+
+                print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
 
             elif user_input.startswith("pp "):
                 user_input = user_input[3:]
