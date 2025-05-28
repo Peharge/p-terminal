@@ -1388,7 +1388,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() in ["dir2", "ls2"]:
-        command = "Powershell ls"
+        command = "powershell ls"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
@@ -4273,7 +4273,7 @@ def handle_special_commands(user_input):
         user_input = user_input[4:].strip()
         current_dir = Path.cwd().resolve()
 
-        command = f"""Powershell New-Item -Path "{current_dir}\\{user_input}"  -ItemType File"""
+        command = f"""powershell New-Item -Path "{current_dir}\\{user_input}"  -ItemType File"""
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
@@ -4290,7 +4290,24 @@ def handle_special_commands(user_input):
         user_input = user_input[4:].strip()
         current_dir = Path.cwd().resolve()
 
-        command = f"""Powershell Get-ChildItem -Path "{current_dir}" -Recurse -Filter "{user_input}" """
+        command = f"""powershell Get-ChildItem -Path "{current_dir}" -Recurse -Filter "{user_input}" """
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Search: {current_dir} -> {user_input}")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pcf command: {e}")
+        return True
+    
+    if user_input.startswith("pff-name "):
+        user_input = user_input[8:].strip()
+        current_dir = Path.cwd().resolve()
+
+        command = f"""powershell Get-ChildItem -Path "{current_dir}" -Recurse -Filter "{user_input}" """
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
@@ -4307,7 +4324,24 @@ def handle_special_commands(user_input):
         user_input = user_input[4:].strip()
         current_dir = Path.cwd().resolve()
 
-        command = f'Powershell Get-ChildItem -Path "{current_dir}" -Recurse | Where-Object {{ $_.Name -like "*{user_input}*" }}'
+        command = f'powershell Get-ChildItem -Path "{current_dir}" -Recurse | Where-Object {{ $_.Name -like "*{user_input}*" }}'
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Search: {current_dir} -> {user_input}")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pcf command: {e}")
+        return True
+    
+    if user_input.startswith("pff-name-like "):
+        user_input = user_input[14:].strip()
+        current_dir = Path.cwd().resolve()
+
+        command = f'powershell Get-ChildItem -Path "{current_dir}" -Recurse | Where-Object {{ $_.Name -like "*{user_input}*" }}'
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
@@ -4324,7 +4358,24 @@ def handle_special_commands(user_input):
         user_input = user_input[4:].strip()
         current_dir = Path.cwd().resolve()
 
-        command = f"""Powershell Get-ChildItem -Path "{current_dir}" -Recurse -Include *{user_input}"""
+        command = f"""powershell Get-ChildItem -Path "{current_dir}" -Recurse -Include *{user_input}"""
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Search: {current_dir} -> {user_input}")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pcf command: {e}")
+        return True
+    
+    if user_input.startswith("pff-name-include "):
+        user_input = user_input[17:].strip()
+        current_dir = Path.cwd().resolve()
+
+        command = f"""powershell Get-ChildItem -Path "{current_dir}" -Recurse -Include *{user_input}"""
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
@@ -4339,6 +4390,26 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pff4-txt "):
         user_input = user_input[9:].strip()
+        current_dir = Path.cwd().resolve()
+
+        extensions = ["*.txt", "*.md", "*.log"]
+        patterns = " -Include " + ",".join(extensions)
+
+        command = f"""powershell -Command "Get-ChildItem -Recurse -Path '{current_dir}'{patterns} | Select-String -Pattern '{user_input}'" """
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Search: {current_dir} -> {user_input}")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pcf command: {e}")
+        return True
+
+    if user_input.startswith("pff-word-txt "):
+        user_input = user_input[13:].strip()
         current_dir = Path.cwd().resolve()
 
         extensions = ["*.txt", "*.md", "*.log"]
@@ -4378,6 +4449,27 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing pcf command: {e}")
         return True
 
+    if user_input.startswith("pff-word-code "):
+        user_input = user_input[14:].strip()
+        current_dir = Path.cwd().resolve()
+
+        extensions = ["*.py", "*.cs", "*.cpp", "*.c", "*.h", "*.java", "*.js", "*.ts", "*.html", "*.css", "*.json",
+                      "*.xml"]
+        patterns = " -Include " + ",".join(extensions)
+
+        command = f"""powershell -Command "Get-ChildItem -Recurse -Path '{current_dir}'{patterns} | Select-String -Pattern '{user_input}'" """
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Search: {current_dir} -> {user_input}")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pcf command: {e}")
+        return True
+
     if user_input.startswith("pff4-config "):
         user_input = user_input[12:].strip()
         current_dir = Path.cwd().resolve()
@@ -4398,8 +4490,48 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing pcf command: {e}")
         return True
 
+    if user_input.startswith("pff-word-config "):
+        user_input = user_input[16:].strip()
+        current_dir = Path.cwd().resolve()
+
+        extensions = ["*.ini", "*.conf", "*.cfg", "*.yaml", "*.yml", "*.toml"]
+        patterns = " -Include " + ",".join(extensions)
+
+        command = f"""powershell -Command "Get-ChildItem -Recurse -Path '{current_dir}'{patterns} | Select-String -Pattern '{user_input}'" """
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Search: {current_dir} -> {user_input}")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pcf command: {e}")
+        return True
+
     if user_input.startswith("pff4-scripts "):
         user_input = user_input[13:].strip()
+        current_dir = Path.cwd().resolve()
+
+        extensions = ["*.bat", "*.cmd", "*.ps1", "*.sh"]
+        patterns = " -Include " + ",".join(extensions)
+
+        command = f"""powershell -Command "Get-ChildItem -Recurse -Path '{current_dir}'{patterns} | Select-String -Pattern '{user_input}'" """
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Search: {current_dir} -> {user_input}")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pcf command: {e}")
+        return True
+
+    if user_input.startswith("pff-word-scripts "):
+        user_input = user_input[17:].strip()
         current_dir = Path.cwd().resolve()
 
         extensions = ["*.bat", "*.cmd", "*.ps1", "*.sh"]
