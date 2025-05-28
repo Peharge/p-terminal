@@ -1400,6 +1400,19 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing ls command: {e}")
         return True
 
+    if user_input.lower() in ["dir3", "ls3"]:
+        command = f"""wsl ls"""
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing ls command: {e}")
+        return True
+
     if user_input.startswith("mkdir "):
         os.makedirs(user_input[6:].strip(), exist_ok=True)
         return True
