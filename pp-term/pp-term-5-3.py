@@ -1455,8 +1455,93 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "exit":
-        print(f"{yellow}Exiting PP-Terminal... Goodbye {user_name}!{reset}")
+        print(f"[{timestamp()}] [INFO] {yellow}Exiting PP-Terminal... Goodbye {user_name}!{reset}")
         sys.exit(0)
+
+    if user_input.lower() == "pp-exit":
+        print(f"[{timestamp()}] [INFO] {yellow}Exiting PP-Terminal... Goodbye {user_name}!{reset}")
+        sys.stdout.flush()  # WICHTIG: Alle Ausgaben sicher beenden
+        sys.exit(0)
+
+    if user_input.lower() == "shutdown":
+        print(f"[{timestamp()}] [INFO] {yellow}Exiting PP-Terminal... Goodbye {user_name}!{reset}")
+        sys.exit(0)
+
+    if user_input.lower() == "pp-shutdown":
+        print(f"[{timestamp()}] [INFO] {yellow}Exiting PP-Terminal... Goodbye {user_name}!{reset}")
+        sys.stdout.flush()  # WICHTIG: Alle Ausgaben sicher beenden
+        sys.exit(0)
+
+    if user_input.lower() == "restart":
+        print(f"[{timestamp()}] [INFO] {yellow}Restarting PP-Terminal... Buckle up, {user_name}!{reset}")
+        os.execl(sys.executable, sys.executable, *sys.argv)
+
+    if user_input.lower() == "pp-restart":
+        print(f"[{timestamp()}] [INFO] {yellow}Restarting PP-Terminal... Buckle up, {user_name}!{reset}")
+        sys.stdout.flush()  # Wichtig: Ausgabe sicherstellen
+        time.sleep(0.5)  # Kurze Pause, damit Text sichtbar bleibt
+
+        try:
+            os.execl(sys.executable, sys.executable, *sys.argv)
+
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] {yellow}Failed to restart: {e}{reset}")
+            sys.exit(1)
+
+    if user_input.lower() == "restart-os":
+        print(f"[{timestamp()}] [INFO] {yellow}System reboot initiated... Hold tight, {user_name}!{reset}")
+        system = platform.system()
+        if system == "Windows":
+            os.system("shutdown /r /t 0")
+        elif system in ["Linux", "Darwin"]:  # Darwin = macOS
+            os.system("sudo reboot")
+        else:
+            print(f"[{timestamp()}] [INFO] {yellow}Unsupported OS for restart: {system}{reset}")
+
+    if user_input.lower() == "pp-restart-os":
+        print(f"[{timestamp()}] [INFO] {yellow}System reboot initiated... Hold tight, {user_name}!{reset}")
+        sys.stdout.flush()
+        time.sleep(1)
+
+        system = platform.system()
+
+        try:
+            if system == "Windows":
+                os.system("shutdown /r /t 0")
+            elif system == "Linux":
+                print(f"[{timestamp()}] [INFO] {yellow}Rebooting Linux system... You may need to enter your sudo password.{reset}")
+                os.system("sudo reboot")
+            elif system == "Darwin":  # macOS
+                print(f"[{timestamp()}] [INFO] {yellow}Rebooting macOS... You may need to enter your sudo password.{reset}")
+                os.system("sudo shutdown -r now")
+            else:
+                print(f"[{timestamp()}] [INFO] {yellow}Unsupported OS for restart: {system}{reset}")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] {yellow}Error attempting OS restart: {e}{reset}")
+            sys.exit(1)
+
+    if user_input.lower() == "shutdown-os":
+        print(f"[{timestamp()}] [INFO] {yellow}Shutting down the operating system... Goodbye forever, {user_name} 🕊️{reset}")
+        system = platform.system()
+        if system == "Windows":
+            os.system("shutdown /s /t 0")
+        elif system in ["Linux", "Darwin"]:
+            os.system("sudo shutdown now")
+        else:
+            print(f"[{timestamp()}] [INFO] {yellow}Unsupported OS for shutdown: {system}{reset}")
+
+    if user_input.lower() == "pp-shutdown-os":
+        print(f"[{timestamp()}] [INFO] {yellow}FORTH-style TERMINATION... No turning back now, {user_name}!{reset}")
+
+        # ACHTUNG: Dieser Befehl fährt das Betriebssystem wirklich herunter!
+        if os.name == 'nt':  # Windows
+            os.system("shutdown /s /t 0")
+        elif os.name == 'posix':  # Linux / macOS
+            os.system("sudo shutdown -h now")
+        else:
+            print(f"[{timestamp()}] [ERROR] Unknown operating system – shutdown not possible.")
+
+        sys.exit(42)
 
     if user_input.lower() == "git ls":
 
@@ -16136,7 +16221,7 @@ def main():
             sys.stderr.flush()
 
         except KeyboardInterrupt:
-            print("\nExiting...")
+            print(f"\n[{timestamp()}] [INFO] Exiting...")
             break
         except Exception as e:
             print(f"[{timestamp()}] [ERROR] {str(e)}", file=sys.stderr)
