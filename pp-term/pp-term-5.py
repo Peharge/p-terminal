@@ -6717,7 +6717,7 @@ def handle_vs_cpp_command(user_input: str) -> bool:
     elif len(parts) == 2 and parts[0].lower() == 'vs-cpp' and parts[1].lower().endswith('.cpp'):
         filename = parts[1]
     else:
-        print(f"[{timestamp()}] [ERROR] Usage: vs-cpp <filename>.cpp or simply <filename>.cpp")
+        print(f"[{timestamp()}] [ERROR] Usage: vs-cpp <filename>.cpp, pc-cpp <filename>.cpp or simply <filename>.cpp")
         return True
 
     # Prüfe Datei im aktuellen Verzeichnis
@@ -6796,7 +6796,7 @@ def handle_vs_cs_command(user_input: str) -> bool:
     elif len(parts) == 2 and parts[0].lower() == 'vs-cs' and parts[1].lower().endswith('.cs'):
         filename = parts[1]
     else:
-        print(f"[{timestamp()}] [ERROR] Usage: vs-cs <filename>.cs or simply <filename>.cs")
+        print(f"[{timestamp()}] [ERROR] Usage: vs-cs <filename>.cs, pc-cs <filename>.cpp  or simply <filename>.cs")
         return True
 
     filepath = os.path.join(os.getcwd(), filename)
