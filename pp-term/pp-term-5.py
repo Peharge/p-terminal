@@ -5361,6 +5361,35 @@ def handle_special_commands(user_input):
 
         return True
 
+    if user_input.startswith("po "):
+        user_input = user_input[3:].strip()
+        ollama_installed = check_command_installed("ollama")
+        if ollama_installed:
+            print(f"[{timestamp()}] [INFO] Ollama is installed.")
+        else:
+            print(f"[{timestamp()}] [ERROR] Ollama is not installed. Please install it to proceed.")
+
+        start_ollama()
+        check_ollama_update()
+
+        command = f"ollama {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        return True
+
+    if user_input.lower() == "po-run":
+        ollama_installed = check_command_installed("ollama")
+        if ollama_installed:
+            print(f"[{timestamp()}] [INFO] Ollama is installed.")
+        else:
+            print(f"[{timestamp()}] [ERROR] Ollama is not installed. Please install it to proceed.")
+
+        start_ollama()
+        check_ollama_update()
+
+        return True
+
     if user_input.startswith("pa "):
         user_input = user_input[3:].strip()
         ollama_installed = check_command_installed("ollama")
