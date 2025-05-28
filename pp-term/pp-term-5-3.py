@@ -4392,7 +4392,8 @@ def handle_special_commands(user_input):
         user_input = user_input[9:].strip()
         current_dir = Path.cwd().resolve()
 
-        extensions = ["*.txt", "*.md", "*.log"]
+        extensions = ["*.txt", "*.md", "*.log", "*.pdf", "*.docx", "*.xlsx", "*.pptx", "*.csv", "*.json", "*.xml", "*.yaml", "*.ini", "*.html", "*.js", "*.py"]
+
         patterns = " -Include " + ",".join(extensions)
 
         command = f"""powershell -Command "Get-ChildItem -Recurse -Path '{current_dir}'{patterns} | Select-String -Pattern '{user_input}'" """
@@ -4412,7 +4413,8 @@ def handle_special_commands(user_input):
         user_input = user_input[13:].strip()
         current_dir = Path.cwd().resolve()
 
-        extensions = ["*.txt", "*.md", "*.log"]
+        extensions = ["*.txt", "*.md", "*.log", "*.pdf", "*.docx", "*.xlsx", "*.pptx", "*.csv", "*.json", "*.xml", "*.yaml", "*.ini", "*.html", "*.js", "*.py"]
+
         patterns = " -Include " + ",".join(extensions)
 
         command = f"""powershell -Command "Get-ChildItem -Recurse -Path '{current_dir}'{patterns} | Select-String -Pattern '{user_input}'" """
@@ -4432,8 +4434,98 @@ def handle_special_commands(user_input):
         user_input = user_input[10:].strip()
         current_dir = Path.cwd().resolve()
 
-        extensions = ["*.py", "*.cs", "*.cpp", "*.c", "*.h", "*.java", "*.js", "*.ts", "*.html", "*.css", "*.json",
-                      "*.xml"]
+        extensions = ["*.py", "*.pyc", "*.pyo", "*.ipynb", "*.r", "*.rmd", "*.jl", "*.m", "*.nb", "*.nbp", "*.sage",
+                      "*.scm", "*.ss", "*.clj", "*.cljs", "*.cljc", "*.edn",
+                      "*.c", "*.cpp", "*.cc", "*.cxx", "*.h", "*.hpp", "*.hh", "*.hxx", "*.cs", "*.java", "*.kt",
+                      "*.kts", "*.scala", "*.go", "*.rs", "*.swift", "*.dart",
+                      "*.ts", "*.tsx", "*.js", "*.jsx", "*.mjs", "*.cjs", "*.php", "*.phtml", "*.php3", "*.php4",
+                      "*.php5", "*.rb", "*.pl", "*.pm", "*.lua", "*.vb", "*.vbs",
+                      "*.asm", "*.s", "*.f", "*.f90", "*.f95", "*.pas", "*.pp", "*.d", "*.nim", "*.ada", "*.adb",
+                      "*.ads", "*.lisp", "*.el", "*.cl", "*.ex", "*.exs", "*.erl",
+                      "*.hrl", "*.ml", "*.mli", "*.mll", "*.mly", "*.groovy", "*.gvy", "*.gy", "*.gsh", "*.tcl", "*.tk",
+                      "*.coffee", "*.sc", "*.rkt", "*.hs", "*.lhs", "*.fs",
+                      "*.fsi", "*.fsx", "*.fsscript", "*.n", "*.nqc", "*.v", "*.vh", "*.sv", "*.svh", "*.vhdl", "*.vhd",
+                      "*.html", "*.htm", "*.xhtml", "*.css", "*.scss", "*.less", "*.xml", "*.json", "*.yaml", "*.yml",
+                      "*.toml", "*.ini", "*.env", "*.cfg", "*.conf",
+                      "*.sql", "*.db", "*.sqlite", "*.mdb", "*.accdb", "*.csv", "*.tsv", "*.parquet", "*.avro", "*.orc",
+                      "*.hdf5", "*.feather", "*.arrow",
+                      "*.sh", "*.bash", "*.zsh", "*.ksh", "*.csh", "*.bat", "*.cmd", "*.ps1", "*.psm1", "*.psd1",
+                      "*.scpt", "*.applescript", "*.vbs", "*.wsf",
+                      "*.make", "*.mak", "*.cmake", "*.gradle", "*.pom", "*.build", "*.proj", "*.sln", "*.csproj",
+                      "*.vcxproj", "*.xcodeproj", "*.ninja",
+                      "*.md", "*.markdown", "*.rst", "*.asciidoc", "*.adoc", "*.tex", "*.latex", "*.bib", "*.doc",
+                      "*.docx", "*.odt", "*.pdf",
+                      "*.properties", "*.settings", "*.prefs", "*.config", "*.cfg", "*.conf", "*.ini", "*.toml",
+                      "*.yaml", "*.yml", "*.json",
+                      "*.log", "*.out", "*.err", "*.bak", "*.tmp", "*.lock", "*.pid", "*.swp", "*.swo", "*.orig",
+                      "*.rej",
+                      "*.vue", "*.svelte", "*.astro", "*.elm", "*.purs", "*.res", "*.re", "*.ml", "*.mli", "*.mll",
+                      "*.mly", "*.zig", "*.vala", "*.vapi", "*.nim", "*.nimble",
+                      "*.ktm", "*.kts", "*.cl", "*.clw", "*.cls", "*.m", "*.mm", "*.ml", "*.mli", "*.mll", "*.mly",
+                      "*.fs", "*.fsi", "*.fsx", "*.fsscript",
+                      "*.r", "*.rmd", "*.rhtml", "*.rxml", "*.rjs", "*.rpy", "*.rpyc", "*.rbc", "*.rbw", "*.erb",
+                      "*.haml", "*.slim", "*.liquid",
+                      "*.ejs", "*.hbs", "*.mustache", "*.pug", "*.jade", "*.njk", "*.nunjucks", "*.twig", "*.blade.php",
+                      "*.latte", "*.volt", "*.tmpl", "*.tpl",
+                      "*.jsp", "*.jspx", "*.asp", "*.aspx", "*.ascx", "*.ashx", "*.asmx", "*.cshtml", "*.vbhtml",
+                      "*.cgi", "*.fcgi", "*.pl", "*.pm", "*.t", "*.pod", "*.psgi",
+                      "*.ex", "*.exs", "*.eex", "*.leex", "*.heex",
+                      "*.erl", "*.hrl", "*.yaws",
+                      "*.lisp", "*.el", "*.cl", "*.scm", "*.ss", "*.rkt", "*.rktl", "*.rktd",
+                      "*.hs", "*.lhs", "*.purs", "*.agda", "*.lagda", "*.lagda.tex",
+                      "*.ml", "*.mli", "*.mll", "*.mly",
+                      "*.fs", "*.fsi", "*.fsx", "*.fsscript",
+                      "*.d", "*.di",
+                      "*.nim", "*.nims", "*.nimble",
+                      "*.vala", "*.vapi",
+                      "*.zig",
+                      "*.v", "*.vh", "*.sv", "*.svh", "*.vhdl", "*.vhd",
+                      "*.q", "*.ql", "*.qvs",
+                      "*.sas", "*.sas7bdat", "*.sas7bcat", "*.sas7bvew", "*.sast", "*.sastat", "*.sasm", "*.sasmacr",
+                      "*.sascfg", "*.sasxpt",
+                      "*.spv", "*.spo", "*.sps", "*.sav", "*.zsav", "*.por",
+                      "*.dta",
+                      "*.do", "*.ado", "*.dta", "*.gph",
+                      "*.m", "*.mat", "*.fig", "*.mex", "*.mexw32", "*.mexw64", "*.mexmaci64",
+                      "*.ipynb", "*.py", "*.pyc", "*.pyo", "*.pyd", "*.pyw", "*.pyz",
+                      "*.r", "*.rdata", "*.rds", "*.rda", "*.rmd", "*.rproj",
+                      "*.jl", "*.jld", "*.jld2", "*.bson", "*.feather", "*.parquet",
+                      "*.csv", "*.tsv", "*.xls", "*.xlsx", "*.ods",
+                      "*.json", "*.jsonl", "*.ndjson", "*.yaml", "*.yml", "*.toml", "*.ini", "*.cfg", "*.conf",
+                      "*.xml", "*.xsd", "*.xsl", "*.xslt", "*.dtd",
+                      "*.sql", "*.sqlite", "*.db", "*.dbf", "*.mdb", "*.accdb",
+                      "*.hdf5", "*.h5", "*.nc", "*.cdf", "*.grib", "*.grb", "*.grb2",
+                      "*.npz", "*.npy", "*.mat", "*.rda", "*.rds", "*.feather", "*.parquet",
+                      "*.log", "*.out", "*.err", "*.txt", "*.md", "*.rst", "*.adoc", "*.asciidoc",
+                      "*.tex", "*.bib", "*.cls", "*.sty", "*.dtx", "*.ins",
+                      "*.pdf", "*.ps", "*.eps", "*.svg", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp", "*.tiff",
+                      "*.mp3", "*.wav", "*.flac", "*.ogg", "*.m4a", "*.aac", "*.wma",
+                      "*.mp4", "*.mkv", "*.avi", "*.mov", "*.wmv", "*.flv", "*.webm",
+                      "*.zip", "*.tar", "*.gz", "*.bz2", "*.xz", "*.7z", "*.rar", "*.iso", "*.dmg",
+                      "*.exe", "*.msi", "*.apk", "*.app", "*.deb", "*.rpm", "*.bin", "*.run", "*.sh", "*.bat", "*.cmd",
+                      "*.ps1",
+                      "*.dll", "*.so", "*.dylib", "*.a", "*.lib", "*.o", "*.obj",
+                      "*.jar", "*.war", "*.ear", "*.class", "*.dex", "*.apk", "*.aar",
+                      "*.xpi", "*.crx", "*.nex", "*.appx", "*.appxbundle", "*.msix", "*.msixbundle",
+                      "*.vbox", "*.vbox-prev", "*.vdi", "*.vmdk", "*.vhd", "*.vhdx", "*.qcow", "*.qcow2", "*.img",
+                      "*.ovf", "*.ova", "*.iso", "*.img", "*.dmg",
+                      "*.pem", "*.crt", "*.cer", "*.key", "*.csr", "*.pfx", "*.p12", "*.der", "*.jks", "*.keystore",
+                      "*.asc", "*.sig", "*.gpg", "*.pgp",
+                      "*.log", "*.bak", "*.old", "*.tmp", "*.swp", "*.swo", "*.lock", "*.pid",
+                      "*.torrent", "*.nzb", "*.magnet",
+                      "*.ics", "*.vcf", "*.vcs", "*.ical", "*.icalendar",
+                      "*.eml", "*.msg", "*.mbox", "*.pst", "*.ost",
+                      "*.srt", "*.sub", "*.ass", "*.ssa", "*.vtt",
+                      "*.cue", "*.bin", "*.iso", "*.nrg", "*.mds", "*.mdf", "*.ccd", "*.img", "*.toast",
+                      "*.cue", "*.ape", "*.flac", "*.wv", "*.tta", "*.tak", "*.alac", "*.m4a",
+                      "*.sfv", "*.md5", "*.sha1", "*.sha256", "*.sha512",
+                      "*.torrent", "*.nzb", "*.magnet",
+                      "*.ics", "*.vcf", "*.vcs", "*.ical", "*.icalendar",
+                      "*.eml", "*.msg", "*.mbox", "*.pst", "*.ost",
+                      "*.srt", "*.sub", "*.ass", "*.ssa", "*.vtt",
+                      "*.cue", "*.bin", "*.iso", "*.nrg", "*.mds", "*.mdf", "*.ccd", "*.img", "*.toast",
+                      "*.cue", "*.ape", "*.flac", "*.wv", "*.tta", "*.tak", "*.al"]
+
         patterns = " -Include " + ",".join(extensions)
 
         command = f"""powershell -Command "Get-ChildItem -Recurse -Path '{current_dir}'{patterns} | Select-String -Pattern '{user_input}'" """
@@ -4453,8 +4545,98 @@ def handle_special_commands(user_input):
         user_input = user_input[14:].strip()
         current_dir = Path.cwd().resolve()
 
-        extensions = ["*.py", "*.cs", "*.cpp", "*.c", "*.h", "*.java", "*.js", "*.ts", "*.html", "*.css", "*.json",
-                      "*.xml"]
+        extensions = ["*.py", "*.pyc", "*.pyo", "*.ipynb", "*.r", "*.rmd", "*.jl", "*.m", "*.nb", "*.nbp", "*.sage",
+                      "*.scm", "*.ss", "*.clj", "*.cljs", "*.cljc", "*.edn",
+                      "*.c", "*.cpp", "*.cc", "*.cxx", "*.h", "*.hpp", "*.hh", "*.hxx", "*.cs", "*.java", "*.kt",
+                      "*.kts", "*.scala", "*.go", "*.rs", "*.swift", "*.dart",
+                      "*.ts", "*.tsx", "*.js", "*.jsx", "*.mjs", "*.cjs", "*.php", "*.phtml", "*.php3", "*.php4",
+                      "*.php5", "*.rb", "*.pl", "*.pm", "*.lua", "*.vb", "*.vbs",
+                      "*.asm", "*.s", "*.f", "*.f90", "*.f95", "*.pas", "*.pp", "*.d", "*.nim", "*.ada", "*.adb",
+                      "*.ads", "*.lisp", "*.el", "*.cl", "*.ex", "*.exs", "*.erl",
+                      "*.hrl", "*.ml", "*.mli", "*.mll", "*.mly", "*.groovy", "*.gvy", "*.gy", "*.gsh", "*.tcl", "*.tk",
+                      "*.coffee", "*.sc", "*.rkt", "*.hs", "*.lhs", "*.fs",
+                      "*.fsi", "*.fsx", "*.fsscript", "*.n", "*.nqc", "*.v", "*.vh", "*.sv", "*.svh", "*.vhdl", "*.vhd",
+                      "*.html", "*.htm", "*.xhtml", "*.css", "*.scss", "*.less", "*.xml", "*.json", "*.yaml", "*.yml",
+                      "*.toml", "*.ini", "*.env", "*.cfg", "*.conf",
+                      "*.sql", "*.db", "*.sqlite", "*.mdb", "*.accdb", "*.csv", "*.tsv", "*.parquet", "*.avro", "*.orc",
+                      "*.hdf5", "*.feather", "*.arrow",
+                      "*.sh", "*.bash", "*.zsh", "*.ksh", "*.csh", "*.bat", "*.cmd", "*.ps1", "*.psm1", "*.psd1",
+                      "*.scpt", "*.applescript", "*.vbs", "*.wsf",
+                      "*.make", "*.mak", "*.cmake", "*.gradle", "*.pom", "*.build", "*.proj", "*.sln", "*.csproj",
+                      "*.vcxproj", "*.xcodeproj", "*.ninja",
+                      "*.md", "*.markdown", "*.rst", "*.asciidoc", "*.adoc", "*.tex", "*.latex", "*.bib", "*.doc",
+                      "*.docx", "*.odt", "*.pdf",
+                      "*.properties", "*.settings", "*.prefs", "*.config", "*.cfg", "*.conf", "*.ini", "*.toml",
+                      "*.yaml", "*.yml", "*.json",
+                      "*.log", "*.out", "*.err", "*.bak", "*.tmp", "*.lock", "*.pid", "*.swp", "*.swo", "*.orig",
+                      "*.rej",
+                      "*.vue", "*.svelte", "*.astro", "*.elm", "*.purs", "*.res", "*.re", "*.ml", "*.mli", "*.mll",
+                      "*.mly", "*.zig", "*.vala", "*.vapi", "*.nim", "*.nimble",
+                      "*.ktm", "*.kts", "*.cl", "*.clw", "*.cls", "*.m", "*.mm", "*.ml", "*.mli", "*.mll", "*.mly",
+                      "*.fs", "*.fsi", "*.fsx", "*.fsscript",
+                      "*.r", "*.rmd", "*.rhtml", "*.rxml", "*.rjs", "*.rpy", "*.rpyc", "*.rbc", "*.rbw", "*.erb",
+                      "*.haml", "*.slim", "*.liquid",
+                      "*.ejs", "*.hbs", "*.mustache", "*.pug", "*.jade", "*.njk", "*.nunjucks", "*.twig", "*.blade.php",
+                      "*.latte", "*.volt", "*.tmpl", "*.tpl",
+                      "*.jsp", "*.jspx", "*.asp", "*.aspx", "*.ascx", "*.ashx", "*.asmx", "*.cshtml", "*.vbhtml",
+                      "*.cgi", "*.fcgi", "*.pl", "*.pm", "*.t", "*.pod", "*.psgi",
+                      "*.ex", "*.exs", "*.eex", "*.leex", "*.heex",
+                      "*.erl", "*.hrl", "*.yaws",
+                      "*.lisp", "*.el", "*.cl", "*.scm", "*.ss", "*.rkt", "*.rktl", "*.rktd",
+                      "*.hs", "*.lhs", "*.purs", "*.agda", "*.lagda", "*.lagda.tex",
+                      "*.ml", "*.mli", "*.mll", "*.mly",
+                      "*.fs", "*.fsi", "*.fsx", "*.fsscript",
+                      "*.d", "*.di",
+                      "*.nim", "*.nims", "*.nimble",
+                      "*.vala", "*.vapi",
+                      "*.zig",
+                      "*.v", "*.vh", "*.sv", "*.svh", "*.vhdl", "*.vhd",
+                      "*.q", "*.ql", "*.qvs",
+                      "*.sas", "*.sas7bdat", "*.sas7bcat", "*.sas7bvew", "*.sast", "*.sastat", "*.sasm", "*.sasmacr",
+                      "*.sascfg", "*.sasxpt",
+                      "*.spv", "*.spo", "*.sps", "*.sav", "*.zsav", "*.por",
+                      "*.dta",
+                      "*.do", "*.ado", "*.dta", "*.gph",
+                      "*.m", "*.mat", "*.fig", "*.mex", "*.mexw32", "*.mexw64", "*.mexmaci64",
+                      "*.ipynb", "*.py", "*.pyc", "*.pyo", "*.pyd", "*.pyw", "*.pyz",
+                      "*.r", "*.rdata", "*.rds", "*.rda", "*.rmd", "*.rproj",
+                      "*.jl", "*.jld", "*.jld2", "*.bson", "*.feather", "*.parquet",
+                      "*.csv", "*.tsv", "*.xls", "*.xlsx", "*.ods",
+                      "*.json", "*.jsonl", "*.ndjson", "*.yaml", "*.yml", "*.toml", "*.ini", "*.cfg", "*.conf",
+                      "*.xml", "*.xsd", "*.xsl", "*.xslt", "*.dtd",
+                      "*.sql", "*.sqlite", "*.db", "*.dbf", "*.mdb", "*.accdb",
+                      "*.hdf5", "*.h5", "*.nc", "*.cdf", "*.grib", "*.grb", "*.grb2",
+                      "*.npz", "*.npy", "*.mat", "*.rda", "*.rds", "*.feather", "*.parquet",
+                      "*.log", "*.out", "*.err", "*.txt", "*.md", "*.rst", "*.adoc", "*.asciidoc",
+                      "*.tex", "*.bib", "*.cls", "*.sty", "*.dtx", "*.ins",
+                      "*.pdf", "*.ps", "*.eps", "*.svg", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp", "*.tiff",
+                      "*.mp3", "*.wav", "*.flac", "*.ogg", "*.m4a", "*.aac", "*.wma",
+                      "*.mp4", "*.mkv", "*.avi", "*.mov", "*.wmv", "*.flv", "*.webm",
+                      "*.zip", "*.tar", "*.gz", "*.bz2", "*.xz", "*.7z", "*.rar", "*.iso", "*.dmg",
+                      "*.exe", "*.msi", "*.apk", "*.app", "*.deb", "*.rpm", "*.bin", "*.run", "*.sh", "*.bat", "*.cmd",
+                      "*.ps1",
+                      "*.dll", "*.so", "*.dylib", "*.a", "*.lib", "*.o", "*.obj",
+                      "*.jar", "*.war", "*.ear", "*.class", "*.dex", "*.apk", "*.aar",
+                      "*.xpi", "*.crx", "*.nex", "*.appx", "*.appxbundle", "*.msix", "*.msixbundle",
+                      "*.vbox", "*.vbox-prev", "*.vdi", "*.vmdk", "*.vhd", "*.vhdx", "*.qcow", "*.qcow2", "*.img",
+                      "*.ovf", "*.ova", "*.iso", "*.img", "*.dmg",
+                      "*.pem", "*.crt", "*.cer", "*.key", "*.csr", "*.pfx", "*.p12", "*.der", "*.jks", "*.keystore",
+                      "*.asc", "*.sig", "*.gpg", "*.pgp",
+                      "*.log", "*.bak", "*.old", "*.tmp", "*.swp", "*.swo", "*.lock", "*.pid",
+                      "*.torrent", "*.nzb", "*.magnet",
+                      "*.ics", "*.vcf", "*.vcs", "*.ical", "*.icalendar",
+                      "*.eml", "*.msg", "*.mbox", "*.pst", "*.ost",
+                      "*.srt", "*.sub", "*.ass", "*.ssa", "*.vtt",
+                      "*.cue", "*.bin", "*.iso", "*.nrg", "*.mds", "*.mdf", "*.ccd", "*.img", "*.toast",
+                      "*.cue", "*.ape", "*.flac", "*.wv", "*.tta", "*.tak", "*.alac", "*.m4a",
+                      "*.sfv", "*.md5", "*.sha1", "*.sha256", "*.sha512",
+                      "*.torrent", "*.nzb", "*.magnet",
+                      "*.ics", "*.vcf", "*.vcs", "*.ical", "*.icalendar",
+                      "*.eml", "*.msg", "*.mbox", "*.pst", "*.ost",
+                      "*.srt", "*.sub", "*.ass", "*.ssa", "*.vtt",
+                      "*.cue", "*.bin", "*.iso", "*.nrg", "*.mds", "*.mdf", "*.ccd", "*.img", "*.toast",
+                      "*.cue", "*.ape", "*.flac", "*.wv", "*.tta", "*.tak", "*.al"]
+
         patterns = " -Include " + ",".join(extensions)
 
         command = f"""powershell -Command "Get-ChildItem -Recurse -Path '{current_dir}'{patterns} | Select-String -Pattern '{user_input}'" """
@@ -4474,7 +4656,17 @@ def handle_special_commands(user_input):
         user_input = user_input[12:].strip()
         current_dir = Path.cwd().resolve()
 
-        extensions = ["*.ini", "*.conf", "*.cfg", "*.yaml", "*.yml", "*.toml"]
+        const
+        extensions = [
+            "*.ini", "*.conf", "*.cfg", "*.cnf", "*.cf", "*.config", "*.yaml", "*.yml", "*.toml", "*.json",
+            "*.xml", "*.properties", "*.plist", "*.desktop", "*.rc",
+            "*.service", "*.target", "*.mount", "*.socket", "*.timer", "*.override", "*.env", "*.editorconfig",
+            "*.htaccess", "*.dsconfig", "*.dsc", "*.pro", "*.reg", "*.sys", "*.hocon", "*.cson",
+            "*.xsd", "*.xsl", "*.xslt", "*.dtd", "*.xproj", "*.xaml", "*.xmi", "*.xpl", "*.xproc", "*.xquery",
+            "*.xq", "*.xql", "*.xqm", "*.xqy", "*.xs", "*.xslt", "*.xsl", "*.xojo_code", "*.xojo_menu",
+            "*.xojo_report", "*.xojo_script", "*.xojo_toolbar", "*.xojo_window", "*.xtend", "*.yang"
+        ]
+
         patterns = " -Include " + ",".join(extensions)
 
         command = f"""powershell -Command "Get-ChildItem -Recurse -Path '{current_dir}'{patterns} | Select-String -Pattern '{user_input}'" """
@@ -4494,7 +4686,17 @@ def handle_special_commands(user_input):
         user_input = user_input[16:].strip()
         current_dir = Path.cwd().resolve()
 
-        extensions = ["*.ini", "*.conf", "*.cfg", "*.yaml", "*.yml", "*.toml"]
+        const
+        extensions = [
+            "*.ini", "*.conf", "*.cfg", "*.cnf", "*.cf", "*.config", "*.yaml", "*.yml", "*.toml", "*.json",
+            "*.xml", "*.properties", "*.plist", "*.desktop", "*.rc",
+            "*.service", "*.target", "*.mount", "*.socket", "*.timer", "*.override", "*.env", "*.editorconfig",
+            "*.htaccess", "*.dsconfig", "*.dsc", "*.pro", "*.reg", "*.sys", "*.hocon", "*.cson",
+            "*.xsd", "*.xsl", "*.xslt", "*.dtd", "*.xproj", "*.xaml", "*.xmi", "*.xpl", "*.xproc", "*.xquery",
+            "*.xq", "*.xql", "*.xqm", "*.xqy", "*.xs", "*.xslt", "*.xsl", "*.xojo_code", "*.xojo_menu",
+            "*.xojo_report", "*.xojo_script", "*.xojo_toolbar", "*.xojo_window", "*.xtend", "*.yang"
+        ]
+
         patterns = " -Include " + ",".join(extensions)
 
         command = f"""powershell -Command "Get-ChildItem -Recurse -Path '{current_dir}'{patterns} | Select-String -Pattern '{user_input}'" """
@@ -4514,7 +4716,16 @@ def handle_special_commands(user_input):
         user_input = user_input[13:].strip()
         current_dir = Path.cwd().resolve()
 
-        extensions = ["*.bat", "*.cmd", "*.ps1", "*.sh"]
+        extensions = [
+          "*.ahk", "*.applescript", "*.asp", "*.aspx", "*.awk", "*.bat", "*.bash", "*.btm", "*.cgi", "*.clj", "*.cljs", "*.cljc", "*.cmd", "*.csh", "*.dart",
+          "*.edn", "*.el", "*.erb", "*.ex", "*.exs", "*.fish", "*.fs", "*.fsx", "*.fsi", "*.gsh", "*.groovy", "*.gvy", "*.gy", "*.jl", "*.js",
+          "*.jse", "*.jsx", "*.ksh", "*.kt", "*.kts", "*.lisp", "*.lua", "*.mak", "*.make", "*.m", "*.mli", "*.mll", "*.mly", "*.mjs", "*.ml",
+          "*.mm", "*.ncl", "*.nsi", "*.nsh", "*.nut", "*.pl", "*.pm", "*.ps1", "*.ps1xml", "*.psd1", "*.psm1", "*.psrc", "*.pssc", "*.py", "*.pyc",
+          "*.pyo", "*.pyw", "*.r", "*.raku", "*.rakumod", "*.rakutest", "*.rb", "*.rkt", "*.rktd", "*.rktl", "*.rmd", "*.rex", "*.rexx", "*.run", "*.scpt",
+          "*.scptd", "*.sh", "*.sps", "*.spt", "*.svm", "*.t", "*.tcsh", "*.tcl", "*.ts", "*.tsx", "*.vim", "*.vbs", "*.vbe", "*.wsf", "*.command",
+          "*.coffee", "*.gradle", "*.scm"
+        ]
+
         patterns = " -Include " + ",".join(extensions)
 
         command = f"""powershell -Command "Get-ChildItem -Recurse -Path '{current_dir}'{patterns} | Select-String -Pattern '{user_input}'" """
@@ -4534,7 +4745,16 @@ def handle_special_commands(user_input):
         user_input = user_input[17:].strip()
         current_dir = Path.cwd().resolve()
 
-        extensions = ["*.bat", "*.cmd", "*.ps1", "*.sh"]
+        extensions = [
+          "*.ahk", "*.applescript", "*.asp", "*.aspx", "*.awk", "*.bat", "*.bash", "*.btm", "*.cgi", "*.clj", "*.cljs", "*.cljc", "*.cmd", "*.csh", "*.dart",
+          "*.edn", "*.el", "*.erb", "*.ex", "*.exs", "*.fish", "*.fs", "*.fsx", "*.fsi", "*.gsh", "*.groovy", "*.gvy", "*.gy", "*.jl", "*.js",
+          "*.jse", "*.jsx", "*.ksh", "*.kt", "*.kts", "*.lisp", "*.lua", "*.mak", "*.make", "*.m", "*.mli", "*.mll", "*.mly", "*.mjs", "*.ml",
+          "*.mm", "*.ncl", "*.nsi", "*.nsh", "*.nut", "*.pl", "*.pm", "*.ps1", "*.ps1xml", "*.psd1", "*.psm1", "*.psrc", "*.pssc", "*.py", "*.pyc",
+          "*.pyo", "*.pyw", "*.r", "*.raku", "*.rakumod", "*.rakutest", "*.rb", "*.rkt", "*.rktd", "*.rktl", "*.rmd", "*.rex", "*.rexx", "*.run", "*.scpt",
+          "*.scptd", "*.sh", "*.sps", "*.spt", "*.svm", "*.t", "*.tcsh", "*.tcl", "*.ts", "*.tsx", "*.vim", "*.vbs", "*.vbe", "*.wsf", "*.command",
+          "*.coffee", "*.gradle", "*.scm"
+        ]
+
         patterns = " -Include " + ",".join(extensions)
 
         command = f"""powershell -Command "Get-ChildItem -Recurse -Path '{current_dir}'{patterns} | Select-String -Pattern '{user_input}'" """
@@ -4554,7 +4774,8 @@ def handle_special_commands(user_input):
         user_input = user_input[9:].strip()
         current_dir = Path.cwd().resolve()
 
-        extensions = ["*.txt"]
+        extensions = ["*.txt", "*.md", "*.log", "*.pdf", "*.docx", "*.xlsx", "*.pptx", "*.csv", "*.json", "*.xml", "*.yaml", "*.ini", "*.html", "*.js", "*.py"]
+
         path_patterns = ",".join(f"'{current_dir}\\{ext}'" for ext in extensions)
         escaped_pattern = user_input.replace("'", "''")
 
@@ -4575,7 +4796,8 @@ def handle_special_commands(user_input):
         user_input = user_input[18:].strip()
         current_dir = Path.cwd().resolve()
 
-        extensions = ["*.txt"]
+        extensions = ["*.txt", "*.md", "*.log", "*.pdf", "*.docx", "*.xlsx", "*.pptx", "*.csv", "*.json", "*.xml", "*.yaml", "*.ini", "*.html", "*.js", "*.py"]
+
         path_patterns = ",".join(f"'{current_dir}\\{ext}'" for ext in extensions)
         escaped_pattern = user_input.replace("'", "''")
 
@@ -4596,8 +4818,98 @@ def handle_special_commands(user_input):
         user_input = user_input[10:].strip()
         current_dir = Path.cwd().resolve()
 
-        extensions = ["*.py", "*.cs", "*.cpp", "*.c", "*.h", "*.java", "*.js", "*.ts", "*.html", "*.css", "*.json",
-                      "*.xml"]
+        extensions = ["*.py", "*.pyc", "*.pyo", "*.ipynb", "*.r", "*.rmd", "*.jl", "*.m", "*.nb", "*.nbp", "*.sage",
+                      "*.scm", "*.ss", "*.clj", "*.cljs", "*.cljc", "*.edn",
+                      "*.c", "*.cpp", "*.cc", "*.cxx", "*.h", "*.hpp", "*.hh", "*.hxx", "*.cs", "*.java", "*.kt",
+                      "*.kts", "*.scala", "*.go", "*.rs", "*.swift", "*.dart",
+                      "*.ts", "*.tsx", "*.js", "*.jsx", "*.mjs", "*.cjs", "*.php", "*.phtml", "*.php3", "*.php4",
+                      "*.php5", "*.rb", "*.pl", "*.pm", "*.lua", "*.vb", "*.vbs",
+                      "*.asm", "*.s", "*.f", "*.f90", "*.f95", "*.pas", "*.pp", "*.d", "*.nim", "*.ada", "*.adb",
+                      "*.ads", "*.lisp", "*.el", "*.cl", "*.ex", "*.exs", "*.erl",
+                      "*.hrl", "*.ml", "*.mli", "*.mll", "*.mly", "*.groovy", "*.gvy", "*.gy", "*.gsh", "*.tcl", "*.tk",
+                      "*.coffee", "*.sc", "*.rkt", "*.hs", "*.lhs", "*.fs",
+                      "*.fsi", "*.fsx", "*.fsscript", "*.n", "*.nqc", "*.v", "*.vh", "*.sv", "*.svh", "*.vhdl", "*.vhd",
+                      "*.html", "*.htm", "*.xhtml", "*.css", "*.scss", "*.less", "*.xml", "*.json", "*.yaml", "*.yml",
+                      "*.toml", "*.ini", "*.env", "*.cfg", "*.conf",
+                      "*.sql", "*.db", "*.sqlite", "*.mdb", "*.accdb", "*.csv", "*.tsv", "*.parquet", "*.avro", "*.orc",
+                      "*.hdf5", "*.feather", "*.arrow",
+                      "*.sh", "*.bash", "*.zsh", "*.ksh", "*.csh", "*.bat", "*.cmd", "*.ps1", "*.psm1", "*.psd1",
+                      "*.scpt", "*.applescript", "*.vbs", "*.wsf",
+                      "*.make", "*.mak", "*.cmake", "*.gradle", "*.pom", "*.build", "*.proj", "*.sln", "*.csproj",
+                      "*.vcxproj", "*.xcodeproj", "*.ninja",
+                      "*.md", "*.markdown", "*.rst", "*.asciidoc", "*.adoc", "*.tex", "*.latex", "*.bib", "*.doc",
+                      "*.docx", "*.odt", "*.pdf",
+                      "*.properties", "*.settings", "*.prefs", "*.config", "*.cfg", "*.conf", "*.ini", "*.toml",
+                      "*.yaml", "*.yml", "*.json",
+                      "*.log", "*.out", "*.err", "*.bak", "*.tmp", "*.lock", "*.pid", "*.swp", "*.swo", "*.orig",
+                      "*.rej",
+                      "*.vue", "*.svelte", "*.astro", "*.elm", "*.purs", "*.res", "*.re", "*.ml", "*.mli", "*.mll",
+                      "*.mly", "*.zig", "*.vala", "*.vapi", "*.nim", "*.nimble",
+                      "*.ktm", "*.kts", "*.cl", "*.clw", "*.cls", "*.m", "*.mm", "*.ml", "*.mli", "*.mll", "*.mly",
+                      "*.fs", "*.fsi", "*.fsx", "*.fsscript",
+                      "*.r", "*.rmd", "*.rhtml", "*.rxml", "*.rjs", "*.rpy", "*.rpyc", "*.rbc", "*.rbw", "*.erb",
+                      "*.haml", "*.slim", "*.liquid",
+                      "*.ejs", "*.hbs", "*.mustache", "*.pug", "*.jade", "*.njk", "*.nunjucks", "*.twig", "*.blade.php",
+                      "*.latte", "*.volt", "*.tmpl", "*.tpl",
+                      "*.jsp", "*.jspx", "*.asp", "*.aspx", "*.ascx", "*.ashx", "*.asmx", "*.cshtml", "*.vbhtml",
+                      "*.cgi", "*.fcgi", "*.pl", "*.pm", "*.t", "*.pod", "*.psgi",
+                      "*.ex", "*.exs", "*.eex", "*.leex", "*.heex",
+                      "*.erl", "*.hrl", "*.yaws",
+                      "*.lisp", "*.el", "*.cl", "*.scm", "*.ss", "*.rkt", "*.rktl", "*.rktd",
+                      "*.hs", "*.lhs", "*.purs", "*.agda", "*.lagda", "*.lagda.tex",
+                      "*.ml", "*.mli", "*.mll", "*.mly",
+                      "*.fs", "*.fsi", "*.fsx", "*.fsscript",
+                      "*.d", "*.di",
+                      "*.nim", "*.nims", "*.nimble",
+                      "*.vala", "*.vapi",
+                      "*.zig",
+                      "*.v", "*.vh", "*.sv", "*.svh", "*.vhdl", "*.vhd",
+                      "*.q", "*.ql", "*.qvs",
+                      "*.sas", "*.sas7bdat", "*.sas7bcat", "*.sas7bvew", "*.sast", "*.sastat", "*.sasm", "*.sasmacr",
+                      "*.sascfg", "*.sasxpt",
+                      "*.spv", "*.spo", "*.sps", "*.sav", "*.zsav", "*.por",
+                      "*.dta",
+                      "*.do", "*.ado", "*.dta", "*.gph",
+                      "*.m", "*.mat", "*.fig", "*.mex", "*.mexw32", "*.mexw64", "*.mexmaci64",
+                      "*.ipynb", "*.py", "*.pyc", "*.pyo", "*.pyd", "*.pyw", "*.pyz",
+                      "*.r", "*.rdata", "*.rds", "*.rda", "*.rmd", "*.rproj",
+                      "*.jl", "*.jld", "*.jld2", "*.bson", "*.feather", "*.parquet",
+                      "*.csv", "*.tsv", "*.xls", "*.xlsx", "*.ods",
+                      "*.json", "*.jsonl", "*.ndjson", "*.yaml", "*.yml", "*.toml", "*.ini", "*.cfg", "*.conf",
+                      "*.xml", "*.xsd", "*.xsl", "*.xslt", "*.dtd",
+                      "*.sql", "*.sqlite", "*.db", "*.dbf", "*.mdb", "*.accdb",
+                      "*.hdf5", "*.h5", "*.nc", "*.cdf", "*.grib", "*.grb", "*.grb2",
+                      "*.npz", "*.npy", "*.mat", "*.rda", "*.rds", "*.feather", "*.parquet",
+                      "*.log", "*.out", "*.err", "*.txt", "*.md", "*.rst", "*.adoc", "*.asciidoc",
+                      "*.tex", "*.bib", "*.cls", "*.sty", "*.dtx", "*.ins",
+                      "*.pdf", "*.ps", "*.eps", "*.svg", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp", "*.tiff",
+                      "*.mp3", "*.wav", "*.flac", "*.ogg", "*.m4a", "*.aac", "*.wma",
+                      "*.mp4", "*.mkv", "*.avi", "*.mov", "*.wmv", "*.flv", "*.webm",
+                      "*.zip", "*.tar", "*.gz", "*.bz2", "*.xz", "*.7z", "*.rar", "*.iso", "*.dmg",
+                      "*.exe", "*.msi", "*.apk", "*.app", "*.deb", "*.rpm", "*.bin", "*.run", "*.sh", "*.bat", "*.cmd",
+                      "*.ps1",
+                      "*.dll", "*.so", "*.dylib", "*.a", "*.lib", "*.o", "*.obj",
+                      "*.jar", "*.war", "*.ear", "*.class", "*.dex", "*.apk", "*.aar",
+                      "*.xpi", "*.crx", "*.nex", "*.appx", "*.appxbundle", "*.msix", "*.msixbundle",
+                      "*.vbox", "*.vbox-prev", "*.vdi", "*.vmdk", "*.vhd", "*.vhdx", "*.qcow", "*.qcow2", "*.img",
+                      "*.ovf", "*.ova", "*.iso", "*.img", "*.dmg",
+                      "*.pem", "*.crt", "*.cer", "*.key", "*.csr", "*.pfx", "*.p12", "*.der", "*.jks", "*.keystore",
+                      "*.asc", "*.sig", "*.gpg", "*.pgp",
+                      "*.log", "*.bak", "*.old", "*.tmp", "*.swp", "*.swo", "*.lock", "*.pid",
+                      "*.torrent", "*.nzb", "*.magnet",
+                      "*.ics", "*.vcf", "*.vcs", "*.ical", "*.icalendar",
+                      "*.eml", "*.msg", "*.mbox", "*.pst", "*.ost",
+                      "*.srt", "*.sub", "*.ass", "*.ssa", "*.vtt",
+                      "*.cue", "*.bin", "*.iso", "*.nrg", "*.mds", "*.mdf", "*.ccd", "*.img", "*.toast",
+                      "*.cue", "*.ape", "*.flac", "*.wv", "*.tta", "*.tak", "*.alac", "*.m4a",
+                      "*.sfv", "*.md5", "*.sha1", "*.sha256", "*.sha512",
+                      "*.torrent", "*.nzb", "*.magnet",
+                      "*.ics", "*.vcf", "*.vcs", "*.ical", "*.icalendar",
+                      "*.eml", "*.msg", "*.mbox", "*.pst", "*.ost",
+                      "*.srt", "*.sub", "*.ass", "*.ssa", "*.vtt",
+                      "*.cue", "*.bin", "*.iso", "*.nrg", "*.mds", "*.mdf", "*.ccd", "*.img", "*.toast",
+                      "*.cue", "*.ape", "*.flac", "*.wv", "*.tta", "*.tak", "*.al"]
+
         path_patterns = ",".join(f"'{current_dir}\\{ext}'" for ext in extensions)
         escaped_pattern = user_input.replace("'", "''")
 
@@ -4618,8 +4930,98 @@ def handle_special_commands(user_input):
         user_input = user_input[19:].strip()
         current_dir = Path.cwd().resolve()
 
-        extensions = ["*.py", "*.cs", "*.cpp", "*.c", "*.h", "*.java", "*.js", "*.ts", "*.html", "*.css", "*.json",
-                      "*.xml"]
+        extensions = ["*.py", "*.pyc", "*.pyo", "*.ipynb", "*.r", "*.rmd", "*.jl", "*.m", "*.nb", "*.nbp", "*.sage",
+                      "*.scm", "*.ss", "*.clj", "*.cljs", "*.cljc", "*.edn",
+                      "*.c", "*.cpp", "*.cc", "*.cxx", "*.h", "*.hpp", "*.hh", "*.hxx", "*.cs", "*.java", "*.kt",
+                      "*.kts", "*.scala", "*.go", "*.rs", "*.swift", "*.dart",
+                      "*.ts", "*.tsx", "*.js", "*.jsx", "*.mjs", "*.cjs", "*.php", "*.phtml", "*.php3", "*.php4",
+                      "*.php5", "*.rb", "*.pl", "*.pm", "*.lua", "*.vb", "*.vbs",
+                      "*.asm", "*.s", "*.f", "*.f90", "*.f95", "*.pas", "*.pp", "*.d", "*.nim", "*.ada", "*.adb",
+                      "*.ads", "*.lisp", "*.el", "*.cl", "*.ex", "*.exs", "*.erl",
+                      "*.hrl", "*.ml", "*.mli", "*.mll", "*.mly", "*.groovy", "*.gvy", "*.gy", "*.gsh", "*.tcl", "*.tk",
+                      "*.coffee", "*.sc", "*.rkt", "*.hs", "*.lhs", "*.fs",
+                      "*.fsi", "*.fsx", "*.fsscript", "*.n", "*.nqc", "*.v", "*.vh", "*.sv", "*.svh", "*.vhdl", "*.vhd",
+                      "*.html", "*.htm", "*.xhtml", "*.css", "*.scss", "*.less", "*.xml", "*.json", "*.yaml", "*.yml",
+                      "*.toml", "*.ini", "*.env", "*.cfg", "*.conf",
+                      "*.sql", "*.db", "*.sqlite", "*.mdb", "*.accdb", "*.csv", "*.tsv", "*.parquet", "*.avro", "*.orc",
+                      "*.hdf5", "*.feather", "*.arrow",
+                      "*.sh", "*.bash", "*.zsh", "*.ksh", "*.csh", "*.bat", "*.cmd", "*.ps1", "*.psm1", "*.psd1",
+                      "*.scpt", "*.applescript", "*.vbs", "*.wsf",
+                      "*.make", "*.mak", "*.cmake", "*.gradle", "*.pom", "*.build", "*.proj", "*.sln", "*.csproj",
+                      "*.vcxproj", "*.xcodeproj", "*.ninja",
+                      "*.md", "*.markdown", "*.rst", "*.asciidoc", "*.adoc", "*.tex", "*.latex", "*.bib", "*.doc",
+                      "*.docx", "*.odt", "*.pdf",
+                      "*.properties", "*.settings", "*.prefs", "*.config", "*.cfg", "*.conf", "*.ini", "*.toml",
+                      "*.yaml", "*.yml", "*.json",
+                      "*.log", "*.out", "*.err", "*.bak", "*.tmp", "*.lock", "*.pid", "*.swp", "*.swo", "*.orig",
+                      "*.rej",
+                      "*.vue", "*.svelte", "*.astro", "*.elm", "*.purs", "*.res", "*.re", "*.ml", "*.mli", "*.mll",
+                      "*.mly", "*.zig", "*.vala", "*.vapi", "*.nim", "*.nimble",
+                      "*.ktm", "*.kts", "*.cl", "*.clw", "*.cls", "*.m", "*.mm", "*.ml", "*.mli", "*.mll", "*.mly",
+                      "*.fs", "*.fsi", "*.fsx", "*.fsscript",
+                      "*.r", "*.rmd", "*.rhtml", "*.rxml", "*.rjs", "*.rpy", "*.rpyc", "*.rbc", "*.rbw", "*.erb",
+                      "*.haml", "*.slim", "*.liquid",
+                      "*.ejs", "*.hbs", "*.mustache", "*.pug", "*.jade", "*.njk", "*.nunjucks", "*.twig", "*.blade.php",
+                      "*.latte", "*.volt", "*.tmpl", "*.tpl",
+                      "*.jsp", "*.jspx", "*.asp", "*.aspx", "*.ascx", "*.ashx", "*.asmx", "*.cshtml", "*.vbhtml",
+                      "*.cgi", "*.fcgi", "*.pl", "*.pm", "*.t", "*.pod", "*.psgi",
+                      "*.ex", "*.exs", "*.eex", "*.leex", "*.heex",
+                      "*.erl", "*.hrl", "*.yaws",
+                      "*.lisp", "*.el", "*.cl", "*.scm", "*.ss", "*.rkt", "*.rktl", "*.rktd",
+                      "*.hs", "*.lhs", "*.purs", "*.agda", "*.lagda", "*.lagda.tex",
+                      "*.ml", "*.mli", "*.mll", "*.mly",
+                      "*.fs", "*.fsi", "*.fsx", "*.fsscript",
+                      "*.d", "*.di",
+                      "*.nim", "*.nims", "*.nimble",
+                      "*.vala", "*.vapi",
+                      "*.zig",
+                      "*.v", "*.vh", "*.sv", "*.svh", "*.vhdl", "*.vhd",
+                      "*.q", "*.ql", "*.qvs",
+                      "*.sas", "*.sas7bdat", "*.sas7bcat", "*.sas7bvew", "*.sast", "*.sastat", "*.sasm", "*.sasmacr",
+                      "*.sascfg", "*.sasxpt",
+                      "*.spv", "*.spo", "*.sps", "*.sav", "*.zsav", "*.por",
+                      "*.dta",
+                      "*.do", "*.ado", "*.dta", "*.gph",
+                      "*.m", "*.mat", "*.fig", "*.mex", "*.mexw32", "*.mexw64", "*.mexmaci64",
+                      "*.ipynb", "*.py", "*.pyc", "*.pyo", "*.pyd", "*.pyw", "*.pyz",
+                      "*.r", "*.rdata", "*.rds", "*.rda", "*.rmd", "*.rproj",
+                      "*.jl", "*.jld", "*.jld2", "*.bson", "*.feather", "*.parquet",
+                      "*.csv", "*.tsv", "*.xls", "*.xlsx", "*.ods",
+                      "*.json", "*.jsonl", "*.ndjson", "*.yaml", "*.yml", "*.toml", "*.ini", "*.cfg", "*.conf",
+                      "*.xml", "*.xsd", "*.xsl", "*.xslt", "*.dtd",
+                      "*.sql", "*.sqlite", "*.db", "*.dbf", "*.mdb", "*.accdb",
+                      "*.hdf5", "*.h5", "*.nc", "*.cdf", "*.grib", "*.grb", "*.grb2",
+                      "*.npz", "*.npy", "*.mat", "*.rda", "*.rds", "*.feather", "*.parquet",
+                      "*.log", "*.out", "*.err", "*.txt", "*.md", "*.rst", "*.adoc", "*.asciidoc",
+                      "*.tex", "*.bib", "*.cls", "*.sty", "*.dtx", "*.ins",
+                      "*.pdf", "*.ps", "*.eps", "*.svg", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp", "*.tiff",
+                      "*.mp3", "*.wav", "*.flac", "*.ogg", "*.m4a", "*.aac", "*.wma",
+                      "*.mp4", "*.mkv", "*.avi", "*.mov", "*.wmv", "*.flv", "*.webm",
+                      "*.zip", "*.tar", "*.gz", "*.bz2", "*.xz", "*.7z", "*.rar", "*.iso", "*.dmg",
+                      "*.exe", "*.msi", "*.apk", "*.app", "*.deb", "*.rpm", "*.bin", "*.run", "*.sh", "*.bat", "*.cmd",
+                      "*.ps1",
+                      "*.dll", "*.so", "*.dylib", "*.a", "*.lib", "*.o", "*.obj",
+                      "*.jar", "*.war", "*.ear", "*.class", "*.dex", "*.apk", "*.aar",
+                      "*.xpi", "*.crx", "*.nex", "*.appx", "*.appxbundle", "*.msix", "*.msixbundle",
+                      "*.vbox", "*.vbox-prev", "*.vdi", "*.vmdk", "*.vhd", "*.vhdx", "*.qcow", "*.qcow2", "*.img",
+                      "*.ovf", "*.ova", "*.iso", "*.img", "*.dmg",
+                      "*.pem", "*.crt", "*.cer", "*.key", "*.csr", "*.pfx", "*.p12", "*.der", "*.jks", "*.keystore",
+                      "*.asc", "*.sig", "*.gpg", "*.pgp",
+                      "*.log", "*.bak", "*.old", "*.tmp", "*.swp", "*.swo", "*.lock", "*.pid",
+                      "*.torrent", "*.nzb", "*.magnet",
+                      "*.ics", "*.vcf", "*.vcs", "*.ical", "*.icalendar",
+                      "*.eml", "*.msg", "*.mbox", "*.pst", "*.ost",
+                      "*.srt", "*.sub", "*.ass", "*.ssa", "*.vtt",
+                      "*.cue", "*.bin", "*.iso", "*.nrg", "*.mds", "*.mdf", "*.ccd", "*.img", "*.toast",
+                      "*.cue", "*.ape", "*.flac", "*.wv", "*.tta", "*.tak", "*.alac", "*.m4a",
+                      "*.sfv", "*.md5", "*.sha1", "*.sha256", "*.sha512",
+                      "*.torrent", "*.nzb", "*.magnet",
+                      "*.ics", "*.vcf", "*.vcs", "*.ical", "*.icalendar",
+                      "*.eml", "*.msg", "*.mbox", "*.pst", "*.ost",
+                      "*.srt", "*.sub", "*.ass", "*.ssa", "*.vtt",
+                      "*.cue", "*.bin", "*.iso", "*.nrg", "*.mds", "*.mdf", "*.ccd", "*.img", "*.toast",
+                      "*.cue", "*.ape", "*.flac", "*.wv", "*.tta", "*.tak", "*.al"]
+
         path_patterns = ",".join(f"'{current_dir}\\{ext}'" for ext in extensions)
         escaped_pattern = user_input.replace("'", "''")
 
@@ -4640,7 +5042,15 @@ def handle_special_commands(user_input):
         user_input = user_input[12:].strip()
         current_dir = Path.cwd().resolve()
 
-        extensions = ["*.ini", "*.conf", "*.cfg", "*.yaml", "*.yml", "*.toml"]
+        extensions = [
+            "*.ini", "*.conf", "*.cfg", "*.cnf", "*.cf", "*.config", "*.yaml", "*.yml", "*.toml", "*.json",
+            "*.xml", "*.properties", "*.plist", "*.desktop", "*.rc",
+            "*.service", "*.target", "*.mount", "*.socket", "*.timer", "*.override", "*.env", "*.editorconfig",
+            "*.htaccess", "*.dsconfig", "*.dsc", "*.pro", "*.reg", "*.sys", "*.hocon", "*.cson",
+            "*.xsd", "*.xsl", "*.xslt", "*.dtd", "*.xproj", "*.xaml", "*.xmi", "*.xpl", "*.xproc", "*.xquery",
+            "*.xq", "*.xql", "*.xqm", "*.xqy", "*.xs", "*.xslt", "*.xsl", "*.xojo_code", "*.xojo_menu",
+            "*.xojo_report", "*.xojo_script", "*.xojo_toolbar", "*.xojo_window", "*.xtend", "*.yang"
+        ]
         path_patterns = ",".join(f"'{current_dir}\\{ext}'" for ext in extensions)
         escaped_pattern = user_input.replace("'", "''")
 
@@ -4661,7 +5071,15 @@ def handle_special_commands(user_input):
         user_input = user_input[21:].strip()
         current_dir = Path.cwd().resolve()
 
-        extensions = ["*.ini", "*.conf", "*.cfg", "*.yaml", "*.yml", "*.toml"]
+        extensions = [
+            "*.ini", "*.conf", "*.cfg", "*.cnf", "*.cf", "*.config", "*.yaml", "*.yml", "*.toml", "*.json",
+            "*.xml", "*.properties", "*.plist", "*.desktop", "*.rc",
+            "*.service", "*.target", "*.mount", "*.socket", "*.timer", "*.override", "*.env", "*.editorconfig",
+            "*.htaccess", "*.dsconfig", "*.dsc", "*.pro", "*.reg", "*.sys", "*.hocon", "*.cson",
+            "*.xsd", "*.xsl", "*.xslt", "*.dtd", "*.xproj", "*.xaml", "*.xmi", "*.xpl", "*.xproc", "*.xquery",
+            "*.xq", "*.xql", "*.xqm", "*.xqy", "*.xs", "*.xslt", "*.xsl", "*.xojo_code", "*.xojo_menu",
+            "*.xojo_report", "*.xojo_script", "*.xojo_toolbar", "*.xojo_window", "*.xtend", "*.yang"
+        ]
         path_patterns = ",".join(f"'{current_dir}\\{ext}'" for ext in extensions)
         escaped_pattern = user_input.replace("'", "''")
 
@@ -4682,7 +5100,15 @@ def handle_special_commands(user_input):
         user_input = user_input[13:].strip()
         current_dir = Path.cwd().resolve()
 
-        extensions = ["*.bat", "*.cmd", "*.ps1", "*.sh"]
+        extensions = [
+          "*.ahk", "*.applescript", "*.asp", "*.aspx", "*.awk", "*.bat", "*.bash", "*.btm", "*.cgi", "*.clj", "*.cljs", "*.cljc", "*.cmd", "*.csh", "*.dart",
+          "*.edn", "*.el", "*.erb", "*.ex", "*.exs", "*.fish", "*.fs", "*.fsx", "*.fsi", "*.gsh", "*.groovy", "*.gvy", "*.gy", "*.jl", "*.js",
+          "*.jse", "*.jsx", "*.ksh", "*.kt", "*.kts", "*.lisp", "*.lua", "*.mak", "*.make", "*.m", "*.mli", "*.mll", "*.mly", "*.mjs", "*.ml",
+          "*.mm", "*.ncl", "*.nsi", "*.nsh", "*.nut", "*.pl", "*.pm", "*.ps1", "*.ps1xml", "*.psd1", "*.psm1", "*.psrc", "*.pssc", "*.py", "*.pyc",
+          "*.pyo", "*.pyw", "*.r", "*.raku", "*.rakumod", "*.rakutest", "*.rb", "*.rkt", "*.rktd", "*.rktl", "*.rmd", "*.rex", "*.rexx", "*.run", "*.scpt",
+          "*.scptd", "*.sh", "*.sps", "*.spt", "*.svm", "*.t", "*.tcsh", "*.tcl", "*.ts", "*.tsx", "*.vim", "*.vbs", "*.vbe", "*.wsf", "*.command",
+          "*.coffee", "*.gradle", "*.scm"
+        ]
         path_patterns = ",".join(f"'{current_dir}\\{ext}'" for ext in extensions)
         escaped_pattern = user_input.replace("'", "''")
 
@@ -4703,7 +5129,15 @@ def handle_special_commands(user_input):
         user_input = user_input[22:].strip()
         current_dir = Path.cwd().resolve()
 
-        extensions = ["*.bat", "*.cmd", "*.ps1", "*.sh"]
+        extensions = [
+          "*.ahk", "*.applescript", "*.asp", "*.aspx", "*.awk", "*.bat", "*.bash", "*.btm", "*.cgi", "*.clj", "*.cljs", "*.cljc", "*.cmd", "*.csh", "*.dart",
+          "*.edn", "*.el", "*.erb", "*.ex", "*.exs", "*.fish", "*.fs", "*.fsx", "*.fsi", "*.gsh", "*.groovy", "*.gvy", "*.gy", "*.jl", "*.js",
+          "*.jse", "*.jsx", "*.ksh", "*.kt", "*.kts", "*.lisp", "*.lua", "*.mak", "*.make", "*.m", "*.mli", "*.mll", "*.mly", "*.mjs", "*.ml",
+          "*.mm", "*.ncl", "*.nsi", "*.nsh", "*.nut", "*.pl", "*.pm", "*.ps1", "*.ps1xml", "*.psd1", "*.psm1", "*.psrc", "*.pssc", "*.py", "*.pyc",
+          "*.pyo", "*.pyw", "*.r", "*.raku", "*.rakumod", "*.rakutest", "*.rb", "*.rkt", "*.rktd", "*.rktl", "*.rmd", "*.rex", "*.rexx", "*.run", "*.scpt",
+          "*.scptd", "*.sh", "*.sps", "*.spt", "*.svm", "*.t", "*.tcsh", "*.tcl", "*.ts", "*.tsx", "*.vim", "*.vbs", "*.vbe", "*.wsf", "*.command",
+          "*.coffee", "*.gradle", "*.scm"
+        ]
         path_patterns = ",".join(f"'{current_dir}\\{ext}'" for ext in extensions)
         escaped_pattern = user_input.replace("'", "''")
 
