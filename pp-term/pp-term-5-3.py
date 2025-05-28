@@ -4285,6 +4285,239 @@ def handle_special_commands(user_input):
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] executing pcf command: {e}")
         return True
+    
+    if user_input.startswith("pff "):
+        user_input = user_input[4:].strip()
+        current_dir = Path.cwd().resolve()
+
+        command = f"""Powershell Get-ChildItem -Path "{current_dir}" -Recurse -Filter "{user_input}" """
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Search: {current_dir} -> {user_input}")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pcf command: {e}")
+        return True
+
+    if user_input.startswith("pff2 "):
+        user_input = user_input[4:].strip()
+        current_dir = Path.cwd().resolve()
+
+        command = f'Powershell Get-ChildItem -Path "{current_dir}" -Recurse | Where-Object {{ $_.Name -like "*{user_input}*" }}'
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Search: {current_dir} -> {user_input}")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pcf command: {e}")
+        return True
+
+    if user_input.startswith("pff3 "):
+        user_input = user_input[4:].strip()
+        current_dir = Path.cwd().resolve()
+
+        command = f"""Powershell Get-ChildItem -Path "{current_dir}" -Recurse -Include *{user_input}"""
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Search: {current_dir} -> {user_input}")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pcf command: {e}")
+        return True
+
+    if user_input.startswith("pff4-txt "):
+        user_input = user_input[9:].strip()
+        current_dir = Path.cwd().resolve()
+
+        extensions = ["*.txt", "*.md", "*.log"]
+        patterns = " -Include " + ",".join(extensions)
+
+        command = f"""powershell -Command "Get-ChildItem -Recurse -Path '{current_dir}'{patterns} | Select-String -Pattern '{user_input}'" """
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Search: {current_dir} -> {user_input}")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pcf command: {e}")
+        return True
+
+    if user_input.startswith("pff4-code "):
+        user_input = user_input[10:].strip()
+        current_dir = Path.cwd().resolve()
+
+        extensions = ["*.py", "*.cs", "*.cpp", "*.c", "*.h", "*.java", "*.js", "*.ts", "*.html", "*.css", "*.json",
+                      "*.xml"]
+        patterns = " -Include " + ",".join(extensions)
+
+        command = f"""powershell -Command "Get-ChildItem -Recurse -Path '{current_dir}'{patterns} | Select-String -Pattern '{user_input}'" """
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Search: {current_dir} -> {user_input}")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pcf command: {e}")
+        return True
+
+    if user_input.startswith("pff4-config "):
+        user_input = user_input[12:].strip()
+        current_dir = Path.cwd().resolve()
+
+        extensions = ["*.ini", "*.conf", "*.cfg", "*.yaml", "*.yml", "*.toml"]
+        patterns = " -Include " + ",".join(extensions)
+
+        command = f"""powershell -Command "Get-ChildItem -Recurse -Path '{current_dir}'{patterns} | Select-String -Pattern '{user_input}'" """
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Search: {current_dir} -> {user_input}")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pcf command: {e}")
+        return True
+
+    if user_input.startswith("pff4-scripts "):
+        user_input = user_input[13:].strip()
+        current_dir = Path.cwd().resolve()
+
+        extensions = ["*.bat", "*.cmd", "*.ps1", "*.sh"]
+        patterns = " -Include " + ",".join(extensions)
+
+        command = f"""powershell -Command "Get-ChildItem -Recurse -Path '{current_dir}'{patterns} | Select-String -Pattern '{user_input}'" """
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Search: {current_dir} -> {user_input}")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pcf command: {e}")
+        return True
+
+    if user_input.startswith("pff5-txt "):
+        user_input = user_input[9:].strip()
+        current_dir = Path.cwd().resolve()
+
+        extensions = ["*.txt"]
+        path_patterns = ",".join(f"'{current_dir}\\{ext}'" for ext in extensions)
+        escaped_pattern = user_input.replace("'", "''")
+
+        command = f"Select-String -Path {path_patterns} -Pattern '{escaped_pattern}' -Recurse"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Search: {current_dir} -> {user_input}")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pcf command: {e}")
+        return True
+
+    if user_input.startswith("pff5-code "):
+        user_input = user_input[10:].strip()
+        current_dir = Path.cwd().resolve()
+
+        extensions = ["*.py", "*.cs", "*.cpp", "*.c", "*.h", "*.java", "*.js", "*.ts", "*.html", "*.css", "*.json",
+                      "*.xml"]
+        path_patterns = ",".join(f"'{current_dir}\\{ext}'" for ext in extensions)
+        escaped_pattern = user_input.replace("'", "''")
+
+        command = f"Select-String -Path {path_patterns} -Pattern '{escaped_pattern}' -Recurse"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Search: {current_dir} -> {user_input}")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pcf command: {e}")
+        return True
+
+    if user_input.startswith("pff5-config "):
+        user_input = user_input[12:].strip()
+        current_dir = Path.cwd().resolve()
+
+        extensions = ["*.ini", "*.conf", "*.cfg", "*.yaml", "*.yml", "*.toml"]
+        path_patterns = ",".join(f"'{current_dir}\\{ext}'" for ext in extensions)
+        escaped_pattern = user_input.replace("'", "''")
+
+        command = f"Select-String -Path {path_patterns} -Pattern '{escaped_pattern}' -Recurse"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Search: {current_dir} -> {user_input}")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pcf command: {e}")
+        return True
+
+    if user_input.startswith("pff5-scripts "):
+        user_input = user_input[13:].strip()
+        current_dir = Path.cwd().resolve()
+
+        extensions = ["*.bat", "*.cmd", "*.ps1", "*.sh"]
+        path_patterns = ",".join(f"'{current_dir}\\{ext}'" for ext in extensions)
+        escaped_pattern = user_input.replace("'", "''")
+
+        command = f"Select-String -Path {path_patterns} -Pattern '{escaped_pattern}' -Recurse"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Search: {current_dir} -> {user_input}")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pcf command: {e}")
+        return True
+
+    if user_input.lower() == "pff7":
+        current_dir = Path.cwd().resolve()
+
+        command = 'Get-ChildItem -Path "C:\Pfad\zum\Ordner" -Recurse | Where-Object { -not $_.PSIsContainer }'
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Search: {current_dir}")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pcf command: {e}")
+        return True
 
     if user_input.lower() == "whoami":
         print(user_name)
