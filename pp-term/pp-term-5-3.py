@@ -232,25 +232,14 @@ Thank you so much for using PP-Terminal. We truly appreciate your support ❤️
     show_color_palette()
 
 
-def set_python_path():
-    """Setzt PYTHON_PATH basierend auf dem gefundenen Environment."""
-    active_env = find_active_env()
+def set_python_path(user_provided: Optional[str] = None) -> None:
+    """
+    Setzt PYTHON_PATH basierend auf dem gefundenen Environment.
+    Wenn `user_provided` gesetzt und != "cd", wird es priorisiert.
+    """
+    active_env = find_active_env(user_provided)
 
     python_executable = os.path.join(active_env, "Scripts", "python.exe")
-
-    if not os.path.exists(python_executable):
-        # Fallback auf default
-        python_executable = os.path.abspath(DEFAULT_PYTHON_EXECUTABLE)
-
-    os.environ["PYTHON_PATH"] = python_executable
-
-
-def set_python_path_3(env_path: str) -> None:
-    """Setzt PYTHON_PATH basierend auf dem gefundenen Environment."""
-    active_env = find_active_env()
-
-    python_executable = os.path.join(active_env, "Scripts", "python.exe")
-
     if not os.path.exists(python_executable):
         # Fallback auf default
         python_executable = os.path.abspath(DEFAULT_PYTHON_EXECUTABLE)
@@ -268,7 +257,6 @@ def save_current_env(env_path: str) -> None:
     try:
         ensure_state_dir_exists()
         payload = {"active_env": env_path}
-        # atomar schreiben: erst in temp, dann umbenennen
         tmp = STATE_FILE.with_suffix(".tmp")
         tmp.write_text(_json.dumps(payload), encoding="utf-8")
         tmp.replace(STATE_FILE)
@@ -303,12 +291,10 @@ def find_env_in_current_dir(max_workers: int = None) -> Optional[str]:
     Gibt den ersten gefundenen Pfad zurück.
     """
     cwd = Path.cwd()
-    # os.scandir liefert DirEntry-Objekte, sehr effizient
     dirs = [Path(entry.path) for entry in os.scandir(cwd) if entry.is_dir()]
     if not dirs:
         return None
 
-    # max_workers default: Anzahl CPUs * 2
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         future_to_path = {executor.submit(_check_env_dir, d): d for d in dirs}
         for future in as_completed(future_to_path):
@@ -321,31 +307,32 @@ def find_env_in_current_dir(max_workers: int = None) -> Optional[str]:
 def find_active_env(user_provided: Optional[str] = None) -> str:
     """
     Bestimmt den aktiven Virtualenv:
-    1. Wenn user_provided gesetzt: speichert und gibt ihn zurück.
-    2. Suche parallel nach Env im CWD.
-    3. Wenn gefunden und anders als gespeichertes, dann speichern.
-    4. Wenn gespeichert vorhanden: verwende es.
-    5. Fallback auf DEFAULT_ENV_DIR.
+    1. Wenn user_provided gesetzt und nicht "cd": speichert und gibt ihn zurück.
+    2. Wenn user_provided == "cd" oder None:
+       - Suche im aktuellen Verzeichnis.
+       - Wenn gefunden und anders als gespeicherte, speichern.
+       - Wenn nichts gefunden aber gespeicherte Env vorhanden, diese verwenden.
+    3. Sonst Fallback auf DEFAULT_ENV_DIR.
     """
-    # 1. User-spezifisches Env
-    if user_provided:
+    saved = load_saved_env()
+
+    # 1. Direkteingabe außer "cd"
+    if user_provided and user_provided != "cd":
         save_current_env(user_provided)
         return user_provided
 
-    # 2. Suche im CWD
+    # 2. Suche im CWD (bei user_provided == None oder "cd")
     found = find_env_in_current_dir()
-    # 3. Aus gespeicherter Datei
-    saved = load_saved_env()
-
     if found:
         if found != saved:
             save_current_env(found)
         return found
 
+    # 3. Gespeicherte Env verwenden
     if saved:
         return saved
 
-    # 5. Fallback
+    # 4. Fallback
     return str(DEFAULT_ENV_DIR.resolve())
 
 
@@ -14302,9 +14289,10 @@ def handle_history_command():
 
 def main():
     state = "main"
+    active = Path(find_active_env()).resolve()
 
     print_banner()
-    set_python_path()
+    set_python_path(active)
     # setup_autocomplete()
 
     while True:
@@ -15142,7 +15130,7 @@ def main():
 
                 active = find_active_env(env_path)
 
-                set_python_path_3(active)
+                set_python_path(active)
 
                 print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
 
