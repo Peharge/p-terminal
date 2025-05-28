@@ -4243,6 +4243,23 @@ def handle_special_commands(user_input):
 
         return True
 
+    if user_input.startswith("pcf "):
+        user_input = user_input[4:].strip()
+        current_dir = Path.cwd().resolve()
+
+        command = f"""Powershell New-Item -Path "{current_dir}\\{user_input}"  -ItemType File"""
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Create {user_input} file.")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
     if user_input.lower() == "whoami":
         print(user_name)
         return True
