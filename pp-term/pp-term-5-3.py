@@ -1476,6 +1476,10 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] {str(e)}", file=sys.stderr)
         return True
 
+    elif user_input.lower() == "p-venv-info":
+        active = find_active_env(env_path)
+        print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+
     if user_input.lower() == "exit":
         print(f"[{timestamp()}] [INFO] {yellow}Exiting PP-Terminal... Goodbye {user_name}!{reset}")
         sys.exit(0)
