@@ -1490,7 +1490,7 @@ def handle_special_commands(user_input):
 
         try:
             process.wait()
-            print(f"[{timestamp()}] [INFO] The '{user_input}' venv was created")
+            print(f"[{timestamp()}] [INFO] The '{user_input}' venv was created.")
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
@@ -1506,7 +1506,7 @@ def handle_special_commands(user_input):
 
         try:
             process.wait()
-            print(f"[{timestamp()}] [INFO] The '{user_input}' venv was created")
+            print(f"[{timestamp()}] [INFO] The '{user_input}' venv was created.")
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
