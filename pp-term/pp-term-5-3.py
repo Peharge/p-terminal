@@ -1477,8 +1477,9 @@ def handle_special_commands(user_input):
         return True
 
     elif user_input.lower() == "p-venv-info":
-        active = find_active_env(env_path)
-        print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+        active_env_path = Path(find_active_env()).resolve()
+        print(f"[{timestamp()}] [INFO] Active environment set to '{active_env_path}'.")
+        return True
 
     if user_input.lower() == "exit":
         print(f"[{timestamp()}] [INFO] {yellow}Exiting PP-Terminal... Goodbye {user_name}!{reset}")
