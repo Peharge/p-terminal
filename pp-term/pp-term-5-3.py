@@ -4304,7 +4304,7 @@ def handle_special_commands(user_input):
         return True
     
     if user_input.startswith("pff-name "):
-        user_input = user_input[8:].strip()
+        user_input = user_input[9:].strip()
         current_dir = Path.cwd().resolve()
 
         command = f"""powershell Get-ChildItem -Path "{current_dir}" -Recurse -Filter "{user_input}" """
@@ -4321,7 +4321,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("pff2 "):
-        user_input = user_input[4:].strip()
+        user_input = user_input[5:].strip()
         current_dir = Path.cwd().resolve()
 
         command = f'powershell Get-ChildItem -Path "{current_dir}" -Recurse | Where-Object {{ $_.Name -like "*{user_input}*" }}'
@@ -4355,7 +4355,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("pff3 "):
-        user_input = user_input[4:].strip()
+        user_input = user_input[5:].strip()
         current_dir = Path.cwd().resolve()
 
         command = f"""powershell Get-ChildItem -Path "{current_dir}" -Recurse -Include *{user_input}"""
