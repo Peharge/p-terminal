@@ -4656,7 +4656,6 @@ def handle_special_commands(user_input):
         user_input = user_input[12:].strip()
         current_dir = Path.cwd().resolve()
 
-        const
         extensions = [
             "*.ini", "*.conf", "*.cfg", "*.cnf", "*.cf", "*.config", "*.yaml", "*.yml", "*.toml", "*.json",
             "*.xml", "*.properties", "*.plist", "*.desktop", "*.rc",
@@ -4686,7 +4685,6 @@ def handle_special_commands(user_input):
         user_input = user_input[16:].strip()
         current_dir = Path.cwd().resolve()
 
-        const
         extensions = [
             "*.ini", "*.conf", "*.cfg", "*.cnf", "*.cf", "*.config", "*.yaml", "*.yml", "*.toml", "*.json",
             "*.xml", "*.properties", "*.plist", "*.desktop", "*.rc",
