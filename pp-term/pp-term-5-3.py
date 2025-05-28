@@ -1387,9 +1387,7 @@ def handle_special_commands(user_input):
         run_command("dir" if os.name == "nt" else "ls -la", shell=True)
         return True
 
-    if user_input.lower() in ["dir", "ls"]:
-        current_dir = Path.cwd().resolve()
-
+    if user_input.lower() in ["dir2", "ls2"]:
         command = f"""Powershell ls"""
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
