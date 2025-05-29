@@ -3524,6 +3524,23 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
+    if user_input.startswith("pc-p "):
+        user_input = user_input[5:].strip()
+
+        command = f"pyinstaller --onefile {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with PyInstaller")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
     if user_input.startswith("pc-python "):
         user_input = user_input[10:].strip()
 
