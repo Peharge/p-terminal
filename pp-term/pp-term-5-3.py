@@ -3529,8 +3529,7 @@ def handle_special_commands(user_input):
 
         command = f"python {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
-                                   text=True)
+        process = run_command(command, shell=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Run {user_input} with Python:\n")
@@ -3546,8 +3545,7 @@ def handle_special_commands(user_input):
 
         command = f"python {user_input}"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
-                                   text=True)
+        process = run_command(command, shell=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Run {user_input} with Python:\n")
