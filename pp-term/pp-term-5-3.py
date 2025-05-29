@@ -2594,7 +2594,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
         return True
 
-    if user_input.startswith("code "):
+    if user_input.startswith("code-lx "):
 
         command = f"wsl {user_input}"
 
