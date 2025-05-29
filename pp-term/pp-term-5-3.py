@@ -3089,7 +3089,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
         return True
 
-    if user_input.startswith("atom "):
+    if user_input.startswith("atom-lx "):
 
         command = f"wsl {user_input}"
 
