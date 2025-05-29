@@ -1606,6 +1606,27 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing ls command: {e}")
         return True
 
+    elif user_input.startswith("pcv "):
+        user_input = user_input[4:].strip()
+        command = f"python -m venv {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
+
+        try:
+            process.wait()
+            print(f"[{timestamp()}] [INFO] The '{user_input}' venv was created.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing ls command: {e}")
+        return True
+
+    elif user_input.lower() == "pv-info":
+        active_env_path = Path(find_active_env()).resolve()
+        print(f"[{timestamp()}] [INFO] Active environment: '{active_env_path}'.")
+        return True
+
     elif user_input.startswith("p-venv-create "):
         user_input = user_input[14:].strip()
         command = f"python -m venv {user_input}"
