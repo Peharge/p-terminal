@@ -3524,7 +3524,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
-    if user_input.startswith("pc-p "):
+    if user_input.startswith("prp "):
         user_input = user_input[5:].strip()
 
         command = f"python {user_input}"
@@ -3533,7 +3533,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile {user_input} with PyInstaller")
+            print(f"[{timestamp()}] [INFO] Run {user_input} with Python")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
