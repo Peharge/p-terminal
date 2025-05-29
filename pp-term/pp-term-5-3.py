@@ -15605,7 +15605,7 @@ def main():
                 user_input = f"Invoke-Item '{current_dir}\\{user_input_file}'"
                 run_command_with_admin_python_privileges(user_input)
 
-            elif user_input.startswith("pp-open "):
+            elif user_input.startswith("pp-run "):
                 user_input_file = user_input[6:]
                 user_input = f"Start-Process '{current_dir}\\{user_input_file}'"
                 run_command_with_admin_python_privileges(user_input)
