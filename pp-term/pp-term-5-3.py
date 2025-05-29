@@ -360,7 +360,7 @@ def find_active_env(user_input: Optional[str] = None) -> str:
             return found
         if saved:
             return saved
-        return str(DEFAULT_ENV_DIR.resolve())
+        return str(Path(DEFAULT_ENV_DIR).resolve())
 
     # 3. user_input == None
     if user_str is None:
@@ -370,10 +370,10 @@ def find_active_env(user_input: Optional[str] = None) -> str:
             return found
         if saved:
             return saved
-        return str(DEFAULT_ENV_DIR.resolve())
+        return str(Path(DEFAULT_ENV_DIR).resolve())
 
     # 4. Fallback (eigentlich unreachable)
-    return str(DEFAULT_ENV_DIR.resolve())
+    return str(Path(DEFAULT_ENV_DIR).resolve())
 
 
 def run_command(command, shell=False, cwd=None, extra_env=None):
