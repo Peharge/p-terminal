@@ -14722,13 +14722,6 @@ def main():
                     # Example usage
                     python_exe = active_env_path / "Scripts" / "python.exe"
 
-                    if python_exe.exists():
-                        pass
-                    else:
-                        print(f"[{timestamp()}] [ERROR] Python executable not found.")
-                else:
-                    print(f"[{timestamp()}] [ERROR] Key 'active_env' not found.")
-
             except FileNotFoundError:
                 print(f"File not found: {json_path}")
             except json.JSONDecodeError:
