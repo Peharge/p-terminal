@@ -3525,7 +3525,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("prp "):
-        user_input = user_input[5:].strip()
+        user_input = user_input[4:].strip()
 
         command = f"python {user_input}"
 
