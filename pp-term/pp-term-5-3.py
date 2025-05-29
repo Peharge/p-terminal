@@ -1481,7 +1481,7 @@ def handle_special_commands(user_input):
 
     if user_input.lower() == "cd":
         env_path = handle_cd_command()
-        print(f"[{timestamp()}] [INFO] Environment used: {env_path}")
+        # print(f"[{timestamp()}] [INFO] Environment used: {env_path}")
 
     if user_input.lower() in ["dir", "ls"]:
         run_command("dir" if os.name == "nt" else "ls -la", shell=True)
@@ -14720,7 +14720,7 @@ def main():
                     active_env_path = Path(active)  # Convert to Path object
 
                     # Example usage
-                    python_exe = active_env_path / "Scripts" / "python.exe"
+                    # python_exe = active_env_path / "Scripts" / "python.exe"
 
             except FileNotFoundError:
                 print(f"File not found: {json_path}")
