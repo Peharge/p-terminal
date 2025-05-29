@@ -804,6 +804,56 @@ def handle_special_commands(user_input):
         "3d-slicer --version": "pp-commands\\3d-slicer-version.py",  # new
         "doctor": "pp-commands\\doctor.py",  # new
         "hole doctor": "pp-commands\\doctor-hole.py",  # new
+        "install cool pin": "pp-commands\\theme-pcc.py",  # new
+        "install cool pin-2": "pp-commands\\theme-pcc-2.py",  # new
+        "install cool pin-3": "pp-commands\\theme-pcc-3.py",  # new
+        "install cool pin-4": "pp-commands\\theme-pcc-4.py",  # new
+        "install cool pin-5": "pp-commands\\theme-pcc-5.py",  # new
+        "install cool pin-6": "pp-commands\\theme-pcc-6.py",  # new
+        "install cool pin-7": "pp-commands\\theme-pcc-7.py",  # new
+        "install cool pin-8": "pp-commands\\theme-pcc-8.py",  # new
+        "install cool pin-9": "pp-commands\\theme-pcc-9.py",  # new
+        "install cool pin-10": "pp-commands\\theme-pcc-10.py",  # new
+        "install cool pin-11": "pp-commands\\theme-pcc-11.py",  # new
+        "install cool pin-13": "pp-commands\\theme-pcc-13.py",  # new
+        "install cool pin-14": "pp-commands\\theme-pcc-14.py",  # new
+        "install cool pin-15": "pp-commands\\theme-pcc-15.py",  # new
+        "install cool pin-16": "pp-commands\\theme-pcc-16.py",  # new
+        "install cool pin-17": "pp-commands\\theme-pcc-17.py",  # new
+        "install cool pin-18": "pp-commands\\theme-pcc-18.py",  # new
+        "install cool pin-19": "pp-commands\\theme-pcc-19.py",  # new
+        "install cool pin-20": "pp-commands\\theme-pcc-20.py",  # new
+        "install cool pin-21": "pp-commands\\theme-pcc-21.py",  # new
+        "install cool pin-22": "pp-commands\\theme-pcc-22.py",  # new
+        "install cool pin-23": "pp-commands\\theme-pcc-23.py",  # new
+        "run githubdesktop": "pp-commands\\githubdesktop.py",  # new
+        "run dockerdesktop": "pp-commands\\dockerdesktop.py",  # new
+        "run pycharm": "pp-commands\\run-pycharm.py",  # new
+        "run vs-code": "pp-commands\\run-vs-code.py",  # new
+        "run vs": "pp-commands\\run-vs.py",  # new
+        "p map": "pp-commands\\p-map.py",  # new
+        "p weather": "pp-commands\\p-weather.py",  # new
+        "p you": "pp-commands\\you.py",  # new
+        "p qwen": "pp-commands\\qwen.py",  # new
+        "p poe": "pp-commands\\poe.py",  # new
+        "p perplexity": "pp-commands\\perplexity.py",  # new
+        "p mistral": "pp-commands\\mistral.py",  # new
+        "p jasper": "pp-commands\\jasper.py",  # new
+        "p grok": "pp-commands\\grok.py",  # new
+        "p gemini": "pp-commands\\gemini.py",  # new
+        "p deepseek": "pp-commands\\deepseek.py",  # new
+        "p copy": "pp-commands\\copy.py",  # new
+        "p claude": "pp-commands\\claude.py",  # new
+        "p chatgpt": "pp-commands\\chatgpt.py",  # new
+        "p savannah gnu": "pp-commands\\p-savannah-gnu.py",  # new
+        "p gnu": "pp-commands\\p-gnu.py",  # new
+        "p gnu software": "pp-commands\\p-gnu-software.py",  # new
+        "p git.com": "pp-commands\\p-git-com.py",  # new
+        "run mavis main": "pp-commands\\run-mavis-main.py",  # new
+        "run mavis main fast": "pp-commands\\run-mavis-main-fast.py"  # new
+    }
+
+    commands3 = {
         "fun": "pp-commands\\fun-matrix.py",  # new
         "fun sl": "pp-commands\\fun-sl.py",  # new
         "fun aafire": "pp-commands\\fun-aafire.py",  # new
@@ -870,53 +920,6 @@ def handle_special_commands(user_input):
         "install fun aquarium": "pp-commands\\fun-asciiquarium.py",  # new
         "install fun aqua": "pp-commands\\fun-asciiquarium.py",  # new
         "install fun bb": "pp-commands\\fun-bb.py",  # new
-        "install cool pin": "pp-commands\\theme-pcc.py",  # new
-        "install cool pin-2": "pp-commands\\theme-pcc-2.py",  # new
-        "install cool pin-3": "pp-commands\\theme-pcc-3.py",  # new
-        "install cool pin-4": "pp-commands\\theme-pcc-4.py",  # new
-        "install cool pin-5": "pp-commands\\theme-pcc-5.py",  # new
-        "install cool pin-6": "pp-commands\\theme-pcc-6.py",  # new
-        "install cool pin-7": "pp-commands\\theme-pcc-7.py",  # new
-        "install cool pin-8": "pp-commands\\theme-pcc-8.py",  # new
-        "install cool pin-9": "pp-commands\\theme-pcc-9.py",  # new
-        "install cool pin-10": "pp-commands\\theme-pcc-10.py",  # new
-        "install cool pin-11": "pp-commands\\theme-pcc-11.py",  # new
-        "install cool pin-13": "pp-commands\\theme-pcc-13.py",  # new
-        "install cool pin-14": "pp-commands\\theme-pcc-14.py",  # new
-        "install cool pin-15": "pp-commands\\theme-pcc-15.py",  # new
-        "install cool pin-16": "pp-commands\\theme-pcc-16.py",  # new
-        "install cool pin-17": "pp-commands\\theme-pcc-17.py",  # new
-        "install cool pin-18": "pp-commands\\theme-pcc-18.py",  # new
-        "install cool pin-19": "pp-commands\\theme-pcc-19.py",  # new
-        "install cool pin-20": "pp-commands\\theme-pcc-20.py",  # new
-        "install cool pin-21": "pp-commands\\theme-pcc-21.py",  # new
-        "install cool pin-22": "pp-commands\\theme-pcc-22.py",  # new
-        "install cool pin-23": "pp-commands\\theme-pcc-23.py",  # new
-        "run githubdesktop": "pp-commands\\run-githubdesktop.py",  # new
-        "run dockerdesktop": "pp-commands\\run-dockerdesktop.py",  # new
-        "run pycharm": "pp-commands\\run-pycharm.py",  # new
-        "run vs-code": "pp-commands\\run-vs-code.py",  # new
-        "run vs": "pp-commands\\run-vs.py",  # new
-        "p map": "pp-commands\\p-map.py",  # new
-        "p weather": "pp-commands\\p-weather.py",  # new
-        "p you": "pp-commands\\you.py",  # new
-        "p qwen": "pp-commands\\qwen.py",  # new
-        "p poe": "pp-commands\\poe.py",  # new
-        "p perplexity": "pp-commands\\perplexity.py",  # new
-        "p mistral": "pp-commands\\mistral.py",  # new
-        "p jasper": "pp-commands\\jasper.py",  # new
-        "p grok": "pp-commands\\grok.py",  # new
-        "p gemini": "pp-commands\\gemini.py",  # new
-        "p deepseek": "pp-commands\\deepseek.py",  # new
-        "p copy": "pp-commands\\copy.py",  # new
-        "p claude": "pp-commands\\claude.py",  # new
-        "p chatgpt": "pp-commands\\chatgpt.py",  # new
-        "p savannah gnu": "pp-commands\\p-savannah-gnu.py",  # new
-        "p gnu": "pp-commands\\p-gnu.py",  # new
-        "p gnu software": "pp-commands\\p-gnu-software.py",  # new
-        "p git.com": "pp-commands\\p-git-com.py",  # new
-        "run mavis main": "pp-commands\\run-mavis-main.py",  # new
-        "run mavis main fast": "pp-commands\\run-mavis-main-fast.py",  # new
         "htop": "pp-commands\\htop.py",  # new
         "bashtop": "pp-commands\\bashtop.py",  # new
         "taskmanager": "pp-commands\\bashtop.py",  # new
@@ -1440,6 +1443,18 @@ def handle_special_commands(user_input):
         except Exception as e:
             logging.exception(f"[ERROR] Error starting the script: {e}")
             return True
+
+
+    if user_input in commands3:
+        # Pfad zum Skript zusammenbauen
+        script_path = f"C:\\Users\\{os.getlogin()}\\p-terminal\\pp-term\\{commands3[user_input]}"
+
+        # Prüfen, ob das Skript eine .bat-Datei ist
+        if not user_input.endswith(".bat"):
+            run([python_path, script_path], shell=True)
+        else:
+            run([script_path], shell=True)
+        return True
 
     # Built-in Commands Erweiterung
     if user_input.lower() in ["cls", "clear"]:
