@@ -3529,11 +3529,9 @@ def handle_special_commands(user_input):
 
         command = f"python {user_input}"
 
-        process = run_command(command, shell=True)
-
         try:
             print(f"[{timestamp()}] [INFO] Run {user_input} with Python:\n")
-            process.wait()
+            run_command(command, shell=True)
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
@@ -3545,11 +3543,9 @@ def handle_special_commands(user_input):
 
         command = f"python {user_input}"
 
-        process = run_command(command, shell=True)
-
         try:
             print(f"[{timestamp()}] [INFO] Run {user_input} with Python:\n")
-            process.wait()
+            run_command(command, shell=True)
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
