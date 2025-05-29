@@ -15948,6 +15948,26 @@ def main():
 
                 print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
 
+            elif user_input.startswith("p-venv-f "):
+                env_name = user_input[9:].strip()
+                env_path = str(env_name)
+
+                # setzt und speichert das aktive Env
+                active = find_active_env(env_path)
+                set_python_path(active)
+
+                print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+
+            elif user_input.startswith("pavf "):
+                env_name = user_input[5:].strip()
+                env_path = str(env_name)
+
+                # setzt und speichert das aktive Env
+                active = find_active_env(env_path)
+                set_python_path(active)
+
+                print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+
             elif user_input.startswith("pp "):
                 user_input = user_input[3:]
                 run_command_with_admin_python_privileges(user_input)
