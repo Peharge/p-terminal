@@ -3533,7 +3533,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Run {user_input} with Python:")
+            print(f"[{timestamp()}] [INFO] Run {user_input} with Python:\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
