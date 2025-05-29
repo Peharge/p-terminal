@@ -15600,6 +15600,16 @@ def main():
                 user_input = f"Remove-Item -LiteralPath '{current_dir}\\{user_input_file}' -Recurse -Force"
                 run_command_with_admin_python_privileges(user_input)
 
+            elif user_input.startswith("pp-open "):
+                user_input_file = user_input[6:]
+                user_input = f"Invoke-Item '{current_dir}\\{user_input_file}'"
+                run_command_with_admin_python_privileges(user_input)
+
+            elif user_input.startswith("pp-open "):
+                user_input_file = user_input[6:]
+                user_input = f"Start-Process '{current_dir}\\{user_input_file}'"
+                run_command_with_admin_python_privileges(user_input)
+
             elif user_input.startswith("pp-del "):
                 user_input_file = user_input[7:]
                 user_input = f"Remove-Item -LiteralPath '{current_dir}\\{user_input_file}' -Recurse -Force"
