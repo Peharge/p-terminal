@@ -5983,6 +5983,110 @@ def handle_special_commands(user_input):
 
         return False
 
+    if user_input.startswith("pr-app "):
+        user_input = user_input[7:].strip()
+        command_str = user_input[len("launch "):].strip()
+
+        # Leere Eingabe abfangen
+        if not command_str:
+            logging.error("[ERROR] No program specified after 'launch'.")
+            return False  # Frühzeitige Rückgabe, falls kein Programmname angegeben wurde
+
+        try:
+            # Platform-spezifische Befehlsausführung
+            if sys.platform == "win32":
+                # Auf Windows: Verwende 'start' im Shell-Modus
+                safe_cmd = f'start "" {shlex.quote(command_str)}'
+                subprocess.Popen(safe_cmd, shell=True)
+            else:
+                # Für Unix/macOS: Parsen des Programms und der Argumente direkt
+                args = shlex.split(command_str)
+                subprocess.Popen(args)
+
+            logging.info("[INFO] Program launched: %s", command_str)
+            return True  # Erfolgreiche Ausführung, Rückgabe True
+
+        except FileNotFoundError:
+            logging.error("[ERROR] Program not found: %s", command_str)
+        except Exception as e:
+            logging.exception("[ERROR] Error launching %s: %s", command_str, str(e))
+
+        return False
+
+    if user_input.startswith("run-app "):
+        user_input = user_input[8:].strip()
+        command_str = user_input[len("launch "):].strip()
+
+        # Leere Eingabe abfangen
+        if not command_str:
+            logging.error("[ERROR] No program specified after 'launch'.")
+            return False  # Frühzeitige Rückgabe, falls kein Programmname angegeben wurde
+
+        try:
+            # Platform-spezifische Befehlsausführung
+            if sys.platform == "win32":
+                # Auf Windows: Verwende 'start' im Shell-Modus
+                safe_cmd = f'start "" {shlex.quote(command_str)}'
+                subprocess.Popen(safe_cmd, shell=True)
+            else:
+                # Für Unix/macOS: Parsen des Programms und der Argumente direkt
+                args = shlex.split(command_str)
+                subprocess.Popen(args)
+
+            logging.info("[INFO] Program launched: %s", command_str)
+            return True  # Erfolgreiche Ausführung, Rückgabe True
+
+        except FileNotFoundError:
+            logging.error("[ERROR] Program not found: %s", command_str)
+        except Exception as e:
+            logging.exception("[ERROR] Error launching %s: %s", command_str, str(e))
+
+        return False
+
+    if user_input.startswith("pr-file "):
+        user_input = user_input[8:].strip()
+        # Extrahiere und parse den Zielpfad / die URL
+        try:
+            parts = shlex.split(user_input, posix=not sys.platform.startswith("win"))
+            if len(parts) < 2:
+                print(f"[{timestamp()}] [ERROR] No destination specified.")
+                return False
+            else:
+                target = parts[1]
+                target_expanded = os.path.expandvars(os.path.expanduser(target))
+
+                # URL erkennen
+                if target_expanded.startswith(('http://', 'https://', 'ftp://')):
+                    try:
+                        webbrowser.open(target_expanded)
+                        print(f"[{timestamp()}] [PASS] URL opened: {target_expanded}")
+                        return True
+                    except Exception as e:
+                        print(f"[{timestamp()}] [ERROR] URL could not be opened: {e}")
+                        return False
+                else:
+                    # Prüfe Existenz im Dateisystem
+                    if not os.path.exists(target_expanded):
+                        print(f"[{timestamp()}] [ERROR] Not found: {target_expanded}")
+                        return False
+                    else:
+                        try:
+                            if sys.platform.startswith("win"):
+                                os.startfile(target_expanded)
+                            elif sys.platform.startswith("darwin"):
+                                subprocess.Popen(["open", target_expanded])
+                            else:
+                                subprocess.Popen(["xdg-open", target_expanded])
+
+                            print(f"[{timestamp()}] [PASS] Open: {target_expanded}")
+                            return True
+                        except Exception as e:
+                            print(f"[{timestamp()}] [ERROR] Open failed: {e}")
+                            return False
+        except ValueError as e:
+            print(f"[{timestamp()}] [ERROR] Parse error: {e}")
+            return False
+
     # Speedtest
     if user_input.lower() == "speedtest":
         try:
