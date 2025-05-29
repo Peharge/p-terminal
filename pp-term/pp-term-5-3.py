@@ -376,21 +376,6 @@ def find_active_env(user_input: Optional[str] = None) -> str:
     return str(DEFAULT_ENV_DIR.resolve())
 
 
-def handle_cd_command():
-    path = os.path.expanduser("~")
-    change_directory(path)
-
-    found = find_env_in_current_dir()
-    saved = load_saved_env()
-
-    if found:
-        if found != saved:
-            save_current_env(found)
-        return found
-    else:
-        return saved if saved else str(DEFAULT_ENV_DIR.resolve())
-
-
 def run_command(command, shell=False, cwd=None, extra_env=None):
     """
     Führt einen externen Befehl aus und leitet stdout/stderr interaktiv ans Terminal weiter.
@@ -414,7 +399,7 @@ def run_command(command, shell=False, cwd=None, extra_env=None):
             active = data.get("active_env")
 
         if active:
-            active_env_path = Path(active)  # ✅ Convert to Path object
+            active_env_path = Path(active)  # Convert to Path object
 
             # Example usage
             python_exe = active_env_path / "Scripts" / "python.exe"
@@ -1480,7 +1465,20 @@ def handle_special_commands(user_input):
             return saved if saved else str(DEFAULT_ENV_DIR.resolve())
 
     if user_input.lower() == "cd":
-        env_path = handle_cd_command()
+        path = os.path.expanduser("~")
+        change_directory(path)
+
+        found = find_env_in_current_dir()
+        saved = load_saved_env()
+
+        if found:
+            if found != saved:
+                save_current_env(found)
+            return found
+        else:
+            return saved if saved else str(DEFAULT_ENV_DIR.resolve())
+
+        # env_path = handle_cd_command()
         # print(f"[{timestamp()}] [INFO] Environment used: {env_path}")
 
     if user_input.lower() in ["dir", "ls"]:
