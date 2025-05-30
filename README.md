@@ -69,7 +69,7 @@ Thank you for your interest in Peharge Terminal. We greatly appreciate that ❤�
 # **_PP-Terminal 5_**
 
 Why show the standard? The PP Terminal does it all<br>
-— but we show you what sets it apart.<br><br>[`Download PP-Term [Windows]`](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) [`PP-Term Commands`](https://peharge.github.io/MAVIS-web/commands-pp-term.html)<br><br>
+— but we show you what sets it apart.<br><br>[`Download PP-Term [Windows]`](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) [`PP-Term Commands`](https://peharge.github.io/MAVIS-web/commands-pp-term.html) [`Learn PP-Term`](https://peharge.github.io/MAVIS-web/pp-term-hole.html)<br><br>
 <img width="1500" src="https://github.com/Peharge/p-terminal-images/raw/main/images/pp-term-banner-8.png" alt="pp-term"/><br><br>
 </div>
 
@@ -661,7 +661,7 @@ The commit history can be found at: https://github.com/Peharge/p-terminal-old
 
 [`P-Terminal.com`](https://peharge.github.io/MAVIS-web/p-term.html) [`Download PP-Term [Windows]`](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) [`Download P-Term (SOON) [Windows]`](https://github.com/Peharge/p-terminal/blob/main/p-term/run-p-term.bat)
 
-[`PP-Term Commands`](https://peharge.github.io/MAVIS-web/commands-pp-term.html) [`P-Term Commands`](https://peharge.github.io/MAVIS-web/commands-p-term.html)
+[`PP-Term Commands`](https://peharge.github.io/MAVIS-web/commands-pp-term.html) [`P-Term Commands`](https://peharge.github.io/MAVIS-web/commands-p-term.html) [`Learn PP-Term`](https://peharge.github.io/MAVIS-web/pp-term-hole.html)
 
 [`LICENSE`](LICENSE) [`SECURITY`](SECURITY.md) [`PULL_REQUEST_TEMPLATE`](PULL_REQUEST_TEMPLATE.md) [`CONTRIBUTING`](CONTRIBUTING.md) [`CODE_OF_CONDUCT`](CODE_OF_CONDUCT.md) [`TREE`](TREE.md) [`VERSIONS`](VERSIONS.md)
 
