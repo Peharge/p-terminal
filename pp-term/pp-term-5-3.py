@@ -4564,8 +4564,83 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
+    if user_input.startswith("pc-typescript "):
+        user_input = user_input[14:].strip()
+
+        command = f"ts-node {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with TypeScript NodeJs")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
     if user_input.startswith("pd-ts "):
         script = user_input[6:].strip()
+
+        # Remove .ts suffix if present
+        if script.endswith(".ts"):
+            script = script[:-3]
+
+        # 1) Check if ts-node and typescript are installed
+        try:
+            # Prüfen ob ts-node installiert ist
+            has_ts_node = subprocess.run(
+                ["ts-node", "--version"],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                check=False
+            ).returncode == 0
+
+            # Prüfen ob typescript installiert ist
+            has_typescript = subprocess.run(
+                ["tsc", "--version"],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                check=False
+            ).returncode == 0
+
+            if not has_ts_node or not has_typescript:
+                print(
+                    f"[{timestamp()}] [INFO] ts-node or typescript not found, installing with `npm install -g ts-node typescript`…")
+                subprocess.run(
+                    ["npm", "install", "-g", "ts-node", "typescript"],
+                    check=True
+                )
+                print(f"[{timestamp()}] [INFO] ts-node and typescript successfully installed.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error while installing ts-node/typescript: {e}", file=sys.stderr)
+            return True
+
+        # 2) Start debugging with Node.js Inspector via ts-node
+        print(f"[{timestamp()}] [INFO] Starting TypeScript debugger for {script}.ts on port 9229")
+
+        cmd = [
+            "node",
+            "--inspect-brk=9229",
+            "-r",
+            "ts-node/register",
+            f"{script}.ts"
+        ]
+
+        try:
+            proc = subprocess.Popen(cmd)
+            proc.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Debugging aborted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error running TypeScript debugger: {e}", file=sys.stderr)
+
+        return True
+
+    if user_input.startswith("pd-typescript "):
+        script = user_input[14:].strip()
 
         # Remove .ts suffix if present
         if script.endswith(".ts"):
