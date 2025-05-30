@@ -3721,6 +3721,47 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
+    if user_input.startswith("pd-ruby "):
+        script = user_input[8:].strip()
+
+        # Remove .rb suffix if present
+        if script.endswith(".rb"):
+            script = script[:-3]
+
+        # 1) Check if pry is installed
+        try:
+            has_pry = subprocess.run(
+                ["gem", "list", "pry", "-i"],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                check=False
+            ).returncode == 0
+
+            if not has_pry:
+                print(f"[{timestamp()}] [INFO] `pry` not found, installing with `gem install pry`…")
+                subprocess.run(
+                    ["gem", "install", "pry"],
+                    check=True
+                )
+                print(f"[{timestamp()}] [INFO] `pry` successfully installed.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error while installing pry: {e}", file=sys.stderr)
+            return True
+
+        # 2) Debug script with rdbg (Ruby 3.1+)
+        cmd = ["rdbg", "--open", "--port", "5005", f"{script}.rb"]
+
+        print(f"[{timestamp()}] [INFO] Starting Ruby debugger for {script}.rb on port 5005")
+        try:
+            proc = subprocess.Popen(cmd)
+            proc.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Debugging aborted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error running rdbg: {e}", file=sys.stderr)
+
+        return True
+
     if user_input.startswith("Rscript "):
         user_input = user_input[8:].strip()
 
@@ -3770,6 +3811,47 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.startswith("pd-r "):
+        script = user_input[5:].strip()
+
+        # Remove .R suffix if present
+        if script.endswith(".R"):
+            script = script[:-2]
+
+        # 1) Check if 'debug' package is installed (just as an example)
+        try:
+            has_debug = subprocess.run(
+                ["Rscript", "-e", "if (!requireNamespace('debug', quietly=TRUE)) quit(status=1)"],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                check=False
+            ).returncode == 0
+
+            if not has_debug:
+                print(f"[{timestamp()}] [INFO] 'debug' package not found, installing with install.packages('debug')…")
+                subprocess.run(
+                    ["Rscript", "-e", "install.packages('debug', repos='https://cloud.r-project.org')"],
+                    check=True
+                )
+                print(f"[{timestamp()}] [INFO] 'debug' package successfully installed.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error while installing debug package: {e}", file=sys.stderr)
+            return True
+
+        # 2) Debug script with Rscript --debugger (R 4.0+)
+        cmd = ["Rscript", "-d", "debug", f"{script}.R"]
+
+        print(f"[{timestamp()}] [INFO] Starting R debugger for {script}.R")
+        try:
+            proc = subprocess.Popen(cmd)
+            proc.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Debugging aborted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error running R debugger: {e}", file=sys.stderr)
+
         return True
 
     if user_input.startswith("pyinstaller --onefile "):
@@ -3979,6 +4061,56 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
+    if user_input.startswith("pd-go "):
+        script = user_input[6:].strip()
+
+        # Remove .go suffix if present
+        if script.endswith(".go"):
+            script = script[:-3]
+
+        # 1) Check if Delve (dlv) debugger is installed
+        try:
+            has_dlv = subprocess.run(
+                ["which", "dlv"],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                check=False
+            ).returncode == 0
+
+            if not has_dlv:
+                print(
+                    f"[{timestamp()}] [INFO] `dlv` (Delve debugger) not found, installing with `go install github.com/go-delve/delve/cmd/dlv@latest`…")
+                subprocess.run(
+                    ["go", "install", "github.com/go-delve/delve/cmd/dlv@latest"],
+                    check=True
+                )
+                print(f"[{timestamp()}] [INFO] `dlv` successfully installed.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error while installing dlv: {e}", file=sys.stderr)
+            return True
+
+        # 2) Debug Go program with dlv
+        # Annahme: ausführbare Datei heißt wie das Script ohne .go
+        executable = script
+
+        print(f"[{timestamp()}] [INFO] Starting Go debugger (dlv) for {executable}")
+        try:
+            # Build the binary first (debug build)
+            subprocess.run(["go", "build", "-gcflags", "all=-N -l", "-o", executable, f"{script}.go"], check=True)
+
+            # Start debugger in headless mode, listening on port 2345 (Standard)
+            cmd = ["dlv", "exec", f"./{executable}", "--headless", "--listen=:2345", "--api-version=2",
+                   "--accept-multiclient"]
+
+            proc = subprocess.Popen(cmd)
+            proc.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Debugging aborted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error running dlv: {e}", file=sys.stderr)
+
+        return True
+
     if user_input.startswith("julia "):
         user_input = user_input[6:].strip()
 
@@ -4030,6 +4162,60 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
+    if user_input.startswith("pd-julia "):
+        script = user_input[9:].strip()
+
+        # Remove .jl suffix if present
+        if script.endswith(".jl"):
+            script = script[:-3]
+
+        # 1) Check if Debugger.jl is installed in Julia
+        try:
+            has_debugger = subprocess.run(
+                [
+                    "julia",
+                    "-e",
+                    "using Pkg; is_installed = any(x -> x.name == \"Debugger\", Pkg.installed()); if !is_installed exit(1) end"
+                ],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                check=False
+            ).returncode == 0
+
+            if not has_debugger:
+                print(f"[{timestamp()}] [INFO] Debugger.jl not found, installing with `Pkg.add(\"Debugger\")` …")
+                subprocess.run(
+                    ["julia", "-e", "using Pkg; Pkg.add(\"Debugger\")"],
+                    check=True
+                )
+                print(f"[{timestamp()}] [INFO] Debugger.jl successfully installed.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error while installing Debugger.jl: {e}", file=sys.stderr)
+            return True
+
+        # 2) Start debugging session with Julia Debugger
+        print(f"[{timestamp()}] [INFO] Starting Julia debugger for {script}.jl")
+
+        # Kommando, das das Skript im Debug-Modus lädt
+        # Wir nutzen das REPL Debugger-Paket via julia -e
+        cmd = [
+            "julia",
+            "-e",
+            (
+                f"using Debugger; @enter include(\"{script}.jl\")"
+            )
+        ]
+
+        try:
+            proc = subprocess.Popen(cmd)
+            proc.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Debugging aborted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error running Julia Debugger: {e}", file=sys.stderr)
+
+        return True
+
     if user_input.startswith("php "):
         user_input = user_input[4:].strip()
 
@@ -4079,6 +4265,48 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.startswith("pd-php "):
+        script = user_input[7:].strip()
+
+        # Remove .php suffix if present
+        if script.endswith(".php"):
+            script = script[:-4]
+
+        # 1) Check if Xdebug is installed/enabled (php -m lists modules)
+        try:
+            has_xdebug = subprocess.run(
+                ["php", "-m"],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.DEVNULL,
+                check=True,
+                text=True
+            ).stdout.lower().find("xdebug") != -1
+
+            if not has_xdebug:
+                print(
+                    f"[{timestamp()}] [INFO] Xdebug not found/enabled. Please install and enable Xdebug to debug PHP scripts.")
+                return True
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error checking PHP modules: {e}", file=sys.stderr)
+            return True
+
+        # 2) Start debugging PHP script with Xdebug
+        # Hinweis: Xdebug läuft normalerweise als Debug-Client (IDE) oder via remote debugging
+        # Zum Starten einfach php mit dem Skript ausführen, Xdebug muss konfiguriert sein.
+        print(f"[{timestamp()}] [INFO] Starting PHP script {script}.php with Xdebug enabled (if configured).")
+
+        cmd = ["php", f"{script}.php"]
+
+        try:
+            proc = subprocess.Popen(cmd)
+            proc.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Debugging aborted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error running PHP script: {e}", file=sys.stderr)
+
         return True
 
     if user_input.startswith("lua "):
@@ -4169,6 +4397,58 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
+    if user_input.startswith("pd-lua "):
+        script = user_input[7:].strip()
+
+        # Remove .lua suffix if present
+        if script.endswith(".lua"):
+            script = script[:-4]
+
+        # 1) Check if mobdebug (Lua remote debugger) is installed
+        # Wir prüfen, ob 'mobdebug' verfügbar ist, indem wir lua versuchen, es zu require'n
+        try:
+            has_mobdebug = subprocess.run(
+                [
+                    "lua",
+                    "-e",
+                    "local status, _ = pcall(require, 'mobdebug'); if not status then os.exit(1) end"
+                ],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                check=False
+            ).returncode == 0
+
+            if not has_mobdebug:
+                print(
+                    f"[{timestamp()}] [INFO] mobdebug not found. Please install it via LuaRocks with `luarocks install mobdebug`.")
+                return True
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error checking mobdebug: {e}", file=sys.stderr)
+            return True
+
+        # 2) Start debugging session with mobdebug
+        # mobdebug funktioniert als remote Debugger, also muss das Skript mobdebug starten oder man startet es mit einem Debug-Launcher
+        print(f"[{timestamp()}] [INFO] Starting Lua script {script}.lua with mobdebug.")
+
+        # Wir starten lua mit mobdebug und dem Script; hier ein einfaches Beispiel mit mobdebug.start()
+        cmd = [
+            "lua",
+            "-e",
+            (
+                    "local mobdebug = require('mobdebug'); mobdebug.start(); dofile('" + f"{script}.lua" + "')"
+            )
+        ]
+
+        try:
+            proc = subprocess.Popen(cmd)
+            proc.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Debugging aborted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error running Lua debugger: {e}", file=sys.stderr)
+
+        return True
+
     if user_input.startswith("tsc "):
         user_input = user_input[4:].strip()
 
@@ -4252,6 +4532,64 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.startswith("pd-ts "):
+        script = user_input[6:].strip()
+
+        # Remove .ts suffix if present
+        if script.endswith(".ts"):
+            script = script[:-3]
+
+        # 1) Check if ts-node and typescript are installed
+        try:
+            # Prüfen ob ts-node installiert ist
+            has_ts_node = subprocess.run(
+                ["ts-node", "--version"],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                check=False
+            ).returncode == 0
+
+            # Prüfen ob typescript installiert ist
+            has_typescript = subprocess.run(
+                ["tsc", "--version"],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                check=False
+            ).returncode == 0
+
+            if not has_ts_node or not has_typescript:
+                print(
+                    f"[{timestamp()}] [INFO] ts-node or typescript not found, installing with `npm install -g ts-node typescript`…")
+                subprocess.run(
+                    ["npm", "install", "-g", "ts-node", "typescript"],
+                    check=True
+                )
+                print(f"[{timestamp()}] [INFO] ts-node and typescript successfully installed.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error while installing ts-node/typescript: {e}", file=sys.stderr)
+            return True
+
+        # 2) Start debugging with Node.js Inspector via ts-node
+        print(f"[{timestamp()}] [INFO] Starting TypeScript debugger for {script}.ts on port 9229")
+
+        cmd = [
+            "node",
+            "--inspect-brk=9229",
+            "-r",
+            "ts-node/register",
+            f"{script}.ts"
+        ]
+
+        try:
+            proc = subprocess.Popen(cmd)
+            proc.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Debugging aborted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error running TypeScript debugger: {e}", file=sys.stderr)
+
         return True
 
     if user_input.startswith("kotlinc "):
@@ -4356,6 +4694,70 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
+    if user_input.startswith("pd-kotlin "):
+        script = user_input[10:].strip()
+
+        # Remove .kt suffix if present
+        if script.endswith(".kt"):
+            script = script[:-3]
+
+        # 1) Check if kotlinc (Kotlin compiler) and kotlin runtime are installed
+        try:
+            has_kotlinc = subprocess.run(
+                ["kotlinc", "-version"],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                check=False
+            ).returncode == 0
+
+            has_kotlin = subprocess.run(
+                ["kotlin", "-version"],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                check=False
+            ).returncode == 0
+
+            if not has_kotlinc or not has_kotlin:
+                print(
+                    f"[{timestamp()}] [ERROR] Kotlin compiler or runtime not found. Please install Kotlin (https://kotlinlang.org/docs/command-line.html).")
+                return True
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error checking Kotlin installation: {e}", file=sys.stderr)
+            return True
+
+        # 2) Compile Kotlin script to jar/class files
+        jar_file = f"{script}.jar"
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling Kotlin script {script}.kt to jar...")
+            subprocess.run(
+                ["kotlinc", f"{script}.kt", "-include-runtime", "-d", jar_file],
+                check=True
+            )
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Kotlin compilation failed: {e}", file=sys.stderr)
+            return True
+
+        # 3) Start debugger (using Java Debug Wire Protocol, JDWP)
+        # Wir starten die JVM mit Debug-Optionen (port 5005, warten auf Debugger)
+        print(f"[{timestamp()}] [INFO] Starting Kotlin debugger for {script}.kt on port 5005")
+
+        cmd = [
+            "java",
+            "-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005",
+            "-jar",
+            jar_file
+        ]
+
+        try:
+            proc = subprocess.Popen(cmd)
+            proc.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Debugging aborted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error running Kotlin debugger: {e}", file=sys.stderr)
+
+        return True
+
     if user_input.startswith("swiftc "):
         user_input = user_input[7:].strip()
 
@@ -4389,6 +4791,63 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.startswith("pd-swift "):
+        script = user_input[9:].strip()
+
+        # Remove .swift suffix if present
+        if script.endswith(".swift"):
+            script = script[:-6]
+
+        # 1) Check if swiftc (Swift compiler) is installed
+        try:
+            has_swiftc = subprocess.run(
+                ["swiftc", "-version"],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                check=False
+            ).returncode == 0
+
+            if not has_swiftc:
+                print(
+                    f"[{timestamp()}] [ERROR] Swift compiler (swiftc) not found. Please install Swift from https://swift.org/download/")
+                return True
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error checking swiftc installation: {e}", file=sys.stderr)
+            return True
+
+        # 2) Compile Swift script to executable
+        executable = script
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling Swift script {script}.swift...")
+            subprocess.run(
+                ["swiftc", f"{script}.swift", "-g", "-o", executable],
+                check=True
+            )
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Swift compilation failed: {e}", file=sys.stderr)
+            return True
+
+        # 3) Start debugger with lldb
+        # lldb startet und stoppt direkt am Programmstart (suspend)
+        print(f"[{timestamp()}] [INFO] Starting Swift debugger for {script}.swift with lldb")
+
+        cmd = [
+            "lldb",
+            executable,
+            "--",
+            # Optional: hier können noch Programmargumente eingefügt werden
+        ]
+
+        try:
+            proc = subprocess.Popen(cmd)
+            proc.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Debugging aborted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error running lldb debugger: {e}", file=sys.stderr)
+
         return True
 
     if user_input.startswith("dart run "):
@@ -4440,6 +4899,50 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.startswith("pd-dart "):
+        script = user_input[8:].strip()
+
+        # Remove .dart suffix if present
+        if script.endswith(".dart"):
+            script = script[:-5]
+
+        # 1) Check if dart SDK is installed
+        try:
+            has_dart = subprocess.run(
+                ["dart", "--version"],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                check=False
+            ).returncode == 0
+
+            if not has_dart:
+                print(f"[{timestamp()}] [ERROR] Dart SDK not found. Please install Dart from https://dart.dev/get-dart")
+                return True
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error checking Dart installation: {e}", file=sys.stderr)
+            return True
+
+        # 2) Start Dart script in debug mode with Observatory (now Dart VM Service)
+        # Standardmäßig läuft der Debugger auf Port 8181
+        print(f"[{timestamp()}] [INFO] Starting Dart debugger for {script}.dart on port 8181")
+
+        cmd = [
+            "dart",
+            "run",
+            "--observe=8181",
+            f"{script}.dart"
+        ]
+
+        try:
+            proc = subprocess.Popen(cmd)
+            proc.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Debugging aborted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error running Dart debugger: {e}", file=sys.stderr)
+
         return True
 
     if user_input.startswith("ghc "):
