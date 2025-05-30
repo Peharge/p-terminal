@@ -1624,7 +1624,7 @@ def handle_special_commands(user_input):
         return True
 
     elif user_input.startswith("pcsvf "):
-        user_input = user_input[5:].strip()
+        user_input = user_input[6:].strip()
         command = f"virtualenv -p {user_input}"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
