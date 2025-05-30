@@ -3318,38 +3318,118 @@ def handle_special_commands(user_input):
 
     elif user_input.startswith("vs-cpp "):
         user_input = user_input[7:].strip()
-        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 20222")
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022")
         handle_vs_cpp_command(user_input)
         return True
 
     elif user_input.startswith("cppc "):
         user_input = user_input[5:].strip()
-        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 20222")
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022")
         handle_vs_cpp_command(user_input)
         return True
 
     elif user_input.startswith("pc-cpp "):
         user_input = user_input[7:].strip()
-        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 20222")
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022")
         handle_vs_cpp_command(user_input)
+        return True
+
+    if user_input.startswith("pd-cpp "):
+        args = shlex.split(user_input[7:].strip())
+        if len(args) != 2:
+            print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file.")
+            return False
+
+        source_file, output_file = args
+
+        if not os.path.isfile(source_file):
+            print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
+            return False
+
+        vcvarsall_path = r'C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat'
+        if not os.path.isfile(vcvarsall_path):
+            print(f"[{timestamp()}] [ERROR] vcvarsall.bat not found at path: {vcvarsall_path}")
+            return False
+
+        compile_command = f'"{vcvarsall_path}" x64 && cl /Zi /Od /EHsc "{source_file}" /Fe:"{output_file}"'
+        full_command = f'cmd /c "{compile_command}"'
+
+        print(f"[{timestamp()}] [INFO] Starting compilation...")
+        print(f"[{timestamp()}] [DEBUG] Running command: {full_command}")
+
+        try:
+            returncode = run_command(full_command, shell=True)
+
+            if returncode == 0:
+                print(f"[{timestamp()}] [SUCCESS] Compilation completed successfully.")
+            else:
+                print(f"[{timestamp()}] [ERROR] Compilation failed with return code {returncode}.")
+
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Compilation cancelled by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [EXCEPTION] Subprocess error: {e}")
+        except Exception as e:
+            print(f"[{timestamp()}] [EXCEPTION] Unexpected error: {e}")
+
         return True
 
     elif user_input.startswith("vs-c "):
         user_input = user_input[5:].strip()
-        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 20222")
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022")
         handle_vs_c_command(user_input)
         return True
 
     elif user_input.startswith("cc "):
         user_input = user_input[3:].strip()
-        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 20222")
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022")
         handle_vs_c_command(user_input)
         return True
 
     elif user_input.startswith("pc-c "):
         user_input = user_input[5:].strip()
-        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 20222")
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022")
         handle_vs_c_command(user_input)
+        return True
+
+    if user_input.startswith("pd-c "):
+        args = shlex.split(user_input[5:].strip())
+        if len(args) != 2:
+            print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file.")
+            return False
+
+        source_file, output_file = args
+
+        if not os.path.isfile(source_file):
+            print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
+            return False
+
+        vcvarsall_path = r'C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat'
+        if not os.path.isfile(vcvarsall_path):
+            print(f"[{timestamp()}] [ERROR] vcvarsall.bat not found at path: {vcvarsall_path}")
+            return False
+
+        compile_command = f'"{vcvarsall_path}" x64 && cl /Zi /Od /EHsc "{source_file}" /Fe:"{output_file}"'
+        full_command = f'cmd /c "{compile_command}"'
+
+        print(f"[{timestamp()}] [INFO] Starting compilation...")
+        print(f"[{timestamp()}] [DEBUG] Running command: {full_command}")
+
+        try:
+            returncode = run_command(full_command, shell=True)
+
+            if returncode == 0:
+                print(f"[{timestamp()}] [SUCCESS] Compilation completed successfully.")
+            else:
+                print(f"[{timestamp()}] [ERROR] Compilation failed with return code {returncode}.")
+
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Compilation cancelled by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [EXCEPTION] Subprocess error: {e}")
+        except Exception as e:
+            print(f"[{timestamp()}] [EXCEPTION] Unexpected error: {e}")
+
         return True
 
     elif user_input.startswith("vs-cs "):
@@ -3360,14 +3440,61 @@ def handle_special_commands(user_input):
 
     elif user_input.startswith("csc "):
         user_input = user_input[4:].strip()
-        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 20222")
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022")
         handle_vs_cs_command(user_input)
         return True
 
     elif user_input.startswith("pc-cs "):
         user_input = user_input[6:].strip()
-        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 20222")
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022")
         handle_vs_cs_command(user_input)
+        return True
+
+    if user_input.startswith("pd-cs "):
+        args = shlex.split(user_input[6:].strip())
+        if len(args) != 2:
+            print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file.")
+            return False
+
+        source_file, output_file = args
+
+        if not os.path.isfile(source_file):
+            print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
+            return False
+
+        # Finde den C#-Compiler (csc.exe)
+        csc_paths = [
+            r"C:\Windows\Microsoft.NET\Framework\v4.0.30319\csc.exe",  # 32-bit .NET Framework
+            r"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe",  # 64-bit
+            r"C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\Roslyn\csc.exe"
+            # Roslyn (VS 2022)
+        ]
+
+        csc_path = next((p for p in csc_paths if os.path.isfile(p)), None)
+
+        if not csc_path:
+            print(f"[{timestamp()}] [ERROR] csc.exe not found. Please ensure .NET SDK or Visual Studio is installed.")
+            return False
+
+        compile_command = f'"{csc_path}" /debug /out:"{output_file}" "{source_file}"'
+        print(f"[{timestamp()}] [INFO] Starting C# compilation...")
+        print(f"[{timestamp()}] [DEBUG] Running command: {compile_command}")
+
+        try:
+            returncode = run_command(compile_command, shell=True)
+
+            if returncode == 0:
+                print(f"[{timestamp()}] [SUCCESS] Compilation completed successfully.")
+            else:
+                print(f"[{timestamp()}] [ERROR] Compilation failed with return code {returncode}.")
+
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Compilation cancelled by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [EXCEPTION] Subprocess error: {e}")
+        except Exception as e:
+            print(f"[{timestamp()}] [EXCEPTION] Unexpected error: {e}")
+
         return True
 
     if user_input.startswith("rustc "):
@@ -3397,6 +3524,22 @@ def handle_special_commands(user_input):
 
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with rustup")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.startswith("pd-rust "):
+        user_input = user_input[8:].strip()
+
+        command = f"rustc -Z unstable-options --error-format=long-span {user_input}"
+
+        process = run_command(command, shell=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Debug {user_input} with rustup")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3455,6 +3598,22 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
+    if user_input.startswith("pd-node "):
+        user_input = user_input[8:].strip()
+
+        command = f"node inspect {user_input}"
+
+        process = run_command(command, shell=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Debug {user_input} with rustup")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
     if user_input.startswith("javac "):
         user_input = user_input[6:].strip()
 
@@ -3483,6 +3642,28 @@ def handle_special_commands(user_input):
         try:
             print(f"[{timestamp()}] [INFO] Compile {user_input} with Java - JDK")
             process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.startswith("pd-java "):
+        user_input = user_input[8:].strip()
+
+        if user_input.endswith(".java"):
+            user_input = user_input[:-5]
+
+        command = f"javac -g {user_input}.java"
+        command3 = f"java -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005 {user_input}"
+
+        process = run_command(command, shell=True)
+        process3 = run_command(command3, shell=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Debug {user_input} with javac")
+            process.wait()
+            process3.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
@@ -3686,6 +3867,20 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pd-p "):
         user_input = user_input[5:].strip()
+
+        command = f"python -m pdb {user_input}"
+
+        try:
+            print(f"[{timestamp()}] [INFO] Debugg {user_input} with Python:\n")
+            run_command(command, shell=True)
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.startswith("pd-python "):
+        user_input = user_input[10:].strip()
 
         command = f"python -m pdb {user_input}"
 
