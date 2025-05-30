@@ -3902,6 +3902,20 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
+    if user_input.startswith("pr-p "):
+        user_input = user_input[5:].strip()
+
+        command = f"python {user_input}"
+
+        try:
+            print(f"[{timestamp()}] [INFO] Run {user_input} with Python:\n")
+            run_command(command, shell=True)
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
     if user_input.startswith("pc-p "):
         user_input = user_input[5:].strip()
 
