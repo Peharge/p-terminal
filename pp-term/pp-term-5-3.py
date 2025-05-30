@@ -2595,8 +2595,9 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("code-lx "):
+        user_input = user_input[8:].strip()
 
-        command = f"wsl {user_input}"
+        command = f"wsl code {user_input}"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
                                    text=True)
@@ -3090,8 +3091,9 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("atom-lx "):
+        user_input = user_input[8:].strip()
 
-        command = f"wsl {user_input}"
+        command = f"wsl atom {user_input}"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
                                    text=True)
