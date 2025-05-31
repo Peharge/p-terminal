@@ -107,6 +107,7 @@ from duckduckgo_search import DDGS
 import multiprocessing
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from shutil import which
+import tempfile
 
 try:
     import ujson as _json  # ultraschnelles JSON
