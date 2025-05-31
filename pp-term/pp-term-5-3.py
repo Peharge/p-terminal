@@ -106,6 +106,7 @@ from PIL import Image
 from duckduckgo_search import DDGS
 import multiprocessing
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from shutil import which
 
 try:
     import ujson as _json  # ultraschnelles JSON
@@ -5101,6 +5102,56 @@ def handle_special_commands(user_input):
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
+    
+    if user_input.startswith("pd-haskell "):
+        script = user_input[11:].strip()
+
+        # Remove .go suffix if present
+        if script.endswith(".go"):
+            script = script[:-3]
+
+        # 1) Check if Delve (dlv) debugger is installed
+        try:
+            has_dlv = subprocess.run(
+                ["which", "dlv"],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                check=False
+            ).returncode == 0
+
+            if not has_dlv:
+                print(
+                    f"[{timestamp()}] [INFO] `dlv` (Delve debugger) not found, installing with `go install github.com/go-delve/delve/cmd/dlv@latest`…")
+                subprocess.run(
+                    ["go", "install", "github.com/go-delve/delve/cmd/dlv@latest"],
+                    check=True
+                )
+                print(f"[{timestamp()}] [INFO] `dlv` successfully installed.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error while installing dlv: {e}", file=sys.stderr)
+            return True
+
+        # 2) Debug Go program with dlv
+        # Annahme: ausführbare Datei heißt wie das Script ohne .go
+        executable = script
+
+        print(f"[{timestamp()}] [INFO] Starting Go debugger (dlv) for {executable}")
+        try:
+            # Build the binary first (debug build)
+            subprocess.run(["go", "build", "-gcflags", "all=-N -l", "-o", executable, f"{script}.go"], check=True)
+
+            # Start debugger in headless mode, listening on port 2345 (Standard)
+            cmd = ["dlv", "exec", f"./{executable}", "--headless", "--listen=:2345", "--api-version=2",
+                   "--accept-multiclient"]
+
+            proc = subprocess.Popen(cmd)
+            proc.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Debugging aborted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error running dlv: {e}", file=sys.stderr)
+
+        return True
 
     if user_input.startswith("dotnet fsi "):
         user_input = user_input[11:].strip()
@@ -5168,6 +5219,62 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.startswith("pd-scala "):
+        user_input = user_input[9:].strip()
+
+        if not user_input.endswith(".scala"):
+            print(f"{timestamp()} [ERROR] Please provide a `.scala` file.")
+            return True
+
+        script_name = os.path.splitext(user_input)[0]  # ohne .scala
+        class_name = script_name  # Standard-Annahme: Klassenname = Dateiname
+        class_file = f"{class_name}.class"
+
+        # 1. Check ob scalac und java vorhanden sind
+        if which("scalac") is None:
+            print(f"{timestamp()} [ERROR] `scalac` (Scala compiler) not found. Please install Scala.")
+            return True
+        if which("java") is None:
+            print(f"{timestamp()} [ERROR] `java` not found. Please install JDK.")
+            return True
+
+        print(f"{timestamp()} [INFO] Compiling {user_input} with scalac...")
+
+        # 2. Kompilieren
+        compile_result = subprocess.run(
+            ["scalac", user_input],
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+
+        if compile_result.returncode != 0:
+            print(f"{timestamp()} [ERROR] Compilation failed:")
+            print(compile_result.stderr)
+            return True
+        else:
+            print(f"{timestamp()} [INFO] Compilation successful.")
+
+        # 3. Start Debugging (Java JDWP)
+        print(f"{timestamp()} [INFO] Launching Java Debugger for class: {class_name}")
+
+        debug_command = [
+            "java",
+            "-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005",
+            class_name
+        ]
+
+        try:
+            proc = subprocess.Popen(debug_command)
+            proc.wait()
+        except KeyboardInterrupt:
+            print(f"{timestamp()} [INFO] Debugging cancelled by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"{timestamp()} [ERROR] Error while running debugger: {e}", file=sys.stderr)
+
         return True
 
     if user_input.startswith("clj "):
@@ -5240,6 +5347,55 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
+    if user_input.startswith("pd-ocaml "):
+        user_input = user_input[9:].strip()
+
+        if not user_input.endswith(".ml"):
+            print(f"{timestamp()} [ERROR] Please provide a `.ml` OCaml source file.")
+            return True
+
+        script_name = os.path.splitext(user_input)[0]  # ohne .ml
+        bytecode_file = f"{script_name}.byte"
+
+        # 1. Check ob ocamlc und ocamldebug vorhanden sind
+        if which("ocamlc") is None:
+            print(f"{timestamp()} [ERROR] `ocamlc` (OCaml bytecode compiler) not found. Please install OCaml.")
+            return True
+        if which("ocamldebug") is None:
+            print(f"{timestamp()} [ERROR] `ocamldebug` not found. Please install OCaml Debugger.")
+            return True
+
+        print(f"{timestamp()} [INFO] Compiling {user_input} with ocamlc...")
+
+        # 2. Kompilieren zu Bytecode (mit Debug-Info)
+        compile_result = subprocess.run(
+            ["ocamlc", "-g", "-o", bytecode_file, user_input],
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+
+        if compile_result.returncode != 0:
+            print(f"{timestamp()} [ERROR] Compilation failed:")
+            print(compile_result.stderr)
+            return True
+        else:
+            print(f"{timestamp()} [INFO] Compilation successful.")
+
+        # 3. Debug starten mit ocamldebug
+        print(f"{timestamp()} [INFO] Launching OCaml Debugger for {bytecode_file}")
+
+        try:
+            proc = subprocess.Popen(["ocamldebug", bytecode_file])
+            proc.wait()
+        except KeyboardInterrupt:
+            print(f"{timestamp()} [INFO] Debugging cancelled by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"{timestamp()} [ERROR] Error while running ocamldebug: {e}", file=sys.stderr)
+
+        return True
+
     if user_input.startswith("elixir "):
         user_input = user_input[7:].strip()
 
@@ -5272,6 +5428,42 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.startswith("pd-elixir "):
+        user_input = user_input[10:].strip()
+
+        if not user_input.endswith(".ex"):
+            print(f"{timestamp()} [ERROR] Please provide a `.ex` Elixir source file.")
+            return True
+
+        script_name = os.path.splitext(user_input)[0]
+
+        # 1. Prüfen ob elixir und iex vorhanden sind
+        if which("elixir") is None:
+            print(f"{timestamp()} [ERROR] `elixir` not found. Please install Elixir.")
+            return True
+        if which("iex") is None:
+            print(f"{timestamp()} [ERROR] `iex` not found. Please install Elixir.")
+            return True
+
+        print(f"{timestamp()} [INFO] Launching Elixir Debugger with :debugger and {user_input}")
+
+        # 2. Start Debug-Session in iex mit dem Modul
+        debug_command = [
+            "iex",
+            "--erl", "-sdebugger",  # Start mit :debugger
+            "-r", user_input  # Lade die Datei
+        ]
+
+        try:
+            proc = subprocess.Popen(debug_command)
+            proc.wait()
+        except KeyboardInterrupt:
+            print(f"{timestamp()} [INFO] Debugging cancelled by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"{timestamp()} [ERROR] Error while running iex: {e}", file=sys.stderr)
+
         return True
 
     if user_input.startswith("elm make "):
@@ -5310,6 +5502,54 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
+    if user_input.startswith("pd-elm "):
+        user_input = user_input[7:].strip()
+
+        if not user_input.endswith(".elm"):
+            print(f"{timestamp()} [ERROR] Please provide a `.elm` Elm source file.")
+            return True
+
+        script_name = os.path.splitext(user_input)[0]
+        output_file = "elm_debug.html"
+
+        # 1. Prüfen ob elm vorhanden ist
+        if which("elm") is None:
+            print(
+                f"{timestamp()} [ERROR] `elm` not found. Please install Elm: https://guide.elm-lang.org/install/elm.html")
+            return True
+
+        print(f"{timestamp()} [INFO] Compiling {user_input} with elm in debug mode...")
+
+        # 2. Kompilieren mit Debug-Modus
+        compile_result = subprocess.run(
+            ["elm", "make", user_input, "--output", output_file, "--debug"],
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+
+        if compile_result.returncode != 0:
+            print(f"{timestamp()} [ERROR] Compilation failed:")
+            print(compile_result.stderr)
+            return True
+        else:
+            print(f"{timestamp()} [INFO] Compilation successful. Output: {output_file}")
+
+        # 3. HTML im Browser öffnen
+        print(f"{timestamp()} [INFO] Opening debug viewer in browser...")
+        try:
+            if sys.platform.startswith("win"):
+                os.startfile(output_file)
+            elif sys.platform == "darwin":
+                subprocess.run(["open", output_file])
+            else:
+                subprocess.run(["xdg-open", output_file])
+        except Exception as e:
+            print(f"{timestamp()} [ERROR] Could not open browser: {e}")
+
+        return True
+
     if user_input.startswith("v run "):
         user_input = user_input[7:].strip()
 
@@ -5342,6 +5582,65 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.startswith("pd-v "):
+        # 1) Argument auslesen
+        user_input = user_input[5:].strip()
+        if not user_input.endswith(".v"):
+            print(f"{timestamp()} [ERROR] Please specify a `.v` file.")
+            return True
+
+        # Basisname (ohne .v) und Quelldatei
+        script_name = os.path.splitext(user_input)[0]
+        source_file = user_input
+        executable = script_name  # V legt unter Linux/Mac das Binary standardmäßig auf den Basisnamen
+
+        # 2) Prüfen, ob 'v' (Compiler) und 'gdb' (Debugger) verfügbar sind
+        if which("v") is None:
+            print(f"{timestamp()} [ERROR] `v` compiler not found. Please install V: https://vlang.io")
+            return True
+        if which("gdb") is None:
+            print(
+                f"{timestamp()} [ERROR] `gdb` (GNU Debugger) not found. Please install gdb (e.g., `sudo apt install gdb`).")
+            return True
+
+        # 3) Kompilieren mit Debug-Informationen
+        print(f"{timestamp()} [INFO] Compiling {source_file} with debug info (v -g)...")
+        compile_cmd = ["v", "-g", source_file]
+
+        try:
+            compile_proc = subprocess.run(
+                compile_cmd,
+                stdin=subprocess.DEVNULL,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True
+            )
+        except Exception as e:
+            print(f"{timestamp()} [ERROR] Error starting the compiler: {e}", file=sys.stderr)
+            return True
+
+        if compile_proc.returncode != 0:
+            print(f"{timestamp()} [ERROR] Compilation failed:")
+            print(compile_proc.stderr.strip())
+            return True
+        else:
+            print(f"{timestamp()} [INFO] Compilation successful. Binary file: {executable}")
+
+        # 4) Debuggen mit gdb
+        print(f"{timestamp()} [INFO] Start GNU Debugger (gdb) for {executable}...")
+        # gdb erwartet in der Regel den Pfad zum Binärprogramm
+        debug_cmd = ["gdb", "--args", f"./{executable}"]
+
+        try:
+            dbg_proc = subprocess.Popen(debug_cmd)
+            dbg_proc.wait()
+        except KeyboardInterrupt:
+            print(f"{timestamp()} [INFO] Debugging aborted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"{timestamp()} [ERROR] Error running gdb: {e}", file=sys.stderr)
+
         return True
 
     if user_input.startswith("zig build-exe "):
@@ -5395,6 +5694,62 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
+    if user_input.startswith("pd-zig "):
+        # 1) Argument auslesen und überprüfen
+        user_input = user_input[7:].strip()  # Entferne "pd-zig " (7 Zeichen)
+        if not user_input.endswith(".zig"):
+            print(f"{timestamp()} [ERROR] Please specify a `.zig` file.")
+            return True
+
+        source_file = user_input
+        script_name = os.path.splitext(source_file)[0]  # Basisname ohne .zig
+        executable = script_name  # Zig legt standardmäßig das Binary auf den Basisnamen
+
+        # 2) Prüfen, ob 'zig' (Compiler) und 'gdb' (Debugger) verfügbar sind
+        if which("zig") is None:
+            print(
+                f"{timestamp()} [ERROR] `zig` compiler not found. Please install Zig: https://ziglang.org/download/")
+            return True
+        if which("gdb") is None:
+            print(
+                f"{timestamp()} [ERROR] `gdb` (GNU Debugger) not found. Please install gdb (e.g., `sudo apt install gdb`).")
+            return True
+
+        # 3) Kompilieren mit Debug-Informationen (-g)
+        print(f"{timestamp()} [INFO] Compile {source_file} with debug info (zig build-exe -g)...")
+        compile_cmd = ["zig", "build-exe", "-g", source_file]
+        try:
+            compile_proc = subprocess.run(
+                compile_cmd,
+                stdin=subprocess.DEVNULL,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True
+            )
+        except Exception as e:
+            print(f"{timestamp()} [ERROR] Error calling compiler: {e}", file=sys.stderr)
+            return True
+
+        if compile_proc.returncode != 0:
+            print(f"{timestamp()} [ERROR] Compilation failed:")
+            print(compile_proc.stderr.strip())
+            return True
+        else:
+            print(f"{timestamp()} [INFO] Compilation successful. Binary file: {executable}")
+
+        # 4) Debuggen mit gdb
+        print(f"{timestamp()} [INFO] Start GNU Debugger (gdb) for {executable}...")
+        debug_cmd = ["gdb", "--args", f"./{executable}"]
+        try:
+            dbg_proc = subprocess.Popen(debug_cmd)
+            dbg_proc.wait()
+        except KeyboardInterrupt:
+            print(f"{timestamp()} [INFO] Debugging aborted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"{timestamp()} [ERROR] Error running gdb: {e}", file=sys.stderr)
+
+        return True
+
     if user_input.startswith("nim compile "):
         user_input = user_input[12:].strip()
 
@@ -5444,6 +5799,72 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.startswith("pd-nim "):
+        # 1) Argument (Dateiname) extrahieren und trimmen
+        user_input = user_input[7:].strip()  # Entferne "pd-nim " (7 Zeichen)
+        if not user_input.endswith(".nim"):
+            print(f"{timestamp()} [ERROR] Please specify a `.nim` file.")
+            return True
+
+        source_file = user_input
+        script_name = os.path.splitext(source_file)[0]  # Basisname ohne .nim
+
+        # Unter Windows kann es nötig sein, .exe anzuhängen.
+        # Hier belassen wir es zunächst plattformunabhängig als Basisname.
+        executable = script_name
+
+        # 2) Prüfen, ob 'nim' (Compiler) und 'gdb' (Debugger) verfügbar sind
+        if which("nim") is None:
+            print(
+                f"{timestamp()} [ERROR] `nim` compiler not found. Please install Nim: https://nim-lang.org/install.html")
+            return True
+        if which("gdb") is None:
+            print(
+                f"{timestamp()} [ERROR] `gdb` (GNU Debugger) not found. Please install gdb (e.g., `sudo apt install gdb`).")
+            return True
+
+        # 3) Kompilieren mit Debug-Informationen
+        print(f"{timestamp()} [INFO] Compile {source_file} with debug info (nim c -d:debug --debugger:native)...")
+        compile_cmd = [
+            "nim", "c",
+            "-d:debug",  # Schalter, damit Nim mit Debug-Symbolen kompiliert
+            "--debugger:native",  # Explizit den nativen Debugger (gdb/lldb) verwenden
+            "-o:" + executable,  # Legt den Namen des Binaries fest
+            source_file
+        ]
+        try:
+            compile_proc = subprocess.run(
+                compile_cmd,
+                stdin=subprocess.DEVNULL,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True
+            )
+        except Exception as e:
+            print(f"{timestamp()} [ERROR] Error calling Nim compiler: {e}", file=sys.stderr)
+            return True
+
+        if compile_proc.returncode != 0:
+            print(f"{timestamp()} [ERROR] Compilation failed: ")
+            # Zeige stderr vom Compiler an
+            print(compile_proc.stderr.strip())
+            return True
+        else:
+            print(f"{timestamp()} [INFO] Compilation successful. Binary file: {executable}")
+
+        # 4) Debuggen mit gdb
+        print(f"{timestamp()} [INFO] Start GNU Debugger (gdb) for {executable}...")
+        debug_cmd = ["gdb", "--args", f"./{executable}"]
+        try:
+            dbg_proc = subprocess.Popen(debug_cmd)
+            dbg_proc.wait()
+        except KeyboardInterrupt:
+            print(f"{timestamp()} [INFO] Debugging aborted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"{timestamp()} [ERROR] Error running gdb: {e}", file=sys.stderr)
+
         return True
 
     if user_input.startswith("bazel run //explorer -- ./"):
@@ -5497,6 +5918,69 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
+    if user_input.startswith("pd-carban "):
+        # 1) Argument (Dateiname) extrahieren und trimmen
+        user_input = user_input[len("pd-carban "):].strip()
+        if not user_input.endswith(".carban"):
+            print(f"{timestamp()} [ERROR] Please specify a `.carban` file.")
+            return True
+
+        source_file = user_input
+        script_name = os.path.splitext(source_file)[0]  # Basisname ohne .carban
+        executable = script_name  # Der Carban-Compiler sollte ein Binary mit demselben Basisnamen erzeugen
+
+        # 2) Prüfen, ob 'carban' (Compiler) und 'gdb' (Debugger) verfügbar sind
+        if which("carban") is None:
+            print(f"{timestamp()} [ERROR] `carban` compiler not found."
+                  f"Please install Carban from https://carban-lang.org/install or from your package manager.")
+            return True
+        if which("gdb") is None:
+            print(f"{timestamp()} [ERROR] `gdb` (GNU Debugger) not found."
+                  f"Please install gdb (e.g. `sudo apt install gdb`).")
+            return True
+
+        # 3) Kompilieren mit Debug-Informationen
+        print(f"{timestamp()} [INFO] Compile {source_file} with debug info (carban compile -g)...")
+        compile_cmd = [
+            "carban", "compile",
+            "-g",  # Schalter für Debug-Symbole (angommen)
+            source_file,
+            "-o", executable  # Legt den Namen des Ausgabebinaries fest
+        ]
+        try:
+            compile_proc = subprocess.run(
+                compile_cmd,
+                stdin=subprocess.DEVNULL,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True
+            )
+        except Exception as e:
+            print(f"{timestamp()} [ERROR] Error calling the Carban compiler: {e}", file=sys.stderr)
+            return True
+
+        if compile_proc.returncode != 0:
+            print(f"{timestamp()} [ERROR] Compilation failed:")
+            # Zeige stderr vom Compiler an
+            for line in compile_proc.stderr.strip().splitlines():
+                print(line)
+            return True
+        else:
+            print(f"{timestamp()} [INFO] Compilation successful. Binary file: {executable}")
+
+        # 4) Debuggen mit gdb
+        print(f"{timestamp()} [INFO] Start GNU Debugger (gdb) for {executable}...")
+        debug_cmd = ["gdb", "--args", f"./{executable}"]
+        try:
+            dbg_proc = subprocess.Popen(debug_cmd)
+            dbg_proc.wait()
+        except KeyboardInterrupt:
+            print(f"{timestamp()} [INFO] Debugging aborted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"{timestamp()} [ERROR] Error running gdb: {e}", file=sys.stderr)
+
+        return True
+
     if user_input.startswith("solc --bin --abi "):
         user_input = user_input[17:].strip()
 
@@ -5546,6 +6030,112 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.startswith("pd-solidity "):
+        # 1) Argument (Dateiname) extrahieren und trimmen
+        user_input = user_input[len("pd-solidity "):].strip()
+        if not user_input.endswith(".sol"):
+            print(f"{timestamp()} [ERROR] Please specify a `.sol` file.")
+            return True
+
+        source_file = user_input
+        script_name = os.path.splitext(source_file)[0]  # Basisname ohne .sol
+
+        # 2) Prüfen, ob 'solc' (Solidity-Compiler) und 'evm' (EVM-Binary) verfügbar sind
+        if which("solc") is None:
+            print(
+                f"{timestamp()} [ERROR] `solc` (Solidity compiler) not found."
+                f"Please install Solidity (e.g. via `npm install -g solc` or from your package manager)."
+            )
+            return True
+        if which("evm") is None:
+            print(
+                f"{timestamp()} [ERROR] `evm` (EVM interpreter from go-ethereum) not found."
+                f"Please install go-ethereum (`geth`) or the `evm` binary separately."
+            )
+            return True
+
+        # 3) Kompilieren mit solc → JSON-Output mit Bytecode
+        print(f"{timestamp()} [INFO] Compile {source_file} (solc --combined-json bin)...")
+        try:
+            # Wir nutzen --combined-json bin, damit wir ein JSON erhalten, in dem alle Contracts enthalten sind
+            proc = subprocess.run(
+                ["solc", "--combined-json", "bin", source_file],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True
+            )
+        except Exception as e:
+            print(f"{timestamp()} [ERROR] Error calling solc: {e}", file=sys.stderr)
+            return True
+
+        if proc.returncode != 0:
+            print(f"{timestamp()} [ERROR] Compilation failed:")
+            print(proc.stderr.strip())
+            return True
+
+        # 4) JSON parsen und ersten Contract-Bytecode extrahieren
+        try:
+            combined = json.loads(proc.stdout)
+            # `contracts` ist ein Dictionary: "Dateiname.sol:ContractName" → { "bin": "<hex>" }
+            contracts_dict = combined.get("contracts", {})
+            if not contracts_dict:
+                print(f"{timestamp()} [ERROR] Could not find any contracts in the output.")
+                return True
+
+            # Nimm den ersten Contract-Eintrag
+            first_key = next(iter(contracts_dict))
+            contract_data = contracts_dict[first_key]
+            bytecode_hex = contract_data.get("bin", "")
+            if not bytecode_hex:
+                print(f"{timestamp()} [ERROR] Binary bytecode of the contract is empty.")
+                return True
+            # Prefix 0x, damit evm ihn richtig interpretiert
+            bytecode = "0x" + bytecode_hex
+        except json.JSONDecodeError as e:
+            print(f"{timestamp()} [ERROR] Could not parse JSON output from solc: {e}", file=sys.stderr)
+            return True
+
+        print(f"{timestamp()} [INFO] Bytecode extracted (length: {len(bytecode_hex)} hex characters).")
+
+        # 5) Bytecode temporär in eine Datei schreiben (evm akzeptiert auch direkten Hex-String, aber
+        #    zur Übersicht speichern wir ihn kurz)
+        try:
+            tmp = tempfile.NamedTemporaryFile(prefix=f"{script_name}_", suffix=".hex", delete=False, mode="w",
+                                              encoding="utf-8")
+            tmp.write(bytecode_hex)
+            tmp.flush()
+            tmp.close()
+            hex_file = tmp.name
+        except Exception as e:
+            print(f"{timestamp()} [ERROR] Could not create temporary hex file: {e}", file=sys.stderr)
+            return True
+
+        print(f"{timestamp()} [INFO] Bytecode written to temporary file: {hex_file}")
+
+        # 6) Debuggen mit EVM-Interpreter
+        print(f"{timestamp()} [INFO] Starting EVM interpreter in debug mode...")
+        # evm --code <hex> --debug run
+        # Wir übergeben hier direkt den Hex-String. Alternativ könnte man auch: ["evm", "--codefile", hex_file, "--debug", "run"]
+        debug_cmd = ["evm", "--code", bytecode, "--debug", "run"]
+
+        try:
+            dbg_proc = subprocess.Popen(debug_cmd)
+            dbg_proc.wait()
+        except KeyboardInterrupt:
+            print(f"{timestamp()} [INFO] Debugging aborted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"{timestamp()} [ERROR] Error running evm: {e}", file=sys.stderr)
+        finally:
+            # 7) Aufräumen: temporäre Datei löschen
+            try:
+                os.remove(hex_file)
+                print(f"{timestamp()} [INFO] Remove temporary file: {hex_file}")
+            except Exception:
+                # Swallow any deletion error silently
+                pass
+
         return True
 
     if user_input.startswith("hhvm "):
@@ -5599,6 +6189,108 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
+    if user_input.startswith("pd-hack "):
+        # 1) Argument extrahieren und trimmen
+        filename = user_input[len("pd-hack "):].strip()
+        if not (filename.endswith(".hack") or filename.endswith(".php")):
+            print(f"{timestamp()} [ERROR] Please specify a `.hack` or `.php` file that uses hack syntax.")
+            return True
+
+        # Basisname (z. B. "MyScript" von "MyScript.hack" oder "MyScript.php")
+        base_name = os.path.splitext(filename)[0]
+
+        # 2) Verfügbarkeit von hh_client und hhvm prüfen
+        if which("hh_client") is None:
+            print(f"{timestamp()} [ERROR] `hh_client` (hack type checker) not found."
+                  f"Please install `hh_single_type_check` or HHVM with `hh_client`."
+                  f"See: https://docs.hhvm.com/hack/getting-started/getting-started")
+            return True
+        if which("hhvm") is None:
+            print(f"{timestamp()} [ERROR] `hhvm` not found. Please install HHVM: https://hhvm.com/")
+            return True
+
+        # 3) Typprüfung mit hh_client
+        print(f"{timestamp()} [INFO] Starting type checking of `{filename}` with `hh_client check-file`...")
+        try:
+            # Wir nutzen `hh_client` im Check-File-Modus, um nur diese Datei zu prüfen
+            # Achtung: hh_client erwartet in der Regel ein Projekt-Verzeichnis mit einer .hhconfig-Datei.
+            # Wenn du nur eine einzelne Datei prüfen möchtest, kannst du hh_client mit --json nutzen und
+            # das Verzeichnis deines Projekts übergeben (hier: aktuelles Verzeichnis ".").
+            #
+            # Beispiel: hh_client check-file --json . <pfad-zur-datei>
+            proc = subprocess.run(
+                ["hh_client", "check-file", "--json", ".", filename],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True
+            )
+        except Exception as e:
+            print(f"{timestamp()} [ERROR] Could not start `hh_client`: {e}", file=sys.stderr)
+            return True
+
+        # 3a) Rückgabewert überprüfen
+        if proc.returncode != 0:
+            print(f"{timestamp()} [ERROR] Type check failed. hh_client reports:")
+            # hh_client gibt sowohl auf stdout (JSON-Fehler) als auch stderr text aus – beides ausgeben
+            if proc.stderr.strip():
+                print(proc.stderr.strip())
+            if proc.stdout.strip():
+                print(proc.stdout.strip())
+            print(f"{timestamp()} [INFO] Please correct the typos listed above before continuing.")
+            return True
+        else:
+            print(f"{timestamp()} [INFO] Type check successful - no errors found in `{filename}`.")
+
+        # 4) HHVM im Debug-Modus (DBGP) starten
+        #
+        # Wir wählen hier DBGP-Port 8080, Host 0.0.0.0 (Zugriff von lokalem Rechner).
+        # IDEs (VS Code + Vdebug, PhpStorm, vim+Vdebug) können sich dann an diesen Port hängen.
+        #
+        # Wichtige HHVM-Ini-Einstellungen:
+        #   - hhvm.debugger.enable = 1        (Debugging aktivieren)
+        #   - hhvm.debugger.port = 8080       (Port, an dem HHVM auf Debug-Anfragen wartet)
+        #   - hhvm.debugger.host = 0.0.0.0     (Host, an dem Debugger lauscht – 0.0.0.0 bedeutet „alle Schnittstellen“)
+        #   - hhvm.idekey = "PHPSTORM" (oder ein anderer, den deine IDE erwartet)
+        #
+        # Beispielaufruf:
+        #   hhvm \
+        #    -c /dev/null \
+        #    -d hhvm.debugger.enable=1 \
+        #    -d hhvm.debugger.port=8080 \
+        #    -d hhvm.debugger.host=0.0.0.0 \
+        #    -d hhvm.idekey=VDEBUG \
+        #    filename.hack
+        #
+        # Hinweis: -c /dev/null sorgt dafür, dass HHVM keine globale Konfiguration lädt und wir nur
+        # die hier gesetzten Debug-Flags nutzen. Unter Windows kann -c NUL lauten, je nach Umgebung.
+        #
+        print(f"{timestamp()} [INFO] Starting HHVM in debug mode (DBGP) for `{filename}`...")
+        hhvm_cmd = [
+            "hhvm",
+            "-c", "/dev/null",
+            "-d", "hhvm.debugger.enable=1",
+            "-d", "hhvm.debugger.port=8080",
+            "-d", "hhvm.debugger.host=0.0.0.0",
+            "-d", "hhvm.idekey=VDEBUG",
+            filename
+        ]
+
+        # Unter Windows müsste -c auf NUL statt /dev/null zeigen:
+        if os.name == "nt":
+            hhvm_cmd[2] = "NUL"  # statt "/dev/null"
+
+        try:
+            dbg_proc = subprocess.Popen(hhvm_cmd)
+            print(f"{timestamp()} [INFO] HHVM is running. Debugger is listening on port 8080."
+                  f"Start your IDE with DBGP (IDEKEY=VDEBUG).")
+            dbg_proc.wait()
+        except KeyboardInterrupt:
+            print(f"{timestamp()} [INFO] Debugging aborted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"{timestamp()} [ERROR] Error running HHVM: {e}", file=sys.stderr)
+
+        return True
+
     if user_input.startswith("crystal run "):
         user_input = user_input[12:].strip()
 
@@ -5648,6 +6340,85 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.startswith("pd-crystal "):
+        # 1) Argument (Dateiname) extrahieren und trimmen
+        filename = user_input[len("pd-crystal "):].strip()
+        if not (filename.endswith(".cr") or filename.endswith(".crystal")):
+            print(f"{timestamp()} [ERROR] Please specify a `.cr` or `.crystal` file.")
+            return True
+
+        # Basisname (z. B. "MyApp" von "MyApp.cr")
+        base_name = os.path.splitext(filename)[0]
+
+        # Unter Windows könnte Crystal ebenfalls .exe erzeugen, gegebenenfalls anpassen:
+        executable = base_name
+        if os.name == "nt":
+            executable += ".exe"
+
+        # 2) Verfügbarkeit von 'crystal' (Compiler) prüfen
+        if which("crystal") is None:
+            print(
+                f"{timestamp()} [ERROR] `crystal` compiler not found. Please install Crystal: https://crystal-lang.org/install/")
+            return True
+
+        # 3) Kompilieren mit Debug-Info
+        print(f"{timestamp()} [INFO] Compiling `{filename}` with debug information (`crystal build --debug`)…")
+        compile_cmd = [
+            "crystal",
+            "build",
+            "--debug",  # DWARF-Debug-Symbole einbetten
+            "-o", executable,  # Ausgabename des Binaries
+            filename
+        ]
+        try:
+            compile_proc = subprocess.run(
+                compile_cmd,
+                stdin=subprocess.DEVNULL,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True
+            )
+        except Exception as e:
+            print(f"{timestamp()} [ERROR] Error calling the Crystal compiler: {e}", file=sys.stderr)
+            return True
+
+        if compile_proc.returncode != 0:
+            print(f"{timestamp()} [ERROR] Compilation failed: ")
+            if compile_proc.stderr:
+                print(compile_proc.stderr.strip())
+            return True
+        else:
+            print(f"{timestamp()} [INFO] Compilation successful. Binary file: `{executable}`")
+
+        # 4) Prüfen, ob 'gdb' oder 'lldb' verfügbar sind (priorisiere gdb, fallback lldb)
+        debugger = None
+        if which("gdb") is not None:
+            debugger = "gdb"
+        elif which("lldb") is not None:
+            debugger = "lldb"
+        else:
+            print(f"{timestamp()} [ERROR] Neither `gdb` nor `lldb` found."
+                  f"Please install a native debugger (e.g. `gdb` or `lldb`).")
+            return True
+
+        # 5) Debuggen starten
+        if debugger == "gdb":
+            print(f"{timestamp()} [INFO] Start GNU Debugger (gdb) for `{executable}`…")
+            debug_cmd = ["gdb", "--args", f"./{executable}"]
+        else:
+            print(f"{timestamp()} [INFO] Start LLVM Debugger (lldb) for `{executable}`…")
+            debug_cmd = ["lldb", f"./{executable}"]
+
+        try:
+            dbg_proc = subprocess.Popen(debug_cmd)
+            dbg_proc.wait()
+        except KeyboardInterrupt:
+            print(f"{timestamp()} [INFO] Debugging aborted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"{timestamp()} [ERROR] Error running debugger ({debugger}): {e}", file=sys.stderr)
+
         return True
 
     if user_input.startswith("haxe -main "):
@@ -5702,6 +6473,126 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.startswith("pd-haxe "):
+        # 1) Argument (Dateiname) extrahieren und trimmen
+        filename = user_input[len("pd-haxe "):].strip()
+        if not filename.endswith(".hx"):
+            print(f"{timestamp()} [ERROR] Please specify a `.hx` file.")
+            return True
+
+        # Basisname (z. B. "Main" von "Main.hx")
+        base_name = os.path.splitext(filename)[0]
+
+        # 3) Prüfen, ob 'haxe' (Compiler) vorhanden ist
+        if which("haxe") is None:
+            print(
+                f"{timestamp()} [ERROR] `haxe` compiler not found. Please install Haxe: https://haxe.org/download/")
+            return True
+
+        # 4) Prüfen, ob 'gdb' oder 'lldb' (Debugger) vorhanden sind
+        debugger = None
+        if which("gdb") is not None:
+            debugger = "gdb"
+        elif which("lldb") is not None:
+            debugger = "lldb"
+        else:
+            print(
+                f"{timestamp()} [ERROR] Neither `gdb` nor `lldb` was found. Please install a native debugger (e.g. `gdb` or `lldb`).")
+            return True
+
+        # 4) Kompilieren mit Debug-Informationen in C++
+        print(f"{timestamp()} [INFO] Compiling `{filename}` with debug info (haxe → C++ via hxcpp)…")
+        # Befehl: haxe -main <base_name> -cpp bin --debug
+        compile_cmd = [
+            "haxe",
+            "-main", base_name,
+            "-cpp", "bin",
+            "--debug"
+        ]
+        try:
+            compile_proc = subprocess.run(
+                compile_cmd,
+                stdin=subprocess.DEVNULL,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True
+            )
+        except Exception as e:
+            print(f"{timestamp()} [ERROR] Error calling the Haxe compiler: {e}", file=sys.stderr)
+            return True
+
+        if compile_proc.returncode != 0:
+            print(f"{timestamp()} [ERROR] Haxe compilation failed:")
+            if compile_proc.stderr:
+                print(compile_proc.stderr.strip())
+            return True
+        else:
+            print(f"{timestamp()} [INFO] Haxe generation successful. Switching to `bin/` to build...")
+
+        # 5) In das Verzeichnis 'bin' wechseln und 'make' ausführen
+        bin_dir = os.path.join(os.getcwd(), "bin")
+        if not os.path.isdir(bin_dir):
+            print(
+                f"{timestamp()} [ERROR] Directory `bin/` not found after generating HAXE. Is hxcpp installed and configured?")
+            return True
+
+        # Unter macOS kann das Executable später die Endung ".app" haben; wir gehen erst vom Standard aus.
+        os.chdir(bin_dir)
+        print(f"{timestamp()} [INFO] Run `make` in the `bin/` directory to build the native binary…")
+        try:
+            make_proc = subprocess.run(
+                ["make"],
+                stdin=subprocess.DEVNULL,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True
+            )
+        except Exception as e:
+            print(f"{timestamp()} [ERROR] Error running `make`: {e}", file=sys.stderr)
+            os.chdir("..")
+            return True
+
+        if make_proc.returncode != 0:
+            print(f"{timestamp()} [ERROR] Build with `make` failed:")
+            if make_proc.stderr:
+                print(make_proc.stderr.strip())
+            os.chdir("..")
+            return True
+        else:
+            print(f"{timestamp()} [INFO] Build successful. Switch back to the root directory...")
+            os.chdir("..")
+
+        # 6) Debugger aufrufen
+        # Unter Linux/macOS befindet sich das Binary meist direkt in bin/<base_name>
+        # Unter Windows: bin\<base_name>.exe
+        if os.name == "nt":
+            executable_path = os.path.join("bin", base_name + ".exe")
+        else:
+            executable_path = os.path.join("bin", base_name)
+
+        if not os.path.isfile(executable_path):
+            print(
+                f"{timestamp()} [ERROR] Executable `{executable_path}` not found. Build may have failed.")
+            return True
+
+        # 7) Debuggen starten
+        if debugger == "gdb":
+            print(f"{timestamp()} [INFO] Start GNU Debugger (gdb) for `{executable_path}`…")
+            debug_cmd = ["gdb", "--args", executable_path]
+        else:
+            print(f"{timestamp()} [INFO] Start LLVM Debugger (lldb) for `{executable_path}`…")
+            debug_cmd = ["lldb", executable_path]
+
+        try:
+            dbg_proc = subprocess.Popen(debug_cmd)
+            dbg_proc.wait()
+        except KeyboardInterrupt:
+            print(f"{timestamp()} [INFO] Debugging aborted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"{timestamp()} [ERROR] Error running debugger ({debugger}): {e}", file=sys.stderr)
+
         return True
 
     if user_input.startswith("gfortran -o "):
