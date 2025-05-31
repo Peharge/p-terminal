@@ -562,6 +562,9 @@ def handle_special_commands(user_input):
         "neofetch": "pp-commands\\neofetch.py",
         "fastfetch": "pp-commands\\neofetch.py",  # new
         "screenfetch": "pp-commands\\neofetch.py",  # new
+        "neofetch 2": "pp-commands\\neofetch-2.py",  # new
+        "neofetch 3": "pp-commands\\neofetch-3.py",  # new
+        "neofetch 4": "pp-commands\\neofetch-4.py",  # new
         "jupyter": "mavis-run-jup\\run-jup.py",
         "run jupyter": "mavis-run-jup\\run-jup.py",
         "run ju": "mavis-run-jup\\run-jup.py",  # new
@@ -796,7 +799,6 @@ def handle_special_commands(user_input):
         "p neofetch": "pp-commands\\p-neofetch.py",  # new
         "p fastfetch": "pp-commands\\p-neofetch.py",  # new
         "p screenfetch": "pp-commands\\p-neofetch.py",  # new
-        "p neofetch-3": "pp-commands\\p-neofetch-3.py",  # new
         "p vswhere": "pp-commands\\p-vswhere.py",  # new
         "p speedtest": "pp-commands\\p-speedtest.py",  # new
         "install 3d-slicer": "run\\simon\\3d-slicer\\install-3d-slicer.py",  # new
