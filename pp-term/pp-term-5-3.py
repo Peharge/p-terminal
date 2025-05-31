@@ -562,9 +562,9 @@ def handle_special_commands(user_input):
         "neofetch": "pp-commands\\neofetch.py",
         "fastfetch": "pp-commands\\neofetch.py",  # new
         "screenfetch": "pp-commands\\neofetch.py",  # new
-        "neofetch 2": "pp-commands\\neofetch-2.py",  # new
-        "neofetch 3": "pp-commands\\neofetch-3.py",  # new
-        "neofetch 4": "pp-commands\\neofetch-4.py",  # new
+        "neofetch2": "pp-commands\\neofetch-2.py",  # new
+        "neofetch3": "pp-commands\\neofetch-3.py",  # new
+        "neofetch4": "pp-commands\\neofetch-4.py",  # new
         "jupyter": "mavis-run-jup\\run-jup.py",
         "run jupyter": "mavis-run-jup\\run-jup.py",
         "run ju": "mavis-run-jup\\run-jup.py",  # new
