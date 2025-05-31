@@ -1447,7 +1447,6 @@ def handle_special_commands(user_input):
             logging.exception(f"[ERROR] Error starting the script: {e}")
             return True
 
-
     if user_input in commands3:
         # Pfad zum Skript zusammenbauen
         script_path = f"C:\\Users\\{os.getlogin()}\\p-terminal\\pp-term\\{commands3[user_input]}"
