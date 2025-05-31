@@ -61,6 +61,8 @@
 #
 # Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 
+# https://asciiart.club/
+
 import sys
 import getpass
 import subprocess
