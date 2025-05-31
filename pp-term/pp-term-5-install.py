@@ -90,7 +90,7 @@ REQUIRED_PACKAGES = [
     "torchvision", "torchaudio", "tensorflow", "tf-nightly", "notebook", "jupyterlab", "jax",
     "chardet", "plotly", "py-cpuinfo", "gputil", "tabulate", "pyqtgraph", "deep-translator",
     "duckduckgo-search", "pillow", "GitPython", "matplotlib", "pyinstaller", "virtualenv",
-    "legacy-cgi"
+    "legacy-cgi", "colorama"
 ]
 
 
