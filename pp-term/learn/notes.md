@@ -1,5 +1,6 @@
 # PP-Terminal Notes
 
+Drücke Strg + Shift + P (Windows) und tippe „Einstellungen (JSON) öffnen“ oder gehe auf Datei > Einstellungen > Einstellungen und dann oben rechts auf das Symbol {} klicken.
 
 ```json
 {
