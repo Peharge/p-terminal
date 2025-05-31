@@ -524,10 +524,10 @@ def gather_info_lines(sys_info: dict, versions: dict) -> list:
     # Zeilen hinzufügen
     lines.append("")
     lines.append("")
-    lines.append(f"          {title}")
-    lines.append(f"        {line}")
+    lines.append(f"         {title}")
+    lines.append(f"       {line}")
     lines.append(f"       {blue}P-Terminal Version{reset}: {p_terminal_ver}")
-    lines.append(f"       {blue}PP-Terminal Version{reset}: {pp_terminal_ver}")
+    lines.append(f"      {blue}PP-Terminal Version{reset}: {pp_terminal_ver}")
     lines.append(f"      {blue}PP-Terminal Launcher Version{reset}: {launcher_ver}")
     lines.append(f"      {blue}Peharge Compiler Version{reset}: {p_compiler_ver}")
     lines.append(f"      {blue}Peharge IQ Kernel Version{reset}: {p_iq_cernel_ver}")
@@ -610,14 +610,14 @@ def gather_info_lines(sys_info: dict, versions: dict) -> list:
     lines.append(f"      {blue}Direct3D Version{reset}: {get_direct3d_version()}")
     lines.append(f"      {blue}DXCore Version{reset}: {get_dxcore_version()}")
     lines.append(f"      {blue}Ollama Version{reset}: {get_ollama_version()}")
-    lines.append(f"       {blue}Visual Studio Version{reset}: {get_visual_studio_version()}")
+    lines.append(f"      {blue}Visual Studio Version{reset}: {get_visual_studio_version()}")
 
     # Rust
     try:
         rust_ver = subprocess.check_output(['rustc', '--version'], text=True).strip()
     except Exception:
         rust_ver = "unbekannt"
-    lines.append(f"        {blue}Rust Version{reset}: {rust_ver}")
+    lines.append(f"       {blue}Rust Version{reset}: {rust_ver}")
 
     # Farbpaletten
     lines.append("")
