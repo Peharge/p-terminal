@@ -543,10 +543,12 @@ def handle_special_commands(user_input):
     commands = {
         "mavis env install": "mavis-install\\install-info-mavis-4.py",
         "install mavis env": "mavis-install\\install-info-mavis-4.py",
-        "install mavis3": "mavis-install\\install-info-mavis-4.py",  # new
-        "install mavis3.3": "mavis-install\\install-info-mavis-4.py",  # new
-        "install mavis4": "mavis-install\\install-info-mavis-4.py",  # new
-        "install mavis4.3": "mavis-install\\install-info-mavis-4.py",  # new
+        "install mavis-3": "mavis-install\\install-info-mavis-4.py",  # new
+        "install mavis-3.3": "mavis-install\\install-info-mavis-4.py",  # new
+        "install mavis-3-3": "mavis-install\\install-info-mavis-4.py",  # new
+        "install mavis-4": "mavis-install\\install-info-mavis-4.py",  # new
+        "install mavis-4.3": "mavis-install\\install-info-mavis-4.py",  # new
+        "install mavis-4-3": "mavis-install\\install-info-mavis-4.py",  # new
         "mavis env update": "mavis-install\\install-info-mavis-4.py",
         "update mavis env": "mavis-install\\install-info-mavis-4.py",
         "mavis update": "mavis-update\\update-mavis-repository-windows.py",
@@ -562,9 +564,9 @@ def handle_special_commands(user_input):
         "neofetch": "pp-commands\\neofetch.py",
         "fastfetch": "pp-commands\\neofetch.py",  # new
         "screenfetch": "pp-commands\\neofetch.py",  # new
-        "neofetch2": "pp-commands\\neofetch-2.py",  # new
-        "neofetch3": "pp-commands\\neofetch-3.py",  # new
-        "neofetch4": "pp-commands\\neofetch-4.py",  # new
+        "neofetch-2": "pp-commands\\neofetch-2.py",  # new
+        "neofetch-3": "pp-commands\\neofetch-3.py",  # new
+        "neofetch-4": "pp-commands\\neofetch-4.py",  # new
         "jupyter": "mavis-run-jup\\run-jup.py",
         "run jupyter": "mavis-run-jup\\run-jup.py",
         "run ju": "mavis-run-jup\\run-jup.py",  # new
@@ -1136,10 +1138,12 @@ def handle_special_commands(user_input):
         "update wsl": "pp-commands\\update-wsl.py",  # new
         "update powershell": "pp-commands\\update-powershell.py",  # new
         "pi mavis env": "mavis-install\\install-info-mavis-4.py",
-        "pi mavis3": "mavis-install\\install-info-mavis-4.py",  # new
-        "pi mavis3.3": "mavis-install\\install-info-mavis-4.py",  # new
-        "pi mavis4": "mavis-install\\install-info-mavis-4.py",  # new
-        "pi mavis4.3": "mavis-install\\install-info-mavis-4.py",  # new
+        "pi mavis-3": "mavis-install\\install-info-mavis-4.py",  # new
+        "pi mavis-3.3": "mavis-install\\install-info-mavis-4.py",  # new
+        "pi mavis-3-3": "mavis-install\\install-info-mavis-4.py",  # new
+        "pi mavis-4": "mavis-install\\install-info-mavis-4.py",  # new
+        "pi mavis-4.3": "mavis-install\\install-info-mavis-4.py",  # new
+        "pi mavis-4-3": "mavis-install\\install-info-mavis-4.py",  # new
         "pi ollama mavis-4": "mavis-install\\install-ollama-mavis-4.py",  # new
         "pi grafana": "mavis-run-grafana\\run-grafana.py",  # new
         "pi deepseek-r1:1.5b": "pp-commands\\deepseek-r1-1-5b.py",  # new
@@ -1505,7 +1509,7 @@ def handle_special_commands(user_input):
         run_command("dir" if os.name == "nt" else "ls -la", shell=True)
         return True
 
-    if user_input.lower() in ["dir2", "ls2"]:
+    if user_input.lower() in ["dir-2", "ls-2"]:
         command = "powershell ls"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -1519,7 +1523,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing ls command: {e}")
         return True
 
-    if user_input.lower() in ["dir3", "ls3"]:
+    if user_input.lower() in ["dir-3", "ls-3"]:
         command = "wsl ls"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -2148,7 +2152,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
         return True
 
-    if user_input.lower() == "ls count2":
+    if user_input.lower() == "ls count-2":
 
         command = f"wsl cloc *"
 
@@ -2238,7 +2242,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
         return True
 
-    if user_input.lower() == "ls count3":
+    if user_input.lower() == "ls count-3":
 
         command = f"wsl cloc --by-file"
 
@@ -2268,7 +2272,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
         return True
 
-    if user_input.lower() == "ls count4":
+    if user_input.lower() == "ls count-4":
 
         command = f"wsl cloc --csv"
 
@@ -2298,7 +2302,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
         return True
 
-    if user_input.lower() == "ls count5":
+    if user_input.lower() == "ls count-5":
 
         command = f"wsl cloc --json"
 
@@ -2418,7 +2422,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
         return True
 
-    if user_input.lower() == "tree2":
+    if user_input.lower() == "tree-2":
 
         command = f"wsl tree -L 2"
 
@@ -16546,8 +16550,8 @@ COMMANDS = [
                                                                                                    "weather", "whoami",
     "hostname", "ip", "os", "time", "date", "open", "fortune", "history", "search",
     "zip", "unzip", "sysinfo", "clip set", "clip get", "ping", "emptytrash", "launch", "doctor", "hole doctor",
-    "mavis env install", "install mavis env", "install mavis3", "install mavis3.3", "install mavis4",
-    "install mavis4.3", "mavis env update", "update mavis env", "mavis update", "update mavis",
+    "mavis env install", "install mavis env", "install mavis-3", "install mavis-3.3", "install mavis4",
+    "install mavis-4.3", "mavis env update", "update mavis env", "mavis update", "update mavis",
     "security", "p-terminal security", "securitycheck", "info", "mavis info", "info mavis", "p-term info",
     "info p-term", "neofetch", "fastfetch", "screenfetch", "jupyter", "run jupyter", "run ju",
     "ninite", "just-install", "oneget", "boxstarter", "npackd", "zero-install", "appget", "pp-rm",
