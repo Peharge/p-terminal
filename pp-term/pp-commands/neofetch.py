@@ -132,7 +132,7 @@ import json
 import re
 from typing import Tuple
 
-# -------------------- Farb- und Formatierungs-Codes --------------------
+# Farb- und Formatierungs-Codes
 red = "\033[91m"
 green = "\033[92m"
 yellow = "\033[93m"
@@ -145,7 +145,7 @@ orange = "\033[38;5;214m"
 reset = "\033[0m"
 bold = "\033[1m"
 
-# -------------------- Hilfsfunktionen --------------------
+# Hilfsfunktionen
 
 def format_bytes(byte_value: int) -> float:
     """Bytes in GB umwandeln und auf 2 Nachkommastellen runden."""
@@ -155,7 +155,7 @@ def timestamp() -> str:
     """Gibt einen Zeitstempel im Format [YYYY-MM-DD HH:MM:SS] zurück."""
     return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
-# -------------------- Systeminformationen sammeln --------------------
+# Systeminformationen sammeln
 
 def get_system_info() -> dict:
     """Sammelt umfangreiche Systeminformationen."""
@@ -250,7 +250,7 @@ def get_system_info() -> dict:
 
     return system_info
 
-# -------------------- Windows-spezifische Versions-Getter --------------------
+# Windows-spezifische Versions-Getter
 
 def get_powershell_version():
     try:
@@ -365,7 +365,7 @@ def get_ollama_version():
         except subprocess.CalledProcessError:
             return f"[{timestamp()}] [INFO] Warning: Could not connect to a running Ollama instance."
 
-# -------------------- BBCode → ANSI-ASCII-Art --------------------
+# BBCode → ANSI-ASCII-Art
 
 def hex_to_rgb(hex_color: str) -> Tuple[int, int, int]:
     hex_color = hex_color.lstrip('#')
@@ -403,7 +403,7 @@ def parse_bbcode(text: str) -> str:
     output += text[pos:] + '\033[0m'
     return output
 
-# -------------------- Farbpaletten-Anzeige --------------------
+# Farbpaletten-Anzeige
 
 def show_color_palette_1() -> str:
     """Zeigt die ersten 8 ANSI-256 Farben (Hintergrund) ohne Zahlen."""
@@ -419,7 +419,7 @@ def show_color_palette_3() -> str:
         palette += f"\033[48;5;{i}m  \033[0m"
     return palette
 
-# -------------------- Versionsdatei laden --------------------
+# Versionsdatei laden
 
 def load_versions_json():
     """Lädt die Versionsinformationen aus der JSON-Datei"""
@@ -429,13 +429,13 @@ def load_versions_json():
         with open(json_path, 'r') as f:
             return json.load(f)
     except FileNotFoundError:
-        print(f"[{timestamp()}] [INFO] Versionsdatei nicht gefunden unter {json_path}")
+        print(f"[{timestamp()}] [INFO] Version file not found under {json_path}")
     except json.JSONDecodeError:
-        print(f"[{timestamp()}] [INFO] JSON-Formatfehler in {json_path}")
+        print(f"[{timestamp()}] [INFO] JSON format error in {json_path}")
     return {}
 
 
-# -------------------- ASCII-Art-Block (BBCode) --------------------
+# ASCII-Art-Block (BBCode)
 
 bbcode_text = """
 [color=#808080]       [/color][color=#717171],[/color][color=#626262]╓[/color][color=#565656]▄[/color][color=#4f4f4f]▄[/color][color=#494949]&[/color][color=#494949]&▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓&&&&&&▄▄[/color][color=#464646]▄[/color][color=#454545]▄▄▄▄▄▄[/color][color=#424342]▄[/color][color=#424242]▄▄▄▄▄▄[/color][color=#3f3f3f]▄[/color][color=#3e3e3e]▄▄▄▄▄▄▄▄▄[/color][color=#4b4b4b]▄[/color][color=#595959]▄[/color][color=#6c6c6c],[/color]
@@ -478,7 +478,7 @@ bbcode_text = """
 
 ascii_art = parse_bbcode(bbcode_text)
 
-# -------------------- ASCII- und Info-Zeilen nebeneinander ausgeben --------------------
+# ASCII- und Info-Zeilen nebeneinander ausgeben
 
 def gather_info_lines(sys_info: dict, versions: dict) -> list:
     """
@@ -620,7 +620,7 @@ def print_side_by_side(ascii_str: str, info_lines: list, ascii_width: int = 60):
         right = info_lines[i] if i < len(info_lines) else ""
         print(f"{left.ljust(ascii_width)}  {right}")
 
-# -------------------- Hauptprogramm --------------------
+# Hauptprogramm
 
 if __name__ == "__main__":
     print("\n")
