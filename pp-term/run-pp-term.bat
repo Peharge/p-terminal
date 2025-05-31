@@ -233,14 +233,14 @@ timeout /t 5 >nul
 :: Check if Python is already installed
 python --version >nul 2>&1
 if %errorlevel% neq 0 (
-    call :Log ERROR "❌ Python 3.12 is not installed."
-    set /p install_python="Would you like to install Python 3.12? [y/n]: "
+    call :Log ERROR "❌ Python 3.13 is not installed."
+    set /p install_python="Would you like to install Python 3.13? [y/n]: "
 
     if /i "%install_python%"=="y" (
-        call :Log INFO "Downloading Python 3.12 installer..."
+        call :Log INFO "Downloading Python 3.13 installer..."
 
-        set "PYTHON_URL=https://www.python.org/ftp/python/3.12.2/python-3.12.2-amd64.exe"
-        set "PYTHON_INSTALLER=%TEMP%\python-3.12.2-installer.exe"
+        set "PYTHON_URL=https://www.python.org/ftp/python/3.13.0/python-3.13.0-amd64.exe"
+        set "PYTHON_INSTALLER=%TEMP%\python-3.13.0-installer.exe"
 
         :: Securely download Python using PowerShell (TLS 1.2)
         powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri '%PYTHON_URL%' -OutFile '%PYTHON_INSTALLER%'"
@@ -258,11 +258,11 @@ if %errorlevel% neq 0 (
 
                 python --version >nul 2>&1
                 if %errorlevel% neq 0 (
-                    ecall :Log ERROR "❌ Second installation attempt failed! Trying ZIP method..."
+                    call :Log ERROR "❌ Second installation attempt failed! Trying ZIP method..."
                     del "%PYTHON_INSTALLER%"
-                    set "PYTHON_ZIP_URL=https://www.python.org/ftp/python/3.12.2/python-3.12.2-embed-amd64.zip"
-                    set "PYTHON_ZIP=%TEMP%\python-3.12.2.zip"
-                    set "PYTHON_DIR=C:\Python312"
+                    set "PYTHON_ZIP_URL=https://www.python.org/ftp/python/3.13.0/python-3.13.0-embed-amd64.zip"
+                    set "PYTHON_ZIP=%TEMP%\python-3.13.0.zip"
+                    set "PYTHON_DIR=C:\Python313"
 
                     powershell -Command "Invoke-WebRequest -Uri '%PYTHON_ZIP_URL%' -OutFile '%PYTHON_ZIP%'"
 
@@ -279,22 +279,22 @@ if %errorlevel% neq 0 (
                             rmdir /s /q "%PYTHON_DIR%"
                             call :Log INFO "Manual installation required: https://www.python.org/downloads"
                         ) else (
-                            call :Log PASS "✅ Python 3.12 successfully installed using ZIP method!"
+                            call :Log PASS "✅ Python 3.13 successfully installed using ZIP method!"
                         )
                     ) else (
                         call :Log ERROR "❌ ZIP download failed! Manual installation required."
                     )
                 ) else (
-                    call :Log PASS "✅ Python 3.12 successfully installed!"
+                    call :Log PASS "✅ Python 3.13 successfully installed!"
                 )
             ) else (
-                call :Log PASS "✅ Python 3.12 successfully installed!"
+                call :Log PASS "✅ Python 3.13 successfully installed!"
             )
         ) else (
             call :Log ERROR "❌ Python installer could not be downloaded!"
         )
     ) else (
-        call :Log HINT "Installation aborted. Please install Python 3.12 manually: https://www.python.org/downloads"
+        call :Log HINT "Installation aborted. Please install Python 3.13 manually: https://www.python.org/downloads"
     )
 ) else (
     call :Log PASS "✅ Python is already installed."
@@ -2252,7 +2252,7 @@ set "PYCHARM_PROJECTS=%USERPROFILE%\p-terminal"
 set "PP_DIR=%PYCHARM_PROJECTS%\pp-term"
 set "PP_ENV_FILE=%PP_DIR%\.env"
 set "PP_RUN_FILE=%PP_DIR%\pp-term.bat"
-set "EXPECTED_PYTHON_VERSION=3.12"
+set "EXPECTED_PYTHON_VERSION=3.13"
 
 :: Ensure PyCharm Projects directory exists
 if not exist "%PYCHARM_PROJECTS%" (
