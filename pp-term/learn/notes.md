@@ -9,10 +9,12 @@ Drücke Strg + Shift + P (Windows) und tippe „Einstellungen (JSON) öffnen“ 
     "editor.unicodeHighlight.nonBasicASCII": false,
 
     "terminal.integrated.profiles.windows": {
-        "MeinEigenesTerminal": {
+        "pp-terminal": {
             "path": "C:\\Windows\\System32\\cmd.exe",
             "args": ["/c", "C:\\Users\\julia\\p-terminal\\pp-term\\run-pp-term-fast.bat"]
         }
-    }
+    },
+    "terminal.integrated.defaultProfile.windows": "pp-terminal"
 }
+
 ```
