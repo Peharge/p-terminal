@@ -140,8 +140,8 @@ def ensure_packages(packages: list[str]) -> None:
             )
             if result.returncode == 0:
                 # Output the complete pip install result
-                logging.info(f"[INFO] pip install {pkg}")
-                logging.info(result.stdout)  # Full output
+                logging.info(f"[INFO] Running: pip install {pkg}")
+                logging.info(f"[INFO] {result.stdout}")  # Full output
                 logging.info(f"[PASS] ✅ {pkg} successfully installed.")
             else:
                 # Error output in case of problems
