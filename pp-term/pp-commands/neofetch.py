@@ -587,7 +587,7 @@ def gather_info_lines(sys_info: dict, versions: dict) -> list:
     lines.append(f"      {blue}MSRDC Version{reset}: {get_msrpc_version()}")
     lines.append(f"      {blue}Direct3D Version{reset}: {get_direct3d_version()}")
     lines.append(f"      {blue}DXCore Version{reset}: {get_dxcore_version()}")
-    lines.append(f"      {blue}Ollama Version{reset}: {get_ollama_version()}")
+    lines.append(f"       {blue}Ollama Version{reset}: {get_ollama_version()}")
     lines.append(f"       {blue}Visual Studio Version{reset}: {get_visual_studio_version()}")
 
     # Rust
@@ -599,7 +599,7 @@ def gather_info_lines(sys_info: dict, versions: dict) -> list:
 
     # Farbpaletten
     lines.append("")
-    lines.append("           " + show_color_palette_1())
+    lines.append("            " + show_color_palette_1())
     lines.append("                    " + show_color_palette_3())
     lines.append("")
     lines.append("")
