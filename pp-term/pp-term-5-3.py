@@ -3169,7 +3169,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile your code with g++")
+            print(f"[{timestamp()}] [INFO] Compile your code with g++\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3186,7 +3186,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile your code with g++")
+            print(f"[{timestamp()}] [INFO] Compile your code with g++\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3202,7 +3202,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile your code with g++")
+            print(f"[{timestamp()}] [INFO] Compile your code with g++\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3218,7 +3218,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile your code with g++")
+            print(f"[{timestamp()}] [INFO] Compile your code with g++\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3235,7 +3235,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile your code with g++")
+            print(f"[{timestamp()}] [INFO] Compile your code with g++\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3267,7 +3267,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile your code with gcc")
+            print(f"[{timestamp()}] [INFO] Compile your code with gcc\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3284,7 +3284,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile your code with gcc")
+            print(f"[{timestamp()}] [INFO] Compile your code with gcc\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3300,7 +3300,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile your code with gcc")
+            print(f"[{timestamp()}] [INFO] Compile your code with gcc\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3316,7 +3316,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile your code with gcc")
+            print(f"[{timestamp()}] [INFO] Compile your code with gcc\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3333,7 +3333,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile your code with gcc")
+            print(f"[{timestamp()}] [INFO] Compile your code with gcc\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3357,20 +3357,30 @@ def handle_special_commands(user_input):
 
     elif user_input.startswith("vs-cpp "):
         user_input = user_input[7:].strip()
-        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022")
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022\n")
         handle_vs_cpp_command(user_input)
         return True
 
     elif user_input.startswith("cppc "):
         user_input = user_input[5:].strip()
-        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022")
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022\n")
         handle_vs_cpp_command(user_input)
         return True
 
-    elif user_input.startswith("pc-cpp "):
-        user_input = user_input[7:].strip()
+    elif user_input.startswith("prcpp "):
+        user_input = user_input[6:].strip()
         print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022")
         handle_vs_cpp_command(user_input)
+        # // EXE-Dateiname aus dem .cpp-Dateinamen ableiten
+        exe_name = os.path.splitext(os.path.basename(user_input))[0] + ".exe"
+
+        # // Prüfen, ob die EXE-Datei nach der Kompilierung existiert
+        if os.path.exists(exe_name):
+            print(f"[{timestamp()}] [INFO] Running compiled program: {exe_name}")
+            print(f"[{timestamp()}] [INFO] Output {exe_name}:\n")
+            subprocess.run(exe_name, shell=True)
+        else:
+            print(f"[{timestamp()}] [ERROR] Executable {exe_name} not found after compilation.")
         return True
 
     if user_input.startswith("pd-cpp "):
@@ -3415,20 +3425,36 @@ def handle_special_commands(user_input):
 
     elif user_input.startswith("vs-c "):
         user_input = user_input[5:].strip()
-        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022")
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022\n")
         handle_vs_c_command(user_input)
         return True
 
     elif user_input.startswith("cc "):
         user_input = user_input[3:].strip()
-        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022")
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022\n")
         handle_vs_c_command(user_input)
         return True
 
     elif user_input.startswith("pc-c "):
         user_input = user_input[5:].strip()
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022\n")
+        handle_vs_c_command(user_input)
+        return True
+
+    elif user_input.startswith("prc "):
+        user_input = user_input[4:].strip()
         print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022")
         handle_vs_c_command(user_input)
+        # // EXE-Dateiname aus dem .cpp-Dateinamen ableiten
+        exe_name = os.path.splitext(os.path.basename(user_input))[0] + ".exe"
+
+        # // Prüfen, ob die EXE-Datei nach der Kompilierung existiert
+        if os.path.exists(exe_name):
+            print(f"[{timestamp()}] [INFO] Running compiled program: {exe_name}")
+            print(f"[{timestamp()}] [INFO] Output {exe_name}:\n")
+            subprocess.run(exe_name, shell=True)
+        else:
+            print(f"[{timestamp()}] [ERROR] Executable {exe_name} not found after compilation.")
         return True
 
     if user_input.startswith("pd-c "):
@@ -3473,20 +3499,36 @@ def handle_special_commands(user_input):
 
     elif user_input.startswith("vs-cs "):
         user_input = user_input[6:].strip()
-        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 20222")
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022\n")
         handle_vs_cs_command(user_input)
         return True
 
     elif user_input.startswith("csc "):
         user_input = user_input[4:].strip()
-        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022")
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022\n")
         handle_vs_cs_command(user_input)
         return True
 
     elif user_input.startswith("pc-cs "):
         user_input = user_input[6:].strip()
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022\n")
+        handle_vs_cs_command(user_input)
+        return True
+
+    elif user_input.startswith("prcs "):
+        user_input = user_input[5:].strip()
         print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022")
         handle_vs_cs_command(user_input)
+        # // EXE-Dateiname aus dem .cpp-Dateinamen ableiten
+        exe_name = os.path.splitext(os.path.basename(user_input))[0] + ".exe"
+
+        # // Prüfen, ob die EXE-Datei nach der Kompilierung existiert
+        if os.path.exists(exe_name):
+            print(f"[{timestamp()}] [INFO] Running compiled program: {exe_name}")
+            print(f"[{timestamp()}] [INFO] Output {exe_name}:\n")
+            subprocess.run(exe_name, shell=True)
+        else:
+            print(f"[{timestamp()}] [ERROR] Executable {exe_name} not found after compilation.")
         return True
 
     if user_input.startswith("pd-cs "):
@@ -3545,7 +3587,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile {user_input} with rustup")
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with rustup\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3578,12 +3620,42 @@ def handle_special_commands(user_input):
         process = run_command(command, shell=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Debug {user_input} with rustup")
+            print(f"[{timestamp()}] [INFO] Debug {user_input} with rustup\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.startswith("prr "):
+        user_input = user_input[4:].strip()
+
+        # // Kompilierbefehl für rustc zusammenbauen
+        command = f"rustc {user_input}"
+
+        # // rustc-Prozess starten
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with rustc")
+            process.wait()
+
+            # // Wenn Kompilierung erfolgreich, führe das erstellte Programm aus
+            if process.returncode == 0:
+                exe_file = os.path.splitext(user_input)[0]  # Dateiname ohne .rs
+                if os.name == 'nt':
+                    exe_file += ".exe"  # Windows-spezifisch
+                print(f"[{timestamp()}] [INFO] Running compiled executable: {exe_file}")
+                print(f"[{timestamp()}] [INFO] Output {exe_file}:\n")
+                subprocess.run(exe_file, shell=True)
+            else:
+                print(f"[{timestamp()}] [ERROR] Compilation failed with exit code {process.returncode}")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Executing command failed: {e}")
         return True
 
     if user_input.startswith("node "):
@@ -3595,7 +3667,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile {user_input} with nodejs")
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with nodejs\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3612,7 +3684,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile {user_input} with NodeJs")
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with NodeJs\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3629,7 +3701,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile {user_input} with NodeJs")
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with NodeJs\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3645,7 +3717,7 @@ def handle_special_commands(user_input):
         process = run_command(command, shell=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Debug {user_input} with rustup")
+            print(f"[{timestamp()}] [INFO] Debug {user_input} with rustup\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3662,7 +3734,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile {user_input} with Java - JDK")
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Java - JDK\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3679,12 +3751,38 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile {user_input} with Java - JDK")
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Java - JDK\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.startswith("prj "):
+        user_input = user_input[4:].strip()
+
+        command = f"javac {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with javac")
+            process.wait()
+
+            # Wenn Kompilierung erfolgreich, führe die Java-Klasse mit `java` aus
+            if process.returncode == 0:
+                class_name = os.path.splitext(user_input)[0]  # Dateiname ohne Erweiterung (Klassenname)
+                print(f"[{timestamp()}] [INFO] Running compiled Java class: {class_name}")
+                print(f"[{timestamp()}] [INFO] Output {class_name}:\n")
+                subprocess.run(f"java {class_name}", shell=True)
+            else:
+                print(f"[{timestamp()}] [ERROR] Compilation failed with exit code {process.returncode}")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Executing command failed: {e}")
         return True
 
     if user_input.startswith("pd-java "):
@@ -3700,7 +3798,7 @@ def handle_special_commands(user_input):
         process3 = run_command(command3, shell=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Debug {user_input} with javac")
+            print(f"[{timestamp()}] [INFO] Debug {user_input} with javac\n")
             process.wait()
             process3.wait()
         except KeyboardInterrupt:
@@ -3718,7 +3816,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile {user_input} with Ruby")
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Ruby\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3735,7 +3833,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile {user_input} with Ruby")
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Ruby\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3752,7 +3850,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile {user_input} with Ruby")
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Ruby\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3810,7 +3908,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile {user_input} with Rscript")
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Rscript\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3844,7 +3942,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile {user_input} with Rscript")
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Rscript\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3902,7 +4000,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile {user_input} with PyInstaller")
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with PyInstaller\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3919,7 +4017,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile {user_input} with PyInstaller")
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with PyInstaller\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -3978,7 +4076,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile {user_input} with PyInstaller")
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with PyInstaller\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -4038,7 +4136,7 @@ def handle_special_commands(user_input):
 
         try:
             print(f"[{timestamp()}] [INFO] Compile your code with PyInstaller")
-            print(f"[{timestamp()}] [INFO] Note the systkas: pc-python-all mein_icon.ico meine_app.py")
+            print(f"[{timestamp()}] [INFO] Note the systkas: pc-python-all mein_icon.ico meine_app.py\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -4055,7 +4153,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile {user_input} with GO")
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with GO\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -4072,7 +4170,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile {user_input} with GO")
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with GO\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -4089,7 +4187,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile {user_input} with GO Build")
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with GO Build\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -4106,7 +4204,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile {user_input} with GO Build")
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with GO Build\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -4173,7 +4271,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile {user_input} with Julia")
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Julia\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -4190,7 +4288,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile {user_input} with Julia")
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Julia\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -4207,7 +4305,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile {user_input} with Julia")
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Julia\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -4278,7 +4376,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile {user_input} with PHP")
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with PHP\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -4295,7 +4393,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile {user_input} with PHP")
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with PHP\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -4312,7 +4410,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile {user_input} with PHP")
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with PHP\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -4371,7 +4469,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile {user_input} with Lua")
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Lua\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -4389,7 +4487,7 @@ def handle_special_commands(user_input):
 
         try:
             print(f"[{timestamp()}] [INFO] Compile your code with PyInstaller")
-            print(f"[{timestamp()}] [INFO] Note the systkas: glue srlua.exe script.luac myprogram.exe")
+            print(f"[{timestamp()}] [INFO] Note the systkas: glue srlua.exe script.luac myprogram.exe\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -4407,7 +4505,7 @@ def handle_special_commands(user_input):
 
         try:
             print(f"[{timestamp()}] [INFO] Compile your code with Glue")
-            print(f"[{timestamp()}] [INFO] Note the systkas: luac script.luac myprogram.exe")
+            print(f"[{timestamp()}] [INFO] Note the systkas: luac script.luac myprogram.exe\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -4424,7 +4522,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile {user_input} with Lua")
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Lua\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -4442,7 +4540,7 @@ def handle_special_commands(user_input):
 
         try:
             print(f"[{timestamp()}] [INFO] Compile your code with Glue")
-            print(f"[{timestamp()}] [INFO] Note the systkas: pce-lua script.luac myprogram.exe")
+            print(f"[{timestamp()}] [INFO] Note the systkas: pce-lua script.luac myprogram.exe\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -4511,7 +4609,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile {user_input} with Tsc")
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Tsc\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -4528,7 +4626,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile {user_input} with Tsc")
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with Tsc\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -4545,7 +4643,7 @@ def handle_special_commands(user_input):
                                    text=True)
 
         try:
-            print(f"[{timestamp()}] [INFO] Compile {user_input} with TypeScript NodeJs")
+            print(f"[{timestamp()}] [INFO] Compile {user_input} with TypeScript NodeJs\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
