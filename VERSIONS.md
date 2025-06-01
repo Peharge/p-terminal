@@ -221,6 +221,11 @@
        - PP-Terminal 5.3.1.53
        - PP-Terminal 5.3.1.54
        - PP-Terminal 5.3.1.55
+       - PP-Terminal 5.3.1.56
+       - PP-Terminal 5.3.1.58
+       - PP-Terminal 5.3.1.59
+       - PP-Terminal 5.3.1.60
+       - PP-Terminal 5.3.1.61
 
 # IQ Compiler
 
