@@ -3993,7 +3993,6 @@ def handle_special_commands(user_input):
         server_thread.start()
 
         # Optional: Delay to allow the server to start
-        import time
         time.sleep(1)
 
         # Run Ruby script (it might generate output into HTML in the same dir)
@@ -7539,7 +7538,7 @@ def handle_special_commands(user_input):
             proc = subprocess.Popen([str(fixed_python), "-m", "notebook", str(file_path)])
 
             # Step 3: Wait a bit for Jupyter to start
-            time.sleep(3)
+            time.sleep(5)
 
             # Step 4: Open notebook in default browser
             url_path = file_path.relative_to(Path.cwd()).as_posix()
