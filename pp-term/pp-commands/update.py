@@ -91,7 +91,7 @@ def start_mavis():
     base_path = Path.home() / 'p-terminal' / 'pp-term' / 'pp-commands'
 
     update_script = base_path / 'update-repository-windows.py'
-    install_script = base_path / 'install-pp-term.py'
+    install_script = base_path / 'update-pp-term-venv.py'
 
     print(f"[{timestamp()}] [INFO] Running update script...")
     subprocess.run([sys.executable, str(update_script)], check=True)
