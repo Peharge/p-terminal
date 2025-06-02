@@ -7691,6 +7691,42 @@ def handle_special_commands(user_input):
 
         return True
 
+    if user_input.startswith("jupyter lab "):
+        if user_input.lower() == "jupl q":
+            print("Terminated by 'q'")
+            return True
+        if user_input == "jupl \x11":  # Ctrl + Q
+            print("Terminated by Ctrl + Q")
+            return True
+
+        file_input = user_input[5:].strip()
+
+        try:
+            # Optional: falls ein Pfad angegeben wurde, diesen auflösen
+            file_path = Path(file_input).resolve()
+
+            # Fester Pfad zum Python, das JupyterLab starten soll
+            fixed_python = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/.env/Scripts/python.exe")
+            if not fixed_python.exists():
+                print(f"Error: Fixed Python interpreter for Jupyter not found: {fixed_python}")
+                return True
+
+            # JupyterLab starten (ohne Kernel-Registrierung etc.)
+            proc = subprocess.Popen([str(fixed_python), "-m", "jupyter", "lab", str(file_path) if file_input else ""])
+
+            # Optional: kleine Pause, damit JupyterLab startet
+            time.sleep(3)
+
+            # Browser öffnen mit Standard-JupyterLab-URL (ohne expliziten Pfad, da jupyter lab das öffnet)
+            webbrowser.open_new("http://localhost:8888/lab")
+
+            print("Started JupyterLab.")
+
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
+        return True
+
     if user_input.startswith("pff "):
         user_input = user_input[4:].strip()
         current_dir = Path.cwd().resolve()
