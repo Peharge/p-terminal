@@ -115,6 +115,7 @@ import contextlib
 from IPython import get_ipython
 import urllib.request
 import urllib.error
+import nbformat
 
 try:
     import ujson as _json  # ultraschnelles JSON
@@ -246,6 +247,17 @@ def shutdown_jupyter_kernel():
     ipython = get_ipython()
     if ipython:
         ipython.kernel.do_shutdown(restart=False)
+        
+
+def set_kernel_in_notebook(notebook_path, kernel_name, display_name):
+    nb = nbformat.read(notebook_path, as_version=4)
+    nb['metadata']['kernelspec'] = {
+        'name': kernel_name,
+        'display_name': display_name,
+        'language': 'python'
+    }
+    with open(notebook_path, 'w', encoding='utf-8') as f:
+        nbformat.write(nb, f)
 
 
 def set_python_path(user_input: Optional[str] = None) -> None:
@@ -7524,28 +7536,34 @@ def handle_special_commands(user_input):
                 subprocess.run([str(python_exe), "-m", "pip", "install", "ipykernel"], check=True)
                 print(f"[{timestamp()}] [INFO] ipykernel installed.")
 
-            # Step 1: Register the kernel pointing to the active venv python
-            kernel_name = f"venv_{active_env.name}_kernel"
-            # Remove old kernel with same name to avoid conflicts (optional)
-            subprocess.run([
-                str(python_exe), "-m", "ipykernel", "install",
-                "--user",
-                "--name", kernel_name,
-                "--display-name", f"Python (venv: {active_env.name})"
-            ], check=True)
+                # Step 1: Register the kernel pointing to the active venv python
+                kernel_name = f"venv_{active_env.name}_kernel"
+                subprocess.run([
+                    str(python_exe), "-m", "ipykernel", "install",
+                    "--user",
+                    "--name", kernel_name,
+                    "--display-name", f"Python (venv: {active_env.name})"
+                ], check=True)
 
-            # Step 2: Start Jupyter Notebook with the fixed interpreter (which runs Jupyter)
-            proc = subprocess.Popen([str(fixed_python), "-m", "notebook", str(file_path)])
+                # Neu: Kernel in Notebook setzen, damit Jupyter direkt den richtigen Kernel lädt
+                set_kernel_in_notebook(
+                    notebook_path=file_path,
+                    kernel_name=kernel_name,
+                    display_name=f"Python (venv: {active_env.name})"
+                )
 
-            # Step 3: Wait a bit for Jupyter to start
-            time.sleep(5)
+                # Step 2: Start Jupyter Notebook with the fixed interpreter (which runs Jupyter)
+                proc = subprocess.Popen([str(fixed_python), "-m", "notebook", str(file_path)])
 
-            # Step 4: Open notebook in default browser
-            url_path = file_path.relative_to(Path.cwd()).as_posix()
-            webbrowser.open_new(f"http://localhost:8888/notebooks/{url_path}")
+                # Step 3: Wait a bit for Jupyter to start
+                time.sleep(5)
 
-            print(
-                f"[{timestamp()}] [INFO] Started Jupyter Notebook with kernel '{kernel_name}'. Please select this kernel inside the notebook under 'Kernel' > 'Change kernel'.")
+                # Step 4: Open notebook in default browser
+                url_path = file_path.relative_to(Path.cwd()).as_posix()
+                webbrowser.open_new(f"http://localhost:8888/notebooks/{url_path}")
+
+                print(
+                    f"[{timestamp()}] [INFO] Started Jupyter Notebook with kernel '{kernel_name}'. Kernel is used automatically.")
 
         except Exception as e:
             print(f"[{timestamp()}] [ERROR] An error occurred: {e}")
@@ -7610,28 +7628,34 @@ def handle_special_commands(user_input):
                 subprocess.run([str(python_exe), "-m", "pip", "install", "ipykernel"], check=True)
                 print(f"[{timestamp()}] [INFO] ipykernel installed.")
 
-            # Step 1: Register the kernel pointing to the active venv python
-            kernel_name = f"venv_{active_env.name}_kernel"
-            # Remove old kernel with same name to avoid conflicts (optional)
-            subprocess.run([
-                str(python_exe), "-m", "ipykernel", "install",
-                "--user",
-                "--name", kernel_name,
-                "--display-name", f"Python (venv: {active_env.name})"
-            ], check=True)
+                # Step 1: Register the kernel pointing to the active venv python
+                kernel_name = f"venv_{active_env.name}_kernel"
+                subprocess.run([
+                    str(python_exe), "-m", "ipykernel", "install",
+                    "--user",
+                    "--name", kernel_name,
+                    "--display-name", f"Python (venv: {active_env.name})"
+                ], check=True)
 
-            # Step 2: Start Jupyter Notebook with the fixed interpreter (which runs Jupyter)
-            proc = subprocess.Popen([str(fixed_python), "-m", "notebook", str(file_path)])
+                # Neu: Kernel in Notebook setzen, damit Jupyter direkt den richtigen Kernel lädt
+                set_kernel_in_notebook(
+                    notebook_path=file_path,
+                    kernel_name=kernel_name,
+                    display_name=f"Python (venv: {active_env.name})"
+                )
 
-            # Step 3: Wait a bit for Jupyter to start
-            time.sleep(3)
+                # Step 2: Start Jupyter Notebook with the fixed interpreter (which runs Jupyter)
+                proc = subprocess.Popen([str(fixed_python), "-m", "notebook", str(file_path)])
 
-            # Step 4: Open notebook in default browser
-            url_path = file_path.relative_to(Path.cwd()).as_posix()
-            webbrowser.open_new(f"http://localhost:8888/notebooks/{url_path}")
+                # Step 3: Wait a bit for Jupyter to start
+                time.sleep(5)
 
-            print(
-                f"[{timestamp()}] [INFO] Started Jupyter Notebook with kernel '{kernel_name}'. Please select this kernel inside the notebook under 'Kernel' > 'Change kernel'.")
+                # Step 4: Open notebook in default browser
+                url_path = file_path.relative_to(Path.cwd()).as_posix()
+                webbrowser.open_new(f"http://localhost:8888/notebooks/{url_path}")
+
+                print(
+                    f"[{timestamp()}] [INFO] Started Jupyter Notebook with kernel '{kernel_name}'. Kernel is used automatically.")
 
         except Exception as e:
             print(f"[{timestamp()}] [ERROR] An error occurred: {e}")
@@ -7697,28 +7721,34 @@ def handle_special_commands(user_input):
                 subprocess.run([str(python_exe), "-m", "pip", "install", "ipykernel"], check=True)
                 print(f"[{timestamp()}] [INFO] ipykernel installed.")
 
-            # Step 1: Register the kernel pointing to the active venv python
-            kernel_name = f"venv_{active_env.name}_kernel"
-            # Remove old kernel with same name to avoid conflicts (optional)
-            subprocess.run([
-                str(python_exe), "-m", "ipykernel", "install",
-                "--user",
-                "--name", kernel_name,
-                "--display-name", f"Python (venv: {active_env.name})"
-            ], check=True)
+                # Step 1: Register the kernel pointing to the active venv python
+                kernel_name = f"venv_{active_env.name}_kernel"
+                subprocess.run([
+                    str(python_exe), "-m", "ipykernel", "install",
+                    "--user",
+                    "--name", kernel_name,
+                    "--display-name", f"Python (venv: {active_env.name})"
+                ], check=True)
 
-            # Step 2: Start Jupyter Notebook with the fixed interpreter (which runs Jupyter)
-            proc = subprocess.Popen([str(fixed_python), "-m", "notebook", str(file_path)])
+                # Neu: Kernel in Notebook setzen, damit Jupyter direkt den richtigen Kernel lädt
+                set_kernel_in_notebook(
+                    notebook_path=file_path,
+                    kernel_name=kernel_name,
+                    display_name=f"Python (venv: {active_env.name})"
+                )
 
-            # Step 3: Wait a bit for Jupyter to start
-            time.sleep(3)
+                # Step 2: Start Jupyter Notebook with the fixed interpreter (which runs Jupyter)
+                proc = subprocess.Popen([str(fixed_python), "-m", "notebook", str(file_path)])
 
-            # Step 4: Open notebook in default browser
-            url_path = file_path.relative_to(Path.cwd()).as_posix()
-            webbrowser.open_new(f"http://localhost:8888/notebooks/{url_path}")
+                # Step 3: Wait a bit for Jupyter to start
+                time.sleep(5)
 
-            print(
-                f"[{timestamp()}] [INFO] Started Jupyter Notebook with kernel '{kernel_name}'. Please select this kernel inside the notebook under 'Kernel' > 'Change kernel'.")
+                # Step 4: Open notebook in default browser
+                url_path = file_path.relative_to(Path.cwd()).as_posix()
+                webbrowser.open_new(f"http://localhost:8888/notebooks/{url_path}")
+
+                print(
+                    f"[{timestamp()}] [INFO] Started Jupyter Notebook with kernel '{kernel_name}'. Kernel is used automatically.")
 
         except Exception as e:
             print(f"[{timestamp()}] [ERROR] An error occurred: {e}")
@@ -7785,7 +7815,6 @@ def handle_special_commands(user_input):
 
             # Step 1: Register the kernel pointing to the active venv python
             kernel_name = f"venv_{active_env.name}_kernel"
-            # Remove old kernel with same name to avoid conflicts (optional)
             subprocess.run([
                 str(python_exe), "-m", "ipykernel", "install",
                 "--user",
@@ -7793,18 +7822,25 @@ def handle_special_commands(user_input):
                 "--display-name", f"Python (venv: {active_env.name})"
             ], check=True)
 
+            # Neu: Kernel in Notebook setzen, damit Jupyter direkt den richtigen Kernel lädt
+            set_kernel_in_notebook(
+                notebook_path=file_path,
+                kernel_name=kernel_name,
+                display_name=f"Python (venv: {active_env.name})"
+            )
+
             # Step 2: Start Jupyter Notebook with the fixed interpreter (which runs Jupyter)
             proc = subprocess.Popen([str(fixed_python), "-m", "notebook", str(file_path)])
 
             # Step 3: Wait a bit for Jupyter to start
-            time.sleep(3)
+            time.sleep(5)
 
             # Step 4: Open notebook in default browser
             url_path = file_path.relative_to(Path.cwd()).as_posix()
             webbrowser.open_new(f"http://localhost:8888/notebooks/{url_path}")
 
             print(
-                f"[{timestamp()}] [INFO] Started Jupyter Notebook with kernel '{kernel_name}'. Please select this kernel inside the notebook under 'Kernel' > 'Change kernel'.")
+                f"[{timestamp()}] [INFO] Started Jupyter Notebook with kernel '{kernel_name}'. Kernel is used automatically.")
 
         except Exception as e:
             print(f"[{timestamp()}] [ERROR] An error occurred: {e}")
