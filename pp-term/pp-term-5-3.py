@@ -8150,6 +8150,29 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing pcf command: {e}")
         return True
 
+    if user_input.startswith("pff-word "):
+        user_input = user_input[9:].strip()
+        current_dir = Path.cwd().resolve()
+
+        extensions = ["*.txt", "*.md", "*.log", "*.pdf", "*.docx", "*.xlsx", "*.pptx", "*.csv", "*.json", "*.xml",
+                      "*.yaml", "*.ini", "*.html", "*.js", "*.py"]
+
+        patterns = " -Include " + ",".join(extensions)
+
+        command = f"""powershell -Command "Get-ChildItem -Recurse -Path '{current_dir}'{patterns} | Select-String -Pattern '{user_input}'" """
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Search: {current_dir} -> {user_input}")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pcf command: {e}")
+        return True
+
     if user_input.startswith("pff-word-text "):
         user_input = user_input[13:].strip()
         current_dir = Path.cwd().resolve()
