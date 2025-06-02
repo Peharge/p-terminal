@@ -33,8 +33,8 @@
 <div align="center">
 
 "The coolest terminal in the world"<br>
-100% Free. 100% Open Source.<br>
-A warm welcome, to P-Term (C/C++/Rust) and PP-Term (Python) ❤️<br><br>
+A warm welcome, to P-Term (C/C++/Rust) and PP-Term (Python) ❤️<br>
+100% Free. 100% Open Source.<br><br>
 [`P-Terminal.com`](https://peharge.github.io/MAVIS-web/p-term.html) [`Download PP-Term [Windows]`](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) [`Download P-Term (SOON) [Windows]`](https://github.com/Peharge/p-terminal/blob/main/p-term/run-p-term.bat) [`LICENSE`](LICENSE)<br><br>
 Peharge Projects 2025<br>
 
