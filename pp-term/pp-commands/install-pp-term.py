@@ -537,7 +537,9 @@ packages = [
     "psutil", "speedtest-cli", "colorama", "pyperclip", "termcolor", "docker", "flask",
     "typer", "click", "blessed", "prompt-toolkit", "tqdm", "watchdog", "fire", "torch",
     "torchvision", "torchaudio", "tensorflow", "tf-nightly", "notebook", "jupyterlab", "jax",
-    "chardet", "plotly", "py-cpuinfo", "gputil", "tabulate"
+    "chardet", "plotly", "py-cpuinfo", "gputil", "tabulate", "pyqtgraph", "deep-translator",
+    "duckduckgo-search", "pillow", "GitPython", "matplotlib", "pyinstaller", "virtualenv",
+    "legacy-cgi", "colorama", "ipykernel", "ipython", "bash_kernel", "pip"
 ]
 
 process_packages(packages)
