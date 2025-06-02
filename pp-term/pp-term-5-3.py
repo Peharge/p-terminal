@@ -7053,14 +7053,8 @@ def handle_special_commands(user_input):
         service_name = user_input[14:].strip()
         command = f'net start "{service_name}"'
 
-        process = subprocess.Popen(
-            command,
-            stdin=sys.stdin,
-            stdout=sys.stdout,
-            stderr=sys.stderr,
-            shell=True,
-            text=True
-        )
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Starting PostgreSQL service '{service_name}'\n")
@@ -7077,14 +7071,8 @@ def handle_special_commands(user_input):
         service_name = user_input[9:].strip()
         command = f'net start "{service_name}"'
 
-        process = subprocess.Popen(
-            command,
-            stdin=sys.stdin,
-            stdout=sys.stdout,
-            stderr=sys.stderr,
-            shell=True,
-            text=True
-        )
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Starting MySQL service '{service_name}'\n")
@@ -7101,14 +7089,8 @@ def handle_special_commands(user_input):
         service_name = user_input[11:].strip()
         command = f'net start "{service_name}"'
 
-        process = subprocess.Popen(
-            command,
-            stdin=sys.stdin,
-            stdout=sys.stdout,
-            stderr=sys.stderr,
-            shell=True,
-            text=True
-        )
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Starting MongoDB service '{service_name}'\n")
@@ -7125,14 +7107,8 @@ def handle_special_commands(user_input):
         service_name = user_input[13:].strip()
         command = f'net start "{service_name}"'
 
-        process = subprocess.Popen(
-            command,
-            stdin=sys.stdin,
-            stdout=sys.stdout,
-            stderr=sys.stderr,
-            shell=True,
-            text=True
-        )
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Starting SQL Server service '{service_name}'\n")
@@ -7149,14 +7125,8 @@ def handle_special_commands(user_input):
         service_name = user_input[16:].strip()
         command = f'net stop "{service_name}"'
 
-        process = subprocess.Popen(
-            command,
-            stdin=sys.stdin,
-            stdout=sys.stdout,
-            stderr=sys.stderr,
-            shell=True,
-            text=True
-        )
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Stopping service '{service_name}'\n")
@@ -7173,14 +7143,8 @@ def handle_special_commands(user_input):
         service_name = user_input[11:].strip()
         command = f'net start "{service_name}"'
 
-        process = subprocess.Popen(
-            command,
-            stdin=sys.stdin,
-            stdout=sys.stdout,
-            stderr=sys.stderr,
-            shell=True,
-            text=True
-        )
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Starting MariaDB service '{service_name}'\n")
@@ -7197,14 +7161,8 @@ def handle_special_commands(user_input):
         service_name = user_input[9:].strip()
         command = f'net start "{service_name}"'
 
-        process = subprocess.Popen(
-            command,
-            stdin=sys.stdin,
-            stdout=sys.stdout,
-            stderr=sys.stderr,
-            shell=True,
-            text=True
-        )
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Starting Redis service '{service_name}'\n")
@@ -7212,7 +7170,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()
+            print(f"[{timestamp()}] [ERROR] executing pc-redis command: {e}")
             
     # pc-oracle: startet einen Oracle XE-Dienst (Service-Name angeben)
     # Beispiel: "pc-oracle OracleServiceXE"
@@ -7220,14 +7178,8 @@ def handle_special_commands(user_input):
         service_name = user_input[10:].strip()
         command = f'net start "{service_name}"'
 
-        process = subprocess.Popen(
-            command,
-            stdin=sys.stdin,
-            stdout=sys.stdout,
-            stderr=sys.stderr,
-            shell=True,
-            text=True
-        )
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Starting Oracle service '{service_name}'\n")
@@ -7244,14 +7196,8 @@ def handle_special_commands(user_input):
         service_name = user_input[11:].strip()
         command = f'net start "{service_name}"'
 
-        process = subprocess.Popen(
-            command,
-            stdin=sys.stdin,
-            stdout=sys.stdout,
-            stderr=sys.stderr,
-            shell=True,
-            text=True
-        )
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Starting CouchDB service '{service_name}'\n")
@@ -7268,14 +7214,8 @@ def handle_special_commands(user_input):
         service_name = user_input[12:].strip()
         command = f'net start "{service_name}"'
 
-        process = subprocess.Popen(
-            command,
-            stdin=sys.stdin,
-            stdout=sys.stdout,
-            stderr=sys.stderr,
-            shell=True,
-            text=True
-        )
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Starting Firebird service '{service_name}'\n")
@@ -7292,14 +7232,8 @@ def handle_special_commands(user_input):
         service_name = user_input[13:].strip()
         command = f'net start "{service_name}"'
 
-        process = subprocess.Popen(
-            command,
-            stdin=sys.stdin,
-            stdout=sys.stdout,
-            stderr=sys.stderr,
-            shell=True,
-            text=True
-        )
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Starting Cassandra service '{service_name}'\n")
@@ -7316,14 +7250,8 @@ def handle_special_commands(user_input):
         service_name = user_input[16:].strip()
         command = f'net start "{service_name}"'
 
-        process = subprocess.Popen(
-            command,
-            stdin=sys.stdin,
-            stdout=sys.stdout,
-            stderr=sys.stderr,
-            shell=True,
-            text=True
-        )
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Starting Elasticsearch service '{service_name}'\n")
@@ -7340,14 +7268,8 @@ def handle_special_commands(user_input):
         service_name = user_input[9:].strip()
         command = f'net start "{service_name}"'
 
-        process = subprocess.Popen(
-            command,
-            stdin=sys.stdin,
-            stdout=sys.stdout,
-            stderr=sys.stderr,
-            shell=True,
-            text=True
-        )
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Starting Neo4j service '{service_name}'\n")
@@ -7364,14 +7286,8 @@ def handle_special_commands(user_input):
         service_name = user_input[12:].strip()
         command = f'net start "{service_name}"'
 
-        process = subprocess.Popen(
-            command,
-            stdin=sys.stdin,
-            stdout=sys.stdout,
-            stderr=sys.stderr,
-            shell=True,
-            text=True
-        )
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
 
         try:
             print(f"[{timestamp()}] [INFO] Starting InfluxDB service '{service_name}'\n")
