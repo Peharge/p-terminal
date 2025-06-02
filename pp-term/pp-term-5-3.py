@@ -3712,6 +3712,44 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
+    if user_input.startswith("prjs "):
+        user_input = user_input[5:].strip()
+        filepath = os.path.abspath(user_input)
+
+        if not os.path.isfile(filepath):
+            print(f"[{timestamp()}] [ERROR] File '{filepath}' not found.")
+            return True
+
+        _, ext = os.path.splitext(filepath)
+        filename = os.path.basename(filepath)
+        directory = os.path.dirname(filepath)
+
+        if ext == ".js":
+            # Node.js Skript ausführen
+            command = f"node \"{filepath}\""
+            print(f"[{timestamp()}] [INFO] Executing JS with Node.js: {filename}")
+            process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                       shell=True, text=True)
+            try:
+                process.wait()
+            except KeyboardInterrupt:
+                print(f"[{timestamp()}] [INFO] Canceled by user.")
+            except subprocess.CalledProcessError as e:
+                print(f"[{timestamp()}] [ERROR] Execution failed: {e}")
+        elif ext in [".html", ".htm"]:
+            # HTML mit eingebettetem JS -> im Browser öffnen
+            port = 8000
+            url = f"http://localhost:{port}/{filename}"
+
+            server_thread = threading.Thread(target=start_local_server, args=(directory, port), daemon=True)
+            server_thread.start()
+
+            print(f"[{timestamp()}] [INFO] Opening in browser: {url}")
+            webbrowser.open(url)
+        else:
+            print(f"[{timestamp()}] [WARN] Unsupported file extension: '{ext}'")
+        return True
+
     if user_input.startswith("pd-node "):
         user_input = user_input[8:].strip()
 
@@ -3859,6 +3897,31 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.startswith("prruby "):
+        user_input = user_input[7:].strip()
+        filepath = os.path.abspath(user_input)
+
+        if not os.path.isfile(filepath):
+            print(f"[{timestamp()}] [ERROR] File not found: {filepath}")
+            return True
+
+        if not filepath.endswith(".rb"):
+            print(f"[{timestamp()}] [WARN] Unsupported file extension for Ruby: {filepath}")
+            return True
+
+        print(f"[{timestamp()}] [INFO] Running Ruby script: {filepath}")
+
+        command = f"ruby \"{filepath}\""
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                   shell=True, text=True)
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Canceled by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Ruby execution failed: {e}")
         return True
 
     if user_input.startswith("pd-ruby "):
@@ -4422,7 +4485,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("prphp "):
-        user_input = user_input[7:].strip()
+        user_input = user_input[6:].strip()
 
         # Absolute Pfadangabe ermitteln
         filepath = os.path.abspath(user_input)
@@ -4714,6 +4777,35 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.startswith("prts "):
+        user_input = user_input[5:].strip()
+        filepath = os.path.abspath(user_input)
+
+        if not os.path.isfile(filepath):
+            print(f"[{timestamp()}] [ERROR] File not found: {filepath}")
+            return True
+
+        ts_file = filepath
+        js_file = ts_file.replace(".ts", ".js")
+
+        print(f"[{timestamp()}] [INFO] Compiling TypeScript file: {ts_file}")
+        compile_command = f"tsc \"{ts_file}\""
+        compile_proc = subprocess.run(compile_command, shell=True)
+
+        if compile_proc.returncode != 0:
+            print(f"[{timestamp()}] [ERROR] Compilation failed.")
+            return True
+
+        print(f"[{timestamp()}] [INFO] Running compiled JS: {js_file}")
+        run_command = f"node \"{js_file}\""
+        process = subprocess.Popen(run_command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                   shell=True, text=True)
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Canceled by user.")
         return True
 
     if user_input.startswith("pc-typescript "):
@@ -10492,7 +10584,6 @@ def start_local_server(directory, port=8000):
     with socketserver.TCPServer(("", port), handler) as httpd:
         print(f"[{timestamp()}] [INFO] Server started at http://localhost:{port}/")
         httpd.serve_forever()
-
 
 
 def handle_vs_cpp_command(user_input: str) -> bool:
