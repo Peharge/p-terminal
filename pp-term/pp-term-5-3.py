@@ -7079,7 +7079,6 @@ def handle_special_commands(user_input):
             subprocess.Popen([python_path, "-m", "notebook", file_path])
 
             # Öffne die Datei im Standardbrowser (nach kurzem Delay)
-            import time
             time.sleep(2)  # kurze Wartezeit, damit Jupyter starten kann
             webbrowser.open_new(f"http://localhost:8888/notebooks/{os.path.relpath(file_path).replace(os.sep, '/')}")
         except FileNotFoundError:
@@ -7121,7 +7120,6 @@ def handle_special_commands(user_input):
             subprocess.Popen([python_path, "-m", "notebook", file_path])
 
             # Öffne die Datei im Standardbrowser (nach kurzem Delay)
-            import time
             time.sleep(2)  # kurze Wartezeit, damit Jupyter starten kann
             webbrowser.open_new(f"http://localhost:8888/notebooks/{os.path.relpath(file_path).replace(os.sep, '/')}")
         except FileNotFoundError:
@@ -7163,7 +7161,6 @@ def handle_special_commands(user_input):
             subprocess.Popen([python_path, "-m", "notebook", file_path])
 
             # Öffne die Datei im Standardbrowser (nach kurzem Delay)
-            import time
             time.sleep(2)  # kurze Wartezeit, damit Jupyter starten kann
             webbrowser.open_new(f"http://localhost:8888/notebooks/{os.path.relpath(file_path).replace(os.sep, '/')}")
         except FileNotFoundError:
