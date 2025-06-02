@@ -111,6 +111,8 @@ import tempfile
 import http.server
 import socketserver
 import re
+import contextlib
+from IPython import get_ipython
 
 try:
     import ujson as _json  # ultraschnelles JSON
@@ -236,6 +238,12 @@ Thank you so much for using PP-Terminal. We truly appreciate your support ❤️
         print()
 
     show_color_palette()
+
+
+def shutdown_jupyter_kernel():
+    ipython = get_ipython()
+    if ipython:
+        ipython.kernel.do_shutdown(restart=False)
 
 
 def set_python_path(user_input: Optional[str] = None) -> None:
@@ -7301,9 +7309,11 @@ def handle_special_commands(user_input):
     if user_input.startswith("jup "):
         if user_input.lower() == "jup q":
             print(f"[{timestamp()}] [INFO] Terminated by 'q'")
+            shutdown_jupyter_kernel()
             return True
         if user_input == "jup \x11":  # Ctrl + Q
             print(f"[{timestamp()}] [INFO]  Terminated by Ctrl + Q")
+            shutdown_jupyter_kernel()
             return True
 
         file_input = user_input[4:].strip()
@@ -7333,6 +7343,7 @@ def handle_special_commands(user_input):
 
             if not active_env_path:
                 print(f"[{timestamp()}] [ERROR] No active environment found.")
+                shutdown_jupyter_kernel()
                 return True
 
             active_env = Path(active_env_path)
@@ -7342,6 +7353,7 @@ def handle_special_commands(user_input):
             fixed_python = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/.env/Scripts/python.exe")
             if not fixed_python.exists():
                 print(f"[{timestamp()}] [ERROR] Fixed Python interpreter for Jupyter not found: {fixed_python}")
+                shutdown_jupyter_kernel()
                 return True
 
             # Step 0: Ensure ipykernel is installed in the active venv
@@ -7381,11 +7393,13 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("jupyter "):
-        if user_input.lower() == "jupyter q":
+        if user_input.lower() == "jup q":
             print(f"[{timestamp()}] [INFO] Terminated by 'q'")
+            shutdown_jupyter_kernel()
             return True
-        if user_input == "jupyter \x11":  # Ctrl + Q
-            print(f"[{timestamp()}] [INFO] Terminated by Ctrl + Q")
+        if user_input == "jup \x11":  # Ctrl + Q
+            print(f"[{timestamp()}] [INFO]  Terminated by Ctrl + Q")
+            shutdown_jupyter_kernel()
             return True
 
         file_input = user_input[8:].strip()
@@ -7415,6 +7429,7 @@ def handle_special_commands(user_input):
 
             if not active_env_path:
                 print(f"[{timestamp()}] [ERROR] No active environment found.")
+                shutdown_jupyter_kernel()
                 return True
 
             active_env = Path(active_env_path)
@@ -7424,6 +7439,7 @@ def handle_special_commands(user_input):
             fixed_python = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/.env/Scripts/python.exe")
             if not fixed_python.exists():
                 print(f"[{timestamp()}] [ERROR] Fixed Python interpreter for Jupyter not found: {fixed_python}")
+                shutdown_jupyter_kernel()
                 return True
 
             # Step 0: Ensure ipykernel is installed in the active venv
@@ -7463,11 +7479,14 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("jupyter notebook "):
-        if user_input.lower() == "jupyter notebook q":
+        if user_input.lower() == "jup q":
             print(f"[{timestamp()}] [INFO] Terminated by 'q'")
+            shutdown_jupyter_kernel()
             return True
-        if user_input == "jupyter notebook \x11":  # Ctrl + Q
-            print(f"[{timestamp()}] [INFO] Terminated by Ctrl + Q")
+        if user_input == "jup \x11":  # Ctrl + Q
+            print(f"[{timestamp()}] [INFO]  Terminated by Ctrl + Q")
+            shutdown_jupyter_kernel()
+            shutdown_jupyter_kernel()
             return True
 
         file_input = user_input[17:].strip()
@@ -7497,6 +7516,7 @@ def handle_special_commands(user_input):
 
             if not active_env_path:
                 print(f"[{timestamp()}] [ERROR] No active environment found.")
+                shutdown_jupyter_kernel()
                 return True
 
             active_env = Path(active_env_path)
@@ -7506,6 +7526,7 @@ def handle_special_commands(user_input):
             fixed_python = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/.env/Scripts/python.exe")
             if not fixed_python.exists():
                 print(f"[{timestamp()}] [ERROR] Fixed Python interpreter for Jupyter not found: {fixed_python}")
+                shutdown_jupyter_kernel()
                 return True
 
             # Step 0: Ensure ipykernel is installed in the active venv
@@ -7545,11 +7566,13 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("jup-p "):
-        if user_input.lower() == "jup-p q":
+        if user_input.lower() == "jup q":
             print(f"[{timestamp()}] [INFO] Terminated by 'q'")
+            shutdown_jupyter_kernel()
             return True
-        if user_input == "jup-p \x11":  # Ctrl + Q
-            print(f"[{timestamp()}] [INFO] Terminated by Ctrl + Q")
+        if user_input == "jup \x11":  # Ctrl + Q
+            print(f"[{timestamp()}] [INFO]  Terminated by Ctrl + Q")
+            shutdown_jupyter_kernel()
             return True
 
         file_input = user_input[6:].strip()
@@ -7579,6 +7602,7 @@ def handle_special_commands(user_input):
 
             if not active_env_path:
                 print(f"[{timestamp()}] [ERROR] No active environment found.")
+                shutdown_jupyter_kernel()
                 return True
 
             active_env = Path(active_env_path)
@@ -7588,6 +7612,7 @@ def handle_special_commands(user_input):
             fixed_python = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/.env/Scripts/python.exe")
             if not fixed_python.exists():
                 print(f"[{timestamp()}] [ERROR] Fixed Python interpreter for Jupyter not found: {fixed_python}")
+                shutdown_jupyter_kernel()
                 return True
 
             # Step 0: Ensure ipykernel is installed in the active venv
@@ -7628,11 +7653,13 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("jup-j "):
         # Abbruchkürzel: 'jup-j q' oder Ctrl+Q (ASCII 0x11)
-        if user_input.lower().strip() == "jup-j q":
+        if user_input.lower() == "jup q":
             print(f"[{timestamp()}] [INFO] Terminated by 'q'")
+            shutdown_jupyter_kernel()
             return True
-        if user_input.strip() == "jup-j \x11":
-            print(f"[{timestamp()}] [INFO] Terminated by Ctrl+Q")
+        if user_input == "jup \x11":  # Ctrl + Q
+            print(f"[{timestamp()}] [INFO]  Terminated by Ctrl + Q")
+            shutdown_jupyter_kernel()
             return True
 
         # Extrahiere Dateinamen/Path hinter "jup-j "
@@ -7688,6 +7715,7 @@ def handle_special_commands(user_input):
                     julia_path = str(cand_unix)
                 else:
                     print(f"[{timestamp()}] [ERROR] Julia not found (neither in PATH nor in the current directory).")
+                    shutdown_jupyter_kernel()
                     return True
 
             print(f"[{timestamp()}] [INFO] Used Julia executable: {julia_path}")
@@ -7713,6 +7741,7 @@ def handle_special_commands(user_input):
                     if install_result.returncode != 0:
                         print(f"[{timestamp()}] [ERROR] Error during IJulia installation:")
                         print(install_result.stdout or install_result.stderr)
+                        shutdown_jupyter_kernel()
                         return True
                     else:
                         print(f"[{timestamp()}] [INFO] IJulia successfully installed and registered.")
@@ -7732,6 +7761,7 @@ def handle_special_commands(user_input):
                         print(f"[{timestamp()}] [INFO] IJulia kernel registration updated.")
             except Exception as e:
                 print(f"[{timestamp()}] [ERROR] Error during IJulia installation/check: {e}")
+                shutdown_jupyter_kernel()
                 return True
 
             # 3) Jupyter Notebook starten
@@ -7739,6 +7769,7 @@ def handle_special_commands(user_input):
             jupyter_exe = shutil.which("jupyter-notebook") or shutil.which("jupyter")
             if jupyter_exe is None:
                 print(f"[{timestamp()}] [ERROR] 'jupyter-notebook' not found. Please install Jupyter or add it to PATH.")
+                shutdown_jupyter_kernel()
                 return True
 
             # Start notebook process (in background)
@@ -7767,11 +7798,13 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("jup-r "):
         # Kürzel für Abbruch: 'jup-r q' oder Ctrl+Q (ASCII 0x11)
-        if user_input.lower().strip() == "jup-r q":
+        if user_input.lower() == "jup q":
             print(f"[{timestamp()}] [INFO] Terminated by 'q'")
+            shutdown_jupyter_kernel()
             return True
-        if user_input.strip() == "jup-r \x11":
-            print(f"[{timestamp()}] [INFO] Terminated by Ctrl+Q")
+        if user_input == "jup \x11":  # Ctrl + Q
+            print(f"[{timestamp()}] [INFO]  Terminated by Ctrl + Q")
+            shutdown_jupyter_kernel()
             return True
 
         # Extrahiere Dateinamen/Path hinter "jup-r "
@@ -7827,6 +7860,7 @@ def handle_special_commands(user_input):
                     rscript_path = str(cand_unix)
                 else:
                     print(f"[{timestamp()}] [INFO] Rscript not found (neither in PATH nor in current directory).")
+                    shutdown_jupyter_kernel()
                     return True
 
             print(f"[{timestamp()}] [INFO] Used Rscript: {rscript_path}")
@@ -7853,6 +7887,7 @@ def handle_special_commands(user_input):
                     if install_result.returncode != 0:
                         print(f"[{timestamp()}] [ERROR] Error during IRkernel installation:")
                         print(install_result.stdout or install_result.stderr)
+                        shutdown_jupyter_kernel()
                         return True
                     else:
                         print(f"[{timestamp()}] [INFO] IRkernel successfully installed and registered.")
@@ -7872,6 +7907,7 @@ def handle_special_commands(user_input):
                         print(f"[{timestamp()}] [INFO] IRkernel registration updated.")
             except Exception as e:
                 print(f"[{timestamp()}] [ERROR] Error during IRkernel installation/check: {e}")
+                shutdown_jupyter_kernel()
                 return True
 
             # 3) Jupyter Notebook starten
@@ -7879,6 +7915,7 @@ def handle_special_commands(user_input):
             jupyter_exe = shutil.which("jupyter-notebook") or shutil.which("jupyter")
             if jupyter_exe is None:
                 print(f"[{timestamp()}] [ERROR] 'jupyter-notebook' not found. Please install Jupyter or add it to PATH.")
+                shutdown_jupyter_kernel()
                 return True
 
             # Starte Notebook-Prozess (im Hintergrund)
@@ -7907,11 +7944,13 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("jupl "):
-        if user_input.lower() == "jupl q":
+        if user_input.lower() == "jup q":
             print(f"[{timestamp()}] [INFO] Terminated by 'q'")
+            shutdown_jupyter_kernel()
             return True
-        if user_input == "jupl \x11":  # Ctrl + Q
-            print(f"[{timestamp()}] [INFO] Terminated by Ctrl + Q")
+        if user_input == "jup \x11":  # Ctrl + Q
+            print(f"[{timestamp()}] [INFO]  Terminated by Ctrl + Q")
+            shutdown_jupyter_kernel()
             return True
 
         file_input = user_input[5:].strip()
@@ -7924,6 +7963,7 @@ def handle_special_commands(user_input):
             fixed_python = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/.env/Scripts/python.exe")
             if not fixed_python.exists():
                 print(f"[{timestamp()}] [ERROR] Fixed Python interpreter for Jupyter not found: {fixed_python}")
+                shutdown_jupyter_kernel()
                 return True
 
             # JupyterLab starten (ohne Kernel-Registrierung etc.)
@@ -11511,12 +11551,32 @@ def switch_theme(user_input: str) -> bool:
     return True
 
 
+def find_free_port(start=8000, end=9000):
+    for port in range(start, end):
+        with contextlib.closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as sock:
+            if sock.connect_ex(("localhost", port)) != 0:
+                return port
+    raise RuntimeError("Kein freier Port zwischen 8000 und 9000 gefunden.")
+
+
 def start_local_server(directory, port=8000):
-    os.chdir(directory)
     handler = http.server.SimpleHTTPRequestHandler
-    with socketserver.TCPServer(("", port), handler) as httpd:
-        print(f"[{timestamp()}] [INFO] Server started at http://localhost:{port}/")
-        httpd.serve_forever()
+
+    # Versuche gewählten Port, bei Fehler nimm freien
+    try:
+        os.chdir(directory)
+        with socketserver.TCPServer(("", port), handler) as httpd:
+            print(f"[{timestamp()}] [INFO] Server started at http://localhost:{port}/")
+            httpd.serve_forever()
+    except OSError as e:
+        if e.errno == 10048:  # Port belegt
+            print(f"[{timestamp()}] [WARN] Port {port} belegt. Suche freien Port...")
+            free_port = find_free_port()
+            with socketserver.TCPServer(("", free_port), handler) as httpd:
+                print(f"[{timestamp()}] [INFO] Server started at http://localhost:{free_port}/")
+                httpd.serve_forever()
+        else:
+            raise
 
 
 def handle_vs_cpp_command(user_input: str) -> bool:
