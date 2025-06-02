@@ -108,6 +108,9 @@ import multiprocessing
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from shutil import which
 import tempfile
+import http.server
+import socketserver
+import re
 
 try:
     import ujson as _json  # ultraschnelles JSON
@@ -4418,6 +4421,34 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
+    if user_input.startswith("prphp "):
+        user_input = user_input[7:].strip()
+
+        # Absolute Pfadangabe ermitteln
+        filepath = os.path.abspath(user_input)
+        if not os.path.isfile(filepath):
+            print(f"[{timestamp()}] [ERROR] File '{filepath}' does not exist.")
+            return True
+
+        # Arbeitsverzeichnis für Server
+        directory = os.path.dirname(filepath)
+        filename = os.path.basename(filepath)
+
+        port = 8000  # Oder dynamisch wählen
+        url = f"http://localhost:{port}/{filename}"
+
+        # Server im Hintergrund starten
+        server_thread = threading.Thread(target=start_local_server, args=(directory, port), daemon=True)
+        server_thread.start()
+
+        print(f"[{timestamp()}] [INFO] Compiling '{filename}' with PHP")
+        print(f"[{timestamp()}] [INFO] Opening in browser: {url}")
+
+        # Öffne im Standardbrowser
+        webbrowser.open(url)
+
+        return True
+
     if user_input.startswith("pd-php "):
         script = user_input[7:].strip()
 
@@ -8076,7 +8107,6 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower().startswith("ping "):
-        import re
         # Ziel extrahieren und validieren
         target = user_input.split(maxsplit=1)[1].strip()
         if not re.fullmatch(r"[A-Za-z0-9\.-]+", target):
@@ -10456,6 +10486,15 @@ def switch_theme(user_input: str) -> bool:
     return True
 
 
+def start_local_server(directory, port=8000):
+    os.chdir(directory)
+    handler = http.server.SimpleHTTPRequestHandler
+    with socketserver.TCPServer(("", port), handler) as httpd:
+        print(f"[{timestamp()}] [INFO] Server started at http://localhost:{port}/")
+        httpd.serve_forever()
+
+
+
 def handle_vs_cpp_command(user_input: str) -> bool:
     """
     Verarbeitet den Befehl 'vs-cpp <datei>.cpp' oder direkt '<datei>.cpp' und kompiliert die angegebene C++-Datei
@@ -10652,7 +10691,6 @@ def ensure_admin():
             os.execvp('sudo', args)
     elif os.name == 'nt':
         try:
-            import ctypes
             if not ctypes.windll.shell32.IsUserAnAdmin():
                 print(f"[{timestamp()}] [INFO] Restarting with administrator privileges...", file=sys.stderr)
                 params = ' '.join(shlex.quote(arg) for arg in sys.argv)
@@ -11723,12 +11761,6 @@ def run_command_with_admin_c_privileges(command):
 
 # --- pp-p command---
 
-import os
-import re
-import sys
-import subprocess
-import ctypes
-
 # Kritische Befehle – nur mit Warnung
 FORBIDDEN_COMMANDS = [
     r"\brm\b",
@@ -11780,8 +11812,6 @@ def run_command_with_admin_python_privileges(command: str):
     Führt einen Shell-/PowerShell-Befehl mit Adminrechten aus,
     erlaubt auch gefährliche Befehle nach ausdrücklicher Zustimmung.
     """
-    import platform
-
     working_dir = os.getcwd()
     dangerous = is_dangerous_command(command)
 
