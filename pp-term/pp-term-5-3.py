@@ -113,6 +113,8 @@ import socketserver
 import re
 import contextlib
 from IPython import get_ipython
+import urllib.request
+import urllib.error
 
 try:
     import ujson as _json  # ultraschnelles JSON
@@ -3722,42 +3724,105 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("prjs "):
-        user_input = user_input[5:].strip()
-        filepath = os.path.abspath(user_input)
+        filepath = user_input[5:].strip()
+        filepath = os.path.abspath(filepath)
 
         if not os.path.isfile(filepath):
             print(f"[{timestamp()}] [ERROR] File '{filepath}' not found.")
             return True
 
         _, ext = os.path.splitext(filepath)
+        ext = ext.lower()
         filename = os.path.basename(filepath)
         directory = os.path.dirname(filepath)
 
         if ext == ".js":
-            # Node.js Skript ausführen
-            command = f"node \"{filepath}\""
+            # Execute Node.js script
+            command = f'node "{filepath}"'
             print(f"[{timestamp()}] [INFO] Executing JS with Node.js: {filename}")
-            process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
-                                       shell=True, text=True)
+            process = subprocess.Popen(
+                command,
+                stdin=sys.stdin,
+                stdout=sys.stdout,
+                stderr=sys.stderr,
+                shell=True,
+                text=True
+            )
             try:
                 process.wait()
             except KeyboardInterrupt:
-                print(f"[{timestamp()}] [INFO] Canceled by user.")
+                print(f"[{timestamp()}] [INFO] Execution canceled by user.")
             except subprocess.CalledProcessError as e:
                 print(f"[{timestamp()}] [ERROR] Execution failed: {e}")
-        elif ext in [".html", ".htm"]:
-            # HTML mit eingebettetem JS -> im Browser öffnen
-            port = 8000
-            url = f"http://localhost:{port}/{filename}"
+            return True
 
-            server_thread = threading.Thread(target=start_local_server, args=(directory, port), daemon=True)
+        elif ext in [".html", ".htm"]:
+            # Serve HTML+JS in browser
+            requested_port = 8000
+            port_container = {}
+            server_started_event = threading.Event()
+
+            server_thread = threading.Thread(
+                target=start_local_server,
+                args=(directory, requested_port, port_container, server_started_event),
+                daemon=True
+            )
             server_thread.start()
+
+            # Wait up to 5s for server to start
+            if not server_started_event.wait(timeout=5):
+                print(f"[{timestamp()}] [ERROR] Server did not start within 5 seconds.")
+                return True
+
+            actual_port = port_container.get('port')
+            url = f"http://localhost:{actual_port}/{filename}"
 
             print(f"[{timestamp()}] [INFO] Opening in browser: {url}")
             webbrowser.open(url)
+
+            print(f"[{timestamp()}] [INFO] Server is running on port {actual_port}. Press 'q' (or Ctrl+Q) to stop.")
+
+            # Wait for 'q' or Ctrl+Q
+            try:
+                while True:
+                    user_cmd = input().strip()
+                    if user_cmd.lower() == 'q' or user_cmd.lower() == '\x11':
+                        print(f"[{timestamp()}] [INFO] Shutting down server...")
+                        break
+                    else:
+                        print(f"[{timestamp()}] [INFO] Invalid input. Press 'q' to quit.")
+            except (KeyboardInterrupt, EOFError):
+                print(f"\n[{timestamp()}] [INFO] Input interrupted. Shutting down server...")
+
+            # Trigger a request to unblock server if it's idle
+            try:
+                urllib.request.urlopen(url, timeout=1)
+            except:
+                pass
+
+            # Wait up to 5s for thread to finish
+            server_thread.join(timeout=5)
+            if server_thread.is_alive():
+                print(f"[{timestamp()}] [WARN] Server thread did not terminate in time.")
+
+            # Verify URL is offline
+            max_retries = 5
+            delay_between_checks = 1
+            for _ in range(max_retries):
+                try:
+                    urllib.request.urlopen(url, timeout=1)
+                    print(f"[{timestamp()}] [INFO] URL still reachable, waiting {delay_between_checks}s...")
+                    time.sleep(delay_between_checks)
+                except (urllib.error.URLError, ConnectionRefusedError):
+                    print(f"[{timestamp()}] [INFO] URL is now offline.")
+                    return True
+
+            print(f"[{timestamp()}] [WARN] URL still reachable after retries. Returning True anyway.")
+            return True
+
         else:
             print(f"[{timestamp()}] [WARN] Unsupported file extension: '{ext}'")
-        return True
+            return True
 
     if user_input.startswith("pd-node "):
         user_input = user_input[8:].strip()
@@ -3909,28 +3974,56 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("prruby "):
-        user_input = user_input[7:].strip()
-        filepath = os.path.abspath(user_input)
+        filepath = os.path.abspath(user_input[7:].strip())
 
         if not os.path.isfile(filepath):
             print(f"[{timestamp()}] [ERROR] File not found: {filepath}")
             return True
 
-        if not filepath.endswith(".rb"):
+        if not filepath.lower().endswith(".rb"):
             print(f"[{timestamp()}] [WARN] Unsupported file extension for Ruby: {filepath}")
             return True
 
         print(f"[{timestamp()}] [INFO] Running Ruby script: {filepath}")
+        directory = os.path.dirname(filepath)
+        port = find_free_port()
 
+        # Start local server
+        server_thread = threading.Thread(target=start_local_server, args=(directory, port), daemon=True)
+        server_thread.start()
+
+        # Optional: Delay to allow the server to start
+        import time
+        time.sleep(1)
+
+        # Run Ruby script (it might generate output into HTML in the same dir)
         command = f"ruby \"{filepath}\""
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
-                                   shell=True, text=True)
+        process = subprocess.Popen(
+            command,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            shell=True,
+            text=True
+        )
+
         try:
             process.wait()
         except KeyboardInterrupt:
-            print(f"[{timestamp()}] [INFO] Canceled by user.")
+            print(f"[{timestamp()}] [INFO] Execution canceled by user.")
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] Ruby execution failed: {e}")
+            return True
+
+        # Try to open a file like index.html if it exists
+        index_path = os.path.join(directory, "index.html")
+        if os.path.exists(index_path):
+            url = f"http://localhost:{port}/index.html"
+            print(f"[{timestamp()}] [INFO] Opening in browser: {url}")
+            webbrowser.open(url)
+        else:
+            print(f"[{timestamp()}] [INFO] No index.html found to open in browser.")
+
         return True
 
     if user_input.startswith("pd-ruby "):
@@ -4494,31 +4587,84 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("prphp "):
-        user_input = user_input[6:].strip()
+        # Absoluter Pfad zur Datei
+        filepath = user_input[6:].strip()
+        filepath = os.path.abspath(filepath)
 
-        # Absolute Pfadangabe ermitteln
-        filepath = os.path.abspath(user_input)
         if not os.path.isfile(filepath):
             print(f"[{timestamp()}] [ERROR] File '{filepath}' does not exist.")
             return True
 
-        # Arbeitsverzeichnis für Server
         directory = os.path.dirname(filepath)
         filename = os.path.basename(filepath)
 
-        port = 8000  # Oder dynamisch wählen
-        url = f"http://localhost:{port}/{filename}"
+        # Auf Port 8000 starten, notfalls nächster freier Port
+        requested_port = 8000
+        port_container = {}
+        server_started_event = threading.Event()
 
-        # Server im Hintergrund starten
-        server_thread = threading.Thread(target=start_local_server, args=(directory, port), daemon=True)
+        # Server-Thread definieren
+        server_thread = threading.Thread(
+            target=start_local_server,
+            args=(directory, requested_port, port_container, server_started_event),
+            daemon=True
+        )
         server_thread.start()
 
-        print(f"[{timestamp()}] [INFO] Compiling '{filename}' with PHP")
-        print(f"[{timestamp()}] [INFO] Opening in browser: {url}")
+        # Maximal 5s warten, bis der Server bereit ist
+        if not server_started_event.wait(timeout=5):
+            print(f"[{timestamp()}] [ERROR] Server could not be started within 5 seconds.")
+            return True
 
-        # Öffne im Standardbrowser
+        # Tatsächlichen Port auslesen und URL bauen
+        actual_port = port_container.get('port')
+        url = f"http://localhost:{actual_port}/{filename}"
+
+        print(f"[{timestamp()}] [INFO] Opening '{filename}' in browser: {url}")
         webbrowser.open(url)
 
+        print(f"[{timestamp()}] [INFO] Server is running on port {actual_port}. Press 'q' to stop it.")
+
+        # Warteschleife: Benutzer drückt 'q' oder Ctrl+Q, um Server zu stoppen
+        try:
+            while True:
+                user_cmd = input().strip()
+                if user_cmd.lower() == 'q' or user_cmd.lower() == '\x11':
+                    print(f"[{timestamp()}] [INFO] Stopping server...")
+                    break
+                else:
+                    print(f"[{timestamp()}] [INFO] Invalid input. Press 'q' to quit.")
+        except (KeyboardInterrupt, EOFError):
+            # Strg+C oder EOF (z. B. Ctrl+D) interpretiert als Abbruch
+            print(f"\n[{timestamp()}] [INFO] Input interrupted. Stopping server...")
+
+        # Versuche, eine Verbindung herzustellen, um serve_forever() im Hintergrund zu unterbrechen
+        try:
+            urllib.request.urlopen(url, timeout=1)
+        except:
+            pass
+
+        # Warten, bis der Server-Thread endet (max. 5 Sekunden)
+        server_thread.join(timeout=5)
+        if server_thread.is_alive():
+            print(f"[{timestamp()}] [WARN] Server thread did not terminate in time.")
+
+        # Prüfen, ob die URL wirklich offline ist
+        max_retries = 5
+        delay_between_checks = 1  # Sekunde
+        for attempt in range(max_retries):
+            try:
+                urllib.request.urlopen(url, timeout=1)
+                # Server noch erreichbar
+                print(f"[{timestamp()}] [INFO] URL still reachable, waiting {delay_between_checks}s...")
+                time.sleep(delay_between_checks)
+            except (urllib.error.URLError, ConnectionRefusedError):
+                # Server offline → URL nicht erreichbar
+                print(f"[{timestamp()}] [INFO] URL is now offline.")
+                return True
+
+        # Falls wir nach allen Versuchen immer noch Zugriff haben
+        print(f"[{timestamp()}] [WARN] URL still reachable, returning True anyway.")
         return True
 
     if user_input.startswith("pd-php "):
@@ -4789,32 +4935,46 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("prts "):
-        user_input = user_input[5:].strip()
-        filepath = os.path.abspath(user_input)
+        ts_path = user_input[5:].strip()
+        ts_path = os.path.abspath(ts_path)
 
-        if not os.path.isfile(filepath):
-            print(f"[{timestamp()}] [ERROR] File not found: {filepath}")
+        if not os.path.isfile(ts_path):
+            print(f"[{timestamp()}] [ERROR] File not found: {ts_path}")
             return True
 
-        ts_file = filepath
-        js_file = ts_file.replace(".ts", ".js")
+        base, ext = os.path.splitext(ts_path)
+        if ext.lower() != ".ts":
+            print(f"[{timestamp()}] [ERROR] Unsupported extension '{ext}'. Expected a .ts file.")
+            return True
 
-        print(f"[{timestamp()}] [INFO] Compiling TypeScript file: {ts_file}")
-        compile_command = f"tsc \"{ts_file}\""
+        js_path = base + ".js"
+
+        print(f"[{timestamp()}] [INFO] Compiling TypeScript file: {ts_path}")
+        compile_command = f"tsc \"{ts_path}\""
         compile_proc = subprocess.run(compile_command, shell=True)
 
         if compile_proc.returncode != 0:
             print(f"[{timestamp()}] [ERROR] Compilation failed.")
             return True
 
-        print(f"[{timestamp()}] [INFO] Running compiled JS: {js_file}")
-        run_command_ts = f"node \"{js_file}\""
-        process = subprocess.Popen(run_command_ts, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
-                                   shell=True, text=True)
+        if not os.path.isfile(js_path):
+            print(f"[{timestamp()}] [ERROR] Compiled JS file not found: {js_path}")
+            return True
+
+        print(f"[{timestamp()}] [INFO] Running compiled JS: {js_path}")
+        run_command = f"node \"{js_path}\""
+        process = subprocess.Popen(
+            run_command,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            shell=True,
+            text=True
+        )
         try:
             process.wait()
         except KeyboardInterrupt:
-            print(f"[{timestamp()}] [INFO] Canceled by user.")
+            print(f"[{timestamp()}] [INFO] Execution canceled by user.")
         return True
 
     if user_input.startswith("pc-typescript "):
@@ -11575,32 +11735,62 @@ def switch_theme(user_input: str) -> bool:
     return True
 
 
-def find_free_port(start=8000, end=9000):
+def find_free_port(start: int = 8000, end: int = 9000) -> int:
+    """
+    Durchläuft Ports von `start` bis `end` und gibt den ersten freien Port zurück.
+    Wir öffnen temporär einen Socket, um zu prüfen, ob der Port belegt ist.
+    """
     for port in range(start, end):
         with contextlib.closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as sock:
             if sock.connect_ex(("localhost", port)) != 0:
                 return port
-    raise RuntimeError("Kein freier Port zwischen 8000 und 9000 gefunden.")
+    raise RuntimeError(f"No free port found between {start} and {end}.")
 
 
-def start_local_server(directory, port=8000):
-    handler = http.server.SimpleHTTPRequestHandler
+def start_local_server(directory: str,
+                       requested_port: int,
+                       port_container: dict,
+                       started_event: threading.Event) -> None:
+    """
+    Startet einen HTTP-Server im angegebenen `directory`:
+      1. Versucht zuerst `requested_port`.
+      2. Ist dieser belegt, wird mit `find_free_port()` ein neuer freier Port gesucht.
+      3. Legt den tatsächlich verwendeten Port in `port_container['port']` ab.
+      4. Signalisiert über `started_event`, sobald der Server bereit ist.
+      5. Führt dann `serve_forever()` aus (blockierend).
 
-    # Versuche gewählten Port, bei Fehler nimm freien
+    Args:
+        directory (str): Verzeichnis, in dem der Server dienen soll.
+        requested_port (int): Gewünschter Startport (z.B. 8000).
+        port_container (dict): Dient dazu, den gewählten Port zurückzumelden.
+        started_event (threading.Event): Wird gesetzt, sobald der Server läuft.
+    """
+    # Verzeichnis wechseln
     try:
         os.chdir(directory)
-        with socketserver.TCPServer(("", port), handler) as httpd:
-            print(f"[{timestamp()}] [INFO] Server started at http://localhost:{port}/")
-            httpd.serve_forever()
-    except OSError as e:
-        if e.errno == 10048:  # Port belegt
-            print(f"[{timestamp()}] [WARN] Port {port} belegt. Suche freien Port...")
-            free_port = find_free_port()
-            with socketserver.TCPServer(("", free_port), handler) as httpd:
-                print(f"[{timestamp()}] [INFO] Server started at http://localhost:{free_port}/")
-                httpd.serve_forever()
-        else:
-            raise
+        chosen_port = requested_port
+
+        # Test, ob der gewünschte Port schon belegt ist
+        with contextlib.closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as test_sock:
+            if test_sock.connect_ex(("localhost", chosen_port)) == 0:
+                # Port belegt → Fehler provozieren, damit wir in den Except-Zweig springen
+                raise OSError(f"Port {chosen_port} belegt.")
+    except OSError:
+        print(f"[{timestamp()}] [WARN] Port {requested_port} is busy. Searching for a free port...")
+        chosen_port = find_free_port()
+
+    handler = http.server.SimpleHTTPRequestHandler
+
+    # ThreadingTCPServer erlaubt parallele Anfragen
+    with socketserver.ThreadingTCPServer(("localhost", chosen_port), handler) as httpd:
+        httpd.allow_reuse_address = True
+        # Finalen Port weitergeben und Event setzen
+        port_container['port'] = chosen_port
+        started_event.set()
+        print(f"[{timestamp()}] [INFO] Server started: http://localhost:{chosen_port}/")
+        httpd.serve_forever()
+        # Sobald shutdown() gerufen wurde, endet serve_forever() und wir kommen hierher.
+    # Ende: Kontext-Manager schließt den Server automatisch
 
 
 def handle_vs_cpp_command(user_input: str) -> bool:
