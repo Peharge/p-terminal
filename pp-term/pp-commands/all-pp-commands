@@ -8,6 +8,7 @@ commands = {
         "install mavis-4.3": "mavis-install\\install-info-mavis-4.py",  # new
         "install mavis-4-3": "mavis-install\\install-info-mavis-4.py",  # new
         "mavis env update": "mavis-install\\install-info-mavis-4.py",
+        "update pp-term env": "mavis-install\\update-pp-term-venv.py",  # new
         "update mavis env": "mavis-install\\install-info-mavis-4.py",
         "mavis update": "mavis-update\\update-mavis-repository-windows.py",
         "update mavis": "mavis-update\\update-mavis-repository-windows.py",
