@@ -8126,7 +8126,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing pcf command: {e}")
         return True
 
-    if user_input.startswith("pff4-text "):
+    if user_input.startswith("pff-text "):
         user_input = user_input[9:].strip()
         current_dir = Path.cwd().resolve()
 
