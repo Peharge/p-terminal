@@ -572,7 +572,7 @@ def handle_special_commands(user_input):
         "neofetch-4": "pp-commands\\neofetch-4.py",  # new
         "jupyter": "mavis-run-jup\\run-jup.py",
         "run jupyter": "mavis-run-jup\\run-jup.py",
-        "run ju": "mavis-run-jup\\run-jup.py",  # new
+        "run jup": "mavis-run-jup\\run-jup.py",  # new
         "run mavis-4": "pp-commands\\run-mavis-4.py",  # new
         "run mavis-4-3": "pp-commands\\run-mavis-4-3.py",  # new
         "run mavis-4-fast": "mavis-4-main.py",  # new
@@ -7045,6 +7045,132 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] executing pcf command: {e}")
+        return True
+
+    if user_input.startswith("jup "):
+        file_input = user_input[4:].strip()
+
+        # Wenn Eingabe auf .jup endet, ändere sie zu .ipynb
+        if file_input.endswith(".jup"):
+            file_input = file_input[:-4] + ".ipynb"
+
+        # Absoluten Pfad erzeugen
+        file_path = os.path.abspath(file_input)
+
+        # Verzeichnis erstellen, falls es nicht existiert
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+
+        # Wenn Datei nicht existiert, leeres Notebook schreiben
+        if not os.path.exists(file_path):
+            with open(file_path, "w", encoding="utf-8") as f:
+                f.write("""{
+         "cells": [],
+         "metadata": {},
+         "nbformat": 4,
+         "nbformat_minor": 2
+        }""")
+
+        # Pfad zum Python-Interpreter im virtuellen Environment
+        username = os.getlogin()
+        python_path = f"C:\\Users\\{username}\\p-terminal\\pp-term\\.env\\Scripts\\python.exe"
+
+        try:
+            # Starte Jupyter Notebook
+            subprocess.Popen([python_path, "-m", "notebook", file_path])
+
+            # Öffne die Datei im Standardbrowser (nach kurzem Delay)
+            import time
+            time.sleep(2)  # kurze Wartezeit, damit Jupyter starten kann
+            webbrowser.open_new(f"http://localhost:8888/notebooks/{os.path.relpath(file_path).replace(os.sep, '/')}")
+        except FileNotFoundError:
+            print(f"Error: Python interpreter not found at {python_path}")
+        except subprocess.SubprocessError:
+            print("Error: Failed to start Jupyter Notebook.")
+
+        return True
+
+    if user_input.startswith("jupyter "):
+        file_input = user_input[8:].strip()
+
+        # Wenn Eingabe auf .jup endet, ändere sie zu .ipynb
+        if file_input.endswith(".jup"):
+            file_input = file_input[:-4] + ".ipynb"
+
+        # Absoluten Pfad erzeugen
+        file_path = os.path.abspath(file_input)
+
+        # Verzeichnis erstellen, falls es nicht existiert
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+
+        # Wenn Datei nicht existiert, leeres Notebook schreiben
+        if not os.path.exists(file_path):
+            with open(file_path, "w", encoding="utf-8") as f:
+                f.write("""{
+         "cells": [],
+         "metadata": {},
+         "nbformat": 4,
+         "nbformat_minor": 2
+        }""")
+
+        # Pfad zum Python-Interpreter im virtuellen Environment
+        username = os.getlogin()
+        python_path = f"C:\\Users\\{username}\\p-terminal\\pp-term\\.env\\Scripts\\python.exe"
+
+        try:
+            # Starte Jupyter Notebook
+            subprocess.Popen([python_path, "-m", "notebook", file_path])
+
+            # Öffne die Datei im Standardbrowser (nach kurzem Delay)
+            import time
+            time.sleep(2)  # kurze Wartezeit, damit Jupyter starten kann
+            webbrowser.open_new(f"http://localhost:8888/notebooks/{os.path.relpath(file_path).replace(os.sep, '/')}")
+        except FileNotFoundError:
+            print(f"Error: Python interpreter not found at {python_path}")
+        except subprocess.SubprocessError:
+            print("Error: Failed to start Jupyter Notebook.")
+
+        return True
+
+    if user_input.startswith("jupyter notebook "):
+        file_input = user_input[17:].strip()
+
+        # Wenn Eingabe auf .jup endet, ändere sie zu .ipynb
+        if file_input.endswith(".jup"):
+            file_input = file_input[:-4] + ".ipynb"
+
+        # Absoluten Pfad erzeugen
+        file_path = os.path.abspath(file_input)
+
+        # Verzeichnis erstellen, falls es nicht existiert
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+
+        # Wenn Datei nicht existiert, leeres Notebook schreiben
+        if not os.path.exists(file_path):
+            with open(file_path, "w", encoding="utf-8") as f:
+                f.write("""{
+         "cells": [],
+         "metadata": {},
+         "nbformat": 4,
+         "nbformat_minor": 2
+        }""")
+
+        # Pfad zum Python-Interpreter im virtuellen Environment
+        username = os.getlogin()
+        python_path = f"C:\\Users\\{username}\\p-terminal\\pp-term\\.env\\Scripts\\python.exe"
+
+        try:
+            # Starte Jupyter Notebook
+            subprocess.Popen([python_path, "-m", "notebook", file_path])
+
+            # Öffne die Datei im Standardbrowser (nach kurzem Delay)
+            import time
+            time.sleep(2)  # kurze Wartezeit, damit Jupyter starten kann
+            webbrowser.open_new(f"http://localhost:8888/notebooks/{os.path.relpath(file_path).replace(os.sep, '/')}")
+        except FileNotFoundError:
+            print(f"Error: Python interpreter not found at {python_path}")
+        except subprocess.SubprocessError:
+            print("Error: Failed to start Jupyter Notebook.")
+
         return True
 
     if user_input.startswith("pff "):

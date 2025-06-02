@@ -27,7 +27,7 @@ commands = {
         "neofetch-4": "pp-commands\\neofetch-4.py",  # new
         "jupyter": "mavis-run-jup\\run-jup.py",
         "run jupyter": "mavis-run-jup\\run-jup.py",
-        "run ju": "mavis-run-jup\\run-jup.py",  # new
+        "run jup": "mavis-run-jup\\run-jup.py",  # new
         "run mavis-4": "pp-commands\\run-mavis-4.py",  # new
         "run mavis-4-3": "pp-commands\\run-mavis-4-3.py",  # new
         "run mavis-4-fast": "mavis-4-main.py",  # new
