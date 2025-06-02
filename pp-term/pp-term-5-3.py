@@ -7048,125 +7048,479 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("jup "):
+        if user_input.lower() == "jup q":
+            print("Terminated by 'q'")
+            return True
+        if user_input == "jup \x11":  # Ctrl + Q
+            print("Terminated by Ctrl + Q")
+            return True
+
         file_input = user_input[4:].strip()
 
-        # Wenn Eingabe auf .jup endet, ändere sie zu .ipynb
         if file_input.endswith(".jup"):
             file_input = file_input[:-4] + ".ipynb"
 
-        # Absoluten Pfad erzeugen
-        file_path = os.path.abspath(file_input)
+        try:
+            file_path = Path(file_input).resolve()
+            file_path.parent.mkdir(parents=True, exist_ok=True)
 
-        # Verzeichnis erstellen, falls es nicht existiert
-        os.makedirs(os.path.dirname(file_path), exist_ok=True)
-
-        # Wenn Datei nicht existiert, leeres Notebook schreiben
-        if not os.path.exists(file_path):
-            with open(file_path, "w", encoding="utf-8") as f:
-                f.write("""{
+            # Create empty notebook if it doesn't exist
+            if not file_path.exists():
+                with open(file_path, "w", encoding="utf-8") as f:
+                    f.write("""{
          "cells": [],
          "metadata": {},
          "nbformat": 4,
          "nbformat_minor": 2
         }""")
 
-        # Pfad zum Python-Interpreter im virtuellen Environment
-        username = os.getlogin()
-        python_path = f"C:\\Users\\{username}\\p-terminal\\pp-term\\.env\\Scripts\\python.exe"
+            # Load active venv path from JSON
+            json_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/current_env.json")
+            with open(json_path, 'r') as file:
+                data = json.load(file)
+                active_env_path = data.get("active_env")
 
-        try:
-            # Starte Jupyter Notebook
-            subprocess.Popen([python_path, "-m", "notebook", file_path])
+            if not active_env_path:
+                print("Error: No active environment found.")
+                return True
 
-            # Öffne die Datei im Standardbrowser (nach kurzem Delay)
-            time.sleep(2)  # kurze Wartezeit, damit Jupyter starten kann
-            webbrowser.open_new(f"http://localhost:8888/notebooks/{os.path.relpath(file_path).replace(os.sep, '/')}")
-        except FileNotFoundError:
-            print(f"Error: Python interpreter not found at {python_path}")
-        except subprocess.SubprocessError:
-            print("Error: Failed to start Jupyter Notebook.")
+            active_env = Path(active_env_path)
+            python_exe = active_env / "Scripts" / "python.exe"
+
+            # Fixed python interpreter to start Jupyter Notebook
+            fixed_python = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/.env/Scripts/python.exe")
+            if not fixed_python.exists():
+                print(f"Error: Fixed Python interpreter for Jupyter not found: {fixed_python}")
+                return True
+
+            # Step 0: Ensure ipykernel is installed in the active venv
+            print("Checking ipykernel in the active environment...")
+            result = subprocess.run([str(python_exe), "-m", "pip", "show", "ipykernel"], capture_output=True, text=True)
+            if result.returncode != 0:
+                print("ipykernel not found. Installing ipykernel...")
+                subprocess.run([str(python_exe), "-m", "pip", "install", "ipykernel"], check=True)
+                print("ipykernel installed.")
+
+            # Step 1: Register the kernel pointing to the active venv python
+            kernel_name = f"venv_{active_env.name}_kernel"
+            # Remove old kernel with same name to avoid conflicts (optional)
+            subprocess.run([
+                str(python_exe), "-m", "ipykernel", "install",
+                "--user",
+                "--name", kernel_name,
+                "--display-name", f"Python (venv: {active_env.name})"
+            ], check=True)
+
+            # Step 2: Start Jupyter Notebook with the fixed interpreter (which runs Jupyter)
+            proc = subprocess.Popen([str(fixed_python), "-m", "notebook", str(file_path)])
+
+            # Step 3: Wait a bit for Jupyter to start
+            time.sleep(3)
+
+            # Step 4: Open notebook in default browser
+            url_path = file_path.relative_to(Path.cwd()).as_posix()
+            webbrowser.open_new(f"http://localhost:8888/notebooks/{url_path}")
+
+            print(
+                f"Started Jupyter Notebook with kernel '{kernel_name}'. Please select this kernel inside the notebook under 'Kernel' > 'Change kernel'.")
+
+        except Exception as e:
+            print(f"An error occurred: {e}")
 
         return True
 
     if user_input.startswith("jupyter "):
+        if user_input.lower() == "jupyter q":
+            print("Terminated by 'q'")
+            return True
+        if user_input == "jupyter \x11":  # Ctrl + Q
+            print("Terminated by Ctrl + Q")
+            return True
+
         file_input = user_input[8:].strip()
 
-        # Wenn Eingabe auf .jup endet, ändere sie zu .ipynb
         if file_input.endswith(".jup"):
             file_input = file_input[:-4] + ".ipynb"
 
-        # Absoluten Pfad erzeugen
-        file_path = os.path.abspath(file_input)
+        try:
+            file_path = Path(file_input).resolve()
+            file_path.parent.mkdir(parents=True, exist_ok=True)
 
-        # Verzeichnis erstellen, falls es nicht existiert
-        os.makedirs(os.path.dirname(file_path), exist_ok=True)
-
-        # Wenn Datei nicht existiert, leeres Notebook schreiben
-        if not os.path.exists(file_path):
-            with open(file_path, "w", encoding="utf-8") as f:
-                f.write("""{
+            # Create empty notebook if it doesn't exist
+            if not file_path.exists():
+                with open(file_path, "w", encoding="utf-8") as f:
+                    f.write("""{
          "cells": [],
          "metadata": {},
          "nbformat": 4,
          "nbformat_minor": 2
         }""")
 
-        # Pfad zum Python-Interpreter im virtuellen Environment
-        username = os.getlogin()
-        python_path = f"C:\\Users\\{username}\\p-terminal\\pp-term\\.env\\Scripts\\python.exe"
+            # Load active venv path from JSON
+            json_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/current_env.json")
+            with open(json_path, 'r') as file:
+                data = json.load(file)
+                active_env_path = data.get("active_env")
 
-        try:
-            # Starte Jupyter Notebook
-            subprocess.Popen([python_path, "-m", "notebook", file_path])
+            if not active_env_path:
+                print("Error: No active environment found.")
+                return True
 
-            # Öffne die Datei im Standardbrowser (nach kurzem Delay)
-            time.sleep(2)  # kurze Wartezeit, damit Jupyter starten kann
-            webbrowser.open_new(f"http://localhost:8888/notebooks/{os.path.relpath(file_path).replace(os.sep, '/')}")
-        except FileNotFoundError:
-            print(f"Error: Python interpreter not found at {python_path}")
-        except subprocess.SubprocessError:
-            print("Error: Failed to start Jupyter Notebook.")
+            active_env = Path(active_env_path)
+            python_exe = active_env / "Scripts" / "python.exe"
+
+            # Fixed python interpreter to start Jupyter Notebook
+            fixed_python = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/.env/Scripts/python.exe")
+            if not fixed_python.exists():
+                print(f"Error: Fixed Python interpreter for Jupyter not found: {fixed_python}")
+                return True
+
+            # Step 0: Ensure ipykernel is installed in the active venv
+            print("Checking ipykernel in the active environment...")
+            result = subprocess.run([str(python_exe), "-m", "pip", "show", "ipykernel"], capture_output=True, text=True)
+            if result.returncode != 0:
+                print("ipykernel not found. Installing ipykernel...")
+                subprocess.run([str(python_exe), "-m", "pip", "install", "ipykernel"], check=True)
+                print("ipykernel installed.")
+
+            # Step 1: Register the kernel pointing to the active venv python
+            kernel_name = f"venv_{active_env.name}_kernel"
+            # Remove old kernel with same name to avoid conflicts (optional)
+            subprocess.run([
+                str(python_exe), "-m", "ipykernel", "install",
+                "--user",
+                "--name", kernel_name,
+                "--display-name", f"Python (venv: {active_env.name})"
+            ], check=True)
+
+            # Step 2: Start Jupyter Notebook with the fixed interpreter (which runs Jupyter)
+            proc = subprocess.Popen([str(fixed_python), "-m", "notebook", str(file_path)])
+
+            # Step 3: Wait a bit for Jupyter to start
+            time.sleep(3)
+
+            # Step 4: Open notebook in default browser
+            url_path = file_path.relative_to(Path.cwd()).as_posix()
+            webbrowser.open_new(f"http://localhost:8888/notebooks/{url_path}")
+
+            print(
+                f"Started Jupyter Notebook with kernel '{kernel_name}'. Please select this kernel inside the notebook under 'Kernel' > 'Change kernel'.")
+
+        except Exception as e:
+            print(f"An error occurred: {e}")
 
         return True
 
     if user_input.startswith("jupyter notebook "):
+        if user_input.lower() == "jupyter notebook q":
+            print("Terminated by 'q'")
+            return True
+        if user_input == "jupyter notebook \x11":  # Ctrl + Q
+            print("Terminated by Ctrl + Q")
+            return True
+
         file_input = user_input[17:].strip()
 
-        # Wenn Eingabe auf .jup endet, ändere sie zu .ipynb
         if file_input.endswith(".jup"):
             file_input = file_input[:-4] + ".ipynb"
 
-        # Absoluten Pfad erzeugen
-        file_path = os.path.abspath(file_input)
+        try:
+            file_path = Path(file_input).resolve()
+            file_path.parent.mkdir(parents=True, exist_ok=True)
 
-        # Verzeichnis erstellen, falls es nicht existiert
-        os.makedirs(os.path.dirname(file_path), exist_ok=True)
-
-        # Wenn Datei nicht existiert, leeres Notebook schreiben
-        if not os.path.exists(file_path):
-            with open(file_path, "w", encoding="utf-8") as f:
-                f.write("""{
+            # Create empty notebook if it doesn't exist
+            if not file_path.exists():
+                with open(file_path, "w", encoding="utf-8") as f:
+                    f.write("""{
          "cells": [],
          "metadata": {},
          "nbformat": 4,
          "nbformat_minor": 2
         }""")
 
-        # Pfad zum Python-Interpreter im virtuellen Environment
-        username = os.getlogin()
-        python_path = f"C:\\Users\\{username}\\p-terminal\\pp-term\\.env\\Scripts\\python.exe"
+            # Load active venv path from JSON
+            json_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/current_env.json")
+            with open(json_path, 'r') as file:
+                data = json.load(file)
+                active_env_path = data.get("active_env")
+
+            if not active_env_path:
+                print("Error: No active environment found.")
+                return True
+
+            active_env = Path(active_env_path)
+            python_exe = active_env / "Scripts" / "python.exe"
+
+            # Fixed python interpreter to start Jupyter Notebook
+            fixed_python = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/.env/Scripts/python.exe")
+            if not fixed_python.exists():
+                print(f"Error: Fixed Python interpreter for Jupyter not found: {fixed_python}")
+                return True
+
+            # Step 0: Ensure ipykernel is installed in the active venv
+            print("Checking ipykernel in the active environment...")
+            result = subprocess.run([str(python_exe), "-m", "pip", "show", "ipykernel"], capture_output=True, text=True)
+            if result.returncode != 0:
+                print("ipykernel not found. Installing ipykernel...")
+                subprocess.run([str(python_exe), "-m", "pip", "install", "ipykernel"], check=True)
+                print("ipykernel installed.")
+
+            # Step 1: Register the kernel pointing to the active venv python
+            kernel_name = f"venv_{active_env.name}_kernel"
+            # Remove old kernel with same name to avoid conflicts (optional)
+            subprocess.run([
+                str(python_exe), "-m", "ipykernel", "install",
+                "--user",
+                "--name", kernel_name,
+                "--display-name", f"Python (venv: {active_env.name})"
+            ], check=True)
+
+            # Step 2: Start Jupyter Notebook with the fixed interpreter (which runs Jupyter)
+            proc = subprocess.Popen([str(fixed_python), "-m", "notebook", str(file_path)])
+
+            # Step 3: Wait a bit for Jupyter to start
+            time.sleep(3)
+
+            # Step 4: Open notebook in default browser
+            url_path = file_path.relative_to(Path.cwd()).as_posix()
+            webbrowser.open_new(f"http://localhost:8888/notebooks/{url_path}")
+
+            print(
+                f"Started Jupyter Notebook with kernel '{kernel_name}'. Please select this kernel inside the notebook under 'Kernel' > 'Change kernel'.")
+
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
+        return True
+
+    if user_input.startswith("jup-p "):
+        if user_input.lower() == "jup-p q":
+            print("Terminated by 'q'")
+            return True
+        if user_input == "jup-p \x11":  # Ctrl + Q
+            print("Terminated by Ctrl + Q")
+            return True
+
+        file_input = user_input[6:].strip()
+
+        if file_input.endswith(".jup"):
+            file_input = file_input[:-4] + ".ipynb"
 
         try:
-            # Starte Jupyter Notebook
-            subprocess.Popen([python_path, "-m", "notebook", file_path])
+            file_path = Path(file_input).resolve()
+            file_path.parent.mkdir(parents=True, exist_ok=True)
 
-            # Öffne die Datei im Standardbrowser (nach kurzem Delay)
-            time.sleep(2)  # kurze Wartezeit, damit Jupyter starten kann
-            webbrowser.open_new(f"http://localhost:8888/notebooks/{os.path.relpath(file_path).replace(os.sep, '/')}")
-        except FileNotFoundError:
-            print(f"Error: Python interpreter not found at {python_path}")
-        except subprocess.SubprocessError:
-            print("Error: Failed to start Jupyter Notebook.")
+            # Create empty notebook if it doesn't exist
+            if not file_path.exists():
+                with open(file_path, "w", encoding="utf-8") as f:
+                    f.write("""{
+         "cells": [],
+         "metadata": {},
+         "nbformat": 4,
+         "nbformat_minor": 2
+        }""")
+
+            # Load active venv path from JSON
+            json_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/current_env.json")
+            with open(json_path, 'r') as file:
+                data = json.load(file)
+                active_env_path = data.get("active_env")
+
+            if not active_env_path:
+                print("Error: No active environment found.")
+                return True
+
+            active_env = Path(active_env_path)
+            python_exe = active_env / "Scripts" / "python.exe"
+
+            # Fixed python interpreter to start Jupyter Notebook
+            fixed_python = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/.env/Scripts/python.exe")
+            if not fixed_python.exists():
+                print(f"Error: Fixed Python interpreter for Jupyter not found: {fixed_python}")
+                return True
+
+            # Step 0: Ensure ipykernel is installed in the active venv
+            print("Checking ipykernel in the active environment...")
+            result = subprocess.run([str(python_exe), "-m", "pip", "show", "ipykernel"], capture_output=True, text=True)
+            if result.returncode != 0:
+                print("ipykernel not found. Installing ipykernel...")
+                subprocess.run([str(python_exe), "-m", "pip", "install", "ipykernel"], check=True)
+                print("ipykernel installed.")
+
+            # Step 1: Register the kernel pointing to the active venv python
+            kernel_name = f"venv_{active_env.name}_kernel"
+            # Remove old kernel with same name to avoid conflicts (optional)
+            subprocess.run([
+                str(python_exe), "-m", "ipykernel", "install",
+                "--user",
+                "--name", kernel_name,
+                "--display-name", f"Python (venv: {active_env.name})"
+            ], check=True)
+
+            # Step 2: Start Jupyter Notebook with the fixed interpreter (which runs Jupyter)
+            proc = subprocess.Popen([str(fixed_python), "-m", "notebook", str(file_path)])
+
+            # Step 3: Wait a bit for Jupyter to start
+            time.sleep(3)
+
+            # Step 4: Open notebook in default browser
+            url_path = file_path.relative_to(Path.cwd()).as_posix()
+            webbrowser.open_new(f"http://localhost:8888/notebooks/{url_path}")
+
+            print(
+                f"Started Jupyter Notebook with kernel '{kernel_name}'. Please select this kernel inside the notebook under 'Kernel' > 'Change kernel'.")
+
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
+        return True
+
+    if user_input.startswith("jup-j "):
+        if user_input.lower() == "jup-j q":
+            print("Terminated by 'q'")
+            return True
+        if user_input == "jup-j \x11":  # Ctrl + Q
+            print("Terminated by Ctrl + Q")
+            return True
+
+        file_input = user_input[6:].strip()
+
+        if file_input.endswith(".jup"):
+            file_input = file_input[:-4] + ".ipynb"
+
+        try:
+            file_path = Path(file_input).resolve()
+            file_path.parent.mkdir(parents=True, exist_ok=True)
+
+            # Create empty notebook if it doesn't exist
+            if not file_path.exists():
+                with open(file_path, "w", encoding="utf-8") as f:
+                    f.write("""{
+         "cells": [],
+         "metadata": {},
+         "nbformat": 4,
+         "nbformat_minor": 2
+        }""")
+
+            # Statt JSON -> Pfad zu Rscript im aktuellen Verzeichnis suchen
+            current_dir = Path.cwd().resolve()
+
+            # Rscript Pfad prüfen (Windows vs. Unix)
+            rscript_exe = current_dir / "Rscript.exe"
+            if not rscript_exe.exists():
+                rscript_exe = current_dir / "Rscript"  # Unix Variante
+
+            if not rscript_exe.exists():
+                print(f"Error: Rscript executable not found in current directory: {current_dir}")
+                return True
+
+            print(f"Found Rscript at: {rscript_exe}")
+
+            # Optional: Rscript Version prüfen
+            result = subprocess.run([str(rscript_exe), "--version"], capture_output=True, text=True)
+            print(f"Rscript version info:\n{result.stdout or result.stderr}")
+
+            # Beispiel: Starte Jupyter Notebook mit festem Python Interpreter (wie vorher) oder alternative
+
+            # Feste Python-Interpreter wie bisher (angepasst)
+            user_name_3 = os.getlogin() if hasattr(os, 'getlogin') else os.environ.get("USERNAME") or "UnknownUser"
+            fixed_python = Path(f"C:/Users/{user_name_3}/p-terminal/pp-term/.env/Scripts/python.exe")
+            if not fixed_python.exists():
+                print(f"Error: Fixed Python interpreter for Jupyter not found: {fixed_python}")
+                return True
+
+            # Start Jupyter Notebook mit fixed Python Interpreter
+            proc = subprocess.Popen([str(fixed_python), "-m", "notebook", str(file_path)])
+
+            time.sleep(3)
+
+            url_path = file_path.relative_to(Path.cwd()).as_posix()
+            webbrowser.open_new(f"http://localhost:8888/notebooks/{url_path}")
+
+            print(f"Started Jupyter Notebook. Please select the appropriate kernel inside the notebook.")
+
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
+        return True
+
+    if user_input.startswith("jup-r "):
+        if user_input.lower() == "jup-r q":
+            print("Terminated by 'q'")
+            return True
+        if user_input == "jup-r \x11":  # Ctrl + Q
+            print("Terminated by Ctrl + Q")
+            return True
+
+        file_input = user_input[6:].strip()
+
+        if file_input.endswith(".jup"):
+            file_input = file_input[:-4] + ".ipynb"
+
+        try:
+            file_path = Path(file_input).resolve()
+            file_path.parent.mkdir(parents=True, exist_ok=True)
+
+            # Create empty notebook if it doesn't exist
+            if not file_path.exists():
+                with open(file_path, "w", encoding="utf-8") as f:
+                    f.write("""{
+         "cells": [],
+         "metadata": {},
+         "nbformat": 4,
+         "nbformat_minor": 2
+        }""")
+
+            current_dir = Path.cwd().resolve()
+
+            # Suche Rscript
+            rscript_exe = current_dir / "Rscript.exe"
+            if not rscript_exe.exists():
+                rscript_exe = current_dir / "Rscript"  # Unix Variante
+
+            # Suche Julia
+            julia_exe = current_dir / "julia.exe"
+            if not julia_exe.exists():
+                julia_exe = current_dir / "julia"  # Unix Variante
+
+            # Entscheide, was gefunden wurde
+            runner = None
+            runner_name = None
+
+            if rscript_exe.exists():
+                runner = rscript_exe
+                runner_name = "Rscript"
+            elif julia_exe.exists():
+                runner = julia_exe
+                runner_name = "Julia"
+            else:
+                print(f"Error: Weder Rscript noch Julia executable im aktuellen Verzeichnis gefunden ({current_dir})")
+                return True
+
+            print(f"Gefundenes Executable: {runner_name} unter {runner}")
+
+            # Optional: Version ausgeben
+            try:
+                version_result = subprocess.run([str(runner), "--version"], capture_output=True, text=True)
+                print(f"{runner_name} version info:\n{version_result.stdout or version_result.stderr}")
+            except Exception as e:
+                print(f"Konnte Version von {runner_name} nicht bestimmen: {e}")
+
+            fixed_python = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/.env/Scripts/python.exe")
+            if not fixed_python.exists():
+                print(f"Error: Fixed Python interpreter for Jupyter not found: {fixed_python}")
+                return True
+
+            # Starte Jupyter Notebook
+            proc = subprocess.Popen([str(fixed_python), "-m", "notebook", str(file_path)])
+            time.sleep(3)
+            url_path = file_path.relative_to(Path.cwd()).as_posix()
+            webbrowser.open_new(f"http://localhost:8888/notebooks/{url_path}")
+
+            print(f"Started Jupyter Notebook. Please select the appropriate kernel inside the notebook.")
+
+        except Exception as e:
+            print(f"An error occurred: {e}")
 
         return True
 
