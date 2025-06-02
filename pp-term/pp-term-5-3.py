@@ -7376,148 +7376,315 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("jup-j "):
-        if user_input.lower() == "jup-j q":
+        # Abbruchkürzel: 'jup-j q' oder Ctrl+Q (ASCII 0x11)
+        if user_input.lower().strip() == "jup-j q":
             print("Terminated by 'q'")
             return True
-        if user_input == "jup-j \x11":  # Ctrl + Q
-            print("Terminated by Ctrl + Q")
+        if user_input.strip() == "jup-j \x11":
+            print("Terminated by Ctrl+Q")
             return True
 
+        # Extrahiere Dateinamen/Path hinter "jup-j "
         file_input = user_input[6:].strip()
 
-        if file_input.endswith(".jup"):
+        # Wenn Dateiendung .jup, ersetze sie durch .ipynb
+        if file_input.lower().endswith(".jup"):
             file_input = file_input[:-4] + ".ipynb"
+
+        # Wenn keine Endung angegeben ist, hänge .ipynb an
+        if not Path(file_input).suffix:
+            file_input = file_input + ".ipynb"
 
         try:
             file_path = Path(file_input).resolve()
+            # Erstelle übergeordnete Ordner, falls nötig
             file_path.parent.mkdir(parents=True, exist_ok=True)
 
-            # Create empty notebook if it doesn't exist
+            # Falls Notebook noch nicht existiert: leeres Template mit Julia-Kernel-Metadaten anlegen
             if not file_path.exists():
                 with open(file_path, "w", encoding="utf-8") as f:
                     f.write("""{
-         "cells": [],
-         "metadata": {},
-         "nbformat": 4,
-         "nbformat_minor": 2
+          "cells": [],
+          "metadata": {
+            "kernelspec": {
+              "display_name": "Julia",
+              "language": "julia",
+              "name": "julia-1.9"
+            },
+            "language_info": {
+              "file_extension": ".jl",
+              "mimetype": "application/julia",
+              "name": "julia",
+              "version": "1.9"
+            }
+          },
+          "nbformat": 4,
+          "nbformat_minor": 2
         }""")
+                    # Hinweis: kernelspec.name sollte der tatsächlichen Julia-Version entsprechen,
+                    # z. B. "julia-1.9" oder was IJulia registriert.
 
-            # Statt JSON -> Pfad zu Rscript im aktuellen Verzeichnis suchen
+            # 1) Julia finden
+            #    Zuerst im PATH suchen, sonst im aktuellen Verzeichnis
+            julia_path = shutil.which("julia")
+            if julia_path is None:
+                # Falls nicht in PATH, im aktuellen Verzeichnis suchen
+                cand_win = Path.cwd() / "julia.exe"
+                cand_unix = Path.cwd() / "julia"
+                if cand_win.exists():
+                    julia_path = str(cand_win)
+                elif cand_unix.exists():
+                    julia_path = str(cand_unix)
+                else:
+                    print(f"Error: Julia not found (neither in PATH nor in the current directory).")
+                    return True
+
+            print(f"Used Julia executable: {julia_path}")
+
+            # 2) Prüfen/Installieren von IJulia
+            try:
+                # Check if IJulia is installed
+                check_cmd = [
+                    julia_path,
+                    "-e",
+                    "using IJulia; quit()"
+                ]
+                result = subprocess.run(check_cmd, capture_output=True, text=True)
+                if result.returncode != 0:
+                    # IJulia is not installed → install and register
+                    print("IJulia is not installed. Starting installation...")
+                    install_cmd = [
+                        julia_path,
+                        "-e",
+                        "import Pkg; Pkg.add(\"IJulia\"); using IJulia; installkernel(\"Julia\")"
+                    ]
+                    install_result = subprocess.run(install_cmd, capture_output=True, text=True)
+                    if install_result.returncode != 0:
+                        print("Error during IJulia installation:")
+                        print(install_result.stdout or install_result.stderr)
+                        return True
+                    else:
+                        print("IJulia successfully installed and registered.")
+                else:
+                    # IJulia is already installed – maybe just re-register the kernel
+                    print("IJulia is already installed. Re-registering kernel...")
+                    register_cmd = [
+                        julia_path,
+                        "-e",
+                        "using IJulia; installkernel(\"Julia\", force = true)"
+                    ]
+                    reg_result = subprocess.run(register_cmd, capture_output=True, text=True)
+                    if reg_result.returncode != 0:
+                        print("Warning: Could not rerun IJulia::installkernel:")
+                        print(reg_result.stdout or reg_result.stderr)
+                    else:
+                        print("IJulia kernel registration updated.")
+            except Exception as e:
+                print(f"Error during IJulia installation/check: {e}")
+                return True
+
+            # 3) Jupyter Notebook starten
+            #    Wir suchen zuerst nach 'jupyter-notebook' im PATH
+            jupyter_exe = shutil.which("jupyter-notebook") or shutil.which("jupyter")
+            if jupyter_exe is None:
+                print("Error: 'jupyter-notebook' not found. Please install Jupyter or add it to PATH.")
+                return True
+
+            # Start notebook process (in background)
+            print("Starting Jupyter Notebook...")
+            proc = subprocess.Popen([jupyter_exe, "notebook", str(file_path)])
+            time.sleep(3)  # short pause to allow server to start
+
+            # Open notebook URL: default URL is localhost:8888/notebooks/<relative path>
             current_dir = Path.cwd().resolve()
+            try:
+                url_path = file_path.relative_to(current_dir).as_posix()
+            except ValueError:
+                # If file is outside current working directory,
+                # use absolute path (usually works anyway)
+                url_path = file_path.as_posix()
 
-            # Rscript Pfad prüfen (Windows vs. Unix)
-            rscript_exe = current_dir / "Rscript.exe"
-            if not rscript_exe.exists():
-                rscript_exe = current_dir / "Rscript"  # Unix Variante
-
-            if not rscript_exe.exists():
-                print(f"Error: Rscript executable not found in current directory: {current_dir}")
-                return True
-
-            print(f"Found Rscript at: {rscript_exe}")
-
-            # Optional: Rscript Version prüfen
-            result = subprocess.run([str(rscript_exe), "--version"], capture_output=True, text=True)
-            print(f"Rscript version info:\n{result.stdout or result.stderr}")
-
-            # Beispiel: Starte Jupyter Notebook mit festem Python Interpreter (wie vorher) oder alternative
-
-            # Feste Python-Interpreter wie bisher (angepasst)
-            user_name_3 = os.getlogin() if hasattr(os, 'getlogin') else os.environ.get("USERNAME") or "UnknownUser"
-            fixed_python = Path(f"C:/Users/{user_name_3}/p-terminal/pp-term/.env/Scripts/python.exe")
-            if not fixed_python.exists():
-                print(f"Error: Fixed Python interpreter for Jupyter not found: {fixed_python}")
-                return True
-
-            # Start Jupyter Notebook mit fixed Python Interpreter
-            proc = subprocess.Popen([str(fixed_python), "-m", "notebook", str(file_path)])
-
-            time.sleep(3)
-
-            url_path = file_path.relative_to(Path.cwd()).as_posix()
-            webbrowser.open_new(f"http://localhost:8888/notebooks/{url_path}")
-
-            print(f"Started Jupyter Notebook. Please select the appropriate kernel inside the notebook.")
+            notebook_url = f"http://localhost:8888/notebooks/{url_path}"
+            webbrowser.open_new(notebook_url)
+            print(f"Jupyter Notebook started. Opening: {notebook_url}")
+            print("In the notebook, select 'Julia' in the kernel menu at top right (if not selected automatically).")
 
         except Exception as e:
-            print(f"An error occurred: {e}")
+            print(f"An unexpected error occurred: {e}")
 
         return True
 
     if user_input.startswith("jup-r "):
-        if user_input.lower() == "jup-r q":
+        # Kürzel für Abbruch: 'jup-r q' oder Ctrl+Q (ASCII 0x11)
+        if user_input.lower().strip() == "jup-r q":
             print("Terminated by 'q'")
             return True
-        if user_input == "jup-r \x11":  # Ctrl + Q
-            print("Terminated by Ctrl + Q")
+        if user_input.strip() == "jup-r \x11":
+            print("Terminated by Ctrl+Q")
             return True
 
+        # Extrahiere Dateinamen/Path hinter "jup-r "
         file_input = user_input[6:].strip()
 
-        if file_input.endswith(".jup"):
+        # Wenn Dateiendung .jup, ersetze sie durch .ipynb
+        if file_input.lower().endswith(".jup"):
             file_input = file_input[:-4] + ".ipynb"
+
+        # Wenn keine Endung angegeben ist, füge .ipynb hinzu
+        if not Path(file_input).suffix:
+            file_input = file_input + ".ipynb"
 
         try:
             file_path = Path(file_input).resolve()
+            # Erstelle übergeordnete Ordner, falls nötig
             file_path.parent.mkdir(parents=True, exist_ok=True)
 
-            # Create empty notebook if it doesn't exist
+            # Falls Notebook noch nicht existiert: leeres Template anlegen
             if not file_path.exists():
                 with open(file_path, "w", encoding="utf-8") as f:
                     f.write("""{
-         "cells": [],
-         "metadata": {},
-         "nbformat": 4,
-         "nbformat_minor": 2
+          "cells": [],
+          "metadata": {
+            "kernelspec": {
+              "display_name": "R",
+              "language": "R",
+              "name": "ir"
+            },
+            "language_info": {
+              "codemirror_mode": "r",
+              "file_extension": ".r",
+              "mimetype": "text/x-r-source",
+              "name": "R",
+              "pygments_lexer": "r"
+            }
+          },
+          "nbformat": 4,
+          "nbformat_minor": 2
         }""")
+                    # Hinweis: Metadata enthält schon R-Kernel-Definition
 
-            current_dir = Path.cwd().resolve()
+            # 1) Rscript finden
+            #    Zuerst im PATH suchen, sonst im Arbeitsverzeichnis
+            rscript_path = shutil.which("Rscript")
+            if rscript_path is None:
+                # Falls nicht in PATH, im aktuellen Verzeichnis suchen
+                cand_win = Path.cwd() / "Rscript.exe"
+                cand_unix = Path.cwd() / "Rscript"
+                if cand_win.exists():
+                    rscript_path = str(cand_win)
+                elif cand_unix.exists():
+                    rscript_path = str(cand_unix)
+                else:
+                    print(f"Error: Rscript not found (neither in PATH nor in current directory).")
+                    return True
 
-            # Suche Rscript
-            rscript_exe = current_dir / "Rscript.exe"
-            if not rscript_exe.exists():
-                rscript_exe = current_dir / "Rscript"  # Unix Variante
+            print(f"Used Rscript: {rscript_path}")
 
-            # Suche Julia
-            julia_exe = current_dir / "julia.exe"
-            if not julia_exe.exists():
-                julia_exe = current_dir / "julia"  # Unix Variante
-
-            # Entscheide, was gefunden wurde
-            runner = None
-            runner_name = None
-
-            if rscript_exe.exists():
-                runner = rscript_exe
-                runner_name = "Rscript"
-            elif julia_exe.exists():
-                runner = julia_exe
-                runner_name = "Julia"
-            else:
-                print(f"Error: Weder Rscript noch Julia executable im aktuellen Verzeichnis gefunden ({current_dir})")
+            # 2) Prüfen/Installieren von IRkernel
+            #    IRkernel wird benötigt, damit Jupyter den R-Kernel erkennt.
+            try:
+                # Check if IRkernel is installed
+                check_cmd = [
+                    rscript_path,
+                    "-e",
+                    "if (!requireNamespace('IRkernel', quietly=TRUE)) quit(status=1)"
+                ]
+                result = subprocess.run(check_cmd, capture_output=True, text=True)
+                if result.returncode != 0:
+                    # IRkernel is not installed → install and register
+                    print("IRkernel is not installed. Starting installation...")
+                    install_cmd = [
+                        rscript_path,
+                        "-e",
+                        "install.packages('IRkernel', repos='https://cloud.r-project.org'); IRkernel::installspec()"
+                    ]
+                    install_result = subprocess.run(install_cmd, capture_output=True, text=True)
+                    if install_result.returncode != 0:
+                        print("Error during IRkernel installation:")
+                        print(install_result.stdout or install_result.stderr)
+                        return True
+                    else:
+                        print("IRkernel successfully installed and registered.")
+                else:
+                    # IRkernel is already present – maybe just register (to be safe)
+                    print("IRkernel already installed. Registering (installspec)...")
+                    register_cmd = [
+                        rscript_path,
+                        "-e",
+                        "IRkernel::installspec(user = FALSE)"
+                    ]
+                    reg_result = subprocess.run(register_cmd, capture_output=True, text=True)
+                    if reg_result.returncode != 0:
+                        print("Warning: Could not rerun IRkernel::installspec:")
+                        print(reg_result.stdout or reg_result.stderr)
+                    else:
+                        print("IRkernel registration updated.")
+            except Exception as e:
+                print(f"Error during IRkernel installation/check: {e}")
                 return True
 
-            print(f"Gefundenes Executable: {runner_name} unter {runner}")
+            # 3) Jupyter Notebook starten
+            #    Wir versuchen zuerst, 'jupyter-notebook' über PATH zu starten:
+            jupyter_exe = shutil.which("jupyter-notebook") or shutil.which("jupyter")
+            if jupyter_exe is None:
+                print("Error: 'jupyter-notebook' not found. Please install Jupyter or add it to PATH.")
+                return True
 
-            # Optional: Version ausgeben
+            # Starte Notebook-Prozess (im Hintergrund)
+            # Hinweis: Bei Bedarf kann man hier auch 'jupyter lab' benutzen.
+            print("Starting Jupyter Notebook...")
+            proc = subprocess.Popen([jupyter_exe, "notebook", str(file_path)])
+            time.sleep(3)  # short pause to allow server start
+
+            # Notebook-URL öffnen: Standard-URL lautet localhost:8888/notebooks/<relativer Pfad>
+            current_dir = Path.cwd().resolve()
             try:
-                version_result = subprocess.run([str(runner), "--version"], capture_output=True, text=True)
-                print(f"{runner_name} version info:\n{version_result.stdout or version_result.stderr}")
-            except Exception as e:
-                print(f"Konnte Version von {runner_name} nicht bestimmen: {e}")
+                url_path = file_path.relative_to(current_dir).as_posix()
+            except ValueError:
+                # Wenn sich die Datei außerhalb des aktuellen Arbeitsverzeichnisses befindet,
+                # nehmen wir den absoluten Pfad (funktioniert in den meisten Fällen trotzdem)
+                url_path = file_path.as_posix()
 
+            notebook_url = f"http://localhost:8888/notebooks/{url_path}"
+            webbrowser.open_new(notebook_url)
+            print(f"Jupyter Notebook started. Opening: {notebook_url}")
+            print("In the notebook, please select 'R' in the kernel menu at top right (if not selected automatically).")
+
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
+
+        return True
+
+    if user_input.startswith("jupl "):
+        if user_input.lower() == "jupl q":
+            print("Terminated by 'q'")
+            return True
+        if user_input == "jupl \x11":  # Ctrl + Q
+            print("Terminated by Ctrl + Q")
+            return True
+
+        file_input = user_input[5:].strip()
+
+        try:
+            # Optional: falls ein Pfad angegeben wurde, diesen auflösen
+            file_path = Path(file_input).resolve()
+
+            # Fester Pfad zum Python, das JupyterLab starten soll
             fixed_python = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/.env/Scripts/python.exe")
             if not fixed_python.exists():
                 print(f"Error: Fixed Python interpreter for Jupyter not found: {fixed_python}")
                 return True
 
-            # Starte Jupyter Notebook
-            proc = subprocess.Popen([str(fixed_python), "-m", "notebook", str(file_path)])
-            time.sleep(3)
-            url_path = file_path.relative_to(Path.cwd()).as_posix()
-            webbrowser.open_new(f"http://localhost:8888/notebooks/{url_path}")
+            # JupyterLab starten (ohne Kernel-Registrierung etc.)
+            proc = subprocess.Popen([str(fixed_python), "-m", "jupyter", "lab", str(file_path) if file_input else ""])
 
-            print(f"Started Jupyter Notebook. Please select the appropriate kernel inside the notebook.")
+            # Optional: kleine Pause, damit JupyterLab startet
+            time.sleep(3)
+
+            # Browser öffnen mit Standard-JupyterLab-URL (ohne expliziten Pfad, da jupyter lab das öffnet)
+            webbrowser.open_new("http://localhost:8888/lab")
+
+            print("Started JupyterLab.")
 
         except Exception as e:
             print(f"An error occurred: {e}")
