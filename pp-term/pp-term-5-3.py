@@ -4799,8 +4799,8 @@ def handle_special_commands(user_input):
             return True
 
         print(f"[{timestamp()}] [INFO] Running compiled JS: {js_file}")
-        run_command = f"node \"{js_file}\""
-        process = subprocess.Popen(run_command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+        run_command_ts = f"node \"{js_file}\""
+        process = subprocess.Popen(run_command_ts, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
                                    shell=True, text=True)
         try:
             process.wait()
@@ -4943,6 +4943,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("kotlinc "):
         user_input = user_input[8:].strip()
+        args = user_input.split()
 
         if len(args) != 2:
             print(f"[{timestamp()}] [ERROR] Syntax: kotlinc <input.kt> <output.jar>")
@@ -4964,6 +4965,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("kotlinc1 "):
         user_input = user_input[9:].strip()
+        args = user_input.split()
 
         if len(args) != 2:
             print(f"[{timestamp()}] [ERROR] Syntax: kotlinc <input.kt> <output.jar>")
