@@ -7047,6 +7047,341 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing pcf command: {e}")
         return True
 
+    # pc-postgresql: startet einen PostgreSQL-Dienst (Service-Name muss als Argument angegeben werden)
+    # Beispiel-Aufruf: "pc-postgresql postgresql-x64-15"
+    if user_input.startswith("pc-postgresql "):
+        service_name = user_input[14:].strip()
+        command = f'net start "{service_name}"'
+
+        process = subprocess.Popen(
+            command,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            shell=True,
+            text=True
+        )
+
+        try:
+            print(f"[{timestamp()}] [INFO] Starting PostgreSQL service '{service_name}'\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc-postgresql command: {e}")
+        return True
+
+    # pc-mysql: startet einen MySQL-/MariaDB-Dienst (Service-Name muss als Argument angegeben werden)
+    # Beispiel-Aufruf: "pc-mysql MySQL80" oder "pc-mysql MySQL"
+    if user_input.startswith("pc-mysql "):
+        service_name = user_input[9:].strip()
+        command = f'net start "{service_name}"'
+
+        process = subprocess.Popen(
+            command,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            shell=True,
+            text=True
+        )
+
+        try:
+            print(f"[{timestamp()}] [INFO] Starting MySQL service '{service_name}'\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc-mysql command: {e}")
+        return True
+
+    # pc-mongodb: startet einen MongoDB-Dienst (Service-Name muss als Argument angegeben werden)
+    # Beispiel-Aufruf: "pc-mongodb MongoDB"
+    if user_input.startswith("pc-mongodb "):
+        service_name = user_input[11:].strip()
+        command = f'net start "{service_name}"'
+
+        process = subprocess.Popen(
+            command,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            shell=True,
+            text=True
+        )
+
+        try:
+            print(f"[{timestamp()}] [INFO] Starting MongoDB service '{service_name}'\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc-mongodb command: {e}")
+        return True
+
+    # pc-sqlserver: startet einen Microsoft SQL Server-Dienst (Service-Name muss als Argument angegeben werden)
+    # Beispiel-Aufruf: "pc-sqlserver MSSQLSERVER"
+    if user_input.startswith("pc-sqlserver "):
+        service_name = user_input[13:].strip()
+        command = f'net start "{service_name}"'
+
+        process = subprocess.Popen(
+            command,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            shell=True,
+            text=True
+        )
+
+        try:
+            print(f"[{timestamp()}] [INFO] Starting SQL Server service '{service_name}'\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc-sqlserver command: {e}")
+        return True
+
+    # pc-service-stop: stoppt einen beliebigen Windows-Dienst (Service-Name muss als Argument angegeben werden)
+    # Beispiel-Aufruf: "pc-service-stop postgresql-x64-15"
+    if user_input.startswith("pc-service-stop "):
+        service_name = user_input[16:].strip()
+        command = f'net stop "{service_name}"'
+
+        process = subprocess.Popen(
+            command,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            shell=True,
+            text=True
+        )
+
+        try:
+            print(f"[{timestamp()}] [INFO] Stopping service '{service_name}'\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc-service-stop command: {e}")
+        return True
+
+    # pc-mariadb: startet einen MariaDB-Dienst (Service-Name angeben)
+    # Beispiel: "pc-mariadb MariaDB"
+    if user_input.startswith("pc-mariadb "):
+        service_name = user_input[11:].strip()
+        command = f'net start "{service_name}"'
+
+        process = subprocess.Popen(
+            command,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            shell=True,
+            text=True
+        )
+
+        try:
+            print(f"[{timestamp()}] [INFO] Starting MariaDB service '{service_name}'\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc-mariadb command: {e}")
+        return True
+
+    # pc-redis: startet einen Redis-Dienst (Service-Name angeben)
+    # Beispiel: "pc-redis Redis"
+    if user_input.startswith("pc-redis "):
+        service_name = user_input[9:].strip()
+        command = f'net start "{service_name}"'
+
+        process = subprocess.Popen(
+            command,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            shell=True,
+            text=True
+        )
+
+        try:
+            print(f"[{timestamp()}] [INFO] Starting Redis service '{service_name}'\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()
+            
+    # pc-oracle: startet einen Oracle XE-Dienst (Service-Name angeben)
+    # Beispiel: "pc-oracle OracleServiceXE"
+    if user_input.startswith("pc-oracle "):
+        service_name = user_input[10:].strip()
+        command = f'net start "{service_name}"'
+
+        process = subprocess.Popen(
+            command,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            shell=True,
+            text=True
+        )
+
+        try:
+            print(f"[{timestamp()}] [INFO] Starting Oracle service '{service_name}'\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc-oracle command: {e}")
+        return True
+
+    # pc-couchdb: startet einen CouchDB-Dienst (Service-Name angeben)
+    # Beispiel: "pc-couchdb ApacheCouchDB"
+    if user_input.startswith("pc-couchdb "):
+        service_name = user_input[11:].strip()
+        command = f'net start "{service_name}"'
+
+        process = subprocess.Popen(
+            command,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            shell=True,
+            text=True
+        )
+
+        try:
+            print(f"[{timestamp()}] [INFO] Starting CouchDB service '{service_name}'\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc-couchdb command: {e}")
+        return True
+
+    # pc-firebird: startet einen Firebird-Dienst (Service-Name angeben)
+    # Beispiel: "pc-firebird FirebirdGuardianDefaultInstance"
+    if user_input.startswith("pc-firebird "):
+        service_name = user_input[12:].strip()
+        command = f'net start "{service_name}"'
+
+        process = subprocess.Popen(
+            command,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            shell=True,
+            text=True
+        )
+
+        try:
+            print(f"[{timestamp()}] [INFO] Starting Firebird service '{service_name}'\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc-firebird command: {e}")
+        return True
+
+    # pc-cassandra: startet einen Cassandra-Dienst (Service-Name angeben)
+    # Beispiel: "pc-cassandra Apache Cassandra"
+    if user_input.startswith("pc-cassandra "):
+        service_name = user_input[13:].strip()
+        command = f'net start "{service_name}"'
+
+        process = subprocess.Popen(
+            command,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            shell=True,
+            text=True
+        )
+
+        try:
+            print(f"[{timestamp()}] [INFO] Starting Cassandra service '{service_name}'\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc-cassandra command: {e}")
+        return True
+
+    # pc-elasticsearch: startet einen Elasticsearch-Dienst (Service-Name angeben)
+    # Beispiel: "pc-elasticsearch elasticsearch-service-x64"
+    if user_input.startswith("pc-elasticsearch "):
+        service_name = user_input[16:].strip()
+        command = f'net start "{service_name}"'
+
+        process = subprocess.Popen(
+            command,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            shell=True,
+            text=True
+        )
+
+        try:
+            print(f"[{timestamp()}] [INFO] Starting Elasticsearch service '{service_name}'\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc-elasticsearch command: {e}")
+        return True
+
+    # pc-neo4j: startet einen Neo4j-Dienst (Service-Name angeben)
+    # Beispiel: "pc-neo4j neo4j"
+    if user_input.startswith("pc-neo4j "):
+        service_name = user_input[9:].strip()
+        command = f'net start "{service_name}"'
+
+        process = subprocess.Popen(
+            command,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            shell=True,
+            text=True
+        )
+
+        try:
+            print(f"[{timestamp()}] [INFO] Starting Neo4j service '{service_name}'\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc-neo4j command: {e}")
+        return True
+
+    # pc-influxdb: startet einen InfluxDB-Dienst (Service-Name angeben)
+    # Beispiel: "pc-influxdb influxdb"
+    if user_input.startswith("pc-influxdb "):
+        service_name = user_input[12:].strip()
+        command = f'net start "{service_name}"'
+
+        process = subprocess.Popen(
+            command,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            shell=True,
+            text=True
+        )
+
+        try:
+            print(f"[{timestamp()}] [INFO] Starting InfluxDB service '{service_name}'\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc-influxdb command: {e}")
+        return True
+
     if user_input.startswith("jup "):
         if user_input.lower() == "jup q":
             print(f"[{timestamp()}] [INFO] Terminated by 'q'")
