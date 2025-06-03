@@ -4958,9 +4958,9 @@ def handle_special_commands(user_input):
             return True
 
         print(f"[{timestamp()}] [INFO] Running compiled JS: {js_path}")
-        run_command = f"node \"{js_path}\""
+        run_command_js = f"node \"{js_path}\""
         process = subprocess.Popen(
-            run_command,
+            run_command_js,
             stdin=sys.stdin,
             stdout=sys.stdout,
             stderr=sys.stderr,
