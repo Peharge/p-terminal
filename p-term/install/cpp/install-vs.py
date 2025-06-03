@@ -65,7 +65,7 @@
 """
 Installationsskript für die Visual Studio C++ Build Tools Umgebung.
 Dieses Skript ermittelt das Projektverzeichnis (basierend auf dem aktuellen Benutzer) und
-erstellt darin den Ordner "peharge-cpp-compier". In diesem Ordner wird nach erfolgreichem
+erstellt darin den Ordner "peharge-cpp-compiler". In diesem Ordner wird nach erfolgreichem
 Test der Visual Studio Umgebung (über vcvarsall.bat und cl.exe) ein Batch-Skript abgelegt,
 das die Umgebung initialisiert und ein Beispiel-Kompilierungskommando ausführt.
 """
@@ -78,15 +78,18 @@ import getpass
 import platform
 import shutil
 import logging
+from pathlib import Path
 
-# Logging-Konfiguration
+log_path = Path(__file__).parent / "peharge-compiler.log"
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
+    format="[%(asctime)s.%(msecs)03d] %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
-    stream=sys.stdout
+    handlers=[
+        logging.FileHandler(log_path, encoding='utf-8'),
+        logging.StreamHandler(sys.stdout)
+    ]
 )
-logger = logging.getLogger(__name__)
 
 
 def find_vcvarsall():
@@ -108,7 +111,7 @@ def find_vcvarsall():
         for root, dirs, files in os.walk(base):
             if "vcvarsall.bat" in files:
                 path_found = os.path.join(root, "vcvarsall.bat")
-                logger.info("Found vcvarsall.bat: %s", path_found)
+                logging.info("Found vcvarsall.bat: %s", path_found)
                 return path_found
     return None
 
@@ -126,9 +129,9 @@ def write_logfile(target_dir, vcvarsall_path):
         with open(log_file, "w", encoding="utf-8") as f:
             f.write("Visual Studio C++ Build Tools detected and ready.\n")
             f.write(f"vcvarsall.bat path: {vcvarsall_path}\n")
-        logger.info("Installation status logged in: %s", log_file)
+        logging.info("Installation status logged in: %s", log_file)
     except Exception as e:
-        logger.warning("Log file could not be written: %s", e)
+        logging.warning("Log file could not be written: %s", e)
 
 
 def verify_compiler(vcvarsall_path, temp_dir):
@@ -143,7 +146,7 @@ def verify_compiler(vcvarsall_path, temp_dir):
     Returns:
         bool: True, wenn der Test erfolgreich war, sonst False.
     """
-    logger.info("Test compiler availability...")
+    logging.info("Test compiler availability...")
     test_cpp = os.path.join(temp_dir, "test.cpp")
     exe_output = os.path.join(temp_dir, "test.exe")
 
@@ -152,7 +155,7 @@ def verify_compiler(vcvarsall_path, temp_dir):
         with open(test_cpp, "w", encoding="utf-8") as f:
             f.write("#include <iostream>\nint main() { std::cout << \"Hello from cl.exe!\" << std::endl; return 0; }")
     except Exception as e:
-        logger.error("Error creating test file: %s", e)
+        logging.error("Error creating test file: %s", e)
         return False
 
     # Erstelle ein Batch-Skript zur Initialisierung der Umgebung und Kompilierung der Testdatei.
@@ -162,7 +165,7 @@ def verify_compiler(vcvarsall_path, temp_dir):
             # "x64" ist hier als Ziel gesetzt; bei Bedarf anpassen (z.B. x86)
             f.write(f'"{vcvarsall_path}" x64 && cl.exe /EHsc "{test_cpp}" /Fe"{exe_output}"\n')
     except Exception as e:
-        logger.error("Error creating batch script: %s", e)
+        logging.error("Error creating batch script: %s", e)
         return False
 
     try:
@@ -175,30 +178,30 @@ def verify_compiler(vcvarsall_path, temp_dir):
             errors='replace',
             check=False
         )
-        logger.info("Output of the compilation test:\n%s", result.stdout)
+        logging.info("Output of the compilation test:\n%s", result.stdout)
     except Exception as e:
-        logger.error("Error running compilation test: %s", e)
+        logging.error("Error running compilation test: %s", e)
         return False
 
     if os.path.exists(exe_output):
-        logger.info("Compilation successful. cl.exe works perfectly.")
+        logging.info("Compilation successful. cl.exe works perfectly.")
         return True
     else:
-        logger.error(
+        logging.error(
             "Compilation failed. Please ensure that Visual Studio C++ Build Tools are correctly installed.")
         return False
 
 
 def create_compiler_folder(target_dir, vcvarsall_path):
     """
-    Erstellt im angegebenen Zielverzeichnis ('peharge-cpp-compier') eine Batch-Datei, die
+    Erstellt im angegebenen Zielverzeichnis ('peharge-cpp-compiler') eine Batch-Datei, die
     die Visual Studio Umgebung initialisiert und ein Beispiel-Kompilierungskommando ausführt.
 
     Args:
         target_dir (str): Das Verzeichnis, in dem der "Compiler" abgelegt werden soll.
         vcvarsall_path (str): Pfad zur Datei 'vcvarsall.bat'.
     """
-    # Erstelle den Ordner falls nicht existent (target_dir sollte z. B. "peharge-cpp-compier" sein)
+    # Erstelle den Ordner falls nicht existent (target_dir sollte z. B. "peharge-cpp-compiler" sein)
     os.makedirs(target_dir, exist_ok=True)
 
     batch_file = os.path.join(target_dir, "build_peharge.bat")
@@ -213,9 +216,9 @@ def create_compiler_folder(target_dir, vcvarsall_path):
             # Platzhalter: Passe den cl.exe Aufruf an deine Projektstruktur an
             f.write('cl.exe /EHsc main.cpp /Fe:peharge_project.exe\n')
             f.write("pause\n")
-        logger.info("Batch file created for the compiler: %s", batch_file)
+        logging.info("Batch file created for the compiler: %s", batch_file)
     except Exception as e:
-        logger.error("Error creating compiler batch file: %s", e)
+        logging.error("Error creating compiler batch file: %s", e)
 
 
 def main():
@@ -224,7 +227,7 @@ def main():
       - Ermitteln des Projektverzeichnisses.
       - Suchen der Visual Studio Umgebung.
       - Testen des Compilers.
-      - Erstellen des speziellen Ordners 'peharge-cpp-compier' mit einer Batch-Datei,
+      - Erstellen des speziellen Ordners 'peharge-cpp-compiler' mit einer Batch-Datei,
         die zum Kompilieren des peharge-Projektes verwendet werden kann.
       - Schreiben einer Log-Datei im Zielordner.
     """
@@ -233,17 +236,17 @@ def main():
             raise EnvironmentError("This installation script is intended for Windows only.")
 
         username = getpass.getuser()
-        project_root = os.path.join("C:\\Users", username, "p-terminal", "p-term")
+        project_root = os.path.join("C:\\Users", username, "p-terminal", "pp-term")
         # Der Zielordner für den "Compiler" wird hier angelegt:
-        compiler_dir = os.path.join(project_root, "peharge-cpp-compier")
+        compiler_dir = os.path.join(project_root, "peharge-cpp-compiler")
         os.makedirs(compiler_dir, exist_ok=True)
-        logger.info("Project directory: %s", project_root)
+        logging.info("Project directory: %s", project_root)
 
         # Temporäres Verzeichnis für den Kompilierungstest
         temp_dir = os.path.join(project_root, "vs_test")
         os.makedirs(temp_dir, exist_ok=True)
 
-        logger.info("Search for the Visual Studio C++ development environment...")
+        logging.info("Search for the Visual Studio C++ development environment...")
         vcvarsall_path = find_vcvarsall()
         if not vcvarsall_path:
             raise FileNotFoundError("Visual Studio environment could not be found."
@@ -253,19 +256,19 @@ def main():
         if verify_compiler(vcvarsall_path, temp_dir):
             write_logfile(compiler_dir, vcvarsall_path)
             create_compiler_folder(compiler_dir, vcvarsall_path)
-            logger.info("Visual Studio C++ Build Tools successfully detected and tested.")
+            logging.info("Visual Studio C++ Build Tools successfully detected and tested.")
         else:
             raise Exception("The compilation test failed.")
 
         # Aufräumen: Entferne das temporäre Verzeichnis
         shutil.rmtree(temp_dir, ignore_errors=True)
-        logger.info("Temporary files have been removed.")
+        logging.info("Temporary files have been removed.")
 
     except Exception as e:
-        logger.error("An error occurred during installation:")
-        logger.error(str(e))
-        logger.error("Stacktrace:\n%s", traceback.format_exc())
-        logger.error("Please make sure that Visual Studio is installed with the required C++ components.")
+        logging.error("An error occurred during installation:")
+        logging.error(str(e))
+        logging.error("Stacktrace:\n%s", traceback.format_exc())
+        logging.error("Please make sure that Visual Studio is installed with the required C++ components.")
         sys.exit(1)
 
 

@@ -76,16 +76,18 @@ import getpass
 import platform
 import shutil
 import logging
+from pathlib import Path
 
-# Logging configuration
+log_path = Path(__file__).parent / "peharge-compiler.log"
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
+    format="[%(asctime)s.%(msecs)03d] %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
-    stream=sys.stdout
+    handlers=[
+        logging.FileHandler(log_path, encoding='utf-8'),
+        logging.StreamHandler(sys.stdout)
+    ]
 )
-logger = logging.getLogger(__name__)
-
 
 def find_vcvarsall():
     possible_paths = [
@@ -99,7 +101,7 @@ def find_vcvarsall():
         for root, dirs, files in os.walk(base):
             if "vcvarsall.bat" in files:
                 path_found = os.path.join(root, "vcvarsall.bat")
-                logger.info("Found: vcvarsall.bat -> %s", path_found)
+                logging.info("Found: vcvarsall.bat -> %s", path_found)
                 return path_found
     return None
 
@@ -109,13 +111,13 @@ def write_logfile(target_dir, vcvarsall_path):
         with open(os.path.join(target_dir, "c_compiler_ready.txt"), "w", encoding="utf-8") as f:
             f.write("Visual Studio C Build Tools ready.\n")
             f.write(f"vcvarsall.bat path: {vcvarsall_path}\n")
-        logger.info("Log file successfully written.")
+        logging.info("Log file successfully written.")
     except Exception as e:
-        logger.warning("Error writing log file: %s", e)
+        logging.warning("Error writing log file: %s", e)
 
 
 def verify_c_compiler(vcvarsall_path, temp_dir):
-    logger.info("Performing C compiler test run...")
+    logging.info("Performing C compiler test run...")
     test_c = os.path.join(temp_dir, "test.c")
     exe_output = os.path.join(temp_dir, "test.exe")
 
@@ -123,7 +125,7 @@ def verify_c_compiler(vcvarsall_path, temp_dir):
         with open(test_c, "w", encoding="utf-8") as f:
             f.write('#include <stdio.h>\nint main() { printf("Hello from cl.exe (C)!\\n"); return 0; }')
     except Exception as e:
-        logger.error("Error creating test file: %s", e)
+        logging.error("Error creating test file: %s", e)
         return False
 
     bat_script = os.path.join(temp_dir, "compile_test_c.bat")
@@ -131,7 +133,7 @@ def verify_c_compiler(vcvarsall_path, temp_dir):
         with open(bat_script, "w", encoding="utf-8") as f:
             f.write(f'call "{vcvarsall_path}" x64 && cl.exe /TC "{test_c}" /Fe"{exe_output}"\n')
     except Exception as e:
-        logger.error("Error creating batch script: %s", e)
+        logging.error("Error creating batch script: %s", e)
         return False
 
     try:
@@ -144,16 +146,16 @@ def verify_c_compiler(vcvarsall_path, temp_dir):
             errors='replace',
             check=False
         )
-        logger.info("Compiler output:\n%s", result.stdout)
+        logging.info("Compiler output:\n%s", result.stdout)
     except Exception as e:
-        logger.error("Error executing batch script: %s", e)
+        logging.error("Error executing batch script: %s", e)
         return False
 
     if os.path.exists(exe_output):
-        logger.info("C compilation successful. cl.exe is working.")
+        logging.info("C compilation successful. cl.exe is working.")
         return True
     else:
-        logger.error("Compilation failed. Is Visual Studio installed and configured correctly?")
+        logging.error("Compilation failed. Is Visual Studio installed and configured correctly?")
         return False
 
 
@@ -169,9 +171,9 @@ def create_c_compiler_folder(target_dir, vcvarsall_path):
             f.write("echo Starting C compilation...\n")
             f.write('cl.exe /TC main.c /Fe:peharge_c.exe\n')
             f.write("pause\n")
-        logger.info("Batch file for C compiler created: %s", batch_file)
+        logging.info("Batch file for C compiler created: %s", batch_file)
     except Exception as e:
-        logger.error("Error creating batch file: %s", e)
+        logging.error("Error creating batch file: %s", e)
 
 
 def main():
@@ -180,13 +182,13 @@ def main():
             raise EnvironmentError("This script is intended for Windows only (requires Visual Studio cl.exe).")
 
         username = getpass.getuser()
-        project_root = os.path.join("C:\\Users", username, "p-terminal", "p-term", "peharge")
+        project_root = os.path.join("C:\\Users", username, "p-terminal", "pp-term")
         compiler_dir = os.path.join(project_root, "peharge-c-compiler")
         os.makedirs(compiler_dir, exist_ok=True)
         temp_dir = os.path.join(project_root, "vs_test_c")
         os.makedirs(temp_dir, exist_ok=True)
 
-        logger.info("Project directory: %s", project_root)
+        logging.info("Project directory: %s", project_root)
 
         vcvarsall_path = find_vcvarsall()
         if not vcvarsall_path:
@@ -195,17 +197,17 @@ def main():
         if verify_c_compiler(vcvarsall_path, temp_dir):
             write_logfile(compiler_dir, vcvarsall_path)
             create_c_compiler_folder(compiler_dir, vcvarsall_path)
-            logger.info("peharge-c-compiler successfully set up.")
+            logging.info("peharge-c-compiler successfully set up.")
         else:
             raise Exception("C compilation test failed.")
 
         shutil.rmtree(temp_dir, ignore_errors=True)
-        logger.info("Temporary files removed.")
+        logging.info("Temporary files removed.")
 
     except Exception as e:
-        logger.error("An error occurred during setup:")
-        logger.error(str(e))
-        logger.error("Stacktrace:\n%s", traceback.format_exc())
+        logging.error("An error occurred during setup:")
+        logging.error(str(e))
+        logging.error("Stacktrace:\n%s", traceback.format_exc())
         sys.exit(1)
 
 
