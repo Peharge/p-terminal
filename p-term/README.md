@@ -15,3 +15,24 @@
 Hey ;-)
 
 file:install -> file:run (muss geädert werden!!!)
+
+
+```bash
+cd p-terminal\p-term
+```
+
+```bash
+cargo clean
+```
+
+```bash
+cargo build
+```
+
+```bash
+cargo run
+```
+
+```bash
+
+```
