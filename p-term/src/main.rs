@@ -1,19 +1,19 @@
-//! P-Terminal (Rust version, stable & high-performance)
+//! P-Terminal (Rust-Version, stabile & performant)
 //!
-//! A cross-platform terminal emulator/shell written in Rust, focusing on stability and speed.
+//! Eine plattformübergreifende Terminal-Emulation / Shell in Rust mit Fokus auf Stabilität und Geschwindigkeit.
 //!
-//! Features:
-//!  1. Prints a colored banner on startup (with versions loaded from a JSON file).
-//!  2. Shows a 16-color palette (ANSI colors 0–15).
-//!  3. Provides a REPL loop using `rustyline` (prompt, read input, dispatch to OS shell).
-//!  4. Supports built-in commands: `cd`, `exit`, `clear`, `help`, `sysinfo`.
-//!  5. Uses `rustyline` for line editing, history, and filesystem path completion.
-//!  6. Includes `git`-branch in prompt when inside a Git repository via `git2`.
-//!  7. Displays system load & memory usage using `sysinfo`.
-//!  8. Handles Ctrl+C gracefully (returns to prompt), Ctrl+D exits.
-//!  9. Saves history in `~/.p-terminal_history`.
-//! 10. Uses `tracing`/`tracing-subscriber` for logging.
-//! 11. Employs `anyhow` for error handling.
+//! Funktionen:
+//!  1. ASCII‐Banner mit Versionen aus JSON.
+//!  2. 16‐Farb‐Palette (ANSI Colors 0–15).
+//!  3. REPL‐Loop mit `rustyline` (Prompt, Eingabe, Shell‐Dispatch).
+//!  4. Built‐in‐Befehle: `cd`, `exit`, `clear`, `help`, `sysinfo`.
+//!  5. `rustyline` für Line‐Editing, History, Pfad‐Completion.
+//!  6. Git‐Branch im Prompt, wenn in einem Git‐Repo via `git2`.
+//!  7. Systemlast & Speicher‐Nutzung über `sysinfo` (synchron).
+//!  8. Strg+C fängt ab (Return zum Prompt), Strg+D beendet.
+//!  9. Speichert History in `~/.p-terminal_history`.
+//! 10. Logging via `tracing`/`tracing-subscriber`.
+//! 11. Fehlerbehandlung mit `anyhow`.
 
 use anyhow::Result;
 use chrono::Local;
@@ -22,8 +22,8 @@ use git2::Repository;
 use rustyline::completion::FilenameCompleter;
 use rustyline::error::ReadlineError;
 use rustyline::highlight::MatchingBracketHighlighter;
-use rustyline::hint::{Hinter, HistoryHinter};
-use rustyline::validate::{Validator, ValidationContext, ValidationResult};
+use rustyline::hint::{HistoryHinter, Hinter};
+use rustyline::validate::{ValidationContext, ValidationResult, Validator};
 use rustyline::{Config, Editor, Helper};
 use rustyline::history::FileHistory;
 use serde_json::Value;
@@ -33,11 +33,11 @@ use std::io::BufReader;
 use std::path::PathBuf;
 use std::process::{Command, Stdio};
 use sysinfo::{CpuExt, System, SystemExt};
-use tracing::error;
+use tracing::{error, info};
 use tracing_subscriber;
 use whoami;
 
-/// ANSI color codes
+/// ANSI‐Farb‐Codes
 const BLUE: &str = "\x1b[34m";
 const CYAN: &str = "\x1b[36m";
 const GREEN: &str = "\x1b[32m";
@@ -45,7 +45,7 @@ const RED: &str = "\x1b[31m";
 const WHITE: &str = "\x1b[37m";
 const RESET: &str = "\x1b[0m";
 
-/// Custom Helper for rustyline, providing completion, hints, and highlighting.
+/// Custom Helper für `rustyline`: Completion, Hinting, Highlighting.
 struct PHelper {
     completer: FilenameCompleter,
     hinter: HistoryHinter,
@@ -109,9 +109,7 @@ impl Validator for PHelper {
     }
 }
 
-/// Load versions JSON from default path:
-///   Windows: C:\Users\<username>\p-terminal\p-term\p-term-versions.json
-///   Unix:    /home/<username>/p-terminal/p-term/p-term-versions.json
+/// Lade Versionen‐JSON synchron (einfach synchron, kein Cache).
 fn load_versions() -> Option<serde_json::Map<String, Value>> {
     let username = whoami::username();
     let json_path: PathBuf = if cfg!(windows) {
@@ -136,7 +134,7 @@ fn load_versions() -> Option<serde_json::Map<String, Value>> {
     None
 }
 
-/// Print ASCII-art banner with ANSI colors
+/// Drucke ASCII‐Banner mit ANSI‐Farben und Versions‐Informationen.
 fn print_banner() {
     let user_name = whoami::username();
 
@@ -198,7 +196,7 @@ fn print_banner() {
             format!("{}/p-terminal/p-term/p-term-versions.json", home)
         };
         eprintln!(
-            "[{}] [INFO] Version file not found under {}{}",
+            "[{}] [INFO] Version file nicht gefunden unter {}{}",
             Local::now().format("%Y-%m-%d %H:%M:%S"),
             fallback_path,
             RESET
@@ -207,7 +205,7 @@ fn print_banner() {
 
     println!();
 
-    // Show 16-color palette
+    // 16-Farb-Palette anzeigen
     for i in 0..8 {
         print!("\x1b[48;5;{}m  \x1b[0m", i);
     }
@@ -218,12 +216,12 @@ fn print_banner() {
     println!("\n");
 }
 
-/// OSC 8 hyperlink helper
+/// OSC 8 Hyperlink‐Helper
 fn hyperlink(text: &str, url: &str) -> String {
     format!("\x1b]8;;{}\x1b\\{}\x1b]8;;\x1b\\", url, text)
 }
 
-/// Return " (branch)" if current dir is in a Git repo
+/// Retourniere " (branch)" falls aktuelles Verzeichnis in Git‐Repo liegt
 fn git_branch_suffix() -> String {
     if let Ok(repo) = Repository::discover(env::current_dir().unwrap_or_else(|_| PathBuf::from("."))) {
         if let Ok(head) = repo.head() {
@@ -235,20 +233,25 @@ fn git_branch_suffix() -> String {
     String::new()
 }
 
-/// Display system info via sysinfo
+/// Zeige System‐Info synchron via `sysinfo`
 fn display_sysinfo() {
     let mut sys = System::new_all();
     sys.refresh_all();
     let total_mem = sys.total_memory() / 1024;
     let used_mem = sys.used_memory() / 1024;
-    let cpu_usage: f32 = sys.cpus().iter().map(|c| c.cpu_usage()).sum::<f32>() / sys.cpus().len() as f32;
+    let cpu_usage: f32 = sys
+        .cpus()
+        .iter()
+        .map(|c| c.cpu_usage())
+        .sum::<f32>()
+        / sys.cpus().len() as f32;
     println!(
         "{}System Info:{} CPU Usage: {:.2}% | Memory: {} MiB / {} MiB",
         GREEN, RESET, cpu_usage, used_mem, total_mem
     );
 }
 
-/// Built-in commands
+/// Built‐in‐Befehle
 enum Builtin {
     Cd,
     Exit,
@@ -258,7 +261,7 @@ enum Builtin {
     Other,
 }
 
-/// Parse first token for built-ins
+/// Parst das erste Token auf einen Built‐in
 fn parse_builtin(cmd: &str) -> Builtin {
     let mut parts = cmd.trim().split_whitespace();
     match parts.next() {
@@ -271,7 +274,7 @@ fn parse_builtin(cmd: &str) -> Builtin {
     }
 }
 
-/// Change directory: `cd <path>` or `cd` → home
+/// Change directory: `cd <Pfad>` oder ohne Arg → Home
 fn handle_cd(args: &[&str]) {
     let target = if args.len() >= 2 {
         args[1]
@@ -285,67 +288,63 @@ fn handle_cd(args: &[&str]) {
     }
 }
 
-/// Print built-in help
+/// Zeigt die Hilfe‐Ansicht (farblich formatiert)
 fn handle_help() {
-    println!(
-        "{}Built-in commands:{}\n  {}cd{} [<path>]    Change directory\n  {}exit{}, {}quit{}    Exit P-Terminal\n  {}clear{}         Clear screen\n  {}help{}          Show this help\n  {}sysinfo{}       Display system info\n",
-        GREEN, RESET,
-        CYAN, RESET,
-        CYAN, RESET,
-        CYAN, RESET,
-        CYAN, RESET,
-        CYAN, RESET,
-        CYAN, RESET
-    );
+    // Hier wandeln wir jede Zeile einzeln um, sodass wir nur genau die benötigten Platzhalter nutzen.
+    println!("{}Built-in Befehle:{}", GREEN, RESET);
+    println!("  {}cd{} [<Pfad>]    Verzeichnis wechseln", CYAN, RESET);
+    println!("  {}exit{}, {}quit{}   P-Terminal beenden", CYAN, RESET, CYAN, RESET);
+    println!("  {}clear{}         Screen clearen", CYAN, RESET);
+    println!("  {}help{}          Diese Hilfe anzeigen", CYAN, RESET);
+    println!("  {}sysinfo{}       System-Info anzeigen", CYAN, RESET);
 }
 
-/// Clear screen (ANSI)
+/// Clear Screen (ANSI)
 fn handle_clear() {
     print!("\x1B[2J\x1B[H");
 }
 
-/// Spawn external command synchronously (blocking until completion)
-fn spawn_command(line: &str) {
-    if cfg!(windows) {
-        match Command::new("cmd.exe")
-            .args(&["/C", line])
-            .stdin(Stdio::inherit())
-            .stdout(Stdio::inherit())
-            .stderr(Stdio::inherit())
-            .status()
-        {
-            Ok(_) => {}
-            Err(e) => {
-                eprintln!("{}Failed to spawn command: {}{}", RED, e, RESET);
+/// Externe Befehle synchron über PowerShell (Windows) / pwsh (Unix) ausführen
+fn spawn_powershell_command(line: &str) {
+    // Unter Windows: powershell.exe, sonst pwsh (PowerShell Core)
+    #[cfg(windows)]
+    let shell = "powershell.exe";
+    #[cfg(not(windows))]
+    let shell = "pwsh";
+
+    let status = Command::new(shell)
+        .arg("-NoLogo")
+        .arg("-NoProfile")
+        .arg("-Command")
+        .arg(line)
+        .stdin(Stdio::inherit())
+        .stdout(Stdio::inherit())
+        .stderr(Stdio::inherit())
+        .status();
+
+    match status {
+        Ok(s) => {
+            if !s.success() {
+                error!("PowerShell-Befehl `{}` mit Exit-Code {:?} beendet.", line, s.code());
             }
         }
-    } else {
-        match Command::new("sh")
-            .arg("-c")
-            .arg(line)
-            .stdin(Stdio::inherit())
-            .stdout(Stdio::inherit())
-            .stderr(Stdio::inherit())
-            .status()
-        {
-            Ok(_) => {}
-            Err(e) => {
-                eprintln!("{}Failed to spawn command: {}{}", RED, e, RESET);
-            }
+        Err(e) => {
+            eprintln!("{}Failed to spawn command: {}{}", RED, e, RESET);
         }
     }
 }
 
 fn main() -> Result<()> {
-    // Initialize tracing subscriber for logging
+    // Logging initialisieren (LEVEL über ENV, z.B. `export RUST_LOG=info`)
     let subscriber = tracing_subscriber::FmtSubscriber::builder()
-        .with_max_level(tracing::Level::INFO)
+        .with_env_filter(tracing_subscriber::EnvFilter::from_default_env())
         .finish();
     tracing::subscriber::set_global_default(subscriber)?;
 
+    // Banner drucken
     print_banner();
 
-    // Prepare rustyline with history, completion, hints, etc.
+    // rustyline konfigurieren
     let config = Config::builder()
         .history_ignore_space(true)
         .auto_add_history(true)
@@ -353,7 +352,7 @@ fn main() -> Result<()> {
     let mut rl: Editor<PHelper, FileHistory> = Editor::with_config(config)?;
     rl.set_helper(Some(PHelper::new()));
 
-    // Load history from file
+    // History laden
     let history_path = BaseDirs::new()
         .map(|d| d.home_dir().join(".p-terminal_history"))
         .unwrap_or_else(|| PathBuf::from(".p-terminal_history"));
@@ -361,8 +360,9 @@ fn main() -> Result<()> {
         let _ = rl.load_history(hp_str);
     }
 
+    // REPL‐Loop
     loop {
-        // Build prompt: username@hostname(git_branch) cwd>
+        // Prompt bauen: user@host(git_branch) cwd>
         let username = whoami::username();
         let hostname = whoami::fallible::hostname().unwrap_or_else(|_| "unknown".into());
         let cwd = env::current_dir().unwrap_or_else(|_| PathBuf::from("."));
@@ -379,10 +379,10 @@ fn main() -> Result<()> {
                 if trimmed.is_empty() {
                     continue;
                 }
+                let parts: Vec<&str> = trimmed.split_whitespace().collect();
                 match parse_builtin(trimmed) {
                     Builtin::Cd => {
-                        let args: Vec<&str> = trimmed.split_whitespace().collect();
-                        handle_cd(&args);
+                        handle_cd(&parts);
                     }
                     Builtin::Exit => {
                         println!("{}Exiting P-Terminal. Goodbye!{}", GREEN, RESET);
@@ -398,16 +398,16 @@ fn main() -> Result<()> {
                         display_sysinfo();
                     }
                     Builtin::Other => {
-                        spawn_command(trimmed);
+                        spawn_powershell_command(trimmed);
                     }
                 }
             }
             Err(ReadlineError::Interrupted) => {
-                // Ctrl+C: just print newline and reprompt
+                // Strg+C → newline und reprompt
                 println!();
             }
             Err(ReadlineError::Eof) => {
-                // Ctrl+D: exit
+                // Strg+D → Exit
                 println!("{}Exiting P-Terminal. Goodbye!{}", GREEN, RESET);
                 break;
             }
@@ -418,7 +418,7 @@ fn main() -> Result<()> {
         }
     }
 
-    // On exit: save history
+    // History speichern
     if let Some(hp_str) = history_path.to_str() {
         let _ = rl.save_history(hp_str);
     }
