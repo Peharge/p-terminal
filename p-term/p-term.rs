@@ -1,5 +1,5 @@
-//! PP-Terminal (Rust version)
-//! 
+//! P-Terminal (Rust version)
+//!
 //! A cross‐platform terminal emulator/shell written in Rust.  
 //! Features:
 //!  1. Prints a colored banner on startup (with versions loaded from a JSON file).
@@ -42,14 +42,14 @@ fn load_versions() -> Option<serde_json::Map<String, Value>> {
         let base = env::var("USERPROFILE").unwrap_or_else(|_| format!("C:\\Users\\{}", username));
         Path::new(&base)
             .join("p-terminal")
-            .join("pp-term")
-            .join("pp-term-versions.json")
+            .join("p-term")
+            .join("p-term-versions.json")
     } else {
         // On Unix, HOME is /home/<username>
         let base = dirs::home_dir().unwrap_or_else(|| PathBuf::from("/home").join(&username));
         base.join("p-terminal")
-            .join("pp-term")
-            .join("pp-term-versions.json")
+            .join("p-term")
+            .join("p-term-versions.json")
     };
 
     if let Ok(file) = File::open(&json_path) {
@@ -114,8 +114,8 @@ fn print_banner() {
         "https://peharge.github.io/MAVIS-web/p-term.html",
     );
     let learn = hyperlink(
-        "[Learn PP-Term]",
-        "https://peharge.github.io/MAVIS-web/pp-term-hole.html",
+        "[Learn P-Term]",
+        "https://peharge.github.io/MAVIS-web/p-term-hole.html",
     );
     println!("{} {} {}", github, website, learn);
     println!();
@@ -130,7 +130,7 @@ fn print_banner() {
         // If not found or invalid JSON
         let username = whoami::username();
         let fallback_path = if cfg!(windows) {
-            format!("C:\\Users\\{}\\p-terminal\\pp-term\\pp-term-versions.json", username)
+            format!("C:\\Users\\{}\\p-terminal\\p-term\\p-term-versions.json", username)
         } else {
             let home = dirs::home_dir()
                 .unwrap_or_else(|| PathBuf::from("/home").join(&username))
@@ -256,8 +256,8 @@ fn main() {
     let mut rl = Editor::<()>::with_config(config);
     // Load history from a file (optional)
     let history_path = dirs::home_dir()
-        .map(|h| h.join(".pp-terminal_history"))
-        .unwrap_or_else(|| PathBuf::from(".pp-terminal_history"));
+        .map(|h| h.join(".p-terminal_history"))
+        .unwrap_or_else(|| PathBuf::from(".p-terminal_history"));
     if let Some(ref hp) = history_path.to_str() {
         let _ = rl.load_history(hp);
     }
@@ -289,7 +289,7 @@ fn main() {
                         handle_cd(&args);
                     }
                     Builtin::Exit => {
-                        println!("Exiting PP-Terminal. Goodbye!");
+                        println!("Exiting P-Terminal. Goodbye!");
                         break;
                     }
                     Builtin::Other => {
@@ -305,7 +305,7 @@ fn main() {
             }
             Err(ReadlineError::Eof) => {
                 // Ctrl-D pressed
-                println!("Exiting PP-Terminal. Goodbye!");
+                println!("Exiting P-Terminal. Goodbye!");
                 break;
             }
             Err(err) => {
