@@ -4598,9 +4598,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("prphp "):
-        # Absoluter Pfad zur Datei
-        filepath = user_input[6:].strip()
-        filepath = os.path.abspath(filepath)
+        filepath = os.path.abspath(user_input[6:].strip())
 
         if not os.path.isfile(filepath):
             print(f"[{timestamp()}] [ERROR] File '{filepath}' does not exist.")
@@ -4609,12 +4607,10 @@ def handle_special_commands(user_input):
         directory = os.path.dirname(filepath)
         filename = os.path.basename(filepath)
 
-        # Auf Port 8000 starten, notfalls nächster freier Port
         requested_port = 8000
         port_container = {}
         server_started_event = threading.Event()
 
-        # Server-Thread definieren
         server_thread = threading.Thread(
             target=start_local_server,
             args=(directory, requested_port, port_container, server_started_event),
@@ -4622,21 +4618,16 @@ def handle_special_commands(user_input):
         )
         server_thread.start()
 
-        # Maximal 5s warten, bis der Server bereit ist
         if not server_started_event.wait(timeout=5):
             print(f"[{timestamp()}] [ERROR] Server could not be started within 5 seconds.")
             return True
 
-        # Tatsächlichen Port auslesen und URL bauen
         actual_port = port_container.get('port')
         url = f"http://localhost:{actual_port}/{filename}"
-
         print(f"[{timestamp()}] [INFO] Opening '{filename}' in browser: {url}")
         webbrowser.open(url)
-
         print(f"[{timestamp()}] [INFO] Server is running on port {actual_port}. Press 'q' to stop it.")
 
-        # Warteschleife: Benutzer drückt 'q' oder Ctrl+Q, um Server zu stoppen
         try:
             while True:
                 user_cmd = input().strip()
@@ -4646,36 +4637,30 @@ def handle_special_commands(user_input):
                 else:
                     print(f"[{timestamp()}] [INFO] Invalid input. Press 'q' to quit.")
         except (KeyboardInterrupt, EOFError):
-            # Strg+C oder EOF (z. B. Ctrl+D) interpretiert als Abbruch
             print(f"\n[{timestamp()}] [INFO] Input interrupted. Stopping server...")
 
-        # Versuche, eine Verbindung herzustellen, um serve_forever() im Hintergrund zu unterbrechen
+        # Server durch "Dummy-Request" abbrechen
         try:
             urllib.request.urlopen(url, timeout=1)
         except:
             pass
 
-        # Warten, bis der Server-Thread endet (max. 5 Sekunden)
+        # Auf Beendigung des Threads warten
         server_thread.join(timeout=5)
-        if server_thread.is_alive():
-            print(f"[{timestamp()}] [WARN] Server thread did not terminate in time.")
 
-        # Prüfen, ob die URL wirklich offline ist
-        max_retries = 5
-        delay_between_checks = 1  # Sekunde
-        for attempt in range(max_retries):
+        # Sicherstellen, dass die URL nicht mehr erreichbar ist
+        for _ in range(5):
             try:
                 urllib.request.urlopen(url, timeout=1)
-                # Server noch erreichbar
-                print(f"[{timestamp()}] [INFO] URL still reachable, waiting {delay_between_checks}s...")
-                time.sleep(delay_between_checks)
+                print(f"[{timestamp()}] [INFO] URL still reachable, waiting 1s...")
+                time.sleep(1)
             except (urllib.error.URLError, ConnectionRefusedError):
-                # Server offline → URL nicht erreichbar
                 print(f"[{timestamp()}] [INFO] URL is now offline.")
-                return True
+                break
+        else:
+            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
 
-        # Falls wir nach allen Versuchen immer noch Zugriff haben
-        print(f"[{timestamp()}] [WARN] URL still reachable, returning True anyway.")
+        # Jetzt erst zurückkehren
         return True
 
     if user_input.startswith("pd-php "):
@@ -7484,7 +7469,7 @@ def handle_special_commands(user_input):
             shutdown_jupyter_kernel()
             return True
         if user_input == "jup \x11":  # Ctrl + Q
-            print(f"[{timestamp()}] [INFO]  Terminated by Ctrl + Q")
+            print(f"[{timestamp()}] [INFO] Terminated by Ctrl + Q")
             shutdown_jupyter_kernel()
             return True
 
@@ -7497,17 +7482,17 @@ def handle_special_commands(user_input):
             file_path = Path(file_input).resolve()
             file_path.parent.mkdir(parents=True, exist_ok=True)
 
-            # Create empty notebook if it doesn't exist
+            # Notebook anlegen, falls nicht vorhanden
             if not file_path.exists():
                 with open(file_path, "w", encoding="utf-8") as f:
                     f.write("""{
-         "cells": [],
-         "metadata": {},
-         "nbformat": 4,
-         "nbformat_minor": 2
-        }""")
+             "cells": [],
+             "metadata": {},
+             "nbformat": 4,
+             "nbformat_minor": 2
+            }""")
 
-            # Load active venv path from JSON
+            # Aktive Umgebung laden
             json_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/current_env.json")
             with open(json_path, 'r') as file:
                 data = json.load(file)
@@ -7521,23 +7506,23 @@ def handle_special_commands(user_input):
             active_env = Path(active_env_path)
             python_exe = active_env / "Scripts" / "python.exe"
 
-            # Fixed python interpreter to start Jupyter Notebook
             fixed_python = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/.env/Scripts/python.exe")
             if not fixed_python.exists():
                 print(f"[{timestamp()}] [ERROR] Fixed Python interpreter for Jupyter not found: {fixed_python}")
                 shutdown_jupyter_kernel()
                 return True
 
-            # Step 0: Ensure ipykernel is installed in the active venv
+            # Prüfen, ob ipykernel installiert ist
             print(f"[{timestamp()}] [INFO] Checking ipykernel in the active environment...")
             result = subprocess.run([str(python_exe), "-m", "pip", "show", "ipykernel"], capture_output=True, text=True)
+
+            kernel_name = f"venv_{active_env.name}_kernel"
+
             if result.returncode != 0:
                 print(f"[{timestamp()}] [INFO] ipykernel not found. Installing ipykernel...")
                 subprocess.run([str(python_exe), "-m", "pip", "install", "ipykernel"], check=True)
                 print(f"[{timestamp()}] [INFO] ipykernel installed.")
 
-                # Step 1: Register the kernel pointing to the active venv python
-                kernel_name = f"venv_{active_env.name}_kernel"
                 subprocess.run([
                     str(python_exe), "-m", "ipykernel", "install",
                     "--user",
@@ -7545,28 +7530,131 @@ def handle_special_commands(user_input):
                     "--display-name", f"Python (venv: {active_env.name})"
                 ], check=True)
 
-                # Neu: Kernel in Notebook setzen, damit Jupyter direkt den richtigen Kernel lädt
-                set_kernel_in_notebook(
-                    notebook_path=file_path,
-                    kernel_name=kernel_name,
-                    display_name=f"Python (venv: {active_env.name})"
-                )
+            # Notebook mit korrektem Kernel verknüpfen
+            set_kernel_in_notebook(
+                notebook_path=file_path,
+                kernel_name=kernel_name,
+                display_name=f"Python (venv: {active_env.name})"
+            )
 
-                # Step 2: Start Jupyter Notebook with the fixed interpreter (which runs Jupyter)
-                proc = subprocess.Popen([str(fixed_python), "-m", "notebook", str(file_path)])
+            # Jupyter starten
+            proc = subprocess.Popen([str(fixed_python), "-m", "notebook", str(file_path)])
 
-                # Step 3: Wait a bit for Jupyter to start
-                time.sleep(5)
+            time.sleep(5)
 
-                # Step 4: Open notebook in default browser
-                url_path = file_path.relative_to(Path.cwd()).as_posix()
-                webbrowser.open_new(f"http://localhost:8888/notebooks/{url_path}")
+            url_path = file_path.relative_to(Path.cwd()).as_posix()
+            webbrowser.open_new(f"http://localhost:8888/notebooks/{url_path}")
 
-                print(
-                    f"[{timestamp()}] [INFO] Started Jupyter Notebook with kernel '{kernel_name}'. Kernel is used automatically.")
+            print(
+                f"[{timestamp()}] [INFO] Started Jupyter Notebook with kernel '{kernel_name}'. Waiting for it to close...")
+
+            proc.wait()
+
+            print(f"[{timestamp()}] [INFO] Jupyter Notebook has been closed. Continuing...")
 
         except Exception as e:
             print(f"[{timestamp()}] [ERROR] An error occurred: {e}")
+            shutdown_jupyter_kernel()
+            return True
+
+        return True
+
+    if user_input.startswith("prj "):
+        if user_input.lower() == "prj q":
+            print(f"[{timestamp()}] [INFO] Terminated by 'q'")
+            shutdown_jupyter_kernel()
+            return True
+        if user_input == "prj \x11":  # Ctrl + Q
+            print(f"[{timestamp()}] [INFO] Terminated by Ctrl + Q")
+            shutdown_jupyter_kernel()
+            return True
+
+        file_input = user_input[4:].strip()
+
+        if file_input.endswith(".jup"):
+            file_input = file_input[:-4] + ".ipynb"
+
+        if file_input.endswith(".pj"):
+            file_input = file_input[:-4] + ".ipynb"
+
+        try:
+            file_path = Path(file_input).resolve()
+            file_path.parent.mkdir(parents=True, exist_ok=True)
+
+            # Notebook anlegen, falls nicht vorhanden
+            if not file_path.exists():
+                with open(file_path, "w", encoding="utf-8") as f:
+                    f.write("""{
+             "cells": [],
+             "metadata": {},
+             "nbformat": 4,
+             "nbformat_minor": 2
+            }""")
+
+            # Aktive Umgebung laden
+            json_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/current_env.json")
+            with open(json_path, 'r') as file:
+                data = json.load(file)
+                active_env_path = data.get("active_env")
+
+            if not active_env_path:
+                print(f"[{timestamp()}] [ERROR] No active environment found.")
+                shutdown_jupyter_kernel()
+                return True
+
+            active_env = Path(active_env_path)
+            python_exe = active_env / "Scripts" / "python.exe"
+
+            fixed_python = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/.env/Scripts/python.exe")
+            if not fixed_python.exists():
+                print(f"[{timestamp()}] [ERROR] Fixed Python interpreter for Jupyter not found: {fixed_python}")
+                shutdown_jupyter_kernel()
+                return True
+
+            # Prüfen, ob ipykernel installiert ist
+            print(f"[{timestamp()}] [INFO] Checking ipykernel in the active environment...")
+            result = subprocess.run([str(python_exe), "-m", "pip", "show", "ipykernel"], capture_output=True, text=True)
+
+            kernel_name = f"venv_{active_env.name}_kernel"
+
+            if result.returncode != 0:
+                print(f"[{timestamp()}] [INFO] ipykernel not found. Installing ipykernel...")
+                subprocess.run([str(python_exe), "-m", "pip", "install", "ipykernel"], check=True)
+                print(f"[{timestamp()}] [INFO] ipykernel installed.")
+
+                subprocess.run([
+                    str(python_exe), "-m", "ipykernel", "install",
+                    "--user",
+                    "--name", kernel_name,
+                    "--display-name", f"Python (venv: {active_env.name})"
+                ], check=True)
+
+            # Notebook mit korrektem Kernel verknüpfen
+            set_kernel_in_notebook(
+                notebook_path=file_path,
+                kernel_name=kernel_name,
+                display_name=f"Python (venv: {active_env.name})"
+            )
+
+            # Jupyter starten
+            proc = subprocess.Popen([str(fixed_python), "-m", "notebook", str(file_path)])
+
+            time.sleep(5)
+
+            url_path = file_path.relative_to(Path.cwd()).as_posix()
+            webbrowser.open_new(f"http://localhost:8888/notebooks/{url_path}")
+
+            print(
+                f"[{timestamp()}] [INFO] Started Jupyter Notebook with kernel '{kernel_name}'. Waiting for it to close...")
+
+            proc.wait()
+
+            print(f"[{timestamp()}] [INFO] Jupyter Notebook has been closed. Continuing...")
+
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] An error occurred: {e}")
+            shutdown_jupyter_kernel()
+            return True
 
         return True
 
@@ -7576,7 +7664,7 @@ def handle_special_commands(user_input):
             shutdown_jupyter_kernel()
             return True
         if user_input == "jup \x11":  # Ctrl + Q
-            print(f"[{timestamp()}] [INFO]  Terminated by Ctrl + Q")
+            print(f"[{timestamp()}] [INFO] Terminated by Ctrl + Q")
             shutdown_jupyter_kernel()
             return True
 
@@ -7589,17 +7677,17 @@ def handle_special_commands(user_input):
             file_path = Path(file_input).resolve()
             file_path.parent.mkdir(parents=True, exist_ok=True)
 
-            # Create empty notebook if it doesn't exist
+            # Notebook anlegen, falls nicht vorhanden
             if not file_path.exists():
                 with open(file_path, "w", encoding="utf-8") as f:
                     f.write("""{
-         "cells": [],
-         "metadata": {},
-         "nbformat": 4,
-         "nbformat_minor": 2
-        }""")
+             "cells": [],
+             "metadata": {},
+             "nbformat": 4,
+             "nbformat_minor": 2
+            }""")
 
-            # Load active venv path from JSON
+            # Aktive Umgebung laden
             json_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/current_env.json")
             with open(json_path, 'r') as file:
                 data = json.load(file)
@@ -7613,23 +7701,23 @@ def handle_special_commands(user_input):
             active_env = Path(active_env_path)
             python_exe = active_env / "Scripts" / "python.exe"
 
-            # Fixed python interpreter to start Jupyter Notebook
             fixed_python = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/.env/Scripts/python.exe")
             if not fixed_python.exists():
                 print(f"[{timestamp()}] [ERROR] Fixed Python interpreter for Jupyter not found: {fixed_python}")
                 shutdown_jupyter_kernel()
                 return True
 
-            # Step 0: Ensure ipykernel is installed in the active venv
+            # Prüfen, ob ipykernel installiert ist
             print(f"[{timestamp()}] [INFO] Checking ipykernel in the active environment...")
             result = subprocess.run([str(python_exe), "-m", "pip", "show", "ipykernel"], capture_output=True, text=True)
+
+            kernel_name = f"venv_{active_env.name}_kernel"
+
             if result.returncode != 0:
                 print(f"[{timestamp()}] [INFO] ipykernel not found. Installing ipykernel...")
                 subprocess.run([str(python_exe), "-m", "pip", "install", "ipykernel"], check=True)
                 print(f"[{timestamp()}] [INFO] ipykernel installed.")
 
-                # Step 1: Register the kernel pointing to the active venv python
-                kernel_name = f"venv_{active_env.name}_kernel"
                 subprocess.run([
                     str(python_exe), "-m", "ipykernel", "install",
                     "--user",
@@ -7637,30 +7725,32 @@ def handle_special_commands(user_input):
                     "--display-name", f"Python (venv: {active_env.name})"
                 ], check=True)
 
-                # Neu: Kernel in Notebook setzen, damit Jupyter direkt den richtigen Kernel lädt
-                set_kernel_in_notebook(
-                    notebook_path=file_path,
-                    kernel_name=kernel_name,
-                    display_name=f"Python (venv: {active_env.name})"
-                )
+            # Notebook mit korrektem Kernel verknüpfen
+            set_kernel_in_notebook(
+                notebook_path=file_path,
+                kernel_name=kernel_name,
+                display_name=f"Python (venv: {active_env.name})"
+            )
 
-                # Step 2: Start Jupyter Notebook with the fixed interpreter (which runs Jupyter)
-                proc = subprocess.Popen([str(fixed_python), "-m", "notebook", str(file_path)])
+            # Jupyter starten
+            proc = subprocess.Popen([str(fixed_python), "-m", "notebook", str(file_path)])
 
-                # Step 3: Wait a bit for Jupyter to start
-                time.sleep(5)
+            time.sleep(5)
 
-                # Step 4: Open notebook in default browser
-                url_path = file_path.relative_to(Path.cwd()).as_posix()
-                webbrowser.open_new(f"http://localhost:8888/notebooks/{url_path}")
+            url_path = file_path.relative_to(Path.cwd()).as_posix()
+            webbrowser.open_new(f"http://localhost:8888/notebooks/{url_path}")
 
-                print(
-                    f"[{timestamp()}] [INFO] Started Jupyter Notebook with kernel '{kernel_name}'. Kernel is used automatically.")
+            print(
+                f"[{timestamp()}] [INFO] Started Jupyter Notebook with kernel '{kernel_name}'. Waiting for it to close...")
+
+            proc.wait()
+
+            print(f"[{timestamp()}] [INFO] Jupyter Notebook has been closed. Continuing...")
 
         except Exception as e:
             print(f"[{timestamp()}] [ERROR] An error occurred: {e}")
-
-        return True
+            shutdown_jupyter_kernel()
+            return True
 
     if user_input.startswith("jupyter notebook "):
         if user_input.lower() == "jup q":
@@ -7668,8 +7758,7 @@ def handle_special_commands(user_input):
             shutdown_jupyter_kernel()
             return True
         if user_input == "jup \x11":  # Ctrl + Q
-            print(f"[{timestamp()}] [INFO]  Terminated by Ctrl + Q")
-            shutdown_jupyter_kernel()
+            print(f"[{timestamp()}] [INFO] Terminated by Ctrl + Q")
             shutdown_jupyter_kernel()
             return True
 
@@ -7682,17 +7771,17 @@ def handle_special_commands(user_input):
             file_path = Path(file_input).resolve()
             file_path.parent.mkdir(parents=True, exist_ok=True)
 
-            # Create empty notebook if it doesn't exist
+            # Notebook anlegen, falls nicht vorhanden
             if not file_path.exists():
                 with open(file_path, "w", encoding="utf-8") as f:
                     f.write("""{
-         "cells": [],
-         "metadata": {},
-         "nbformat": 4,
-         "nbformat_minor": 2
-        }""")
+             "cells": [],
+             "metadata": {},
+             "nbformat": 4,
+             "nbformat_minor": 2
+            }""")
 
-            # Load active venv path from JSON
+            # Aktive Umgebung laden
             json_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/current_env.json")
             with open(json_path, 'r') as file:
                 data = json.load(file)
@@ -7706,23 +7795,23 @@ def handle_special_commands(user_input):
             active_env = Path(active_env_path)
             python_exe = active_env / "Scripts" / "python.exe"
 
-            # Fixed python interpreter to start Jupyter Notebook
             fixed_python = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/.env/Scripts/python.exe")
             if not fixed_python.exists():
                 print(f"[{timestamp()}] [ERROR] Fixed Python interpreter for Jupyter not found: {fixed_python}")
                 shutdown_jupyter_kernel()
                 return True
 
-            # Step 0: Ensure ipykernel is installed in the active venv
+            # Prüfen, ob ipykernel installiert ist
             print(f"[{timestamp()}] [INFO] Checking ipykernel in the active environment...")
             result = subprocess.run([str(python_exe), "-m", "pip", "show", "ipykernel"], capture_output=True, text=True)
+
+            kernel_name = f"venv_{active_env.name}_kernel"
+
             if result.returncode != 0:
                 print(f"[{timestamp()}] [INFO] ipykernel not found. Installing ipykernel...")
                 subprocess.run([str(python_exe), "-m", "pip", "install", "ipykernel"], check=True)
                 print(f"[{timestamp()}] [INFO] ipykernel installed.")
 
-                # Step 1: Register the kernel pointing to the active venv python
-                kernel_name = f"venv_{active_env.name}_kernel"
                 subprocess.run([
                     str(python_exe), "-m", "ipykernel", "install",
                     "--user",
@@ -7730,30 +7819,32 @@ def handle_special_commands(user_input):
                     "--display-name", f"Python (venv: {active_env.name})"
                 ], check=True)
 
-                # Neu: Kernel in Notebook setzen, damit Jupyter direkt den richtigen Kernel lädt
-                set_kernel_in_notebook(
-                    notebook_path=file_path,
-                    kernel_name=kernel_name,
-                    display_name=f"Python (venv: {active_env.name})"
-                )
+            # Notebook mit korrektem Kernel verknüpfen
+            set_kernel_in_notebook(
+                notebook_path=file_path,
+                kernel_name=kernel_name,
+                display_name=f"Python (venv: {active_env.name})"
+            )
 
-                # Step 2: Start Jupyter Notebook with the fixed interpreter (which runs Jupyter)
-                proc = subprocess.Popen([str(fixed_python), "-m", "notebook", str(file_path)])
+            # Jupyter starten
+            proc = subprocess.Popen([str(fixed_python), "-m", "notebook", str(file_path)])
 
-                # Step 3: Wait a bit for Jupyter to start
-                time.sleep(5)
+            time.sleep(5)
 
-                # Step 4: Open notebook in default browser
-                url_path = file_path.relative_to(Path.cwd()).as_posix()
-                webbrowser.open_new(f"http://localhost:8888/notebooks/{url_path}")
+            url_path = file_path.relative_to(Path.cwd()).as_posix()
+            webbrowser.open_new(f"http://localhost:8888/notebooks/{url_path}")
 
-                print(
-                    f"[{timestamp()}] [INFO] Started Jupyter Notebook with kernel '{kernel_name}'. Kernel is used automatically.")
+            print(
+                f"[{timestamp()}] [INFO] Started Jupyter Notebook with kernel '{kernel_name}'. Waiting for it to close...")
+
+            proc.wait()
+
+            print(f"[{timestamp()}] [INFO] Jupyter Notebook has been closed. Continuing...")
 
         except Exception as e:
             print(f"[{timestamp()}] [ERROR] An error occurred: {e}")
-
-        return True
+            shutdown_jupyter_kernel()
+            return True
 
     if user_input.startswith("jup-p "):
         if user_input.lower() == "jup q":
@@ -7761,7 +7852,7 @@ def handle_special_commands(user_input):
             shutdown_jupyter_kernel()
             return True
         if user_input == "jup \x11":  # Ctrl + Q
-            print(f"[{timestamp()}] [INFO]  Terminated by Ctrl + Q")
+            print(f"[{timestamp()}] [INFO] Terminated by Ctrl + Q")
             shutdown_jupyter_kernel()
             return True
 
@@ -7842,6 +7933,10 @@ def handle_special_commands(user_input):
             print(
                 f"[{timestamp()}] [INFO] Started Jupyter Notebook with kernel '{kernel_name}'. Kernel is used automatically.")
 
+            proc.wait()
+
+            print(f"[{timestamp()}] [INFO] JupyterLab has been closed. Continuing...")
+
         except Exception as e:
             print(f"[{timestamp()}] [ERROR] An error occurred: {e}")
 
@@ -7854,7 +7949,7 @@ def handle_special_commands(user_input):
             shutdown_jupyter_kernel()
             return True
         if user_input == "jup \x11":  # Ctrl + Q
-            print(f"[{timestamp()}] [INFO]  Terminated by Ctrl + Q")
+            print(f"[{timestamp()}] [INFO] Terminated by Ctrl + Q")
             shutdown_jupyter_kernel()
             return True
 
@@ -7987,6 +8082,10 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [INFO] Jupyter Notebook started. Opening: {notebook_url}")
             print(f"[{timestamp()}] [INFO] In the notebook, select 'Julia' in the kernel menu at top right (if not selected automatically).")
 
+            proc.wait()
+
+            print(f"[{timestamp()}] [INFO] JupyterLab has been closed. Continuing...")
+
         except Exception as e:
             print(f"[{timestamp()}] [INFO] An unexpected error occurred: {e}")
 
@@ -7999,7 +8098,7 @@ def handle_special_commands(user_input):
             shutdown_jupyter_kernel()
             return True
         if user_input == "jup \x11":  # Ctrl + Q
-            print(f"[{timestamp()}] [INFO]  Terminated by Ctrl + Q")
+            print(f"[{timestamp()}] [INFO] Terminated by Ctrl + Q")
             shutdown_jupyter_kernel()
             return True
 
@@ -8134,6 +8233,10 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [INFO] Jupyter Notebook started. Opening: {notebook_url}")
             print("[{timestamp()}] [INFO] In the notebook, please select 'R' in the kernel menu at top right (if not selected automatically).")
 
+            proc.wait()
+
+            print(f"[{timestamp()}] [INFO] JupyterLab has been closed. Continuing...")
+
         except Exception as e:
             print(f"[{timestamp()}] [INFO] An unexpected error occurred: {e}")
 
@@ -8145,7 +8248,7 @@ def handle_special_commands(user_input):
             shutdown_jupyter_kernel()
             return True
         if user_input == "jup \x11":  # Ctrl + Q
-            print(f"[{timestamp()}] [INFO]  Terminated by Ctrl + Q")
+            print(f"[{timestamp()}] [INFO] Terminated by Ctrl + Q")
             shutdown_jupyter_kernel()
             return True
 
@@ -8173,8 +8276,13 @@ def handle_special_commands(user_input):
 
             print(f"[{timestamp()}] [INFO] Started JupyterLab.")
 
+            proc.wait()
+
+            print(f"[{timestamp()}] [INFO] JupyterLab has been closed. Continuing...")
+
         except Exception as e:
             print(f"[{timestamp()}] [ERROR] An error occurred: {e}")
+            shutdown_jupyter_kernel()
 
         return True
 
