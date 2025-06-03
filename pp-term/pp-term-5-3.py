@@ -605,12 +605,9 @@ def handle_special_commands(user_input):
         "install ollama mavis-4": "mavis-install\\install-ollama-mavis-4.py",  # new
         "change models mavis-4": "mavis-install\\install-ollama-mavis-4.py",  # new
         "change models": "mavis-install\\install-ollama-mavis-4.py",  # new
-        "grafana": "mavis-run-grafana\\run-grafana.py",
-        "run grafana": "mavis-run-grafana\\run-grafana.py",
         "run solution": "mavis-solution\\run-solution-4.py",
         "run solution-3": "mavis-solution\\run-solution-3.py",
         "run solution-4": "mavis-solution\\run-solution-4.py",
-        "install grafana": "mavis-run-grafana\\run-grafana.py",
         "account": "mavis-account\\account.py",
         "run deepseek-r1:1.5b": "pp-commands\\deepseek-r1-1-5b.py",
         "run deepseek-r1:7b": "pp-commands\\deepseek-r1-7b.py",
@@ -1155,6 +1152,7 @@ def handle_special_commands(user_input):
         "install atom": "pp-commands\\atom.py",  # new
         "install lite-xl": "pp-commands\\lite-xl.py",  # new
         "install weather": "pp-commands\\weather.py",  # new
+        "install grafana": "mavis-run-grafana\\run-grafana.py",
         "update ollama": "pp-commands\\update-ollama.py",  # new
         "update git": "pp-commands\\update-git.py",  # new
         "update visual studio build tools": "pp-commands\\update-vsb.py",  # new
@@ -1163,6 +1161,8 @@ def handle_special_commands(user_input):
         "update docker": "pp-commands\\update-docker.py",  # new
         "update wsl": "pp-commands\\update-wsl.py",  # new
         "update powershell": "pp-commands\\update-powershell.py",  # new
+        "grafana": "mavis-run-grafana\\run-grafana.py",
+        "run grafana": "mavis-run-grafana\\run-grafana.py",
         "pi mavis env": "mavis-install\\install-info-mavis-4.py",
         "pi mavis-3": "mavis-install\\install-info-mavis-4.py",  # new
         "pi mavis-3.3": "mavis-install\\install-info-mavis-4.py",  # new
