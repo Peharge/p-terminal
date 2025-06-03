@@ -61,12 +61,17 @@
 #
 # Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 
-import subprocess
 import sys
-from pathlib import Path
+import os
+import shutil
+import subprocess
 import logging
+import tempfile
+from pathlib import Path
+from urllib.request import urlopen, Request
+from urllib.error import URLError, HTTPError
 
-# Log setup: timestamp with milliseconds
+# Configure logging
 log_path = Path(__file__).parent / "installer.log"
 logging.basicConfig(
     level=logging.INFO,
@@ -78,42 +83,74 @@ logging.basicConfig(
     ]
 )
 
+# GitHub Desktop release URL (latest stable)
+GHD_URL = "https://central.github.com/deployments/desktop/desktop/latest/win32"
 
-def is_gcc_installed():
-    """Checks if gcc is installed."""
+def is_github_desktop_installed() -> bool:
+    """Checks whether GitHub Desktop is installed via registry or PATH."""
+    # GitHub Desktop installs GitHubDesktop.exe in the Program Files directory
+    prog_path = Path(os.environ.get("ProgramFiles", "C:/Program Files")) / "GitHub Desktop" / "GitHubDesktop.exe"
+    return prog_path.exists() or shutil.which("GitHubDesktop.exe") is not None
+
+def download_installer(dest_path: Path) -> None:
+    """Downloads the GitHub Desktop Windows installer."""
+    logging.info(f"Starting download of GitHub Desktop installer from {GHD_URL}")
     try:
-        subprocess.run(["wsl", "which", "gcc"], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        return True
-    except subprocess.CalledProcessError:
-        return False
+        req = Request(GHD_URL, headers={"User-Agent": "Mozilla/5.0"})
+        with urlopen(req) as response, open(dest_path, "wb") as out_file:
+            total = int(response.getheader('Content-Length', 0))
+            downloaded = 0
+            chunk_size = 8192
+            while True:
+                chunk = response.read(chunk_size)
+                if not chunk:
+                    break
+                out_file.write(chunk)
+                downloaded += len(chunk)
+                if total:
+                    percent = downloaded * 100 / total
+                    logging.info(f"Download progress: {percent:.1f}%")
+        logging.info(f"Download complete: {dest_path}")
+    except (HTTPError, URLError) as e:
+        logging.error(f"Download error: {e}")
+        sys.exit(1)
 
+def run_installer(installer_path: Path) -> None:
+    """Runs the GitHub Desktop installer in silent mode."""
+    logging.info(f"Launching GitHub Desktop installer: {installer_path}")
+    # Squirrel-based installer supports '--silent' flag
+    cmd = [str(installer_path), "--silent"]
+    try:
+        result = subprocess.run(cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        logging.info("GitHub Desktop installed successfully.")
+        logging.debug(f"Installer output:\n{result.stdout}")
+    except subprocess.CalledProcessError as e:
+        logging.error(f"Installation failed (exit code {e.returncode}): {e.stderr}")
+        sys.exit(e.returncode)
 
-def install_gcc():
-    """Installs gcc if it is not installed."""
-    logging.info("[INFO] gcc is not installed. Installing gcc...")
-    subprocess.run(["wsl", "sudo", "apt", "update"], check=True)
-    subprocess.run(["wsl", "sudo", "apt", "install", "-y", "gcc"], check=True)
-    logging.info("[INFO] gcc has been successfully installed.")
-
-
-def run_gcc():
-    """Runs gcc."""
-    logging.info("[INFO] Running gcc...")
-    command = "gcc"
-    if isinstance(command, str):
-        command = f"wsl {command}"  # Embed command for WSL
-
-    process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
-    process.communicate()
-
+def ensure_installed():
+    """Final check to confirm GitHub Desktop is available."""
+    if is_github_desktop_installed():
+        logging.info("GitHub Desktop is now available.")
+    else:
+        logging.warning("GitHub Desktop not found. Please check PATH or installation.")
 
 def main():
-    """Main logic to check and run gcc."""
-    if not is_gcc_installed():
-        install_gcc()
+    logging.info("=== GitHub Desktop Installer started ===")
+    if is_github_desktop_installed():
+        logging.info("GitHub Desktop is already installed. Exiting.")
+        return
 
-    run_gcc()
+    with tempfile.TemporaryDirectory() as tmpdir:
+        installer_file = Path(tmpdir) / "GitHubDesktopSetup.exe"
+        download_installer(installer_file)
+        run_installer(installer_file)
 
+    ensure_installed()
+    logging.info("=== Process completed ===")
 
 if __name__ == "__main__":
+    if os.name != "nt":
+        logging.error("This script only runs on Windows.")
+        sys.exit(1)
     main()

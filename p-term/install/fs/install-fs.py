@@ -61,12 +61,17 @@
 #
 # Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 
-import subprocess
+import os
 import sys
-from pathlib import Path
+import shutil
+import subprocess
 import logging
+import tempfile
+from pathlib import Path
+from urllib.request import Request, urlopen
+from urllib.error import URLError, HTTPError
 
-# Log setup: timestamp with milliseconds
+# --- Logging konfigurieren ---
 log_path = Path(__file__).parent / "installer.log"
 logging.basicConfig(
     level=logging.INFO,
@@ -78,42 +83,118 @@ logging.basicConfig(
     ]
 )
 
+# --- Konstanten ---
+DOTNET_INSTALL_SCRIPT = "https://dot.net/v1/dotnet-install.ps1"
+INSTALL_DIR           = Path("C:/Program Files/dotnet")
+FSI_CMD               = "fsi"          # F# Interactive
+DOTNET_CMD            = "dotnet"
 
-def is_gcc_installed():
-    """Checks if gcc is installed."""
+def is_dotnet_installed() -> bool:
+    """Prüft, ob 'dotnet' bereits im PATH verfügbar ist."""
+    return shutil.which(DOTNET_CMD) is not None
+
+def is_fsharp_available() -> bool:
+    """Prüft, ob 'fsi' (F# Interactive) verfügbar ist."""
+    return shutil.which(FSI_CMD) is not None
+
+def download_install_script(dest: Path) -> None:
+    """Lädt das offizielle dotnet-install PowerShell-Skript herunter."""
+    logging.info(f"Starte Download des dotnet-install-Skripts von {DOTNET_INSTALL_SCRIPT}")
     try:
-        subprocess.run(["wsl", "which", "gcc"], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        return True
-    except subprocess.CalledProcessError:
-        return False
+        req = Request(DOTNET_INSTALL_SCRIPT, headers={"User-Agent": "Mozilla/5.0"})
+        with urlopen(req) as resp, open(dest, "wb") as out:
+            total = int(resp.getheader("Content-Length", 0) or 0)
+            downloaded = 0
+            chunk_size = 8192
+            while True:
+                chunk = resp.read(chunk_size)
+                if not chunk:
+                    break
+                out.write(chunk)
+                downloaded += len(chunk)
+                if total:
+                    pct = downloaded * 100 / total
+                    logging.info(f"Download-Fortschritt: {pct:.1f}%")
+        logging.info(f"dotnet-install-Skript gespeichert: {dest}")
+    except (HTTPError, URLError) as e:
+        logging.error(f"Fehler beim Herunterladen: {e}")
+        sys.exit(1)
 
+def run_install_script(script_path: Path) -> None:
+    """
+    Führt das PowerShell-Skript aus, um das .NET SDK (LTS) zu installieren.
+    """
+    logging.info(f"Starte Installation des .NET SDK (LTS) in {INSTALL_DIR}")
+    ps_command = [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy", "Bypass",
+        "-File", str(script_path),
+        "-Channel", "LTS",
+        "-InstallDir", str(INSTALL_DIR),
+        "-NoPath"
+    ]
+    try:
+        subprocess.run(ps_command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        logging.info(".NET SDK erfolgreich installiert.")
+    except subprocess.CalledProcessError as e:
+        logging.error(f".NET-Installation fehlgeschlagen (Exit-Code {e.returncode}):\n{e.stderr}")
+        sys.exit(e.returncode)
 
-def install_gcc():
-    """Installs gcc if it is not installed."""
-    logging.info("[INFO] gcc is not installed. Installing gcc...")
-    subprocess.run(["wsl", "sudo", "apt", "update"], check=True)
-    subprocess.run(["wsl", "sudo", "apt", "install", "-y", "gcc"], check=True)
-    logging.info("[INFO] gcc has been successfully installed.")
+def update_path() -> None:
+    """Fügt das dotnet-Install-Verzeichnis dem System-PATH hinzu (für neue Terminals)."""
+    dotnet_bin = str(INSTALL_DIR)
+    current = os.environ.get("PATH", "")
+    if dotnet_bin.lower() in current.lower():
+        logging.info("dotnet ist bereits im PATH.")
+        return
+    new_path = f"{current};{dotnet_bin}"
+    logging.info(f"Füge dotnet-InstallDir dem PATH hinzu: {dotnet_bin}")
+    subprocess.run(f'setx PATH "{new_path}"', shell=True, check=False)
 
+def verify_installation() -> None:
+    """
+    Prüft die Installation via 'dotnet --list-sdks' und 'fsi --version'.
+    """
+    try:
+        sdks = subprocess.check_output([DOTNET_CMD, "--list-sdks"], text=True).strip()
+        logging.info(f"Installierte .NET SDKs:\n{sdks}")
+    except Exception as e:
+        logging.error(f"Fehler bei '.NET SDK'-Prüfung: {e}")
+        sys.exit(1)
 
-def run_gcc():
-    """Runs gcc."""
-    logging.info("[INFO] Running gcc...")
-    command = "gcc"
-    if isinstance(command, str):
-        command = f"wsl {command}"  # Embed command for WSL
-
-    process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
-    process.communicate()
-
+    try:
+        out = subprocess.check_output([FSI_CMD, "--version"], text=True).strip()
+        logging.info(f"F# Interactive (fsi) Version: {out}")
+    except Exception as e:
+        logging.error(f"Fehler bei 'fsi'-Prüfung: {e}")
+        sys.exit(1)
 
 def main():
-    """Main logic to check and run gcc."""
-    if not is_gcc_installed():
-        install_gcc()
+    logging.info("=== F# Installer (.NET SDK) gestartet ===")
+    if os.name != "nt":
+        logging.error("Dieses Skript funktioniert nur unter Windows.")
+        sys.exit(1)
 
-    run_gcc()
+    # .NET SDK installieren, falls nicht vorhanden
+    if not is_dotnet_installed():
+        with tempfile.TemporaryDirectory() as td:
+            script = Path(td) / "dotnet-install.ps1"
+            download_install_script(script)
+            run_install_script(script)
+        update_path()
+    else:
+        logging.info(".NET SDK ist bereits installiert.")
 
+    # F# Interactive prüfen
+    if is_fsharp_available():
+        logging.info("F# Interactive ist bereits verfügbar.")
+    else:
+        logging.error("F# Interactive (fsi) wurde nicht gefunden.")
+        sys.exit(1)
+
+    verify_installation()
+    logging.info("=== F# Installation abgeschlossen ===")
 
 if __name__ == "__main__":
     main()
