@@ -4,12 +4,13 @@
 
 # **_P-Terminal_**
 
-<p align="left">
-    <img src="./icons/p-term-banner-3.svg" alt="peharge"/>
-    <img src="./icons/peharge-banner-3.svg" alt="peharge"/>
-    <img src="./icons/MAVIS-icon-banner-3.svg" alt="mavis">
-    <img src="./icons/MAVIS-launcher-icon-banner-3.svg" alt="mavis-launcher">
-    <img src="./icons/MAVIS-terminal-icon-banner-3.svg" alt="mavis-terminal">
+<p align="center">
+    <img src="https://github.com/Peharge/p-terminal/tree/main/icons/p-term-banner-3.svg" alt="peharge"/>
+    <img src="https://github.com/Peharge/p-terminal/tree/main/icons/pp-term-banner-3.svg" alt="peharge"/>
+    <img src="https://github.com/Peharge/p-terminal/tree/main/icons/peharge-banner-3.svg" alt="peharge"/>
+    <img src="https://github.com/Peharge/p-terminal/tree/main/icons/MAVIS-icon-banner-3.svg" alt="mavis">
+    <img src="https://github.com/Peharge/p-terminal/tree/main/icons/MAVIS-launcher-icon-banner-3.svg" alt="mavis-launcher">
+    <img src="https://github.com/Peharge/p-terminal/tree/main/icons/MAVIS-terminal-icon-banner-3.svg" alt="mavis-terminal"><br>
 </p>
 
 Hey ;-)
