@@ -61,12 +61,18 @@
 #
 # Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 
-import subprocess
+import os
 import sys
-from pathlib import Path
+import subprocess
 import logging
+import tempfile
+import shutil
+from pathlib import Path
+from urllib.request import urlopen
+import json
+import zipfile
 
-# Log setup: timestamp with milliseconds
+# Configure logging
 log_path = Path(__file__).parent / "installer.log"
 logging.basicConfig(
     level=logging.INFO,
@@ -78,42 +84,85 @@ logging.basicConfig(
     ]
 )
 
+GO_INSTALL_DIR = Path("C:/Go")
+GO_DOWNLOAD_API = "https://go.dev/dl/?mode=json"
 
-def is_gcc_installed():
-    """Checks if gcc is installed."""
+def is_go_installed() -> bool:
+    return shutil.which("go") is not None or (GO_INSTALL_DIR / "bin" / "go.exe").exists()
+
+def get_latest_go_version() -> dict:
+    """Fetches metadata for the latest Go version for Windows x64."""
+    logging.info("Querying official Go download API...")
+    with urlopen(GO_DOWNLOAD_API) as resp:
+        versions = json.load(resp)
+        for v in versions:
+            for f in v["files"]:
+                if f["os"] == "windows" and f["arch"] == "amd64" and f["kind"] == "archive":
+                    logging.info(f"Latest version found: {v['version']}")
+                    return {
+                        "version": v["version"],
+                        "filename": f["filename"],
+                        "url": "https://go.dev/dl/" + f["filename"]
+                    }
+    logging.error("No matching Go version found.")
+    sys.exit(1)
+
+def download_go_zip(info: dict, dest: Path):
+    """Downloads the Go ZIP archive."""
+    logging.info(f"Downloading Go {info['version']} from {info['url']}")
+    with urlopen(info["url"]) as resp, open(dest, "wb") as out_file:
+        shutil.copyfileobj(resp, out_file)
+    logging.info(f"Download complete: {dest}")
+
+def extract_go(zip_path: Path):
+    """Extracts the ZIP archive to C:/Go"""
+    if GO_INSTALL_DIR.exists():
+        logging.info("Removing old Go installation...")
+        shutil.rmtree(GO_INSTALL_DIR)
+    logging.info(f"Extracting {zip_path} to {GO_INSTALL_DIR}")
+    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+        zip_ref.extractall("C:/")
+    logging.info("Extraction complete.")
+
+def update_path():
+    """Adds Go to the PATH (only effective for future terminals)."""
+    go_bin = str(GO_INSTALL_DIR / "bin")
+    current_path = os.environ.get("PATH", "")
+    if go_bin.lower() in current_path.lower():
+        logging.info("Go is already in the PATH.")
+        return
+    logging.info(f"Adding Go to PATH: {go_bin}")
+    subprocess.run(["setx", "PATH", f"{current_path};{go_bin}"], shell=True)
+
+def verify_installation():
+    """Verifies the Go installation."""
     try:
-        subprocess.run(["wsl", "which", "gcc"], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        return True
-    except subprocess.CalledProcessError:
-        return False
-
-
-def install_gcc():
-    """Installs gcc if it is not installed."""
-    logging.info("[INFO] gcc is not installed. Installing gcc...")
-    subprocess.run(["wsl", "sudo", "apt", "update"], check=True)
-    subprocess.run(["wsl", "sudo", "apt", "install", "-y", "gcc"], check=True)
-    logging.info("[INFO] gcc has been successfully installed.")
-
-
-def run_gcc():
-    """Runs gcc."""
-    logging.info("[INFO] Running gcc...")
-    command = "gcc"
-    if isinstance(command, str):
-        command = f"wsl {command}"  # Embed command for WSL
-
-    process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
-    process.communicate()
-
+        result = subprocess.run(["go", "version"], capture_output=True, text=True, check=True)
+        logging.info(f"Go successfully installed: {result.stdout.strip()}")
+    except Exception as e:
+        logging.error("Error verifying Go installation: " + str(e))
+        sys.exit(1)
 
 def main():
-    """Main logic to check and run gcc."""
-    if not is_gcc_installed():
-        install_gcc()
+    logging.info("=== Go Installer started ===")
+    if os.name != "nt":
+        logging.error("This script only works on Windows.")
+        sys.exit(1)
 
-    run_gcc()
+    if is_go_installed():
+        logging.info("Go is already installed.")
+        return
 
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp_path = Path(tmp)
+        info = get_latest_go_version()
+        zip_file = tmp_path / info["filename"]
+        download_go_zip(info, zip_file)
+        extract_go(zip_file)
+
+    update_path()
+    verify_installation()
+    logging.info("=== Go installation completed ===")
 
 if __name__ == "__main__":
     main()
