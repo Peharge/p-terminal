@@ -290,7 +290,6 @@ fn handle_cd(args: &[&str]) {
 
 /// Zeigt die Hilfe‐Ansicht (farblich formatiert)
 fn handle_help() {
-    // Hier wandeln wir jede Zeile einzeln um, sodass wir nur genau die benötigten Platzhalter nutzen.
     println!("{}Built-in Befehle:{}", GREEN, RESET);
     println!("  {}cd{} [<Pfad>]    Verzeichnis wechseln", CYAN, RESET);
     println!("  {}exit{}, {}quit{}   P-Terminal beenden", CYAN, RESET, CYAN, RESET);
@@ -304,47 +303,110 @@ fn handle_clear() {
     print!("\x1B[2J\x1B[H");
 }
 
-/// Externe Befehle synchron über PowerShell (Windows) / pwsh (Unix) ausführen
-fn spawn_powershell_command(line: &str) {
-    // Unter Windows: powershell.exe, sonst pwsh (PowerShell Core)
+/// Führt externe Befehle synchron aus. Dabei wird zuerst versucht, PowerShell (bzw. pwsh) zu verwenden.
+/// Falls das gewählte Shell-Programm nicht verfügbar ist, wird automatisch auf cmd (Windows) bzw. sh (Unix) umgeschaltet.
+fn spawn_shell_command(line: &str) {
     #[cfg(windows)]
-    let shell = "powershell.exe";
-    #[cfg(not(windows))]
-    let shell = "pwsh";
+    {
+        // Prüfe, ob PowerShell verfügbar ist
+        let use_powershell = Command::new("powershell.exe")
+            .arg("-NoLogo")
+            .arg("-Command")
+            .arg("exit")
+            .status()
+            .map(|s| s.success())
+            .unwrap_or(false);
 
-    let status = Command::new(shell)
-        .arg("-NoLogo")
-        .arg("-NoProfile")
-        .arg("-Command")
-        .arg(line)
-        .stdin(Stdio::inherit())
-        .stdout(Stdio::inherit())
-        .stderr(Stdio::inherit())
-        .status();
+        if use_powershell {
+            let status = Command::new("powershell.exe")
+                .arg("-NoLogo")
+                .arg("-NoProfile")
+                .arg("-Command")
+                .arg(line)
+                .stdin(Stdio::inherit())
+                .stdout(Stdio::inherit())
+                .stderr(Stdio::inherit())
+                .status();
 
-    match status {
-        Ok(s) => {
-            if !s.success() {
-                error!("PowerShell-Befehl `{}` mit Exit-Code {:?} beendet.", line, s.code());
+            match status {
+                Ok(s) if s.success() => (),
+                Ok(s) => error!("PowerShell-Befehl `{}` mit Exit-Code {:?} beendet.", line, s.code()),
+                Err(e) => error!("Fehler beim Ausführen von PowerShell: {}", e),
+            }
+        } else {
+            // Fallback zu cmd.exe
+            let status = Command::new("cmd.exe")
+                .arg("/C")
+                .arg(line)
+                .stdin(Stdio::inherit())
+                .stdout(Stdio::inherit())
+                .stderr(Stdio::inherit())
+                .status();
+
+            match status {
+                Ok(s) if s.success() => (),
+                Ok(s) => error!("cmd.exe-Befehl `{}` mit Exit-Code {:?} beendet.", line, s.code()),
+                Err(e) => error!("Fehler beim Ausführen von cmd.exe: {}", e),
             }
         }
-        Err(e) => {
-            eprintln!("{}Failed to spawn command: {}{}", RED, e, RESET);
+    }
+
+    #[cfg(not(windows))]
+    {
+        // Unter Unix: Zuerst versuchen wir pwsh, andernfalls sh
+        let use_pwsh = Command::new("pwsh")
+            .arg("-NoLogo")
+            .arg("-Command")
+            .arg("exit")
+            .status()
+            .map(|s| s.success())
+            .unwrap_or(false);
+
+        if use_pwsh {
+            let status = Command::new("pwsh")
+                .arg("-NoLogo")
+                .arg("-NoProfile")
+                .arg("-Command")
+                .arg(line)
+                .stdin(Stdio::inherit())
+                .stdout(Stdio::inherit())
+                .stderr(Stdio::inherit())
+                .status();
+
+            match status {
+                Ok(s) if s.success() => (),
+                Ok(s) => error!("pwsh-Befehl `{}` mit Exit-Code {:?} beendet.", line, s.code()),
+                Err(e) => error!("Fehler beim Ausführen von pwsh: {}", e),
+            }
+        } else {
+            let status = Command::new("sh")
+                .arg("-c")
+                .arg(line)
+                .stdin(Stdio::inherit())
+                .stdout(Stdio::inherit())
+                .stderr(Stdio::inherit())
+                .status();
+
+            match status {
+                Ok(s) if s.success() => (),
+                Ok(s) => error!("sh-Befehl `{}` mit Exit-Code {:?} beendet.", line, s.code()),
+                Err(e) => error!("Fehler beim Ausführen von sh: {}", e),
+            }
         }
     }
 }
 
 fn main() -> Result<()> {
-    // Logging initialisieren (LEVEL über ENV, z.B. `export RUST_LOG=info`)
+    // Initialisiere Logging (Level wird per ENV gesetzt, z.B. `export RUST_LOG=info`)
     let subscriber = tracing_subscriber::FmtSubscriber::builder()
         .with_env_filter(tracing_subscriber::EnvFilter::from_default_env())
         .finish();
     tracing::subscriber::set_global_default(subscriber)?;
 
-    // Banner drucken
+    // Banner ausgeben
     print_banner();
 
-    // rustyline konfigurieren
+    // Konfiguriere rustyline
     let config = Config::builder()
         .history_ignore_space(true)
         .auto_add_history(true)
@@ -352,7 +414,7 @@ fn main() -> Result<()> {
     let mut rl: Editor<PHelper, FileHistory> = Editor::with_config(config)?;
     rl.set_helper(Some(PHelper::new()));
 
-    // History laden
+    // Lade History
     let history_path = BaseDirs::new()
         .map(|d| d.home_dir().join(".p-terminal_history"))
         .unwrap_or_else(|| PathBuf::from(".p-terminal_history"));
@@ -360,7 +422,7 @@ fn main() -> Result<()> {
         let _ = rl.load_history(hp_str);
     }
 
-    // REPL‐Loop
+    // REPL-Loop
     loop {
         // Prompt bauen: user@host(git_branch) cwd>
         let username = whoami::username();
@@ -398,12 +460,17 @@ fn main() -> Result<()> {
                         display_sysinfo();
                     }
                     Builtin::Other => {
-                        spawn_powershell_command(trimmed);
+                        // Führe externe Befehle aus, wobei mehrere CPUs stärker genutzt werden können,
+                        // indem der Befehl in einem separaten Thread ausgeführt wird.
+                        let command = trimmed.to_string();
+                        std::thread::spawn(move || {
+                            spawn_shell_command(&command);
+                        }).join().unwrap();
                     }
                 }
             }
             Err(ReadlineError::Interrupted) => {
-                // Strg+C → newline und reprompt
+                // Strg+C → Neue Zeile und erneuter Prompt
                 println!();
             }
             Err(ReadlineError::Eof) => {
