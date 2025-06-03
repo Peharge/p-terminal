@@ -63,81 +63,121 @@ REM pouvant découler directement ou indirectement de l'utilisation, de la modif
 REM
 REM Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 
-:: -----------------------------------------------------------------------------
-:: Batch-Skript: Installiert ggf. Visual Studio C++ Build Tools und kompiliert
-::               und startet dann das Programm p-term.cpp
-:: -----------------------------------------------------------------------------
-setlocal enableextensions enabledelayedexpansion
+setlocal EnableDelayedExpansion
 
-REM === 1. Visual Studio Install-Skript ausführen ===
-set "INSTALL_SCRIPT=%USERPROFILE%\p-terminal\p-term\install\cpp\install-vs.py"
-if not exist "%INSTALL_SCRIPT%" (
-    echo Fehler: Installationsskript nicht gefunden: %INSTALL_SCRIPT%
-    goto :error
-)
-echo.
-echo *** Schritt 1: Installationsskript fuer VS Build Tools ausfuehren ***
-python "%INSTALL_SCRIPT%"
+echo =========================================
+echo      Rust-Projekt-Setup (Batch-Skript)
+echo =========================================
+
+rem -----------------------------------------
+rem 1) Überprüfen, ob rustup installiert ist
+rem -----------------------------------------
+where rustup >nul 2>&1
 if errorlevel 1 (
-    echo Fehler: Installationsskript schlug fehl.
-    goto :error
+    echo [INFO] Rustup nicht gefunden. Installation wird gestartet...
+
+    rem Prüfen, ob curl vorhanden ist
+    where curl >nul 2>&1
+    if errorlevel 1 (
+        echo [FEHLER] curl ist nicht installiert. Bitte curl installieren oder PowerShell verwenden.
+        goto :Ende
+    )
+
+    echo [INFO] Lade rustup-init.exe herunter...
+    curl -s -o "%~dp0rustup-init.exe" https://win.rustup.rs
+    if not exist "%~dp0rustup-init.exe" (
+        echo [FEHLER] Download von rustup-init.exe fehlgeschlagen.
+        goto :Ende
+    )
+
+    echo [INFO] Führe rustup-Installer aus...
+    "%~dp0rustup-init.exe" -y
+    if errorlevel 1 (
+        echo [FEHLER] Rust-Installation über rustup ist fehlgeschlagen.
+        goto :CleanupInstaller
+    )
+
+    echo [INFO] Rustup erfolgreich installiert.
+    :CleanupInstaller
+    del "%~dp0rustup-init.exe" >nul 2>&1
+    rem Neuen Pfad sofort hinzufügen, damit cargo verfügbar wird
+    set "PATH=%USERPROFILE%\.cargo\bin;%PATH%"
+) else (
+    echo [INFO] Rustup ist bereits installiert.
 )
-echo.
 
-REM === 2. Visual Studio Umgebungs-Init (vcvarsall.bat) ===
-echo *** Schritt 2: Visual Studio-Umgebung initialisieren ***
-
-REM Default-Installation-Verzeichnis setzen (fallback)
-set "VSINSTALL=%ProgramFiles%\Microsoft Visual Studio\2022\Community"
-
-REM Versuche VS-Installation via vswhere.exe zu finden und überschreibe VSINSTALL
-set "VSWHERE=%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe"
-if exist "%VSWHERE%" (
-    for /f "usebackq tokens=* delims=" %%i in (`"%VSWHERE%" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do (
-        set "VSINSTALL=%%i"
+rem -----------------------------------------
+rem 2) Überprüfen, ob cargo (Rust-Paketmanager) verfügbar ist
+rem -----------------------------------------
+where cargo >nul 2>&1
+if errorlevel 1 (
+    echo [WARNUNG] cargo nicht in PATH gefunden. Versuche PATH zu aktualisieren...
+    set "PATH=%USERPROFILE%\.cargo\bin;%PATH%"
+    where cargo >nul 2>&1
+    if errorlevel 1 (
+        echo [FEHLER] cargo ist immer noch nicht erreichbar. Bitte Terminal neu starten oder neu einloggen.
+        goto :Ende
+    ) else (
+        echo [INFO] cargo jetzt verfügbar.
     )
 ) else (
-    echo vswhere.exe nicht gefunden, verwende Standard: %VSINSTALL%
+    echo [INFO] cargo ist vorhanden.
 )
 
-set "VCVARSALL=%VSINSTALL%\VC\Auxiliary\Build\vcvarsall.bat"
-if not exist "%VCVARSALL%" (
-    echo Fehler: vcvarsall.bat nicht gefunden unter %VCVARSALL%
-    goto :error
-)
-call "%VCVARSALL%" x64
+rem -----------------------------------------
+rem 3) Projektverzeichnis bestimmen und prüfen
+rem -----------------------------------------
+rem Da sich dieses Skript im Projekt-Root befindet, ist %~dp0 der korrekte Pfad.
+set "PROJECT_PATH=%~dp0"
+
+echo [INFO] Projektverzeichnis: "%PROJECT_PATH%"
+
+rem -------------------------------------------------
+rem 4) Cargo Clean: Alte Builds entfernen
+rem -------------------------------------------------
+echo ----------------------------------------
+echo [SCHRITT] cargo clean
+echo ----------------------------------------
+pushd "%PROJECT_PATH%"
+cargo clean
 if errorlevel 1 (
-    echo Fehler: VS-Umgebung konnte nicht initialisiert werden.
-    goto :error
+    echo [FEHLER] "cargo clean" ist fehlgeschlagen.
+    popd
+    goto :Ende
 )
-echo.
 
-REM === 3. C++-Datei kompilieren und ausfuehren ===
-set "SRC=%USERPROFILE%\p-terminal\p-term\p-term.cpp"
-set "EXE=%USERPROFILE%\p-terminal\p-term\p-term.exe"
-if not exist "%SRC%" (
-    echo Fehler: Quelldatei nicht gefunden: %SRC%
-    goto :error
-)
-echo *** Schritt 3: Kompilieren von %SRC% ***
-cl.exe /EHsc "%SRC%" /Fe"%EXE%"
+rem -------------------------------------------------
+rem 5) Cargo Build: Projekt kompilieren
+rem -------------------------------------------------
+echo ----------------------------------------
+echo [SCHRITT] cargo build
+echo ----------------------------------------
+cargo build
 if errorlevel 1 (
-    echo Fehler: Kompilierung schlug fehl.
-    goto :error
+    echo [FEHLER] "cargo build" ist fehlgeschlagen.
+    popd
+    goto :Ende
 )
-echo.
-echo *** Ausfuehren von %EXE% ***
-"%EXE%"
 
-goto :end
+rem -------------------------------------------------
+rem 6) Cargo Run: Projekt ausführen
+rem -------------------------------------------------
+echo ----------------------------------------
+echo [SCHRITT] cargo run
+echo ----------------------------------------
+cargo run
+if errorlevel 1 (
+    echo [FEHLER] "cargo run" ist fehlgeschlagen.
+    popd
+    goto :Ende
+)
 
-:error
+popd
+echo =========================================
+echo [ERFOLG] Alle Aufgaben erfolgreich ausgeführt.
+echo =========================================
+
+:Ende
 echo.
-echo *** Skript wurde mit Fehler beendet ***
 pause
-exit /b 1
-
-:end
-echo.
-echo *** Fertig ***
-endlocal
+exit /b 0
