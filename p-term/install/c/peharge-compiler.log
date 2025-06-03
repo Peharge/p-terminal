@@ -1,0 +1,26 @@
+[2025-05-16 10:59:29.601] Project directory: C:\Users\julia\p-terminal\pp-term
+[2025-05-16 10:59:31.137] Found: vcvarsall.bat -> C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat
+[2025-05-16 10:59:31.137] Performing C compiler test run...
+[2025-05-16 10:59:35.522] Compiler output:
+
+C:\Users\julia\p-terminal\pp-term>call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" x64   && cl.exe /TC "C:\Users\julia\p-terminal\pp-term\vs_test_c\test.c" /Fe"C:\Users\julia\p-terminal\pp-term\vs_test_c\test.exe" 
+**********************************************************************
+** Visual Studio 2022 Developer Command Prompt v17.13.6
+** Copyright (c) 2022 Microsoft Corporation
+**********************************************************************
+[vcvarsall.bat] Environment initialized for: 'x64'
+Microsoft (R) C/C++-Optimierungscompiler Version 19.43.34810 f├╝r x64
+Copyright (C) Microsoft Corporation. Alle Rechte vorbehalten.
+
+test.c
+Microsoft (R) Incremental Linker Version 14.43.34810.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+/out:C:\Users\julia\p-terminal\pp-term\vs_test_c\test.exe 
+test.obj 
+
+[2025-05-16 10:59:35.522] C compilation successful. cl.exe is working.
+[2025-05-16 10:59:35.522] Log file successfully written.
+[2025-05-16 10:59:35.522] Batch file for C compiler created: C:\Users\julia\p-terminal\pp-term\peharge-c-compiler\build_peharge_c.bat
+[2025-05-16 10:59:35.522] peharge-c-compiler successfully set up.
+[2025-05-16 10:59:35.522] Temporary files removed.

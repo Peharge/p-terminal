@@ -1,0 +1,27 @@
+[2025-05-16 10:59:16.888] Project directory: C:\Users\julia\p-terminal\pp-term
+[2025-05-16 10:59:16.888] Search for the Visual Studio C++ development environment...
+[2025-05-16 10:59:21.191] Found vcvarsall.bat: C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat
+[2025-05-16 10:59:21.191] Test compiler availability...
+[2025-05-16 10:59:26.519] Output of the compilation test:
+
+C:\Users\julia\p-terminal\pp-term>"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" x64   && cl.exe /EHsc "C:\Users\julia\p-terminal\pp-term\vs_test\test.cpp" /Fe"C:\Users\julia\p-terminal\pp-term\vs_test\test.exe" 
+**********************************************************************
+** Visual Studio 2022 Developer Command Prompt v17.13.6
+** Copyright (c) 2022 Microsoft Corporation
+**********************************************************************
+[vcvarsall.bat] Environment initialized for: 'x64'
+Microsoft (R) C/C++-Optimierungscompiler Version 19.43.34810 f├╝r x64
+Copyright (C) Microsoft Corporation. Alle Rechte vorbehalten.
+
+test.cpp
+Microsoft (R) Incremental Linker Version 14.43.34810.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+/out:C:\Users\julia\p-terminal\pp-term\vs_test\test.exe 
+test.obj 
+
+[2025-05-16 10:59:26.535] Compilation successful. cl.exe works perfectly.
+[2025-05-16 10:59:26.535] Installation status logged in: C:\Users\julia\p-terminal\pp-term\peharge-cpp-compiler\compiler_installed.txt
+[2025-05-16 10:59:26.535] Batch file created for the compiler: C:\Users\julia\p-terminal\pp-term\peharge-cpp-compiler\build_peharge.bat
+[2025-05-16 10:59:26.535] Visual Studio C++ Build Tools successfully detected and tested.
+[2025-05-16 10:59:26.535] Temporary files have been removed.
