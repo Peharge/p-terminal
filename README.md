@@ -46,7 +46,7 @@ Peharge Projects 2025<br>
 
 # **_NEWS_**
 
-**[23.04.2025]** Development start of P-Term and PP-Term<br>
+**[23.04.2025]** Development start of PP-Terminal<br>
 **[24.04.2025]** PP-Term EAP release: [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat)<br>
 **[01.05.2025]** PP-Term 3 EAP release<br>
 **[08.05.2025]** PP-Term 3 release<br>
@@ -59,6 +59,7 @@ Peharge Projects 2025<br>
 **[28.05.2025]** PP-Term 5.3 EAP release<br>
 **[29.05.2025]** PP-Term 5.3 release<br>
 **[31.05.2025]** PP-Term 5.3.1.55 runs with Python 3.13<br>
+**[03.06.2025]** Development start of P-Terminal<br>
 
 </div>
 
