@@ -61,17 +61,19 @@
 #
 # Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 
-import sys
 import os
+import sys
 import shutil
 import subprocess
 import logging
-from pathlib import Path
-from urllib.request import urlopen, Request
-from urllib.error import URLError, HTTPError
 import tempfile
+import zipfile
+import json
+from pathlib import Path
+from urllib.request import Request, urlopen
+from urllib.error import URLError, HTTPError
 
-# Logging konfigurieren
+# --- Logging konfigurieren ---
 log_path = Path(__file__).parent / "installer.log"
 logging.basicConfig(
     level=logging.INFO,
@@ -83,77 +85,122 @@ logging.basicConfig(
     ]
 )
 
-def is_rustup_installed() -> bool:
-    """Prüft, ob rustup über den PATH aufgerufen werden kann."""
-    return shutil.which("rustup") is not None
+# --- Konstanten ---
+GITHUB_API_LATEST = "https://api.github.com/repos/scala/scala/releases/latest"
+INSTALL_ROOT      = Path("C:/Program Files/Scala")
+SCALA_CMD         = "scala"
 
-def download_rustup_installer(dest_path: Path) -> None:
-    """
-    Lädt den Windows-Installer von rustup (rustup-init.exe) herunter.
-    Die URL https://win.rustup.rs/ liefert automatisch den aktuellsten Installer.
-    """
-    url = "https://win.rustup.rs/"
-    logging.info(f"Starte Download des rustup-Installers von {url}")
+def is_scala_installed() -> bool:
+    """Prüft, ob 'scala' bereits im PATH verfügbar ist."""
+    return shutil.which(SCALA_CMD) is not None
+
+def get_latest_scala_release() -> dict:
+    """Ermittelt die neueste Scala-Version und das ZIP-Asset über die GitHub-API."""
+    logging.info("Ermittle neueste Scala-Version über GitHub API…")
+    req = Request(GITHUB_API_LATEST, headers={"User-Agent": "Mozilla/5.0"})
+    try:
+        with urlopen(req) as resp:
+            data = json.load(resp)
+    except (HTTPError, URLError) as e:
+        logging.error(f"Fehler beim Abruf der GitHub-API: {e}")
+        sys.exit(1)
+
+    version = data.get("tag_name", "").lstrip("v")
+    download_url = None
+    filename = None
+    # Suche das Asset mit Binär-ZIP
+    for asset in data.get("assets", []):
+        name = asset.get("name", "")
+        if name.endswith("-bin.zip"):
+            download_url = asset.get("browser_download_url")
+            filename = name
+            break
+
+    if not version or not download_url:
+        logging.error("Konnte Scala-Binär-ZIP nicht finden.")
+        sys.exit(1)
+
+    logging.info(f"Gefundene Version: {version}, Asset: {filename}")
+    return {"version": version, "url": download_url, "filename": filename}
+
+def download_zip(dest: Path, url: str):
+    """Lädt das ZIP-Archiv herunter und protokolliert den Fortschritt."""
+    logging.info(f"Starte Download von {url}")
     try:
         req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
-        with urlopen(req) as response, open(dest_path, "wb") as out_file:
-            total = int(response.getheader('Content-Length', 0))
+        with urlopen(req) as resp, open(dest, "wb") as out:
+            total = int(resp.getheader("Content-Length", 0) or 0)
             downloaded = 0
             chunk_size = 8192
             while True:
-                chunk = response.read(chunk_size)
+                chunk = resp.read(chunk_size)
                 if not chunk:
                     break
-                out_file.write(chunk)
+                out.write(chunk)
                 downloaded += len(chunk)
-                percent = downloaded * 100 / total if total else 0
-                logging.info(f"Download-Fortschritt: {percent:.1f}%")
-        logging.info(f"Download abgeschlossen: {dest_path}")
+                if total:
+                    pct = downloaded * 100 / total
+                    logging.info(f"Download-Fortschritt: {pct:.1f}%")
+        logging.info(f"Download abgeschlossen: {dest}")
     except (HTTPError, URLError) as e:
         logging.error(f"Fehler beim Download: {e}")
         sys.exit(1)
 
-def run_installer(installer_path: Path) -> None:
-    """
-    Führt den heruntergeladenen rustup-Installer im Silent-Modus aus.
-    """
-    logging.info(f"Starte rustup-Installer: {installer_path}")
-    # /VERYSILENT je nach InnoSetup-Version, für rustup reicht `-y`
-    cmd = [str(installer_path), "-y"]
-    try:
-        result = subprocess.run(cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        logging.info("rustup erfolgreich installiert.")
-        logging.debug(f"Installer-Ausgabe:\n{result.stdout}")
-    except subprocess.CalledProcessError as e:
-        logging.error(f"Installation fehlgeschlagen (Exit-Code {e.returncode}):\n{e.stderr}")
-        sys.exit(e.returncode)
+def extract_scala(zip_path: Path, install_dir: Path):
+    """Entpackt das ZIP-Archiv nach install_dir, löscht alte Installation."""
+    if install_dir.exists():
+        logging.info(f"Alte Installation in {install_dir} wird gelöscht…")
+        shutil.rmtree(install_dir)
+    logging.info(f"Entpacke {zip_path} nach {install_dir}")
+    install_dir.parent.mkdir(parents=True, exist_ok=True)
+    with zipfile.ZipFile(zip_path, 'r') as z:
+        z.extractall(install_dir)
+    logging.info("Entpackung abgeschlossen.")
 
-def ensure_rustup_available():
-    """
-    Prüft nach der Installation, ob rustup nun in PATH ist.
-    """
-    if is_rustup_installed():
-        logging.info("rustup steht nun zur Verfügung.")
-    else:
-        logging.warning("rustup nicht im PATH gefunden. Bitte Terminal neu starten oder PATH überprüfen.")
+def update_path(install_dir: Path):
+    """Fügt install_dir/bin per setx dem System-PATH hinzu (für neue Terminals)."""
+    bin_path = str(install_dir / "bin")
+    current = os.environ.get("PATH", "")
+    if bin_path.lower() in current.lower():
+        logging.info("Scala/bin ist bereits im PATH.")
+        return
+    new_path = f"{current};{bin_path}"
+    logging.info(f"Füge Scala/bin dem PATH hinzu: {bin_path}")
+    subprocess.run(f'setx PATH "{new_path}"', shell=True, check=False)
+
+def verify_installation():
+    """Prüft die Installation via 'scala -version'."""
+    try:
+        out = subprocess.check_output([SCALA_CMD, "-version"], text=True).strip()
+        logging.info(f"Scala erfolgreich installiert: {out}")
+    except Exception as e:
+        logging.error(f"Fehler bei der Verifikation von Scala: {e}")
+        sys.exit(1)
 
 def main():
-    logging.info("=== rustup-Installer gestartet ===")
-    if is_rustup_installed():
-        logging.info("rustup ist bereits installiert. Beende Prozess.")
-        return
-
-    # Temporäres Verzeichnis für den Downloader anlegen
-    with tempfile.TemporaryDirectory() as tmpdir:
-        installer_file = Path(tmpdir) / "rustup-init.exe"
-        download_rustup_installer(installer_file)
-        run_installer(installer_file)
-
-    ensure_rustup_available()
-    logging.info("=== Prozess abgeschlossen ===")
-
-if __name__ == "__main__":
+    logging.info("=== Scala-Installer gestartet ===")
     if os.name != "nt":
         logging.error("Dieses Skript läuft nur unter Windows.")
         sys.exit(1)
+
+    if is_scala_installed():
+        logging.info("Scala ist bereits installiert. Abbruch.")
+        return
+
+    info = get_latest_scala_release()
+    version = info["version"]
+    url     = info["url"]
+    filename= info["filename"]
+    install_dir = INSTALL_ROOT / f"scala-{version}"
+
+    with tempfile.TemporaryDirectory() as td:
+        tmp_zip = Path(td) / filename
+        download_zip(tmp_zip, url)
+        extract_scala(tmp_zip, install_dir)
+
+    update_path(install_dir)
+    verify_installation()
+    logging.info("=== Scala-Installation abgeschlossen ===")
+
+if __name__ == "__main__":
     main()
