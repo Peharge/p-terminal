@@ -4835,113 +4835,123 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("prmd "):
         import markdown
+        from markdown.extensions.toc import TocExtension
 
         filepath = os.path.abspath(user_input[5:].strip())
 
+        # Datei-Existenz prüfen
         if not os.path.isfile(filepath):
             print(f"[{timestamp()}] [ERROR] File '{filepath}' does not exist.")
             return True
 
+        # Dateiendung prüfen
         if not filepath.lower().endswith(".md"):
-            print(f"[{timestamp()}] [ERROR] File '{filepath}' is not a Markdown (.md) file.")
+            print(f"[{timestamp()}] [ERROR] File '{filepath}' is not a Markdown file (.md).")
             return True
 
         directory = os.path.dirname(filepath)
         filename = os.path.basename(filepath)
 
-        requested_port = 8000
-        port_container = {}
-        server_started_event = threading.Event()
+        requested_port = 8001  # Port for Markdown server
 
         class MarkdownRenderHandler(http.server.SimpleHTTPRequestHandler):
             def do_GET(self):
-                if self.path.endswith(".md"):
-                    md_path = os.path.join(directory, self.path.lstrip("/"))
+                if self.path == "/render":
+                    md_path = os.path.join(directory, filename)
                     if os.path.isfile(md_path):
                         try:
                             with open(md_path, "r", encoding="utf-8") as f:
                                 md_text = f.read()
-                            html = markdown.markdown(md_text, extensions=['extra', 'codehilite', 'toc'])
+
+                            html = markdown.markdown(
+                                md_text,
+                                extensions=[
+                                    'extra',
+                                    'codehilite',
+                                    TocExtension(permalink=True)
+                                ],
+                                output_format='html5'
+                            )
+
                             full_html = f"""<!DOCTYPE html>
-            <html lang="en">
-            <head>
-            <meta charset="utf-8">
-            <title>{os.path.basename(md_path)}</title>
-            <style>
+    <html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>{filename}</title>
+        <style>
             body {{ font-family: Arial, sans-serif; margin: 40px; }}
-            pre code {{ background-color: #f4f4f4; padding: 10px; display: block; }}
-            </style>
-            </head>
-            <body>
-            {html}
-            </body>
-            </html>"""
+            pre code {{ background-color: #f4f4f4; padding: 10px; display: block; white-space: pre-wrap; }}
+            code {{ font-family: monospace; }}
+            h1, h2, h3 {{ border-bottom: 1px solid #ddd; }}
+        </style>
+    </head>
+    <body>
+    {html}
+    </body>
+    </html>"""
+
                             self.send_response(200)
-                            self.send_header("Content-type", "text/html; charset=utf-8")
+                            self.send_header("Content-Type", "text/html; charset=utf-8")
                             self.end_headers()
                             try:
                                 self.wfile.write(full_html.encode("utf-8"))
                             except ConnectionAbortedError:
-                                # Client hat Verbindung beendet, einfach ignorieren
+                                # Client hat Verbindung abgebrochen, ignoriere
                                 pass
                         except Exception as e:
-                            try:
-                                self.send_error(500, f"Error rendering Markdown: {e}")
-                            except ConnectionAbortedError:
-                                pass
+                            self.send_error(500, f"Error rendering Markdown: {e}")
                     else:
-                        try:
-                            self.send_error(404, "File not found")
-                        except ConnectionAbortedError:
-                            pass
+                        self.send_error(404, "File not found")
                 else:
                     super().do_GET()
 
-        server_thread = threading.Thread(
-            target=start_local_server,
-            args=(directory, requested_port, port_container, server_started_event),
-            daemon=True
-        )
+        # Server-Objekt global, um Shutdown von außen zu ermöglichen
+        httpd = None
+
+        def run_markdown_server():
+            nonlocal httpd
+            with socketserver.TCPServer(("", requested_port), MarkdownRenderHandler) as server:
+                httpd = server
+                print(f"[{timestamp()}] [INFO] Markdown server running at http://localhost:{requested_port}/render")
+                server.serve_forever()
+
+        # Server-Thread als Daemon starten
+        server_thread = threading.Thread(target=run_markdown_server, daemon=True)
         server_thread.start()
 
-        if not server_started_event.wait(timeout=5):
-            print(f"[{timestamp()}] [ERROR] Server could not be started within 5 seconds.")
-            return True
-
-        actual_port = port_container.get('port')
-        url = f"http://localhost:{actual_port}/{filename}"
-        print(f"[{timestamp()}] [INFO] Opening Markdown '{filename}' in browser: {url}")
+        url = f"http://localhost:{requested_port}/render"
+        print(f"[{timestamp()}] [INFO] Opening Markdown file '{filename}' in browser: {url}")
         webbrowser.open(url)
-        print(f"[{timestamp()}] [INFO] Server is running on port {actual_port}. Press 'q' to stop it.")
 
         try:
             while True:
-                user_cmd = input().strip()
-                if user_cmd.lower() == 'q':
-                    print(f"[{timestamp()}] [INFO] Stopping server...")
+                user_cmd = input().strip().lower()
+                if user_cmd == 'q':
+                    print(f"[{timestamp()}] [INFO] Stopping Markdown server...")
+                    if httpd:
+                        httpd.shutdown()
                     break
                 else:
                     print(f"[{timestamp()}] [INFO] Invalid input. Press 'q' to quit.")
         except (KeyboardInterrupt, EOFError):
-            print(f"\n[{timestamp()}] [INFO] Input interrupted. Stopping server...")
+            print(f"\n[{timestamp()}] [INFO] Input interrupted. Stopping Markdown server...")
+            if httpd:
+                httpd.shutdown()
 
-        try:
-            urllib.request.urlopen(url, timeout=1)
-        except:
-            pass
-
+        # Warten, bis Server-Thread beendet ist
         server_thread.join(timeout=5)
 
-        for _ in range(5):
+        # Prüfen, ob Server wirklich offline ist
+        for attempt in range(5):
             try:
                 urllib.request.urlopen(url, timeout=1)
-                print(f"[{timestamp()}] [INFO] URL still reachable, waiting 1s...")
+                print(f"[{timestamp()}] [INFO] URL still reachable, waiting 1 second...")
                 time.sleep(1)
             except:
                 print(f"[{timestamp()}] [INFO] URL is now offline.")
                 break
         else:
-            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+            print(f"[{timestamp()}] [WARN] URL still reachable after multiple attempts.")
 
         return True
 
