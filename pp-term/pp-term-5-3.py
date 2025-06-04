@@ -4897,14 +4897,6 @@ def handle_special_commands(user_input):
                 else:
                     super().do_GET()
 
-        def start_local_server(directory, requested_port, port_container, server_started_event):
-            os.chdir(directory)
-            with socketserver.TCPServer(("localhost", requested_port), MarkdownRenderHandler) as httpd:
-                actual_port = httpd.server_address[1]
-                port_container['port'] = actual_port
-                server_started_event.set()
-                httpd.serve_forever()
-
         server_thread = threading.Thread(
             target=start_local_server,
             args=(directory, requested_port, port_container, server_started_event),
