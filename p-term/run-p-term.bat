@@ -65,18 +65,24 @@ REM Veuillez lire l'intégralité des termes et conditions de la licence MIT pou
 
 setlocal EnableDelayedExpansion
 
+:: Setze festes Arbeitsverzeichnis
+set "PROJECT_PATH=C:\Users\%USERNAME%\p-terminal\p-term"
+cd /d "%PROJECT_PATH%" || (
+    echo [FEHLER] Projektverzeichnis nicht gefunden: "%PROJECT_PATH%"
+    goto :Ende
+)
+
 echo =========================================
 echo      Rust-Projekt-Setup (Batch-Skript)
 echo =========================================
 
-rem -----------------------------------------
-rem 1) Überprüfen, ob rustup installiert ist
-rem -----------------------------------------
+:: -----------------------------------------
+:: 1) Rustup prüfen und ggf. installieren
+:: -----------------------------------------
 where rustup >nul 2>&1
 if errorlevel 1 (
     echo [INFO] Rustup nicht gefunden. Installation wird gestartet...
 
-    rem Prüfen, ob curl vorhanden ist
     where curl >nul 2>&1
     if errorlevel 1 (
         echo [FEHLER] curl ist nicht installiert. Bitte curl installieren oder PowerShell verwenden.
@@ -84,31 +90,31 @@ if errorlevel 1 (
     )
 
     echo [INFO] Lade rustup-init.exe herunter...
-    curl -s -o "%~dp0rustup-init.exe" https://win.rustup.rs
-    if not exist "%~dp0rustup-init.exe" (
+    curl -s -o "%PROJECT_PATH%\rustup-init.exe" https://win.rustup.rs
+    if not exist "%PROJECT_PATH%\rustup-init.exe" (
         echo [FEHLER] Download von rustup-init.exe fehlgeschlagen.
         goto :Ende
     )
 
     echo [INFO] Führe rustup-Installer aus...
-    "%~dp0rustup-init.exe" -y
+    "%PROJECT_PATH%\rustup-init.exe" -y
     if errorlevel 1 (
         echo [FEHLER] Rust-Installation über rustup ist fehlgeschlagen.
         goto :CleanupInstaller
     )
 
     echo [INFO] Rustup erfolgreich installiert.
-    :CleanupInstaller
-    del "%~dp0rustup-init.exe" >nul 2>&1
-    rem Neuen Pfad sofort hinzufügen, damit cargo verfügbar wird
+
+:CleanupInstaller
+    del "%PROJECT_PATH%\rustup-init.exe" >nul 2>&1
     set "PATH=%USERPROFILE%\.cargo\bin;%PATH%"
 ) else (
     echo [INFO] Rustup ist bereits installiert.
 )
 
-rem -----------------------------------------
-rem 2) Überprüfen, ob cargo (Rust-Paketmanager) verfügbar ist
-rem -----------------------------------------
+:: -----------------------------------------
+:: 2) Cargo prüfen
+:: -----------------------------------------
 where cargo >nul 2>&1
 if errorlevel 1 (
     echo [WARNUNG] cargo nicht in PATH gefunden. Versuche PATH zu aktualisieren...
@@ -124,55 +130,35 @@ if errorlevel 1 (
     echo [INFO] cargo ist vorhanden.
 )
 
-rem -----------------------------------------
-rem 3) Projektverzeichnis bestimmen und prüfen
-rem -----------------------------------------
-rem Da sich dieses Skript im Projekt-Root befindet, ist %~dp0 der korrekte Pfad.
-set "PROJECT_PATH=%~dp0"
-
+:: -----------------------------------------
+:: 3) Projektpfad anzeigen
+:: -----------------------------------------
 echo [INFO] Projektverzeichnis: "%PROJECT_PATH%"
 
-rem -------------------------------------------------
-rem 4) Cargo Clean: Alte Builds entfernen
-rem -------------------------------------------------
-echo ----------------------------------------
-echo [SCHRITT] cargo clean
-echo ----------------------------------------
-pushd "%PROJECT_PATH%"
-cargo clean
-if errorlevel 1 (
-    echo [FEHLER] "cargo clean" ist fehlgeschlagen.
-    popd
-    goto :Ende
-)
-
-rem -------------------------------------------------
-rem 5) Cargo Build: Projekt kompilieren
-rem -------------------------------------------------
+:: -----------------------------------------
+:: 4) Build-Prozess starten
+:: -----------------------------------------
 echo ----------------------------------------
 echo [SCHRITT] cargo build
 echo ----------------------------------------
 cargo build
 if errorlevel 1 (
     echo [FEHLER] "cargo build" ist fehlgeschlagen.
-    popd
     goto :Ende
 )
 
-rem -------------------------------------------------
-rem 6) Cargo Run: Projekt ausführen
-rem -------------------------------------------------
+:: -----------------------------------------
+:: 5) Projekt starten
+:: -----------------------------------------
 echo ----------------------------------------
 echo [SCHRITT] cargo run
 echo ----------------------------------------
 cargo run
 if errorlevel 1 (
     echo [FEHLER] "cargo run" ist fehlgeschlagen.
-    popd
     goto :Ende
 )
 
-popd
 echo =========================================
 echo [ERFOLG] Alle Aufgaben erfolgreich ausgeführt.
 echo =========================================
