@@ -2357,11 +2357,23 @@ cd /d "%PP_DIR%" || (
     exit /b 1
 )
 
-echo Creating Python virtual environment in ".env" ...
-start /b python -m venv .env
+:: Check if the .env folder does not exist
+IF NOT EXIST ".env" (
+    call :Log INFO "Creating Python virtual environment in - .env - ..."
+    start /b python -m venv C:\Users\%USERNAME%\p-terminal\pp-term\.env
 
-:: Optionally, wait for a moment to let the process start
-timeout /t 2 >nul
+    :: Warten, damit der Prozess Zeit zum Abschluss hat (z. B. 5 Sekunden)
+    timeout /t 5 >nul
+
+    :: Check again if the virtual environment now exists
+    IF EXIST ".env" (
+        call :Log PASS "✅ Virtual environment created successfully."
+    ) ELSE (
+        call :Log ERROR "❌ Failed to create virtual environment!"
+    )
+) ELSE (
+    call :Log INFO "Virtual environment already exists. Skipping creation."
+)
 
 :: Ensure .env file exists and is correctly configured
 :: echo Checking for existing .env file at: "%PP_ENV_FILE%"
