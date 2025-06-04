@@ -2252,7 +2252,7 @@ set "PYCHARM_PROJECTS=%USERPROFILE%\p-terminal"
 set "PP_DIR=%PYCHARM_PROJECTS%\pp-term"
 set "PP_ENV_FILE=%PP_DIR%\.env"
 set "PP_RUN_FILE=%PP_DIR%\pp-term.bat"
-set "EXPECTED_PYTHON_VERSION=3.13"
+:: set "EXPECTED_PYTHON_VERSION=3.13"
 
 :: Ensure PyCharm Projects directory exists
 if not exist "%PYCHARM_PROJECTS%" (
@@ -2357,34 +2357,11 @@ cd /d "%PP_DIR%" || (
     exit /b 1
 )
 
-:: Ensure .env file exists and is correctly configured
-echo Checking for existing .env file at: "%PP_ENV_FILE%"
-if not exist "%PP_ENV_FILE%" (
-    echo Creating .env file...
-    (
-        echo # Environment variables for P-terminal
-        echo PYTHONPATH=%PP_DIR%
-        echo PYTHON_VERSION=%EXPECTED_PYTHON_VERSION%
-    ) > "%PP_ENV_FILE%"
+echo Creating Python virtual environment in ".env" ...
+start /b python -m venv .env
 
-    :: Verify file was created and is not empty
-    if exist "%PP_ENV_FILE%" (
-        for %%A in ("%PP_ENV_FILE%") do (
-            if %%~zA gtr 0 (
-                call :Log PASS "✅ .env file created successfully at %PP_ENV_FILE%"
-            ) else (
-                call :Log WARN "❌ .env file was created but is empty!"
-                del "%PP_ENV_FILE%" >nul 2>&1
-                exit /b 1
-            )
-        )
-    ) else (
-        call :Log WARN "❌ Failed to create .env file!"
-        exit /b 1
-    )
-) else (
-    call :Log PASS "✅ .env file already exists at %PP_ENV_FILE%"
-)
+:: Optionally, wait for a moment to let the process start
+timeout /t 2 >nul
 
 :: Define the username variable dynamically
 :: set "username=%USERNAME%"
