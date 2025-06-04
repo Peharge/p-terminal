@@ -4925,18 +4925,14 @@ def handle_special_commands(user_input):
 
         try:
             while True:
-                user_cmd = input().strip().lower()
-                if user_cmd == 'q':
-                    print(f"[{timestamp()}] [INFO] Stopping Markdown server...")
-                    if httpd:
-                        httpd.shutdown()
+                user_cmd = input().strip()
+                if user_cmd.lower() == 'q' or user_cmd.lower() == '\x11':
+                    print(f"[{timestamp()}] [INFO] Stopping server...")
                     break
                 else:
                     print(f"[{timestamp()}] [INFO] Invalid input. Press 'q' to quit.")
         except (KeyboardInterrupt, EOFError):
-            print(f"\n[{timestamp()}] [INFO] Input interrupted. Stopping Markdown server...")
-            if httpd:
-                httpd.shutdown()
+            print(f"\n[{timestamp()}] [INFO] Input interrupted. Stopping server...")
 
         # Warten, bis Server-Thread beendet ist
         server_thread.join(timeout=5)
