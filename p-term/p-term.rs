@@ -95,7 +95,6 @@ use rustyline::hint::{HistoryHinter, Hinter};
 use rustyline::validate::{ValidationContext, ValidationResult, Validator};
 use rustyline::{Config, Editor, Helper};
 use rustyline::history::FileHistory;
-use rustyline::Editor;
 use serde_json::Value;
 use std::env;
 use std::fs::File;
@@ -466,72 +465,43 @@ fn spawn_shell_command(line: &str) {
     }
 }
 
-/// Prüft, ob der Pfad Zeichen enthält, die in PowerShell escaped oder in Anführungszeichen gesetzt werden müssen
-fn needs_quoting(path: &str) -> bool {
-    let special_chars = [' ', '(', ')', '&', '$', '^', '"', '\''];
-    path.chars().any(|c| special_chars.contains(&c))
-}
-
-/// Macht aus einem Pfad einen PowerShell-kompatiblen String mit korrektem Escape
-fn powershell_quote_path(path: &str) -> String {
-    if needs_quoting(path) {
-        // PowerShell-Style: doppelte Anführungszeichen werden verdoppelt
-        let escaped = path.replace('"', "\"\"");
-        format!("\"{}\"", escaped)
-    } else {
-        path.to_string()
-    }
-}
-
-/// Holt das aktuelle Arbeitsverzeichnis und gibt es PowerShell-kompatibel zurück
-fn get_cwd_powershell_style() -> String {
-    let cwd: PathBuf = env::current_dir().unwrap_or_else(|_| PathBuf::from("."));
-    let cwd_str = cwd.to_string_lossy();
-    powershell_quote_path(&cwd_str)
-}
-
 fn main() -> Result<()> {
-    // Logging initialisieren
+    // Initialisiere Logging (Level wird per ENV gesetzt, z.B. `export RUST_LOG=info`)
     let subscriber = tracing_subscriber::FmtSubscriber::builder()
         .with_env_filter(tracing_subscriber::EnvFilter::from_default_env())
         .finish();
     tracing::subscriber::set_global_default(subscriber)?;
 
+    // Banner ausgeben
     print_banner();
 
+    // Konfiguriere rustyline
     let config = Config::builder()
         .history_ignore_space(true)
         .auto_add_history(true)
         .build();
-
     let mut rl: Editor<PHelper, FileHistory> = Editor::with_config(config)?;
     rl.set_helper(Some(PHelper::new()));
 
+    // Lade History
     let history_path = BaseDirs::new()
         .map(|d| d.home_dir().join(".p-terminal_history"))
         .unwrap_or_else(|| PathBuf::from(".p-terminal_history"));
-
     if let Some(hp_str) = history_path.to_str() {
         let _ = rl.load_history(hp_str);
     }
 
+    // REPL-Loop
     loop {
+        // Prompt bauen: user@host(git_branch) cwd>
         let username = whoami::username();
         let hostname = whoami::fallible::hostname().unwrap_or_else(|_| "unknown".into());
-        let cwd_ps = get_cwd_powershell_style();
+        let cwd = env::current_dir().unwrap_or_else(|_| PathBuf::from("."));
+        let cwd_str = cwd.to_string_lossy();
         let git_suffix = git_branch_suffix();
-
-        // Prompt korrekt mit allen Argumenten
         let prompt = format!(
-            "PP {}{}@{}{} {} {}>{} ",
-            mask_ansi(BLUE),
-            username,
-            hostname,
-            mask_ansi(RESET),
-            cwd_ps,
-            mask_ansi(GREEN),
-            git_suffix,
-            mask_ansi(RESET)
+            "{}{}@{}{}{} {}> {}",
+            BLUE, username, hostname, RESET, git_suffix, cwd_str, RESET
         );
 
         match rl.readline(&prompt) {
@@ -542,15 +512,25 @@ fn main() -> Result<()> {
                 }
                 let parts: Vec<&str> = trimmed.split_whitespace().collect();
                 match parse_builtin(trimmed) {
-                    Builtin::Cd => handle_cd(&parts),
+                    Builtin::Cd => {
+                        handle_cd(&parts);
+                    }
                     Builtin::Exit => {
                         println!("{}Exiting P-Terminal. Goodbye!{}", GREEN, RESET);
                         break;
                     }
-                    Builtin::Clear => handle_clear(),
-                    Builtin::Help => handle_help(),
-                    Builtin::SysInfo => display_sysinfo(),
+                    Builtin::Clear => {
+                        handle_clear();
+                    }
+                    Builtin::Help => {
+                        handle_help();
+                    }
+                    Builtin::SysInfo => {
+                        display_sysinfo();
+                    }
                     Builtin::Other => {
+                        // Führe externe Befehle aus, wobei mehrere CPUs stärker genutzt werden können,
+                        // indem der Befehl in einem separaten Thread ausgeführt wird.
                         let command = trimmed.to_string();
                         std::thread::spawn(move || {
                             spawn_shell_command(&command);
@@ -559,9 +539,11 @@ fn main() -> Result<()> {
                 }
             }
             Err(ReadlineError::Interrupted) => {
+                // Strg+C → Neue Zeile und erneuter Prompt
                 println!();
             }
             Err(ReadlineError::Eof) => {
+                // Strg+D → Exit
                 println!("{}Exiting P-Terminal. Goodbye!{}", GREEN, RESET);
                 break;
             }
@@ -572,6 +554,7 @@ fn main() -> Result<()> {
         }
     }
 
+    // History speichern
     if let Some(hp_str) = history_path.to_str() {
         let _ = rl.save_history(hp_str);
     }
