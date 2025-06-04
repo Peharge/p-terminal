@@ -2363,6 +2363,35 @@ start /b python -m venv .env
 :: Optionally, wait for a moment to let the process start
 timeout /t 2 >nul
 
+:: Ensure .env file exists and is correctly configured
+:: echo Checking for existing .env file at: "%PP_ENV_FILE%"
+:: if not exist "%PP_ENV_FILE%" (
+::     echo Creating .env file...
+::     (
+::         echo # Environment variables for P-terminal
+::         echo PYTHONPATH=%PP_DIR%
+::         echo PYTHON_VERSION=%EXPECTED_PYTHON_VERSION%
+::     ) > "%PP_ENV_FILE%"
+
+::     :: Verify file was created and is not empty
+::     if exist "%PP_ENV_FILE%" (
+::         for %%A in ("%PP_ENV_FILE%") do (
+::             if %%~zA gtr 0 (
+::                 call :Log PASS "✅ .env file created successfully at %PP_ENV_FILE%"
+::             ) else (
+::                 call :Log WARN "❌ .env file was created but is empty!"
+::                 del "%PP_ENV_FILE%" >nul 2>&1
+::                 exit /b 1
+::             )
+::         )
+::     ) else (
+::         call :Log WARN "❌ Failed to create .env file!"
+::         exit /b 1
+::     )
+:: ) else (
+::     call :Log PASS "✅ .env file already exists at %PP_ENV_FILE%"
+:: )
+
 :: Define the username variable dynamically
 :: set "username=%USERNAME%"
 
