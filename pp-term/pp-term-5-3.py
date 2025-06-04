@@ -4705,6 +4705,254 @@ def handle_special_commands(user_input):
 
         return True
 
+    if user_input.startswith("prhtml "):
+        filepath = os.path.abspath(user_input[7:].strip())
+
+        if not os.path.isfile(filepath):
+            print(f"[{timestamp()}] [ERROR] File '{filepath}' does not exist.")
+            return True
+
+        directory = os.path.dirname(filepath)
+        filename = os.path.basename(filepath)
+
+        requested_port = 8000
+        port_container = {}
+        server_started_event = threading.Event()
+
+        server_thread = threading.Thread(
+            target=start_local_server,
+            args=(directory, requested_port, port_container, server_started_event),
+            daemon=True
+        )
+        server_thread.start()
+
+        if not server_started_event.wait(timeout=5):
+            print(f"[{timestamp()}] [ERROR] Server could not be started within 5 seconds.")
+            return True
+
+        actual_port = port_container.get('port')
+        url = f"http://localhost:{actual_port}/{filename}"
+        print(f"[{timestamp()}] [INFO] Opening '{filename}' in browser: {url}")
+        webbrowser.open(url)
+        print(f"[{timestamp()}] [INFO] Server is running on port {actual_port}. Press 'q' to stop it.")
+
+        try:
+            while True:
+                user_cmd = input().strip()
+                if user_cmd.lower() == 'q':
+                    print(f"[{timestamp()}] [INFO] Stopping server...")
+                    break
+                else:
+                    print(f"[{timestamp()}] [INFO] Invalid input. Press 'q' to quit.")
+        except (KeyboardInterrupt, EOFError):
+            print(f"\n[{timestamp()}] [INFO] Input interrupted. Stopping server...")
+
+        try:
+            urllib.request.urlopen(url, timeout=1)
+        except:
+            pass
+
+        server_thread.join(timeout=5)
+
+        for _ in range(5):
+            try:
+                urllib.request.urlopen(url, timeout=1)
+                print(f"[{timestamp()}] [INFO] URL still reachable, waiting 1s...")
+                time.sleep(1)
+            except:
+                print(f"[{timestamp()}] [INFO] URL is now offline.")
+                break
+        else:
+            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+
+        return True
+
+    if user_input.startswith("prpdf "):
+        filepath = os.path.abspath(user_input[6:].strip())
+
+        if not os.path.isfile(filepath):
+            print(f"[{timestamp()}] [ERROR] File '{filepath}' does not exist.")
+            return True
+
+        if not filepath.lower().endswith(".pdf"):
+            print(f"[{timestamp()}] [ERROR] File '{filepath}' is not a PDF.")
+            return True
+
+        directory = os.path.dirname(filepath)
+        filename = os.path.basename(filepath)
+
+        requested_port = 8000
+        port_container = {}
+        server_started_event = threading.Event()
+
+        server_thread = threading.Thread(
+            target=start_local_server,
+            args=(directory, requested_port, port_container, server_started_event),
+            daemon=True
+        )
+        server_thread.start()
+
+        if not server_started_event.wait(timeout=5):
+            print(f"[{timestamp()}] [ERROR] Server could not be started within 5 seconds.")
+            return True
+
+        actual_port = port_container.get('port')
+        url = f"http://localhost:{actual_port}/{filename}"
+        print(f"[{timestamp()}] [INFO] Opening PDF '{filename}' in browser: {url}")
+        webbrowser.open(url)
+        print(f"[{timestamp()}] [INFO] Server is running on port {actual_port}. Press 'q' to stop it.")
+
+        try:
+            while True:
+                user_cmd = input().strip()
+                if user_cmd.lower() == 'q':
+                    print(f"[{timestamp()}] [INFO] Stopping server...")
+                    break
+                else:
+                    print(f"[{timestamp()}] [INFO] Invalid input. Press 'q' to quit.")
+        except (KeyboardInterrupt, EOFError):
+            print(f"\n[{timestamp()}] [INFO] Input interrupted. Stopping server...")
+
+        try:
+            urllib.request.urlopen(url, timeout=1)
+        except:
+            pass
+
+        server_thread.join(timeout=5)
+
+        for _ in range(5):
+            try:
+                urllib.request.urlopen(url, timeout=1)
+                print(f"[{timestamp()}] [INFO] URL still reachable, waiting 1s...")
+                time.sleep(1)
+            except:
+                print(f"[{timestamp()}] [INFO] URL is now offline.")
+                break
+        else:
+            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+
+        return True
+
+    if user_input.startswith("prmd "):
+        import markdown
+
+        filepath = os.path.abspath(user_input[5:].strip())
+
+        if not os.path.isfile(filepath):
+            print(f"[{timestamp()}] [ERROR] File '{filepath}' does not exist.")
+            return True
+
+        if not filepath.lower().endswith(".md"):
+            print(f"[{timestamp()}] [ERROR] File '{filepath}' is not a Markdown (.md) file.")
+            return True
+
+        directory = os.path.dirname(filepath)
+        filename = os.path.basename(filepath)
+
+        requested_port = 8000
+        port_container = {}
+        server_started_event = threading.Event()
+
+        class MarkdownRenderHandler(http.server.SimpleHTTPRequestHandler):
+            def do_GET(self):
+                if self.path.endswith(".md"):
+                    md_path = os.path.join(directory, self.path.lstrip("/"))
+                    if os.path.isfile(md_path):
+                        try:
+                            with open(md_path, "r", encoding="utf-8") as f:
+                                md_text = f.read()
+                            html = markdown.markdown(md_text, extensions=['extra', 'codehilite', 'toc'])
+                            full_html = f"""<!DOCTYPE html>
+            <html lang="en">
+            <head>
+            <meta charset="utf-8">
+            <title>{os.path.basename(md_path)}</title>
+            <style>
+            body {{ font-family: Arial, sans-serif; margin: 40px; }}
+            pre code {{ background-color: #f4f4f4; padding: 10px; display: block; }}
+            </style>
+            </head>
+            <body>
+            {html}
+            </body>
+            </html>"""
+                            self.send_response(200)
+                            self.send_header("Content-type", "text/html; charset=utf-8")
+                            self.end_headers()
+                            try:
+                                self.wfile.write(full_html.encode("utf-8"))
+                            except ConnectionAbortedError:
+                                # Client hat Verbindung beendet, einfach ignorieren
+                                pass
+                        except Exception as e:
+                            try:
+                                self.send_error(500, f"Error rendering Markdown: {e}")
+                            except ConnectionAbortedError:
+                                pass
+                    else:
+                        try:
+                            self.send_error(404, "File not found")
+                        except ConnectionAbortedError:
+                            pass
+                else:
+                    super().do_GET()
+
+        def start_local_server(directory, requested_port, port_container, server_started_event):
+            os.chdir(directory)
+            with socketserver.TCPServer(("localhost", requested_port), MarkdownRenderHandler) as httpd:
+                actual_port = httpd.server_address[1]
+                port_container['port'] = actual_port
+                server_started_event.set()
+                httpd.serve_forever()
+
+        server_thread = threading.Thread(
+            target=start_local_server,
+            args=(directory, requested_port, port_container, server_started_event),
+            daemon=True
+        )
+        server_thread.start()
+
+        if not server_started_event.wait(timeout=5):
+            print(f"[{timestamp()}] [ERROR] Server could not be started within 5 seconds.")
+            return True
+
+        actual_port = port_container.get('port')
+        url = f"http://localhost:{actual_port}/{filename}"
+        print(f"[{timestamp()}] [INFO] Opening Markdown '{filename}' in browser: {url}")
+        webbrowser.open(url)
+        print(f"[{timestamp()}] [INFO] Server is running on port {actual_port}. Press 'q' to stop it.")
+
+        try:
+            while True:
+                user_cmd = input().strip()
+                if user_cmd.lower() == 'q':
+                    print(f"[{timestamp()}] [INFO] Stopping server...")
+                    break
+                else:
+                    print(f"[{timestamp()}] [INFO] Invalid input. Press 'q' to quit.")
+        except (KeyboardInterrupt, EOFError):
+            print(f"\n[{timestamp()}] [INFO] Input interrupted. Stopping server...")
+
+        try:
+            urllib.request.urlopen(url, timeout=1)
+        except:
+            pass
+
+        server_thread.join(timeout=5)
+
+        for _ in range(5):
+            try:
+                urllib.request.urlopen(url, timeout=1)
+                print(f"[{timestamp()}] [INFO] URL still reachable, waiting 1s...")
+                time.sleep(1)
+            except:
+                print(f"[{timestamp()}] [INFO] URL is now offline.")
+                break
+        else:
+            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+
+        return True
+
     if user_input.startswith("lua "):
         user_input = user_input[4:].strip()
 
