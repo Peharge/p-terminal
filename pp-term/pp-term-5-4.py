@@ -5370,6 +5370,290 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
+    if user_input.startswith("pd-java-run "):
+        user_input = user_input[12:].strip()
+        parts = shlex.split(user_input)
+        if len(parts) < 1:
+            print(f"[{timestamp()}] [ERROR] Please provide at least a class name to run.")
+            return False
+
+        class_name = parts[0][:-5] if parts[0].endswith(".java") else parts[0]
+        java_file = f"{class_name}.java"
+        args = parts[1:]
+
+        if not os.path.isfile(java_file):
+            print(f"[{timestamp()}] [ERROR] Source file '{java_file}' not found.")
+            return False
+
+        # Compile
+        compile_cmd = f"javac \"{java_file}\""
+        print(f"[{timestamp()}] [INFO] Compiling '{java_file}'...")
+        code_compile = run_command(compile_cmd, shell=True)
+        if code_compile != 0:
+            print(f"[{timestamp()}] [ERROR] javac failed with return code {code_compile}.")
+            return True
+
+        # Run
+        run_args = " ".join(f"\"{arg}\"" for arg in args)
+        run_cmd = f"java {class_name} {run_args}"
+        print(f"[{timestamp()}] [INFO] Running '{class_name}' with args: {args}")
+        try:
+            run_command(run_cmd, shell=True)
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Execution cancelled by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [ERROR] pd-java-run failed: {e}")
+        return True
+
+    if user_input.startswith("pd-java-package "):
+        user_input = user_input[16:].strip()
+        args = shlex.split(user_input)
+        if len(args) != 2:
+            print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: class name and output JAR file.")
+            return False
+
+        class_name, output_jar = args
+        java_file = f"{class_name}.java"
+        class_file = f"{class_name}.class"
+
+        if not os.path.isfile(java_file):
+            print(f"[{timestamp()}] [ERROR] Source file '{java_file}' not found.")
+            return False
+
+        # Compile
+        compile_cmd = f"javac \"{java_file}\""
+        print(f"[{timestamp()}] [INFO] Compiling '{java_file}'...")
+        code_compile = run_command(compile_cmd, shell=True)
+        if code_compile != 0:
+            print(f"[{timestamp()}] [ERROR] javac failed with return code {code_compile}.")
+            return True
+
+        # Package into JAR (including manifest)
+        manifest = "Manifest-Version: 1.0\nMain-Class: " + class_name + "\n"
+        manifest_file = "manifest.txt"
+        with open(manifest_file, "w") as mf:
+            mf.write(manifest)
+        jar_cmd = f"jar cfm \"{output_jar}\" \"{manifest_file}\" \"{class_file}\""
+        print(f"[{timestamp()}] [INFO] Creating JAR '{output_jar}' with main class '{class_name}'...")
+        code_jar = run_command(jar_cmd, shell=True)
+        os.remove(manifest_file)
+
+        if code_jar == 0:
+            print(f"[{timestamp()}] [SUCCESS] JAR '{output_jar}' created successfully.")
+        else:
+            print(f"[{timestamp()}] [ERROR] jar command failed with return code {code_jar}.")
+        return True
+
+    if user_input.startswith("pd-java-doc "):
+        user_input = user_input[11:].strip()
+        parts = shlex.split(user_input)
+        if len(parts) < 1 or len(parts) > 2:
+            print(f"[{timestamp()}] [ERROR] Provide a source file or package path, optionally an output directory.")
+            return False
+
+        target = parts[0]
+        output_dir = parts[1] if len(parts) == 2 else "doc"
+        if not os.path.exists(target):
+            print(f"[{timestamp()}] [ERROR] Path '{target}' not found.")
+            return False
+
+        cmd = f"javadoc -d \"{output_dir}\" \"{target}\""
+        print(f"[{timestamp()}] [INFO] Generating Javadoc for '{target}' into '{output_dir}'...")
+        try:
+            code = run_command(cmd, shell=True)
+            if code == 0:
+                print(f"[{timestamp()}] [SUCCESS] Javadoc generated in '{output_dir}'.")
+            else:
+                print(f"[{timestamp()}] [ERROR] javadoc failed with return code {code}.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Javadoc generation cancelled by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [ERROR] pd-java-doc failed: {e}")
+        return True
+
+    if user_input.startswith("pd-java-clean"):
+        parts = shlex.split(user_input[13:].strip())
+        target_dir = parts[0] if parts else "."
+        if not os.path.isdir(target_dir):
+            print(f"[{timestamp()}] [ERROR] Directory '{target_dir}' not found.")
+            return False
+
+        # Delete all .class and .jar in target_dir
+        print(f"[{timestamp()}] [INFO] Cleaning .class and .jar files in '{target_dir}'...")
+        try:
+            for root, _, files in os.walk(target_dir):
+                for filename in files:
+                    if filename.endswith(".class") or filename.endswith(".jar"):
+                        filepath = os.path.join(root, filename)
+                        os.remove(filepath)
+            print(f"[{timestamp()}] [SUCCESS] Clean complete.")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] pd-java-clean failed: {e}")
+        return True
+
+    if user_input.startswith("pd-java-compile-all "):
+        user_input = user_input[19:].strip()
+        source_dir = user_input
+        if not os.path.isdir(source_dir):
+            print(f"[{timestamp()}] [ERROR] Directory '{source_dir}' not found.")
+            return False
+
+        # Find all .java files
+        java_files = []
+        for root, _, files in os.walk(source_dir):
+            for f in files:
+                if f.endswith(".java"):
+                    java_files.append(os.path.join(root, f))
+
+        if not java_files:
+            print(f"[{timestamp()}] [ERROR] No .java files found in '{source_dir}'.")
+            return True
+
+        files_str = " ".join(f"\"{jf}\"" for jf in java_files)
+        compile_cmd = f"javac -d \"{source_dir}\" {files_str}"
+        print(f"[{timestamp()}] [INFO] Compiling all Java files in '{source_dir}'...")
+        try:
+            code = run_command(compile_cmd, shell=True)
+            if code == 0:
+                print(f"[{timestamp()}] [SUCCESS] All Java files compiled into '{source_dir}'.")
+            else:
+                print(f"[{timestamp()}] [ERROR] javac failed with return code {code}.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Compilation cancelled by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [ERROR] pd-java-compile-all failed: {e}")
+        return True
+
+    if user_input.startswith("pd-java-run-all "):
+        user_input = user_input[15:].strip()
+        args = shlex.split(user_input)
+        if len(args) != 2:
+            print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: package directory and class name pattern.")
+            return False
+
+        package_dir, pattern = args
+        if not os.path.isdir(package_dir):
+            print(f"[{timestamp()}] [ERROR] Directory '{package_dir}' not found.")
+            return False
+
+        # Convert directory to classpath root and find matching .class files
+        class_files = []
+        for root, _, files in os.walk(package_dir):
+            for f in files:
+                if f.endswith(".class") and pattern in f:
+                    rel_path = os.path.relpath(root, package_dir).replace(os.sep, ".")
+                    class_name = f[:-6]
+                    fqcn = f"{rel_path}.{class_name}" if rel_path != "." else class_name
+                    class_files.append(fqcn)
+
+        if not class_files:
+            print(f"[{timestamp()}] [ERROR] No classes matching '{pattern}' found in '{package_dir}'.")
+            return True
+
+        for fqcn in class_files:
+            cmd = f"java -cp \"{package_dir}\" {fqcn}"
+            print(f"[{timestamp()}] [INFO] Running class '{fqcn}'...")
+            try:
+                run_command(cmd, shell=True)
+            except KeyboardInterrupt:
+                print(f"[{timestamp()}] [INFO] Execution of '{fqcn}' cancelled by user.")
+            except subprocess.SubprocessError as e:
+                print(f"[{timestamp()}] [ERROR] Running '{fqcn}' failed: {e}")
+        return True
+
+    if user_input.startswith("pd-java-all "):
+        user_input = user_input[12:].strip()
+        args = shlex.split(user_input)
+        if len(args) != 3:
+            print(f"[{timestamp()}] [ERROR] Provide three arguments: project directory, main class, and output JAR.")
+            return False
+
+        project_dir, main_class, output_jar = args
+        if not os.path.isdir(project_dir):
+            print(f"[{timestamp()}] [ERROR] Directory '{project_dir}' not found.")
+            return False
+
+        # 1. Clean
+        print(f"[{timestamp()}] [INFO] Cleaning project directory '{project_dir}'...")
+        try:
+            for root, _, files in os.walk(project_dir):
+                for f in files:
+                    if f.endswith(".class") or f.endswith(".jar"):
+                        os.remove(os.path.join(root, f))
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Clean failed: {e}")
+            return True
+
+        # 2. Compile all .java files
+        print(f"[{timestamp()}] [INFO] Compiling all .java files in '{project_dir}'...")
+        java_files = []
+        for root, _, files in os.walk(project_dir):
+            for f in files:
+                if f.endswith(".java"):
+                    java_files.append(os.path.join(root, f))
+        files_str = " ".join(f"\"{jf}\"" for jf in java_files)
+        compile_cmd = f"javac -d \"{project_dir}\" {files_str}"
+        code_compile = run_command(compile_cmd, shell=True)
+        if code_compile != 0:
+            print(f"[{timestamp()}] [ERROR] javac failed with return code {code_compile}.")
+            return True
+
+        # 3. Create JAR
+        manifest = "Manifest-Version: 1.0\nMain-Class: " + main_class + "\n"
+        manifest_file = os.path.join(project_dir, "manifest.txt")
+        with open(manifest_file, "w") as mf:
+            mf.write(manifest)
+        class_files = []
+        for root, _, files in os.walk(project_dir):
+            for f in files:
+                if f.endswith(".class"):
+                    rel = os.path.relpath(os.path.join(root, f), project_dir)
+                    class_files.append(rel)
+        class_list_str = " ".join(f"\"{cf}\"" for cf in class_files)
+        jar_cmd = f"jar cfm \"{os.path.join(project_dir, output_jar)}\" \"{manifest_file}\" {class_list_str}"
+        print(f"[{timestamp()}] [INFO] Creating JAR '{output_jar}' with main class '{main_class}'...")
+        code_jar = run_command(jar_cmd, shell=True)
+        os.remove(manifest_file)
+        if code_jar != 0:
+            print(f"[{timestamp()}] [ERROR] jar failed with return code {code_jar}.")
+            return True
+
+        # 4. Run the JAR
+        run_cmd = f"java -jar \"{os.path.join(project_dir, output_jar)}\""
+        print(f"[{timestamp()}] [INFO] Running JAR '{output_jar}'...")
+        try:
+            run_command(run_cmd, shell=True)
+            print(f"[{timestamp()}] [SUCCESS] pd-java-all pipeline completed successfully.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Execution cancelled by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [ERROR] Running JAR failed: {e}")
+        return True
+
+    if user_input.startswith("pd-java-clean-logs "):
+        user_input = user_input[18:].strip()
+        project_dir = user_input
+        if not os.path.isdir(project_dir):
+            print(f"[{timestamp()}] [ERROR] Directory '{project_dir}' not found.")
+            return False
+
+        patterns = ["*.log", ".classpath", ".project", ".settings", "target", "bin"]
+        print(f"[{timestamp()}] [INFO] Cleaning IDE artifacts and logs from '{project_dir}'...")
+        try:
+            for root, dirs, files in os.walk(project_dir):
+                for f in files:
+                    for pat in ["*.log", ".classpath", ".project"]:
+                        if f.endswith(pat) or f == pat:
+                            os.remove(os.path.join(root, f))
+                for d in dirs:
+                    if d in ["target", "bin", ".settings"]:
+                        dirpath = os.path.join(root, d)
+                        subprocess.call(f"rmdir /s /q \"{dirpath}\"", shell=True)
+            print(f"[{timestamp()}] [SUCCESS] IDE artifacts cleaned.")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] pd-java-clean-logs failed: {e}")
+        return True
+
     if user_input.startswith("ruby "):
         user_input = user_input[5:].strip()
 
