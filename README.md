@@ -67,6 +67,40 @@ Peharge Projects 2025<br>
 
 <div align="center">
 
+# **Peharge Terminal?**
+Discover the future of developer productivity with Peharge Terminal!
+
+Why settle for less?
+Peharge Terminal comes in two powerful versions, tailored to every developer's needs:
+P-Terminal: Lightning-fast, ultra-lightweight, and efficient.
+Everything you love about the classic CMD – but supercharged!
+Written in Rust for unbeatable speed and minimal resource usage.
+Ideal for those who value simplicity and performance.
+
+PP-Terminal: Unlock a universe of possibilities! The PP-Terminal is
+not just a terminal – it's your complete development ecosystem.
+Effortlessly manage over 50 programming languages (including classics like Fortran),
+seamlessly communicate with WSL, and run cutting-edge AI models
+(LLMs, Transformers, LSTM, GRU, CNNs, and more)
+directly on your CPU. Packed with smart tools and extensions for
+Python, C, C++, Rust, and beyond.
+Crafted in Python, C, and C++ for maximum flexibility and power.
+
+Why Peharge Terminal?
+Boost your productivity with automation and smart integrations.
+Stay ahead with regular feature updates and community-driven
+improvements.
+Easy to use – whether you're a beginner or a pro.
+Join a growing community of developers who are shaping the
+future of development environments.
+100% free to start – experience the power today!
+
+</div>
+
+<br><br>
+
+<div align="center">
+
 # **_PP-Terminal 5_**
 
 Why show the standard? The PP Terminal does it all<br>
@@ -643,8 +677,10 @@ soon more
 
 # **_Peharge Terminal Community_**<br>
 <img width="400" src="https://github.com/Peharge/p-terminal-images/blob/main/images/banner-3.png" alt="pp-term"/><br><br>
-[`soon`](...) [`soon`](...) [`soon`](...)<br><br>
-soon
+  [`P-Terminal GitHub`](https://github.com/Peharge/p-terminal) [`P-Terminal Discussions`](https://github.com/Peharge/p-terminal/discussions) [`P-Term Discussions`](https://github.com/Peharge/p-terminal/discussions/2) [`PP-Term Discussions`](https://github.com/Peharge/p-terminal/discussions/3) [`P-Terminal Issues`](https://github.com/Peharge/p-terminal/issues) [`P-Terminal Pulls`](https://github.com/Peharge/p-terminal/pulls)
+
+  <br>
+    Have you discovered a bug or have questions about the P-Terminal or PP-Terminal? <br>Or maybe you already know a solution or have helpful ideas? <br>Feel free to share your knowledge and thoughts under Discussions, Issues, or Pull Requests on GitHub! <br>Whether it's a question or an answer – every contribution counts. <br>Just click the appropriate button above and join in!
 </div>
 
 # Problems
