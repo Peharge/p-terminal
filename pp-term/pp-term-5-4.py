@@ -3654,6 +3654,235 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
+    if user_input.startswith("pd-rust-check "):
+        user_input = user_input[13:].strip()
+
+        command = f"rustc --emit=metadata {user_input}"
+        process = run_command(command, shell=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Running pd-rust-check on {user_input}\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pd-rust-check: {e}")
+        return True
+
+    if user_input.startswith("pd-rust-expand "):
+        user_input = user_input[15:].strip()
+
+        command = f"rustc +nightly -Z unstable-options -Z unpretty=expanded {user_input}"
+        process = run_command(command, shell=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Running pd-rust-expand (macro-expanded) on {user_input}\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pd-rust-expand: {e}")
+        return True
+
+    if user_input.startswith("pd-rust-expand "):
+        user_input = user_input[15:].strip()
+
+        command = f"rustc +nightly -Z unstable-options -Z unpretty=expanded {user_input}"
+        process = run_command(command, shell=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Running pd-rust-expand (macro-expanded) on {user_input}\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pd-rust-expand: {e}")
+        return True
+
+    if user_input.startswith("pd-rust-llvm-ir "):
+        user_input = user_input[16:].strip()
+
+        command = f"rustc +nightly --emit=llvm-ir {user_input}"
+        process = run_command(command, shell=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Running pd-rust-llvm-ir (emit LLVM IR) on {user_input}\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pd-rust-llvm-ir: {e}")
+        return True
+
+    if user_input.startswith("pd-rust-asm "):
+        user_input = user_input[13:].strip()
+
+        command = f"rustc +nightly --emit=asm {user_input}"
+        process = run_command(command, shell=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Running pd-rust-asm (emit assembly) on {user_input}\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pd-rust-asm: {e}")
+        return True
+
+    if user_input.startswith("pd-rust-gdb "):
+        user_input = user_input[12:].strip()
+        # Annahme: <source.rs> wird kompiliert und das Binary heißt a.out, oder man spezifiziert -o <binary>
+        source = user_input.split()[0]
+        output = "a.out"
+
+        command_1 = f"rustc -g {source} -o {output}"
+        command_2 = f"gdb {output}"
+
+        process_1 = run_command(command_1, shell=True)
+        process_2 = run_command(command_2, shell=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling {source} with debug symbols and launching GDB\n")
+            process_1.wait()
+            process_2.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pd-rust-gdb: {e}")
+        return True
+
+    if user_input.startswith("pd-rust-lldb "):
+        user_input = user_input[13:].strip()
+        source = user_input.split()[0]
+        output = "a.out"
+
+        command_1 = f"rustc -g {source} -o {output}"
+        command_2 = f"lldb {output}"
+
+        process_1 = run_command(command_1, shell=True)
+        process_2 = run_command(command_2, shell=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling {source} with debug symbols and launching LLDB\n")
+            process_1.wait()
+            process_2.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pd-rust-lldb: {e}")
+        return True
+
+    if user_input.startswith("pd-rust-format-errors "):
+        user_input = user_input[21:].strip()
+
+        command = f"rustc --error-format=json {user_input}"
+        process = run_command(command, shell=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Running pd-rust-format-errors (JSON output) on {user_input}\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pd-rust-format-errors: {e}")
+        return True
+
+    if user_input.startswith("pd-rust-unpretty-hir "):
+        user_input = user_input[21:].strip()
+
+        command = f"rustc +nightly -Z unstable-options -Z unpretty=hir {user_input}"
+        process = run_command(command, shell=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Running pd-rust-unpretty-hir (HIR dump) on {user_input}\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pd-rust-unpretty-hir: {e}")
+        return True
+
+    if user_input.startswith("pd-rust-unpretty-trees "):
+        user_input = user_input[23:].strip()
+
+        command = f"rustc +nightly -Z unstable-options -Z unpretty=print-tree {user_input}"
+        process = run_command(command, shell=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Running pd-rust-unpretty-trees (AST tree) on {user_input}\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pd-rust-unpretty-trees: {e}")
+        return True
+
+    if user_input.startswith("pd-rust-emit-deps "):
+        user_input = user_input[18:].strip()
+
+        command = f"rustc --emit=dep-info {user_input}"
+        process = run_command(command, shell=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Running pd-rust-emit-deps (dep-info) on {user_input}\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pd-rust-emit-deps: {e}")
+        return True
+
+    if user_input.startswith("pd-rust-ast-json "):
+        user_input = user_input[16:].strip()
+
+        command = f"rustc +nightly -Z ast-json-output {user_input}"
+        process = run_command(command, shell=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Running pd-rust-ast-json (AST JSON) on {user_input}\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pd-rust-ast-json: {e}")
+        return True
+
+    if user_input.startswith("pd-rust-emit-link "):
+        user_input = user_input[18:].strip()
+
+        command = f"rustc --emit=link {user_input}"
+        process = run_command(command, shell=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Running pd-rust-emit-link (link only) on {user_input}\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pd-rust-emit-link: {e}")
+        return True
+
+    if user_input.startswith("pd-rust-size "):
+        user_input = user_input[14:].strip()
+        source = user_input.split()[0]
+        output = "a.out"
+
+        command_1 = f"rustc -C opt-level=3 {source} -o {output}"
+        command_2 = f"ls -lh {output}"
+
+        process_1 = run_command(command_1, shell=True)
+        process_2 = run_command(command_2, shell=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling {source} with -C opt-level=3 and showing size\n")
+            process_1.wait()
+            process_2.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pd-rust-size: {e}")
+        return True
+
     if user_input.startswith("prr "):
         user_input = user_input[4:].strip()
 
@@ -3682,6 +3911,471 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] Executing command failed: {e}")
+        return True
+
+    if user_input.startswith("p-cargo "):
+        user_input = user_input[8:].strip()
+
+        command = f"cargo {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Running cargo {user_input}")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.lower() == "p-cargo-all":
+        user_input = user_input[8:].strip()
+
+        # 1. Code formatieren
+        command_1 = f"cargo fmt"
+
+        # 2. Linting mit Clippy
+        command_2 = f"cargo clippy"
+
+        # 3. Alte Build-Artefakte entfernen
+        command_3 = f"cargo clean"
+
+        # 4. Projekt kompilieren
+        command_4 = f"cargo build"
+
+        # 5. Tests ausführen
+        command_5 = f"cargo test"
+
+        # 6. Dokumentation erzeugen
+        command_6 = f"cargo doc"
+
+        # 7. Programm starten
+        command_7 = f"cargo run"
+
+        process_1 = subprocess.Popen(command_1, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                     text=True)
+        process_2 = subprocess.Popen(command_2, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                     text=True)
+        process_3 = subprocess.Popen(command_3, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                     text=True)
+        process_4 = subprocess.Popen(command_4, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                     text=True)
+        process_5 = subprocess.Popen(command_5, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                     text=True)
+        process_6 = subprocess.Popen(command_6, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                     text=True)
+        process_7 = subprocess.Popen(command_7, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                     text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Running p-cargo-all {user_input}")
+            process_1.wait()
+            process_2.wait()
+            process_3.wait()
+            process_4.wait()
+            process_5.wait()
+            process_6.wait()
+            process_7.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.lower() == "p-cargo-debug":
+        user_input = user_input[8:].strip()
+
+        # 1. Projekt im Debug-Modus kompilieren
+        command_1 = "cargo build"
+        # 2. Unter GDB starten (Binary-Pfad: target/debug/<your_binary_name>)
+        #    Hier <your_binary_name> anpassen oder per Umgebungsvariable übergeben.
+        command_2 = "rust-gdb target/debug/<your_binary_name>"
+
+        process_1 = subprocess.Popen(command_1, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                     text=True)
+        process_2 = subprocess.Popen(command_2, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                     text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Running p-cargo-debug {user_input}")
+            process_1.wait()
+            process_2.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.lower() == "p-cargo-release":
+        user_input = user_input[8:].strip()
+
+        # 1. Alte Release-Artefakte löschen
+        command_1 = "cargo clean --release"
+        # 2. Release-Build
+        command_2 = "cargo build --release"
+        # 3. Tests im Release-Modus (manchmal schneller, je nach Test-Setup)
+        command_3 = "cargo test --release"
+        # 4. Programm unter Release starten
+        command_4 = "cargo run --release"
+
+        process_1 = subprocess.Popen(command_1, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                     text=True)
+        process_2 = subprocess.Popen(command_2, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                     text=True)
+        process_3 = subprocess.Popen(command_3, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                     text=True)
+        process_4 = subprocess.Popen(command_4, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                     text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Running p-cargo-release {user_input}")
+            process_1.wait()
+            process_2.wait()
+            process_3.wait()
+            process_4.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.lower() == "p-cargo-update-all":
+        user_input = user_input[8:].strip()
+
+        # 1. Alle Abhängigkeiten in Cargo.lock aktualisieren
+        command_1 = "cargo update"
+        # 2. Projekt kompilieren, um zu prüfen, ob alles noch buildet
+        command_2 = "cargo build"
+        # 3. Optional: Tests ausführen, um sicherzustellen, dass die neuen Versionen keine Fehler erzeugen
+        command_3 = "cargo test"
+
+        process_1 = subprocess.Popen(command_1, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                     text=True)
+        process_2 = subprocess.Popen(command_2, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                     text=True)
+        process_3 = subprocess.Popen(command_3, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                     text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Running p-cargo-update-all {user_input}")
+            process_1.wait()
+            process_2.wait()
+            process_3.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.lower() == "p-cargo-format-lint":
+        user_input = user_input[8:].strip()
+
+        # 1. Rust-Code formatieren
+        command_1 = "cargo fmt"
+        # 2. Linting mit Clippy
+        command_2 = "cargo clippy -- -D warnings"  # Alle Warnungen als Fehler behandeln
+
+        process_1 = subprocess.Popen(command_1, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                     text=True)
+        process_2 = subprocess.Popen(command_2, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                     text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Running p-cargo-format-lint {user_input}")
+            process_1.wait()
+            process_2.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.lower() == "p-cargo-publish-all":
+        user_input = user_input[8:].strip()
+
+        # 1. Release build
+        command_1 = "cargo build --release"
+        # 2. Tests im Release-Modus
+        command_2 = "cargo test --release"
+        # 3. Dokumentation erzeugen und öffnen
+        command_3 = "cargo doc --open"
+        # 4. Crate veröffentlichen (erfordert gültiges CARGO_TOKEN)
+        command_4 = "cargo publish"
+
+        process_1 = subprocess.Popen(command_1, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                     text=True)
+        process_2 = subprocess.Popen(command_2, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                     text=True)
+        process_3 = subprocess.Popen(command_3, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                     text=True)
+        process_4 = subprocess.Popen(command_4, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                     text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Running p-cargo-publish-all {user_input}")
+            process_1.wait()
+            process_2.wait()
+            process_3.wait()
+            process_4.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.lower() == "p-cargo-doc-clean":
+        user_input = user_input[8:].strip()
+
+        # 1. Alte Dokumentation löschen (manuell das Verzeichnis löschen)
+        command_1 = "rm -rf target/doc"
+        # 2. Neue Dokumentation erzeugen
+        command_2 = "cargo doc"
+        # 3. Dokumentation im Browser öffnen
+        command_3 = "cargo doc --open"
+
+        process_1 = subprocess.Popen(command_1, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                     text=True)
+        process_2 = subprocess.Popen(command_2, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                     text=True)
+        process_3 = subprocess.Popen(command_3, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                     text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Running p-cargo-doc-clean {user_input}")
+            process_1.wait()
+            process_2.wait()
+            process_3.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.lower() == "p-cargo-deps-tree":
+        user_input = user_input[8:].strip()
+
+        # 1. cargo-tree ausführen (falls nicht installiert: cargo install cargo-tree)
+        command_1 = "cargo tree"
+
+        process_1 = subprocess.Popen(command_1, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                     text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Running p-cargo-deps-tree {user_input}")
+            process_1.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.lower() == "p-cargo-clean-target":
+        user_input = user_input[8:].strip()
+
+        # 1. cargo clean ohne Release-Flag (löscht Debug- und Release-Artefakte)
+        command_1 = "cargo clean"
+
+        process_1 = subprocess.Popen(command_1, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                     text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Running p-cargo-clean-target {user_input}")
+            process_1.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.lower() == "p-cargo-install-tools":
+        user_input = user_input[8:].strip()
+
+        # 1. cargo-edit installieren (für cargo add, remove, upgrade)
+        command_1 = "cargo install cargo-edit"
+        # 2. cargo-outdated installieren (zeigt veraltete Abhängigkeiten)
+        command_2 = "cargo install cargo-outdated"
+        # 3. cargo-audit installieren (Sicherheits-Scans)
+        command_3 = "cargo install cargo-audit"
+
+        process_1 = subprocess.Popen(command_1, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                     text=True)
+        process_2 = subprocess.Popen(command_2, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                     text=True)
+        process_3 = subprocess.Popen(command_3, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                     text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Running p-cargo-install-tools {user_input}")
+            process_1.wait()
+            process_2.wait()
+            process_3.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.lower() == "p-cargo-bench":
+        user_input = user_input[8:].strip()
+
+        # 1. Benchmarks starten
+        command_1 = "cargo bench"
+
+        process_1 = subprocess.Popen(command_1, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                     shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Running p-cargo-bench {user_input}")
+            process_1.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing p-cargo-bench: {e}")
+        return True
+
+    if user_input.lower() == "p-cargo-bench-run":
+        user_input = user_input[8:].strip()
+
+        # 1. Benchmarks starten
+        command_1 = "cargo bench"
+        # 2. Wenn Benchmarks durchgelaufen sind, Programm starten
+        command_2 = "cargo run"
+
+        process_1 = subprocess.Popen(command_1, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                     shell=True, text=True)
+        process_2 = subprocess.Popen(command_2, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                     shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Running p-cargo-bench-run {user_input}")
+            process_1.wait()
+            process_2.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing p-cargo-bench-run: {e}")
+        return True
+
+    if user_input.lower() == "p-cargo-coverage":
+        user_input = user_input[8:].strip()
+
+        # 1. cargo-tarpaulin installieren (falls nicht vorhanden)
+        command_1 = "cargo install cargo-tarpaulin"
+        # 2. Coverage-Analyse starten und Ergebnis als HTML generieren
+        command_2 = "cargo tarpaulin --out Html"
+        # 3. Öffnet den generierten Report im Standard-Browser (Linux/Mac/Windows)
+        command_3 = "xdg-open tarpaulin-report.html || open tarpaulin-report.html || start tarpaulin-report.html"
+
+        process_1 = subprocess.Popen(command_1, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                     shell=True, text=True)
+        process_2 = subprocess.Popen(command_2, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                     shell=True, text=True)
+        process_3 = subprocess.Popen(command_3, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                     shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Running p-cargo-coverage {user_input}")
+            process_1.wait()
+            process_2.wait()
+            process_3.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing p-cargo-coverage: {e}")
+        return True
+
+    if user_input.lower() == "p-cargo-cross-build":
+        user_input = user_input[8:].strip()
+
+        # 1. WebAssembly-Target hinzufügen (falls nicht installiert)
+        command_1 = "rustup target add wasm32-unknown-unknown"
+        # 2. Build für WebAssembly
+        command_2 = "cargo build --target wasm32-unknown-unknown"
+        # 3. Build für Linux x86_64
+        command_3 = "cargo build --target x86_64-unknown-linux-gnu"
+
+        process_1 = subprocess.Popen(command_1, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                     shell=True, text=True)
+        process_2 = subprocess.Popen(command_2, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                     shell=True, text=True)
+        process_3 = subprocess.Popen(command_3, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                     shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Running p-cargo-cross-build {user_input}")
+            process_1.wait()
+            process_2.wait()
+            process_3.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing p-cargo-cross-build: {e}")
+        return True
+
+    if user_input.lower() == "p-cargo-clippy-fix":
+        user_input = user_input[8:].strip()
+
+        # 1. Clippy im Fix-Modus starten (erlaubt Änderungen am Code)
+        command_1 = "cargo clippy --fix --allow-dirty --allow-staged"
+
+        process_1 = subprocess.Popen(command_1, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                     shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Running p-cargo-clippy-fix {user_input}")
+            process_1.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing p-cargo-clippy-fix: {e}")
+        return True
+
+    if user_input.lower() == "p-cargo-watch-test":
+        user_input = user_input[8:].strip()
+
+        # 1. cargo-watch installieren (falls nicht vorhanden)
+        command_1 = "cargo install cargo-watch"
+        # 2. Tests bei jeder Änderung automatisch ausführen
+        command_2 = "cargo watch -x \"test\""
+
+        process_1 = subprocess.Popen(command_1, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                     shell=True, text=True)
+        process_2 = subprocess.Popen(command_2, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                     shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Running p-cargo-watch-test {user_input}")
+            process_1.wait()
+            process_2.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing p-cargo-watch-test: {e}")
+        return True
+
+    if user_input.lower() == "p-cargo-watch-run":
+        user_input = user_input[8:].strip()
+
+        # 1. cargo-watch installieren (falls nicht vorhanden)
+        command_1 = "cargo install cargo-watch"
+        # 2. Binary bei jeder Änderung automatisch starten
+        command_2 = "cargo watch -x \"run\""
+
+        process_1 = subprocess.Popen(command_1, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                     shell=True, text=True)
+        process_2 = subprocess.Popen(command_2, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                     shell=True, text=True)
+
+        try:
+            print(f"[{timestamp()}] [INFO] Running p-cargo-watch-run {user_input}")
+            process_1.wait()
+            process_2.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing p-cargo-watch-run: {e}")
         return True
 
     if user_input.startswith("node "):
