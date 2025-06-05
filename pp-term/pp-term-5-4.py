@@ -118,17 +118,14 @@ import urllib.error
 import nbformat
 
 try:
-    import ujson as _json  # ultraschnelles JSON
+    import ujson as _json
 except ImportError:
     _json = json
 
+
 colorama.init()
-
-DEFAULT_ENV_DIR = os.path.join("p-terminal", "pp-term", ".env")
-DEFAULT_PYTHON_EXECUTABLE = os.path.join(DEFAULT_ENV_DIR, "Scripts", "python.exe")
-
-# Globales Thema
 current_theme = "dark"
+
 
 """
 log_path = Path(__file__).parent / "pp-term-compiler.log"
@@ -152,13 +149,16 @@ logging.basicConfig(
     ]
 )
 
-user_name = getpass.getuser()
 
+user_name = getpass.getuser()
 sys.stdout.reconfigure(encoding='utf-8')
+
 
 # Constants
 APP_NAME = "p-terminal\\pp-term"
 STATE_FILE = Path(f"C:/Users/{user_name}/{APP_NAME}/current_env.json")
+DEFAULT_ENV_DIR = os.path.join("p-terminal", "pp-term", ".env")
+DEFAULT_PYTHON_EXECUTABLE = os.path.join(DEFAULT_ENV_DIR, "Scripts", "python.exe")
 
 
 # Farbcodes definieren (kleingeschrieben)
@@ -307,7 +307,6 @@ def load_saved_env() -> Optional[str]:
     except Exception as e:
         logging.warning(f"Error loading status file: {e}")
     return None
-
 
 
 def save_current_env(env_path: str | Path) -> None:
