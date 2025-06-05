@@ -3449,6 +3449,230 @@ def handle_special_commands(user_input):
 
         return True
 
+    if user_input.startswith("pd-cpp-gdb "):
+        user_input = user_input[11:].strip()
+        args = shlex.split(user_input)
+        if len(args) != 2:
+            print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file.")
+            return False
+
+        source_file, output_file = args
+        if not os.path.isfile(source_file):
+            print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
+            return False
+
+        # 1. Compile with -g for debug symbols
+        compile_cmd = f"wsl g++ -g \"{source_file}\" -o \"{output_file}\""
+        # 2. Start GDB
+        debug_cmd = f"wsl gdb \"{output_file}\""
+
+        print(f"[{timestamp()}] [INFO] Compiling with g++ -g ...")
+        print(f"[{timestamp()}] [DEBUG] Running: {compile_cmd}")
+        try:
+            code_compile = run_command(compile_cmd, shell=True)
+            if code_compile != 0:
+                print(f"[{timestamp()}] [ERROR] Compilation failed with return code {code_compile}.")
+                return True
+            print(f"[{timestamp()}] [INFO] Starting GDB for '{output_file}' ...")
+            run_command(debug_cmd, shell=True)
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Aborted by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [ERROR] Error running pd-cpp-gdb: {e}")
+        return True
+
+    if user_input.startswith("pd-cpp-clang "):
+        user_input = user_input[13:].strip()
+        args = shlex.split(user_input)
+        if len(args) != 2:
+            print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file.")
+            return False
+
+        source_file, output_file = args
+        if not os.path.isfile(source_file):
+            print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
+            return False
+
+        # Clang with all warnings and debug symbols
+        compile_cmd = f"""wsl clang++ -Wall -Wextra -Wpedantic -g \"{source_file}\" -o \"{output_file}\" """
+        print(f"[{timestamp()}] [INFO] Compiling with clang++ -Wall -Wextra -Wpedantic -g ...")
+        print(f"[{timestamp()}] [DEBUG] Running: {compile_cmd}")
+        try:
+            code = run_command(compile_cmd, shell=True)
+            if code == 0:
+                print(f"[{timestamp()}] [SUCCESS] Clang compilation successful.")
+            else:
+                print(f"[{timestamp()}] [ERROR] Clang compilation failed with return code {code}.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Aborted by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [ERROR] Error running pd-cpp-clang: {e}")
+        return True
+
+    if user_input.startswith("pd-cpp-asm "):
+        user_input = user_input[11:].strip()
+        args = shlex.split(user_input)
+        if len(args) != 2:
+            print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file (without .asm).")
+            return False
+
+        source_file, asm_file = args
+        if not os.path.isfile(source_file):
+            print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
+            return False
+
+        # MSVC: /Fa generates assembler code
+        compile_cmd = msvc_env_cmd() + f'cl /nologo /c /Fa"{asm_file}.asm" "{source_file}"'
+        print(f"[{timestamp()}] [INFO] Generating assembler output with cl /Fa ...")
+        print(f"[{timestamp()}] [DEBUG] Running: {compile_cmd}")
+        try:
+            code = run_command(compile_cmd)
+            if code == 0:
+                print(f"[{timestamp()}] [SUCCESS] Assembler file '{asm_file}.asm' created.")
+            else:
+                print(f"[{timestamp()}] [ERROR] Assembler generation failed with return code {code}.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Aborted by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [ERROR] Error in pd-cpp-asm: {e}")
+        return True
+
+    if user_input.startswith("pd-cpp-opt "):
+        user_input = user_input[11:].strip()
+        args = shlex.split(user_input)
+        if len(args) != 2:
+            print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file.")
+            return False
+
+        source_file, output_file = args
+        if not os.path.isfile(source_file):
+            print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
+            return False
+
+        # MSVC: /O2 for optimization, /Fe for output file
+        compile_cmd = msvc_env_cmd() + f'cl /nologo /O2 "{source_file}" /Fe"{output_file}"'
+        print(f"[{timestamp()}] [INFO] Compiling with cl /O2 (optimization for release) ...")
+        print(f"[{timestamp()}] [DEBUG] Running: {compile_cmd}")
+        try:
+            code_compile = run_command(compile_cmd)
+            if code_compile != 0:
+                print(f"[{timestamp()}] [ERROR] Optimized compilation failed with return code {code_compile}.")
+                return True
+            print(f"[{timestamp()}] [INFO] Release binary created, showing file size ...")
+            if is_windows():
+                size_cmd = f'dir "{output_file}"'
+            else:
+                size_cmd = f'ls -lh "{output_file}"'
+            run_command(size_cmd)
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Aborted by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [ERROR] Error in pd-cpp-opt: {e}")
+        return True
+
+    if user_input.startswith("pd-cpp-run "):
+        user_input = user_input[11:].strip()
+        binary = user_input
+        if is_windows() and not binary.lower().endswith(".exe"):
+            binary += ".exe"
+        if not os.path.isfile(binary):
+            print(f"[{timestamp()}] [ERROR] Executable '{binary}' not found.")
+            return False
+        run_cmd = f'"{binary}"'
+        print(f"[{timestamp()}] [INFO] Starting executable '{binary}' ...")
+        try:
+            run_command(run_cmd)
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Execution aborted by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [ERROR] Error in pd-cpp-run: {e}")
+        return True
+
+    if user_input.startswith("pd-cpp-warnings "):
+        user_input = user_input[15:].strip()
+        args = shlex.split(user_input)
+        if len(args) != 2:
+            print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file.")
+            return False
+
+        source_file, output_file = args
+        if not os.path.isfile(source_file):
+            print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
+            return False
+
+        # MSVC warning flags: /W4 (all warnings), /WX (treat warnings as errors)
+        compile_cmd = msvc_env_cmd() + f'cl /nologo /W4 /WX "{source_file}" /Fe"{output_file}"'
+        print(f"[{timestamp()}] [INFO] Compiling with cl /W4 /WX (all warnings, errors on warning) ...")
+        print(f"[{timestamp()}] [DEBUG] Running: {compile_cmd}")
+        try:
+            code = run_command(compile_cmd)
+            if code == 0:
+                print(f"[{timestamp()}] [SUCCESS] Compilation with all warnings successful.")
+            else:
+                print(f"[{timestamp()}] [ERROR] Compilation with warnings failed, return code {code}.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Aborted by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [ERROR] Error in pd-cpp-warnings: {e}")
+        return True
+
+    if user_input.startswith("pd-cpp-std "):
+        user_input = user_input[11:].strip()
+        args = shlex.split(user_input)
+        if len(args) != 3:
+            print(f"[{timestamp()}] [ERROR] Please provide three arguments: source file, output file, and C++ standard (e.g., c++17).")
+            return False
+
+        source_file, output_file, std_flag = args
+        if not os.path.isfile(source_file):
+            print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
+            return False
+
+        # MSVC: /std:c++17 etc. (c++14/c++17/c++20/c++latest)
+        compile_cmd = msvc_env_cmd() + f'cl /nologo /std:{std_flag} /W4 "{source_file}" /Fe"{output_file}"'
+        print(f"[{timestamp()}] [INFO] Compiling with cl /std:{std_flag} /W4 ...")
+        print(f"[{timestamp()}] [DEBUG] Running: {compile_cmd}")
+        try:
+            code = run_command(compile_cmd)
+            if code == 0:
+                print(f"[{timestamp()}] [SUCCESS] Compilation with C++ standard {std_flag} successful.")
+            else:
+                print(f"[{timestamp()}] [ERROR] Compilation with C++ standard {std_flag} failed, return code {code}.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Aborted by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [ERROR] Error in pd-cpp-std: {e}")
+        return True
+
+    if user_input.lower() == "pd-cpp-clean":
+        # Delete all .obj, .exe, .ilk, .pdb files
+        clean_cmd_win = 'del /Q *.obj *.exe *.ilk *.pdb 2>nul'
+        print(f"[{timestamp()}] [INFO] Removing compilation artifacts ...")
+        try:
+            run_command(clean_cmd_win)
+            print(f"[{timestamp()}] [SUCCESS] Artifacts deleted.")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Error in pd-cpp-clean: {e}")
+        return True
+
+    if user_input.lower() == "pd-cpp-all":
+        # Assumption: main.cpp exists, a.exe will be created
+        cmd1 = 'del /Q *.obj a.exe 2>nul'
+        cmd2 = msvc_env_cmd() + 'cl /nologo /Zi main.cpp /Fea.exe'
+        cmd3 = 'a.exe'
+        print(f"[{timestamp()}] [INFO] Running pd-cpp-all ...")
+        try:
+            run_command(cmd1)
+            run_command(cmd2)
+            print(f"[{timestamp()}] [INFO] Starting a.exe ...")
+            run_command(cmd3)
+            print(f"[{timestamp()}] [SUCCESS] pd-cpp-all completed.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Aborted by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [ERROR] Error in pd-cpp-all: {e}")
+        return True
+
     elif user_input.startswith("vs-c "):
         user_input = user_input[5:].strip()
         print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022\n")
@@ -3521,6 +3745,226 @@ def handle_special_commands(user_input):
         except Exception as e:
             print(f"[{timestamp()}] [EXCEPTION] Unexpected error: {e}")
 
+        return True
+
+    if user_input.startswith("pd-c-debug "):
+        user_input = user_input[11:].strip()
+        args = shlex.split(user_input)
+        if len(args) != 2:
+            print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file.")
+            return False
+
+        source_file, output_file = args
+        if not os.path.isfile(source_file):
+            print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
+            return False
+
+        if not os.path.isfile(VCVARSALL):
+            print(f"[{timestamp()}] [ERROR] vcvarsall.bat not found: {VCVARSALL}")
+            return False
+
+        # /Zi: debug info in PDB, /Z7: legacy format, /Od: no optimization
+        compile_command = (
+            f'"{VCVARSALL}" x64 && cl /Zi /Z7 /Od /TC "{source_file}" /Fe:"{output_file}"'
+        )
+        full_command = f'cmd /c "{compile_command}"'
+
+        print(f"[{timestamp()}] [INFO] Starting extended debug compilation (pd-c-debug) ...")
+        print(f"[{timestamp()}] [DEBUG] Running: {full_command}")
+        try:
+            code = run_command(full_command, shell=True)
+            if code == 0:
+                print(f"[{timestamp()}] [SUCCESS] Debug build successful: '{output_file}' + PDB file.")
+            else:
+                print(f"[{timestamp()}] [ERROR] Debug build failed (return code {code}).")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Compilation aborted by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [EXCEPTION] Subprocess error: {e}")
+        return True
+
+    if user_input.startswith("pd-c-release "):
+        user_input = user_input[13:].strip()
+        args = shlex.split(user_input)
+        if len(args) != 2:
+            print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file.")
+            return False
+
+        source_file, output_file = args
+        if not os.path.isfile(source_file):
+            print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
+            return False
+
+        if not os.path.isfile(VCVARSALL):
+            print(f"[{timestamp()}] [ERROR] vcvarsall.bat not found: {VCVARSALL}")
+            return False
+
+        # /O2: maximum optimization, /DNDEBUG: disables assert, /TC: C mode
+        compile_command = (
+            f'"{VCVARSALL}" x64 && cl /O2 /DNDEBUG /TC "{source_file}" /Fe:"{output_file}"'
+        )
+        full_command = f'cmd /c "{compile_command}"'
+
+        print(f"[{timestamp()}] [INFO] Starting release build (pd-c-release) ...")
+        print(f"[{timestamp()}] [DEBUG] Running: {full_command}")
+        try:
+            code = run_command(full_command, shell=True)
+            if code == 0:
+                print(f"[{timestamp()}] [SUCCESS] Release build successful: '{output_file}'.")
+            else:
+                print(f"[{timestamp()}] [ERROR] Release build failed (return code {code}).")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Compilation aborted by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [EXCEPTION] Subprocess error: {e}")
+        return True
+
+    if user_input.startswith("pd-c-warnings "):
+        user_input = user_input[14:].strip()
+        args = shlex.split(user_input)
+        if len(args) != 2:
+            print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file.")
+            return False
+
+        source_file, output_file = args
+        if not os.path.isfile(source_file):
+            print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
+            return False
+
+        if not os.path.isfile(VCVARSALL):
+            print(f"[{timestamp()}] [ERROR] vcvarsall.bat not found: {VCVARSALL}")
+            return False
+
+        # /W4: highest warning level, /WX: treat warnings as errors, /Zi: debug info
+        compile_command = (
+            f'"{VCVARSALL}" x64 && cl /W4 /WX /Zi /TC "{source_file}" /Fe:"{output_file}"'
+        )
+        full_command = f'cmd /c "{compile_command}"'
+
+        print(f"[{timestamp()}] [INFO] Starting compilation with warnings as errors (pd-c-warnings) ...")
+        print(f"[{timestamp()}] [DEBUG] Running: {full_command}")
+        try:
+            code = run_command(full_command, shell=True)
+            if code == 0:
+                print(f"[{timestamp()}] [SUCCESS] Build with warnings successful: '{output_file}'.")
+            else:
+                print(f"[{timestamp()}] [ERROR] Build with warnings failed (return code {code}).")
+            # Note: /WX aborts on any warning
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Compilation aborted by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [EXCEPTION] Subprocess error: {e}")
+        return True
+
+    if user_input.startswith("pd-c-std "):
+        user_input = user_input[9:].strip()
+        args = shlex.split(user_input)
+        if len(args) != 3:
+            print(f"[{timestamp()}] [ERROR] Please provide three arguments: source file, output file, and C standard (c11 or c17).")
+            return False
+
+        source_file, output_file, std_flag = args
+        if not os.path.isfile(source_file):
+            print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
+            return False
+
+        if std_flag.lower() not in ("c11", "c17"):
+            print(f"[{timestamp()}] [ERROR] Invalid C standard: '{std_flag}'. Allowed: c11 or c17.")
+            return False
+
+        if not os.path.isfile(VCVARSALL):
+            print(f"[{timestamp()}] [ERROR] vcvarsall.bat not found: {VCVARSALL}")
+            return False
+
+        # /std:c11 or /std:c17
+        compile_command = (
+            f'"{VCVARSALL}" x64 && cl /std:{std_flag} /W3 /TC "{source_file}" /Fe:"{output_file}"'
+        )
+        full_command = f'cmd /c "{compile_command}"'
+
+        print(f"[{timestamp()}] [INFO] Compiling with C standard {std_flag} (pd-c-std) ...")
+        print(f"[{timestamp()}] [DEBUG] Running: {full_command}")
+        try:
+            code = run_command(full_command, shell=True)
+            if code == 0:
+                print(f"[{timestamp()}] [SUCCESS] Compilation with C standard {std_flag} successful: '{output_file}'.")
+            else:
+                print(f"[{timestamp()}] [ERROR] Compilation with C standard {std_flag} failed (return code {code}).")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Compilation aborted by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [ERROR] Error running pd-c-std: {e}")
+        return True
+
+    if user_input.startswith("pd-c-run "):
+        user_input = user_input[9:].strip()
+        executable = user_input
+        if not os.path.isfile(executable):
+            print(f"[{timestamp()}] [ERROR] Executable '{executable}' not found.")
+            return False
+
+        run_cmd = f'"{executable}"'
+        print(f"[{timestamp()}] [INFO] Starting executable '{executable}' ...")
+        try:
+            run_command(run_cmd, shell=True)
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Execution aborted by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [ERROR] Error running pd-c-run: {e}")
+        return True
+
+    if user_input.lower() == "pd-c-clean":
+        user_input = user_input[9:].strip()  # not used
+        # Delete all .obj, .exe, .pdb in current directory
+        clean_cmd = 'del /Q *.obj *.exe *.pdb 2>nul'
+        print(f"[{timestamp()}] [INFO] Removing MSVC build artifacts (pd-c-clean) ...")
+        try:
+            run_command(clean_cmd, shell=True)
+            print(f"[{timestamp()}] [SUCCESS] Artifacts (.obj, .exe, .pdb) deleted.")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Error running pd-c-clean: {e}")
+        return True
+
+    if user_input.lower() == "pd-c-all":
+        user_input = user_input[7:].strip()  # no further flags here
+        # Assumption: main.c exists, output is main.exe
+        source = "main.c"
+        output = "main.exe"
+
+        if not os.path.isfile(source):
+            print(f"[{timestamp()}] [ERROR] Source file '{source}' not found.")
+            return True  # Abort, but True since command was recognized
+
+        if not os.path.isfile(VCVARSALL):
+            print(f"[{timestamp()}] [ERROR] vcvarsall.bat not found: {VCVARSALL}")
+            return True
+
+        cmd_clean = f'"{VCVARSALL}" x64 && del /Q *.obj *.exe *.pdb 2>nul'
+        cmd_build = f'"{VCVARSALL}" x64 && cl /Zi /Od /TC "{source}" /Fe:"{output}"'
+        cmd_run   = f'"{output}"'
+
+        print(f"[{timestamp()}] [INFO] Running pd-c-all (MSVC): Clean, Build, Run ...")
+        try:
+            # 1. Clean
+            print(f"[{timestamp()}] [INFO] Cleaning artifacts ...")
+            run_command(cmd_clean, shell=True)
+
+            # 2. Debug build
+            print(f"[{timestamp()}] [INFO] Starting debug build '{source}' ...")
+            ret = run_command(cmd_build, shell=True)
+            if ret != 0:
+                print(f"[{timestamp()}] [ERROR] Debug build failed (return code {ret}).")
+                return True
+
+            # 3. Run
+            print(f"[{timestamp()}] [INFO] Starting '{output}' ...")
+            run_command(cmd_run, shell=True)
+
+            print(f"[{timestamp()}] [SUCCESS] pd-c-all completed successfully.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Aborted by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [ERROR] Error running pd-c-all: {e}")
         return True
 
     elif user_input.startswith("vs-cs "):
@@ -3602,6 +4046,304 @@ def handle_special_commands(user_input):
         except Exception as e:
             print(f"[{timestamp()}] [EXCEPTION] Unexpected error: {e}")
 
+        return True
+
+    # Pfade zum C#-Compiler (csc.exe) prüfen
+    CSC_PATHS = [
+        r"C:\Windows\Microsoft.NET\Framework\v4.0.30319\csc.exe",               # 32-bit .NET Framework
+        r"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe",             # 64-bit .NET Framework
+        r"C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\Roslyn\csc.exe",  # Roslyn (VS 2022)
+        r"C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\csc.exe",         # VS 2022 allgemeiner Pfad
+    ]
+
+    def find_csc() -> str:
+        """
+        Durchsucht vordefinierte Pfade und gibt den ersten existierenden csc.exe-Pfad zurück.
+        """
+        for path in CSC_PATHS:
+            if os.path.isfile(path):
+                return path
+        return None
+
+    if user_input.startswith("pd-cs "):
+        user_input = user_input[6:].strip()
+        args = shlex.split(user_input)
+        if len(args) != 2:
+            print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file.")
+            return False
+
+        source_file, output_file = args
+        if not os.path.isfile(source_file):
+            print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
+            return False
+
+        csc_path = find_csc()
+        if not csc_path:
+            print(f"[{timestamp()}] [ERROR] csc.exe not found. Please ensure .NET SDK or Visual Studio is installed.")
+            return False
+
+        # /debug: PDB erzeugen; /optimize- deaktiviert Optimierung
+        compile_command = f'"{csc_path}" /debug+ /optimize- /out:"{output_file}" "{source_file}"'
+        print(f"[{timestamp()}] [INFO] Starting C# debug compilation (pd-cs)...")
+        print(f"[{timestamp()}] [DEBUG] Running command: {compile_command}")
+
+        try:
+            returncode = run_command(compile_command, shell=True)
+            if returncode == 0:
+                print(f"[{timestamp()}] [SUCCESS] Compilation completed successfully: '{output_file}'.")
+            else:
+                print(f"[{timestamp()}] [ERROR] Compilation failed with return code {returncode}.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Compilation cancelled by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [EXCEPTION] Subprocess error: {e}")
+        except Exception as e:
+            print(f"[{timestamp()}] [EXCEPTION] Unexpected error: {e}")
+        return True
+
+    if user_input.startswith("pd-cs-debug "):
+        user_input = user_input[11:].strip()
+        args = shlex.split(user_input)
+        if len(args) != 2:
+            print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file.")
+            return False
+
+        source_file, output_file = args
+        if not os.path.isfile(source_file):
+            print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
+            return False
+
+        csc_path = find_csc()
+        if not csc_path:
+            print(f"[{timestamp()}] [ERROR] csc.exe not found. Please ensure .NET SDK or Visual Studio is installed.")
+            return False
+
+        # /debug+: Debug-Symbole in PDB, /optimize-: keine Optimierung
+        compile_command = f'"{csc_path}" /debug+ /optimize- /langversion:latest /out:"{output_file}" "{source_file}"'
+        print(f"[{timestamp()}] [INFO] Starting C# enhanced debug compilation (pd-cs-debug)...")
+        print(f"[{timestamp()}] [DEBUG] Running command: {compile_command}")
+
+        try:
+            returncode = run_command(compile_command, shell=True)
+            if returncode == 0:
+                print(f"[{timestamp()}] [SUCCESS] Debug build completed: '{output_file}' + PDB file.")
+            else:
+                print(f"[{timestamp()}] [ERROR] Debug build failed with return code {returncode}.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Compilation cancelled by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [EXCEPTION] Subprocess error: {e}")
+        return True
+
+    if user_input.startswith("pd-cs-release "):
+        user_input = user_input[15:].strip()
+        args = shlex.split(user_input)
+        if len(args) != 2:
+            print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file.")
+            return False
+
+        source_file, output_file = args
+        if not os.path.isfile(source_file):
+            print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
+            return False
+
+        csc_path = find_csc()
+        if not csc_path:
+            print(f"[{timestamp()}] [ERROR] csc.exe not found. Please ensure .NET SDK or Visual Studio is installed.")
+            return False
+
+        # /optimize+: Aktiviert Optimierung, /define:RELEASE: Symbol für bedingte Kompilierung
+        compile_command = f'"{csc_path}" /optimize+ /define:RELEASE /out:"{output_file}" "{source_file}"'
+        print(f"[{timestamp()}] [INFO] Starting C# release build (pd-cs-release)...")
+        print(f"[{timestamp()}] [DEBUG] Running command: {compile_command}")
+
+        try:
+            returncode = run_command(compile_command, shell=True)
+            if returncode == 0:
+                print(f"[{timestamp()}] [SUCCESS] Release build completed: '{output_file}'.")
+            else:
+                print(f"[{timestamp()}] [ERROR] Release build failed with return code {returncode}.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Compilation cancelled by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [EXCEPTION] Subprocess error: {e}")
+        return True
+
+    if user_input.startswith("pd-cs-warnings "):
+        user_input = user_input[15:].strip()
+        args = shlex.split(user_input)
+        if len(args) != 2:
+            print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file.")
+            return False
+
+        source_file, output_file = args
+        if not os.path.isfile(source_file):
+            print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
+            return False
+
+        csc_path = find_csc()
+        if not csc_path:
+            print(f"[{timestamp()}] [ERROR] csc.exe not found. Please ensure .NET SDK or Visual Studio is installed.")
+            return False
+
+        # /warn:4: höchste Warnungsstufe, /warnaserror+: behandelt alle Warnungen als Fehler
+        compile_command = f'"{csc_path}" /warn:4 /warnaserror+ /out:"{output_file}" "{source_file}"'
+        print(f"[{timestamp()}] [INFO] Starting C# compilation with warnings as errors (pd-cs-warnings)...")
+        print(f"[{timestamp()}] [DEBUG] Running command: {compile_command}")
+
+        try:
+            returncode = run_command(compile_command, shell=True)
+            if returncode == 0:
+                print(f"[{timestamp()}] [SUCCESS] Build with warnings-as-errors succeeded: '{output_file}'.")
+            else:
+                print(f"[{timestamp()}] [ERROR] Build failed with return code {returncode}.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Compilation cancelled by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [EXCEPTION] Subprocess error: {e}")
+        return True
+
+    if user_input.startswith("pd-cs-run "):
+        user_input = user_input[11:].strip()
+        executable = user_input
+        if not os.path.isfile(executable):
+            print(f"[{timestamp()}] [ERROR] Executable '{executable}' not found.")
+            return False
+
+        run_cmd = f'"{executable}"'
+        print(f"[{timestamp()}] [INFO] Running executable '{executable}' (pd-cs-run)...")
+        try:
+            run_command(run_cmd, shell=True)
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Execution cancelled by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [ERROR] Error running pd-cs-run: {e}")
+        return True
+
+    if user_input.lower() == "pd-cs-clean":
+        user_input = user_input[11:].strip()  # nicht verwendet
+        # Lösche alle Standard-Artefakte im aktuellen Verzeichnis
+        clean_cmd = 'del /Q *.exe *.dll *.pdb *.xml 2>nul'
+        print(f"[{timestamp()}] [INFO] Cleaning C# build artifacts (pd-cs-clean)...")
+        try:
+            run_command(clean_cmd, shell=True)
+            print(f"[{timestamp()}] [SUCCESS] Artifacts deleted.")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Error running pd-cs-clean: {e}")
+        return True
+
+    if user_input.startswith("pd-cs-build-project "):
+        user_input = user_input[21:].strip()
+        args = shlex.split(user_input)
+        if len(args) != 1:
+            print(f"[{timestamp()}] [ERROR] Please provide exactly one argument: path to .csproj or .sln.")
+            return False
+
+        project_path = args[0]
+        if not os.path.isfile(project_path):
+            print(f"[{timestamp()}] [ERROR] Project file '{project_path}' not found.")
+            return False
+
+        # MSBuild via Developer Command Prompt aufrufen
+        msbuild_path = r'C:\Program Files\Microsoft Visual Studio\2022\Community\Msbuild\Current\Bin\MSBuild.exe'
+        if not os.path.isfile(msbuild_path):
+            print(f"[{timestamp()}] [ERROR] MSBuild.exe not found: {msbuild_path}")
+            return False
+
+        # /p:Configuration=Release Bauen im Release-Modus; /m: paralleles Bauen
+        build_cmd = f'"{msbuild_path}" "{project_path}" /t:Build /p:Configuration=Release /m'
+        print(f"[{timestamp()}] [INFO] Building C# project with MSBuild (pd-cs-build-project)...")
+        print(f"[{timestamp()}] [DEBUG] Running command: {build_cmd}")
+
+        try:
+            code = run_command(build_cmd, shell=True)
+            if code == 0:
+                print(f"[{timestamp()}] [SUCCESS] Project built successfully: '{project_path}'.")
+            else:
+                print(f"[{timestamp()}] [ERROR] MSBuild failed with return code {code}.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Build cancelled by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [ERROR] Error running pd-cs-build-project: {e}")
+        return True
+
+    if user_input.startswith("pd-cs-run-project "):
+        user_input = user_input[20:].strip()
+        args = shlex.split(user_input)
+        if len(args) != 1:
+            print(f"[{timestamp()}] [ERROR] Please provide exactly one argument: path to project folder containing .csproj.")
+            return False
+
+        project_dir = args[0]
+        csproj_files = [f for f in os.listdir(project_dir) if f.endswith(".csproj")]
+        if not csproj_files:
+            print(f"[{timestamp()}] [ERROR] No .csproj file found in directory '{project_dir}'.")
+            return False
+
+        # dotnet CLI verwenden
+        run_cmd = f'dotnet run --project "{os.path.join(project_dir, csproj_files[0])}"'
+        print(f"[{timestamp()}] [INFO] Running 'dotnet run' for project (pd-cs-run-project)...")
+        print(f"[{timestamp()}] [DEBUG] Running command: {run_cmd}")
+
+        try:
+            run_command(run_cmd, shell=True)
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Execution cancelled by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [ERROR] Error running pd-cs-run-project: {e}")
+        return True
+
+    if user_input.startswith("pd-cs-publish-project "):
+        user_input = user_input[24:].strip()
+        args = shlex.split(user_input)
+        if len(args) != 2:
+            print(f"[{timestamp()}] [ERROR] Please provide two arguments: path to project folder and output folder for publish.")
+            return False
+
+        project_dir, publish_dir = args
+        csproj_files = [f for f in os.listdir(project_dir) if f.endswith(".csproj")]
+        if not csproj_files:
+            print(f"[{timestamp()}] [ERROR] No .csproj file found in directory '{project_dir}'.")
+            return False
+
+        publish_cmd = f'dotnet publish "{os.path.join(project_dir, csproj_files[0])}" -c Release -o "{publish_dir}"'
+        print(f"[{timestamp()}] [INFO] Publishing project (pd-cs-publish-project) to '{publish_dir}'...")
+        print(f"[{timestamp()}] [DEBUG] Running command: {publish_cmd}")
+
+        try:
+            code = run_command(publish_cmd, shell=True)
+            if code == 0:
+                print(f"[{timestamp()}] [SUCCESS] Publish completed. Artifacts in: '{publish_dir}'.")
+            else:
+                print(f"[{timestamp()}] [ERROR] dotnet publish failed with return code {code}.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Publish cancelled by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [ERROR] Error running pd-cs-publish-project: {e}")
+        return True
+
+    if user_input.startswith("pd-cs-test "):
+        user_input = user_input[11:].strip()
+        args = shlex.split(user_input)
+        if len(args) != 1:
+            print(f"[{timestamp()}] [ERROR] Please provide exactly one argument: path to solution or project to test.")
+            return False
+
+        test_path = args[0]
+        if not os.path.exists(test_path):
+            print(f"[{timestamp()}] [ERROR] Path '{test_path}' not found.")
+            return False
+
+        test_cmd = f'dotnet test "{test_path}" --configuration Release'
+        print(f"[{timestamp()}] [INFO] Running 'dotnet test' (pd-cs-test) on '{test_path}'...")
+        print(f"[{timestamp()}] [DEBUG] Running command: {test_cmd}")
+
+        try:
+            run_command(test_cmd, shell=True)
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Tests cancelled by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [ERROR] Error running pd-cs-test: {e}")
         return True
 
     if user_input.startswith("rustc "):
@@ -4999,7 +5741,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
-    if user_input.startswith("pc-python-all "):
+    if user_input.startswith("pc-python-all-s "):
         user_input = user_input[14:].strip()
 
         command = f"pyinstaller --onefile --noconsole --icon={user_input}"
@@ -5015,6 +5757,355 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
+    if user_input.startswith("pd-python-run "):
+        user_input = user_input[14:].strip()
+        parts = shlex.split(user_input)
+        script = parts[0]
+        args = parts[1:]
+        if not os.path.isfile(script):
+            print(f"[{timestamp()}] [ERROR] Script '{script}' not found.")
+            return False
+
+        cmd = f"python \"{script}\" " + " ".join(f"\"{arg}\"" for arg in args)
+        try:
+            print(f"[{timestamp()}] [INFO] Running '{script}'...")
+            run_command(cmd, shell=True)
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Execution cancelled by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] pd-python-run failed: {e}")
+        return True
+
+    if user_input.startswith("pd-python-venv "):
+        user_input = user_input[16:].strip()
+        venv_name = user_input
+        if os.path.isdir(venv_name):
+            print(f"[{timestamp()}] [ERROR] Virtual environment folder '{venv_name}' already exists.")
+            return False
+
+        cmd_create = f"python -m venv \"{venv_name}\""
+        cmd_activate = f"call \"{venv_name}\\Scripts\\activate.bat\""
+
+        try:
+            print(f"[{timestamp()}] [INFO] Creating virtual environment '{venv_name}'...")
+            code = run_command(cmd_create, shell=True)
+            if code != 0:
+                print(f"[{timestamp()}] [ERROR] venv creation failed with return code {code}.")
+                return True
+
+            print(f"[{timestamp()}] [INFO] Activating virtual environment '{venv_name}'...")
+            run_command(cmd_activate, shell=True)
+            print(f"[{timestamp()}] [SUCCESS] Virtual environment '{venv_name}' created and activated.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Operation cancelled by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [ERROR] pd-python-venv failed: {e}")
+        return True
+
+    if user_input.startswith("pd-python-install "):
+        user_input = user_input[18:].strip()
+        args = shlex.split(user_input)
+        if len(args) != 2:
+            print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: venv folder and requirements file.")
+            return False
+
+        venv_name, req_file = args
+        if not os.path.isdir(venv_name):
+            print(f"[{timestamp()}] [ERROR] Virtual environment '{venv_name}' not found.")
+            return False
+        if not os.path.isfile(req_file):
+            print(f"[{timestamp()}] [ERROR] Requirements file '{req_file}' not found.")
+            return False
+
+        cmd_activate = f"call \"{venv_name}\\Scripts\\activate.bat\""
+        cmd_install = f"pip install -r \"{req_file}\""
+
+        try:
+            print(f"[{timestamp()}] [INFO] Activating virtual environment '{venv_name}'...")
+            run_command(cmd_activate, shell=True)
+            print(f"[{timestamp()}] [INFO] Installing packages from '{req_file}'...")
+            code = run_command(cmd_install, shell=True)
+            if code == 0:
+                print(f"[{timestamp()}] [SUCCESS] Packages installed successfully.")
+            else:
+                print(f"[{timestamp()}] [ERROR] pip install failed with return code {code}.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Installation cancelled by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [ERROR] pd-python-install failed: {e}")
+        return True
+
+    if user_input.startswith("pd-python-format "):
+        user_input = user_input[17:].strip()
+        target = user_input
+        if not os.path.exists(target):
+            print(f"[{timestamp()}] [ERROR] Path '{target}' not found.")
+            return False
+
+        cmd = f"black \"{target}\""
+        try:
+            print(f"[{timestamp()}] [INFO] Formatting '{target}' with black...")
+            code = run_command(cmd, shell=True)
+            if code == 0:
+                print(f"[{timestamp()}] [SUCCESS] Format complete.")
+            else:
+                print(f"[{timestamp()}] [ERROR] black failed with return code {code}.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Formatting cancelled by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [ERROR] pd-python-format failed: {e}")
+        return True
+
+    if user_input.startswith("pd-python-lint "):
+        user_input = user_input[16:].strip()
+        target = user_input
+        if not os.path.exists(target):
+            print(f"[{timestamp()}] [ERROR] Path '{target}' not found.")
+            return False
+
+        cmd = f"flake8 \"{target}\""
+        try:
+            print(f"[{timestamp()}] [INFO] Linting '{target}' with flake8...")
+            code = run_command(cmd, shell=True)
+            if code == 0:
+                print(f"[{timestamp()}] [SUCCESS] No linting issues found.")
+            else:
+                print(f"[{timestamp()}] [ERROR] flake8 found issues (return code {code}).")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Linting cancelled by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [ERROR] pd-python-lint failed: {e}")
+        return True
+
+    if user_input.startswith("pd-python-typecheck "):
+        user_input = user_input[19:].strip()
+        target = user_input
+        if not os.path.exists(target):
+            print(f"[{timestamp()}] [ERROR] Path '{target}' not found.")
+            return False
+
+        cmd = f"mypy \"{target}\""
+        try:
+            print(f"[{timestamp()}] [INFO] Type-checking '{target}' with mypy...")
+            code = run_command(cmd, shell=True)
+            if code == 0:
+                print(f"[{timestamp()}] [SUCCESS] No type errors detected.")
+            else:
+                print(f"[{timestamp()}] [ERROR] mypy detected issues (return code {code}).")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Type-check cancelled by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [ERROR] pd-python-typecheck failed: {e}")
+        return True
+
+    if user_input.startswith("pd-python-test "):
+        user_input = user_input[15:].strip()
+        target = user_input if user_input else "."
+        if not os.path.exists(target):
+            print(f"[{timestamp()}] [ERROR] Path '{target}' not found.")
+            return False
+
+        cmd = f"pytest \"{target}\""
+        try:
+            print(f"[{timestamp()}] [INFO] Running tests with pytest on '{target}'...")
+            code = run_command(cmd, shell=True)
+            if code == 0:
+                print(f"[{timestamp()}] [SUCCESS] Tests passed successfully.")
+            else:
+                print(f"[{timestamp()}] [ERROR] pytest detected failures (return code {code}).")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Tests cancelled by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [ERROR] pd-python-test failed: {e}")
+        return True
+
+    if user_input.startswith("pd-python-coverage "):
+        user_input = user_input[19:].strip()
+        parts = shlex.split(user_input)
+        if len(parts) == 0:
+            print(f"[{timestamp()}] [ERROR] Please provide a script or test path.")
+            return False
+
+        target = parts[0]
+        html_flag = "--html" in parts
+
+        if not os.path.exists(target):
+            print(f"[{timestamp()}] [ERROR] Path '{target}' not found.")
+            return False
+
+        cmd_run = f"coverage run -m pytest \"{target}\"" if os.path.isdir(target) or target.endswith("_test.py") else f"coverage run \"{target}\""
+        cmd_report = "coverage report"
+        cmd_html = "coverage html"
+
+        try:
+            print(f"[{timestamp()}] [INFO] Running coverage on '{target}'...")
+            code_run = run_command(cmd_run, shell=True)
+            if code_run != 0:
+                print(f"[{timestamp()}] [ERROR] coverage run failed with return code {code_run}.")
+                return True
+
+            print(f"[{timestamp()}] [INFO] Generating coverage report...")
+            run_command(cmd_report, shell=True)
+
+            if html_flag:
+                print(f"[{timestamp()}] [INFO] Generating HTML coverage report...")
+                run_command(cmd_html, shell=True)
+                print(f"[{timestamp()}] [SUCCESS] HTML coverage report created in 'htmlcov'.")
+            else:
+                print(f"[{timestamp()}] [SUCCESS] Coverage summary displayed above.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Coverage generation cancelled by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [ERROR] pd-python-coverage failed: {e}")
+        return True
+
+    if user_input.startswith("pd-python-pack "):
+        user_input = user_input[16:].strip()
+        target = user_input
+        if not os.path.exists(target):
+            print(f"[{timestamp()}] [ERROR] Path '{target}' not found.")
+            return False
+
+        # If it's a directory with pyproject.toml or setup.py
+        if os.path.isdir(target):
+            # Prefer pyproject.toml build via PEP517, otherwise fallback to setup.py
+            if os.path.isfile(os.path.join(target, "pyproject.toml")):
+                cmd = f"cd \"{target}\" && python -m build --wheel"
+            elif os.path.isfile(os.path.join(target, "setup.py")):
+                cmd = f"cd \"{target}\" && python setup.py bdist_wheel"
+            else:
+                print(f"[{timestamp()}] [ERROR] No setup.py or pyproject.toml found in '{target}'.")
+                return False
+        else:
+            # If directly a setup.py file
+            if target.endswith("setup.py"):
+                dirpath = os.path.dirname(target)
+                cmd = f"cd \"{dirpath}\" && python setup.py bdist_wheel"
+            else:
+                print(f"[{timestamp()}] [ERROR] '{target}' is not a recognized package entry point.")
+                return False
+
+        try:
+            print(f"[{timestamp()}] [INFO] Building wheel for '{target}'...")
+            code = run_command(cmd, shell=True)
+            if code == 0:
+                print(f"[{timestamp()}] [SUCCESS] Wheel built successfully. Check the 'dist' folder.")
+            else:
+                print(f"[{timestamp()}] [ERROR] Wheel build failed with return code {code}.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Packaging cancelled by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [ERROR] pd-python-pack failed: {e}")
+        return True
+
+    if user_input.startswith("pd-python-docs "):
+        user_input = user_input[16:].strip()
+        docs_dir = user_input
+        if not os.path.isdir(docs_dir):
+            print(f"[{timestamp()}] [ERROR] Directory '{docs_dir}' not found.")
+            return False
+
+        # Build HTML docs
+        cmd = f"cd \"{docs_dir}\" && sphinx-build -b html \"{docs_dir}\" \"{os.path.join(docs_dir, '_build')}\""
+
+        try:
+            print(f"[{timestamp()}] [INFO] Generating Sphinx documentation in '{docs_dir}'...")
+            code = run_command(cmd, shell=True)
+            if code == 0:
+                print(f"[{timestamp()}] [SUCCESS] Documentation built in '{os.path.join(docs_dir, '_build')}'.")
+            else:
+                print(f"[{timestamp()}] [ERROR] Sphinx build failed with return code {code}.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Documentation build cancelled by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [ERROR] pd-python-docs failed: {e}")
+        return True
+
+    if user_input.startswith("pd-python-clean"):
+        # Accept optional directory argument, default to current directory
+        args = shlex.split(user_input[15:].strip())
+        target_dir = args[0] if args else "."
+        if not os.path.isdir(target_dir):
+            print(f"[{timestamp()}] [ERROR] Directory '{target_dir}' not found.")
+            return False
+
+        # Remove .pyc files, __pycache__ folders, build/ and dist/ if present
+        cmd_clean_pyc = f"for /r \"{target_dir}\" %f in (*.pyc) do del \"%f\""
+        cmd_clean_cache = f"for /d /r \"{target_dir}\" %d in (__pycache__) do rmdir /s /q \"%d\""
+        cmd_clean_build = f"if exist \"{os.path.join(target_dir, 'build')}\" rmdir /s /q \"{os.path.join(target_dir, 'build')}\""
+        cmd_clean_dist = f"if exist \"{os.path.join(target_dir, 'dist')}\" rmdir /s /q \"{os.path.join(target_dir, 'dist')}\""
+
+        try:
+            print(f"[{timestamp()}] [INFO] Cleaning Python artifacts in '{target_dir}'...")
+            run_command(cmd_clean_pyc, shell=True)
+            run_command(cmd_clean_cache, shell=True)
+            run_command(cmd_clean_build, shell=True)
+            run_command(cmd_clean_dist, shell=True)
+            print(f"[{timestamp()}] [SUCCESS] Clean complete.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cleaning cancelled by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [ERROR] pd-python-clean failed: {e}")
+        return True
+
+    if user_input.startswith("pd-python-all "):
+        user_input = user_input[14:].strip()
+        project_dir = user_input
+        if not os.path.isdir(project_dir):
+            print(f"[{timestamp()}] [ERROR] Directory '{project_dir}' not found.")
+            return False
+
+        # 1. Format
+        cmd_fmt = f"black \"{project_dir}\""
+        # 2. Lint
+        cmd_lint = f"flake8 \"{project_dir}\""
+        # 3. Type-check
+        cmd_type = f"mypy \"{project_dir}\""
+        # 4. Test
+        cmd_test = f"pytest \"{project_dir}\""
+        # 5. Coverage report
+        cmd_cov = f"coverage run -m pytest \"{project_dir}\" && coverage report"
+        # 6. Build wheel
+        if os.path.isfile(os.path.join(project_dir, "pyproject.toml")):
+            cmd_pack = f"cd \"{project_dir}\" && python -m build --wheel"
+        else:
+            cmd_pack = f"cd \"{project_dir}\" && python setup.py bdist_wheel"
+
+        print(f"[{timestamp()}] [INFO] Running pd-python-all pipeline on '{project_dir}'...")
+        try:
+            # Format
+            print(f"[{timestamp()}] [INFO] Formatting code...")
+            run_command(cmd_fmt, shell=True)
+
+            # Lint
+            print(f"[{timestamp()}] [INFO] Linting code...")
+            run_command(cmd_lint, shell=True)
+
+            # Type-check
+            print(f"[{timestamp()}] [INFO] Type-checking code...")
+            run_command(cmd_type, shell=True)
+
+            # Test
+            print(f"[{timestamp()}] [INFO] Running tests...")
+            run_command(cmd_test, shell=True)
+
+            # Coverage
+            print(f"[{timestamp()}] [INFO] Generating coverage report...")
+            run_command(cmd_cov, shell=True)
+
+            # Package
+            print(f"[{timestamp()}] [INFO] Building distribution package...")
+            code = run_command(cmd_pack, shell=True)
+            if code == 0:
+                print(f"[{timestamp()}] [SUCCESS] pd-python-all completed successfully.")
+            else:
+                print(f"[{timestamp()}] [ERROR] Packaging step failed with return code {code}.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Pipeline cancelled by user.")
+        except subprocess.SubprocessError as e:
+            print(f"[{timestamp()}] [ERROR] pd-python-all failed: {e}")
         return True
 
     if user_input.startswith("go run "):
