@@ -3494,7 +3494,7 @@ def handle_special_commands(user_input):
             return False
 
         # Clang with all warnings and debug symbols
-        compile_cmd = f"""wsl clang++ -Wall -Wextra -Wpedantic -g \"{source_file}\" -o \"{output_file}\" """
+        compile_cmd = f'wsl clang++ -Wall -Wextra -Wpedantic -g "{source_file}" -o "{output_file}"'
         print(f"[{timestamp()}] [INFO] Compiling with clang++ -Wall -Wextra -Wpedantic -g ...")
         print(f"[{timestamp()}] [DEBUG] Running: {compile_cmd}")
         try:
