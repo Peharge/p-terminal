@@ -4739,7 +4739,7 @@ def handle_special_commands(user_input):
         try:
             while True:
                 user_cmd = input().strip()
-                if user_cmd.lower() == 'q':
+                if user_cmd.lower() == 'q' or user_cmd.lower() == '\x11':
                     print(f"[{timestamp()}] [INFO] Stopping server...")
                     break
                 else:
@@ -4809,7 +4809,7 @@ def handle_special_commands(user_input):
         try:
             while True:
                 user_cmd = input().strip()
-                if user_cmd.lower() == 'q':
+                if user_cmd.lower() == 'q' or user_cmd.lower() == '\x11':
                     print(f"[{timestamp()}] [INFO] Stopping server...")
                     # Hier shutdown() auf dem Server aufrufen
                     # Dazu brauchen wir eine Referenz auf das server-Objekt;
