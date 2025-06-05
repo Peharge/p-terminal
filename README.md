@@ -677,7 +677,7 @@ soon more
 
 # **_Peharge Terminal Community_**<br>
 <img width="400" src="https://github.com/Peharge/p-terminal-images/blob/main/images/banner-3.png" alt="pp-term"/><br><br>
-  [`P-Terminal GitHub`](https://github.com/Peharge/p-terminal) [`P-Terminal Discussions`](https://github.com/Peharge/p-terminal/discussions) [`P-Term Discussions`](https://github.com/Peharge/p-terminal/discussions/2) [`PP-Term Discussions`](https://github.com/Peharge/p-terminal/discussions/3) [`P-Terminal Issues`](https://github.com/Peharge/p-terminal/issues) [`P-Terminal Pulls`](https://github.com/Peharge/p-terminal/pulls)
+[`P-Terminal Discussions`](https://github.com/Peharge/p-terminal/discussions) [`P-Term Discussions`](https://github.com/Peharge/p-terminal/discussions/2) [`PP-Term Discussions`](https://github.com/Peharge/p-terminal/discussions/3) [`P-Terminal Issues`](https://github.com/Peharge/p-terminal/issues) [`P-Terminal Pulls`](https://github.com/Peharge/p-terminal/pulls)
 
   <br>
     Have you discovered a bug or have questions about the P-Terminal or PP-Terminal? <br>Or maybe you already know a solution or have helpful ideas? <br>Feel free to share your knowledge and thoughts under Discussions, Issues, or Pull Requests on GitHub! <br>Whether it's a question or an answer – every contribution counts. <br>Just click the appropriate button above and join in!
