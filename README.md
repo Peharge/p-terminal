@@ -69,7 +69,7 @@ Peharge Projects 2025<br>
 
 <div align="center">
 
-# **Peharge Terminal?**
+# **_Peharge Terminal?_**
 Discover the future of developer productivity with Peharge Terminal!
 
 Why settle for less?
