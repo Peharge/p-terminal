@@ -4768,6 +4768,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("prpdf "):
+        # user_input erwartet: "prpdf <pfad_zur_pdf>"
         filepath = os.path.abspath(user_input[6:].strip())
 
         if not os.path.isfile(filepath):
@@ -4785,6 +4786,7 @@ def handle_special_commands(user_input):
         port_container = {}
         server_started_event = threading.Event()
 
+        # Thread starten
         server_thread = threading.Thread(
             target=start_local_server,
             args=(directory, requested_port, port_container, server_started_event),
@@ -4792,6 +4794,7 @@ def handle_special_commands(user_input):
         )
         server_thread.start()
 
+        # Maximal 5 Sekunden auf den Start warten
         if not server_started_event.wait(timeout=5):
             print(f"[{timestamp()}] [ERROR] Server could not be started within 5 seconds.")
             return True
@@ -4802,24 +4805,37 @@ def handle_special_commands(user_input):
         webbrowser.open(url)
         print(f"[{timestamp()}] [INFO] Server is running on port {actual_port}. Press 'q' to stop it.")
 
+        # Warte-Schleife für Benutzereingabe
         try:
             while True:
                 user_cmd = input().strip()
                 if user_cmd.lower() == 'q':
                     print(f"[{timestamp()}] [INFO] Stopping server...")
+                    # Hier shutdown() auf dem Server aufrufen
+                    # Dazu brauchen wir eine Referenz auf das server-Objekt;
+                    # wir könnten es in port_container ablegen, z. B. port_container['server'] = server
                     break
                 else:
                     print(f"[{timestamp()}] [INFO] Invalid input. Press 'q' to quit.")
         except (KeyboardInterrupt, EOFError):
             print(f"\n[{timestamp()}] [INFO] Input interrupted. Stopping server...")
 
+        # Wir müssen das Shutdown-Signal senden. Da wir den Server-Instanz nicht direkt haben,
+        # könnten wir den HTTP-Endpunkt selbst als „Trigger“ verwenden oder – besser –
+        # speichern wir beim Erzeugen in port_container auch die server-Instanz:
         try:
-            urllib.request.urlopen(url, timeout=1)
-        except:
+            # Senden eines shut-down-Requests an eine speziell dafür eingerichtete URL
+            # (falls man eine Route dafür definiert). Hier nutzen wir einfach server.shutdown().
+            server = port_container.get('server')
+            if server:
+                server.shutdown()
+        except Exception:
             pass
 
+        # Auf das Ende des Threads warten
         server_thread.join(timeout=5)
 
+        # Prüfen, ob die URL nicht mehr erreichbar ist
         for _ in range(5):
             try:
                 urllib.request.urlopen(url, timeout=1)
