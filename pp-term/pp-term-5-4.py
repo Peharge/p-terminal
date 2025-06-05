@@ -6515,6 +6515,250 @@ def handle_special_commands(user_input):
 
         return True
 
+    if user_input.startswith("pd-go-run "):
+        target = user_input[10:].strip()
+        cmd = f"go run \"{target}\""
+        try:
+            run_command(cmd, shell=True)
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Run cancelled by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] pd-go-run failed: {e}")
+        return True
+
+    if user_input.startswith("pd-go-build "):
+        pkg = user_input[12:].strip()
+        cmd = f"go build \"{pkg}\""
+        try:
+            code = run_command(cmd, shell=True)
+            if code == 0:
+                print(f"[{timestamp()}] [SUCCESS] Build completed.")
+            else:
+                print(f"[{timestamp()}] [ERROR] Build failed with code {code}.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Build cancelled by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] pd-go-build failed: {e}")
+        return True
+
+    if user_input.startswith("pd-go-test "):
+        pkg = user_input[11:].strip()
+        cmd = f"go test \"{pkg}\""
+        try:
+            run_command(cmd, shell=True)
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Tests cancelled by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] pd-go-test failed: {e}")
+        return True
+
+    if user_input.startswith("pd-go-format "):
+        target = user_input[13:].strip()
+        cmd = f"go fmt \"{target}\""
+        try:
+            code = run_command(cmd, shell=True)
+            if code == 0:
+                print(f"[{timestamp()}] [SUCCESS] Format completed.")
+            else:
+                print(f"[{timestamp()}] [ERROR] go fmt failed with code {code}.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Format cancelled by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] pd-go-format failed: {e}")
+        return True
+
+    if user_input.startswith("pd-go-lint "):
+        target = user_input[11:].strip()
+        cmd = f"go vet \"{target}\""
+        try:
+            code = run_command(cmd, shell=True)
+            if code == 0:
+                print(f"[{timestamp()}] [SUCCESS] No issues found.")
+            else:
+                print(f"[{timestamp()}] [ERROR] go vet found issues, code {code}.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Lint cancelled by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] pd-go-lint failed: {e}")
+        return True
+
+    if user_input.startswith("pd-go-mod-tidy"):
+        target = user_input[14:].strip()
+        cmd = f"go mod tidy"
+        if target:
+            cmd = f"cd \"{target}\" && go mod tidy"
+        try:
+            code = run_command(cmd, shell=True)
+            if code == 0:
+                print(f"[{timestamp()}] [SUCCESS] go mod tidy completed.")
+            else:
+                print(f"[{timestamp()}] [ERROR] go mod tidy failed with code {code}.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] go mod tidy cancelled by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] pd-go-mod-tidy failed: {e}")
+        return True
+
+    if user_input.startswith("pd-go-mod-vendor"):
+        target = user_input[15:].strip()
+        cmd = f"go mod vendor"
+        if target:
+            cmd = f"cd \"{target}\" && go mod vendor"
+        try:
+            code = run_command(cmd, shell=True)
+            if code == 0:
+                print(f"[{timestamp()}] [SUCCESS] Vendor directory created.")
+            else:
+                print(f"[{timestamp()}] [ERROR] go mod vendor failed with code {code}.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] go mod vendor cancelled by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] pd-go-mod-vendor failed: {e}")
+        return True
+
+    if user_input.startswith("pd-go-install"):
+        pkg = user_input[11:].strip()
+        cmd = f"go install \"{pkg}\""
+        try:
+            code = run_command(cmd, shell=True)
+            if code == 0:
+                print(f"[{timestamp()}] [SUCCESS] go install completed.")
+            else:
+                print(f"[{timestamp()}] [ERROR] go install failed with code {code}.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] go install cancelled by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] pd-go-install failed: {e}")
+        return True
+
+    if user_input.startswith("pd-go-cover"):
+        target = user_input[13:].strip()
+        html_flag = "--html" in target
+        pkg = target.replace("--html", "").strip()
+        cmd_run = f"go test -coverprofile=coverage.out \"{pkg}\""
+        cmd_report = "go tool cover -func=coverage.out"
+        cmd_html = "go tool cover -html=coverage.out -o coverage.html"
+        try:
+            code = run_command(cmd_run, shell=True)
+            if code != 0:
+                print(f"[{timestamp()}] [ERROR] go test -cover failed with code {code}.")
+                return True
+            run_command(cmd_report, shell=True)
+            if html_flag:
+                run_command(cmd_html, shell=True)
+                print(f"[{timestamp()}] [SUCCESS] HTML coverage report created.")
+            else:
+                print(f"[{timestamp()}] [SUCCESS] Coverage summary above.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Coverage cancelled by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] pd-go-cover failed: {e}")
+        return True
+
+    if user_input.startswith("pd-go-bench"):
+        pkg = user_input[11:].strip()
+        if not pkg:
+            pkg = "./..."
+        cmd = f"go test -bench . \"{pkg}\""
+        try:
+            run_command(cmd, shell=True)
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Benchmarks cancelled by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] pd-go-bench failed: {e}")
+        return True
+
+    if user_input.startswith("pd-go-doc"):
+        target = user_input[10:].strip()
+        cmd = f"go doc \"{target}\""
+        try:
+            run_command(cmd, shell=True)
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] go doc cancelled by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] pd-go-doc failed: {e}")
+        return True
+
+    if user_input.startswith("pd-go-clean"):
+        target = user_input[12:].strip()
+        cmd_clean_cache = "go clean -cache -testcache -modcache"
+        cmd_delete_bin = "del /Q *.exe 2>nul"
+        try:
+            run_command(cmd_clean_cache, shell=True)
+            run_command(cmd_delete_bin, shell=True)
+            print(f"[{timestamp()}] [SUCCESS] Clean completed.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Clean cancelled by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] pd-go-clean failed: {e}")
+        return True
+
+    if user_input.startswith("pd-go-compile-all"):
+        source_dir = user_input[17:].strip()
+        if not os.path.isdir(source_dir):
+            print(f"[{timestamp()}] [ERROR] Directory '{source_dir}' not found.")
+            return True
+        go_files = []
+        for root, _, files in os.walk(source_dir):
+            for f in files:
+                if f.endswith(".go"):
+                    go_files.append(os.path.join(root, f))
+        if not go_files:
+            print(f"[{timestamp()}] [ERROR] No .go files in '{source_dir}'.")
+            return True
+        files_str = " ".join(f"\"{gf}\"" for gf in go_files)
+        cmd = f"go build -o \"{source_dir}\\bin\\app.exe\" {files_str}"
+        try:
+            code = run_command(cmd, shell=True)
+            if code == 0:
+                print(f"[{timestamp()}] [SUCCESS] All Go files compiled to '{source_dir}\\bin\\app.exe'.")
+            else:
+                print(f"[{timestamp()}] [ERROR] Build failed with code {code}.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Compilation cancelled by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] pd-go-compile-all failed: {e}")
+        return True
+
+    if user_input.startswith("pd-go-run-all"):
+        args = shlex.split(user_input[13:].strip())
+        if len(args) != 2:
+            print(f"[{timestamp()}] [ERROR] Provide two arguments: directory and pattern.")
+            return True
+        package_dir, pattern = args
+        if not os.path.isdir(package_dir):
+            print(f"[{timestamp()}] [ERROR] Directory '{package_dir}' not found.")
+            return True
+        for root, _, files in os.walk(package_dir):
+            for f in files:
+                if f.endswith(".exe") and pattern in f:
+                    exe_path = os.path.join(root, f)
+                    print(f"[{timestamp()}] [INFO] Running '{exe_path}'...")
+                    try:
+                        run_command(f"\"{exe_path}\"", shell=True)
+                    except KeyboardInterrupt:
+                        print(f"[{timestamp()}] [INFO] Execution of '{exe_path}' cancelled.")
+                    except subprocess.CalledProcessError as e:
+                        print(f"[{timestamp()}] [ERROR] Running '{exe_path}' failed: {e}")
+        return True
+
+    if user_input.startswith("pd-go-all"):
+        project_dir = user_input[10:].strip()
+        if not os.path.isdir(project_dir):
+            print(f"[{timestamp()}] [ERROR] Directory '{project_dir}' not found.")
+            return True
+        try:
+            run_command(f"go mod tidy", shell=True)
+            run_command(f"go build \"{project_dir}\"", shell=True)
+            run_command(f"go test \"{project_dir}\"", shell=True)
+            run_command(f"go run \"{project_dir}\"", shell=True)
+            print(f"[{timestamp()}] [SUCCESS] pd-go-all pipeline completed.")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Pipeline cancelled by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] pd-go-all failed: {e}")
+        return True
+
     if user_input.startswith("julia "):
         user_input = user_input[6:].strip()
 
