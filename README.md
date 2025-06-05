@@ -61,6 +61,7 @@ Peharge Projects 2025<br>
 **[31.05.2025]** PP-Term 5.3.1.55 runs with Python 3.13<br>
 **[03.06.2025]** Development start of P-Terminal<br>
 **[05.06.2025]** PP-Term 5.4 EAP release<br>
+**[05.06.2025]** PP-Term 5.4 release
 
 </div>
 
