@@ -696,7 +696,9 @@ The commit history can be found at: https://github.com/Peharge/p-terminal-old
 
 <div align="center">
 
-[`P-Terminal.com`](https://peharge.github.io/MAVIS-web/p-term.html) [`Download PP-Term [Windows]`](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) [`Download P-Term (SOON) [Windows]`](https://github.com/Peharge/p-terminal/blob/main/p-term/run-p-term.bat)
+[`P-Terminal.com`](https://peharge.github.io/MAVIS-web/p-term.html) [`Download P-Term (SOON) [Windows]`](https://github.com/Peharge/p-terminal/blob/main/p-term/run-p-term.bat) [`Download PP-Term [Windows]`](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat)
+
+[`P-Terminal Discussions`](https://github.com/Peharge/p-terminal/discussions) [`P-Term Discussions`](https://github.com/Peharge/p-terminal/discussions/2) [`PP-Term Discussions`](https://github.com/Peharge/p-terminal/discussions/3) [`P-Terminal Issues`](https://github.com/Peharge/p-terminal/issues) [`P-Terminal Pulls`](https://github.com/Peharge/p-terminal/pulls)
 
 [`PP-Term Commands`](https://peharge.github.io/MAVIS-web/commands-pp-term.html) [`P-Term Commands`](https://peharge.github.io/MAVIS-web/commands-p-term.html) [`Learn PP-Term`](https://peharge.github.io/MAVIS-web/pp-term-hole.html)
 
