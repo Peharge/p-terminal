@@ -24,8 +24,14 @@ commands = {
         "fastfetch": "pp-commands\\neofetch.py",  # new
         "screenfetch": "pp-commands\\neofetch.py",  # new
         "neofetch-2": "pp-commands\\neofetch-2.py",  # new
+        "fastfetch-2": "pp-commands\\neofetch-2.py",  # new
+        "screenfetch-2": "pp-commands\\neofetch-2.py",  # new
         "neofetch-3": "pp-commands\\neofetch-3.py",  # new
+        "fastfetch-3": "pp-commands\\neofetch-3.py",  # new
+        "screenfetch-3": "pp-commands\\neofetch-3.py",  # new
         "neofetch-4": "pp-commands\\neofetch-4.py",  # new
+        "fastfetch-4": "pp-commands\\neofetch-4.py",  # new
+        "screenfetch-4": "pp-commands\\neofetch-4.py",  # new
         "jupyter": "mavis-run-jup\\run-jup.py",
         "run jupyter": "mavis-run-jup\\run-jup.py",
         "run jup": "mavis-run-jup\\run-jup.py",  # new
