@@ -1543,8 +1543,7 @@ def handle_special_commands(user_input):
     if user_input.lower() in ["dir-2", "ls-2"]:
         command = "powershell ls"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
-                                   text=True)
+        process = run_command(command, shell=True)
 
         try:
             process.wait()
@@ -1557,8 +1556,7 @@ def handle_special_commands(user_input):
     if user_input.lower() in ["dir-3", "ls-3"]:
         command = "wsl ls"
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
-                                   text=True)
+        process = run_command(command, shell=True)
 
         try:
             process.wait()
@@ -12711,8 +12709,30 @@ def handle_special_commands(user_input):
             print(f"PID {proc.info['pid']}: {proc.info['name']}")
         return True
 
-    if user_input.lower() == "ps2":
-        run_command("powershell ps", shell=True)
+    if user_input.lower() == "ps-2":
+        command = "powershell ps"
+
+        process = run_command(command, shell=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing ls command: {e}")
+        return True
+    
+    if user_input.lower() == "ps-3":
+        command = "wsl ps"
+
+        process = run_command(command, shell=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing ls command: {e}")
         return True
 
     if user_input.startswith("kill "):
