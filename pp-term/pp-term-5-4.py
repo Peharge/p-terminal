@@ -3190,19 +3190,22 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower().startswith("g++ ") and " -o " in user_input:
-        # Example: "g++ file.cpp -o myprogram"
+        print(f"[{timestamp()}] [INFO] Compiling with g++...")
         command = f"wsl {user_input}"
-        process = subprocess.Popen(
-            command,
-            stdin=sys.stdin,
-            stdout=sys.stdout,
-            stderr=sys.stderr,
-            shell=True,
-            text=True
-        )
+        process = subprocess.Popen(command, shell=True)
+
         try:
-            print(f"[{timestamp()}] [INFO] Compiling with g++...\n")
             process.wait()
+            print(f"[{timestamp()}] [INFO] Compilation finished.")
+
+            # Name der Ausgabedatei extrahieren
+            parts = shlex.split(user_input)
+            if "-o" in parts:
+                output_file = parts[parts.index("-o") + 1]
+                print(f"[{timestamp()}] [INFO] Executing ./{output_file}...\n")
+                subprocess.Popen(f"wsl ./{output_file}", shell=True).wait()
+                print("")
+
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Compilation cancelled by user.")
         except subprocess.CalledProcessError as e:
@@ -3493,20 +3496,28 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error displaying help: {e}")
         return True
 
-    if user_input.startswith("gcc "):
-        args = user_input[4:].strip()
-        command = f"wsl gcc {args}"
-        process = subprocess.Popen(command,
-                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
-                                   shell=True, text=True)
-        try:
-            print(f"[{timestamp()}] [INFO] Compiling with gcc: {args}\n")
-            process.wait()
-        except KeyboardInterrupt:
-            print(f"[{timestamp()}] [INFO] Compilation interrupted by user.")
-        except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] gcc execution failed: {e}")
-        return True
+    if user_input.lower().startswith("gcc ") and " -o " in user_input:
+            print(f"[{timestamp()}] [INFO] Compiling with gcc...")
+            command = f"wsl {user_input}"
+            process = subprocess.Popen(command, shell=True)
+
+            try:
+                process.wait()
+                print(f"[{timestamp()}] [INFO] Compilation finished.")
+
+                # Name der Ausgabedatei extrahieren
+                parts = shlex.split(user_input)
+                if "-o" in parts:
+                    output_file = parts[parts.index("-o") + 1]
+                    print(f"[{timestamp()}] [INFO] Executing ./{output_file}...\n")
+                    subprocess.Popen(f"wsl ./{output_file}", shell=True).wait()
+                    print("")
+
+            except KeyboardInterrupt:
+                print(f"[{timestamp()}] [INFO] Compilation cancelled by user.")
+            except subprocess.CalledProcessError as e:
+                print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
+            return True
 
     if user_input.startswith("gcc -o "):
         args = user_input[7:].strip()  # everything after "gcc -o "
