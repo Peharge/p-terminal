@@ -3189,199 +3189,713 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
         return True
 
-    if user_input.startswith("g++ "):
-        user_input = user_input[4:].strip()
-
-        command = f"wsl g++ -o {user_input}"
-
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
-                                   text=True)
-
-        try:
-            print(f"[{timestamp()}] [INFO] Compile your code with g++\n")
-            process.wait()
-        except KeyboardInterrupt:
-            print(f"[{timestamp()}] [INFO] Cancellation by user.")
-        except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
-        return True
-
-    if user_input.startswith("g++ -o "):
-        user_input = user_input[7:].strip()
-
-        command = f"wsl g++ -o {user_input}"
-
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
-                                   text=True)
-
-        try:
-            print(f"[{timestamp()}] [INFO] Compile your code with g++\n")
-            process.wait()
-        except KeyboardInterrupt:
-            print(f"[{timestamp()}] [INFO] Cancellation by user.")
-        except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
-        return True
-
-    if user_input.startswith("g++ -fsyntax-only "):
-
+    if user_input.lower().startswith("g++ ") and " -o " in user_input:
+        # Example: "g++ file.cpp -o myprogram"
         command = f"wsl {user_input}"
-
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
-                                   text=True)
-
+        process = subprocess.Popen(
+            command,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            shell=True,
+            text=True
+        )
         try:
-            print(f"[{timestamp()}] [INFO] Compile your code with g++\n")
+            print(f"[{timestamp()}] [INFO] Compiling with g++...\n")
             process.wait()
         except KeyboardInterrupt:
-            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+            print(f"[{timestamp()}] [INFO] Compilation cancelled by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+            print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
         return True
 
-    if user_input.startswith("g++ -g -o "):
-
+    if user_input.lower().startswith("g++ -c "):
         command = f"wsl {user_input}"
-
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
-                                   text=True)
-
+        process = subprocess.Popen(
+            command,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            shell=True,
+            text=True
+        )
         try:
-            print(f"[{timestamp()}] [INFO] Compile your code with g++\n")
+            print(f"[{timestamp()}] [INFO] Generating object file with g++ (-c)...\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+            print(f"[{timestamp()}] [ERROR] Error during object file generation: {e}")
         return True
 
-    if user_input.startswith("g++ debug "):
-        user_input = user_input[10:].strip()
-
-        command = f"wsl g++ -Wall -Wextra -pedantic -fsyntax-only datei.cpp {user_input}"
-
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
-                                   text=True)
-
+    if user_input.lower().startswith("g++ -e "):
+        # Interpret "-e" as shorthand for "-E" (preprocess)
+        rest = user_input[6:].strip()
+        command = f"wsl g++ -E {rest}"
+        process = subprocess.Popen(
+            command,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            shell=True,
+            text=True
+        )
         try:
-            print(f"[{timestamp()}] [INFO] Compile your code with g++\n")
+            print(f"[{timestamp()}] [INFO] Preprocessing {rest} (g++ -E)...\n")
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+            print(f"[{timestamp()}] [ERROR] Error during preprocessing: {e}")
         return True
 
-    if user_input.lower() == "g++-version":
+    if user_input.lower().startswith("g++ -s "):
+        # Interpret "-s" (lowercase) as "-S" (uppercase) for assembly generation
+        rest = user_input[6:].strip()
+        command = f"wsl g++ -S {rest}"
+        process = subprocess.Popen(
+            command,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            shell=True,
+            text=True
+        )
+        try:
+            print(f"[{timestamp()}] [INFO] Generating assembly with g++ (-S)...\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error during assembly generation: {e}")
+        return True
 
-        command = f"wsl g++ --version"
+    if user_input.lower().startswith("g++ -std="):
+        command = f"wsl {user_input}"
+        process = subprocess.Popen(
+            command,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            shell=True,
+            text=True
+        )
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling with specified C++ standard...\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error during C++ standard compilation: {e}")
+        return True
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
-                                   text=True)
+    if user_input.lower().startswith("g++ -o") and " -o " not in user_input:
+        print(f"[{timestamp()}] [WARNING] Incorrect format for g++ compilation.")
+        print(f"[{timestamp()}] [INFO] Expected usage: g++ <flags> <source_file.cpp> -o <output_file>")
+        print(f"[{timestamp()}] [HELP] Example: g++ -O2 main.cpp -o myprogram")
+        print(f"[{timestamp()}] [EXPLANATION] The '-o' flag must be separated by spaces and placed correctly.")
+        print(f"[{timestamp()}] [NOTE] You used: '{user_input}', which may be misformatted.")
+        return True
 
+    if user_input.lower().startswith("g++ -o2 ") or user_input.lower().startswith("g++ -o3 "):
+        # User might write "-o2" instead of "-O2". We'll normalize to uppercase O.
+        rest = user_input[6:].strip()
+        command = f"wsl g++ -O{rest}"
+        process = subprocess.Popen(
+            command,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            shell=True,
+            text=True
+        )
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling with optimization flag...\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error during optimization compile: {e}")
+        return True
+
+    if user_input.lower().startswith("g++ -i "):
+        # Interpret "-i" as shorthand for "-I"
+        rest = user_input[6:].strip()
+        command = f"wsl g++ -I {rest}"
+        process = subprocess.Popen(
+            command,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            shell=True,
+            text=True
+        )
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling with include directory (-I)...\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error during include-dir compile: {e}")
+        return True
+
+    if user_input.lower().startswith("g++ ") and "-l" in user_input:
+        command = f"wsl {user_input}"
+        process = subprocess.Popen(
+            command,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            shell=True,
+            text=True
+        )
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling and linking with libraries...\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error during library linking: {e}")
+        return True
+
+    if user_input.lower().startswith("g++ -wall ") or user_input.lower().startswith("g++ -wextra "):
+        command = f"wsl {user_input}"
+        process = subprocess.Popen(
+            command,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            shell=True,
+            text=True
+        )
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling with warnings enabled...\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error during warning-enabled compile: {e}")
+        return True
+
+    if user_input.lower().startswith("g++ -g "):
+        command = f"wsl {user_input}"
+        process = subprocess.Popen(
+            command,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            shell=True,
+            text=True
+        )
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling with debug symbols (-g)...\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error during debug compile: {e}")
+        return True
+
+    if user_input.lower().startswith("g++ -fpic ") or user_input.lower().startswith("g++ -shared "):
+        command = f"wsl {user_input}"
+        process = subprocess.Popen(
+            command,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            shell=True,
+            text=True
+        )
+        try:
+            print(f"[{timestamp()}] [INFO] Generating shared object / PIC code...\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error during shared library compile: {e}")
+        return True
+
+    if user_input.lower().startswith("g++ run "):
+        exec_name = user_input[8:].strip()
+        command = f"wsl ./{exec_name}"
+        process = subprocess.Popen(
+            command,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            shell=True,
+            text=True
+        )
+        try:
+            print(f"[{timestamp()}] [INFO] Running {exec_name}...\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Execution cancelled by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error during execution: {e}")
+        return True
+
+    if user_input.lower() in ("g++--version", "g++ --version"):
+        command = "wsl g++ --version"
+        process = subprocess.Popen(
+            command,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            shell=True,
+            text=True
+        )
         try:
             process.wait()
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+            print(f"[{timestamp()}] [ERROR] Error fetching version: {e}")
+        return True
+
+    if user_input.lower().startswith("g++ clean "):
+        target = user_input[12:].strip()
+        command = f"wsl rm -f {target}"
+        process = subprocess.Popen(
+            command,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            shell=True,
+            text=True
+        )
+        try:
+            print(f"[{timestamp()}] [INFO] Removing {target}...\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error during cleanup: {e}")
+        return True
+
+        # 15. Display help for g++
+        #     e.g., "g++ help"
+    if user_input.lower() == "g++ help":
+        command = "wsl g++ --help"
+        process = subprocess.Popen(
+            command,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            shell=True,
+            text=True
+        )
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error displaying help: {e}")
         return True
 
     if user_input.startswith("gcc "):
-        user_input = user_input[4:].strip()
-
-        command = f"wsl gcc++ -o {user_input}"
-
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
-                                   text=True)
-
+        args = user_input[4:].strip()
+        command = f"wsl gcc {args}"
+        process = subprocess.Popen(command,
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                   shell=True, text=True)
         try:
-            print(f"[{timestamp()}] [INFO] Compile your code with gcc\n")
+            print(f"[{timestamp()}] [INFO] Compiling with gcc: {args}\n")
             process.wait()
         except KeyboardInterrupt:
-            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+            print(f"[{timestamp()}] [INFO] Compilation interrupted by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+            print(f"[{timestamp()}] [ERROR] gcc execution failed: {e}")
         return True
 
     if user_input.startswith("gcc -o "):
-        user_input = user_input[7:].strip()
-
-        command = f"wsl gcc -o {user_input}"
-
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
-                                   text=True)
-
+        args = user_input[7:].strip()  # everything after "gcc -o "
+        command = f"wsl gcc -o {args}"
+        process = subprocess.Popen(command,
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                   shell=True, text=True)
         try:
-            print(f"[{timestamp()}] [INFO] Compile your code with gcc\n")
+            print(f"[{timestamp()}] [INFO] Compiling with gcc and writing to output: {args}\n")
             process.wait()
         except KeyboardInterrupt:
-            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+            print(f"[{timestamp()}] [INFO] Compilation interrupted by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+            print(f"[{timestamp()}] [ERROR] gcc execution failed: {e}")
         return True
 
     if user_input.startswith("gcc -fsyntax-only "):
-
-        command = f"wsl {user_input}"
-
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
-                                   text=True)
-
+        args = user_input[len("gcc -fsyntax-only "):].strip()
+        command = f"wsl gcc -fsyntax-only {args}"
+        process = subprocess.Popen(command,
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                   shell=True, text=True)
         try:
-            print(f"[{timestamp()}] [INFO] Compile your code with gcc\n")
+            print(f"[{timestamp()}] [INFO] Performing syntax-only check for: {args}\n")
             process.wait()
         except KeyboardInterrupt:
-            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+            print(f"[{timestamp()}] [INFO] Syntax check interrupted by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+            print(f"[{timestamp()}] [ERROR] Syntax-only check failed: {e}")
         return True
 
     if user_input.startswith("gcc -g -o "):
-
-        command = f"wsl {user_input}"
-
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
-                                   text=True)
-
+        args = user_input[len("gcc -g -o "):].strip()
+        command = f"wsl gcc -g -o {args}"
+        process = subprocess.Popen(command,
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                   shell=True, text=True)
         try:
-            print(f"[{timestamp()}] [INFO] Compile your code with gcc\n")
+            print(f"[{timestamp()}] [INFO] Compiling with debug symbols (-g) into: {args}\n")
             process.wait()
         except KeyboardInterrupt:
-            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+            print(f"[{timestamp()}] [INFO] Debug compilation interrupted by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+            print(f"[{timestamp()}] [ERROR] Debug compilation failed: {e}")
         return True
 
-    if user_input.startswith("gcc debug "):
-        user_input = user_input[10:].strip()
-
-        command = f"wsl gcc -Wall -Wextra -pedantic -fsyntax-only datei.c {user_input}"
-
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
-                                   text=True)
-
+    if user_input.startswith("gcc -c "):
+        args = user_input[len("gcc -c "):].strip()
+        command = f"wsl gcc -c {args}"
+        process = subprocess.Popen(command,
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                   shell=True, text=True)
         try:
-            print(f"[{timestamp()}] [INFO] Compile your code with gcc\n")
+            print(f"[{timestamp()}] [INFO] Compiling only (-c) for: {args}\n")
             process.wait()
         except KeyboardInterrupt:
-            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+            print(f"[{timestamp()}] [INFO] Compilation-only step interrupted by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+            print(f"[{timestamp()}] [ERROR] Compilation-only failed: {e}")
         return True
 
-    if user_input.lower() == "gcc-version":
-        command = f"wsl {user_input}"
+    if user_input.startswith("gcc -S "):
+        args = user_input[len("gcc -S "):].strip()
+        command = f"wsl gcc -S {args}"
+        process = subprocess.Popen(command,
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                   shell=True, text=True)
+        try:
+            print(f"[{timestamp()}] [INFO] Generating assembly (-S) for: {args}\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Assembly generation interrupted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Assembly generation failed: {e}")
+        return True
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
-                                   text=True)
+    if user_input.startswith("gcc -E "):
+        args = user_input[len("gcc -E "):].strip()
+        command = f"wsl gcc -E {args}"
+        process = subprocess.Popen(command,
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                   shell=True, text=True)
+        try:
+            print(f"[{timestamp()}] [INFO] Preprocessing only (-E) for: {args}\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Preprocessing interrupted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Preprocessing failed: {e}")
+        return True
 
+    if user_input.startswith("gcc -std="):
+        args = user_input[len("gcc "):].strip()  # keep everything after "gcc "
+        command = f"wsl gcc {args}"
+        process = subprocess.Popen(command,
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                   shell=True, text=True)
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling with standard flag: {args}\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Standard-specific compilation interrupted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Compilation with standard flag failed: {e}")
+        return True
+
+    if user_input.startswith("gcc -O"):
+        args = user_input[len("gcc "):].strip()  # e.g. "-O2 main.c -o main"
+        command = f"wsl gcc {args}"
+        process = subprocess.Popen(command,
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                   shell=True, text=True)
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling with optimization: {args}\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Optimization compilation interrupted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Optimization compilation failed: {e}")
+        return True
+
+    if user_input.startswith("gcc -l") or user_input.startswith("gcc -L"):
+        args = user_input[len("gcc "):].strip()  # e.g. "-lm -L/usr/local/lib main.o -o main"
+        command = f"wsl gcc {args}"
+        process = subprocess.Popen(command,
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                   shell=True, text=True)
+        try:
+            print(f"[{timestamp()}] [INFO] Linking libraries: {args}\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Linking interrupted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Linking failed: {e}")
+        return True
+
+    if user_input.startswith("gcc -shared "):
+        args = user_input[len("gcc -shared "):].strip()
+        command = f"wsl gcc -shared {args}"
+        process = subprocess.Popen(command,
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                   shell=True, text=True)
+        try:
+            print(f"[{timestamp()}] [INFO] Building shared object (-shared) for: {args}\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Shared-object build interrupted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Shared-object build failed: {e}")
+        return True
+
+    if user_input.startswith("gcc -static "):
+        args = user_input[len("gcc -static "):].strip()
+        command = f"wsl gcc -static {args}"
+        process = subprocess.Popen(command,
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                   shell=True, text=True)
+        try:
+            print(f"[{timestamp()}] [INFO] Building static executable (-static) for: {args}\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Static build interrupted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Static build failed: {e}")
+        return True
+
+    if user_input.startswith("gcc -fPIC "):
+        args = user_input[len("gcc -fPIC "):].strip()
+        command = f"wsl gcc -fPIC {args}"
+        process = subprocess.Popen(command,
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                   shell=True, text=True)
+        try:
+            print(f"[{timestamp()}] [INFO] Generating position-independent code (-fPIC) for: {args}\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] -fPIC generation interrupted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] -fPIC generation failed: {e}")
+        return True
+
+    if user_input.startswith("gcc -Wall") or user_input.startswith("gcc -Wextra") or user_input.startswith(
+            "gcc -pedantic"):
+        args = user_input[len("gcc "):].strip()  # e.g. "-Wall -Wextra -pedantic main.c -o main"
+        command = f"wsl gcc {args}"
+        process = subprocess.Popen(command,
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                   shell=True, text=True)
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling with extra warning flags: {args}\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Warning-enabled compilation interrupted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Warning-enabled compilation failed: {e}")
+        return True
+
+    if user_input.startswith("gcc -fsanitize="):
+        args = user_input[len("gcc "):].strip()  # e.g. "-fsanitize=address main.c -o main"
+        command = f"wsl gcc {args}"
+        process = subprocess.Popen(command,
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                   shell=True, text=True)
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling with sanitizer: {args}\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Sanitizer compilation interrupted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Sanitizer compilation failed: {e}")
+        return True
+
+    if user_input.lower().startswith("gcc --version") or user_input.lower().startswith("gcc -v "):
+        command = "wsl gcc --version"
+        process = subprocess.Popen(command,
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                   shell=True, text=True)
         try:
             process.wait()
         except KeyboardInterrupt:
-            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+            print(f"[{timestamp()}] [INFO] Version check interrupted by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+            print(f"[{timestamp()}] [ERROR] Version check failed: {e}")
+        return True
+
+    if user_input.startswith("gcc -v "):
+        args = user_input[len("gcc -v "):].strip()
+        command = f"wsl gcc -v {args}"
+        process = subprocess.Popen(command,
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                   shell=True, text=True)
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling verbosely (-v) for: {args}\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Verbose compilation interrupted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Verbose compilation failed: {e}")
+        return True
+
+    if user_input.startswith("gcc -print-search-dirs"):
+        command = "wsl gcc -print-search-dirs"
+        process = subprocess.Popen(command,
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                   shell=True, text=True)
+        try:
+            print(f"[{timestamp()}] [INFO] Printing search directories for gcc\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Print-search-dirs interrupted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Print-search-dirs failed: {e}")
+        return True
+
+    if user_input.startswith("gcc -dM"):
+        args = user_input[len("gcc "):].strip()  # e.g. "-dM -E /dev/null"
+        command = f"wsl gcc {args}"
+        process = subprocess.Popen(command,
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                   shell=True, text=True)
+        try:
+            print(f"[{timestamp()}] [INFO] Showing predefined macros for: {args}\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Macro dump interrupted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Macro dump failed: {e}")
+        return True
+
+    if user_input.startswith("gcc -static-libgcc"):
+        args = user_input[len("gcc "):].strip()  # e.g. "-static-libgcc main.c -o main"
+        command = f"wsl gcc {args}"
+        process = subprocess.Popen(command,
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                   shell=True, text=True)
+        try:
+            print(f"[{timestamp()}] [INFO] Linking C runtime statically (-static-libgcc): {args}\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Static runtime linking interrupted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Static runtime linking failed: {e}")
+        return True
+
+    if user_input.startswith("gcc -fprof-gen") or user_input.startswith("gcc -fprofile-generate"):
+        args = user_input[len("gcc "):].strip()
+        command = f"wsl gcc -fprofile-generate {args}"
+        process = subprocess.Popen(command,
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                   shell=True, text=True)
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling for PGO instrumentation: {args}\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] PGO instrumentation interrupted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] PGO instrumentation failed: {e}")
+        return True
+
+    if user_input.startswith("gcc -fprof-use") or user_input.startswith("gcc -fprofile-use"):
+        args = user_input[len("gcc "):].strip()
+        command = f"wsl gcc -fprofile-use {args}"
+        process = subprocess.Popen(command,
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                   shell=True, text=True)
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling with PGO data: {args}\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] PGO compilation interrupted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] PGO compilation failed: {e}")
+        return True
+
+    if user_input.startswith("gcc -flto"):
+        args = user_input[len("gcc "):].strip()  # e.g. "-flto main.c -o main"
+        command = f"wsl gcc -flto {args}"
+        process = subprocess.Popen(command,
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                   shell=True, text=True)
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling with Link-Time Optimization (LTO): {args}\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] LTO compilation interrupted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] LTO compilation failed: {e}")
+        return True
+
+    if user_input.startswith("gcc -m32") or user_input.startswith("gcc -m64"):
+        args = user_input[len("gcc "):].strip()  # e.g. "-m64 main.c -o main"
+        command = f"wsl gcc {args}"
+        process = subprocess.Popen(command,
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                   shell=True, text=True)
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling for architecture flag: {args}\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Architecture-specific compilation interrupted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Architecture-specific compilation failed: {e}")
+        return True
+
+    if user_input.startswith("gcc -M") or user_input.startswith("gcc -MM"):
+        args = user_input[len("gcc "):].strip()  # e.g. "-M main.c"
+        command = f"wsl gcc {args}"
+        process = subprocess.Popen(command,
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                   shell=True, text=True)
+        try:
+            print(f"[{timestamp()}] [INFO] Generating dependency info: {args}\n")
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Dependency generation interrupted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Dependency generation failed: {e}")
+        return True
+
+    if user_input.startswith("gcc -help") or user_input.startswith("gcc --help"):
+        command = "wsl gcc --help"
+        process = subprocess.Popen(command,
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                   shell=True, text=True)
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Help command interrupted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Help command failed: {e}")
+        return True
+
+    if user_input.startswith("gcc clean"):
+        parts = user_input.split()
+        if len(parts) >= 3:
+            target_dir = parts[2]
+            command = f"wsl rm -rf {target_dir}/*.o {target_dir}/*.d {target_dir}/*.gcda {target_dir}/*.gcno"
+            process = subprocess.Popen(command,
+                                       stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                       shell=True, text=True)
+            try:
+                print(f"[{timestamp()}] [INFO] Cleaning intermediate files in: {target_dir}\n")
+                process.wait()
+            except KeyboardInterrupt:
+                print(f"[{timestamp()}] [INFO] Clean interrupted by user.")
+            except subprocess.CalledProcessError as e:
+                print(f"[{timestamp()}] [ERROR] Clean command failed: {e}")
+        else:
+            print(f"[{timestamp()}] [WARN] Usage: gcc clean <directory_path>")
         return True
 
     elif user_input.startswith("vs-cpp "):
