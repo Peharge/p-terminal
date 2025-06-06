@@ -5184,7 +5184,6 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] Running compiled executable: {exe_file}")
                 print(f"[{timestamp()}] [INFO] Output {exe_file}:\n")
                 subprocess.run(exe_file, shell=True)
-                print("")
             else:
                 print(f"[{timestamp()}] [ERROR] Compilation failed with exit code {process.returncode}")
         except KeyboardInterrupt:
