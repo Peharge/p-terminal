@@ -12711,6 +12711,10 @@ def handle_special_commands(user_input):
             print(f"PID {proc.info['pid']}: {proc.info['name']}")
         return True
 
+    if user_input.lower() == "ps2":
+        run_command("powershell ps", shell=True)
+        return True
+
     if user_input.startswith("kill "):
         try:
             _, pid_str = user_input.split(maxsplit=1)
