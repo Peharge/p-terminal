@@ -4238,6 +4238,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [INFO] Running compiled program: {exe_name}")
             print(f"[{timestamp()}] [INFO] Output {exe_name}:\n")
             subprocess.run(exe_name, shell=True)
+            print("")
         else:
             print(f"[{timestamp()}] [ERROR] Executable {exe_name} not found after compilation.")
         return True
