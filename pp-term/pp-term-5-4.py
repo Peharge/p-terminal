@@ -3911,25 +3911,25 @@ def handle_special_commands(user_input):
 
     elif user_input.startswith("vs-cpp "):
         user_input = user_input[7:].strip()
-        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022\n")
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Studio Building Tools 2022\n")
         handle_vs_cpp_command(user_input)
         return True
 
     elif user_input.startswith("cppc "):
         user_input = user_input[5:].strip()
-        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022\n")
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Studio Building Tools 2022\n")
         handle_vs_cpp_command(user_input)
         return True
 
     elif user_input.startswith("pc-cpp "):
          user_input = user_input[7:].strip()
-         print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022\n")
+         print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Studio Building Tools 2022\n")
          handle_vs_cpp_command(user_input)
          return True
 
     elif user_input.startswith("prcpp "):
         user_input = user_input[6:].strip()
-        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022")
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Studio Building Tools 2022")
         handle_vs_cpp_command(user_input)
         # // EXE-Dateiname aus dem .cpp-Dateinamen ableiten
         exe_name = os.path.splitext(os.path.basename(user_input))[0] + ".exe"
@@ -4210,25 +4210,25 @@ def handle_special_commands(user_input):
 
     elif user_input.startswith("vs-c "):
         user_input = user_input[5:].strip()
-        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022\n")
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Studio Building Tools 2022\n")
         handle_vs_c_command(user_input)
         return True
 
     elif user_input.startswith("cc "):
         user_input = user_input[3:].strip()
-        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022\n")
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Studio Building Tools 2022\n")
         handle_vs_c_command(user_input)
         return True
 
     elif user_input.startswith("pc-c "):
         user_input = user_input[5:].strip()
-        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022\n")
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Studio Building Tools 2022\n")
         handle_vs_c_command(user_input)
         return True
 
     elif user_input.startswith("prc "):
         user_input = user_input[4:].strip()
-        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022")
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Studio Building Tools 2022")
         handle_vs_c_command(user_input)
         # // EXE-Dateiname aus dem .cpp-Dateinamen ableiten
         exe_name = os.path.splitext(os.path.basename(user_input))[0] + ".exe"
@@ -4505,25 +4505,25 @@ def handle_special_commands(user_input):
 
     elif user_input.startswith("vs-cs "):
         user_input = user_input[6:].strip()
-        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022\n")
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Studio Building Tools 2022\n")
         handle_vs_cs_command(user_input)
         return True
 
     elif user_input.startswith("csc "):
         user_input = user_input[4:].strip()
-        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022\n")
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Studio Building Tools 2022\n")
         handle_vs_cs_command(user_input)
         return True
 
     elif user_input.startswith("pc-cs "):
         user_input = user_input[6:].strip()
-        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022\n")
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Studio Building Tools 2022\n")
         handle_vs_cs_command(user_input)
         return True
 
     elif user_input.startswith("prcs "):
         user_input = user_input[5:].strip()
-        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022")
+        print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Studio Building Tools 2022")
         handle_vs_cs_command(user_input)
         # // EXE-Dateiname aus dem .cpp-Dateinamen ableiten
         exe_name = os.path.splitext(os.path.basename(user_input))[0] + ".exe"
