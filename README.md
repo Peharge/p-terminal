@@ -74,6 +74,7 @@ Discover the future of developer productivity with Peharge Terminal!
 
 Why settle for less?
 Peharge Terminal comes in two powerful versions, tailored to every developer's needs:
+
 P-Terminal: Lightning-fast, ultra-lightweight, and efficient.
 Everything you love about the classic CMD – but supercharged!
 Written in Rust for unbeatable speed and minimal resource usage.
