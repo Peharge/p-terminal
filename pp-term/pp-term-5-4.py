@@ -3921,6 +3921,12 @@ def handle_special_commands(user_input):
         handle_vs_cpp_command(user_input)
         return True
 
+    elif user_input.startswith("pc-cpp "):
+         user_input = user_input[7:].strip()
+         print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022\n")
+         handle_vs_cpp_command(user_input)
+         return True
+
     elif user_input.startswith("prcpp "):
         user_input = user_input[6:].strip()
         print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Wtudio Building Tools 2022")
@@ -3933,6 +3939,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [INFO] Running compiled program: {exe_name}")
             print(f"[{timestamp()}] [INFO] Output {exe_name}:\n")
             subprocess.run(exe_name, shell=True)
+            print("")
         else:
             print(f"[{timestamp()}] [ERROR] Executable {exe_name} not found after compilation.")
         return True
@@ -4525,6 +4532,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [INFO] Running compiled program: {exe_name}")
             print(f"[{timestamp()}] [INFO] Output {exe_name}:\n")
             subprocess.run(exe_name, shell=True)
+            print("")
         else:
             print(f"[{timestamp()}] [ERROR] Executable {exe_name} not found after compilation.")
         return True
@@ -5175,6 +5183,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] Running compiled executable: {exe_file}")
                 print(f"[{timestamp()}] [INFO] Output {exe_file}:\n")
                 subprocess.run(exe_file, shell=True)
+                print("")
             else:
                 print(f"[{timestamp()}] [ERROR] Compilation failed with exit code {process.returncode}")
         except KeyboardInterrupt:
@@ -5850,7 +5859,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
-    if user_input.startswith("prj "):
+    if user_input.startswith("prjava "):
         user_input = user_input[4:].strip()
 
         command = f"javac {user_input}"
@@ -5868,6 +5877,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] Running compiled Java class: {class_name}")
                 print(f"[{timestamp()}] [INFO] Output {class_name}:\n")
                 subprocess.run(f"java {class_name}", shell=True)
+                print("")
             else:
                 print(f"[{timestamp()}] [ERROR] Compilation failed with exit code {process.returncode}")
         except KeyboardInterrupt:
@@ -6460,6 +6470,7 @@ def handle_special_commands(user_input):
         try:
             print(f"[{timestamp()}] [INFO] Run {user_input} with Python:\n")
             run_command(command, shell=True)
+            print("")
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
