@@ -35,7 +35,7 @@
 "The coolest terminal in the world"<br>
 A warm welcome, to P-Term (C/C++/Rust) and PP-Term (Python) ❤️<br>
 100% Free. 100% Open Source.<br><br>
-[`P-Terminal.com`](https://peharge.github.io/MAVIS-web/p-term.html) [`Download PP-Term [Windows]`](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) [`Download P-Term (SOON) [Windows]`](https://github.com/Peharge/p-terminal/blob/main/p-term/run-p-term.bat) [`LICENSE`](LICENSE)<br><br>
+[`P-Terminal.com`](https://github.com/Peharge/peharge-web) [`Download PP-Term [Windows]`](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) [`Download P-Term (SOON) [Windows]`](https://github.com/Peharge/p-terminal/blob/main/p-term/run-p-term.bat) [`LICENSE`](LICENSE)<br><br>
 Peharge Projects 2025<br>
 
 </div>
@@ -70,7 +70,7 @@ Peharge Projects 2025<br>
 # **_PP-Terminal 5_**
 
 Why show the standard? The PP Terminal does it all<br>
-— but we show you what sets it apart.<br><br>[`Download PP-Term [Windows]`](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) [`PP-Term Commands`](https://peharge.github.io/MAVIS-web/commands-pp-term.html) [`Learn PP-Term`](https://peharge.github.io/MAVIS-web/pp-term-hole.html)<br><br>
+— but we show you what sets it apart.<br><br>[`Download PP-Term [Windows]`](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) [`PP-Term Commands`](https://peharge.github.io/MAVIS-web/commands-pp-term.html) [`Learn PP-Term`](https://github.com/Peharge/peharge-web/blob/main/pp-term-hole.html)<br><br>
 <img width="1500" src="https://github.com/Peharge/p-terminal-images/raw/main/images/pp-term-banner-8.png" alt="pp-term"/><br><br>
 </div>
 
