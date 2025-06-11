@@ -207,7 +207,7 @@ def print_banner():
     print(f"""A warm welcome, {blue}{user_name}{reset}, to Peharge Python Terminal!
 Developed by Peharge and JK (Peharge Projects 2025)
 Thank you so much for using PP-Terminal. We truly appreciate your support ❤️\n
-{hyperlink("[GitHub Repository]", "https://github.com/Peharge/p-terminal")} {hyperlink("[Project Website]", "https://peharge.github.io/MAVIS-web/p-term.html")} {hyperlink("[Learn PP-Term]", "https://peharge.github.io/MAVIS-web/pp-term-hole.html")}""")
+{hyperlink("[GitHub Repository]", "https://github.com/Peharge/p-terminal")} {hyperlink("[Project Website]", f"file:///C:/Users/{user_name}/peharge-web/p-term.html")} {hyperlink("[Learn PP-Term]", f"file:///C:/Users/{user_name}/peharge-web/pp-term-hole.html")}""")
 
     print()
 
