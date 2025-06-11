@@ -2335,6 +2335,76 @@ if not exist "%PP_DIR%" (
     )
 )
 
+:: === Handle peharge-web Repository ===
+set "PHW_DIR=%~dp0peharge-web"
+
+:: Check if peharge-web directory exists
+if not exist "%PHW_DIR%" (
+    echo Cloning peharge-web repository from GitHub...
+
+    :: Check if Git is installed
+    where git >nul 2>&1
+    if %errorlevel% neq 0 (
+        call :Log WARN "❌ Error: Git is not installed. Please install Git first."
+        exit /b 1
+    )
+
+    :: Check if GitHub is reachable (with a timeout of 5 seconds)
+    echo Testing connection to GitHub...
+    for /f "delims=" %%i in ('ping -n 1 -w 5000 github.com ^| find "TTL"') do set REACHABLE=1
+    if not defined REACHABLE (
+        call :Log WARN "❌ Cannot reach GitHub! Check your internet connection or firewall settings."
+        exit /b 1
+    )
+    set REACHABLE=  :: Reset REACHABLE variable
+
+    :: Clone the repository
+    echo Running git clone...
+    git clone https://github.com/Peharge/peharge-web.git "%PHW_DIR%"
+
+    if %errorlevel% neq 0 (
+        call :Log WARN "❌ Cloning peharge-web repository failed! Make sure GitHub is accessible and the URL is correct."
+        exit /b 1
+    ) else (
+        call :Log PASS "✅ peharge-web repository cloned successfully!"
+    )
+) else (
+    echo peharge-web repository already exists. Checking for updates...
+
+    cd /d "%PHW_DIR%"
+
+    :: Check for uncommitted changes
+    git diff-index --quiet HEAD --
+    if %errorlevel% neq 0 (
+        call :Log WARN "❌ There are uncommitted changes in peharge-web! Please commit or discard them first."
+        exit /b 1
+    )
+
+    :: Fetch latest changes
+    echo Fetching latest changes from origin...
+    git fetch --quiet
+    if %errorlevel% neq 0 (
+        call :Log WARN "❌ Could not fetch updates for peharge-web! Check your connection or Git settings."
+        exit /b 1
+    )
+
+    :: Check if branch is behind
+    git status | find "Your branch is behind" >nul
+    if %errorlevel% equ 0 (
+        echo Updates available, pulling changes...
+
+        git pull --quiet
+        if %errorlevel% neq 0 (
+            call :Log WARN "❌ Could not update peharge-web repository!"
+            exit /b 1
+        ) else (
+            call :Log PASS "✅ peharge-web repository updated successfully!"
+        )
+    ) else (
+        call :Log PASS "✅ peharge-web repository is already up-to-date!"
+    )
+)
+
 :: Check Git status after pull (no merge conflicts)
 git status | find "Merge conflict" >nul
 if %errorlevel% equ 0 (
