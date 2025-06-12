@@ -35,7 +35,7 @@
 "The coolest terminal in the world"<br>
 A warm welcome, to P-Term (C/C++/Rust) and PP-Term (Python) ❤️<br>
 100% Free. 100% Open Source.<br><br>
-I would use the PP-Terminal, if I were you ;-) - not P-Terminal. <br>If you don't know how to clone this repo, you probably shouldn't use this terminal! <br>If you cloned it: Run pp-term\run-pp-term.bat on your Windows PC – and you're good to go.<br><br>
+I would use the PP-Terminal on Windows, if I were you ;-) - not P-Terminal. <br>If you don't know how to clone this repo, you probably shouldn't use this terminal! <br>If you cloned it: Run pp-term\run-pp-term.bat on your Windows PC – and you're good to go.<br><br>
 [`P-Terminal.com`](https://github.com/Peharge/peharge-web) [`Download PP-Term [Windows]`](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) [`Download P-Term (SOON) [Windows]`](https://github.com/Peharge/p-terminal/blob/main/p-term/run-p-term.bat) [`LICENSE`](LICENSE)<br><br>
 Peharge Projects 2025<br>
 
