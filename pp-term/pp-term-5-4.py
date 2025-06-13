@@ -4287,6 +4287,7 @@ def handle_special_commands(user_input):
     if user_input.startswith("pd-c-debug "):
         user_input = user_input[11:].strip()
         args = shlex.split(user_input)
+        VCVARSALL = r"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat"
         if len(args) != 2:
             print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file.")
             return False
@@ -4323,6 +4324,8 @@ def handle_special_commands(user_input):
     if user_input.startswith("pd-c-release "):
         user_input = user_input[13:].strip()
         args = shlex.split(user_input)
+        VCVARSALL = r"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat"
+
         if len(args) != 2:
             print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file.")
             return False
@@ -4359,6 +4362,8 @@ def handle_special_commands(user_input):
     if user_input.startswith("pd-c-warnings "):
         user_input = user_input[14:].strip()
         args = shlex.split(user_input)
+        VCVARSALL = r"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat"
+
         if len(args) != 2:
             print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file.")
             return False
@@ -4396,6 +4401,8 @@ def handle_special_commands(user_input):
     if user_input.startswith("pd-c-std "):
         user_input = user_input[9:].strip()
         args = shlex.split(user_input)
+        VCVARSALL = r"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat"
+
         if len(args) != 3:
             print(f"[{timestamp()}] [ERROR] Please provide three arguments: source file, output file, and C standard (c11 or c17).")
             return False
@@ -4467,6 +4474,7 @@ def handle_special_commands(user_input):
         # Assumption: main.c exists, output is main.exe
         source = "main.c"
         output = "main.exe"
+        VCVARSALL = r"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat"
 
         if not os.path.isfile(source):
             print(f"[{timestamp()}] [ERROR] Source file '{source}' not found.")
@@ -15017,6 +15025,22 @@ def switch_theme(user_input: str) -> bool:
         print(f"[{timestamp()}] [ERROR] Failed to apply theme '{choice}': {e}")
 
     return True
+
+
+def msvc_env_cmd():
+    """
+    Returns the command prefix to set up the MSVC environment using 'vcvarsall.bat'.
+    Adjust the path to 'vcvarsall.bat' according to your Visual Studio installation.
+    """
+    # Beispielpfad für Visual Studio 2022 Community Edition
+    vcvarsall_path = r'"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat"'
+    arch = "x64"  # Oder "x86", "x86_amd64" etc.
+    return f'call {vcvarsall_path} {arch} && '
+
+
+def is_windows():
+    """Returns True if the OS is Windows."""
+    return platform.system().lower() == "windows"
 
 
 def find_free_port(start: int = 8000, end: int = 9000) -> int:
