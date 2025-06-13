@@ -2431,17 +2431,17 @@ if not exist "%PHW_DIR%" (
     )
 )
 
-:: Projektverzeichnis (wechsle hinein)
+:: Project directory (switch into it)
 cd /d "C:\Users\%USERNAME%\p-terminal\pp-term" || (
     call :Log ERROR "❌ Could not change to directory: C:\Users\%USERNAME%\p-terminal\pp-term"
     exit /b 1
 )
 
-:: Zielpfad für virtuelle Umgebung
+:: Target path for virtual environment
 set "VENV_DIR=C:\Users\%USERNAME%\p-terminal\pp-term\.env"
 set "VENV_ACTIVATE=%VENV_DIR%\Scripts\activate.bat"
 
-:: Prüfen, ob virtuelle Umgebung bereits existiert
+:: Check if virtual environment already exists
 IF EXIST "%VENV_ACTIVATE%" (
     call :Log INFO "✅ Virtual environment already exists at: %VENV_DIR%"
 ) ELSE (
