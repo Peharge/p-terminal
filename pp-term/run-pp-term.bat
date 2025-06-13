@@ -2432,13 +2432,13 @@ if not exist "%PHW_DIR%" (
 )
 
 :: Projektverzeichnis (wechsle hinein)
-cd /d "%PTERMINAL_PROJECTS%" || (
-    call :Log ERROR "❌ Could not change to directory: %PTERMINAL_PROJECTS%"
+cd /d "C:\Users\%USERNAME%\p-terminal\pp-term" || (
+    call :Log ERROR "❌ Could not change to directory: C:\Users\%USERNAME%\p-terminal\pp-term"
     exit /b 1
 )
 
 :: Zielpfad für virtuelle Umgebung
-set "VENV_DIR=%CD%\.env"
+set "VENV_DIR=C:\Users\%USERNAME%\p-terminal\pp-term\.env"
 set "VENV_ACTIVATE=%VENV_DIR%\Scripts\activate.bat"
 
 :: Prüfen, ob virtuelle Umgebung bereits existiert
@@ -2449,6 +2449,10 @@ IF EXIST "%VENV_ACTIVATE%" (
 
     python -m venv "%VENV_DIR%"
 
+    :: Wait for the process to complete (e.g., 20 seconds)
+    call :Log INFO "Wait for the process to complete (e.g., 20 seconds)"
+    timeout /t 20 >nul
+
     :: Nachprüfen, ob Erstellung erfolgreich war
     IF EXIST "%VENV_ACTIVATE%" (
         call :Log PASS "✅ Virtual environment created successfully."
@@ -2457,7 +2461,6 @@ IF EXIST "%VENV_ACTIVATE%" (
         exit /b 1
     )
 )
-
 
 :: Ensure .env file exists and is correctly configured
 :: echo Checking for existing .env file at: "%PP_ENV_FILE%"
@@ -2584,7 +2587,7 @@ if not exist "%PP_RUN_FILE%" (
 )
 
 :: Execute pp-term.bat
-echo Starting PP_terminal...
+echo Starting PP-terminal...
 
 :: Check if the file is executable (check for executable file)
 :: Test if the file is an .bat file
