@@ -125,6 +125,7 @@ set "LOGFILE=C:\Users\%USERNAME%\p-terminal\pp-term\WSL_Diagnostics.log"
 set "MAX_DRIFT=300"          & rem Maximum allowed time drift in seconds
 set "PING_ADDR=8.8.8.8"      & rem Default ping target
 set "TEST_DOMAIN=example.com"
+set PYTHON_PATH=C:\Users\%USERNAME%\p-terminal\pp-term\.env\Scripts\python.exe
 
 :: Get Windows Build number
 for /f "tokens=3" %%a in ('reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v CurrentBuildNumber 2^>nul') do (
@@ -516,7 +517,6 @@ if %errorlevel% neq 0 (
     ffmpeg --version
 )
 
-set PYTHON_PATH=C:\Users\%USERNAME%\p-terminal\pp-term\.env\Scripts\python.exe
 set SCRIPT_install_rustup=C:\Users\%USERNAME%\p-terminal\pp-term\run\rust\install-rustup.py
 
 :: Check if Rustup is already installed
@@ -761,7 +761,6 @@ if %ERRORLEVEL% NEQ 0 (
 )
 
 set "USERNAME=%USERNAME%"
-set "PYTHON_PATH=C:\Users\%USERNAME%\p-terminal\pp-term\.env\Scripts\python.exe"
 
 :: Main Python script for generic WSL installations (fallback)
 set "SCRIPT_install_wsl=C:\Users\%USERNAME%\p-terminal\pp-term\run\wsl\install-wsl.py"
@@ -2432,26 +2431,33 @@ if not exist "%PHW_DIR%" (
     )
 )
 
-:: Change to P-Terminal Projects directory
-cd /d "%PTERMINAL_PROJECTS%"
+:: Projektverzeichnis (wechsle hinein)
+cd /d "%PTERMINAL_PROJECTS%" || (
+    call :Log ERROR "❌ Could not change to directory: %PTERMINAL_PROJECTS%"
+    exit /b 1
+)
 
-:: Check if the .env folder does not exist
-IF NOT EXIST ".env" (
-    call :Log INFO "Creating Python virtual environment in - .env - ..."
-    start "" /b python -m venv "C:\Users\%USERNAME%\p-terminal\pp-term\.env"
+:: Zielpfad für virtuelle Umgebung
+set "VENV_DIR=%CD%\.env"
+set "VENV_ACTIVATE=%VENV_DIR%\Scripts\activate.bat"
 
-    :: Warten, damit der Prozess Zeit zum Abschluss hat (z. B. 5 Sekunden)
-    timeout /t 20 >nul
+:: Prüfen, ob virtuelle Umgebung bereits existiert
+IF EXIST "%VENV_ACTIVATE%" (
+    call :Log INFO "✅ Virtual environment already exists at: %VENV_DIR%"
+) ELSE (
+    call :Log INFO "Creating Python virtual environment in: %VENV_DIR% ..."
 
-    :: Check again if the virtual environment now exists
-    IF EXIST ".env" (
+    python -m venv "%VENV_DIR%"
+
+    :: Nachprüfen, ob Erstellung erfolgreich war
+    IF EXIST "%VENV_ACTIVATE%" (
         call :Log PASS "✅ Virtual environment created successfully."
     ) ELSE (
-        call :Log ERROR "❌ Failed to create virtual environment!"
+        call :Log ERROR "❌ Failed to create virtual environment at: %VENV_DIR%"
+        exit /b 1
     )
-) ELSE (
-    call :Log INFO "Virtual environment already exists. Skipping creation."
 )
+
 
 :: Ensure .env file exists and is correctly configured
 :: echo Checking for existing .env file at: "%PP_ENV_FILE%"
