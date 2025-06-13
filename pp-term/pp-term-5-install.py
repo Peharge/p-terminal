@@ -130,7 +130,7 @@ def ensure_packages(packages: list[str]) -> None:
 
     logging.info(f"[INFO] Found {len(missing)} missing packages: {', '.join(missing)}")
     for index, pkg in enumerate(missing, 1):
-        logging.info(f"[INFO] [{index}/{len(missing)}] Installing package: {pkg}")
+        logging.info(f"\n[INFO] [{index}/{len(missing)}] Installing package: {pkg}")
         try:
             # Install the package
             result = subprocess.run(
