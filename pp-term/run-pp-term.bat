@@ -117,9 +117,11 @@ echo Initializing PP-Terminal 5
 echo Gooo...
 echo.
 
+set USERNAME=%USERNAME%
+
 :: Global Settings
 set "SCRIPT_DIR=%~dp0"
-set "LOGFILE=C:\Users\julia\p-terminal\pp-term\WSL_Diagnostics.log"
+set "LOGFILE=C:\Users\%USERNAME%\p-terminal\pp-term\WSL_Diagnostics.log"
 set "MAX_DRIFT=300"          & rem Maximum allowed time drift in seconds
 set "PING_ADDR=8.8.8.8"      & rem Default ping target
 set "TEST_DOMAIN=example.com"
@@ -514,7 +516,6 @@ if %errorlevel% neq 0 (
     ffmpeg --version
 )
 
-set USERNAME=%USERNAME%
 set PYTHON_PATH=C:\Users\%USERNAME%\p-terminal\pp-term\.env\Scripts\python.exe
 set SCRIPT_install_rustup=C:\Users\%USERNAME%\p-terminal\pp-term\run\rust\install-rustup.py
 
@@ -563,6 +564,8 @@ if %errorlevel% neq 0 (
                             call :Log ERROR "❌ Script not found: %SCRIPT_install_rustup%"
                             exit /B 1
                         )
+
+                        call :Log INFO "It may be that the .env has not yet been created under P-Terminal..."
 
                         "%PYTHON_PATH%" "%SCRIPT_install_rustup%"
 
@@ -978,7 +981,7 @@ call :Log INFO "Listing WSL client version"& call :Run wsl --version
 call :Log INFO "Retrieving general WSL engine status"
 call :Run wsl --status
 if errorlevel 1 (
-    call :Log WARN "❌ Unable to retrieve WSL engine status."
+    call :Log ERROR "❌ Unable to retrieve WSL engine status."
 ) else (
     call :Log INFO "✅ WSL engine status retrieved successfully."
 )
@@ -1035,7 +1038,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Pinging %PING_ADDR%"
     call :Run wsl -d Ubuntu -- ping -c 2 %PING_ADDR%
     if errorlevel 1 (
-        call :Log WARN "❌ Network unreachable"
+        call :Log ERROR "❌ Network unreachable"
         call :Log HINT "Check WSL network settings and Windows Firewall"
     ) else (
         call :Log PASS "✅ Network OK"
@@ -1045,7 +1048,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Resolving %TEST_DOMAIN%"
     call :Run wsl -d Ubuntu -- nslookup %TEST_DOMAIN%
     if errorlevel 1 (
-        call :Log WARN "❌ DNS resolution failed"
+        call :Log ERROR "❌ DNS resolution failed"
     ) else (
         call :Log PASS "✅ DNS OK"
     )
@@ -1064,7 +1067,7 @@ if %errorlevel% equ 0 (
     for /F "delims=" %%T in ('wsl -d Ubuntu -- date +%%s') do set "TS_DISTRO=%%T"
     set /A DRIFT=TS_HOST-TS_DISTRO
     if !DRIFT! GTR %MAX_DRIFT% (
-        call :Log WARN "❌ Time drift !DRIFT!s"
+        call :Log ERROR "❌ Time drift !DRIFT!s"
     ) else (
         call :Log PASS "✅ Time sync OK"
     )
@@ -1073,7 +1076,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Listing mount points"
     call :Run wsl -d Ubuntu -- mount
     if errorlevel 1 (
-        call :Log WARN "❌ Cannot list mounts"
+        call :Log ERROR "❌ Cannot list mounts"
     ) else (
         call :Log PASS "✅ Mount points displayed"
     )
@@ -1132,7 +1135,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Pinging %PING_ADDR%"
     call :Run wsl -d Debian -- ping -c 2 %PING_ADDR%
     if errorlevel 1 (
-        call :Log WARN "❌ Network unreachable"
+        call :Log ERROR "❌ Network unreachable"
         call :Log HINT "Check WSL network settings and Windows Firewall"
     ) else (
         call :Log PASS "✅ Network OK"
@@ -1142,7 +1145,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Resolving %TEST_DOMAIN%"
     call :Run wsl -d Debian -- nslookup %TEST_DOMAIN%
     if errorlevel 1 (
-        call :Log WARN "❌ DNS resolution failed"
+        call :Log ERROR "❌ DNS resolution failed"
     ) else (
         call :Log PASS "✅ DNS OK"
     )
@@ -1161,7 +1164,7 @@ if %errorlevel% equ 0 (
     for /F "delims=" %%T in ('wsl -d Debian -- date +%%s') do set "TS_DISTRO=%%T"
     set /A DRIFT=TS_HOST-TS_DISTRO
     if !DRIFT! GTR %MAX_DRIFT% (
-        call :Log WARN "❌ Time drift !DRIFT!s"
+        call :Log ERROR "❌ Time drift !DRIFT!s"
     ) else (
         call :Log PASS "✅ Time sync OK"
     )
@@ -1170,7 +1173,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Listing mount points"
     call :Run wsl -d Debian -- mount
     if errorlevel 1 (
-        call :Log WARN "❌ Cannot list mounts"
+        call :Log ERROR "❌ Cannot list mounts"
     ) else (
         call :Log PASS "✅ Mount points displayed"
     )
@@ -1230,7 +1233,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Pinging %PING_ADDR%"
     call :Run wsl -d kali-linux -- ping -c 2 %PING_ADDR%
     if errorlevel 1 (
-        call :Log WARN "❌ Network unreachable"
+        call :Log ERROR "❌ Network unreachable"
         call :Log HINT "Check WSL network settings and Windows Firewall"
     ) else (
         call :Log PASS "✅ Network OK"
@@ -1240,7 +1243,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Resolving %TEST_DOMAIN%"
     call :Run wsl -d kali-linux -- nslookup %TEST_DOMAIN%
     if errorlevel 1 (
-        call :Log WARN "❌ DNS resolution failed"
+        call :Log ERROR "❌ DNS resolution failed"
     ) else (
         call :Log PASS "✅ DNS OK"
     )
@@ -1259,7 +1262,7 @@ if %errorlevel% equ 0 (
     for /F "delims=" %%T in ('wsl -d kali-linux -- date +%%s') do set "TS_DISTRO=%%T"
     set /A DRIFT=TS_HOST-TS_DISTRO
     if !DRIFT! GTR %MAX_DRIFT% (
-        call :Log WARN "❌ Time drift !DRIFT!s"
+        call :Log ERROR "❌ Time drift !DRIFT!s"
     ) else (
         call :Log PASS "✅ Time sync OK"
     )
@@ -1268,7 +1271,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Listing mount points"
     call :Run wsl -d kali-linux -- mount
     if errorlevel 1 (
-        call :Log WARN "❌ Cannot list mounts"
+        call :Log ERROR "❌ Cannot list mounts"
     ) else (
         call :Log PASS "✅ Mount points displayed"
     )
@@ -1326,7 +1329,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Pinging %PING_ADDR%"
     call :Run wsl -d Arch -- ping -c 2 %PING_ADDR%
     if errorlevel 1 (
-        call :Log WARN "❌ Network unreachable"
+        call :Log ERROR "❌ Network unreachable"
         call :Log HINT "Check WSL network settings and Windows Firewall"
     ) else (
         call :Log PASS "✅ Network OK"
@@ -1336,7 +1339,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Resolving %TEST_DOMAIN%"
     call :Run wsl -d Arch -- nslookup %TEST_DOMAIN%
     if errorlevel 1 (
-        call :Log WARN "❌ DNS resolution failed"
+        call :Log ERROR "❌ DNS resolution failed"
     ) else (
         call :Log PASS "✅ DNS OK"
     )
@@ -1355,7 +1358,7 @@ if %errorlevel% equ 0 (
     for /F "delims=" %%T in ('wsl -d Arch -- date +%%s') do set "TS_DISTRO=%%T"
     set /A DRIFT=TS_HOST-TS_DISTRO
     if !DRIFT! GTR %MAX_DRIFT% (
-        call :Log WARN "❌ Time drift !DRIFT!s"
+        call :Log ERROR "❌ Time drift !DRIFT!s"
     ) else (
         call :Log PASS "✅ Time sync OK"
     )
@@ -1364,7 +1367,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Listing mount points"
     call :Run wsl -d Arch -- mount
     if errorlevel 1 (
-        call :Log WARN "❌ Cannot list mounts"
+        call :Log ERROR "❌ Cannot list mounts"
     ) else (
         call :Log PASS "✅ Mount points displayed"
     )
@@ -1422,7 +1425,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Pinging %PING_ADDR%"
     call :Run wsl -d openSUSE -- ping -c 2 %PING_ADDR%
     if errorlevel 1 (
-        call :Log WARN "❌ Network unreachable"
+        call :Log ERROR "❌ Network unreachable"
         call :Log HINT "Check WSL network settings and Windows Firewall"
     ) else (
         call :Log PASS "✅ Network OK"
@@ -1432,7 +1435,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Resolving %TEST_DOMAIN%"
     call :Run wsl -d openSUSE -- nslookup %TEST_DOMAIN%
     if errorlevel 1 (
-        call :Log WARN "❌ DNS resolution failed"
+        call :Log ERROR "❌ DNS resolution failed"
     ) else (
         call :Log PASS "✅ DNS OK"
     )
@@ -1451,7 +1454,7 @@ if %errorlevel% equ 0 (
     for /F "delims=" %%T in ('wsl -d openSUSE-Leap -- date +%%s') do set "TS_DISTRO=%%T"
     set /A DRIFT=TS_HOST-TS_DISTRO
     if !DRIFT! GTR %MAX_DRIFT% (
-        call :Log WARN "❌ Time drift !DRIFT!s"
+        call :Log ERROR "❌ Time drift !DRIFT!s"
     ) else (
         call :Log PASS "✅ Time sync OK"
     )
@@ -1460,7 +1463,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Listing mount points"
     call :Run wsl -d openSUSE-Leap -- mount
     if errorlevel 1 (
-        call :Log WARN "❌ Cannot list mounts"
+        call :Log ERROR "❌ Cannot list mounts"
     ) else (
         call :Log PASS "✅ Mount points displayed"
     )
@@ -1518,7 +1521,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Pinging %PING_ADDR%"
     call :Run wsl -d mint -- ping -c 2 %PING_ADDR%
     if errorlevel 1 (
-        call :Log WARN "❌ Network unreachable"
+        call :Log ERROR "❌ Network unreachable"
         call :Log HINT "Check WSL network settings and Windows Firewall"
     ) else (
         call :Log PASS "✅ Network OK"
@@ -1528,7 +1531,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Resolving %TEST_DOMAIN%"
     call :Run wsl -d mint -- nslookup %TEST_DOMAIN%
     if errorlevel 1 (
-        call :Log WARN "❌ DNS resolution failed"
+        call :Log ERROR "❌ DNS resolution failed"
     ) else (
         call :Log PASS "✅ DNS OK"
     )
@@ -1547,7 +1550,7 @@ if %errorlevel% equ 0 (
     for /F "delims=" %%T in ('wsl -d mint -- date +%%s') do set "TS_DISTRO=%%T"
     set /A DRIFT=TS_HOST-TS_DISTRO
     if !DRIFT! GTR %MAX_DRIFT% (
-        call :Log WARN "❌ Time drift !DRIFT!s"
+        call :Log ERROR "❌ Time drift !DRIFT!s"
     ) else (
         call :Log PASS "✅ Time sync OK"
     )
@@ -1556,7 +1559,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Listing mount points"
     call :Run wsl -d mint -- mount
     if errorlevel 1 (
-        call :Log WARN "❌ Cannot list mounts"
+        call :Log ERROR "❌ Cannot list mounts"
     ) else (
         call :Log PASS "✅ Mount points displayed"
     )
@@ -1614,7 +1617,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Pinging %PING_ADDR%"
     call :Run wsl -d Fedora -- ping -c 2 %PING_ADDR%
     if errorlevel 1 (
-        call :Log WARN "❌ Network unreachable"
+        call :Log ERROR "❌ Network unreachable"
         call :Log HINT "Check WSL network settings and Windows Firewall"
     ) else (
         call :Log PASS "✅ Network OK"
@@ -1624,7 +1627,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Resolving %TEST_DOMAIN%"
     call :Run wsl -d Fedora -- nslookup %TEST_DOMAIN%
     if errorlevel 1 (
-        call :Log WARN "❌ DNS resolution failed"
+        call :Log ERROR "❌ DNS resolution failed"
     ) else (
         call :Log PASS "✅ DNS OK"
     )
@@ -1643,7 +1646,7 @@ if %errorlevel% equ 0 (
     for /F "delims=" %%T in ('wsl -d Fedora -- date +%%s') do set "TS_DISTRO=%%T"
     set /A DRIFT=TS_HOST-TS_DISTRO
     if !DRIFT! GTR %MAX_DRIFT% (
-        call :Log WARN "❌ Time drift !DRIFT!s"
+        call :Log ERROR "❌ Time drift !DRIFT!s"
     ) else (
         call :Log PASS "✅ Time sync OK"
     )
@@ -1652,7 +1655,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Listing mount points"
     call :Run wsl -d Fedora -- mount
     if errorlevel 1 (
-        call :Log WARN "❌ Cannot list mounts"
+        call :Log ERROR "❌ Cannot list mounts"
     ) else (
         call :Log PASS "✅ Mount points displayed"
     )
@@ -1710,7 +1713,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Pinging %PING_ADDR%"
     call :Run wsl -d RedHat -- ping -c 2 %PING_ADDR%
     if errorlevel 1 (
-        call :Log WARN "❌ Network unreachable"
+        call :Log ERROR "❌ Network unreachable"
         call :Log HINT "Check WSL network settings and Windows Firewall"
     ) else (
         call :Log PASS "✅ Network OK"
@@ -1720,7 +1723,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Resolving %TEST_DOMAIN%"
     call :Run wsl -d RedHat -- nslookup %TEST_DOMAIN%
     if errorlevel 1 (
-        call :Log WARN "❌ DNS resolution failed"
+        call :Log ERROR "❌ DNS resolution failed"
     ) else (
         call :Log PASS "✅ DNS OK"
     )
@@ -1739,7 +1742,7 @@ if %errorlevel% equ 0 (
     for /F "delims=" %%T in ('wsl -d RedHat -- date +%%s') do set "TS_DISTRO=%%T"
     set /A DRIFT=TS_HOST-TS_DISTRO
     if !DRIFT! GTR %MAX_DRIFT% (
-        call :Log WARN "❌ Time drift !DRIFT!s"
+        call :Log ERROR "❌ Time drift !DRIFT!s"
     ) else (
         call :Log PASS "✅ Time sync OK"
     )
@@ -1748,7 +1751,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Listing mount points"
     call :Run wsl -d RedHat -- mount
     if errorlevel 1 (
-        call :Log WARN "❌ Cannot list mounts"
+        call :Log ERROR "❌ Cannot list mounts"
     ) else (
         call :Log PASS "✅ Mount points displayed"
     )
@@ -1807,7 +1810,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Pinging %PING_ADDR%"
     call :Run wsl -d suse-linux -- ping -c 2 %PING_ADDR%
     if errorlevel 1 (
-        call :Log WARN "❌ Network unreachable"
+        call :Log ERROR "❌ Network unreachable"
         call :Log HINT "Check WSL network settings and Windows Firewall"
     ) else (
         call :Log PASS "✅ Network OK"
@@ -1817,7 +1820,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Resolving %TEST_DOMAIN%"
     call :Run wsl -d suse-linux -- nslookup %TEST_DOMAIN%
     if errorlevel 1 (
-        call :Log WARN "❌ DNS resolution failed"
+        call :Log ERROR "❌ DNS resolution failed"
     ) else (
         call :Log PASS "✅ DNS OK"
     )
@@ -1836,7 +1839,7 @@ if %errorlevel% equ 0 (
     for /F "delims=" %%T in ('wsl -d suse-linux -- date +%%s') do set "TS_DISTRO=%%T"
     set /A DRIFT=TS_HOST-TS_DISTRO
     if !DRIFT! GTR %MAX_DRIFT% (
-        call :Log WARN "❌ Time drift !DRIFT!s"
+        call :Log ERROR "❌ Time drift !DRIFT!s"
     ) else (
         call :Log PASS "✅ Time sync OK"
     )
@@ -1845,7 +1848,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Listing mount points"
     call :Run wsl -d suse-linux -- mount
     if errorlevel 1 (
-        call :Log WARN "❌ Cannot list mounts"
+        call :Log ERROR "❌ Cannot list mounts"
     ) else (
         call :Log PASS "✅ Mount points displayed"
     )
@@ -1904,7 +1907,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Pinging %PING_ADDR%"
     call :Run wsl -d Pengwin -- ping -c 2 %PING_ADDR%
     if errorlevel 1 (
-        call :Log WARN "❌ Network unreachable"
+        call :Log ERROR "❌ Network unreachable"
         call :Log HINT "Check WSL network settings and Windows Firewall"
     ) else (
         call :Log PASS "✅ Network OK"
@@ -1914,7 +1917,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Resolving %TEST_DOMAIN%"
     call :Run wsl -d Pengwin -- nslookup %TEST_DOMAIN%
     if errorlevel 1 (
-        call :Log WARN "❌ DNS resolution failed"
+        call :Log ERROR "❌ DNS resolution failed"
     ) else (
         call :Log PASS "✅ DNS OK"
     )
@@ -1933,7 +1936,7 @@ if %errorlevel% equ 0 (
     for /F "delims=" %%T in ('wsl -d Pengwin -- date +%%s') do set "TS_DISTRO=%%T"
     set /A DRIFT=TS_HOST-TS_DISTRO
     if !DRIFT! GTR %MAX_DRIFT% (
-        call :Log WARN "❌ Time drift !DRIFT!s"
+        call :Log ERROR "❌ Time drift !DRIFT!s"
     ) else (
         call :Log PASS "✅ Time sync OK"
     )
@@ -1942,7 +1945,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Listing mount points"
     call :Run wsl -d Pengwin -- mount
     if errorlevel 1 (
-        call :Log WARN "❌ Cannot list mounts"
+        call :Log ERROR "❌ Cannot list mounts"
     ) else (
         call :Log PASS "✅ Mount points displayed"
     )
@@ -2001,7 +2004,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Pinging %PING_ADDR%"
     call :Run wsl -d oracle-linux -- ping -c 2 %PING_ADDR%
     if errorlevel 1 (
-        call :Log WARN "❌ Network unreachable"
+        call :Log ERROR "❌ Network unreachable"
         call :Log HINT "Check WSL network settings and Windows Firewall"
     ) else (
         call :Log PASS "✅ Network OK"
@@ -2011,7 +2014,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Resolving %TEST_DOMAIN%"
     call :Run wsl -d oracle-linux -- nslookup %TEST_DOMAIN%
     if errorlevel 1 (
-        call :Log WARN "❌ DNS resolution failed"
+        call :Log ERROR "❌ DNS resolution failed"
     ) else (
         call :Log PASS "✅ DNS OK"
     )
@@ -2039,7 +2042,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Listing mount points"
     call :Run wsl -d oracle-linux -- mount
     if errorlevel 1 (
-        call :Log WARN "❌ Cannot list mounts"
+        call :Log ERROR "❌ Cannot list mounts"
     ) else (
         call :Log PASS "✅ Mount points displayed"
     )
@@ -2098,7 +2101,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Pinging %PING_ADDR%"
     call :Run wsl -d clear-linux -- ping -c 2 %PING_ADDR%
     if errorlevel 1 (
-        call :Log WARN "❌ Network unreachable"
+        call :Log ERROR "❌ Network unreachable"
         call :Log HINT "Check WSL network settings and Windows Firewall"
     ) else (
         call :Log PASS "✅ Network OK"
@@ -2108,7 +2111,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Resolving %TEST_DOMAIN%"
     call :Run wsl -d clear-linux -- nslookup %TEST_DOMAIN%
     if errorlevel 1 (
-        call :Log WARN "❌ DNS resolution failed"
+        call :Log ERROR "❌ DNS resolution failed"
     ) else (
         call :Log PASS "✅ DNS OK"
     )
@@ -2127,7 +2130,7 @@ if %errorlevel% equ 0 (
     for /F "delims=" %%T in ('wsl -d clear-linux -- date +%%s') do set "TS_DISTRO=%%T"
     set /A DRIFT=TS_HOST-TS_DISTRO
     if !DRIFT! GTR %MAX_DRIFT% (
-        call :Log WARN "❌ Time drift !DRIFT!s"
+        call :Log ERROR "❌ Time drift !DRIFT!s"
     ) else (
         call :Log PASS "✅ Time sync OK"
     )
@@ -2136,7 +2139,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Listing mount points"
     call :Run wsl -d clear-linux -- mount
     if errorlevel 1 (
-        call :Log WARN "❌ Cannot list mounts"
+        call :Log ERROR "❌ Cannot list mounts"
     ) else (
         call :Log PASS "✅ Mount points displayed"
     )
@@ -2194,7 +2197,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Pinging %PING_ADDR%"
     call :Run wsl -d Alpine -- ping -c 2 %PING_ADDR%
     if errorlevel 1 (
-        call :Log WARN "❌ Network unreachable"
+        call :Log ERROR "❌ Network unreachable"
         call :Log HINT "Check WSL network settings and Windows Firewall"
     ) else (
         call :Log PASS "✅ Network OK"
@@ -2204,7 +2207,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Resolving %TEST_DOMAIN%"
     call :Run wsl -d Alpine -- nslookup %TEST_DOMAIN%
     if errorlevel 1 (
-        call :Log WARN "❌ DNS resolution failed"
+        call :Log ERROR "❌ DNS resolution failed"
     ) else (
         call :Log PASS "✅ DNS OK"
     )
@@ -2223,7 +2226,7 @@ if %errorlevel% equ 0 (
     for /F "delims=" %%T in ('wsl -d Alpine -- date +%%s') do set "TS_DISTRO=%%T"
     set /A DRIFT=TS_HOST-TS_DISTRO
     if !DRIFT! GTR %MAX_DRIFT% (
-        call :Log WARN "❌ Time drift !DRIFT!s"
+        call :Log ERROR "❌ Time drift !DRIFT!s"
     ) else (
         call :Log PASS "✅ Time sync OK"
     )
@@ -2232,7 +2235,7 @@ if %errorlevel% equ 0 (
     call :Log TEST "Listing mount points"
     call :Run wsl -d Alpine -- mount
     if errorlevel 1 (
-        call :Log WARN "❌ Cannot list mounts"
+        call :Log ERROR "❌ Cannot list mounts"
     ) else (
         call :Log PASS "✅ Mount points displayed"
     )
@@ -2248,24 +2251,24 @@ call :Log PASS "✅ All diagnostics complete. Exiting with code %ERRORLEVEL%"
 endlocal
 
 :: Define project path
-set "PYCHARM_PROJECTS=%USERPROFILE%\p-terminal"
-set "PP_DIR=%PYCHARM_PROJECTS%\pp-term"
+set "PTERMINAL_PROJECTS=%USERPROFILE%\p-terminal"
+set "PP_DIR=%PTERMINAL_PROJECTS%\pp-term"
 set "PP_ENV_FILE=%PP_DIR%\.env"
 set "PP_RUN_FILE=%PP_DIR%\pp-term.bat"
 :: set "EXPECTED_PYTHON_VERSION=3.13"
 
-:: Ensure PyCharm Projects directory exists
-if not exist "%PYCHARM_PROJECTS%" (
-    echo Creating project directory: %PYCHARM_PROJECTS%...
-    mkdir "%PYCHARM_PROJECTS%"
+:: Ensure P-Terminal Projects directory exists
+if not exist "%PTERMINAL_PROJECTS%" (
+    echo Creating project directory: %PTERMINAL_PROJECTS%...
+    mkdir "%PTERMINAL_PROJECTS%"
     if errorlevel 1 (
-        call :Log WARN "❌ Error: Failed to create directory %PYCHARM_PROJECTS%. Exiting..."
+        call :Log ERROR "❌ Failed to create directory %PTERMINAL_PROJECTS%. Exiting..."
         exit /b 1
     )
 )
 
-:: Change to PyCharm Projects directory
-cd /d "%PYCHARM_PROJECTS%"
+:: Change to P-Terminal Projects directory
+cd /d "%PTERMINAL_PROJECTS%"
 
 :: Check if the p-terminal directory exists
 if not exist "%PP_DIR%" (
@@ -2274,7 +2277,7 @@ if not exist "%PP_DIR%" (
     :: Check if Git is installed
     where git >nul 2>&1
     if %errorlevel% neq 0 (
-        call :Log WARN "❌ Error: Git is not installed. Please install Git first."
+        call :Log ERROR "❌ Git is not installed. Please install Git first."
         exit /b 1
     )
 
@@ -2282,7 +2285,7 @@ if not exist "%PP_DIR%" (
     echo Testing connection to GitHub...
     for /f "delims=" %%i in ('ping -n 1 -w 5000 github.com ^| find "TTL"') do set REACHABLE=1
     if not defined REACHABLE (
-        call :Log WARN "❌ Cannot reach GitHub! Check your internet connection or firewall settings."
+        call :Log ERROR "❌ Cannot reach GitHub! Check your internet connection or firewall settings."
         exit /b 1
     )
     set REACHABLE=  :: Zurücksetzen der REACHABLE-Variable
@@ -2292,7 +2295,7 @@ if not exist "%PP_DIR%" (
     git clone https://github.com/Peharge/p-terminal.git "%PP_DIR%"
 
     if %errorlevel% neq 0 (
-        call :Log WARN "❌ Cloning P-terminal repository failed! Make sure GitHub is accessible and the URL is correct."
+        call :Log ERROR "❌ Cloning P-terminal repository failed! Make sure GitHub is accessible and the URL is correct."
         exit /b 1
     ) else (
         call :Log PASS "✅ P-terminal repository cloned successfully!"
@@ -2305,7 +2308,7 @@ if not exist "%PP_DIR%" (
     :: Check if the repository is in the correct state (no uncommitted changes)
     git diff-index --quiet HEAD --
     if %errorlevel% neq 0 (
-       call :Log WARN "❌ There are uncommitted changes! Please commit or discard them first."
+       call :Log ERROR "❌ There are uncommitted changes! Please commit or discard them first."
         exit /b 1
     )
 
@@ -2313,7 +2316,7 @@ if not exist "%PP_DIR%" (
     echo Fetching latest changes...
     git fetch --quiet
     if %errorlevel% neq 0 (
-        call :Log WARN "❌ Could not fetch updates from the remote repository! Check your internet connection or Git configuration."
+        call :Log ERROR "❌ Could not fetch updates from the remote repository! Check your internet connection or Git configuration."
         exit /b 1
     )
 
@@ -2325,7 +2328,7 @@ if not exist "%PP_DIR%" (
         :: Perform Git Pull (with timeout of 5 seconds)
         git pull --quiet
         if %errorlevel% neq 0 (
-            call :Log WARN "❌ Could not update P-terminal repository! Check your internet connection or Git configuration."
+            call :Log ERROR "❌ Could not update P-terminal repository! Check your internet connection or Git configuration."
             exit /b 1
         ) else (
             call :Log PASS "✅ P-terminal repository updated successfully!"
@@ -2335,8 +2338,32 @@ if not exist "%PP_DIR%" (
     )
 )
 
+:: Check Git status after pull (no merge conflicts)
+git status | find "Merge conflict" >nul
+if %errorlevel% equ 0 (
+    call :Log ERROR "❌ Merge conflicts detected. Please resolve them manually."
+    exit /b 1
+)
+
+call :Log PASS "✅ P-terminal update process completed successfully."
+
+:: Ensure P-terminal directory exists
+if not exist "%PP_DIR%" (
+    call :Log ERROR "❌ P-terminal directory does not exist!"
+    echo Make sure the repository was cloned correctly.
+    exit /b 1
+)
+
+:: Change to P-terminal directory
+cd /d "%PP_DIR%" || (
+    call :Log ERROR "❌ Failed to access P-terminal directory!"
+    exit /b 1
+)
+
+cd /d C:\Users\%USERNAME%
+
 :: === Handle peharge-web Repository ===
-set "PHW_DIR=%~dp0peharge-web"
+set "PHW_DIR=C:\Users\%USERNAME%\peharge-web"
 
 :: Check if peharge-web directory exists
 if not exist "%PHW_DIR%" (
@@ -2345,7 +2372,7 @@ if not exist "%PHW_DIR%" (
     :: Check if Git is installed
     where git >nul 2>&1
     if %errorlevel% neq 0 (
-        call :Log WARN "❌ Error: Git is not installed. Please install Git first."
+        call :Log ERROR "❌ Git is not installed. Please install Git first."
         exit /b 1
     )
 
@@ -2353,7 +2380,7 @@ if not exist "%PHW_DIR%" (
     echo Testing connection to GitHub...
     for /f "delims=" %%i in ('ping -n 1 -w 5000 github.com ^| find "TTL"') do set REACHABLE=1
     if not defined REACHABLE (
-        call :Log WARN "❌ Cannot reach GitHub! Check your internet connection or firewall settings."
+        call :Log ERROR "❌ Cannot reach GitHub! Check your internet connection or firewall settings."
         exit /b 1
     )
     set REACHABLE=  :: Reset REACHABLE variable
@@ -2363,7 +2390,7 @@ if not exist "%PHW_DIR%" (
     git clone https://github.com/Peharge/peharge-web.git "%PHW_DIR%"
 
     if %errorlevel% neq 0 (
-        call :Log WARN "❌ Cloning peharge-web repository failed! Make sure GitHub is accessible and the URL is correct."
+        call :Log ERROR "❌ Cloning peharge-web repository failed! Make sure GitHub is accessible and the URL is correct."
         exit /b 1
     ) else (
         call :Log PASS "✅ peharge-web repository cloned successfully!"
@@ -2376,7 +2403,7 @@ if not exist "%PHW_DIR%" (
     :: Check for uncommitted changes
     git diff-index --quiet HEAD --
     if %errorlevel% neq 0 (
-        call :Log WARN "❌ There are uncommitted changes in peharge-web! Please commit or discard them first."
+        call :Log ERROR "❌ There are uncommitted changes in peharge-web! Please commit or discard them first."
         exit /b 1
     )
 
@@ -2384,7 +2411,7 @@ if not exist "%PHW_DIR%" (
     echo Fetching latest changes from origin...
     git fetch --quiet
     if %errorlevel% neq 0 (
-        call :Log WARN "❌ Could not fetch updates for peharge-web! Check your connection or Git settings."
+        call :Log ERROR "❌ Could not fetch updates for peharge-web! Check your connection or Git settings."
         exit /b 1
     )
 
@@ -2395,7 +2422,7 @@ if not exist "%PHW_DIR%" (
 
         git pull --quiet
         if %errorlevel% neq 0 (
-            call :Log WARN "❌ Could not update peharge-web repository!"
+            call :Log ERROR "❌ Could not update peharge-web repository!"
             exit /b 1
         ) else (
             call :Log PASS "✅ peharge-web repository updated successfully!"
@@ -2405,27 +2432,8 @@ if not exist "%PHW_DIR%" (
     )
 )
 
-:: Check Git status after pull (no merge conflicts)
-git status | find "Merge conflict" >nul
-if %errorlevel% equ 0 (
-    call :Log WARN "❌ Merge conflicts detected. Please resolve them manually."
-    exit /b 1
-)
-
-call :Log PASS "✅ P-terminal update process completed successfully."
-
-:: Ensure P-terminal directory exists
-if not exist "%PP_DIR%" (
-    call :Log WARN "❌ P-terminal directory does not exist!"
-    echo Make sure the repository was cloned correctly.
-    exit /b 1
-)
-
-:: Change to P-terminal directory
-cd /d "%PP_DIR%" || (
-    call :Log WARN "❌ Failed to access P-terminal directory!"
-    exit /b 1
-)
+:: Change to P-Terminal Projects directory
+cd /d "%PTERMINAL_PROJECTS%"
 
 :: Check if the .env folder does not exist
 IF NOT EXIST ".env" (
