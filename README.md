@@ -668,7 +668,7 @@ The commit history can be found at: https://github.com/Peharge/p-terminal-old
 
 [`P-Terminal.com`](https://peharge.github.io/MAVIS-web/p-term.html) [`Download PP-Term [Windows]`](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) [`Download P-Term (SOON) [Windows]`](https://github.com/Peharge/p-terminal/blob/main/p-term/run-p-term.bat)
 
-[`PP-Term Commands`](https://peharge.github.io/MAVIS-web/commands-pp-term.html) [`P-Term Commands`](https://peharge.github.io/MAVIS-web/commands-p-term.html) [`Learn PP-Term`](https://peharge.github.io/MAVIS-web/pp-term-hole.html)
+[`PP-Term Commands`](https://github.com/Peharge/peharge-web/blob/main/commands-pp-term.html) [`P-Term Commands`](https://github.com/Peharge/peharge-web/blob/main/commands-p-term.html) [`Learn PP-Term`](https://github.com/Peharge/peharge-web/blob/main/pp-term-hole.html)
 
 [`LICENSE`](LICENSE) [`SECURITY`](SECURITY.md) [`PULL_REQUEST_TEMPLATE`](PULL_REQUEST_TEMPLATE.md) [`CONTRIBUTING`](CONTRIBUTING.md) [`CODE_OF_CONDUCT`](CODE_OF_CONDUCT.md) [`TREE`](TREE.md) [`VERSIONS`](VERSIONS.md)
 
