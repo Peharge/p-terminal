@@ -653,6 +653,28 @@ Have you discovered a bug or have questions about the P-Terminal or PP-Terminal?
 
 </div>
 
+<br><br><br>
+
+<div align="center">
+
+# Contributing to P-Terminal
+
+<img width="500" src="https://github.com/Peharge/p-terminal-images/blob/main/images/community-pp-term-1.png" alt="pp-term"/><br><br>
+
+[`LICENSE`](LICENSE) [`SECURITY`](SECURITY.md) [`PULL_REQUEST_TEMPLATE`](PULL_REQUEST_TEMPLATE.md) [`CONTRIBUTING`](CONTRIBUTING.md) [`CODE_OF_CONDUCT`](CODE_OF_CONDUCT.md) [`TREE`](TREE.md) [`VERSIONS`](VERSIONS.md)
+	
+Thank you for your interest in P-Terminal! While we are not accepting code contributions at this time, your feedback and support are vital for improving the project.
+Please share your experience, report bugs, or suggest features by opening an issue on GitHub. Include a clear title, detailed description, and any relevant screenshots or logs.
+If you find P-Terminal helpful, we appreciate reviews or feedback to help us reach more researchers.
+Feel free to tell colleagues and share your experiences on social media or blogs to help grow our community.
+When reporting bugs, please provide a description, steps to reproduce, and any error messages or screenshots to help us address them quickly.
+Please follow our [Code of Conduct](CODE_OF_CONDUCT.md) to maintain a respectful and supportive community.
+Thank you for helping make P-Terminal better for researchers worldwide!
+
+</div>
+
+<br>
+
 # Problems
 
 | **Terminal** | **Problem description**      | **Cause**                                                                          | **Solution** | **Status** |
