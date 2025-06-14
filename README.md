@@ -74,7 +74,7 @@ Peharge Projects 2025<br>
 # **_PP-Terminal 5_**
 
 Why show the standard? The PP Terminal does it all<br>
-— but we show you what sets it apart.<br><br>[`Download PP-Term [Windows]`](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) [`PP-Term Commands`](https://peharge.github.io/MAVIS-web/commands-pp-term.html) [`Learn PP-Term`](https://github.com/Peharge/peharge-web/blob/main/pp-term-hole.html)<br><br>
+— but we show you what sets it apart.<br><br>[`Download PP-Term [Windows]`](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) [`PP-Term Commands`](https://github.com/Peharge/peharge-web/blob/main/commands-pp-term.html) [`Learn PP-Term`](https://github.com/Peharge/peharge-web/blob/main/pp-term-hole.html)<br><br>
 <img width="1500" src="https://github.com/Peharge/p-terminal-images/raw/main/images/pp-term-banner-8.png" alt="pp-term"/><br><br>
 </div>
 
@@ -629,7 +629,7 @@ etc.
 <div align="center">
 
 # **_P-Terminal 1 (SOON)_**<br>
-[`Download P-Term (SOON) [Windows]`](https://github.com/Peharge/p-terminal/blob/main/p-term/run-p-term.bat) [`P-Term Commands`](https://peharge.github.io/MAVIS-web/commands-p-term.html)<br><br>
+[`Download P-Term (SOON) [Windows]`](https://github.com/Peharge/p-terminal/blob/main/p-term/run-p-term.bat) [`P-Term Commands`](https://github.com/Peharge/peharge-web/blob/main/commands-p-term.html)<br><br>
 <img width="600" src="https://raw.githubusercontent.com/Peharge/peharge-web/main/images/p-term-img.png" alt="pp-term"/><br><br>
 </div>
 
