@@ -184,9 +184,21 @@ Why show the standard? The PP Terminal does it all<br>
 <table>
   <tr>
     <td width="50%" valign="top">
-      <strong>LINUX OS administration</strong><br><br>PP-Terminal makes managing WSL (Windows Subsystem for Linux) and Linux distributions easier than ever. With the command 'p wsl', you can quickly view all information about your WSL environments. Additionally, 'p [distro]' displays all details related to a specific Linux distribution, giving you a comprehensive overview in just one command.                                                                                                                                                      </td>
+      <strong>pp-Command-System – Secure Administrative Command Execution</strong><br><br>The pp-Command-System allows direct execution of privileged system operations through a simple CLI syntax: <code>pp {command}</code>. It is designed for administrators who require fast, scripted access to system-level tasks like file management, process control, or network diagnostics. All commands run with elevated rights — use with caution.
+                                                                                                                                             </td>
     <td width="50%" valign="top" align="center">
-      <img src="https://raw.githubusercontent.com/Peharge/peharge-web/main/images/pp-term-ads-14.png" width="100%">
+      <img src="" width="100%">
+    </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <strong>Command Reference – Executing & Compiling Source Code</strong><br><br>This overview provides commonly used commands to compile or run source code in various programming languages. From low-level system languages to modern scripting environments, each command pattern follows a consistent interface using simple prefixes. The placeholder <code>{user_input}</code> represents the filename or code to be processed.
+    </td>
+    <td width="50%" valign="top" align="center">
+      <img src="" width="100%">
     </td>
   </tr>
 </table>
