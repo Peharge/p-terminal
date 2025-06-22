@@ -244,6 +244,8 @@ Why show the standard? The PP Terminal does it all<br>
   </tr>
 </table>
 
+And much more...
+
 # **_Install PP-Terminal_**
 
 <p align="center">
