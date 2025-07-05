@@ -593,9 +593,9 @@ def run_quantum_command(
     """
     # Quantum Decision
     decision = quantum_decision(force_quantum)
-    logging.info(f"Quantum decision: {decision}")
+    logging.info(f"[INFO] Quantum decision: {decision}")
     if decision == 0:
-        logging.info("Command skipped by quantum decision.")
+        logging.info("[INFO] Command skipped by quantum decision.")
         return -1
 
     # dry run?
@@ -613,7 +613,7 @@ def run_quantum_command(
             data = json.load(f)
             active_env = data.get('active_env')
     except Exception as e:
-        logging.warning(f"Could not read config: {e}")
+        logging.warning(f"[INFO] Could not read config: {e}")
 
     if not active_env:
         active_env = os.getcwd()
@@ -650,7 +650,7 @@ def run_quantum_command(
         logging.getLogger().addHandler(fh)
 
     # Ausführen
-    logging.info(f"Running command: {command}")
+    logging.info(f"[INFO] Running command: {command}")
     try:
         proc = subprocess.Popen(
             command,
@@ -676,13 +676,13 @@ def run_quantum_command(
         t_out.start(); t_err.start()
         exit_code = proc.wait()
         t_out.join(); t_err.join()
-        logging.info(f"Command finished with exit code {exit_code}")
+        logging.info(f"[INFO] Command finished with exit code {exit_code}")
     except KeyboardInterrupt:
         proc.send_signal(signal.SIGINT)
         exit_code = proc.wait()
-        logging.info("Interrupted by user (SIGINT)")
+        logging.info("[INFO] Interrupted by user (SIGINT)")
     except Exception as e:
-        logging.error(f"Execution error: {e}")
+        logging.error(f"[ERROR] Execution error: {e}")
         exit_code = -1
 
     # callback
@@ -690,7 +690,7 @@ def run_quantum_command(
         try:
             callback(exit_code, {'stdout': out_lines, 'stderr': err_lines})
         except Exception as e:
-            logging.error(f"Callback error: {e}")
+            logging.error(f"[ERROR] Callback error: {e}")
 
     return exit_code
 
