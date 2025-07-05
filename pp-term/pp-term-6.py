@@ -548,125 +548,151 @@ def run_command(command, shell=False, cwd=None, extra_env=None):
     return proc.returncode
 
 
-def quantum_decision():
+def quantum_decision(force=None):
     """
-    Führt eine einfache Quanten-Simulation durch:
-    Ein Qubit wird in Superposition versetzt und gemessen.
-    Rückgabe: 1 = Ausführen, 0 = Nicht ausführen
+    Liefert 0 oder 1.
+    - force=True  => immer ausführen
+    - force=False => nie ausführen
+    - None        => Zufall
     """
-    q = cirq.NamedQubit("q0")
-    circuit = cirq.Circuit(cirq.H(q), cirq.measure(q, key='m'))
-    simulator = cirq.Simulator()
-    res = simulator.run(circuit, repetitions=1)
-    return int(res.measurements['m'][0][0])
+    if force is True:
+        return 1
+    if force is False:
+        return 0
+    return random.randint(0, 1)
 
 
-def run_quantum_command(command, shell=False, cwd=None, extra_env=None):
-    """
-    Führt einen externen Befehl aus, gesteuert durch eine Quantenentscheidung.
-    Wenn quantum_decision() == 1, wird der Befehl ausgeführt, sonst übersprungen.
+def _stream_reader(pipe, out_func):
+    for line in iter(pipe.readline, ''):
+        out_func(line.rstrip())
+    pipe.close()
 
-    Args:
-        command (str | list): Der auszuführende Befehl.
-        shell (bool): Shell-Modus.
-        cwd (str): Arbeitsverzeichnis.
-        extra_env (dict): Zusätzliche Umgebungsvariablen.
+
+def run_quantum_command(
+    command,
+    shell=False,
+    cwd=None,
+    extra_env=None,
+    force_quantum=None,
+    verbose=True,
+    dry_run=False,
+    logfile=None,
+    callback=None
+):
+    """
+    Führt einen externen Befehl auf Quantenbasis aus.
+
+    Zusätzliche Features:
+    - dry_run: nur anzeigen, nicht ausführen
+    - verbose: mehr Details
+    - logfile: Pfad für zusätzliches Logging
+    - callback: Funktion(exit_code, output) nach Ausführung
 
     Returns:
-        int: Exit-Code oder -1 bei übersprungenem Befehl.
+        int: Exit-Code oder -1 bei Übersprungung
     """
-    # Quantensteuerung
-    decision = quantum_decision()
-    print(f"[{timestamp()}] Quantum decision: {decision}")
+    # Quantum Decision
+    decision = quantum_decision(force_quantum)
+    logging.info(f"Quantum decision: {decision}")
     if decision == 0:
-        print(f"[{timestamp()}] Command skipped.")
+        logging.info("Command skipped by quantum decision.")
         return -1
 
-    # klassische Vorbereitung (wie zuvor)
-    user_name = os.getlogin()
-    json_path = Path(f"C:/Users/{user_name}/p-terminal/pp-term/current_env.json")
+    # dry run?
+    if dry_run:
+        logging.info(f"[DRY RUN] Would execute: {command}")
+        return 0
 
-    active = None
+    # Environment laden
+    user = os.getlogin()
+    cfg_path = Path(f"C:/Users/{user}/p-terminal/pp-term/current_env.json")
+    active_env = None
+    venv_env = {}
     try:
-        with open(json_path, 'r') as f:
+        with open(cfg_path) as f:
             data = json.load(f)
-            active = data.get('active_env')
+            active_env = data.get('active_env')
     except Exception as e:
-        print(f"[{timestamp()}] [ERROR] {e}")
+        logging.warning(f"Could not read config: {e}")
 
-    if isinstance(active, tuple) and len(active) == 2 and isinstance(active[1], dict):
-        active_env, venv_env = active
-    else:
-        active_env = active or os.getcwd()
-        venv_env = {}
+    if not active_env:
+        active_env = os.getcwd()
 
-    python_name = "python.exe" if os.name == 'nt' else "python"
     python_exe = os.path.join(
         active_env,
-        "Scripts" if os.name == 'nt' else "bin",
-        python_name
+        "Scripts" if os.name=='nt' else "bin",
+        "python.exe" if os.name=='nt' else "python"
     )
 
+    # Kommando anpassen
     if isinstance(command, str) and not shell:
-        command = shlex.split(command, posix=(os.name != 'nt'))
-
-    if isinstance(command, list) and command:
+        command = shlex.split(command, posix=(os.name!='nt'))
+    if isinstance(command, (list, tuple)) and command:
         base = os.path.basename(command[0]).lower()
         if base.startswith('pip'):
-            command = [python_exe, '-m', 'pip'] + command[1:]
+            command = [python_exe, '-m', 'pip'] + list(command[1:])
         elif base.startswith('python'):
-            command = [python_exe] + command[1:]
+            command = [python_exe] + list(command[1:])
 
-    # env zusammenbauen
-    env = {}
+    # Env zusammenbauen
+    env = os.environ.copy()
     env.update(venv_env)
-    env.update(os.environ)
     env.setdefault('VIRTUAL_ENV', active_env)
     venv_bin = os.path.join(active_env, "Scripts" if os.name=='nt' else "bin")
-    env['PATH'] = venv_bin + os.pathsep + env.get('PATH', '')
+    env['PATH'] = venv_bin + os.pathsep + env['PATH']
     if extra_env:
         env.update(extra_env)
 
-    # Ausführung
-    if shell:
-        proc = subprocess.Popen(command, shell=True, cwd=cwd, env=env,
-                                stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, text=True)
-        try:
-            return proc.wait()
-        except KeyboardInterrupt:
-            proc.send_signal(signal.SIGINT)
-            return proc.wait()
+    # Logging to file
+    if logfile:
+        fh = logging.FileHandler(logfile)
+        fh.setFormatter(logging.Formatter('[%(asctime)s] %(levelname)s: %(message)s'))
+        logging.getLogger().addHandler(fh)
 
-    proc = subprocess.Popen(command, shell=False, cwd=cwd, env=env,
-                             stdin=sys.stdin, stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE, bufsize=1, text=True)
-    sel = selectors.DefaultSelector()
-    sel.register(proc.stdout, selectors.EVENT_READ)
-    sel.register(proc.stderr, selectors.EVENT_READ)
-
-    def _sigint(signum, frame):
-        proc.send_signal(signal.SIGINT)
-    old = signal.signal(signal.SIGINT, _sigint)
-
+    # Ausführen
+    logging.info(f"Running command: {command}")
     try:
-        while True:
-            for key, _ in sel.select(timeout=0.1):
-                line = key.fileobj.readline()
-                if not line:
-                    sel.unregister(key.fileobj)
-                    continue
-                if key.fileobj is proc.stdout:
-                    print(line, end='', flush=True)
-                else:
-                    print(line, end='', file=sys.stderr, flush=True)
-            if proc.poll() is not None and not sel.get_map():
-                break
-    finally:
-        signal.signal(signal.SIGINT, old)
-        sel.close()
-        proc.wait()
+        proc = subprocess.Popen(
+            command,
+            shell=shell,
+            cwd=cwd,
+            env=env,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+        # Threads für stdout/stderr
+        out_lines = []
+        err_lines = []
+        t_out = threading.Thread(
+            target=_stream_reader,
+            args=(proc.stdout, lambda l: (print(l), out_lines.append(l)) if verbose else out_lines.append(l))
+        )
+        t_err = threading.Thread(
+            target=_stream_reader,
+            args=(proc.stderr, lambda l: (print(l, file=sys.stderr), err_lines.append(l)) if verbose else err_lines.append(l))
+        )
+        t_out.start(); t_err.start()
+        exit_code = proc.wait()
+        t_out.join(); t_err.join()
+        logging.info(f"Command finished with exit code {exit_code}")
+    except KeyboardInterrupt:
+        proc.send_signal(signal.SIGINT)
+        exit_code = proc.wait()
+        logging.info("Interrupted by user (SIGINT)")
+    except Exception as e:
+        logging.error(f"Execution error: {e}")
+        exit_code = -1
 
-    return proc.returncode
+    # callback
+    if callback:
+        try:
+            callback(exit_code, {'stdout': out_lines, 'stderr': err_lines})
+        except Exception as e:
+            logging.error(f"Callback error: {e}")
+
+    return exit_code
 
 
 def change_directory(path):
@@ -13811,7 +13837,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("IQ "):
         cmd = user_input[3:].strip()
-        ret = run_quantum_command(cmd)
+        ret = run_quantum_command(cmd, shell=False, force_quantum=None, verbose=True, dry_run=False, logfile='quantum_runner.log')
         print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
         return True
 
