@@ -13871,20 +13871,25 @@ def handle_special_commands(user_input):
                 try:
                     result = simulator.run(circuit, repetitions=1)
                     logging.info(f"[INFO] Simulation result: {result}")
+                    return True
                 except Exception:
                     logging.exception(f"[ERROR] Error during simulation")
+                    return True
                 finally:
                     print(f"[{timestamp()}] [END IQ-QFT]")
+                    return True
 
     if user_input.startswith("IQ-GHZ"):
         # IQ-GHZ <n_qubits>: create a GHZ state on n qubits
         parts = user_input.split()
         if len(parts) != 2 or not parts[1].isdigit():
             print(f"[{timestamp()}] [INFO] Usage: IQ-GHZ <n_qubits>")
+            return True
         else:
             n = int(parts[1])
             if n < 2:
                 print(f"[{timestamp()}] [ERROR] n_qubits must be >= 2")
+                return True
             else:
                 logging.info(f"Starting IQ-GHZ with {n} qubits")
                 qubits = cirq.LineQubit.range(n)
@@ -13894,16 +13899,19 @@ def handle_special_commands(user_input):
                     circuit.append(cirq.CNOT(qubits[0], q))  # entangle rest
                 circuit.append(cirq.measure(*qubits, key='m'))  # measure all
                 run_circuit(circuit)
+                return True
 
     if user_input.startswith("IQ-GROVER"):
         # IQ-GROVER <n_qubits> <target_index>: simple Grover search
         parts = user_input.split()
         if len(parts) != 3 or not (parts[1].isdigit() and parts[2].isdigit()):
             print(f"[{timestamp()}] [INFO] Usage: IQ‑GROVER <n_qubits> <target_index>")
+            return True
         else:
             n, target = map(int, parts[1:])
             if target < 0 or target >= 2 ** n:
                 print(f"[{timestamp()}] [ERROR] target_index out of range")
+                return True
             else:
                 logging.info(f"[INFO] Starting IQ‑GROVER with {n} qubits, target={target}")
                 qubits = cirq.LineQubit.range(n)
@@ -13934,12 +13942,14 @@ def handle_special_commands(user_input):
 
                 # Run with 10 repetitions
                 run_circuit(circuit, repetitions=10)
+                return True
 
     if user_input.startswith("IQ-PHASE_EST"):
         # IQ-PHASE_EST <target_qubits> <precision_bits>: quantum phase estimation
         parts = user_input.split()
         if len(parts) != 3 or not (parts[1].isdigit() and parts[2].isdigit()):
             print(f"[{timestamp()}] [INFO] Usage: IQ-PHASE_EST <target_qubits> <precision_bits>")
+            return True
         else:
             target_qubits, prec = map(int, parts[1:])
             logging.info(f"[INFO] Starting IQ-PHASE_EST with target_qubits={target_qubits}, precision={prec}")
@@ -13965,6 +13975,7 @@ def handle_special_commands(user_input):
             circuit += inv_qft(control)
             circuit.append(cirq.measure(*control, key='phase'))  # measure phase bits
             run_circuit(circuit)
+            return True
 
     if user_input.startswith("IQ-BELL"):
         # IQ-BELL: create and measure a Bell pair
@@ -13976,12 +13987,14 @@ def handle_special_commands(user_input):
             cirq.measure(q0, q1, key='m')  # measure both
         )
         run_circuit(circuit, repetitions=5)
+        return True
 
     if user_input.startswith("IQ-QAOA"):
         # IQ-QAOA <n_qubits> <p_layers>: p-layer QAOA for Max-Cut on a ring graph
         parts = user_input.split()
         if len(parts) != 3 or not (parts[1].isdigit() and parts[2].isdigit()):
             print(f"[{timestamp()}] [INFO] Usage: IQ-QAOA <n_qubits> <p_layers>")
+            return True
         else:
             n, p = map(int, parts[1:])
             logging.info(f"[INFO] Starting IQ-QAOA with {n} qubits, {p} layers")
@@ -13999,12 +14012,14 @@ def handle_special_commands(user_input):
                 circuit.append([cirq.X(q) ** beta[layer] for q in qubits])
             circuit.append(cirq.measure(*qubits, key='m'))
             run_circuit(circuit, repetitions=100)
+            return True
 
     if user_input.startswith("IQ-VQE"):
         # IQ-VQE <n_qubits> <ansatz_depth>: variational quantum eigensolver for H2 Hamiltonian
         parts = user_input.split()
         if len(parts) != 3 or not (parts[1].isdigit() and parts[2].isdigit()):
             print(f"[{timestamp()}] [INFO] Usage: IQ-VQE <n_qubits> <ansatz_depth>")
+            return True
         else:
             n, depth = map(int, parts[1:])
             logging.info(f"[INFO] Starting IQ-VQE with {n} qubits, depth={depth}")
@@ -14038,6 +14053,7 @@ def handle_special_commands(user_input):
             init = np.random.rand(n * depth)
             res = opt.minimize(energy, init, method='COBYLA')
             print(f"[{timestamp()}] [VQE ENERGY] {res.fun}")
+            return True
 
     if user_input.startswith("IQ-TELEPORT"):
         # IQ-TELEPORT: teleport state from qubit 0 to qubit 2
@@ -14055,6 +14071,7 @@ def handle_special_commands(user_input):
             cirq.measure(q2, key='teleported')
         )
         run_circuit(circuit)
+        return True
 
     if user_input.startswith("IQ-ERROR_CORR"):
         # IQ-ERROR_CORR <bitflip|phaseflip>: simple 3-qubit error correction
@@ -14080,12 +14097,14 @@ def handle_special_commands(user_input):
             # correction
             c.append(cirq.X(q[0]).controlled_by(q[2]))
             run_circuit(c)
+            return True
 
     if user_input.startswith("IQ-AMPL_EST"):
         # IQ-AMPL_EST <n_qubits> <target_angle>: simple amplitude estimation
         parts = user_input.split()
         if len(parts) != 3 or not parts[1].isdigit():
             print(f"[{timestamp()}] [INFO] Usage: IQ-AMPL_EST <n_qubits> <target_angle>")
+            return True
         else:
             n = int(parts[1])
             theta = float(parts[2])
@@ -14099,12 +14118,14 @@ def handle_special_commands(user_input):
             c.append(cirq.ry(-2 * theta)(q[-1]))
             c.append(cirq.measure(q[-1], key='m'))
             run_circuit(c, repetitions=10)
+            return True
 
     if user_input.startswith("IQ-TOMO"):
         # IQ-TOMO <n_qubits> <shots>: state tomography on n qubits
         parts = user_input.split()
         if len(parts) != 3 or not (parts[1].isdigit() and parts[2].isdigit()):
             print(f"[{timestamp()}] [INFO] Usage: IQ-TOMO <n_qubits> <shots>")
+            return True
         else:
             n, shots = map(int, parts[1:])
             logging.info(f"[INFO] Starting IQ-TOMO with {n} qubits, {shots} shots")
@@ -14124,17 +14145,20 @@ def handle_special_commands(user_input):
             for basis, c in circuits:
                 res = sim.run(c, repetitions=shots)
                 print(f"{basis}: {res.histogram(key='m')}")
+            return True
 
     if user_input.startswith("IQ-SIMON"):
         # IQ-SIMON <n_qubits> <secret_bitstring>: Simon’s algorithm to find a hidden bitstring
         parts = user_input.split()
         if len(parts) != 3 or not parts[1].isdigit() or not all(c in "01" for c in parts[2]):
             print(f"[{timestamp()}] [INFO] Usage: IQ-SIMON <n_qubits> <secret_bitstring>")
+            return True
         else:
             n = int(parts[1])
             s = parts[2]
             if len(s) != n:
-                print("[{timestamp()}] [ERROR] secret_bitstring length must equal n_qubits")
+                print(f"[{timestamp()}] [ERROR] secret_bitstring length must equal n_qubits")
+                return True
             else:
                 logging.info(f"[INFO] Starting IQ-SIMON with {n} qubits, secret={s}")
                 in_qubits = cirq.LineQubit.range(n)
@@ -14151,12 +14175,14 @@ def handle_special_commands(user_input):
                 circuit.append(cirq.H.on_each(*in_qubits))
                 circuit.append(cirq.measure(*in_qubits, key='in'))
                 run_circuit(circuit, repetitions=2 * n)
+                return True
 
     if user_input.startswith("IQ-SHOR"):
         # IQ-SHOR <N>: Shor’s algorithm for factoring a small integer N
         parts = user_input.split()
         if len(parts) != 2 or not parts[1].isdigit():
             print(f"[{timestamp()}] [INFO] Usage: IQ-SHOR <N>")
+            return True
         else:
             N = int(parts[1])
             logging.info(f"[INFO] Starting IQ-SHOR to factor N={N}")
@@ -14178,12 +14204,14 @@ def handle_special_commands(user_input):
             circuit.append(cirq.inverse(cirq.qft(*count, without_reverse=True)))
             circuit.append(cirq.measure(*count, key='m'))
             run_circuit(circuit)
+            return True
 
     if user_input.startswith("IQ-HHL"):
         # IQ-HHL <theta>: HHL algorithm solving Ax=b with A = Rz(theta)
         parts = user_input.split()
         if len(parts) != 2:
             print(f"[{timestamp()}] [INFO] Usage: IQ-HHL <theta>")
+            return True
         else:
             theta = float(parts[1])
             logging.info(f"[INFO] Starting IQ-HHL with theta={theta}")
@@ -14204,12 +14232,14 @@ def handle_special_commands(user_input):
                             cirq.H(anc)])
             circuit.append(cirq.measure(x, key='solution'))
             run_circuit(circuit, repetitions=5)
+            return True
 
     if user_input.startswith("IQ-QSVM"):
         # IQ-QSVM <n_qubits> <shots>: quantum SVM demo with Bloch‐sphere encoding
         parts = user_input.split()
         if len(parts) != 3 or not parts[1].isdigit() or not parts[2].isdigit():
             print(f"[{timestamp()}] [INFO] Usage: IQ-QSVM <n_qubits> <shots>")
+            return True
         else:
             n, shots = map(int, parts[1:])
             logging.info(f"[INFO] Starting IQ-QSVM with {n} qubits, {shots} shots")
@@ -14221,17 +14251,20 @@ def handle_special_commands(user_input):
                     circuit.append(cirq.rx(angle * (i + 1))(q))
                 circuit.append(cirq.measure(*qubits, key='m'))
             run_circuit(circuit, repetitions=shots)
+            return True
 
     if user_input.startswith("IQ-DJ"):
         # IQ-DJ <n_qubits> <bitstring>: Deutsch–Jozsa algorithm
         parts = user_input.split()
         if len(parts) != 3 or not parts[1].isdigit() or not all(c in "01" for c in parts[2]):
             print(f"[{timestamp()}] [INFO] Usage: IQ-DJ <n_qubits> <bitstring>")
+            return True
         else:
             n = int(parts[1])
             s = parts[2]
             if len(s) != n:
                 print(f"[{timestamp()}] [ERROR] bitstring length must equal n_qubits")
+                return True
             else:
                 logging.info(f"[INFO] Starting IQ-DJ with {n} qubits, s={s}")
                 qs = cirq.LineQubit.range(n + 1)
@@ -14245,17 +14278,20 @@ def handle_special_commands(user_input):
                 circuit.append(cirq.H.on_each(*qs[:-1]))
                 circuit.append(cirq.measure(*qs[:-1], key='result'))
                 run_circuit(circuit)
+                return True
 
     if user_input.startswith("IQ-BV"):
         # IQ-BV <n_qubits> <bitstring>: Bernstein–Vazirani algorithm
         parts = user_input.split()
         if len(parts) != 3 or not parts[1].isdigit() or not all(c in "01" for c in parts[2]):
             print(f"[{timestamp()}] [INFO] Usage: IQ-BV <n_qubits> <bitstring>")
+            return True
         else:
             n = int(parts[1])
             s = parts[2]
             if len(s) != n:
                 print(f"[{timestamp()}] [ERROR] bitstring length must equal n_qubits")
+                return True
             else:
                 logging.info(f"[INFO] Starting IQ-BV with {n} qubits, s={s}")
                 qs = cirq.LineQubit.range(n + 1)
@@ -14268,22 +14304,26 @@ def handle_special_commands(user_input):
                 circuit.append(cirq.H.on_each(*qs[:-1]))
                 circuit.append(cirq.measure(*qs[:-1], key='s'))
                 run_circuit(circuit)
+                return True
 
     if user_input.startswith("IQ-QC"):
         # IQ-QC <n_qubits> <target_index>: quantum counting (Grover + phase estimation)
         parts = user_input.split()
         if len(parts) != 3 or not parts[1].isdigit() or not parts[2].isdigit():
             print(f"[{timestamp()}] [INFO] Usage: IQ-QC <n_qubits> <target_index>")
+            return True
         else:
             n, target = map(int, parts[1:])
             logging.info(f"[INFO] Starting IQ-QC with {n} qubits, target={target}")
             print(f"[{timestamp()}] [INFO] Quantum counting not implemented; please supply custom circuit.")
+            return True
 
     if user_input.startswith("IQ-QWALK"):
         # IQ-QWALK <n_positions> <n_steps>: discrete quantum walk on a line
         parts = user_input.split()
         if len(parts) != 3 or not parts[1].isdigit() or not parts[2].isdigit():
             print(f"[{timestamp()}] [INFO] Usage: IQ-QWALK <n_positions> <n_steps>")
+            return True
         else:
             m, steps = map(int, parts[1:])
             logging.info(f"[INFO] Starting IQ-QWALK with {m} positions, {steps} steps")
@@ -14296,12 +14336,14 @@ def handle_special_commands(user_input):
                 circuit.append(cirq.H(coin))
             circuit.append(cirq.measure(coin, *positions, key='pos'))
             run_circuit(circuit, repetitions=10)
+            return True
 
     if user_input.startswith("IQ-PCA"):
         # IQ-PCA <n_qubits> <shots>: quantum PCA via covariance measurements
         parts = user_input.split()
         if len(parts) != 3 or not parts[1].isdigit() or not parts[2].isdigit():
             print(f"[{timestamp()}] [INFO] Usage: IQ-PCA <n_qubits> <shots>")
+            return True
         else:
             n, shots = map(int, parts[1:])
             logging.info(f"[INFO] Starting IQ-PCA with {n} qubits, {shots} shots")
@@ -14311,12 +14353,14 @@ def handle_special_commands(user_input):
             for i, q in enumerate(qs):
                 circuit.append(cirq.measure(q, key=f'm{i}'))
             run_circuit(circuit, repetitions=shots)
+            return True
 
     if user_input.startswith("IQ-QKERNEL"):
         # IQ-QKERNEL <n_qubits> <shots>: quantum kernel matrix demonstration
         parts = user_input.split()
         if len(parts) != 3 or not parts[1].isdigit() or not parts[2].isdigit():
             print(f"[{timestamp()}] [INFO] Usage: IQ-QKERNEL <n_qubits> <shots>")
+            return True
         else:
             n, shots = map(int, parts[1:])
             logging.info(f"[INFO] Starting IQ-QKERNEL with {n} qubits, {shots} shots")
@@ -14328,6 +14372,7 @@ def handle_special_commands(user_input):
                     circuit.append(cirq.rz(angle)(q))
                 circuit.append(cirq.measure(*qs, key='k'))
             run_circuit(circuit, repetitions=shots)
+            return True
 
     if user_input.startswith("pa "):
         user_input = user_input[3:].strip()
