@@ -115,6 +115,30 @@ Why show the standard? The PP Terminal does it all<br>
 <table>
   <tr>
     <td width="50%" valign="top">
+      <strong>IQ</strong><br><br>
+      The PP-Terminal 6 supports a wide range of advanced quantum operations, offering maximum flexibility and compatibility.<br><br>
+      With the PP-Terminal 6, you can effortlessly run some of the most powerful quantum algorithms, including:<br>
+      <ul>
+        <li><strong>IQ DJ</strong> — Deutsch–Jozsa algorithm for function type testing</li>
+        <li><strong>IQ BV</strong> — Bernstein–Vazirani algorithm to quickly find hidden bitstrings</li>
+        <li><strong>IQ GROVER</strong> — Grover’s search algorithm for fast database search</li>
+        <li><strong>IQ QFT</strong> — Quantum Fourier Transform for phase estimation and more</li>
+        <li><strong>IQ GHZ</strong> — Generation of GHZ entangled states</li>
+        <li><strong>IQ PHASE_EST</strong> — Quantum Phase Estimation for eigenvalue extraction</li>
+        <li><strong>IQ QWALK</strong> — Discrete Quantum Walks for quantum simulation</li>
+        <li>etc.</li>
+      </ul>
+    </td>
+    <td width="50%" valign="top" align="center">
+      <img src="https://raw.githubusercontent.com/Peharge/peharge-web/main/images/pp-term-ads-4.png" width="100%">
+    </td>
+  </tr>
+</table>
+
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
       <strong>Search</strong><br><br>But that's not all. With PP-Terminal, you can also search websites directly from the terminal. Use the ps command followed by a keyword to search for processes, or go further with commands like ps-github, ps-huggingface, or ps-arxiv to search directly on these platforms' websites. This makes it easier than ever to find exactly what you're looking for while working in your terminal.                                                                                                                         </td>
     <td width="50%" valign="top" align="center">
       <img src="https://raw.githubusercontent.com/Peharge/peharge-web/main/images/pp-term-ads-5.png" width="100%">
