@@ -80,8 +80,13 @@ set SCRIPT_install_vs_c=C:\Users\%USERNAME%\p-terminal\pp-term\run\c\install-vs.
 set "VCVARS_PATH=C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat"
 set "PEHARGE_PATH_CPP=C:\Users\%USERNAME%\p-terminal\pp-term\peharge-cpp-compiler"
 set "PEHARGE_PATH_C=C:\Users\%USERNAME%\p-terminal\pp-term\peharge-c-compiler"
-set SCRIPT_PATH_INSTALL=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-5-install.py
-set SCRIPT_PATH_DOCTOR=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-5-doctor.py
+set SCRIPT_PATH_INSTALL_MAIN=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-6-install-main.py
+set SCRIPT_PATH_INSTALL_1=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-6-install-pytorch.py
+set SCRIPT_PATH_INSTALL_2=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-6-install-tensorflow.py
+set SCRIPT_PATH_INSTALL_3=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-6-install-tf-nightly.py
+set SCRIPT_PATH_INSTALL_4=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-6-install-jax.py
+set SCRIPT_PATH_INSTALL_5=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-6-install-cirq.py
+set SCRIPT_PATH_DOCTOR=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-6-doctor.py
 
 if not exist "%PYTHON_PATH%" (
     call :Log ERROR "❌ Python interpreter not found: %PYTHON_PATH%"
@@ -128,12 +133,47 @@ call :Log PASS "✅ Peharge C Compiler available and the folder %PEHARGE_PATH_C%
 rem Setze das Arbeitsverzeichnis auf C:\Users\%USERNAME%\p-terminal\pp-term
 cd /d C:\Users\%USERNAME%\p-terminal\pp-term
 
-if not exist "%SCRIPT_PATH_INSTALL%" (
-    call :Log ERROR "❌ Script not found: %SCRIPT_PATH_INSTALL%"
+if not exist "%SCRIPT_PATH_INSTALL_MAIN%" (
+    call :Log ERROR "❌ Script not found: %SCRIPT_PATH_INSTALL_MAIN%"
     exit /B 1
 )
 
-"%PYTHON_PATH%" "%SCRIPT_PATH_INSTALL%"
+"%PYTHON_PATH%" "%SCRIPT_PATH_INSTALL_MAIN%"
+
+if not exist "%SCRIPT_PATH_INSTALL_1%" (
+    call :Log ERROR "❌ Script not found: %SCRIPT_PATH_INSTALL_1%"
+    exit /B 1
+)
+
+"%PYTHON_PATH%" "%SCRIPT_PATH_INSTALL_1%"
+
+if not exist "%SCRIPT_PATH_INSTALL_2%" (
+    call :Log ERROR "❌ Script not found: %SCRIPT_PATH_INSTALL_2%"
+    exit /B 1
+)
+
+"%PYTHON_PATH%" "%SCRIPT_PATH_INSTALL_2%"
+
+if not exist "%SCRIPT_PATH_INSTALL_3%" (
+    call :Log ERROR "❌ Script not found: %SCRIPT_PATH_INSTALL_3%"
+    exit /B 1
+)
+
+"%PYTHON_PATH%" "%SCRIPT_PATH_INSTALL_3%"
+
+if not exist "%SCRIPT_PATH_INSTALL_4%" (
+    call :Log ERROR "❌ Script not found: %SCRIPT_PATH_INSTALL_4%"
+    exit /B 1
+)
+
+"%PYTHON_PATH%" "%SCRIPT_PATH_INSTALL_4%"
+
+if not exist "%SCRIPT_PATH_INSTALL_5%" (
+    call :Log ERROR "❌ Script not found: %SCRIPT_PATH_INSTALL_5%"
+    exit /B 1
+)
+
+"%PYTHON_PATH%" "%SCRIPT_PATH_INSTALL_5%"
 
 if not exist "%SCRIPT_PATH_DOCTOR%" (
     call :Log ERROR "❌ Script not found: %SCRIPT_PATH_DOCTOR%"
