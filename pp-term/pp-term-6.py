@@ -1666,7 +1666,7 @@ def handle_special_commands(user_input):
                 save_current_env(found)
             return found
         else:
-            return saved if saved else str(DEFAULT_ENV_DIR.resolve())
+            return saved if saved else str(Path(DEFAULT_ENV_DIR).resolve())
 
     if user_input.lower() == "cd":
         path = os.path.expanduser("~")
@@ -1680,7 +1680,7 @@ def handle_special_commands(user_input):
                 save_current_env(found)
             return found
         else:
-            return saved if saved else str(DEFAULT_ENV_DIR.resolve())
+            return saved if saved else str(Path(DEFAULT_ENV_DIR).resolve())
 
         # env_path = handle_cd_command()
         # print(f"[{timestamp()}] [INFO] Environment used: {env_path}")
@@ -1729,6 +1729,11 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("rm "):
         target = user_input[3:].strip()
+        delete_target(target)
+        return True
+
+    if user_input.startswith("prm "):
+        target = user_input[4:].strip()
         delete_target(target)
         return True
 
