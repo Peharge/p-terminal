@@ -74,7 +74,7 @@ Peharge Projects 2025<br>
 
 <div align="center">
 
-# **_PP-Terminal 5_**
+# **_PP-Terminal 6_**
 
 Why show the standard? The PP Terminal does it all<br>
 — but we show you what sets it apart.<br><br>[`Download PP-Term [Windows]`](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) [`PP-Term Commands`](https://github.com/Peharge/peharge-web/blob/main/commands-pp-term.html) [`Learn PP-Term`](https://github.com/Peharge/p-terminal/wiki/Documentation)<br><br>
