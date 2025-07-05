@@ -13837,12 +13837,12 @@ def handle_special_commands(user_input):
         print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
         return True
 
-    if user_input.startswith("IQ QFT"):
-        # IQ QFT <n_qubits>: Quantum Fourier Transform auf n Qubits
+    if user_input.startswith("IQ-QFT"):
+        # IQ-QFT <n_qubits>: Quantum Fourier Transform auf n Qubits
         try:
             n = int(user_input.split()[2])
         except (IndexError, ValueError):
-            print("Usage: IQ QFT <n_qubits>")
+            print("Usage: IQ-QFT <n_qubits>")
             return True
         cmd = [
             "python3", "-c",
@@ -13867,12 +13867,12 @@ def handle_special_commands(user_input):
         print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
         return True
 
-    if user_input.startswith("IQ GHZ"):
-        # IQ GHZ <n_qubits>: Erzeuge GHZ-Zustand auf n Qubits
+    if user_input.startswith("IQ-GHZ"):
+        # IQ-GHZ <n_qubits>: Erzeuge GHZ-Zustand auf n Qubits
         try:
             n = int(user_input.split()[2])
         except (IndexError, ValueError):
-            print("Usage: IQ GHZ <n_qubits>")
+            print("Usage: IQ-GHZ <n_qubits>")
             return True
         cmd = [
             "python3", "-c",
@@ -13894,11 +13894,11 @@ def handle_special_commands(user_input):
         print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
         return True
 
-    if user_input.startswith("IQ GROVER"):
-        # IQ GROVER <n_qubits> <target_index>: Einfache Grover-Suche
+    if user_input.startswith("IQ-GROVER"):
+        # IQ-GROVER <n_qubits> <target_index>: Einfache Grover-Suche
         parts = user_input.split()
         if len(parts) != 4 or not parts[2].isdigit() or not parts[3].isdigit():
-            print("Usage: IQ GROVER <n_qubits> <target_index>")
+            print("Usage: IQ-GROVER <n_qubits> <target_index>")
             return True
         n, target = map(int, parts[2:])
         cmd = [
@@ -13929,11 +13929,11 @@ def handle_special_commands(user_input):
         print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
         return True
 
-    if user_input.startswith("IQ PHASE_EST"):
-        # IQ PHASE_EST <n_qubits> <precision_bits>: Quantum Phase Estimation
+    if user_input.startswith("IQ-PHASE_EST"):
+        # IQ-PHASE_EST <n_qubits> <precision_bits>: Quantum Phase Estimation
         parts = user_input.split()
         if len(parts) != 4 or not parts[2].isdigit() or not parts[3].isdigit():
-            print("Usage: IQ PHASE_EST <n_qubits> <precision_bits>")
+            print("Usage: IQ-PHASE_EST <n_qubits> <precision_bits>")
             return True
         n, prec = map(int, parts[2:])
         cmd = [
@@ -13968,8 +13968,8 @@ def handle_special_commands(user_input):
         print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
         return True
 
-    if user_input.startswith("IQ BELL"):
-        # IQ BELL: Erzeuge und messe Bell-Zustand
+    if user_input.startswith("IQ-BELL"):
+        # IQ-BELL: Erzeuge und messe Bell-Zustand
         cmd = [
             "python3", "-c",
             (
@@ -13986,11 +13986,11 @@ def handle_special_commands(user_input):
         print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
         return True
     
-    if user_input.startswith("IQ QAOA"):
-        # IQ QAOA <n_qubits> <p_layers>: Quantum Approximate Optimization (p-layer QAOA) für Max-Cut auf Ring-Graph
+    if user_input.startswith("IQ-QAOA"):
+        # IQ-QAOA <n_qubits> <p_layers>: Quantum Approximate Optimization (p-layer QAOA) für Max-Cut auf Ring-Graph
         parts = user_input.split()
         if len(parts) != 4 or not parts[2].isdigit() or not parts[3].isdigit():
-            print("Usage: IQ QAOA <n_qubits> <p_layers>")
+            print("Usage: IQ-QAOA <n_qubits> <p_layers>")
             return True
         n, p = map(int, parts[2:])
         cmd = [
@@ -14021,11 +14021,11 @@ def handle_special_commands(user_input):
         print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
         return True
 
-    if user_input.startswith("IQ VQE"):
-        # IQ VQE <n_qubits> <ansatz_depth>: Variational Quantum Eigensolver für einfache H2-Hamiltonian
+    if user_input.startswith("IQ-VQE"):
+        # IQ-VQE <n_qubits> <ansatz_depth>: Variational Quantum Eigensolver für einfache H2-Hamiltonian
         parts = user_input.split()
         if len(parts) != 4 or not parts[2].isdigit() or not parts[3].isdigit():
-            print("Usage: IQ VQE <n_qubits> <ansatz_depth>")
+            print("Usage: IQ-VQE <n_qubits> <ansatz_depth>")
             return True
         n, d = map(int, parts[2:])
         cmd = [
@@ -14058,8 +14058,8 @@ def handle_special_commands(user_input):
         print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
         return True
 
-    if user_input.startswith("IQ TELEPORT"):
-        # IQ TELEPORT: Quanten-Teleportation eines Zustands von Qubit 0 nach Qubit 2
+    if user_input.startswith("IQ-TELEPORT"):
+        # IQ-TELEPORT: Quanten-Teleportation eines Zustands von Qubit 0 nach Qubit 2
         cmd = [
             "python3", "-c",
             (
@@ -14085,11 +14085,11 @@ def handle_special_commands(user_input):
         print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
         return True
 
-    if user_input.startswith("IQ ERROR_CORR"):
-        # IQ ERROR_CORR <code>: Führt einfachen 3-Qubit Bit-Flip-Fehlerkorrekturcode aus
+    if user_input.startswith("IQ-ERROR_CORR"):
+        # IQ-ERROR_CORR <code>: Führt einfachen 3-Qubit Bit-Flip-Fehlerkorrekturcode aus
         parts = user_input.split()
         if len(parts) != 3:
-            print("Usage: IQ ERROR_CORR <bitflip|phaseflip>")
+            print("Usage: IQ-ERROR_CORR <bitflip|phaseflip>")
             return True
         code = parts[2].lower()
         if code not in ("bitflip", "phaseflip"):
@@ -14114,11 +14114,11 @@ def handle_special_commands(user_input):
         print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
         return True
 
-    if user_input.startswith("IQ AMPL_EST"):
-        # IQ AMPL_EST <n_qubits> <target_angle>: Amplitude Estimation mit einfachen Rotationen
+    if user_input.startswith("IQ-AMPL_EST"):
+        # IQ-AMPL_EST <n_qubits> <target_angle>: Amplitude Estimation mit einfachen Rotationen
         parts = user_input.split()
         if len(parts) != 4 or not parts[2].isdigit():
-            print("Usage: IQ AMPL_EST <n_qubits> <target_angle>")
+            print("Usage: IQ-AMPL_EST <n_qubits> <target_angle>")
             return True
         n = int(parts[2]); theta = float(parts[3])
         cmd = [
@@ -14141,11 +14141,11 @@ def handle_special_commands(user_input):
         print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
         return True
 
-    if user_input.startswith("IQ TOMO"):
-        # IQ TOMO <n_qubits> <shots>: Quanten-Zustandstomographie auf n Qubits
+    if user_input.startswith("IQ-TOMO"):
+        # IQ-TOMO <n_qubits> <shots>: Quanten-Zustandstomographie auf n Qubits
         parts = user_input.split()
         if len(parts) != 4 or not parts[2].isdigit() or not parts[3].isdigit():
-            print("Usage: IQ TOMO <n_qubits> <shots>")
+            print("Usage: IQ-TOMO <n_qubits> <shots>")
             return True
         n, shots = map(int, parts[2:])
         cmd = [
@@ -14173,11 +14173,11 @@ def handle_special_commands(user_input):
         print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
         return True
 
-    if user_input.startswith("IQ SIMON"):
-        # IQ SIMON <n_qubits> <secret_bitstring>: Simon’s Algorithm zur Bestimmung einer verborgenen Bitfolge
+    if user_input.startswith("IQ-SIMON"):
+        # IQ-SIMON <n_qubits> <secret_bitstring>: Simon’s Algorithm zur Bestimmung einer verborgenen Bitfolge
         parts = user_input.split()
         if len(parts) != 4 or not parts[2].isdigit() or not all(c in "01" for c in parts[3]):
-            print("Usage: IQ SIMON <n_qubits> <secret_bitstring>")
+            print("Usage: IQ-SIMON <n_qubits> <secret_bitstring>")
             return True
         n = int(parts[2])
         s = parts[3]
@@ -14208,11 +14208,11 @@ def handle_special_commands(user_input):
         print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
         return True
 
-    if user_input.startswith("IQ SHOR"):
-        # IQ SHOR <N>: Shor’s Algorithm zur Faktorisierung einer kleinen Zahl N
+    if user_input.startswith("IQ-SHOR"):
+        # IQ-SHOR <N>: Shor’s Algorithm zur Faktorisierung einer kleinen Zahl N
         parts = user_input.split()
         if len(parts) != 3 or not parts[2].isdigit():
-            print("Usage: IQ SHOR <N>")
+            print("Usage: IQ-SHOR <N>")
             return True
         N = int(parts[2])
         cmd = [
@@ -14248,11 +14248,11 @@ def handle_special_commands(user_input):
         print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
         return True
 
-    if user_input.startswith("IQ HHL"):
-        # IQ HHL <theta>: HHL-Algorithmus zur Lösung des Gleichungssystems Ax=b mit A=Rz(theta)
+    if user_input.startswith("IQ-HHL"):
+        # IQ-HHL <theta>: HHL-Algorithmus zur Lösung des Gleichungssystems Ax=b mit A=Rz(theta)
         parts = user_input.split()
         if len(parts) != 3:
-            print("Usage: IQ HHL <theta>")
+            print("Usage: IQ-HHL <theta>")
             return True
         theta = float(parts[2])
         cmd = [
@@ -14280,11 +14280,11 @@ def handle_special_commands(user_input):
         print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
         return True
 
-    if user_input.startswith("IQ QSVM"):
-        # IQ QSVM <n_qubits> <shots>: Quantum SVM-Demo mit Data-Encoding im Blochraum
+    if user_input.startswith("IQ-QSVM"):
+        # IQ-QSVM <n_qubits> <shots>: Quantum SVM-Demo mit Data-Encoding im Blochraum
         parts = user_input.split()
         if len(parts) != 4 or not parts[2].isdigit() or not parts[3].isdigit():
-            print("Usage: IQ QSVM <n_qubits> <shots>")
+            print("Usage: IQ-QSVM <n_qubits> <shots>")
             return True
         n, shots = map(int, parts[2:])
         cmd = [
@@ -14308,11 +14308,11 @@ def handle_special_commands(user_input):
         print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
         return True
 
-    if user_input.startswith("IQ DJ"):
-        # IQ DJ <n_qubits> <bitstring>: Deutsch–Jozsa-Algorithmus, entscheidet ob f konstant oder ausgewogen
+    if user_input.startswith("IQ-DJ"):
+        # IQ-DJ <n_qubits> <bitstring>: Deutsch–Jozsa-Algorithmus, entscheidet ob f konstant oder ausgewogen
         parts = user_input.split()
         if len(parts) != 4 or not parts[2].isdigit() or not all(c in "01" for c in parts[3]):
-            print("Usage: IQ DJ <n_qubits> <bitstring>")
+            print("Usage: IQ-DJ <n_qubits> <bitstring>")
             return True
         n = int(parts[2])
         s = parts[3]
@@ -14340,11 +14340,11 @@ def handle_special_commands(user_input):
         print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
         return True
 
-    if user_input.startswith("IQ BV"):
-        # IQ BV <n_qubits> <bitstring>: Bernstein–Vazirani-Algorithmus findet s schnell
+    if user_input.startswith("IQ-BV"):
+        # IQ-BV <n_qubits> <bitstring>: Bernstein–Vazirani-Algorithmus findet s schnell
         parts = user_input.split()
         if len(parts) != 4 or not parts[2].isdigit() or not all(c in "01" for c in parts[3]):
-            print("Usage: IQ BV <n_qubits> <bitstring>")
+            print("Usage: IQ-BV <n_qubits> <bitstring>")
             return True
         n = int(parts[2])
         s = parts[3]
@@ -14370,11 +14370,11 @@ def handle_special_commands(user_input):
         print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
         return True
 
-    if user_input.startswith("IQ QC"):
-        # IQ QC <n_qubits> <target_index>: Quantum Counting (Basiert auf Grover + Phase Estimation)
+    if user_input.startswith("IQ-QC"):
+        # IQ-QC <n_qubits> <target_index>: Quantum Counting (Basiert auf Grover + Phase Estimation)
         parts = user_input.split()
         if len(parts) != 4 or not parts[2].isdigit() or not parts[3].isdigit():
-            print("Usage: IQ QC <n_qubits> <target_index>")
+            print("Usage: IQ-QC <n_qubits> <target_index>")
             return True
         n, target = map(int, parts[2:])
         circuit = cirq.qc.QuantumCountingCircuit(cirq.LineQubit.range(n), target)  # Pseudocode-API
@@ -14390,11 +14390,11 @@ def handle_special_commands(user_input):
         print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
         return True
 
-    if user_input.startswith("IQ QWALK"):
-        # IQ QWALK <n_positions> <n_steps>: Diskreter Quanten-Spaziergang auf Liniengitter
+    if user_input.startswith("IQ-QWALK"):
+        # IQ-QWALK <n_positions> <n_steps>: Diskreter Quanten-Spaziergang auf Liniengitter
         parts = user_input.split()
         if len(parts) != 4 or not parts[2].isdigit() or not parts[3].isdigit():
-            print("Usage: IQ QWALK <n_positions> <n_steps>")
+            print("Usage: IQ-QWALK <n_positions> <n_steps>")
             return True
         m, steps = map(int, parts[2:])
         pos = cirq.GridQubit.rect(1, m)
@@ -14418,11 +14418,11 @@ def handle_special_commands(user_input):
         print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
         return True
 
-    if user_input.startswith("IQ PCA"):
-        # IQ PCA <n_qubits> <shots>: Quantum-PCA mit einfacher Covarianz-Messung
+    if user_input.startswith("IQ-PCA"):
+        # IQ-PCA <n_qubits> <shots>: Quantum-PCA mit einfacher Covarianz-Messung
         parts = user_input.split()
         if len(parts) != 4 or not parts[2].isdigit() or not parts[3].isdigit():
-            print("Usage: IQ PCA <n_qubits> <shots>")
+            print("Usage: IQ-PCA <n_qubits> <shots>")
             return True
         n, shots = map(int, parts[2:])
         qubits = cirq.LineQubit.range(n)
@@ -14444,11 +14444,11 @@ def handle_special_commands(user_input):
         print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
         return True
 
-    if user_input.startswith("IQ QKERNEL"):
-        # IQ QKERNEL <n_qubits> <shots>: Berechnet quantenbasierte Kernelmatrix zwischen Datenpunkten
+    if user_input.startswith("IQ-QKERNEL"):
+        # IQ-QKERNEL <n_qubits> <shots>: Berechnet quantenbasierte Kernelmatrix zwischen Datenpunkten
         parts = user_input.split()
         if len(parts) != 4 or not parts[2].isdigit() or not parts[3].isdigit():
-            print("Usage: IQ QKERNEL <n_qubits> <shots>")
+            print("Usage: IQ-QKERNEL <n_qubits> <shots>")
             return True
         n, shots = map(int, parts[2:])
         qubits = cirq.LineQubit.range(n)
