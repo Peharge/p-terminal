@@ -1,7 +1,12 @@
 # Intelligent Quantum
 
-<p align="left"> <img src="https://github.com/Peharge/p-terminal/blob/main/icons/p-term-banner-3.svg" alt="peharge"/> <img src="https://github.com/Peharge/p-terminal/blob/main/icons/pp-term-banner-3.svg" alt="peharge"/> <img src="https://github.com/Peharge/p-terminal/blob/main/icons/peharge-banner-3.svg" alt="peharge"/> </p> 
+<p align="left"> <img src="https://github.com/Peharge/p-terminal/blob/main/icons/p-term-banner-3.svg" alt="peharge"/> <img src="https://github.com/Peharge/p-terminal/blob/main/icons/pp-term-banner-3.svg" alt="peharge"/> <img src="https://github.com/Peharge/p-terminal/blob/main/icons/peharge-banner-3.svg" alt="peharge"/> </p>
 
-SOON
+If I were you, I would use the [PP-Terminal](https://github.com/Peharge/p-terminal) and run the `IQ` command, if I were you ;-)
 
-IQ (Intelligent Quantum) is a high-level programming language designed specifically for artificial intelligence development. Similar to Python in its simplicity and readability, IQ focuses on providing built-in tools, structures, and syntax optimized for machine learning, deep learning, and advanced AI systems. It streamlines AI workflows with native support for neural networks, data processing, and quantum-inspired logic, making it a powerful choice for researchers and developers working at the cutting edge of intelligent systems.
+If you don't know how to clone this repo,
+you probably shouldn't use this terminal!
+
+If you cloned it:
+Run pp-term\run-pp-term.bat on your Windows PC –
+and you're good to go.
