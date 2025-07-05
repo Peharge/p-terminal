@@ -13837,6 +13837,639 @@ def handle_special_commands(user_input):
         print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
         return True
 
+    if user_input.startswith("IQ QFT"):
+        # IQ QFT <n_qubits>: Quantum Fourier Transform auf n Qubits
+        try:
+            n = int(user_input.split()[2])
+        except (IndexError, ValueError):
+            print("Usage: IQ QFT <n_qubits>")
+            return True
+        cmd = [
+            "python3", "-c",
+            (
+                "import cirq, sys;"
+                f"n={n};"
+                "qubits=cirq.LineQubit.range(n);"
+                "circuit=cirq.Circuit();"
+                "# QFT-Aufbau"
+                "for i in range(n):"
+                "  for j in range(i):"
+                "    circuit.append(cirq.CZ(qubits[j], qubits[i])**(1/2**(i-j)));"
+                "  circuit.append(cirq.H(qubits[i]));"
+                "print('Circuit:\\n', circuit);"
+                "sim=cirq.Simulator();"
+                "result=sim.run(circuit, repetitions=1);"
+                "print('Result:', result)"
+            )
+        ]
+        ret = run_quantum_command(cmd, shell=False, force_quantum=None, verbose=True, dry_run=False,
+                                  logfile='quantum_runner.log')
+        print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
+        return True
+
+    if user_input.startswith("IQ GHZ"):
+        # IQ GHZ <n_qubits>: Erzeuge GHZ-Zustand auf n Qubits
+        try:
+            n = int(user_input.split()[2])
+        except (IndexError, ValueError):
+            print("Usage: IQ GHZ <n_qubits>")
+            return True
+        cmd = [
+            "python3", "-c",
+            (
+                "import cirq;"
+                f"n={n};"
+                "qubits=cirq.LineQubit.range(n);"
+                "circuit=cirq.Circuit();"
+                "circuit.append(cirq.H(qubits[0]));"
+                "for q in qubits[1:]: circuit.append(cirq.CNOT(qubits[0], q));"
+                "print('Circuit:\\n', circuit);"
+                "sim=cirq.Simulator();"
+                "result=sim.run(circuit, repetitions=1);"
+                "print('GHZ measurement:', result)"
+            )
+        ]
+        ret = run_quantum_command(cmd, shell=False, force_quantum=None, verbose=True, dry_run=False,
+                                  logfile='quantum_runner.log')
+        print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
+        return True
+
+    if user_input.startswith("IQ GROVER"):
+        # IQ GROVER <n_qubits> <target_index>: Einfache Grover-Suche
+        parts = user_input.split()
+        if len(parts) != 4 or not parts[2].isdigit() or not parts[3].isdigit():
+            print("Usage: IQ GROVER <n_qubits> <target_index>")
+            return True
+        n, target = map(int, parts[2:])
+        cmd = [
+            "python3", "-c",
+            (
+                "import cirq, math;"
+                f"n={n}; target={target};"
+                "qubits=cirq.LineQubit.range(n);"
+                "circuit=cirq.Circuit();"
+                "# Initialisierung"
+                "for q in qubits: circuit.append(cirq.H(q));"
+                "# Oracle: Phasenwechsel für target"
+                "circuit.append(cirq.Z(qubits[target]));"
+                "# Diffusion"
+                "circuit.append([cirq.H(q) for q in qubits]);"
+                "circuit.append([cirq.X(q) for q in qubits]);"
+                "circuit.append(cirq.Z(qubits[-1]).controlled_by(*qubits[:-1]));"
+                "circuit.append([cirq.X(q) for q in qubits]);"
+                "circuit.append([cirq.H(q) for q in qubits]);"
+                "print('Circuit:\\n', circuit);"
+                "sim=cirq.Simulator();"
+                "result=sim.run(circuit, repetitions=10);"
+                "print('Counts:', result.histogram(key=''))"
+            )
+        ]
+        ret = run_quantum_command(cmd, shell=False, force_quantum=None, verbose=True, dry_run=False,
+                                  logfile='quantum_runner.log')
+        print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
+        return True
+
+    if user_input.startswith("IQ PHASE_EST"):
+        # IQ PHASE_EST <n_qubits> <precision_bits>: Quantum Phase Estimation
+        parts = user_input.split()
+        if len(parts) != 4 or not parts[2].isdigit() or not parts[3].isdigit():
+            print("Usage: IQ PHASE_EST <n_qubits> <precision_bits>")
+            return True
+        n, prec = map(int, parts[2:])
+        cmd = [
+            "python3", "-c",
+            (
+                "import cirq, numpy as np;"
+                f"n={n}; prec={prec};"
+                "control = cirq.LineQubit.range(prec);"
+                "target = cirq.LineQubit.range(prec, prec+1)[0];"
+                "circuit=cirq.Circuit();"
+                "# Initialisierung und controlled-U^2^j"
+                "for j, q in enumerate(control):"
+                "  circuit.append(cirq.H(q));"
+                "  for _ in range(2**j): circuit.append(cirq.CZ(q, target));"
+                "# inverse QFT auf control"
+                "def inv_qft(qubits):"
+                "  c=cirq.Circuit();"
+                "  for i in range(len(qubits)-1, -1, -1):"
+                "    c.append(cirq.H(qubits[i]));"
+                "    for j in range(i):"
+                "      c.append(cirq.CZ(qubits[j], qubits[i])**(-1/2**(i-j)));"
+                "  return c"
+                "circuit += inv_qft(control);"
+                "print('Circuit:\\n', circuit);"
+                "sim=cirq.Simulator();"
+                "result=sim.run(circuit, repetitions=1);"
+                "print('Phase bits:', result)"
+            )
+        ]
+        ret = run_quantum_command(cmd, shell=False, force_quantum=None, verbose=True, dry_run=False,
+                                  logfile='quantum_runner.log')
+        print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
+        return True
+
+    if user_input.startswith("IQ BELL"):
+        # IQ BELL: Erzeuge und messe Bell-Zustand
+        cmd = [
+            "python3", "-c",
+            (
+                "import cirq;"
+                "q0, q1 = cirq.LineQubit.range(2);"
+                "circuit=cirq.Circuit(cirq.H(q0), cirq.CNOT(q0, q1), cirq.measure(q0, q1));"
+                "print('Circuit:\\n', circuit);"
+                "sim=cirq.Simulator();"
+                "print('Measurement:', sim.run(circuit, repetitions=5))"
+            )
+        ]
+        ret = run_quantum_command(cmd, shell=False, force_quantum=None, verbose=True, dry_run=False,
+                                  logfile='quantum_runner.log')
+        print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
+        return True
+    
+    if user_input.startswith("IQ QAOA"):
+        # IQ QAOA <n_qubits> <p_layers>: Quantum Approximate Optimization (p-layer QAOA) für Max-Cut auf Ring-Graph
+        parts = user_input.split()
+        if len(parts) != 4 or not parts[2].isdigit() or not parts[3].isdigit():
+            print("Usage: IQ QAOA <n_qubits> <p_layers>")
+            return True
+        n, p = map(int, parts[2:])
+        cmd = [
+            "python3", "-c",
+            (
+                "import cirq, numpy as np;"
+                f"n={n}; p={p};"
+                "qubits = cirq.LineQubit.range(n);"
+                "# Definiere Ring-Graph-Kanten"
+                "edges=[(qubits[i], qubits[(i+1)%n]) for i in range(n)];"
+                "# Parameter-Arrays"
+                "gamma = np.linspace(0.1, np.pi, p);"
+                "beta = np.linspace(0.1, np.pi/2, p);"
+                "circuit = cirq.Circuit();"
+                "# Start in |+>^n"
+                "for q in qubits: circuit.append(cirq.H(q));"
+                "# Wechsel zwischen Problem- und Mixer-Hamiltonian"
+                "for layer in range(p):"
+                "  for u,v in edges: circuit.append(cirq.Z(u)*cirq.Z(v)**gamma[layer]);"
+                "  for q in qubits: circuit.append(cirq.X(q)**beta[layer]);"
+                "print('QAOA Circuit:\\n', circuit);"
+                "sim = cirq.Simulator();"
+                "res = sim.run(circuit, repetitions=100);"
+                "print('Counts:', res.histogram());"
+            )
+        ]
+        ret = run_quantum_command(cmd, shell=False, force_quantum=None, verbose=True, dry_run=False, logfile='quantum_runner.log')
+        print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
+        return True
+
+    if user_input.startswith("IQ VQE"):
+        # IQ VQE <n_qubits> <ansatz_depth>: Variational Quantum Eigensolver für einfache H2-Hamiltonian
+        parts = user_input.split()
+        if len(parts) != 4 or not parts[2].isdigit() or not parts[3].isdigit():
+            print("Usage: IQ VQE <n_qubits> <ansatz_depth>")
+            return True
+        n, d = map(int, parts[2:])
+        cmd = [
+            "python3", "-c",
+            (
+                "import cirq, numpy as np, scipy.optimize as opt;"
+                f"n={n}; depth={d};"
+                "qubits = cirq.LineQubit.range(n);"
+                "# Einfacher hardware-naher Ansatz"
+                "def ansatz(params):"
+                "  c = cirq.Circuit();"
+                "  idx = 0"
+                "  for layer in range(depth):"
+                "    for q in qubits: c.append(cirq.rx(params[idx])(q)); idx+=1"
+                "    for i in range(n-1): c.append(cirq.CNOT(qubits[i], qubits[i+1]));"
+                "  return c"
+                "# Dummy H2-Hamiltonian (Z0 Z1) + X0 + X1"
+                "ops = [(-1.05, cirq.Z(qubits[0])*cirq.Z(qubits[1])), (0.39, cirq.X(qubits[0])), (0.39, cirq.X(qubits[1]))];"
+                "def energy(params):"
+                "  circuit = ansatz(params);"
+                "  sim = cirq.Simulator();"
+                "  result = sim.simulate_expectation_values(circuit, [op for _,op in ops]);"
+                "  return sum(coeff * val for (coeff,_), val in zip(ops, result))"
+                "init = np.random.rand(n*depth);"
+                "res=opt.minimize(energy, init, method='COBYLA');"
+                "print('VQE Energy:', res.fun)"
+            )
+        ]
+        ret = run_quantum_command(cmd, shell=False, force_quantum=None, verbose=True, dry_run=False, logfile='quantum_runner.log')
+        print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
+        return True
+
+    if user_input.startswith("IQ TELEPORT"):
+        # IQ TELEPORT: Quanten-Teleportation eines Zustands von Qubit 0 nach Qubit 2
+        cmd = [
+            "python3", "-c",
+            (
+                "import cirq;"
+                "q0, q1, q2 = cirq.LineQubit.range(3);"
+                "c = cirq.Circuit();"
+                "# Erzeuge Bell-Paar auf q1,q2"
+                "c.append([cirq.H(q1), cirq.CNOT(q1, q2)]);"
+                "# Zu teleportierenden Zustand auf q0"
+                "c.append(cirq.H(q0));"
+                "# Bell-Messung q0,q1"
+                "c.append([cirq.CNOT(q0, q1), cirq.H(q0), cirq.measure(q0, q1)]);"
+                "# Korrektur auf q2"
+                "c.append(cirq.X(q2).controlled_by(q1));"
+                "c.append(cirq.Z(q2).controlled_by(q0));"
+                "c.append(cirq.measure(q2));"
+                "print('Teleportation Circuit:\\n', c);"
+                "sim = cirq.Simulator();"
+                "print('Result:', sim.run(c, repetitions=1))"
+            )
+        ]
+        ret = run_quantum_command(cmd, shell=False, force_quantum=None, verbose=True, dry_run=False, logfile='quantum_runner.log')
+        print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
+        return True
+
+    if user_input.startswith("IQ ERROR_CORR"):
+        # IQ ERROR_CORR <code>: Führt einfachen 3-Qubit Bit-Flip-Fehlerkorrekturcode aus
+        parts = user_input.split()
+        if len(parts) != 3:
+            print("Usage: IQ ERROR_CORR <bitflip|phaseflip>")
+            return True
+        code = parts[2].lower()
+        if code not in ("bitflip", "phaseflip"):
+            print("Nur 'bitflip' oder 'phaseflip' erlaubt.")
+            return True
+        cmd_body = (
+            "import cirq;"
+            "q = cirq.LineQubit.range(3); c=cirq.Circuit();"
+            "# Encoding"
+            "if '{}'=='bitflip': c.append([cirq.CNOT(q[0],q[1]), cirq.CNOT(q[0],q[2])]);"
+            "else: c.append([cirq.H(qi) for qi in q]); c.append([cirq.CNOT(q[0],q[1]), cirq.CNOT(q[0],q[2])]); c.append([cirq.H(qi) for qi in q]);"
+            "# Fehler: flip auf q1"
+            "c.append(cirq.X(q[1]));"
+            "# Syndrome-Messung"
+            "c.append([cirq.CNOT(q[0],q[1]), cirq.CNOT(q[0],q[2]), cirq.measure(q[1],q[2])]);"
+            "# Korrektur"
+            "c.append(cirq.X(q[0]).controlled_by(q[2]));"
+            "print(c); sim=cirq.Simulator(); print(sim.run(c, repetitions=1));"
+        ).format(code)
+        cmd = ["python3", "-c", cmd_body]
+        ret = run_quantum_command(cmd, shell=False, force_quantum=None, verbose=True, dry_run=False, logfile='quantum_runner.log')
+        print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
+        return True
+
+    if user_input.startswith("IQ AMPL_EST"):
+        # IQ AMPL_EST <n_qubits> <target_angle>: Amplitude Estimation mit einfachen Rotationen
+        parts = user_input.split()
+        if len(parts) != 4 or not parts[2].isdigit():
+            print("Usage: IQ AMPL_EST <n_qubits> <target_angle>")
+            return True
+        n = int(parts[2]); theta = float(parts[3])
+        cmd = [
+            "python3", "-c",
+            (
+                "import cirq, numpy as np;"
+                f"n={n}; theta={theta};"
+                "q = cirq.LineQubit.range(n+1);"
+                "# Statevorbereitung"
+                "c=cirq.Circuit(); c.append(cirq.ry(2*theta)(q[-1]));"
+                "# Grover-Operator"
+                "for _ in range(1):"
+                "  c.append(cirq.Z(q[-1])); c.append(cirq.ry(-2*theta)(q[-1]));"
+                "# Messung Amplitude"
+                "c.append(cirq.measure(q[-1]));"
+                "print(c); sim=cirq.Simulator(); print(sim.run(c, repetitions=10))"
+            )
+        ]
+        ret = run_quantum_command(cmd, shell=False, force_quantum=None, verbose=True, dry_run=False, logfile='quantum_runner.log')
+        print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
+        return True
+
+    if user_input.startswith("IQ TOMO"):
+        # IQ TOMO <n_qubits> <shots>: Quanten-Zustandstomographie auf n Qubits
+        parts = user_input.split()
+        if len(parts) != 4 or not parts[2].isdigit() or not parts[3].isdigit():
+            print("Usage: IQ TOMO <n_qubits> <shots>")
+            return True
+        n, shots = map(int, parts[2:])
+        cmd = [
+            "python3", "-c",
+            (
+                "import cirq, itertools;"
+                f"n={n}; shots={shots};"
+                "qubits = cirq.LineQubit.range(n);"
+                "circuits=[];"
+                "# Messe in allen Pauli-Basen-Kombinationen"
+                "for basis in itertools.product(['X','Y','Z'], repeat=n):"
+                "  c=cirq.Circuit();"
+                "  for q,b in zip(qubits,basis):"
+                "    if b=='X': c.append(cirq.H(q));"
+                "    elif b=='Y': c.append(cirq.rx(np.pi/2)(q));"
+                "  c.append(cirq.measure(*qubits, key='m'));"
+                "  circuits.append((basis, c));"
+                "sim=cirq.Simulator();"
+                "for basis, c in circuits:"
+                "  res=sim.run(c, repetitions=shots);"
+                "  print(basis, res.histogram(key='m'))"
+            )
+        ]
+        ret = run_quantum_command(cmd, shell=False, force_quantum=None, verbose=True, dry_run=False, logfile='quantum_runner.log')
+        print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
+        return True
+
+    if user_input.startswith("IQ SIMON"):
+        # IQ SIMON <n_qubits> <secret_bitstring>: Simon’s Algorithm zur Bestimmung einer verborgenen Bitfolge
+        parts = user_input.split()
+        if len(parts) != 4 or not parts[2].isdigit() or not all(c in "01" for c in parts[3]):
+            print("Usage: IQ SIMON <n_qubits> <secret_bitstring>")
+            return True
+        n = int(parts[2])
+        s = parts[3]
+        cmd = [
+            "python3", "-c",
+            (
+                "import cirq, numpy as np;"
+                f"n={n}; s='{s}';"
+                "qubits_in = cirq.LineQubit.range(n);"
+                "qubits_out = cirq.LineQubit.range(n, 2*n);"
+                "circuit = cirq.Circuit();"
+                "# Initialisierung |0>^2n"
+                "for q in qubits_in + qubits_out: circuit.append(cirq.H(q)) if q in qubits_in else None;"
+                "# Oracle: f(x)=x⊕s if highest bit of x is 1"
+                "for i in range(n):"
+                "  if s[i]=='1': circuit.append(cirq.CNOT(qubits_in[i], qubits_out[i]));"
+                "# Messung der Ausgabe und Zurücksetzen"
+                "circuit.append(cirq.measure(*qubits_out, key='out'));"
+                "circuit.append([cirq.H(q) for q in qubits_in]);"
+                "circuit.append(cirq.measure(*qubits_in, key='in'));"
+                "print('Simon Circuit:\\n', circuit);"
+                "sim = cirq.Simulator();"
+                "results = sim.run(circuit, repetitions=n*2);"
+                "print('Samples (in):', results.histogram(key='in'));"
+            )
+        ]
+        ret = run_quantum_command(cmd, shell=False, force_quantum=None, verbose=True, dry_run=False, logfile='quantum_runner.log')
+        print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
+        return True
+
+    if user_input.startswith("IQ SHOR"):
+        # IQ SHOR <N>: Shor’s Algorithm zur Faktorisierung einer kleinen Zahl N
+        parts = user_input.split()
+        if len(parts) != 3 or not parts[2].isdigit():
+            print("Usage: IQ SHOR <N>")
+            return True
+        N = int(parts[2])
+        cmd = [
+            "python3", "-c",
+            (
+                "import cirq, math, random, fractions;"
+                f"N={N};"
+                "# Auswahl einer Zufallsbasis"
+                "a = random.randrange(2, N);"
+                "while math.gcd(a, N) != 1: a = random.randrange(2, N);"
+                "# Anzahl Zähl- und Arbeits-Qubits"
+                "t = math.ceil(math.log2(N))*2; n = math.ceil(math.log2(N));"
+                "count = cirq.LineQubit.range(t); work = cirq.LineQubit.range(t, t+n);"
+                "c = cirq.Circuit();"
+                "# QFT-Register in |+>"
+                "for q in count: c.append(cirq.H(q));"
+                "# Controlled-U^(2^j)"
+                "def controlled_mul(a, power): return cirq.Circuit([cirq.CNOT(count[j], work[(j*power)%n]) for j in range(t)]);"
+                "for j in range(t): c += controlled_mul(a, 2**j);"
+                "# Inverse QFT"
+                "c += cirq.inverse(cirq.qft(*count, without_reverse=True));"
+                "c.append(cirq.measure(*count, key='m'));"
+                "print('Shor Circuit for N='+str(N)+':\\n', c);"
+                "sim = cirq.Simulator(); r = sim.run(c, repetitions=1);"
+                "phase = r.measurements['m'][0];"
+                "# Phasenbruch und Faktoren"
+                "frac = fractions.Fraction(phase, 2**t).limit_denominator(N); r_period = frac.denominator;"
+                "if r_period % 2 != 0: print('Ungefährer Periode ungerade, erneut versuchen');"
+                "else: x = pow(a, r_period//2, N); print('Factors:', math.gcd(x-1, N), math.gcd(x+1, N))"
+            )
+        ]
+        ret = run_quantum_command(cmd, shell=False, force_quantum=None, verbose=True, dry_run=False, logfile='quantum_runner.log')
+        print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
+        return True
+
+    if user_input.startswith("IQ HHL"):
+        # IQ HHL <theta>: HHL-Algorithmus zur Lösung des Gleichungssystems Ax=b mit A=Rz(theta)
+        parts = user_input.split()
+        if len(parts) != 3:
+            print("Usage: IQ HHL <theta>")
+            return True
+        theta = float(parts[2])
+        cmd = [
+            "python3", "-c",
+            (
+                "import cirq, numpy as np;"
+                f"theta={theta};"
+                "anc, x, b = cirq.LineQubit.range(3);"
+                "c = cirq.Circuit();"
+                "# Zustand |b> auf b (hier |1>)"
+                "c.append(cirq.X(b));"
+                "# Phasenschätzung für A=Rz(theta)"
+                "c.append([cirq.H(anc), cirq.CZ(anc, x)**(theta/np.pi), cirq.H(anc)]);"
+                "# Bedingte Rotation anc->x"
+                "c.append(cirq.Ry(2*np.arccos(1/np.sqrt(2)))(x).controlled_by(anc));"
+                "# Uncompute Phasenschätzung"
+                "c.append([cirq.H(anc), cirq.CZ(anc, x)**(-theta/np.pi), cirq.H(anc)]);"
+                "# Messe x"
+                "c.append(cirq.measure(x, key='solution'));"
+                "print('HHL Circuit (θ='+str(theta)+'):\\n', c);"
+                "print('Result:', cirq.Simulator().run(c, repetitions=5))"
+            )
+        ]
+        ret = run_quantum_command(cmd, shell=False, force_quantum=None, verbose=True, dry_run=False, logfile='quantum_runner.log')
+        print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
+        return True
+
+    if user_input.startswith("IQ QSVM"):
+        # IQ QSVM <n_qubits> <shots>: Quantum SVM-Demo mit Data-Encoding im Blochraum
+        parts = user_input.split()
+        if len(parts) != 4 or not parts[2].isdigit() or not parts[3].isdigit():
+            print("Usage: IQ QSVM <n_qubits> <shots>")
+            return True
+        n, shots = map(int, parts[2:])
+        cmd = [
+            "python3", "-c",
+            (
+                "import cirq, numpy as np;"
+                f"n={n}; shots={shots};"
+                "qs = cirq.LineQubit.range(n);"
+                "c = cirq.Circuit();"
+                "# Beispiel-Datenpunkte als Winkel"
+                "data = [np.pi/4, np.pi/2, np.pi*3/4];"
+                "for angle in data:"
+                "  for i,q in enumerate(qs): c.append(cirq.rx(angle*(i+1))(q));"
+                "  c.append(cirq.measure(*qs, key='m'));"
+                "print('QSVM Encoding Circuit:\\n', c);"
+                "res = cirq.Simulator().run(c, repetitions=shots);"
+                "print('Measurement Counts:', res.histogram(key='m'))"
+            )
+        ]
+        ret = run_quantum_command(cmd, shell=False, force_quantum=None, verbose=True, dry_run=False, logfile='quantum_runner.log')
+        print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
+        return True
+
+    if user_input.startswith("IQ DJ"):
+        # IQ DJ <n_qubits> <bitstring>: Deutsch–Jozsa-Algorithmus, entscheidet ob f konstant oder ausgewogen
+        parts = user_input.split()
+        if len(parts) != 4 or not parts[2].isdigit() or not all(c in "01" for c in parts[3]):
+            print("Usage: IQ DJ <n_qubits> <bitstring>")
+            return True
+        n = int(parts[2])
+        s = parts[3]
+        qubits = cirq.LineQubit.range(n+1)
+        circuit = cirq.Circuit()
+        # Bereite |0…0,1> vor
+        circuit.append(cirq.X(qubits[-1]))
+        circuit.append([cirq.H(q) for q in qubits])
+        # Oracle: f_s(x) = s·x mod 2
+        for i, bit in enumerate(s):
+            if bit == '1':
+                circuit.append(cirq.CNOT(qubits[i], qubits[-1]))
+        # H auf ersten n Qubits
+        circuit.append([cirq.H(q) for q in qubits[:-1]])
+        circuit.append(cirq.measure(*qubits[:-1], key='result'))
+        cmd = [
+            "python3", "-c",
+            (
+                "import cirq; print('Circuit:\\n', " + repr(circuit) + "); "
+                "res=cirq.Simulator().run(" + repr(circuit) + ", repetitions=1); "
+                "print('Result:', res)"
+            )
+        ]
+        ret = run_quantum_command(cmd, shell=False, force_quantum=None, verbose=True, dry_run=False, logfile='quantum_runner.log')
+        print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
+        return True
+
+    if user_input.startswith("IQ BV"):
+        # IQ BV <n_qubits> <bitstring>: Bernstein–Vazirani-Algorithmus findet s schnell
+        parts = user_input.split()
+        if len(parts) != 4 or not parts[2].isdigit() or not all(c in "01" for c in parts[3]):
+            print("Usage: IQ BV <n_qubits> <bitstring>")
+            return True
+        n = int(parts[2])
+        s = parts[3]
+        qubits = cirq.LineQubit.range(n+1)
+        circuit = cirq.Circuit()
+        circuit.append(cirq.X(qubits[-1]))
+        circuit.append([cirq.H(q) for q in qubits])
+        # Oracle: s·x mod 2
+        for i, bit in enumerate(s):
+            if bit == '1':
+                circuit.append(cirq.CNOT(qubits[i], qubits[-1]))
+        circuit.append([cirq.H(q) for q in qubits[:-1]])
+        circuit.append(cirq.measure(*qubits[:-1], key='s'))
+        cmd = [
+            "python3", "-c",
+            (
+                "import cirq; print('Circuit:\\n', " + repr(circuit) + "); "
+                "res=cirq.Simulator().run(" + repr(circuit) + ", repetitions=1); "
+                "print('Secret s =', res)"
+            )
+        ]
+        ret = run_quantum_command(cmd, shell=False, force_quantum=None, verbose=True, dry_run=False, logfile='quantum_runner.log')
+        print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
+        return True
+
+    if user_input.startswith("IQ QC"):
+        # IQ QC <n_qubits> <target_index>: Quantum Counting (Basiert auf Grover + Phase Estimation)
+        parts = user_input.split()
+        if len(parts) != 4 or not parts[2].isdigit() or not parts[3].isdigit():
+            print("Usage: IQ QC <n_qubits> <target_index>")
+            return True
+        n, target = map(int, parts[2:])
+        circuit = cirq.qc.QuantumCountingCircuit(cirq.LineQubit.range(n), target)  # Pseudocode-API
+        cmd = [
+            "python3", "-c",
+            (
+                "import cirq; qc=" + repr(circuit) + "; "
+                "print('Circuit:\\n', qc); "
+                "res=cirq.Simulator().run(qc, repetitions=1); print('Count est.:', res)"
+            )
+        ]
+        ret = run_quantum_command(cmd, shell=False, force_quantum=None, verbose=True, dry_run=False, logfile='quantum_runner.log')
+        print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
+        return True
+
+    if user_input.startswith("IQ QWALK"):
+        # IQ QWALK <n_positions> <n_steps>: Diskreter Quanten-Spaziergang auf Liniengitter
+        parts = user_input.split()
+        if len(parts) != 4 or not parts[2].isdigit() or not parts[3].isdigit():
+            print("Usage: IQ QWALK <n_positions> <n_steps>")
+            return True
+        m, steps = map(int, parts[2:])
+        pos = cirq.GridQubit.rect(1, m)
+        coin = cirq.NamedQubit("coin")
+        circuit = cirq.Circuit()
+        # Initialisierung
+        circuit.append(cirq.H(coin))
+        # Schritt-Operator
+        for _ in range(steps):
+            circuit.append(cirq.CNOT(coin, pos[0]))  # Pseudocode: Move conditional
+            circuit.append(cirq.H(coin))
+        circuit.append(cirq.measure(coin, *pos, key='pos'))
+        cmd = [
+            "python3", "-c",
+            (
+                "import cirq; print('Circuit:\\n', " + repr(circuit) + "); "
+                "res=cirq.Simulator().run(" + repr(circuit) + ", repetitions=10); print(res.histogram(key='pos'))"
+            )
+        ]
+        ret = run_quantum_command(cmd, shell=False, force_quantum=None, verbose=True, dry_run=False, logfile='quantum_runner.log')
+        print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
+        return True
+
+    if user_input.startswith("IQ PCA"):
+        # IQ PCA <n_qubits> <shots>: Quantum-PCA mit einfacher Covarianz-Messung
+        parts = user_input.split()
+        if len(parts) != 4 or not parts[2].isdigit() or not parts[3].isdigit():
+            print("Usage: IQ PCA <n_qubits> <shots>")
+            return True
+        n, shots = map(int, parts[2:])
+        qubits = cirq.LineQubit.range(n)
+        circuit = cirq.Circuit()
+        # Zufallszustand (Beispiel)
+        circuit.append([cirq.H(q) for q in qubits])
+        # Messung Covarianz-Matrix-Elemente
+        for i in range(n):
+            circuit.append(cirq.measure(qubits[i], key=f'm{i}'))
+        cmd = [
+            "python3", "-c",
+            (
+                "import cirq; print('Circuit:\\n', " + repr(circuit) + "); "
+                "res=cirq.Simulator().run(" + repr(circuit) + ", repetitions=" + str(shots) + "); "
+                "print('Data:', res)"
+            )
+        ]
+        ret = run_quantum_command(cmd, shell=False, force_quantum=None, verbose=True, dry_run=False, logfile='quantum_runner.log')
+        print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
+        return True
+
+    if user_input.startswith("IQ QKERNEL"):
+        # IQ QKERNEL <n_qubits> <shots>: Berechnet quantenbasierte Kernelmatrix zwischen Datenpunkten
+        parts = user_input.split()
+        if len(parts) != 4 or not parts[2].isdigit() or not parts[3].isdigit():
+            print("Usage: IQ QKERNEL <n_qubits> <shots>")
+            return True
+        n, shots = map(int, parts[2:])
+        qubits = cirq.LineQubit.range(n)
+        data = [[0.1*i for i in range(n)], [0.2*i for i in range(n)]]  # Beispielpunkte
+        circuit = cirq.Circuit()
+        for vec in data:
+            for angle, q in zip(vec, qubits):
+                circuit.append(cirq.rz(angle)(q))
+            circuit.append(cirq.measure(*qubits, key='k'))
+        cmd = [
+            "python3", "-c",
+            (
+                "import cirq; print('Circuit for kernel:' , " + repr(circuit) + "); "
+                "res=cirq.Simulator().run(" + repr(circuit) + ", repetitions=" + str(shots) + "); "
+                "print('Kernel counts:', res.histogram(key='k'))"
+            )
+        ]
+        ret = run_quantum_command(cmd, shell=False, force_quantum=None, verbose=True, dry_run=False, logfile='quantum_runner.log')
+        print(f"[{timestamp()}] [OUTPUT] Return code: {ret}")
+        return True
+
     if user_input.startswith("pa "):
         user_input = user_input[3:].strip()
         ollama_installed = check_command_installed("ollama")
