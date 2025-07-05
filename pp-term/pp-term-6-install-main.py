@@ -110,7 +110,7 @@ REQUIRED_PACKAGES = [
     "typer", "click", "blessed", "prompt-toolkit", "tqdm", "watchdog", "fire", "notebook", "jupyterlab", "jax",
     "chardet", "plotly", "py-cpuinfo", "gputil", "tabulate", "pyqtgraph", "deep-translator",
     "duckduckgo-search", "pillow", "GitPython", "matplotlib", "pyinstaller", "virtualenv",
-    "legacy-cgi", "colorama", "ipykernel", "ipython", "bash_kernel", "urllib3", "markdown"
+    "legacy-cgi", "colorama", "ipykernel", "ipython", "bash_kernel", "urllib3", "markdown", "cirq"
 ]
 
 
