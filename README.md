@@ -65,7 +65,8 @@ Peharge Projects 2025<br>
 **[05.06.2025]** PP-Term 5.4 EAP release<br>
 **[12.06.2025]** PP-Term 5.4 release<br>
 **[12.06.2025]** PP-Term 6 (SOON) on Windows and Linux (with P Wine)<br>
-**[14.06.2025 -> 04.07.2025]** Development stop<br>- Im Sorry ;-) -> 01.08.2025 PP-Terminal 6 Release!!!
+**[14.06.2025 -> 04.07.2025]** Development stop<br>- Im Sorry ;-) -> 01.08.2025 PP-Terminal 6 Release!!!<br>
+**[05.07.2025]** PP-Term 6 release
 
 </div>
 
