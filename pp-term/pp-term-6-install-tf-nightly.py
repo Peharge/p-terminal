@@ -86,17 +86,22 @@ def timestamp() -> str:
     return datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
 
 
-def activate_virtualenv(path: Path) -> None:
-    """
-    Activates a virtual environment at the given path (Windows).
-    """
-    activate_script = path / 'Scripts' / 'activate'
+# Immer zu verwendendes Standardverzeichnis für die virtuelle Umgebung
+DEFAULT_ENV_DIR = os.path.join("p-terminal", "pp-term", ".env")
+
+def activate_virtualenv(path: Path = Path(DEFAULT_ENV_DIR)) -> None:
+    """Aktiviert die virtuelle Umgebung im angegebenen Pfad."""
+    activate_script = path / ("Scripts/activate" if os.name == "nt" else "bin/activate")
+
     if not activate_script.exists():
         logging.error(f"[ERROR] ❌ Virtual environment not found at: {path}")
         sys.exit(1)
-    os.environ['VIRTUAL_ENV'] = str(path)
-    os.environ['PATH'] = str(path / 'Scripts') + os.pathsep + os.environ.get('PATH', '')
-    logging.info(f"[INFO] Virtual environment activated: {path}")
+
+    os.environ["VIRTUAL_ENV"] = str(path)
+    bin_dir = path / ('Scripts' if os.name == 'nt' else 'bin')
+    os.environ["PATH"] = str(bin_dir) + os.pathsep + os.environ.get("PATH", "")
+
+    logging.info(f"[INFO] ✅ Virtual environment activated: {path}")
 
 
 def detect_cuda_available() -> bool:

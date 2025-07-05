@@ -92,8 +92,11 @@ def timestamp() -> str:
     """Returns the current timestamp with milliseconds."""
     return datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
 
-def activate_virtualenv(path: Path) -> None:
-    """Activates the virtual environment located at `path`."""
+# Immer zu verwendendes Standardverzeichnis für die virtuelle Umgebung
+DEFAULT_ENV_DIR = os.path.join("p-terminal", "pp-term", ".env")
+
+def activate_virtualenv(path: Path = Path(DEFAULT_ENV_DIR)) -> None:
+    """Aktiviert die virtuelle Umgebung im angegebenen Pfad."""
     activate_script = path / ("Scripts/activate" if os.name == "nt" else "bin/activate")
 
     if not activate_script.exists():
