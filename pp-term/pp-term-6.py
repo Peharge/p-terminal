@@ -15730,7 +15730,7 @@ def run_circuit(circuit: cirq.Circuit, repetitions: int = 1):
     except Exception:
         logging.exception("[ERROR] Error during simulation")
     finally:
-        print(f"[{timestamp()}] [END IQ‑GROVER]")
+        print(f"[{timestamp()}] [INFO] End IQ Command")
 
 
 def msvc_env_cmd():
