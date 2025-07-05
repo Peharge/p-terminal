@@ -130,7 +130,7 @@ Why show the standard? The PP Terminal does it all<br>
       </ul>
     </td>
     <td width="50%" valign="top" align="center">
-      <img src="https://raw.githubusercontent.com/Peharge/peharge-web/main/images/pp-term-ads-4.png" width="100%">
+      <img src="https://raw.githubusercontent.com/Peharge/p-terminal-images/main/images/IQ-3.png" width="100%">
     </td>
   </tr>
 </table>
@@ -213,7 +213,7 @@ Why show the standard? The PP Terminal does it all<br>
       <strong>pp-Command-System – Secure Administrative Command Execution</strong><br><br>The pp-Command-System allows direct execution of privileged system operations through a simple CLI syntax: <code>pp {command}</code>. It is designed for administrators who require fast, scripted access to system-level tasks like file management, process control, or network diagnostics. All commands run with elevated rights — use with caution.
                                                                                                                                              </td>
     <td width="50%" valign="top" align="center">
-      <img src="https://raw.githubusercontent.com/Peharge/peharge-web/main/images/pp-term-ads-3.png" width="100%">
+      <img src="https://raw.githubusercontent.com/Peharge/p-terminal-images/main/images/adm-3.png" width="100%">
     </td>
   </tr>
 </table>
@@ -224,7 +224,7 @@ Why show the standard? The PP Terminal does it all<br>
       <strong>Command Reference – Executing & Compiling Source Code</strong><br><br>pp-terminal lets you compile, run, and debug code in over 50 programming languages — with full support for C++, C, C#, Python, Java and Rust. Its streamlined command interface uses consistent prefixes to simplify your workflow across languages. The placeholder <code>{user_input}</code> represents the filename or code to be processed.
     </td>
     <td width="50%" valign="top" align="center">
-      <img src="https://raw.githubusercontent.com/Peharge/peharge-web/main/images/pp-term-ads-3.png" width="100%">
+      <img src="https://raw.githubusercontent.com/Peharge/p-terminal-images/main/images/pc-3.png" width="100%">
     </td>
   </tr>
 </table>
