@@ -528,7 +528,7 @@ def process_packages(packages: List[str]):
         print(f"\n[{timestamp()}] [INFO] [{idx}/{len(packages)}] Checking package: {package}")
         install_or_update_package(package)
 
-print(f"\n[{timestamp()}] [INFO] All frameworks for {blue}PP-Term 5{reset} are currently being installed and updated.")
+print(f"\n[{timestamp()}] [INFO] All frameworks for {blue}PP-Term 6{reset} are currently being installed and updated.")
 
 # Paketlisten
 packages = [
@@ -539,7 +539,7 @@ packages = [
     "torchvision", "torchaudio", "tensorflow", "tf-nightly", "notebook", "jupyterlab", "jax",
     "chardet", "plotly", "py-cpuinfo", "gputil", "tabulate", "pyqtgraph", "deep-translator",
     "duckduckgo-search", "pillow", "GitPython", "matplotlib", "pyinstaller", "virtualenv",
-    "legacy-cgi", "colorama", "ipykernel", "ipython", "bash_kernel", "pip"
+    "legacy-cgi", "ipykernel", "ipython", "bash_kernel", "pip", "urllib3", "markdown", "cirq"
 ]
 
 process_packages(packages)
