@@ -72,7 +72,7 @@ Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vo
 #>
 
 param (
-    [string]$ScriptPath = "$PSScriptRoot\pp-term-5-4.py",
+    [string]$ScriptPath = "$PSScriptRoot\pp-term-6.py",
     [string]$PythonExe  = "$PSScriptRoot\.env\Scripts\python.exe",
     [string]$LogFile    = "$HOME\p-terminal\pp-term\WSL_Diagnostics.log"
 )
@@ -93,7 +93,7 @@ if (!(Test-Path $logDir)) {
 
 try {
     # Start-Log
-    Write-Log INFO "Run PP-Term 5 script with maximum CPU affinity..."
+    Write-Log INFO "Run PP-Term 6 script with maximum CPU affinity..."
 
     # Existenz prüfen
     if (!(Test-Path $PythonExe)) {
