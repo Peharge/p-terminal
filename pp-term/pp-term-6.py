@@ -1692,10 +1692,8 @@ def handle_special_commands(user_input):
     if user_input.lower() in ["dir-2", "ls-2"]:
         command = "powershell ls"
 
-        process = run_command(command, shell=True)
-
         try:
-            process.wait()
+            run_command(command, shell=True)
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
@@ -1705,10 +1703,8 @@ def handle_special_commands(user_input):
     if user_input.lower() in ["dir-3", "ls-3"]:
         command = "wsl ls"
 
-        process = run_command(command, shell=True)
-
         try:
-            process.wait()
+            run_command(command, shell=True)
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
