@@ -178,6 +178,16 @@ reset = "\033[0m"
 bold = "\033[1m"
 
 
+COMMANDS_FILE = "commands.json"
+
+if not os.path.exists(COMMANDS_FILE):
+    with open(COMMANDS_FILE, 'w') as f:
+        json.dump({}, f)
+
+with open(COMMANDS_FILE, 'r') as f:
+    commands = json.load(f)
+
+
 def loading_bar(text: str = "Processing", duration: int = 3, color: str = "") -> None:
     print(f"{color}{text} ", end="", flush=True)
     for _ in range(duration):
@@ -24519,6 +24529,52 @@ def main():
                 user_input = user_input[7:].strip()
                 print(f"[{timestamp()}] [INFO] AppGet has been discontinued. You may want to use winget instead.")
                 run_appget_command(user_input)
+
+            elif user_input.startswith("pcsc"):
+                print(f"[{timestamp()}] [INFO] Here, you're creating a custom command that can later be executed by anyone with access to this PC. Therefore, make sure your system is free of security vulnerabilities and that only trusted people have access. Insecure or dangerous paths can put your system at risk!\n")
+                cmd_name = input("What should your command be: ").strip()
+                exe_path = input("Path to the executable file: ").strip()
+                permissions = input("Required rights (user/admin): ").strip().lower()
+
+                commands[cmd_name] = {
+                    "path": exe_path,
+                    "permissions": permissions
+                }
+
+                with open(COMMANDS_FILE, 'w') as f:
+                    json.dump(commands, f, indent=4)
+
+                print(f"\n[{timestamp()}] [INFO] Command '{cmd_name}' was saved.")
+
+            elif user_input.startswith("prsc"):
+                cmd_to_delete = input("Which command do you want to delete: ").strip()
+
+                if cmd_to_delete in commands:
+                    del commands[cmd_to_delete]
+
+                    with open(COMMANDS_FILE, 'w') as f:
+                        json.dump(commands, f, indent=4)
+
+                    print(f"[{timestamp()}] [INFO] Command '{cmd_to_delete}' was deleted.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Command '{cmd_to_delete}' not found.")
+
+            elif user_input and user_input.split()[0] in commands:
+                parts = user_input.split()
+                cmd_name = parts[0]
+                args = parts[1:]
+
+                cmd_info = commands[cmd_name]
+                exe = cmd_info["path"]
+
+                if cmd_info["permissions"] == "admin":
+                    print(f"[{timestamp()}] [INFO] '{cmd_name}' needs admin rights!")
+
+                try:
+                    full_command = [exe] + args
+                    subprocess.run(full_command)
+                except Exception as e:
+                    print(f"[{timestamp()}] [ERROR] Error while running: {e}")
 
             else:
                 run_command(user_input, shell=True)
