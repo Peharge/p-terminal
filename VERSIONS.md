@@ -260,6 +260,17 @@
        - PP-Terminal 6.1.1.1
        - PP-Terminal 6.1.1.3
        - PP-Terminal 6.1.1.4
+       - PP-Terminal 6.1.1.5
+       - PP-Terminal 6.1.1.6
+       - PP-Terminal 6.1.1.8
+       - PP-Terminal 6.1.1.9
+       - PP-Terminal 6.1.1.10
+       - PP-Terminal 6.1.1.11
+       - PP-Terminal 6.1.1.13
+       - PP-Terminal 6.1.1.14
+       - PP-Terminal 6.1.1.15
+       - PP-Terminal 6.1.1.16
+       - PP-Terminal 6.1.1.18
 
 # IQ Compiler
 
