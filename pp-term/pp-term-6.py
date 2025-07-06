@@ -178,7 +178,7 @@ reset = "\033[0m"
 bold = "\033[1m"
 
 
-COMMANDS_FILE = "commands.json"
+COMMANDS_FILE = f"C:/Users/{user_name}/p-terminal/pp-term/commands.json"
 
 if not os.path.exists(COMMANDS_FILE):
     with open(COMMANDS_FILE, 'w') as f:
@@ -24530,7 +24530,7 @@ def main():
                 print(f"[{timestamp()}] [INFO] AppGet has been discontinued. You may want to use winget instead.")
                 run_appget_command(user_input)
 
-            elif user_input.startswith("pcsc"):
+            elif user_input.lower() == "pcsc":
                 print(f"[{timestamp()}] [INFO] Here, you're creating a custom command that can later be executed by anyone with access to this PC. Therefore, make sure your system is free of security vulnerabilities and that only trusted people have access. Insecure or dangerous paths can put your system at risk!\n")
                 cmd_name = input("What should your command be: ").strip()
                 exe_path = input("Path to the executable file: ").strip()
@@ -24546,7 +24546,24 @@ def main():
 
                 print(f"\n[{timestamp()}] [INFO] Command '{cmd_name}' was saved.")
 
-            elif user_input.startswith("prsc"):
+            elif user_input.startswith("pcsc "):
+                cmd_name = user_input[5:].strip()
+                print(f"[{timestamp()}] [INFO] Here, you're creating a custom command that can later be executed by anyone with access to this PC. Therefore, make sure your system is free of security vulnerabilities and that only trusted people have access. Insecure or dangerous paths can put your system at risk!\n")
+                # cmd_name = input("What should your command be: ").strip()
+                exe_path = input("Path to the executable file: ").strip()
+                permissions = input("Required rights (user/admin): ").strip().lower()
+
+                commands[cmd_name] = {
+                    "path": exe_path,
+                    "permissions": permissions
+                }
+
+                with open(COMMANDS_FILE, 'w') as f:
+                    json.dump(commands, f, indent=4)
+
+                print(f"\n[{timestamp()}] [INFO] Command '{cmd_name}' was saved.")
+
+            elif user_input.lower() == "prsc":
                 cmd_to_delete = input("Which command do you want to delete: ").strip()
 
                 if cmd_to_delete in commands:
