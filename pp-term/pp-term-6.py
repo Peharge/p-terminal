@@ -24559,6 +24559,19 @@ def main():
                 else:
                     print(f"[{timestamp()}] [INFO] Command '{cmd_to_delete}' not found.")
 
+            elif user_input.startswith("prsc "):
+                cmd_to_delete = user_input[5:].strip()
+
+                if cmd_to_delete in commands:
+                    del commands[cmd_to_delete]
+
+                    with open(COMMANDS_FILE, 'w') as f:
+                        json.dump(commands, f, indent=4)
+
+                    print(f"[{timestamp()}] [INFO] Command '{cmd_to_delete}' was deleted.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Command '{cmd_to_delete}' not found.")
+
             elif user_input and user_input.split()[0] in commands:
                 parts = user_input.split()
                 cmd_name = parts[0]
