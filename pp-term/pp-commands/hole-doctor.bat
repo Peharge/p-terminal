@@ -63,4 +63,4 @@ REM pouvant découler directement ou indirectement de l'utilisation, de la modif
 REM
 REM Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 
-echo Please run run-pp-term.bat again!!!
+echo Please run run-pp-term.bat again!!! - This Code do nothing!!!

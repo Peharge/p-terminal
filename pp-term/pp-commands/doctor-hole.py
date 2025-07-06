@@ -339,6 +339,7 @@ def scan_project(root: Path, args):
 
 # CLI
 def main():
+    print(f"[{timestamp()}] [INFO] This doctor code should ideally also scan the .env file for errors, but due to security and licensing concerns, this is intentionally avoided. As a result, no getDirectory call is made—only the main repository is analyzed during the doctor check.")
     p = ArgumentParser(description="Doctor Script for full-stack checks")
     p.add_argument("-p","--path",      type=Path, default=Path(rf"C:\Users\{os.getlogin()}\p-terminal\pp-term"))
     p.add_argument("-tio","--threads-io", type=int, default=DEFAULT_THREADS_IO)
