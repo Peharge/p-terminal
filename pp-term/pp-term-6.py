@@ -24532,36 +24532,92 @@ def main():
 
             elif user_input.lower() == "pcsc":
                 print(f"[{timestamp()}] [INFO] Here, you're creating a custom command that can later be executed by anyone with access to this PC. Therefore, make sure your system is free of security vulnerabilities and that only trusted people have access. Insecure or dangerous paths can put your system at risk!\n")
+
                 cmd_name = input("What should your command be: ").strip()
-                exe_path = input("Path to the executable file: ").strip()
-                permissions = input("Required rights (user/admin): ").strip().lower()
 
-                commands[cmd_name] = {
-                    "path": exe_path,
-                    "permissions": permissions
-                }
+                if cmd_name in commands:
+                    print(f"[{timestamp()}] [WARNING] Command '{cmd_name}' already exists.")
 
+                    while True:
+                        choice = input("Do you want to (o)verwrite the path, change (p)ermissions, do (b)oth, or (c)ancel? [o/p/b/c]: ").strip().lower()
+                        if choice == 'o':
+                            exe_path = input("New path to the executable file: ").strip()
+                            commands[cmd_name]["path"] = exe_path
+                            break
+                        elif choice == 'p':
+                            permissions = input("New required rights (user/admin): ").strip().lower()
+                            commands[cmd_name]["permissions"] = permissions
+                            break
+                        elif choice == 'b':
+                            exe_path = input("New path to the executable file: ").strip()
+                            permissions = input("New required rights (user/admin): ").strip().lower()
+                            commands[cmd_name] = {
+                                "path": exe_path,
+                                "permissions": permissions
+                            }
+                            break
+                        elif choice == 'c':
+                            print(f"[{timestamp()}] [INFO] No changes made to '{cmd_name}'.")
+                            break
+                        else:
+                            print("Invalid option. Please enter 'o', 'p', 'b', or 'c'.")
+                else:
+                    exe_path = input("Path to the executable file: ").strip()
+                    permissions = input("Required rights (user/admin): ").strip().lower()
+
+                    commands[cmd_name] = {
+                        "path": exe_path,
+                        "permissions": permissions
+                    }
+                    print(f"\n[{timestamp()}] [INFO] Command '{cmd_name}' was saved.")
+
+                # Save the updated commands in any case (if modified)
                 with open(COMMANDS_FILE, 'w') as f:
                     json.dump(commands, f, indent=4)
-
-                print(f"\n[{timestamp()}] [INFO] Command '{cmd_name}' was saved.")
 
             elif user_input.startswith("pcsc "):
                 cmd_name = user_input[5:].strip()
                 print(f"[{timestamp()}] [INFO] Here, you're creating a custom command that can later be executed by anyone with access to this PC. Therefore, make sure your system is free of security vulnerabilities and that only trusted people have access. Insecure or dangerous paths can put your system at risk!\n")
                 # cmd_name = input("What should your command be: ").strip()
-                exe_path = input("Path to the executable file: ").strip()
-                permissions = input("Required rights (user/admin): ").strip().lower()
+                if cmd_name in commands:
+                    print(f"[{timestamp()}] [WARNING] Command '{cmd_name}' already exists.")
 
-                commands[cmd_name] = {
-                    "path": exe_path,
-                    "permissions": permissions
-                }
+                    while True:
+                        choice = input("Do you want to (o)verwrite the path, change (p)ermissions, do (b)oth, or (c)ancel? [o/p/b/c]: ").strip().lower()
+                        if choice == 'o':
+                            exe_path = input("New path to the executable file: ").strip()
+                            commands[cmd_name]["path"] = exe_path
+                            break
+                        elif choice == 'p':
+                            permissions = input("New required rights (user/admin): ").strip().lower()
+                            commands[cmd_name]["permissions"] = permissions
+                            break
+                        elif choice == 'b':
+                            exe_path = input("New path to the executable file: ").strip()
+                            permissions = input("New required rights (user/admin): ").strip().lower()
+                            commands[cmd_name] = {
+                                "path": exe_path,
+                                "permissions": permissions
+                            }
+                            break
+                        elif choice == 'c':
+                            print(f"[{timestamp()}] [INFO] No changes made to '{cmd_name}'.")
+                            break
+                        else:
+                            print("Invalid option. Please enter 'o', 'p', 'b', or 'c'.")
+                else:
+                    exe_path = input("Path to the executable file: ").strip()
+                    permissions = input("Required rights (user/admin): ").strip().lower()
 
+                    commands[cmd_name] = {
+                        "path": exe_path,
+                        "permissions": permissions
+                    }
+                    print(f"\n[{timestamp()}] [INFO] Command '{cmd_name}' was saved.")
+
+                # Save the updated commands in any case (if modified)
                 with open(COMMANDS_FILE, 'w') as f:
                     json.dump(commands, f, indent=4)
-
-                print(f"\n[{timestamp()}] [INFO] Command '{cmd_name}' was saved.")
 
             elif user_input.lower() == "prsc":
                 cmd_to_delete = input("Which command do you want to delete: ").strip()
