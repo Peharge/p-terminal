@@ -168,7 +168,7 @@ def main():
     check_path(PEHARGE_PATH)
     check_git_repo(PEHARGE_PATH)
 
-    logging.info("System diagnostics completed.")
+    logging.info("System diagnostics completed.\n")
 
 if __name__ == "__main__":
     main()
