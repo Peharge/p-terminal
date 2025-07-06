@@ -183,12 +183,31 @@ if not exist "%SCRIPT_PATH_DOCTOR_MAIN%" (
 
 "%PYTHON_PATH%" "%SCRIPT_PATH_DOCTOR_MAIN%"
 
-if not exist "%SCRIPT_PATH_DOCTOR%" (
-    call :Log ERROR "❌ Script not found: %SCRIPT_PATH_DOCTOR%"
-    exit /B 1
+:AskUser
+call :Log WARNING "⚠️ This script may activate malicious code!"
+echo PYTHON_PATH is "%PYTHON_PATH%"
+echo SCRIPT_PATH_DOCTOR is "%SCRIPT_PATH_DOCTOR%"
+pause
+
+set /p USER_CONFIRM="Do you really want to run it? [y/n]: "
+
+if /I "%USER_CONFIRM%"=="Y" (
+    if not exist "%SCRIPT_PATH_DOCTOR%" (
+        call :Log ERROR "❌ Script not found: %SCRIPT_PATH_DOCTOR%"
+        exit /B 1
+    )
+    "%PYTHON_PATH%" "%SCRIPT_PATH_DOCTOR%"
+    goto :Continue
+) else if /I "%USER_CONFIRM%"=="N" (
+    echo Skipping doctor script as per user choice.
+    goto :Continue
+) else (
+    echo Invalid input. Please enter Y or N.
+    goto :AskUser
 )
 
-"%PYTHON_PATH%" "%SCRIPT_PATH_DOCTOR%"
+:Continue
+:: Rest deines Batch-Scripts
 
 REM Verzeichnis dieser .bat-Datei ermitteln
 set SCRIPT_DIR=%~dp0
