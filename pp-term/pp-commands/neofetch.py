@@ -494,7 +494,8 @@ def gather_info_lines(sys_info: dict, versions: dict) -> list:
     pp_terminal_ver      = versions.get("PP-Terminal Version",      "Unbekannt")
     launcher_ver         = versions.get("PP-Terminal Launcher Version", "Unbekannt")
     p_compiler_ver       = versions.get("Peharge Compiler Version", "Unbekannt")
-    p_iq_cernel_ver    = versions.get("Peharge IQ Kernel Version", "Unbekannt")
+    p_cernel_ver    = versions.get("Peharge Kernel Version", "Unbekannt")
+    iq_cernel_ver    = versions.get("IQ Kernel Version", "Unbekannt")
     license_info         = versions.get("P-Terminal License",       "Unbekannt")
 
     title = f"PP-Terminal - {os.getlogin()}"
@@ -509,7 +510,8 @@ def gather_info_lines(sys_info: dict, versions: dict) -> list:
     lines.append(f"       {blue}PP-Terminal Version{reset}: {pp_terminal_ver}")
     lines.append(f"      {blue}PP-Terminal Launcher Version{reset}: {launcher_ver}")
     lines.append(f"      {blue}Peharge Compiler Version{reset}: {p_compiler_ver}")
-    lines.append(f"      {blue}Peharge IQ Kernel Version{reset}: {p_iq_cernel_ver}")
+    lines.append(f"      {blue}Peharge Kernel Version{reset}: {p_cernel_ver}")
+    lines.append(f"      {blue}IQ Kernel Version{reset}: {iq_cernel_ver}")
     lines.append(f"      {blue}P-Terminal License{reset}: {license_info}")
     lines.append(f"      {blue}MAVIS Version{reset}: 4.3")
     lines.append(f"      {blue}MAVIS Launcher Version{reset}: 4")

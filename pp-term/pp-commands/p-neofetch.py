@@ -314,7 +314,8 @@ def get_system_info() -> dict:
         info['PP-Terminal Version'] = system_info.get("PP-Terminal Version", "Unbekannt")
         info['PP-Terminal Launcher Version'] = system_info.get("PP-Terminal Launcher Version", "Unbekannt")
         info['Peharge Compiler Version'] = system_info.get("Peharge Compiler Version", "Unbekannt")
-        info['Peharge IQ Kernel Version'] = system_info.get("Peharge IQ Kernel Version", "Unbekannt")
+        info['Peharge Kernel Version'] = system_info.get("Peharge Kernel Version", "Unbekannt")
+        info['IQ Kernel Version'] = system_info.get("IQ Kernel Version", "Unbekannt")
         info['P-Terminal License'] = system_info.get("P-Terminal License", "Unbekannt")
 
         info['Operating System'] = f"{platform.system()} {platform.release()} ({platform.version()})"
