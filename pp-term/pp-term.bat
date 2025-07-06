@@ -86,6 +86,7 @@ set SCRIPT_PATH_INSTALL_2=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-6-insta
 set SCRIPT_PATH_INSTALL_3=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-6-install-tf-nightly.py
 set SCRIPT_PATH_INSTALL_4=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-6-install-jax.py
 set SCRIPT_PATH_INSTALL_5=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-6-install-cirq.py
+set SCRIPT_PATH_DOCTOR_MAIN=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-6-doctor-main.py
 set SCRIPT_PATH_DOCTOR=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-6-doctor.py
 
 if not exist "%PYTHON_PATH%" (
@@ -174,6 +175,13 @@ if not exist "%SCRIPT_PATH_INSTALL_5%" (
 )
 
 "%PYTHON_PATH%" "%SCRIPT_PATH_INSTALL_5%"
+
+if not exist "%SCRIPT_PATH_DOCTOR_MAIN%" (
+    call :Log ERROR "❌ Script not found: %SCRIPT_PATH_DOCTOR_MAIN%"
+    exit /B 1
+)
+
+"%PYTHON_PATH%" "%SCRIPT_PATH_DOCTOR_MAIN%"
 
 if not exist "%SCRIPT_PATH_DOCTOR%" (
     call :Log ERROR "❌ Script not found: %SCRIPT_PATH_DOCTOR%"
