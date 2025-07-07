@@ -1,0 +1,850 @@
+commands = {
+        "mavis env install": "mavis-install\\install-info-mavis-4.py",
+        "install mavis env": "mavis-install\\install-info-mavis-4.py",
+        "install mavis-3": "mavis-install\\install-info-mavis-4.py",  # new
+        "install mavis-3.3": "mavis-install\\install-info-mavis-4.py",  # new
+        "install mavis-3-3": "mavis-install\\install-info-mavis-4.py",  # new
+        "install mavis-4": "mavis-install\\install-info-mavis-4.py",  # new
+        "install mavis-4.3": "mavis-install\\install-info-mavis-4.py",  # new
+        "install mavis-4-3": "mavis-install\\install-info-mavis-4.py",  # new
+        "mavis env update": "mavis-install\\install-info-mavis-4.py",
+        "update pp-term env": "mavis-install\\update-pp-term-venv.py",  # new
+        "update mavis env": "mavis-install\\install-info-mavis-4.py",
+        "mavis update": "mavis-update\\update-mavis-repository-windows.py",
+        "update mavis": "mavis-update\\update-mavis-repository-windows.py",
+        "security": "security\\security_check-mavis-4.py",
+        "p-terminal security": "security\\security_check-mavis-4.py",
+        "securitycheck": "security\\security_check-mavis-4.py",
+        "info": "pp-commands\\info.py",
+        "mavis info": "pp-commands\\info.py",
+        "info mavis": "pp-commands\\info.py",
+        "p-term info": "pp-commands\\info.py",
+        "info p-term": "pp-commands\\info.py",
+        "neofetch": "pp-commands\\neofetch.py",
+        "fastfetch": "pp-commands\\neofetch.py",  # new
+        "screenfetch": "pp-commands\\neofetch.py",  # new
+        "neofetch-2": "pp-commands\\neofetch-2.py",  # new
+        "fastfetch-2": "pp-commands\\neofetch-2.py",  # new
+        "screenfetch-2": "pp-commands\\neofetch-2.py",  # new
+        "neofetch-3": "pp-commands\\neofetch-3.py",  # new
+        "fastfetch-3": "pp-commands\\neofetch-3.py",  # new
+        "screenfetch-3": "pp-commands\\neofetch-3.py",  # new
+        "neofetch-4": "pp-commands\\neofetch-4.py",  # new
+        "fastfetch-4": "pp-commands\\neofetch-4.py",  # new
+        "screenfetch-4": "pp-commands\\neofetch-4.py",  # new
+        "jupyter": "mavis-run-jup\\run-jup.py",
+        "run jupyter": "mavis-run-jup\\run-jup.py",
+        "run jup": "mavis-run-jup\\run-jup.py",  # new
+        "run mavis-4": "pp-commands\\run-mavis-4.py",  # new
+        "run mavis-4-3": "pp-commands\\run-mavis-4-3.py",  # new
+        "run mavis-4-fast": "mavis-4-main.py",  # new
+        "run mavis-4-3-fast": "mavis-4-3-main.py",  # new
+        "run mavis-launcher-4": "pp-commands\\run-launcher-4.py",  # new
+        "run ollama mavis-4": "mavis-install\\install-ollama-mavis-4.py",  # new
+        "install ollama mavis-4": "mavis-install\\install-ollama-mavis-4.py",  # new
+        "change models mavis-4": "mavis-install\\install-ollama-mavis-4.py",  # new
+        "change models": "mavis-install\\install-ollama-mavis-4.py",  # new
+        "run solution": "mavis-solution\\run-solution-4.py",
+        "run solution-3": "mavis-solution\\run-solution-3.py",
+        "run solution-4": "mavis-solution\\run-solution-4.py",
+        "account": "mavis-account\\account.py",
+        "run deepseek-r1:1.5b": "pp-commands\\deepseek-r1-1-5b.py",
+        "run deepseek-r1:7b": "pp-commands\\deepseek-r1-7b.py",
+        "run deepseek-r1:8b": "pp-commands\\deepseek-r1-8b.py",
+        "run deepseek-r1:14b": "pp-commands\\deepseek-r1-14b.py",
+        "run deepseek-r1:32b": "pp-commands\\deepseek-r1-32b.py",
+        "run deepseek-r1:70b": "pp-commands\\deepseek-r1-70b.py",
+        "run deepseek-r1:671b": "pp-commands\\deepseek-r1-671b.py",
+        "run deepscaler": "pp-commands\\deepscaler.py",
+        "run llama3.1:8b": "pp-commands\\llama-3-1-8b.py",
+        "run llama3.1:70b": "pp-commands\\llama-3-1-70b.py",
+        "run llama3.1:405": "pp-commands\\llama-3-1-405b.py",
+        "run llama3.2:1b": "pp-commands\\llama-3-2-1b.py",
+        "run llama3.2:3b": "pp-commands\\llama-3-2-3b.py",
+        "run llama3.3": "pp-commands\\llama-3-3.py",
+        "run llama3:8b": "pp-commands\\llama-3-8b.py",
+        "run llama3:70b": "pp-commands\\llama-3-70b.py",
+        "run mistral": "pp-commands\\mistral.py",
+        "run mistral-large": "pp-commands\\mistral-large.py",  # new
+        "run mistral-nemo": "pp-commands\\mistral-nemo.py",  # new
+        "run mistral-openorca": "pp-commands\\mistral-openorca.py",  # new
+        "run mistral-small:22b": "pp-commands\\mistral-small-22b.py",  # new
+        "run mistral-small:24b": "pp-commands\\mistral-small-24b.py",  # new
+        "run phi4": "pp-commands\\phi-4.py",
+        "run qwen2.5:0.5b": "pp-commands\\qwen-2-5-0.5b.py",
+        "run qwen2.5:1.5b": "pp-commands\\qwen-2-5-1.5b.py",
+        "run qwen2.5:3b": "pp-commands\\qwen-2-5-3b.py",
+        "run qwen2.5:7b": "pp-commands\\qwen-2-5-7b.py",
+        "run qwen2.5:14b": "pp-commands\\qwen-2-5-14b.py",
+        "run qwen2.5:32b": "pp-commands\\qwen-2-5-32b.py",
+        "run qwen2.5:72b": "pp-commands\\qwen-2-5-72b.py",
+        "run qwen2.5-coder:0.5b": "pp-commands\\qwen-2-5-coder-0.5b.py",
+        "run qwen2.5-coder:1.5b": "pp-commands\\qwen-2-5-coder-0.5b.py",
+        "run qwen2.5-coder:3b": "pp-commands\\qwen-2-5-coder-0.5b.py",
+        "run qwen2.5-coder:7b": "pp-commands\\qwen-2-5-coder-0.5b.py",
+        "run qwen2.5-coder:14b": "pp-commands\\qwen-2-5-coder-0.5b.py",
+        "run qwen2.5-coder:32b": "pp-commands\\qwen-2-5-coder-0.5b.py",
+        "run qwen3:0.6b": "pp-commands\\qwen-3-0-6b.py",  # new
+        "run qwen3:1.7b": "pp-commands\\qwen-3-1-7b.py",  # new
+        "run qwen3:4b": "pp-commands\\qwen-3-4b.py",  # new
+        "run qwen3:8b": "pp-commands\\qwen-3-8b.py",  # new
+        "run qwen3:14b": "pp-commands\\qwen-3-14b.py",  # new
+        "run qwen3:32b": "pp-commands\\qwen-3-32.py",  # new
+        "run qwen3:30b": "pp-commands\\qwen-3-30.py",  # new
+        "run qwen3:235b": "pp-commands\\qwen-3-235.py",  # new
+        "run gemma3:1b": "pp-commands\\gemma-3-1b.py",  # new
+        "run gemma3:4b": "pp-commands\\gemma-3-4b.py",  # new
+        "run gemma3:12b": "pp-commands\\gemma-3-12b.py",  # new
+        "run gemma3:27b": "pp-commands\\gemma-3-27b.py",  # new
+        "run qwq": "pp-commands\\qwq.py",  # new
+        "run command-a": "pp-commands\\command-a.py",  # new
+        "run phi4-mini": "pp-commands\\phi-4-mini.py",  # new
+        "run granite3.2:8b": "pp-commands\\granite-3-2-8b.py",  # new
+        "run granite3.2:2b": "pp-commands\\granite-3-2-2b.py",  # new
+        "run granite3.2-vision:2b": "pp-commands\\granite-3-2-2b-vision.py",  # new
+        "run qwen2.5-omni:7b": "pp-commands\\qwen-2-5-omni-7b.py",  # new
+        "run qvq:72b": "pp-commands\\qvq-72b.py",  # new
+        "run qwen2.5-vl:32b": "pp-commands\\qwen-2-5-vl-32b.py",  # new
+        "run qwen2.5-vl:72b": "pp-commands\\qwen-2-5-vl-72b.py",  # new
+        "run llama4-maverick:17b": "pp-commands\\llama-4-maverick-17b-ollama.py",  # new
+        "run llama4-scout:17b": "pp-commands\\llama-4-scout-17b-ollama.py",  # new
+        "run llama4-maverick:17b hg": "pp-commands\\llama-4-maverick-17b.py",  # new
+        "run llama4-scout:17b hg": "pp-commands\\llama-4-scout-17b.py",  # new
+        "run deepcoder:1.5b": "pp-commands\\deepcoder-1-5b.py",  # new
+        "run deepcoder:14b": "pp-commands\\deepcoder-14b.py",  # new
+        "run mistral-small3.1": "pp-commands\\mistral-small-3-1.py",  # new
+        "install deepseek-r1:1.5b": "pp-commands\\deepseek-r1-1-5b.py",
+        "install deepseek-r1:7b": "pp-commands\\deepseek-r1-7b.py",
+        "install deepseek-r1:8b": "pp-commands\\deepseek-r1-8b.py",
+        "install deepseek-r1:14b": "pp-commands\\deepseek-r1-14b.py",
+        "install deepseek-r1:32b": "pp-commands\\deepseek-r1-32b.py",
+        "install deepseek-r1:70b": "pp-commands\\deepseek-r1-70b.py",
+        "install deepseek-r1:671b": "pp-commands\\deepseek-r1-671b.py",
+        "install deepscaler": "pp-commands\\deepscaler.py",
+        "install llama3.1:8b": "pp-commands\\llama-3-1-8b.py",
+        "install llama3.1:70b": "pp-commands\\llama-3-1-70b.py",
+        "install llama3.1:405": "pp-commands\\llama-3-1-405b.py",
+        "install llama3.2:1b": "pp-commands\\llama-3-2-1b.py",
+        "install llama3.2:3b": "pp-commands\\llama-3-2-3b.py",
+        "install llama3.3": "pp-commands\\llama-3-3.py",
+        "install llama3:8b": "pp-commands\\llama-3-8b.py",
+        "install llama3:70b": "pp-commands\\llama-3-70b.py",
+        "install mistral": "pp-commands\\mistral.py",
+        "install mistral-large": "pp-commands\\mistral-large.py",  # new
+        "install mistral-nemo": "pp-commands\\mistral-nemo.py",  # new
+        "install mistral-openorca": "pp-commands\\mistral-openorca.py",  # new
+        "install mistral-small:22b": "pp-commands\\mistral-small-22b.py",  # new
+        "install mistral-small:24b": "pp-commands\\mistral-small-24b.py",  # new
+        "install phi4": "pp-commands\\phi-4.py",
+        "install qwen2.5:0.5b": "pp-commands\\qwen-2-5-0.5b.py",
+        "install qwen2.5:1.5b": "pp-commands\\qwen-2-5-1.5b.py",
+        "install qwen2.5:3b": "pp-commands\\qwen-2-5-3b.py",
+        "install qwen2.5:7b": "pp-commands\\qwen-2-5-7b.py",
+        "install qwen2.5:14b": "pp-commands\\qwen-2-5-14b.py",
+        "install qwen2.5:32b": "pp-commands\\qwen-2-5-32b.py",
+        "install qwen2.5:72b": "pp-commands\\qwen-2-5-72b.py",
+        "install qwen2.5-coder:0.5b": "pp-commands\\qwen-2-5-coder-0.5b.py",
+        "install qwen2.5-coder:1.5b": "pp-commands\\qwen-2-5-coder-0.5b.py",
+        "install qwen2.5-coder:3b": "pp-commands\\qwen-2-5-coder-0.5b.py",
+        "install qwen2.5-coder:7b": "pp-commands\\qwen-2-5-coder-0.5b.py",
+        "install qwen2.5-coder:14b": "pp-commands\\qwen-2-5-coder-0.5b.py",
+        "install qwen2.5-coder:32b": "pp-commands\\qwen-2-5-coder-0.5b.py",
+        "install gemma3:1b": "pp-commands\\gemma-3-1b.py",  # new
+        "install gemma3:4b": "pp-commands\\gemma-3-4b.py",  # new
+        "install gemma3:12b": "pp-commands\\gemma-3-12b.py",  # new
+        "install gemma3:27b": "pp-commands\\gemma-3-27b.py",  # new
+        "install qwq": "pp-commands\\qwq.py",  # new
+        "install command-a": "pp-commands\\command-a.py",  # new
+        "install phi4-mini": "pp-commands\\phi-4-mini.py",  # new
+        "install granite3.2:8b": "pp-commands\\granite-3-2-8b.py",  # new
+        "install granite3.2:2b": "pp-commands\\granite-3-2-2b.py",  # new
+        "install granite3.2-vision:2b": "pp-commands\\granite-3-2-2b-vision.py",  # new
+        "install qwen-2-5-omni:7b": "pp-commands\\qwen-2-5-omni-7b.py",  # new
+        "install qvq:72b": "pp-commands\\qvq-72b.py",  # new
+        "install qwen-2-5-vl:32b": "pp-commands\\qwen-2-5-vl-32b.py",  # new
+        "install qwen-2-5-vl:72b": "pp-commands\\qwen-2-5-vl-72b.py",  # new
+        "install llama-4-maverick:17b": "pp-commands\\llama-4-maverick-17b.py",  # new
+        "install llama-4-scout:17b": "pp-commands\\llama-4-scout-17b.py",  # new
+        "install deepcoder:1.5b": "pp-commands\\deepcoder-1-5b.py",  # new
+        "install deepcoder:14b": "pp-commands\\deepcoder-14b.py",  # new
+        "install mistral-small3.1": "pp-commands\\mistral-small-3-1.py",  # new
+        "help": "pp-commands\\help.py",
+        "image generation": "pp-commands\\stable-diffusion-3-5-large-turbo.py",
+        "video generation": "pp-commands\\wan-2-1-t2v-14b.py",
+        "run mavis": "mavis-installer-3-main-windows.py",
+        "p run all": "pp-commands\\p-run-all.py",  # new
+        "p htop": "pp-commands\\p-htop.py",  # new
+        "p run gemma3": "pp-commands\\p-gemma-3.py",  # new
+        "p run deepseek-r1": "pp-commands\\p-deepseek-r1.py",  # new
+        "p run qwen2.5": "pp-commands\\p-qwen-2-5.py",  # new
+        "p run qwen2.5-coder": "pp-commands\\p-qwen-2-5-coder.py",  # new
+        "p python frameworks": "pp-commands\\p-python-frameworks.py",  # new
+        "p pip list": "pp-commands\\p-python-frameworks.py",  # new
+        "p pip ls": "pp-commands\\p-python-frameworks.py",  # new
+        "p git ls": "pp-commands\\p-git.py",  # new
+        "p git": "pp-commands\\p-git.py",  # new
+        "p git p-terminal-old": "pp-commands\\p-git-p-terminal-old.py",  # new
+        "p git p-terminal": "pp-commands\\p-git.py",  # new
+        "p git mavis": "pp-commands\\p-git-mavis.py",  # new
+        "p git mavis-web": "pp-commands\\p-git-mavis-web.py",  # new
+        "p git simon": "pp-commands\\p-git-simon.py",  # new
+        "p git llama.cpp": "pp-commands\\p-git-llama-cpp.py",  # new
+        "p git pytorch": "pp-commands\\p-git-pytorch.py",  # new
+        "p git tensorflow": "pp-commands\\p-git-tensorflow.py",  # new
+        "p git jax": "pp-commands\\p-git-jax.py",  # new
+        "p git ollama": "pp-commands\\p-git-ollama.py",  # new
+        "p git transformer": "pp-commands\\p-git-transformer.py",  # new
+        "p git slicer": "pp-commands\\p-git-slicer.py",  # new
+        "p git linux": "pp-commands\\p-git-linux.py",  # new
+        "p git python": "pp-commands\\p-git-python.py",  # new
+        "p ls": "pp-commands\\p-ls.py",  # new
+        "p ls pp-term": "pp-commands\\p-ls.py",  # new
+        "p ls p-terminal": "pp-commands\\p-ls-p-terminal.py",  # new
+        "p ls mavis": "pp-commands\\p-ls-mavis.py",  # new
+        "p ls mavis-web": "pp-commands\\p-ls-mavis-web.py",  # new
+        "p ls simon": "pp-commands\\p-ls-simon.py",  # new
+        "models": "pp-commands\\models-ls.py",  # new
+        "models ls": "pp-commands\\models-ls.py",  # new
+        "p models": "pp-commands\\p-models-ls.py",  # new
+        "p models ls": "pp-commands\\p-models-ls.py",  # new
+        "p github p-terminal": "pp-commands\\p-github-p-terminal.py",  # new
+        "p github mavis": "pp-commands\\p-github-mavis.py",  # new
+        "p github commits": "pp-commands\\p-github-commits.py",  # new
+        "p github issues": "pp-commands\\p-github-issues.py",  # new
+        "p github peharge": "pp-commands\\p-github-peharge.py",  # new
+        "p github pulls": "pp-commands\\p-github-pulls.py",  # new
+        "p github readme": "pp-commands\\p-github-readme.py",  # new
+        "p github releases": "pp-commands\\p-github-releases.py",  # new
+        "p github": "pp-commands\\p-github.py",  # new
+        "p p-terminal": "pp-commands\\p-p-terminal.py",  # new
+        "p p-terminal.com": "pp-commands\\p-p-terminal-com.py",  # new
+        "p mavis.com": "pp-commands\\p-mavis-com.py",  # new
+        "p search": "pp-commands\\p-search.py",  # new
+        "p google": "pp-commands\\p-google.py",  # new
+        "p ollama": "pp-commands\\p-ollama.py",  # new
+        "p huggingface": "pp-commands\\p-huggingface.py",  # new
+        "p github.com": "pp-commands\\p-github.py",  # new
+        "p wikipedia": "pp-commands\\p-wikipedia.py",  # new
+        "p youtube": "pp-commands\\p-youtube.py",  # new
+        "p kali.com": "pp-commands\\p-kali.py",  # new
+        "p mint.com": "pp-commands\\p-mint.py",  # new
+        "p monai.com": "pp-commands\\p-monai.py",  # new
+        "p monai-github.com": "pp-commands\\p-monai-git.py",  # new
+        "p python.com": "pp-commands\\p-python.py",  # new
+        "p pytorch.com": "pp-commands\\p-pytorch.py",  # new
+        "p pytorch-github.com": "pp-commands\\p-pytorch-git.py",  # new
+        "p ubuntu.com": "pp-commands\\p-ubuntu.py",  # new
+        "p 3dslicer-github.com": "pp-commands\\p-3dslicer-git.py",  # new
+        "p 3dslicer.com": "pp-commands\\p-3dslicer-web.py",  # new
+        "p arch.com": "pp-commands\\p-arch.py",  # new
+        "p debian.com": "pp-commands\\p-debian.py",  # new
+        "p google.com": "pp-commands\\p-google.py",  # new
+        "p ollama.com": "pp-commands\\p-ollama.py",  # new
+        "p huggingface.com": "pp-commands\\p-huggingface.py",  # new
+        "p mavis": "pp-commands\\p-github-mavis.py",  # new
+        "p mavis.com": "pp-commands\\p-mavis.py",  # new
+        "p simon": "pp-commands\\p-simon.py",  # new
+        "p simon.com": "pp-commands\\p-simon-git.py",  # new
+        "wsl info": "pp-commands\\wsl-info.py",  # new
+        "p wsl": "pp-commands\\p-wsl.py",  # new
+        "p pip": "pp-commands\\p-pip.py",  # new
+        "p ubuntu": "pp-commands\\p-wsl-ubuntu.py",  # new
+        "p debian": "pp-commands\\p-wsl-debian.py",  # new
+        "p kali": "pp-commands\\p-wsl-kali.py",  # new
+        "p arch": "pp-commands\\p-wsl-arch.py",  # new
+        "p mint": "pp-commands\\p-wsl-mint.py",  # new
+        "p opensuse": "pp-commands\\p-wsl-opensuse.py",  # new
+        "p fedora": "pp-commands\\p-wsl-fedora.py",  # new
+        "p redhat": "pp-commands\\p-wsl-redhat.py",  # new
+        "p alpine": "pp-commands\\p-wsl-alpine.py",  # new
+        "p clear": "pp-commands\\p-wsl-clearlinux.py",  # new
+        "p oracle": "pp-commands\\p-wsl-oracle.py",  # new
+        "p pengwin": "pp-commands\\p-wsl-pengwin.py",  # new
+        "p sles": "pp-commands\\p-wsl-sles.py",  # new
+        "p neofetch": "pp-commands\\p-neofetch.py",  # new
+        "p fastfetch": "pp-commands\\p-neofetch.py",  # new
+        "p screenfetch": "pp-commands\\p-neofetch.py",  # new
+        "p vswhere": "pp-commands\\p-vswhere.py",  # new
+        "p speedtest": "pp-commands\\p-speedtest.py",  # new
+        "install 3d-slicer": "run\\simon\\3d-slicer\\install-3d-slicer.py",  # new
+        "run 3d-slicer": "run\\simon\\3d-slicer\\run-3d-slicer.py",  # new
+        "install simon": "run\\simon\\install-simon-1.py",  # new
+        "run simon": "mavis-run-jup\\run-jup.py",  # new
+        "jupyter --version": "pp-commands\\jupyter-version.py",  # new
+        "grafana --version": "pp-commands\\grafana-version.py",  # new
+        "3d-slicer --version": "pp-commands\\3d-slicer-version.py",  # new
+        "doctor": "pp-commands\\doctor.py",  # new
+        "hole doctor": "pp-commands\\doctor-hole.py",  # new
+        "install cool pin": "pp-commands\\theme-pcc.py",  # new
+        "install cool pin-2": "pp-commands\\theme-pcc-2.py",  # new
+        "install cool pin-3": "pp-commands\\theme-pcc-3.py",  # new
+        "install cool pin-4": "pp-commands\\theme-pcc-4.py",  # new
+        "install cool pin-5": "pp-commands\\theme-pcc-5.py",  # new
+        "install cool pin-6": "pp-commands\\theme-pcc-6.py",  # new
+        "install cool pin-7": "pp-commands\\theme-pcc-7.py",  # new
+        "install cool pin-8": "pp-commands\\theme-pcc-8.py",  # new
+        "install cool pin-9": "pp-commands\\theme-pcc-9.py",  # new
+        "install cool pin-10": "pp-commands\\theme-pcc-10.py",  # new
+        "install cool pin-11": "pp-commands\\theme-pcc-11.py",  # new
+        "install cool pin-13": "pp-commands\\theme-pcc-13.py",  # new
+        "install cool pin-14": "pp-commands\\theme-pcc-14.py",  # new
+        "install cool pin-15": "pp-commands\\theme-pcc-15.py",  # new
+        "install cool pin-16": "pp-commands\\theme-pcc-16.py",  # new
+        "install cool pin-17": "pp-commands\\theme-pcc-17.py",  # new
+        "install cool pin-18": "pp-commands\\theme-pcc-18.py",  # new
+        "install cool pin-19": "pp-commands\\theme-pcc-19.py",  # new
+        "install cool pin-20": "pp-commands\\theme-pcc-20.py",  # new
+        "install cool pin-21": "pp-commands\\theme-pcc-21.py",  # new
+        "install cool pin-22": "pp-commands\\theme-pcc-22.py",  # new
+        "install cool pin-23": "pp-commands\\theme-pcc-23.py",  # new
+        "run githubdesktop": "pp-commands\\githubdesktop.py",  # new
+        "run dockerdesktop": "pp-commands\\dockerdesktop.py",  # new
+        "run pycharm": "pp-commands\\run-pycharm.py",  # new
+        "run vs-code": "pp-commands\\run-vs-code.py",  # new
+        "run vs": "pp-commands\\run-vs.py",  # new
+        "p map": "pp-commands\\p-map.py",  # new
+        "p weather": "pp-commands\\p-weather.py",  # new
+        "p you": "pp-commands\\you.py",  # new
+        "p qwen": "pp-commands\\qwen.py",  # new
+        "p poe": "pp-commands\\poe.py",  # new
+        "p perplexity": "pp-commands\\perplexity.py",  # new
+        "p mistral": "pp-commands\\mistral.py",  # new
+        "p jasper": "pp-commands\\jasper.py",  # new
+        "p grok": "pp-commands\\grok.py",  # new
+        "p gemini": "pp-commands\\gemini.py",  # new
+        "p deepseek": "pp-commands\\deepseek.py",  # new
+        "p copy": "pp-commands\\copy.py",  # new
+        "p claude": "pp-commands\\claude.py",  # new
+        "p chatgpt": "pp-commands\\chatgpt.py",  # new
+        "p savannah gnu": "pp-commands\\p-savannah-gnu.py",  # new
+        "p gnu": "pp-commands\\p-gnu.py",  # new
+        "p gnu software": "pp-commands\\p-gnu-software.py",  # new
+        "p git.com": "pp-commands\\p-git-com.py",  # new
+        "run mavis main": "pp-commands\\run-mavis-main.py",  # new
+        "run mavis main fast": "pp-commands\\run-mavis-main-fast.py"  # new
+    }
+
+    commands3 = {
+        "fun": "pp-commands\\fun-matrix.py",  # new
+        "fun sl": "pp-commands\\fun-sl.py",  # new
+        "fun aafire": "pp-commands\\fun-aafire.py",  # new
+        "fun cmatrix": "pp-commands\\fun-cmatrix.py",  # new
+        "fun cow": "pp-commands\\fun-cow.py",  # new
+        "fun dragon": "pp-commands\\fun-dragon.py",  # new
+        "fun figlet": "pp-commands\\fun-figlet.py",  # new
+        "fun fortune": "pp-commands\\fun-fortune.py",  # new
+        "install fun main": "pp-commands\\fun-install.py",  # new
+        "install fun games main": "pp-commands\\fun-install.py",  # new
+        "install fun calc main": "pp-commands\\fun-install.py",  # new
+        "fun ponysay": "pp-commands\\fun-ponysay.py",  # new
+        "fun telnet": "pp-commands\\fun-telnet.py",  # new
+        "fun train": "pp-commands\\fun-train.py",  # new
+        "fun train a": "pp-commands\\fun-train-a.py",  # new
+        "fun train F": "pp-commands\\fun-train-F.py",  # new
+        "fun train l": "pp-commands\\fun-train-l.py",  # new
+        "fun train S": "pp-commands\\fun-train-S.py",  # new
+        "fun train t": "pp-commands\\fun-train-t.py",  # new
+        "fun install games": "pp-commands\\fun-install-games.py",  # new
+        "fun bastet": "pp-commands\\fun-bashtet.py",  # new
+        "fun chess": "pp-commands\\fun-gnuchess.py",  # new
+        "fun moon-buggy": "pp-commands\\fun-moon-buggy.py",  # new
+        "fun nethack": "pp-commands\\fun-nethack-console.py",  # new
+        "fun nsnake": "pp-commands\\fun-nsnake.py",  # new
+        "fun pacman": "pp-commands\\fun-pacman4console.py",  # new
+        "fun tictactoe": "pp-commands\\fun-tictactoe-ng.py",  # new
+        "fun tint": "pp-commands\\fun-tint.py",  # new
+        "fun tetris": "pp-commands\\fun-vitetris.py",  # new
+        "fun calculator": "pp-commands\\fun-calc.py",  # new
+        "fun calc": "pp-commands\\fun-calc.py",  # new
+        "fun install calculator": "pp-commands\\fun-install-calc.py",  # new
+        "fun matrix": "pp-commands\\fun-matrix.py",  # new
+        "fun matrix green": "pp-commands\\fun-matrix-green.py",  # new
+        "fun aquarium": "pp-commands\\fun-asciiquarium.py",  # new
+        "fun aqua": "pp-commands\\fun-asciiquarium.py",  # new
+        "fun bb": "pp-commands\\fun-bb.py",  # new
+        "install fun": "pp-commands\\fun-matrix.py",  # new
+        "install fun sl": "pp-commands\\fun-sl.py",  # new
+        "install fun aafire": "pp-commands\\fun-aafire.py",  # new
+        "install fun cmatrix": "pp-commands\\fun-cmatrix.py",  # new
+        "install fun cow": "pp-commands\\fun-cow.py",  # new
+        "install fun dragon": "pp-commands\\fun-dragon.py",  # new
+        "install fun figlet": "pp-commands\\fun-figlet.py",  # new
+        "install fun fortune": "pp-commands\\fun-fortune.py",  # new
+        "install fun ponysay": "pp-commands\\fun-ponysay.py",  # new
+        "install fun telnet": "pp-commands\\fun-telnet.py",  # new
+        "install fun train": "pp-commands\\fun-train.py",  # new
+        "install fun install games": "pp-commands\\fun-install-games.py",  # new
+        "install fun bastet": "pp-commands\\fun-bashtet.py",  # new
+        "install fun chess": "pp-commands\\fun-gnuchess.py",  # new
+        "install fun moon-buggy": "pp-commands\\fun-moon-buggy.py",  # new
+        "install fun nethack": "pp-commands\\fun-nethack-console.py",  # new
+        "install fun nsnake": "pp-commands\\fun-nsnake.py",  # new
+        "install fun pacman": "pp-commands\\fun-pacman4console.py",  # new
+        "install fun tictactoe": "pp-commands\\fun-tictactoe-ng.py",  # new
+        "install fun tint": "pp-commands\\fun-tint.py",  # new
+        "install fun tetris": "pp-commands\\fun-vitetris.py",  # new
+        "install fun calculator": "pp-commands\\fun-calc.py",  # new
+        "install fun calc": "pp-commands\\fun-calc.py",  # new
+        "install fun install calculator": "pp-commands\\fun-install-calc.py",  # new
+        "install fun matrix": "pp-commands\\fun-matrix.py",  # new
+        "install fun matrix green": "pp-commands\\fun-matrix-green.py",  # new
+        "install fun aquarium": "pp-commands\\fun-asciiquarium.py",  # new
+        "install fun aqua": "pp-commands\\fun-asciiquarium.py",  # new
+        "install fun bb": "pp-commands\\fun-bb.py",  # new
+        "htop": "pp-commands\\htop.py",  # new
+        "bashtop": "pp-commands\\bashtop.py",  # new
+        "taskmanager": "pp-commands\\bashtop.py",  # new
+        "btop": "pp-commands\\btop.py",  # new
+        "atop": "pp-commands\\atop.py",  # new
+        "emacs": "pp-commands\\emacs.py",  # new
+        "vim": "pp-commands\\vim.py",  # new
+        "nano": "pp-commands\\nano.py",  # new
+        "dstat": "pp-commands\\dstat.py",  # new
+        "nmon": "pp-commands\\nmon.py",  # new
+        "glances": "pp-commands\\glances.py",  # new
+        "iftop": "pp-commands\\iftop.py",  # new
+        "nethogs": "pp-commands\\nethogs.py",  # new
+        "bmon": "pp-commands\\bmon.py",  # new
+        "tcpdump": "pp-commands\\tcpdump.py",  # new
+        "speedtest-cli": "pp-commands\\speedtest-cli.py",  # new
+        "ncdu": "pp-commands\\ncdu.py",  # new
+        "duf": "pp-commands\\duf.py",  # new
+        "lsblk": "pp-commands\\lsblk.py",  # new
+        "iotop": "pp-commands\\iotop.py",  # new
+        "fzf": "pp-commands\\fzf.py",  # new
+        "fd": "pp-commands\\fd.py",  # new
+        "ripgrep": "pp-commands\\ripgrep.py",  # new
+        "tmux": "pp-commands\\tmux.py",  # new
+        "bat": "pp-commands\\bat.py",  # new
+        "exa": "pp-commands\\exa.py",  # new
+        "tldr": "pp-commands\\tldr.py",  # new
+        "gitui": "pp-commands\\gitui.py",  # new
+        "lazygit": "pp-commands\\lazygit.py",  # new
+        "zoxide": "pp-commands\\zoxide.py",  # new
+        "starship": "pp-commands\\starship.py",  # new
+        "nala": "pp-commands\\nala.py",  # new
+        "bpytop": "pp-commands\\bpytop.py",  # new
+        "belnder": "pp-commands\\belnder.py",  # new
+        "clion": "pp-commands\\clion.py",  # new
+        "community": "pp-commands\\community.py",  # new
+        "intellij": "pp-commands\\intellij.py",  # new
+        "pycharm": "pp-commands\\pycharm.py",  # new
+        "rider": "pp-commands\\rider.py",  # new
+        "vs-code": "pp-commands\\vs-code.py",  # new
+        "webstorm": "pp-commands\\webstorm.py",  # new
+        "golab": "pp-commands\\golab.py",  # new
+        "phpstorm": "pp-commands\\phpstorm.py",  # new
+        "githubdesktop": "pp-commands\\githubdesktop.py",  # new
+        "nvim": "pp-commands\\nvim.py",  # new
+        "code": "pp-commands\\code.py",  # new
+        "micro": "pp-commands\\micro.py",  # new
+        "gedit": "pp-commands\\gedit.py",  # new
+        "update": "pp-commands\\update.py",  # new
+        "selfupdate": "pp-commands\\update.py",  # new
+        "update pp-term": "pp-commands\\updade.py",  # new
+        "kakoune": "pp-commands\\kakoune.py",  # new
+        "helix": "pp-commands\\helix.py",  # new
+        "jed": "pp-commands\\jed.py",  # new
+        "joe": "pp-commands\\joe.py",  # new
+        "mg": "pp-commands\\mg.py",  # new
+        "acme": "pp-commands\\acme.py",  # new
+        "geany": "pp-commands\\geany.py",  # new
+        "kate": "pp-commands\\kate.py",  # new
+        "mousepad": "pp-commands\\mousepad.py",  # new
+        "xed": "pp-commands\\xed.py",  # new
+        "entr": "pp-commands\\entr.py",  # new
+        "asdf": "pp-commands\\asdf.py",  # new
+        "direnv": "pp-commands\\direnv.py",  # new
+        "nmap": "pp-commands\\nmap.py",  # new
+        "iperf3": "pp-commands\\iperf3.py",  # new
+        "glow": "pp-commands\\glow.py",  # new
+        "ranger": "pp-commands\\ranger.py",  # new
+        "espanso": "pp-commands\\espanso.py",  # new
+        "plasma-workspace": "pp-commands\\plasma-workspace.py",  # new
+        "syncthing": "pp-commands\\syncthing.py",  # new
+        "flatpak": "pp-commands\\flatpak.py",  # new
+        "atom": "pp-commands\\atom.py",  # new
+        "lite-xl": "pp-commands\\lite-xl.py",  # new
+        "weather": "pp-commands\\weather.py",  # new
+        "g++": "pp-commands\\gpp.py",  # new
+        "gcc": "pp-commands\\gcc.py",  # new
+        "install alpine-wsl": "run\\wsl\\install-alpine-wsl.py",  # new
+        "install arch-wsl": "run\\wsl\\install-arch-wsl.py",  # new
+        "install clear-wsl": "run\\wsl\\install-clear-wsl.py",  # new
+        "install debian-wsl": "run\\wsl\\install-debian-wsl.py",  # new
+        "install fedora-wsl": "run\\wsl\\install-fedora-wsl.py",  # new
+        "install kali-wsl": "run\\wsl\\install-kali-wsl.py",  # new
+        "install mint-wsl": "run\\wsl\\install-mint-wsl.py",  # new
+        "install opensuse-wsl": "run\\wsl\\install-opensuse-wsl.py",  # new
+        "install oracle-wsl": "run\\wsl\\install-oracle-wsl.py",  # new
+        "install pengwin-wsl": "run\\wsl\\install-pengwin-wsl.py",  # new
+        "install redhat-wsl": "run\\wsl\\install-redhat-wsl.py",  # new
+        "install suse-wsl": "run\\wsl\\install-suse-wsl.py",  # new
+        "install ubuntu-wsl": "run\\wsl\\install-ubuntu-wsl.py",  # new
+        "install wsl": "run\\wsl\\install-wsl.py",  # new
+        "install vs-code": "run\vs\\install-vs-code.py",  # new
+        "install rustup": "run\\rust\\rustup\\install-rustup.py",  # new
+        "install ruby": "run\\ruby\\install-ruby.py",  # new
+        "install rscript": "run\\ruby\\install-rscript.py",
+        "install pycharm": "run\\pycharm\\install-pycharm.py",  # new
+        "install nodejs": "run\\java\\javac\\install-nodejs.py",  # new
+        "install githubdesktop": "run\\github\\install-githubdesktop.py",  # new
+        "install docker": "run\\docker\\install-dockerdesktop.py",  # new
+        "install vs-cpp": "run\\cpp\\install-vs-cpp.py",  # new
+        "install vs-c": "run\\c\\install-vs-c.py",  # new
+        "install vs-cs": "run\\cs\\install-vs.py",  # new
+        "install go": "run\\go\\install-go.py",  # new
+        "install julia": "run\\julia\\install-julia.py",  # new
+        "install ffmpeg": "run\\ffmpeg\\install-ffmpeg.py",  # new
+        "install clojure": "run\\clojure\\install-clojure.py",  # new
+        "install dart": "run\\dart\\install-dart.py",  # new
+        "install elixir": "run\\elixir\\install-elixir.py",  # new
+        "install elm": "run\\elm\\install-elm.py",  # new
+        "install fs": "run\\fs\\install-fs.py",  # new
+        "install haskell": "run\\haskell\\install-haskell.py",  # new
+        "install kotlin": "run\\haskell\\install-kotlin.py",  # new
+        "install lua": "run\\lua\\install-lua.py",  # new
+        "install php": "run\\php\\install-php.py",  # new
+        "install scala": "run\\scala\\install-scala.py",  # new
+        "install swift": "run\\swift\\install-swift.py",  # new
+        "install typescript": "run\\typescript\\install-typescript.py",  # new
+        "install zig": "run\\zig\\install-zig.py",  # new
+        "install v": "run\\v\\install-v.py",  # new
+        "install solidity": "run\\solidity\\install-solidity.py",  # new
+        "install nim": "run\\nim\\install-nim.py",  # new
+        "install haxe": "run\\haxe\\install-haxe.py",  # new
+        "install hack": "run\\hack\\install-hack.py",  # new
+        "install fortran": "run\\fortran\\install-fortran.py",  # new
+        "install lisp": "run\\lisp\\install-lisp.py",  # new
+        "install racket": "run\\racket\\install-racket.py",  # new
+        "install g++": "pp-commands\\gpp.py",  # new
+        "install gcc": "pp-commands\\gcc.py",  # new
+        "install algol": "pp-commands\\gcc.py",  # new
+        "install htop": "pp-commands\\htop.py",  # new
+        "install bashtop": "pp-commands\\bashtop.py",  # new
+        "install taskmanager": "pp-commands\\bashtop.py",  # new
+        "install btop": "pp-commands\\btop.py",  # new
+        "install atop": "pp-commands\\atop.py",  # new
+        "install emacs": "pp-commands\\emacs.py",  # new
+        "install vim": "pp-commands\\vim.py",  # new
+        "install nano": "pp-commands\\nano.py",  # new
+        "install dstat": "pp-commands\\dstat.py",  # new
+        "install nmon": "pp-commands\\nmon.py",  # new
+        "install glances": "pp-commands\\glances.py",  # new
+        "install iftop": "pp-commands\\iftop.py",  # new
+        "install nethogs": "pp-commands\\nethogs.py",  # new
+        "install bmon": "pp-commands\\bmon.py",  # new
+        "install tcpdump": "pp-commands\\tcpdump.py",  # new
+        "install speedtest-cli": "pp-commands\\speedtest-cli.py",  # new
+        "install ncdu": "pp-commands\\ncdu.py",  # new
+        "install duf": "pp-commands\\duf.py",  # new
+        "install lsblk": "pp-commands\\lsblk.py",  # new
+        "install iotop": "pp-commands\\iotop.py",  # new
+        "install fzf": "pp-commands\\fzf.py",  # new
+        "install fd": "pp-commands\\fd.py",  # new
+        "install ripgrep": "pp-commands\\ripgrep.py",  # new
+        "install tmux": "pp-commands\\tmux.py",  # new
+        "install bat": "pp-commands\\bat.py",  # new
+        "install exa": "pp-commands\\exa.py",  # new
+        "install tldr": "pp-commands\\tldr.py",  # new
+        "install gitui": "pp-commands\\gitui.py",  # new
+        "install lazygit": "pp-commands\\lazygit.py",  # new
+        "install zoxide": "pp-commands\\zoxide.py",  # new
+        "install starship": "pp-commands\\starship.py",  # new
+        "install nala": "pp-commands\\nala.py",  # new
+        "install bpytop": "pp-commands\\bpytop.py",  # new
+        "install belnder": "pp-commands\\belnder.py",  # new
+        "install clion": "pp-commands\\clion.py",  # new
+        "install community": "pp-commands\\community.py",  # new
+        "install intellij": "pp-commands\\intellij.py",  # new
+        "install rider": "pp-commands\\rider.py",  # new
+        "install webstorm": "pp-commands\\webstorm.py",  # new
+        "install golab": "pp-commands\\golab.py",  # new
+        "install phpstorm": "pp-commands\\phpstorm.py",  # new
+        "install nvim": "pp-commands\\nvim.py",  # new
+        "install code": "pp-commands\\code.py",  # new
+        "install micro": "pp-commands\\micro.py",  # new
+        "install gedit": "pp-commands\\gedit.py",  # new
+        "install update": "pp-commands\\update.py",  # new
+        "install selfupdate": "pp-commands\\update.py",  # new
+        "install update pp-term": "pp-commands\\updade.py",  # new
+        "install kakoune": "pp-commands\\kakoune.py",  # new
+        "install helix": "pp-commands\\helix.py",  # new
+        "install jed": "pp-commands\\jed.py",  # new
+        "install joe": "pp-commands\\joe.py",  # new
+        "install mg": "pp-commands\\mg.py",  # new
+        "install acme": "pp-commands\\acme.py",  # new
+        "install geany": "pp-commands\\geany.py",  # new
+        "install kate": "pp-commands\\kate.py",  # new
+        "install mousepad": "pp-commands\\mousepad.py",  # new
+        "install xed": "pp-commands\\xed.py",  # new
+        "install entr": "pp-commands\\entr.py",  # new
+        "install asdf": "pp-commands\\asdf.py",  # new
+        "install direnv": "pp-commands\\direnv.py",  # new
+        "install nmap": "pp-commands\\nmap.py",  # new
+        "install iperf3": "pp-commands\\iperf3.py",  # new
+        "install glow": "pp-commands\\glow.py",  # new
+        "install ranger": "pp-commands\\ranger.py",  # new
+        "install espanso": "pp-commands\\espanso.py",  # new
+        "install plasma-workspace": "pp-commands\\plasma-workspace.py",  # new
+        "install syncthing": "pp-commands\\syncthing.py",  # new
+        "install flatpak": "pp-commands\\flatpak.py",  # new
+        "install atom": "pp-commands\\atom.py",  # new
+        "install lite-xl": "pp-commands\\lite-xl.py",  # new
+        "install weather": "pp-commands\\weather.py",  # new
+        "install grafana": "mavis-run-grafana\\run-grafana.py",
+        "update ollama": "pp-commands\\update-ollama.py",  # new
+        "update git": "pp-commands\\update-git.py",  # new
+        "update visual studio build tools": "pp-commands\\update-vsb.py",  # new
+        "update vsb": "pp-commands\\update-vsb.py",  # new
+        "update rustup": "pp-commands\\update-rustup.py",  # new
+        "update docker": "pp-commands\\update-docker.py",  # new
+        "update wsl": "pp-commands\\update-wsl.py",  # new
+        "update powershell": "pp-commands\\update-powershell.py",  # new
+        "grafana": "mavis-run-grafana\\run-grafana.py",
+        "run grafana": "mavis-run-grafana\\run-grafana.py",
+        "pi mavis env": "mavis-install\\install-info-mavis-4.py",
+        "pi mavis-3": "mavis-install\\install-info-mavis-4.py",  # new
+        "pi mavis-3.3": "mavis-install\\install-info-mavis-4.py",  # new
+        "pi mavis-3-3": "mavis-install\\install-info-mavis-4.py",  # new
+        "pi mavis-4": "mavis-install\\install-info-mavis-4.py",  # new
+        "pi mavis-4.3": "mavis-install\\install-info-mavis-4.py",  # new
+        "pi mavis-4-3": "mavis-install\\install-info-mavis-4.py",  # new
+        "pi ollama mavis-4": "mavis-install\\install-ollama-mavis-4.py",  # new
+        "pi grafana": "mavis-run-grafana\\run-grafana.py",  # new
+        "pi deepseek-r1:1.5b": "pp-commands\\deepseek-r1-1-5b.py",  # new
+        "pi deepseek-r1:7b": "pp-commands\\deepseek-r1-7b.py",  # new
+        "pi deepseek-r1:8b": "pp-commands\\deepseek-r1-8b.py",  # new
+        "pi deepseek-r1:14b": "pp-commands\\deepseek-r1-14b.py",  # new
+        "pi deepseek-r1:32b": "pp-commands\\deepseek-r1-32b.py",  # new
+        "pi deepseek-r1:70b": "pp-commands\\deepseek-r1-70b.py",  # new
+        "pi deepseek-r1:671b": "pp-commands\\deepseek-r1-671b.py",  # new
+        "pi deepscaler": "pp-commands\\deepscaler.py",  # new
+        "pi llama3.1:8b": "pp-commands\\llama-3-1-8b.py",  # new
+        "pi llama3.1:70b": "pp-commands\\llama-3-1-70b.py",  # new
+        "pi llama3.1:405": "pp-commands\\llama-3-1-405b.py",  # new
+        "pi llama3.2:1b": "pp-commands\\llama-3-2-1b.py",  # new
+        "pi llama3.2:3b": "pp-commands\\llama-3-2-3b.py",  # new
+        "pi llama3.3": "pp-commands\\llama-3-3.py",  # new
+        "pi llama3:8b": "pp-commands\\llama-3-8b.py",  # new
+        "pi llama3:70b": "pp-commands\\llama-3-70b.py",  # new
+        "pi mistral": "pp-commands\\mistral.py",  # new
+        "pi mistral-large": "pp-commands\\mistral-large.py",  # new
+        "pi mistral-nemo": "pp-commands\\mistral-nemo.py",  # new
+        "pi mistral-openorca": "pp-commands\\mistral-openorca.py",  # new
+        "pi mistral-small:22b": "pp-commands\\mistral-small-22b.py",  # new
+        "pi mistral-small:24b": "pp-commands\\mistral-small-24b.py",  # new
+        "pi phi4": "pp-commands\\phi-4.py",  # new
+        "pi qwen2.5:0.5b": "pp-commands\\qwen-2-5-0.5b.py",  # new
+        "pi qwen2.5:1.5b": "pp-commands\\qwen-2-5-1.5b.py",  # new
+        "pi qwen2.5:3b": "pp-commands\\qwen-2-5-3b.py",  # new
+        "pi qwen2.5:7b": "pp-commands\\qwen-2-5-7b.py",  # new
+        "pi qwen2.5:14b": "pp-commands\\qwen-2-5-14b.py",  # new
+        "pi qwen2.5:32b": "pp-commands\\qwen-2-5-32b.py",  # new
+        "pi qwen2.5:72b": "pp-commands\\qwen-2-5-72b.py",  # new
+        "pi qwen2.5-coder:0.5b": "pp-commands\\qwen-2-5-coder-0.5b.py",  # new
+        "pi qwen2.5-coder:1.5b": "pp-commands\\qwen-2-5-coder-0.5b.py",  # new
+        "pi qwen2.5-coder:3b": "pp-commands\\qwen-2-5-coder-0.5b.py",  # new
+        "pi qwen2.5-coder:7b": "pp-commands\\qwen-2-5-coder-0.5b.py",  # new
+        "pi qwen2.5-coder:14b": "pp-commands\\qwen-2-5-coder-0.5b.py",  # new
+        "pi qwen2.5-coder:32b": "pp-commands\\qwen-2-5-coder-0.5b.py",  # new
+        "pi gemma3:1b": "pp-commands\\gemma-3-1b.py",  # new
+        "pi gemma3:4b": "pp-commands\\gemma-3-4b.py",  # new
+        "pi gemma3:12b": "pp-commands\\gemma-3-12b.py",  # new
+        "pi gemma3:27b": "pp-commands\\gemma-3-27b.py",  # new
+        "pi qwq": "pp-commands\\qwq.py",  # new
+        "pi command-a": "pp-commands\\command-a.py",  # new
+        "pi phi4-mini": "pp-commands\\phi-4-mini.py",  # new
+        "pi granite3.2:8b": "pp-commands\\granite-3-2-8b.py",  # new
+        "pi granite3.2:2b": "pp-commands\\granite-3-2-2b.py",  # new
+        "pi granite3.2-vision:2b": "pp-commands\\granite-3-2-2b-vision.py",  # new
+        "pi qwen-2-5-omni:7b": "pp-commands\\qwen-2-5-omni-7b.py",  # new
+        "pi qvq:72b": "pp-commands\\qvq-72b.py",  # new
+        "pi qwen-2-5-vl:32b": "pp-commands\\qwen-2-5-vl-32b.py",  # new
+        "pi qwen-2-5-vl:72b": "pp-commands\\qwen-2-5-vl-72b.py",  # new
+        "pi llama-4-maverick:17b": "pp-commands\\llama-4-maverick-17b.py",  # new
+        "pi llama-4-scout:17b": "pp-commands\\llama-4-scout-17b.py",  # new
+        "pi deepcoder:1.5b": "pp-commands\\deepcoder-1-5b.py",  # new
+        "pi deepcoder:14b": "pp-commands\\deepcoder-14b.py",  # new
+        "pi mistral-small3.1": "pp-commands\\mistral-small-3-1.py",  # new
+        "pi 3d-slicer": "run\\simon\\3d-slicer\\install-3d-slicer.py",  # new
+        "pi simon": "run\\simon\\install-simon-1.py",  # new
+        "pi fun main": "pp-commands\\fun-install.py",  # new
+        "pi fun games main": "pp-commands\\fun-install.py",  # new
+        "pi fun calc main": "pp-commands\\fun-install.py",  # new
+        "pi fun": "pp-commands\\fun-matrix.py",  # new
+        "pi fun sl": "pp-commands\\fun-sl.py",  # new
+        "pi fun aafire": "pp-commands\\fun-aafire.py",  # new
+        "pi fun cmatrix": "pp-commands\\fun-cmatrix.py",  # new
+        "pi fun cow": "pp-commands\\fun-cow.py",  # new
+        "pi fun dragon": "pp-commands\\fun-dragon.py",  # new
+        "pi fun figlet": "pp-commands\\fun-figlet.py",  # new
+        "pi fun fortune": "pp-commands\\fun-fortune.py",  # new
+        "pi fun ponysay": "pp-commands\\fun-ponysay.py",  # new
+        "pi fun telnet": "pp-commands\\fun-telnet.py",  # new
+        "pi fun train": "pp-commands\\fun-train.py",  # new
+        "pi fun install games": "pp-commands\\fun-install-games.py",  # new
+        "pi fun bastet": "pp-commands\\fun-bashtet.py",  # new
+        "pi fun chess": "pp-commands\\fun-gnuchess.py",  # new
+        "pi fun moon-buggy": "pp-commands\\fun-moon-buggy.py",  # new
+        "pi fun nethack": "pp-commands\\fun-nethack-console.py",  # new
+        "pi fun nsnake": "pp-commands\\fun-nsnake.py",  # new
+        "pi fun pacman": "pp-commands\\fun-pacman4console.py",  # new
+        "pi fun tictactoe": "pp-commands\\fun-tictactoe-ng.py",  # new
+        "pi fun tint": "pp-commands\\fun-tint.py",  # new
+        "pi fun tetris": "pp-commands\\fun-vitetris.py",  # new
+        "pi fun calculator": "pp-commands\\fun-calc.py",  # new
+        "pi fun calc": "pp-commands\\fun-calc.py",  # new
+        "pi fun install calculator": "pp-commands\\fun-install-calc.py",  # new
+        "pi fun matrix": "pp-commands\\fun-matrix.py",  # new
+        "pi fun matrix green": "pp-commands\\fun-matrix-green.py",  # new
+        "pi fun aquarium": "pp-commands\\fun-asciiquarium.py",  # new
+        "pi fun aqua": "pp-commands\\fun-asciiquarium.py",  # new
+        "pi fun bb": "pp-commands\\fun-bb.py",  # new
+        "pi cool pin": "pp-commands\\theme-pcc.py",  # new
+        "pi cool pin-2": "pp-commands\\theme-pcc-2.py",  # new
+        "pi cool pin-3": "pp-commands\\theme-pcc-3.py",  # new
+        "pi cool pin-4": "pp-commands\\theme-pcc-4.py",  # new
+        "pi cool pin-5": "pp-commands\\theme-pcc-5.py",  # new
+        "pi cool pin-6": "pp-commands\\theme-pcc-6.py",  # new
+        "pi cool pin-7": "pp-commands\\theme-pcc-7.py",  # new
+        "pi cool pin-8": "pp-commands\\theme-pcc-8.py",  # new
+        "pi pi pin-9": "pp-commands\\theme-pcc-9.py",  # new
+        "pi cool pin-10": "pp-commands\\theme-pcc-10.py",  # new
+        "pi cool pin-11": "pp-commands\\theme-pcc-11.py",  # new
+        "pi cool pin-13": "pp-commands\\theme-pcc-13.py",  # new
+        "pi cool pin-14": "pp-commands\\theme-pcc-14.py",  # new
+        "pi cool pin-15": "pp-commands\\theme-pcc-15.py",  # new
+        "pi cool pin-16": "pp-commands\\theme-pcc-16.py",  # new
+        "pi cool pin-17": "pp-commands\\theme-pcc-17.py",  # new
+        "pi cool pin-18": "pp-commands\\theme-pcc-18.py",  # new
+        "pi cool pin-19": "pp-commands\\theme-pcc-19.py",  # new
+        "pi cool pin-20": "pp-commands\\theme-pcc-20.py",  # new
+        "pi cool pin-21": "pp-commands\\theme-pcc-21.py",  # new
+        "pi cool pin-22": "pp-commands\\theme-pcc-22.py",  # new
+        "pi cool pin-23": "pp-commands\\theme-pcc-23.py",  # new
+        "pi alpine-wsl": "run\\wsl\\install-alpine-wsl.py",  # new
+        "pi arch-wsl": "run\\wsl\\install-arch-wsl.py",  # new
+        "pi clear-wsl": "run\\wsl\\install-clear-wsl.py",  # new
+        "pi debian-wsl": "run\\wsl\\install-debian-wsl.py",  # new
+        "pi fedora-wsl": "run\\wsl\\install-fedora-wsl.py",  # new
+        "pi kali-wsl": "run\\wsl\\install-kali-wsl.py",  # new
+        "pi mint-wsl": "run\\wsl\\install-mint-wsl.py",  # new
+        "pi opensuse-wsl": "run\\wsl\\install-opensuse-wsl.py",  # new
+        "pi oracle-wsl": "run\\wsl\\install-oracle-wsl.py",  # new
+        "pi pengwin-wsl": "run\\wsl\\install-pengwin-wsl.py",  # new
+        "pi redhat-wsl": "run\\wsl\\install-redhat-wsl.py",  # new
+        "pi suse-wsl": "run\\wsl\\install-suse-wsl.py",  # new
+        "pi ubuntu-wsl": "run\\wsl\\install-ubuntu-wsl.py",  # new
+        "pi wsl": "run\\wsl\\install-wsl.py",  # new
+        "pi vs-code": "run\vs\\install-vs-code.py",  # new
+        "pi rustup": "run\\rust\\rustup\\install-rustup.py",  # new
+        "pi ruby": "run\\ruby\\install-ruby.py",  # new
+        "pi rscript": "run\\ruby\\install-rscript.py",
+        "pi pycharm": "run\\pycharm\\install-pycharm.py",  # new
+        "pi nodejs": "run\\java\\javac\\install-nodejs.py",  # new
+        "pi githubdesktop": "run\\github\\install-githubdesktop.py",  # new
+        "pi docker": "run\\docker\\install-dockerdesktop.py",  # new
+        "pi vs-cpp": "run\\cpp\\install-vs-cpp.py",  # new
+        "pi vs-c": "run\\c\\install-vs-c.py",  # new
+        "pi vs-cs": "run\\cs\\install-vs.py",  # new
+        "pi go": "run\\go\\install-go.py",  # new
+        "pi julia": "run\\julia\\install-julia.py",  # new
+        "pi ffmpeg": "run\\ffmpeg\\install-ffmpeg.py",  # new
+        "pi clojure": "run\\clojure\\install-clojure.py",  # new
+        "pi dart": "run\\dart\\install-dart.py",  # new
+        "pi elixir": "run\\elixir\\install-elixir.py",  # new
+        "pi elm": "run\\elm\\install-elm.py",  # new
+        "pi fs": "run\\fs\\install-fs.py",  # new
+        "pi haskell": "run\\haskell\\install-haskell.py",  # new
+        "pi kotlin": "run\\haskell\\install-kotlin.py",  # new
+        "pi lua": "run\\lua\\install-lua.py",  # new
+        "pi php": "run\\php\\install-php.py",  # new
+        "pi scala": "run\\scala\\install-scala.py",  # new
+        "pi swift": "run\\swift\\install-swift.py",  # new
+        "pi typescript": "run\\typescript\\install-typescript.py",  # new
+        "pi zig": "run\\zig\\install-zig.py",  # new
+        "pi v": "run\\v\\install-v.py",  # new
+        "pi solidity": "run\\solidity\\install-solidity.py",  # new
+        "pi nim": "run\\nim\\install-nim.py",  # new
+        "pi haxe": "run\\haxe\\install-haxe.py",  # new
+        "pi hack": "run\\hack\\install-hack.py",  # new
+        "pi fortran": "run\\fortran\\install-fortran.py",  # new
+        "pi lisp": "run\\lisp\\install-lisp.py",  # new
+        "pi racket": "run\\racket\\install-racket.py",  # new
+        "pi g++": "pp-commands\\gpp.py",  # new
+        "pi gcc": "pp-commands\\gcc.py",  # new
+        "pi algol": "pp-commands\\gcc.py",  # new
+        "pi htop": "pp-commands\\htop.py",  # new
+        "pi bashtop": "pp-commands\\bashtop.py",  # new
+        "pi taskmanager": "pp-commands\\bashtop.py",  # new
+        "pi btop": "pp-commands\\btop.py",  # new
+        "pi atop": "pp-commands\\atop.py",  # new
+        "pi emacs": "pp-commands\\emacs.py",  # new
+        "pi vim": "pp-commands\\vim.py",  # new
+        "pi nano": "pp-commands\\nano.py",  # new
+        "pi dstat": "pp-commands\\dstat.py",  # new
+        "pi nmon": "pp-commands\\nmon.py",  # new
+        "pi glances": "pp-commands\\glances.py",  # new
+        "pi iftop": "pp-commands\\iftop.py",  # new
+        "pi nethogs": "pp-commands\\nethogs.py",  # new
+        "pi bmon": "pp-commands\\bmon.py",  # new
+        "pi tcpdump": "pp-commands\\tcpdump.py",  # new
+        "pi speedtest-cli": "pp-commands\\speedtest-cli.py",  # new
+        "pi ncdu": "pp-commands\\ncdu.py",  # new
+        "pi duf": "pp-commands\\duf.py",  # new
+        "pi lsblk": "pp-commands\\lsblk.py",  # new
+        "pi iotop": "pp-commands\\iotop.py",  # new
+        "pi fzf": "pp-commands\\fzf.py",  # new
+        "pi fd": "pp-commands\\fd.py",  # new
+        "pi ripgrep": "pp-commands\\ripgrep.py",  # new
+        "pi tmux": "pp-commands\\tmux.py",  # new
+        "pi bat": "pp-commands\\bat.py",  # new
+        "pi exa": "pp-commands\\exa.py",  # new
+        "pi tldr": "pp-commands\\tldr.py",  # new
+        "pi gitui": "pp-commands\\gitui.py",  # new
+        "pi lazygit": "pp-commands\\lazygit.py",  # new
+        "pi zoxide": "pp-commands\\zoxide.py",  # new
+        "pi starship": "pp-commands\\starship.py",  # new
+        "pi nala": "pp-commands\\nala.py",  # new
+        "pi bpytop": "pp-commands\\bpytop.py",  # new
+        "pi belnder": "pp-commands\\belnder.py",  # new
+        "pi clion": "pp-commands\\clion.py",  # new
+        "pi community": "pp-commands\\community.py",  # new
+        "pi intellij": "pp-commands\\intellij.py",  # new
+        "pi rider": "pp-commands\\rider.py",  # new
+        "pi webstorm": "pp-commands\\webstorm.py",  # new
+        "pi golab": "pp-commands\\golab.py",  # new
+        "pi phpstorm": "pp-commands\\phpstorm.py",  # new
+        "pi nvim": "pp-commands\\nvim.py",  # new
+        "pi code": "pp-commands\\code.py",  # new
+        "pi micro": "pp-commands\\micro.py",  # new
+        "pi gedit": "pp-commands\\gedit.py",  # new
+        "pi update": "pp-commands\\update.py",  # new
+        "pi selfupdate": "pp-commands\\update.py",  # new
+        "pi update pp-term": "pp-commands\\updade.py",  # new
+        "pi kakoune": "pp-commands\\kakoune.py",  # new
+        "pi helix": "pp-commands\\helix.py",  # new
+        "pi jed": "pp-commands\\jed.py",  # new
+        "pi joe": "pp-commands\\joe.py",  # new
+        "pi mg": "pp-commands\\mg.py",  # new
+        "pi acme": "pp-commands\\acme.py",  # new
+        "pi geany": "pp-commands\\geany.py",  # new
+        "pi kate": "pp-commands\\kate.py",  # new
+        "pi mousepad": "pp-commands\\mousepad.py",  # new
+        "pi xed": "pp-commands\\xed.py",  # new
+        "pi entr": "pp-commands\\entr.py",  # new
+        "pi asdf": "pp-commands\\asdf.py",  # new
+        "pi direnv": "pp-commands\\direnv.py",  # new
+        "pi nmap": "pp-commands\\nmap.py",  # new
+        "pi iperf3": "pp-commands\\iperf3.py",  # new
+        "pi glow": "pp-commands\\glow.py",  # new
+        "pi ranger": "pp-commands\\ranger.py",  # new
+        "pi espanso": "pp-commands\\espanso.py",  # new
+        "pi plasma-workspace": "pp-commands\\plasma-workspace.py",  # new
+        "pi syncthing": "pp-commands\\syncthing.py",  # new
+        "pi flatpak": "pp-commands\\flatpak.py",  # new
+        "pi atom": "pp-commands\\atom.py",  # new
+        "pi lite-xl": "pp-commands\\lite-xl.py",  # new
+        "pi weather": "pp-commands\\weather.py"  # new
+    }
