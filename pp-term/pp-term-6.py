@@ -12720,7 +12720,45 @@ def handle_special_commands(user_input):
         handle_history_command()
         return True
 
+    if user_input.lower() == "phi":
+        handle_history_command()
+        return True
+
     if user_input.startswith("search "):
+        try:
+            # Teilen Sie die Eingabe in Befehl, Dateiname und Schlüsselwort auf
+            parts = user_input.split(maxsplit=2)
+            if len(parts) < 3:
+                print(f"[{timestamp()}] [INFO] Usage: search <filename> <keyword>")
+                return True
+
+            _, filename, keyword = parts
+
+            # Öffnen Sie die Datei mit UTF-8-Kodierung
+            with open(filename, "r", encoding="utf-8") as file:
+                lines = file.readlines()
+
+            # Suchen Sie in jeder Zeile nach dem Schlüsselwort, ohne Berücksichtigung der Groß- und Kleinschreibung
+            matches = []
+            for i, line in enumerate(lines, start=1):
+                if keyword.lower() in line.lower():
+                    matches.append(f"Line {i}: {line.rstrip()}")
+
+            # Ausgabe der Ergebnisse oder einer entsprechenden Meldung, wenn keine Übereinstimmungen gefunden werden
+            if matches:
+                print("\n".join(matches))
+            else:
+                print(f"[{timestamp()}] [ERROR] No matches found.")
+
+        except FileNotFoundError:
+            print(f"[{timestamp()}] [ERROR] File not found: {filename}")
+        except PermissionError:
+            print(f"[{timestamp()}] [ERROR] No permission to read: {filename}")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Error during search: {str(e)}")
+        return True
+
+    if user_input.startswith("psf "):
         try:
             # Teilen Sie die Eingabe in Befehl, Dateiname und Schlüsselwort auf
             parts = user_input.split(maxsplit=2)
@@ -12784,8 +12822,72 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] while zipping the folder: {str(e)}")
         return True
 
+    if user_input.startswith("pz "):
+        try:
+            # Befehl und Ordner aus der Eingabe extrahieren
+            parts = user_input.split(maxsplit=1)
+            if len(parts) < 2:
+                print(f"[{timestamp()}] [INFO] Usage: zip <folder>")
+                return True
+
+            _, folder = parts
+            # Normalisieren Sie den Pfad, besonders nützlich unter Windows
+            folder_path = os.path.normpath(folder)
+
+            # Überprüfen Sie, ob der Ordner vorhanden ist
+            if not os.path.isdir(folder_path):
+                print(f"{red}Error: Folder does not exist{reset}: {folder_path}")
+                return True
+
+            # Erstellen Sie das Archiv. Der Archivname entspricht dem Ordnernamen ohne Erweiterung.
+            shutil.make_archive(folder_path, 'zip', folder_path)
+            print(f"{green}Folder successfully zipped!{reset}")
+
+        except FileNotFoundError:
+            print(f"[{timestamp()}] [ERROR] Folder not found: {folder_path}")
+        except PermissionError:
+            print(f"[{timestamp()}] [ERROR] No permission to access the folder: {folder_path}")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] while zipping the folder: {str(e)}")
+        return True
+
     # Entpacken Sie ein Archiv (optimiert für Windows mit erweiterten Prüfungen)
     if user_input.startswith("unzip "):
+        try:
+            # Extrahieren Sie den Befehl und die ZIP-Datei aus der Eingabe
+            parts = user_input.split(maxsplit=1)
+            if len(parts) < 2:
+                print(f"[{timestamp()}] [INFO] Usage: unzip <zip_file_path>")
+                return True
+
+            _, zip_path = parts
+            # Normalisieren Sie den Pfad, besonders nützlich unter Windows
+            zip_path = os.path.normpath(zip_path)
+
+            # Überprüfen Sie, ob die Zip-Datei vorhanden ist und eine Datei ist
+            if not os.path.isfile(zip_path):
+                print(f"[{timestamp()}] [ERROR] File does not exist: {zip_path}")
+                return True
+
+            # Zielverzeichnis anhand des Dateinamens ohne Erweiterung ermitteln
+            extract_dir = os.path.splitext(zip_path)[0]
+
+            # Öffnen und entpacken Sie das Zip-Archiv
+            with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+                zip_ref.extractall(extract_dir)
+
+            print(f"{green}Archive successfully extracted to:{reset} {extract_dir}")
+
+        except zipfile.BadZipFile:
+            print(f"[{timestamp()}] [ERROR] Invalid zip archive: {zip_path}")
+        except PermissionError:
+            print(f"[{timestamp()}] [ERROR] No permission to access the file: {zip_path}")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Error while extracting:{reset} {str(e)}")
+        return True
+
+
+    if user_input.startswith("puz "):
         try:
             # Extrahieren Sie den Befehl und die ZIP-Datei aus der Eingabe
             parts = user_input.split(maxsplit=1)
@@ -12891,6 +12993,50 @@ def handle_special_commands(user_input):
             if proc.returncode != 0:
                 logging.warning("Ping failed (Exit-Code %d).", proc.returncode)
         return True
+
+
+     if user_input.lower().startswith("pping "):
+         # Ziel extrahieren und validieren
+         target = user_input.split(maxsplit=1)[1].strip()
+         if not re.fullmatch(r"[A-Za-z0-9\.-]+", target):
+             logging.error("Invalid destination: %r", target)
+             return True
+
+         # OS-gerechte Anzahl-Flag
+         count_flag = "-n" if subprocess.os.name == "nt" else "-c"
+         cmd = ["ping", count_flag, "4", target]
+
+         try:
+             # Konsolen-Codepage ermitteln (nur unter Windows relevant)
+             if subprocess.os.name == "nt":
+                 cp = ctypes.windll.kernel32.GetConsoleOutputCP()
+                 encoding = f"cp{cp}"
+             else:
+                 encoding = "utf-8"
+
+             # Subprozess starten, Ausgabe als Bytes
+             proc = subprocess.run(
+                 cmd,
+                 capture_output=True,
+                 timeout=10
+             )
+
+             # Jetzt selbst decodieren mit der passenden Codepage
+             stdout = proc.stdout.decode(encoding, errors="replace")
+             stderr = proc.stderr.decode(encoding, errors="replace")
+         except subprocess.TimeoutExpired:
+             logging.error("The ping command took too long and was aborted.")
+         except Exception as e:
+             logging.error("Error when running ping: %s", e)
+         else:
+             # Ausgabe und Exit-Code loggen
+             if stdout:
+                 logging.info("Ping output:\n%s", stdout.strip())
+             if stderr:
+                 logging.warning("Ping stderr:\n%s", stderr.strip())
+             if proc.returncode != 0:
+                 logging.warning("Ping failed (Exit-Code %d).", proc.returncode)
+         return True
 
     # Papierkorb leeren
     if user_input.lower() == "emptytrash":
