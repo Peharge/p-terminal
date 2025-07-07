@@ -127,7 +127,6 @@ import psutil
 import shutil
 import time
 import socket
-import pip
 import subprocess
 import winreg
 import json
@@ -147,8 +146,6 @@ orange = "\033[38;5;214m"
 reset = "\033[0m"
 bold = "\033[1m"
 
-# Hilfsfunktionen
-
 def format_bytes(byte_value: int) -> float:
     """Bytes in GB umwandeln und auf 2 Nachkommastellen runden."""
     return round(byte_value / (1024 ** 3), 2)
@@ -157,18 +154,22 @@ def timestamp() -> str:
     """Gibt einen Zeitstempel im Format [YYYY-MM-DD HH:MM:SS] zurück."""
     return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
+# Allgemeiner Helfer für Version-Abfragen
+def safe_version(callable_fn, default: str = "unknown") -> str:
+    try:
+        result = callable_fn()
+        return result.strip() if isinstance(result, str) else result
+    except Exception:
+        return default
+
 # Systeminformationen sammeln
-
 def get_system_info() -> dict:
-    """Sammelt umfangreiche Systeminformationen."""
     system_info = {}
-
     # Betriebssystem
     system_info['os_name'] = platform.system()
     system_info['os_version'] = platform.version()
     system_info['os_release'] = platform.release()
     system_info['os_arch'] = platform.architecture()[0]
-
     # CPU-Informationen
     cpu_info = cpuinfo.get_cpu_info()
     system_info['cpu_model'] = cpu_info.get("brand_raw", "N/A")
@@ -177,56 +178,50 @@ def get_system_info() -> dict:
     system_info['cpu_threads'] = psutil.cpu_count(logical=True)
     freq = psutil.cpu_freq()
     system_info['cpu_freq'] = round(freq.max, 2) if freq and freq.max else "N/A"
-
     # RAM
     ram = psutil.virtual_memory()
     system_info['ram_total'] = format_bytes(ram.total)
     system_info['ram_used'] = format_bytes(ram.used)
     system_info['ram_free'] = format_bytes(ram.available)
     system_info['ram_usage'] = ram.percent
-
     # Swap
     swap = psutil.swap_memory()
     system_info['swap_total'] = format_bytes(swap.total)
     system_info['swap_used'] = format_bytes(swap.used)
     system_info['swap_free'] = format_bytes(swap.free)
-
     # Festplattenplatz (Root-Laufwerk)
     total_storage, used_storage, free_storage = shutil.disk_usage("/")
     system_info['storage_total'] = format_bytes(total_storage)
     system_info['storage_used'] = format_bytes(used_storage)
     system_info['storage_free'] = format_bytes(free_storage)
-
     # Netzwerk
     system_info['hostname'] = socket.gethostname()
     try:
         system_info['ip_address'] = socket.gethostbyname(system_info['hostname'])
     except Exception:
         system_info['ip_address'] = "N/A"
-
     # Python und Pip
     system_info['python_version'] = platform.python_version()
     try:
-        system_info['pip_version'] = subprocess.check_output(['pip', '--version'], text=True).split()[1]
-    except Exception as e:
-        system_info['pip_version'] = f"Error: {e}"
-
-    # Netzwerk-Schnittstellen (MAC, IPv4, IPv6)
+        pip_out = subprocess.check_output(['pip', '--version'], text=True)
+        system_info['pip_version'] = pip_out.split()[1]
+    except Exception:
+        system_info['pip_version'] = "unknown"
+    # Netzwerk-Schnittstellen
     network_interfaces = psutil.net_if_addrs()
     interfaces_info = {}
-    for interface, addresses in network_interfaces.items():
-        interface_details = {}
-        for address in addresses:
-            if address.family == socket.AF_INET:
-                interface_details['IPv4'] = address.address
-            elif address.family == socket.AF_INET6:
-                interface_details['IPv6'] = address.address
-            elif address.family == psutil.AF_LINK:
-                interface_details['MAC'] = address.address
-        interfaces_info[interface] = interface_details
+    for iface, addrs in network_interfaces.items():
+        details = {}
+        for addr in addrs:
+            if addr.family == socket.AF_INET:
+                details['IPv4'] = addr.address
+            elif addr.family == socket.AF_INET6:
+                details['IPv6'] = addr.address
+            elif addr.family == psutil.AF_LINK:
+                details['MAC'] = addr.address
+        interfaces_info[iface] = details
     system_info['network_interfaces'] = interfaces_info
-
-    # Load Average (unter Windows als CPU-Auslastung, ansonsten getloadavg)
+    # Load Average / CPU-Auslastung
     if system_info['os_name'] == "Windows":
         system_info['load_avg'] = f"CPU Usage: {psutil.cpu_percent(interval=1)}%"
     else:
@@ -235,137 +230,74 @@ def get_system_info() -> dict:
             system_info['load_avg'] = {"1m": la1, "5m": la5, "15m": la15}
         except OSError:
             system_info['load_avg'] = "Not available"
-
-    # Systemlaufzeit (Uptime)
+    # Uptime
     uptime_seconds = time.time() - psutil.boot_time()
     system_info['uptime'] = time.strftime("%H:%M:%S", time.gmtime(uptime_seconds))
-
     # Aktive Benutzer
     users = psutil.users()
-    system_info['user_info'] = []
-    for u in users:
-        system_info['user_info'].append({
-            'user': u.name,
-            'terminal': u.terminal or 'N/A',
-            'started': time.ctime(u.started)
-        })
-
+    system_info['user_info'] = [
+        {'user': u.name, 'terminal': u.terminal or 'N/A', 'started': time.ctime(u.started)}
+        for u in users
+    ]
     return system_info
 
-# Windows-spezifische Versions-Getter
+# Versions-Getter
 
-def get_powershell_version():
-    try:
-        result = subprocess.run(
-            ["powershell", "-Command", "$PSVersionTable.PSVersion.ToString()"],
-            capture_output=True, text=True, check=True
-        )
-        return result.stdout.strip()
-    except subprocess.CalledProcessError:
-        return f"[{timestamp()}] [ERROR] Error retrieving PowerShell version."
-    except FileNotFoundError:
-        return f"[{timestamp()}] [ERROR] PowerShell is not installed or not in the PATH."
+def get_powershell_version() -> str:
+    return safe_version(lambda: subprocess.check_output(
+        ["powershell", "-Command", "$PSVersionTable.PSVersion.ToString()"], text=True, check=True
+    ), default="0")
 
-def get_wsl_version():
-    try:
-        result = subprocess.run(
-            ["wsl", "--version"],
-            capture_output=True, text=True, check=True
-        )
-        version = result.stdout.strip().split("\n")[0]
-        return version
-    except subprocess.CalledProcessError:
-        return f"[{timestamp()}] [ERROR] Error retrieving WSL version."
-    except FileNotFoundError:
-        return f"[{timestamp()}] [ERROR] WSL is not installiert or not in the PATH."
+def get_wsl_version() -> str:
+    return safe_version(lambda: subprocess.check_output([
+        "wsl", "--version"], text=True, check=True
+    ).splitlines()[0], default="0")
 
-def get_kernel_version():
-    try:
-        result = subprocess.run(
-            ["wsl", "uname", "-r"],
-            capture_output=True, text=True, check=True
-        )
-        return result.stdout.strip()
-    except subprocess.CalledProcessError:
-        return f"[{timestamp()}] [ERROR] Error retrieving kernel version."
-    except FileNotFoundError:
-        return f"[{timestamp()}] [ERROR] WSL is not installiert or not in the PATH."
+def get_kernel_version() -> str:
+    return safe_version(lambda: subprocess.check_output(
+        ["wsl", "uname", "-r"], text=True, check=True
+    ), default="0")
 
-def get_wslg_version():
-    try:
-        result = subprocess.run(
-            ["wsl", "--version"],
-            capture_output=True, text=True, check=True
-        )
-        lines = result.stdout.strip().split("\n")
-        return lines[4] if len(lines) > 4 else "N/A"
-    except subprocess.CalledProcessError:
-        return f"[{timestamp()}] [ERROR] Error retrieving WSLg version."
-    except FileNotFoundError:
-        return f"[{timestamp()}] [ERROR] WSL is not installiert or not in the PATH."
+def get_wslg_version() -> str:
+    return safe_version(lambda: subprocess.check_output([
+        "wsl", "--version"], text=True, check=True
+    ).splitlines()[4] if len(subprocess.check_output(["wsl", "--version"], text=True).splitlines())>4 else "unknown", default="unknown")
 
-def get_msrpc_version():
-    try:
-        result = subprocess.run(
-            ["wsl", "--version"],
-            capture_output=True, text=True, check=True
-        )
-        lines = result.stdout.strip().split("\n")
-        return lines[6] if len(lines) > 6 else "N/A"
-    except subprocess.CalledProcessError:
-        return f"[{timestamp()}] [ERROR] Error retrieving MSRPC version."
-    except FileNotFoundError:
-        return f"[{timestamp()}] [ERROR] WSL is not installiert or not in the PATH."
+def get_msrpc_version() -> str:
+    return safe_version(lambda: subprocess.check_output([
+        "wsl", "--version"], text=True, check=True
+    ).splitlines()[6] if len(subprocess.check_output(["wsl", "--version"], text=True).splitlines())>6 else "unknown", default="unknown")
 
-def get_direct3d_version():
-    try:
-        result = subprocess.run(
-            ["wsl", "--version"],
-            capture_output=True, text=True, check=True
-        )
-        lines = result.stdout.strip().split("\n")
-        return lines[8] if len(lines) > 8 else "N/A"
-    except subprocess.CalledProcessError:
-        return f"[{timestamp()}] [ERROR] Error retrieving Direct3D version."
-    except FileNotFoundError:
-        return f"[{timestamp()}] [ERROR] WSL is not installiert or not in the PATH."
+def get_direct3d_version() -> str:
+    return safe_version(lambda: subprocess.check_output([
+        "wsl", "--version"], text=True, check=True
+    ).splitlines()[8] if len(subprocess.check_output(["wsl", "--version"], text=True).splitlines())>8 else "unknown", default="unknown")
 
-def get_dxcore_version():
-    try:
-        result = subprocess.run(
-            ["wsl", "--version"],
-            capture_output=True, text=True, check=True
-        )
-        lines = result.stdout.strip().split("\n")
-        return lines[10] if len(lines) > 10 else "N/A"
-    except subprocess.CalledProcessError:
-        return f"[{timestamp()}] [ERROR] Error retrieving DXCore version."
-    except FileNotFoundError:
-        return f"[{timestamp()}] [ERROR] WSL is not installiert or not in the PATH."
+def get_dxcore_version() -> str:
+    return safe_version(lambda: subprocess.check_output([
+        "wsl", "--version"], text=True, check=True
+    ).splitlines()[10] if len(subprocess.check_output(["wsl", "--version"], text=True).splitlines())>10 else "unknown", default="unknown")
 
-def get_visual_studio_version():
-    try:
-        # Beispiel-Registry-Pfad für Visual Studio 2015:
+def get_visual_studio_version() -> str:
+    def _vs():
         registry_path = r"SOFTWARE\Microsoft\VisualStudio\14.0\Setup\VisualStudio"
         with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, registry_path) as key:
             version, _ = winreg.QueryValueEx(key, "Version")
             return version
-    except FileNotFoundError:
-        return f"[{timestamp()}] [ERROR] Visual Studio not found"
+    return safe_version(_vs, default="0")
 
-def get_ollama_version():
-    try:
-        return subprocess.check_output(['ollama', '--version'], text=True).strip()
-    except subprocess.CalledProcessError:
-        # Versuche, Ollama zu starten und nochmal
+def get_ollama_version() -> str:
+    def _ollama():
+        return subprocess.check_output(["ollama", "--version"], text=True, check=True)
+    ver = safe_version(_ollama, default="0")
+    if ver == "0":
         try:
-            subprocess.check_output(['ollama', 'start'], text=True)
-        except subprocess.CalledProcessError:
-            return f"[{timestamp()}] [INFO] Warning: Could not start Ollama."
-        try:
-            return subprocess.check_output(['ollama', '--version'], text=True).strip()
-        except subprocess.CalledProcessError:
-            return f"[{timestamp()}] [INFO] Warning: Could not connect to a running Ollama instance."
+            subprocess.check_output(['ollama', 'start'], text=True, check=True)
+            ver2 = safe_version(_ollama, default="0")
+            return ver2
+        except Exception:
+            return "0"
+    return ver
 
 # BBCode → ANSI-ASCII-Art
 
@@ -377,10 +309,6 @@ def ansi_color(r: int, g: int, b: int) -> str:
     return f'\033[38;2;{r};{g};{b}m'
 
 def parse_bbcode(text: str) -> str:
-    """
-    Wandelt BBCode-Farbangaben ([color=#RRGGBB]...[/color]) in ANSI-Farbcodes um.
-    Gibt den kompletten ANSI-strukturierten String zurück.
-    """
     output = ""
     color_stack = []
     pos = 0
@@ -393,7 +321,6 @@ def parse_bbcode(text: str) -> str:
             color_stack.append((r, g, b))
             output += ansi_color(r, g, b)
         else:
-            # [/color]
             if color_stack:
                 color_stack.pop()
             if color_stack:
@@ -408,18 +335,20 @@ def parse_bbcode(text: str) -> str:
 # Farbpaletten-Anzeige
 
 def show_color_palette_1() -> str:
-    """Zeigt die ersten 8 ANSI-256 Farben (Hintergrund) ohne Zahlen."""
-    palette = ""
-    for i in range(8):
-        palette += f"\033[48;5;{i}m  \033[0m"
-    return palette
+    return ''.join(f"\033[48;5;{i}m  \033[0m" for i in range(8))
 
 def show_color_palette_3() -> str:
-    """Zeigt die Farben 8–15 der ANSI-256 Palette (Hintergrund)."""
-    palette = ""
-    for i in range(8, 16):
-        palette += f"\033[48;5;{i}m  \033[0m"
-    return palette
+    return ''.join(f"\033[48;5;{i}m  \033[0m" for i in range(8,16))
+
+# Versionsdatei laden
+def load_versions_json() -> dict:
+    json_path = rf'C:\Users\{os.getlogin()}\p-terminal\pp-term\pp-term-versions.json'
+    try:
+        with open(json_path, 'r') as f:
+            return json.load(f)
+    except Exception:
+        return {}
+
 
 # Versionsdatei laden
 
@@ -507,11 +436,11 @@ def gather_info_lines(sys_info: dict, versions: dict) -> list:
     # Zeilen hinzufügen
     lines.append("")
     lines.append("")
-    lines.append(f"          {title}")
-    lines.append(f"        {line}")
-    lines.append(f"       {blue}P-Terminal Version{reset}: {p_terminal_ver}")
-    lines.append(f"       {blue}PP-Terminal Version{reset}: {pp_terminal_ver}")
-    lines.append(f"      {blue}PP-Terminal Launcher Version{reset}: {launcher_ver}")
+    lines.append(f"                                 {title}")
+    lines.append(f"               {line}")
+    lines.append(f"          {blue}P-Terminal Version{reset}: {p_terminal_ver}")
+    lines.append(f"        {blue}PP-Terminal Version{reset}: {pp_terminal_ver}")
+    lines.append(f"       {blue}PP-Terminal Launcher Version{reset}: {launcher_ver}")
     lines.append(f"      {blue}Peharge Compiler Version{reset}: {p_compiler_ver}")
     lines.append(f"      {blue}Peharge Kernel Version{reset}: {p_cernel_ver}")
     lines.append(f"      {blue}IQ Kernel Version{reset}: {iq_cernel_ver}")
@@ -592,21 +521,21 @@ def gather_info_lines(sys_info: dict, versions: dict) -> list:
     lines.append(f"      {blue}WSLg Version{reset}: {get_wslg_version()}")
     lines.append(f"      {blue}MSRDC Version{reset}: {get_msrpc_version()}")
     lines.append(f"      {blue}Direct3D Version{reset}: {get_direct3d_version()}")
-    lines.append(f"      {blue}DXCore Version{reset}: {get_dxcore_version()}")
-    lines.append(f"       {blue}Ollama Version{reset}: {get_ollama_version()}")
-    lines.append(f"         {blue}Visual Studio Version{reset}: {get_visual_studio_version()}")
+    lines.append(f"       {blue}DXCore Version{reset}: {get_dxcore_version()}")
+    lines.append(f"         {blue}Ollama Version{reset}: {get_ollama_version()}")
+    lines.append(f"            {blue}Visual Studio Version{reset}: {get_visual_studio_version()}")
 
     # Rust
     try:
         rust_ver = subprocess.check_output(['rustc', '--version'], text=True).strip()
     except Exception:
         rust_ver = "unbekannt"
-    lines.append(f"            {blue}Rust Version{reset}: {rust_ver}")
+    lines.append(f"                                 {blue}Rust Version{reset}: {rust_ver}")
 
     # Farbpaletten
     lines.append("")
-    lines.append("                                 " + show_color_palette_1())
-    lines.append("              " + show_color_palette_3())
+    lines.append("              " + show_color_palette_1())
+    lines.append("          " + show_color_palette_3())
     lines.append("")
     lines.append("")
     lines.append("")
