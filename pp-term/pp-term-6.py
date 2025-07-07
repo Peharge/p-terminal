@@ -12994,49 +12994,48 @@ def handle_special_commands(user_input):
                 logging.warning("Ping failed (Exit-Code %d).", proc.returncode)
         return True
 
+    if user_input.lower().startswith("pping "):
+        # Ziel extrahieren und validieren
+        target = user_input.split(maxsplit=1)[1].strip()
+        if not re.fullmatch(r"[A-Za-z0-9\.-]+", target):
+            logging.error("Invalid destination: %r", target)
+            return True
 
-     if user_input.lower().startswith("pping "):
-         # Ziel extrahieren und validieren
-         target = user_input.split(maxsplit=1)[1].strip()
-         if not re.fullmatch(r"[A-Za-z0-9\.-]+", target):
-             logging.error("Invalid destination: %r", target)
-             return True
+        # OS-gerechte Anzahl-Flag
+        count_flag = "-n" if subprocess.os.name == "nt" else "-c"
+        cmd = ["ping", count_flag, "4", target]
 
-         # OS-gerechte Anzahl-Flag
-         count_flag = "-n" if subprocess.os.name == "nt" else "-c"
-         cmd = ["ping", count_flag, "4", target]
+        try:
+            # Konsolen-Codepage ermitteln (nur unter Windows relevant)
+            if subprocess.os.name == "nt":
+                cp = ctypes.windll.kernel32.GetConsoleOutputCP()
+                encoding = f"cp{cp}"
+            else:
+                encoding = "utf-8"
 
-         try:
-             # Konsolen-Codepage ermitteln (nur unter Windows relevant)
-             if subprocess.os.name == "nt":
-                 cp = ctypes.windll.kernel32.GetConsoleOutputCP()
-                 encoding = f"cp{cp}"
-             else:
-                 encoding = "utf-8"
+            # Subprozess starten, Ausgabe als Bytes
+            proc = subprocess.run(
+                cmd,
+                capture_output=True,
+                timeout=10
+            )
 
-             # Subprozess starten, Ausgabe als Bytes
-             proc = subprocess.run(
-                 cmd,
-                 capture_output=True,
-                 timeout=10
-             )
-
-             # Jetzt selbst decodieren mit der passenden Codepage
-             stdout = proc.stdout.decode(encoding, errors="replace")
-             stderr = proc.stderr.decode(encoding, errors="replace")
-         except subprocess.TimeoutExpired:
-             logging.error("The ping command took too long and was aborted.")
-         except Exception as e:
-             logging.error("Error when running ping: %s", e)
-         else:
-             # Ausgabe und Exit-Code loggen
-             if stdout:
-                 logging.info("Ping output:\n%s", stdout.strip())
-             if stderr:
-                 logging.warning("Ping stderr:\n%s", stderr.strip())
-             if proc.returncode != 0:
-                 logging.warning("Ping failed (Exit-Code %d).", proc.returncode)
-         return True
+            # Jetzt selbst decodieren mit der passenden Codepage
+            stdout = proc.stdout.decode(encoding, errors="replace")
+            stderr = proc.stderr.decode(encoding, errors="replace")
+        except subprocess.TimeoutExpired:
+            logging.error("The ping command took too long and was aborted.")
+        except Exception as e:
+            logging.error("Error when running ping: %s", e)
+        else:
+            # Ausgabe und Exit-Code loggen
+            if stdout:
+                logging.info("Ping output:\n%s", stdout.strip())
+            if stderr:
+                logging.warning("Ping stderr:\n%s", stderr.strip())
+            if proc.returncode != 0:
+                logging.warning("Ping failed (Exit-Code %d).", proc.returncode)
+        return True
 
     # Papierkorb leeren
     if user_input.lower() == "emptytrash":
