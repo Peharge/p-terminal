@@ -271,6 +271,8 @@
        - PP-Terminal 6.1.1.15
        - PP-Terminal 6.1.1.16
        - PP-Terminal 6.1.1.18
+       - PP-Terminal 6.1.1.19
+       - PP-Terminal 6.1.1.30
 
 # IQ Compiler
 
