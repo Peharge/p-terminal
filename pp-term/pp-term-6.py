@@ -14389,6 +14389,309 @@ def handle_special_commands(user_input):
             run_circuit(circuit, repetitions=shots)
             return True
 
+    if len(sys.argv) >= 5 and sys.argv[1].upper() in ("PRP", "IQ-AI-TORCH"):
+        import torch
+        import torch.nn as nn
+        import torch.optim as optim
+        from torchvision import datasets, transforms
+        from torch.utils.data import DataLoader
+
+        # Alias PRP → PYTHON (damit sys.argv[1] danach == "IQ-AI-TORCH")
+        if sys.argv[1].upper() == "PRP":
+            sys.argv[1] = "IQ-AI-TORCH"
+
+        # alles Weitere nur für IQ-AI-TORCH
+        # (die If‑Klausel oben stellt sicher, dass wir hier nur hin gelangen, wenn sys.argv[1] jetzt "IQ-AI-TORCH" ist)
+        try:
+            hidden_size = int(sys.argv[2])
+            batch_size  = int(sys.argv[3])
+            epochs      = int(sys.argv[4])
+            model_name  = sys.argv[5] if len(sys.argv) > 5 else "model.pth"
+            if hidden_size <= 0 or batch_size <= 0 or epochs <= 0:
+                raise ValueError("All numeric parameters must be > 0.")
+        except ValueError as e:
+            print(f"[{timestamp()}] [ERROR] Invalid parameters: {e}")
+            print_usage()
+            sys.exit(1)
+
+        logging.basicConfig(level=logging.INFO, format="%(message)s")
+        logging.info(f"[{timestamp()}] [INFO] Start IQ-AI-TORCH with hidden={hidden_size}, batch={batch_size}, epochs={epochs}")
+
+        # Optional: .env laden
+        USERNAME = os.getlogin()
+        env_path = fr"C:\Users\{USERNAME}\p-terminal\pp-term\.env"
+        if os.path.isfile(env_path):
+            with open(env_path, "r") as f:
+                for line in f:
+                    line = line.strip()
+                    if not line or line.startswith("#") or "=" not in line:
+                        continue
+                    key, val = line.split("=", 1)
+                    os.environ[key] = val
+            logging.info(f"[{timestamp()}] [INFO] .env loaded by {env_path}")
+        else:
+            logging.warning(f"[{timestamp()}] [WARN] .env not found under {env_path}")
+
+        # Netzwerk definieren
+        class SimpleNet(nn.Module):
+            def __init__(self, hidden):
+                super().__init__()
+                self.fc1  = nn.Linear(28*28, hidden)
+                self.relu = nn.ReLU()
+                self.fc2  = nn.Linear(hidden, 10)
+            def forward(self, x):
+                x = x.view(-1, 28*28)
+                x = self.relu(self.fc1(x))
+                return self.fc2(x)
+
+        device    = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        model     = SimpleNet(hidden_size).to(device)
+        optimizer = optim.Adam(model.parameters(), lr=1e-3)
+        criterion = nn.CrossEntropyLoss()
+
+        transform    = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize((0.1307,), (0.3081,))
+        ])
+        train_set    = datasets.MNIST('.', train=True,  download=True, transform=transform)
+        test_set     = datasets.MNIST('.', train=False, download=True, transform=transform)
+        train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True)
+        test_loader  = DataLoader(test_set,  batch_size=batch_size, shuffle=False)
+        logging.info(f"[{timestamp()}] [INFO] Data loaded")
+
+        model.train()
+        for epoch in range(1, epochs+1):
+            total_loss = 0.0
+            for data, target in train_loader:
+                data, target = data.to(device), target.to(device)
+                optimizer.zero_grad()
+                output = model(data)
+                loss   = criterion(output, target)
+                loss.backward()
+                optimizer.step()
+                total_loss += loss.item()
+            logging.info(f"[{timestamp()}] [INFO] Epoche {epoch}/{epochs} Loss={total_loss/len(train_loader):.4f}")
+
+        model.eval()
+        correct = total = 0
+        with torch.no_grad():
+            for data, target in test_loader:
+                data, target = data.to(device), target.to(device)
+                output = model(data)
+                pred   = output.argmax(dim=1)
+                correct += (pred == target).sum().item()
+                total   += target.size(0)
+        accuracy = correct/total*100
+        logging.info(f"[{timestamp()}] [INFO] Accuracy: {accuracy:.2f}%")
+
+        torch.save(model.state_dict(), model_name)
+        logging.info(f"[{timestamp()}] [INFO] Model saved as {model_name}")
+
+        print(f"[{timestamp()}] [END] IQ-AI-TORCH pipeline completed")
+        sys.exit(0)
+
+    if len(sys.argv) >= 5 and sys.argv[1].upper() in ("PRP", "IQ-AI-TF"):
+        # Alias PRP → IQ-AI-TF (damit sys.argv[1] danach == "IQ-AI-TF")
+        if sys.argv[1].upper() == "PRP":
+            sys.argv[1] = "IQ-AI-TF"
+
+        # --- alles Weitere bleibt exakt wie gehabt ---
+        import tensorflow as tf
+        from tensorflow.keras import layers, models
+        from tensorflow.keras.datasets import mnist
+
+        # Parameter parsen
+        try:
+            hidden_size = int(sys.argv[2])
+            batch_size  = int(sys.argv[3])
+            epochs      = int(sys.argv[4])
+            model_name  = sys.argv[5] if len(sys.argv) > 5 else "model_tf.h5"
+            if hidden_size <= 0 or batch_size <= 0 or epochs <= 0:
+                raise ValueError("All numeric parameters must be > 0.")
+        except ValueError as e:
+            print(f"[{timestamp()}] [ERROR] Invalid parameters: {e}")
+            print_usage()
+            sys.exit(1)
+
+        # Logging konfigurieren
+        logging.basicConfig(level=logging.INFO, format="%(message)s")
+        logging.info(f"[{timestamp()}] [INFO] Start IQ-AI-TF with hidden={hidden_size}, batch={batch_size}, epochs={epochs}")
+
+        # Manueller .env‑Loader
+        USERNAME = os.getlogin()
+        env_path = fr"C:\Users\{USERNAME}\p-terminal\pp-term\.env"
+        if os.path.isfile(env_path):
+            with open(env_path, "r") as f:
+                for line in f:
+                    line = line.strip()
+                    if not line or line.startswith("#") or "=" not in line:
+                        continue
+                    key, val = line.split("=", 1)
+                    os.environ[key] = val
+            logging.info(f"[{timestamp()}] [INFO] .env loaded from {env_path}")
+        else:
+            logging.warning(f"[{timestamp()}] [WARN] .env not found under {env_path}")
+
+        # Daten laden
+        (x_train, y_train), (x_test, y_test) = mnist.load_data()
+        x_train = x_train.reshape(-1, 28*28).astype("float32") / 255.0
+        x_test  = x_test.reshape(-1, 28*28).astype("float32")  / 255.0
+        logging.info(f"[{timestamp()}] [INFO] MNIST loaded and preprocessed")
+
+        # Modell definieren
+        model = models.Sequential([
+            layers.Input(shape=(28*28,)),
+            layers.Dense(hidden_size, activation="relu"),
+            layers.Dense(10, activation="softmax")
+        ])
+        model.compile(
+            optimizer="adam",
+            loss="sparse_categorical_crossentropy",
+            metrics=["accuracy"]
+        )
+        logging.info(f"[{timestamp()}] [INFO] Model compiled")
+
+        # Training
+        history = model.fit(
+            x_train, y_train,
+            batch_size=batch_size,
+            epochs=epochs,
+            validation_split=0.1,
+            verbose=0,
+            callbacks=[tf.keras.callbacks.LambdaCallback(
+                on_epoch_end=lambda epoch, logs: logging.info(
+                    f"[{timestamp()}] [INFO] Epoch {epoch+1}/{epochs} "
+                    f"Loss={logs['loss']:.4f} Val_Loss={logs['val_loss']:.4f}"
+                )
+            )]
+        )
+
+        # Evaluation
+        eval_loss, eval_acc = model.evaluate(x_test, y_test, batch_size=batch_size, verbose=0)
+        logging.info(f"[{timestamp()}] [INFO] Test Loss={eval_loss:.4f} Accuracy={eval_acc*100:.2f}%")
+
+        # Modell speichern
+        model.save(model_name)
+        logging.info(f"[{timestamp()}] [INFO] Model saved as {model_name}")
+
+        print(f"[{timestamp()}] [END] IQ-AI-TF Pipeline abgeschlossen")
+        sys.exit(0)
+
+    if len(sys.argv) >= 5 and sys.argv[1].upper() in ("PRP", "IQ-AI-JAX"):
+        # Alias PRP → IQ-AI-JAX
+        if sys.argv[1].upper() == "PRP":
+            sys.argv[1] = "IQ-AI-JAX"
+
+        import jax
+        import jax.numpy as jnp
+        from jax import random, grad, jit, vmap
+        from tensorflow.keras.datasets import mnist
+
+        def print_usage():
+            print("Usage: python script.py IQ-AI-JAX <hidden_size> <batch_size> <epochs> [model_name]")
+
+        # Parameter parsen
+        try:
+            hidden_size = int(sys.argv[2])
+            batch_size  = int(sys.argv[3])
+            epochs      = int(sys.argv[4])
+            model_name  = sys.argv[5] if len(sys.argv) > 5 else "model_jax.npy"
+            if hidden_size <= 0 or batch_size <= 0 or epochs <= 0:
+                raise ValueError("All numeric parameters must be > 0.")
+        except ValueError as e:
+            print(f"[{timestamp()}] [ERROR] Invalid parameters: {e}")
+            print_usage()
+            sys.exit(1)
+
+        # Logging konfigurieren
+        logging.basicConfig(level=logging.INFO, format="%(message)s")
+        logging.info(f"[{timestamp()}] [INFO] Start IQ-AI-JAX with hidden={hidden_size}, batch={batch_size}, epochs={epochs}")
+
+        # Manueller .env‑Loader
+        USERNAME = os.getlogin()
+        env_path = fr"C:\Users\{USERNAME}\p-terminal\pp-term\.env"
+        if os.path.isfile(env_path):
+            with open(env_path, "r") as f:
+                for line in f:
+                    line = line.strip()
+                    if not line or line.startswith("#") or "=" not in line:
+                        continue
+                    key, val = line.split("=", 1)
+                    os.environ[key] = val
+            logging.info(f"[{timestamp()}] [INFO] .env loaded from {env_path}")
+        else:
+            logging.warning(f"[{timestamp()}] [WARN] .env not found under {env_path}")
+
+        # Daten laden und vorverarbeiten
+        (x_train, y_train), (x_test, y_test) = mnist.load_data()
+        x_train = x_train.reshape(-1, 28*28) / 255.0
+        x_test  = x_test.reshape(-1, 28*28)  / 255.0
+
+        num_train = x_train.shape[0]
+        steps_per_epoch = num_train // batch_size
+
+        key = random.PRNGKey(0)
+        logging.info(f"[{timestamp()}] [INFO] MNIST loaded and preprocessed")
+
+        # Modellparameter initialisieren
+        def init_params(key):
+            k1, k2 = random.split(key)
+            W1 = random.normal(k1, (28*28, hidden_size)) * jnp.sqrt(2/(28*28))
+            b1 = jnp.zeros((hidden_size,))
+            W2 = random.normal(k2, (hidden_size, 10))    * jnp.sqrt(2/hidden_size)
+            b2 = jnp.zeros((10,))
+            return {"W1": W1, "b1": b1, "W2": W2, "b2": b2}
+
+        params = init_params(key)
+
+        # Forward- und Loss-Funktion
+        def forward(params, x):
+            h = jnp.dot(x, params["W1"]) + params["b1"]
+            h = jnp.maximum(h, 0)  # ReLU
+            logits = jnp.dot(h, params["W2"]) + params["b2"]
+            return logits
+
+        def loss_fn(params, x, y):
+            logits = forward(params, x)
+            one_hot = jax.nn.one_hot(y, 10)
+            return -jnp.mean(jnp.sum(one_hot * jax.nn.log_softmax(logits), axis=-1))
+
+        grad_fn = jit(grad(loss_fn))
+
+        # Optimizer (SGD)
+        learning_rate = 1e-3
+        def update(params, grads):
+            return {k: params[k] - learning_rate * grads[k] for k in params}
+
+        # Training
+        for epoch in range(1, epochs+1):
+            perm = random.permutation(key, num_train)
+            for i in range(steps_per_epoch):
+                idx = perm[i*batch_size:(i+1)*batch_size]
+                xb, yb = x_train[idx], y_train[idx]
+                grads = grad_fn(params, xb, yb)
+                params = update(params, grads)
+            # Loss auf Trainingsset
+            train_loss = loss_fn(params, x_train[:10000], y_train[:10000])
+            logging.info(f"[{timestamp()}] [INFO] Epoch {epoch}/{epochs} Loss={train_loss:.4f}")
+
+        # Evaluation
+        def accuracy(params, x, y):
+            preds = jnp.argmax(forward(params, x), axis=-1)
+            return jnp.mean(preds == y)
+
+        test_acc = accuracy(params, x_test, y_test) * 100
+        logging.info(f"[{timestamp()}] [INFO] Test Accuracy={test_acc:.2f}%")
+
+        # Modell speichern
+        # Speichere Parameter als NumPy-Archive
+        import numpy as onp
+        onp.savez(model_name, **{k: onp.array(v) for k, v in params.items()})
+        logging.info(f"[{timestamp()}] [INFO] Model saved as {model_name}")
+
+        print(f"[{timestamp()}] [END] IQ-AI-JAX pipeline completed")
+        sys.exit(0)
+
     if user_input.startswith("pa "):
         user_input = user_input[3:].strip()
         ollama_installed = check_command_installed("ollama")
