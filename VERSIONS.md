@@ -296,13 +296,21 @@
         - PP-Terminal Launcher 4.1.1.1
         - PP-Terminal Launcher 4.1.1.3
         - PP-Terminal Launcher 4.1.1.4
-        
-  - PP-Terminal Launcher 5
-    - PP-Terminal Launcher 5.1
-      - PP-Terminal Launcher 5.1.1
-        - PP-Terminal Launcher 5.1.1.1
-        - PP-Terminal Launcher 5.1.1.3
-        - PP-Terminal Launcher 5.1.1.4
+
+    - PP-Terminal Launcher 5
+      - PP-Terminal Launcher 5.1
+        - PP-Terminal Launcher 5.1.1
+          - PP-Terminal Launcher 5.1.1.1
+          - PP-Terminal Launcher 5.1.1.3
+          - PP-Terminal Launcher 5.1.1.4
+        - PP-Terminal Launcher 5.1.3
+          - PP-Terminal Launcher 5.1.3.1
+          - PP-Terminal Launcher 5.1.3.3
+          - PP-Terminal Launcher 5.1.3.4
+        - PP-Terminal Launcher 5.1.4
+          - PP-Terminal Launcher 5.1.4.1
+          - PP-Terminal Launcher 5.1.4.3
+          - PP-Terminal Launcher 5.1.4.4
 
   - PP-Terminal Launcher 6
     - PP-Terminal Launcher 6.1
@@ -338,6 +346,14 @@
       - Peharge Compiler 5.1.1.1
       - Peharge Compiler 5.1.1.3
       - Peharge Compiler 5.1.1.4
+    - Peharge Compiler 5.1.3
+      - Peharge Compiler 5.1.3.1
+      - Peharge Compiler 5.1.3.3
+      - Peharge Compiler 5.1.3.4
+    - Peharge Compiler 5.1.4
+      - Peharge Compiler 5.1.4.1
+      - Peharge Compiler 5.1.4.3
+      - Peharge Compiler 5.1.4.4
 
 - Peharge Compiler 6
   - Peharge Compiler 6.1
@@ -373,6 +389,8 @@
       - Peharge Kernel 5.1.1.1
       - Peharge Kernel 5.1.1.3
       - Peharge Kernel 5.1.1.4
+      - Peharge Kernel 5.1.1.5
+      - Peharge Kernel 5.1.1.6
 
 - Peharge Kernel 6
   - Peharge Kernel 6.1
@@ -394,3 +412,23 @@
       - IQ Kernel 3.1.1.1
       - IQ Kernel 3.1.1.3
       - IQ Kernel 3.1.1.4
+      - IQ Kernel 3.1.1.5
+      - IQ Kernel 3.1.1.6
+      - IQ Kernel 3.1.1.8
+      - IQ Kernel 3.1.1.9
+      - IQ Kernel 3.1.1.10
+      - IQ Kernel 3.1.1.11
+      - IQ Kernel 3.1.1.13
+      - IQ Kernel 3.1.1.14
+      - IQ Kernel 3.1.1.15
+      - IQ Kernel 3.1.1.16
+      - IQ Kernel 3.1.1.18
+      - IQ Kernel 3.1.1.19
+      - IQ Kernel 3.1.1.30
+      - IQ Kernel 3.1.1.31
+      - IQ Kernel 3.1.1.33
+      - IQ Kernel 3.1.1.34
+      - IQ Kernel 3.1.1.35
+      - IQ Kernel 3.1.1.36
+      - IQ Kernel 3.1.1.38
+      - IQ Kernel 3.1.1.39
