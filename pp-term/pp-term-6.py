@@ -274,7 +274,7 @@ def set_kernel_in_notebook(notebook_path, kernel_name, display_name):
 def set_python_path(user_input: Optional[str] = None) -> None:
     """
     Setzt PYTHON_PATH basierend auf dem gefundenen Environment.
-    Wenn `user_input` gesetzt und != "cd", wird es priorisiert.
+    Wenn `user_input` gesetzt und != "cd"/"pcd", wird es priorisiert.
     """
     active_env = find_active_env(user_input)
 
@@ -368,9 +368,9 @@ def find_active_env(user_input: Optional[str] = None) -> str:
     """
     Bestimmt den aktiven Virtualenv-Pfad:
 
-    1. Wenn user_input gesetzt und ungleich "cd":
+    1. Wenn user_input gesetzt und ungleich "cd"/"pcd":
        - Speichert den Pfad immer und gibt ihn zurück.
-    2. Wenn user_input == "cd":
+    2. Wenn user_input == "cd" oder "pcd":
        - Sucht im aktuellen Verzeichnis nach einem Virtualenv.
        - Wenn gefunden und von gespeichertem abweichend, speichert und gibt diesen zurück.
        - Wenn nicht gefunden, aber ein gespeicherter Pfad existiert, gibt diesen zurück.
@@ -381,15 +381,15 @@ def find_active_env(user_input: Optional[str] = None) -> str:
     4. Sonst Fallback auf DEFAULT_ENV_DIR.
     """
     saved = load_saved_env()
-    user_str = str(user_input) if user_input is not None else None
+    user_str = str(user_input).lower() if user_input is not None else None
 
-    # 1. Direkteingabe (außer "cd") sofort übernehmen und speichern
-    if user_str and user_str.lower() != "cd":
-        save_current_env(user_str)
+    # 1. Direkteingabe (außer "cd" oder "pcd") sofort übernehmen und speichern
+    if user_str and user_str not in ("cd", "pcd"):
+        save_current_env(user_input)
         return user_str
 
-    # 2. user_input == "cd" and user_str.lower() == "cd":
-    if user_str and user_str.lower() == "cd":
+    # 2. user_input == "cd" oder "pcd"
+    if user_str in ("cd", "pcd"):
         found = find_env_in_current_dir()
         if found:
             if found != saved:
@@ -1656,7 +1656,7 @@ def handle_special_commands(user_input):
         return True
 
     # Built-in Commands Erweiterung
-    if user_input.lower() in ["cls", "clear"]:
+    if user_input.lower() in ["cls", "clear", "pcl"]:
         os.system("cls" if os.name == "nt" else "clear")
         return True
 
@@ -1678,7 +1678,42 @@ def handle_special_commands(user_input):
         else:
             return saved if saved else str(Path(DEFAULT_ENV_DIR).resolve())
 
+    if user_input.startswith("pcd "):
+        path = user_input[4:].strip()
+        try:
+            change_directory(path)
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Error changing directory: {e}")
+            return False
+
+        found = find_env_in_current_dir()
+        saved = load_saved_env()
+
+        if found:
+            if found != saved:
+                save_current_env(found)
+            return found
+        else:
+            return saved if saved else str(Path(DEFAULT_ENV_DIR).resolve())
+
     if user_input.lower() == "cd":
+        path = os.path.expanduser("~")
+        change_directory(path)
+
+        found = find_env_in_current_dir()
+        saved = load_saved_env()
+
+        if found:
+            if found != saved:
+                save_current_env(found)
+            return found
+        else:
+            return saved if saved else str(Path(DEFAULT_ENV_DIR).resolve())
+
+        # env_path = handle_cd_command()
+        # print(f"[{timestamp()}] [INFO] Environment used: {env_path}")
+
+    if user_input.lower() == "pcd":
         path = os.path.expanduser("~")
         change_directory(path)
 
