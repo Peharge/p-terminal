@@ -1699,7 +1699,11 @@ def handle_special_commands(user_input):
         run_command("dir" if os.name == "nt" else "ls -la", shell=True)
         return True
 
-    if user_input.lower() in ["dir-2", "ls-2"]:
+    if user_input.lower() in ["pdir", "pls"]:
+            run_command("dir" if os.name == "nt" else "ls -la", shell=True)
+            return True
+
+    if user_input.lower() in ["pdir-2", "pls-2"]:
         command = "powershell ls"
 
         try:
@@ -1710,7 +1714,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing ls command: {e}")
         return True
 
-    if user_input.lower() in ["dir-3", "ls-3"]:
+    if user_input.lower() in ["pdir-3", "pls-3"]:
         command = "wsl ls"
 
         try:
@@ -1725,6 +1729,10 @@ def handle_special_commands(user_input):
         os.makedirs(user_input[6:].strip(), exist_ok=True)
         return True
 
+    if user_input.startswith("pmkdir "):
+            os.makedirs(user_input[7:].strip(), exist_ok=True)
+            return True
+
     if user_input.startswith("rmdir "):
         try:
             os.rmdir(user_input[6:].strip())
@@ -1732,8 +1740,20 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] {str(e)}", file=sys.stderr)
         return True
 
+    if user_input.startswith("prmdir "):
+        try:
+            os.rmdir(user_input[7:].strip())
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] {str(e)}", file=sys.stderr)
+        return True
+
     if user_input.startswith("del "):
         target = user_input[4:].strip()
+        delete_target(target)
+        return True
+
+    if user_input.startswith("pdel "):
+        target = user_input[5:].strip()
         delete_target(target)
         return True
 
@@ -1751,6 +1771,10 @@ def handle_special_commands(user_input):
         print(user_input[5:].strip())
         return True
 
+    if user_input.startswith("pecho "):
+        print(user_input[6:].strip())
+        return True
+
     """
     if "=" in user_input:
         var, value = map(str.strip, user_input.split("=", 1))
@@ -1762,6 +1786,16 @@ def handle_special_commands(user_input):
     if user_input.startswith(("type ", "cat ")):
         try:
             with open(user_input.split(maxsplit=1)[1].strip(), "r", encoding="utf-8") as f:
+                print(f.read())
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] {str(e)}", file=sys.stderr)
+        return True
+
+    if user_input.startswith(("ptype ", "pcat ")):
+        try:
+            # Extrahiere den Dateinamen nach dem Befehl
+            filename = user_input.split(maxsplit=1)[1].strip()
+            with open(filename, "r", encoding="utf-8") as f:
                 print(f.read())
         except Exception as e:
             print(f"[{timestamp()}] [ERROR] {str(e)}", file=sys.stderr)
