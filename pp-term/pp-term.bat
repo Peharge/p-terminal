@@ -68,7 +68,7 @@ chcp 65001
 
 :: Global Settings
 set "SCRIPT_DIR=%~dp0"
-set "LOGFILE=C:\Users\julia\p-terminal\pp-term\WSL_Diagnostics.log"
+set "LOGFILE=C:\Users\julia\p-terminal\pp-term\PP_Terminal_Diagnostics.log"
 set "MAX_DRIFT=300"          & rem Maximum allowed time drift in seconds
 set "PING_ADDR=8.8.8.8"      & rem Default ping target
 set "TEST_DOMAIN=example.com"
