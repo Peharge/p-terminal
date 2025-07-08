@@ -14603,16 +14603,21 @@ def handle_special_commands(user_input):
             run_circuit(circuit, repetitions=shots)
             return True
 
-    if len(sys.argv) >= 5 and sys.argv[1].upper() in ("PRP", "IQ-AI-TORCH"):
+    if len(sys.argv) >= 5 and sys.argv[1].upper() in ("IPRP", "IQ-AI-TORCH"):
         import torch
         import torch.nn as nn
         import torch.optim as optim
         from torchvision import datasets, transforms
         from torch.utils.data import DataLoader
 
-        # Alias PRP → PYTHON (damit sys.argv[1] danach == "IQ-AI-TORCH")
-        if sys.argv[1].upper() == "PRP":
-            sys.argv[1] = "IQ-AI-TORCH"
+        # Alias IPRP → python (damit später sys.argv[1]=="python")
+        if sys.argv[1].upper() == "IPRP":
+            sys.argv[1] = "python"
+
+        # Ab hier nur, wenn sys.argv[1] == "python" oder "IQ-AI-TORCH2"
+        mode = sys.argv[1]
+        if mode not in ("python", "IQ-AI-TORCH2"):
+            print_usage()
 
         # alles Weitere nur für IQ-AI-TORCH
         # (die If‑Klausel oben stellt sicher, dass wir hier nur hin gelangen, wenn sys.argv[1] jetzt "IQ-AI-TORCH" ist)
@@ -14704,9 +14709,537 @@ def handle_special_commands(user_input):
         print(f"[{timestamp()}] [END] IQ-AI-TORCH pipeline completed")
         sys.exit(0)
 
-    if len(sys.argv) >= 5 and sys.argv[1].upper() in ("PRP", "IQ-AI-TF"):
-        # Alias PRP → IQ-AI-TF (damit sys.argv[1] danach == "IQ-AI-TF")
-        if sys.argv[1].upper() == "PRP":
+    # Zweites Pipeline: IQ-AI-TORCH2 (IPRP alias)
+    if len(sys.argv) >= 6 and sys.argv[1].upper() in ("IPRP", "IQ-AI-TORCH2"):
+        import torch
+        import torch.nn as nn
+        import torch.optim as optim
+        from torch.optim.lr_scheduler import StepLR
+        from torchvision import datasets, transforms
+        from torch.utils.data import DataLoader
+
+        def print_usage():
+            print("Usage:")
+            print("  IPRP main.py IQ-AI-TORCH2 <batch> <epochs> <lr> [hidden] [checkpoint]")
+            sys.exit(1)
+
+        # Alias IPRP → python
+        if sys.argv[1].upper() == "IPRP":
+            sys.argv[1] = "python"
+
+        mode = sys.argv[1]
+        if mode not in ("python", "IQ-AI-TORCH2"):
+            print_usage()
+
+        try:
+            batch_size = int(sys.argv[3])
+            epochs = int(sys.argv[4])
+            lr = float(sys.argv[5])
+            hidden_size = int(sys.argv[6]) if len(sys.argv) > 6 else 128
+            ckpt_path = sys.argv[7] if len(sys.argv) > 7 else "checkpoint.pth"
+            if batch_size <= 0 or epochs <= 0 or lr <= 0 or hidden_size <= 0:
+                raise ValueError("Numeric parameters must be > 0.")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Invalid parameters: {e}")
+            print_usage()
+
+        # Logging
+        logging.basicConfig(level=logging.INFO, format="%(message)s")
+        logging.info(f"[{timestamp()}] [INFO] Start IQ-AI-TORCH2: batch={batch_size}, epochs={epochs}, lr={lr}, hidden={hidden_size}")
+
+        # .env laden
+        env_path = os.path.join(os.path.expanduser("~"), ".env")
+        if os.path.isfile(env_path):
+            from dotenv import load_dotenv
+            load_dotenv(env_path)
+            logging.info(f"[{timestamp()}] [INFO] Loaded .env from {env_path}")
+        else:
+            logging.warning(f"[{timestamp()}] [WARN] .env not found at {env_path}")
+
+        # Netzwerk definieren
+        class CIFARNet(nn.Module):
+            def __init__(self, hidden):
+                super().__init__()
+                self.features = nn.Sequential(
+                    nn.Conv2d(3, 32, 3, padding=1), nn.ReLU(True), nn.MaxPool2d(2),
+                    nn.Conv2d(32, 64, 3, padding=1), nn.ReLU(True), nn.MaxPool2d(2),
+                )
+                self.classifier = nn.Sequential(
+                    nn.Flatten(),
+                    nn.Linear(64*8*8, hidden),
+                    nn.ReLU(True),
+                    nn.Dropout(0.5),
+                    nn.Linear(hidden, 10)
+                )
+            def forward(self, x):
+                return self.classifier(self.features(x))
+
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        model = CIFARNet(hidden_size).to(device)
+        optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9)
+        scheduler = StepLR(optimizer, step_size=10, gamma=0.1)
+        criterion = nn.CrossEntropyLoss()
+
+        # Daten laden
+        transform_train = transforms.Compose([
+            transforms.RandomHorizontalFlip(),
+            transforms.ToTensor(),
+            transforms.Normalize((0.4914,0.4822,0.4465),(0.2470,0.2435,0.2616))
+        ])
+        transform_test = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize((0.4914,0.4822,0.4465),(0.2470,0.2435,0.2616))
+        ])
+        train_ds = datasets.CIFAR10('.', train=True,  download=True, transform=transform_train)
+        test_ds  = datasets.CIFAR10('.', train=False, download=True, transform=transform_test)
+        train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True,  num_workers=4)
+        test_loader  = DataLoader(test_ds,  batch_size=batch_size, shuffle=False, num_workers=4)
+
+        logging.info(f"[{timestamp()}] [INFO] Data ready")
+
+        # Trainings‑ und Validierungsschleife
+        history = {"loss": [], "acc": []}
+        for epoch in range(1, epochs + 1):
+            model.train()
+            running_loss = 0.0
+            for idx, (x, y) in enumerate(train_loader, 1):
+                x, y = x.to(device), y.to(device)
+                optimizer.zero_grad()
+                out = model(x)
+                loss = criterion(out, y)
+                loss.backward()
+                optimizer.step()
+                running_loss += loss.item()
+                if idx % 100 == 0:
+                    logging.info(f"[{timestamp()}] [Epoch {epoch}] Batch {idx}: loss={running_loss/idx:.4f}")
+            avg_loss = running_loss / len(train_loader)
+
+            model.eval()
+            correct = total = 0
+            with torch.no_grad():
+                for x, y in test_loader:
+                    x, y = x.to(device), y.to(device)
+                    preds = model(x).argmax(dim=1)
+                    correct += (preds == y).sum().item()
+                    total   += y.size(0)
+            acc = correct/total*100
+
+            scheduler.step()
+            history["loss"].append(avg_loss)
+            history["acc"].append(acc)
+            logging.info(f"[{timestamp()}] [Epoch {epoch}] Loss={avg_loss:.4f}, Acc={acc:.2f}%")
+
+            if epoch % 5 == 0 or epoch == epochs:
+                ckpt = {
+                    "epoch": epoch,
+                    "model": model.state_dict(),
+                    "opt": optimizer.state_dict(),
+                    "sched": scheduler.state_dict(),
+                    "history": history
+                }
+                torch.save(ckpt, ckpt_path)
+                logging.info(f"[{timestamp()}] [INFO] Checkpoint saved at {ckpt_path}")
+
+        # End‑Model und History speichern
+        final_name = f"cifar_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pth"
+        torch.save(model.state_dict(), final_name)
+        with open("history.json", "w") as f:
+            json.dump(history, f, indent=2)
+        logging.info(f"[{timestamp()}] [INFO] Final model → {final_name}")
+        logging.info(f"[{timestamp()}] [END] {mode} training completed 🎉")
+
+        sys.exit(0)
+
+    # Drittes Pipeline: IQ-AI-TORCH3 (XPRP alias)
+    if len(sys.argv) >= 7 and sys.argv[1].upper() in ("IPRP", "IQ-AI-TORCH3"):
+        import torch
+        import torch.nn as nn
+        import torch.optim as optim
+        from torch.optim.lr_scheduler import CosineAnnealingLR
+        from torch.cuda.amp import GradScaler, autocast
+        from torchvision import datasets, transforms, models
+        from torch.utils.data import DataLoader
+        from torch.utils.tensorboard import SummaryWriter
+
+        def print_usage():
+            print("Usage:")
+            print("  IPRP main.py IQ-AI-TORCH3 <batch> <epochs> <lr> <wd> [model] [checkpoint]")
+            sys.exit(1)
+
+        # Alias IPRP → python
+        if sys.argv[1].upper() == "IPRP":
+            sys.argv[1] = "python"
+
+        mode = sys.argv[1]
+        if mode not in ("python", "IQ-AI-TORCH3"):
+            print_usage()
+
+        try:
+            batch_size = int(sys.argv[3])
+            epochs = int(sys.argv[4])
+            lr = float(sys.argv[5])
+            weight_decay = float(sys.argv[6])
+            model_arch = sys.argv[7] if len(sys.argv) > 7 else "resnet18"
+            ckpt_path = sys.argv[8] if len(sys.argv) > 8 else "checkpoint2.pth"
+            if batch_size <= 0 or epochs <= 0 or lr <= 0 or weight_decay < 0:
+                raise ValueError("Numeric parameters invalid.")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Invalid parameters: {e}")
+            print_usage()
+
+        # Logging & TensorBoard
+        logging.basicConfig(level=logging.INFO, format="[%(asctime)s] [%(levelname)s] %(message)s")
+        tb = SummaryWriter(log_dir="runs/iq_ai_torch3_" + datetime.now().strftime("%Y%m%d_%H%M%S"))
+        logging.info(f"[{timestamp()}] [INFO] Start IQ-AI-TORCH3: batch={batch_size}, epochs={epochs}, lr={lr}, wd={weight_decay}, arch={model_arch}")
+
+        # .env laden
+        env_path = os.path.join(os.path.expanduser("~"), ".env")
+        if os.path.isfile(env_path):
+            load_dotenv(env_path)
+            logging.info(f"[{timestamp()}] [INFO] Loaded .env from {env_path}")
+        else:
+            logging.warning(f"[{timestamp()}] [WARN] .env not found at {env_path}")
+
+        # Gerät
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        logging.info(f"[{timestamp()}] [INFO] Using device: {device}")
+
+        # Modell laden (aus torchvision.models)
+        model = getattr(models, model_arch)(pretrained=False, num_classes=10).to(device)
+
+        # Optimizer, Scheduler, AMP-Scaler, Loss
+        optimizer = optim.AdamW(model.parameters(), lr=lr, weight_decay=weight_dec)
+        scheduler = CosineAnnealingLR(optimizer, T_max=epochs, eta_min=1e-6)
+        scaler    = GradScaler()
+        criterion = nn.CrossEntropyLoss()
+
+        # Daten-Transforms und Loader (CIFAR‑100)
+        transform_train = transforms.Compose([
+            transforms.RandomCrop(32, padding=4),
+            transforms.RandomHorizontalFlip(),
+            transforms.ColorJitter(0.4, 0.4, 0.4, 0.1),
+            transforms.ToTensor(),
+            transforms.Normalize((0.5071,0.4867,0.4408),(0.2675,0.2565,0.2761))
+        ])
+        transform_test = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize((0.5071,0.4867,0.4408),(0.2675,0.2565,0.2761))
+        ])
+        train_ds = datasets.CIFAR100('.', train=True,  download=True, transform=transform_train)
+        test_ds  = datasets.CIFAR100('.', train=False, download=True, transform=transform_test)
+        train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True,  num_workers=8, pin_memory=True)
+        test_loader  = DataLoader(test_ds,  batch_size=batch_size, shuffle=False, num_workers=8, pin_memory=True)
+        logging.info(f"[{timestamp()}] [INFO] Data loaders ready")
+
+        # Trainings‑ und Validierungsschleife mit AMP und TensorBoard
+        best_acc = 0.0
+        for epoch in range(1, epochs + 1):
+            # Training
+            model.train()
+            running_loss = 0.0
+            for i, (x, y) in enumerate(train_loader, 1):
+                x, y = x.to(device), y.to(device)
+                optimizer.zero_grad()
+                with autocast():
+                    out  = model(x)
+                    loss = criterion(out, y)
+                scaler.scale(loss).backward()
+                scaler.step(optimizer)
+                scaler.update()
+                running_loss += loss.item()
+                if i % 200 == 0:
+                    logging.info(f"[{timestamp()}] [E{epoch}] Batch {i}/{len(train_loader)} loss={running_loss/i:.4f}")
+
+            avg_loss = running_loss / len(train_loader)
+            tb.add_scalar("Train/Loss", avg_loss, epoch)
+
+            # Validation
+            model.eval()
+            correct = total = 0
+            with torch.no_grad():
+                for x, y in test_loader:
+                    x, y = x.to(device), y.to(device)
+                    preds = model(x).argmax(dim=1)
+                    correct += (preds == y).sum().item()
+                    total   += y.size(0)
+            acc = correct/total * 100
+            tb.add_scalar("Val/Accuracy", acc, epoch)
+            logging.info(f"[{timestamp()}] [E{epoch}] Val Acc={acc:.2f}%")
+
+            # Scheduler step
+            scheduler.step()
+
+            # Checkpoint, wenn best
+            if acc > best_acc or epoch == epochs:
+                best_acc = max(best_acc, acc)
+                state = {
+                    "epoch": epoch,
+                    "model":  model.state_dict(),
+                    "optim":  optimizer.state_dict(),
+                    "sched":  scheduler.state_dict(),
+                    "scaler": scaler.state_dict(),
+                    "best_acc": best_acc
+                }
+                torch.save(state, ckpt_path)
+                logging.info(f"[{timestamp()}] [INFO] Saved checkpoint (best_acc={best_acc:.2f}%) → {ckpt_path}")
+
+        # Abschluss
+        final_model = f"c100_{model_arch}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pth"
+        torch.save(model.state_dict(), final_model)
+        with open("history_iq2.json", "w") as f:
+            json.dump({"best_acc": best_acc}, f, indent=2)
+        tb.close()
+        logging.info(f"[{timestamp()}] [END] Training finished, final model: {final_model}")
+        sys.exit(0)
+
+
+    # Viertes Pipeline: IQ-AI-TORCH4 (IPRP alias)
+    if len(sys.argv) >= 6 and sys.argv[1].upper() in ("IPRP", "IQ-AI-TORCH4"):
+        import torch
+        import torch.nn as nn
+        import torch.optim as optim
+        from torch.optim.lr_scheduler import ReduceLROnPlateau
+        from torchvision import datasets, transforms
+        from torch.utils.data import DataLoader
+
+        def print_usage():
+            print("Usage:")
+            print("  IPRP command4.py IQ-AI-TORCH4 <batch> <epochs> <lr> <patience> [model] [checkpoint]")
+            sys.exit(1)
+
+        # Alias IPRP → python
+        if sys.argv[1].upper() == "IPRP":
+            sys.argv[1] = "python"
+
+        mode = sys.argv[1]
+        if mode not in ("python", "IQ-AI-TORCH4"):
+            print_usage()
+
+        try:
+            batch_size = int(sys.argv[3])
+            epochs = int(sys.argv[4])
+            lr = float(sys.argv[5])
+            patience = int(sys.argv[6])
+            model_arch = sys.argv[7] if len(sys.argv) > 7 else "SimpleNet"
+            ckpt_path = sys.argv[8] if len(sys.argv) > 8 else "checkpoint4.pth"
+            if batch_size <= 0 or epochs <= 0 or lr <= 0 or patience < 0:
+                raise ValueError("Numeric parameters invalid.")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Invalid parameters: {e}")
+            print_usage()
+
+        # Logging
+        logging.basicConfig(level=logging.INFO, format="%(message)s")
+        logging.info(f"[{timestamp()}] [INFO] Start IQ-AI-TORCH4: batch={batch_size}, epochs={epochs}, lr={lr}, patience={patience}")
+
+        # .env laden (optional)
+        env_path = os.path.join(os.path.expanduser("~"), ".env")
+        if os.path.isfile(env_path):
+            from dotenv import load_dotenv
+            load_dotenv(env_path)
+            logging.info(f"[{timestamp()}] [INFO] Loaded .env from {env_path}")
+        else:
+            logging.warning(f"[{timestamp()}] [WARN] .env not found at {env_path}")
+
+        # Netzwerk definieren je nach Arch
+        class SimpleNet(nn.Module):
+            def __init__(self, hidden=128):
+                super().__init__()
+                self.net = nn.Sequential(
+                    nn.Flatten(),
+                    nn.Linear(28*28, hidden),
+                    nn.ReLU(True),
+                    nn.Linear(hidden, 10)
+                )
+            def forward(self, x):
+                return self.net(x)
+
+        # Modell instanziieren
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        model = SimpleNet().to(device)
+        optimizer = optim.Adam(model.parameters(), lr=lr)
+        scheduler = ReduceLROnPlateau(optimizer, mode='min', patience=patience, factor=0.5)
+        criterion = nn.CrossEntropyLoss()
+
+        # Daten laden (FashionMNIST)
+        transform = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize((0.5,), (0.5,))
+        ])
+        train_ds = datasets.FashionMNIST('.', train=True, download=True, transform=transform)
+        valid_ds = datasets.FashionMNIST('.', train=False, download=True, transform=transform)
+        train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True)
+        valid_loader = DataLoader(valid_ds, batch_size=batch_size, shuffle=False)
+        logging.info(f"[{timestamp()}] [INFO] FashionMNIST data loaded")
+
+        best_loss = float('inf')
+        for epoch in range(1, epochs+1):
+            # Training
+            model.train()
+            train_loss = 0
+            for x, y in train_loader:
+                x, y = x.to(device), y.to(device)
+                optimizer.zero_grad()
+                out = model(x)
+                loss = criterion(out, y)
+                loss.backward()
+                optimizer.step()
+                train_loss += loss.item()
+            avg_train = train_loss/len(train_loader)
+
+            # Validierung
+            model.eval()
+            val_loss = 0
+            correct = total = 0
+            with torch.no_grad():
+                for x, y in valid_loader:
+                    x, y = x.to(device), y.to(device)
+                    out = model(x)
+                    loss = criterion(out, y)
+                    val_loss += loss.item()
+                    preds = out.argmax(dim=1)
+                    correct += (preds == y).sum().item()
+                    total += y.size(0)
+            avg_val = val_loss/len(valid_loader)
+            acc = correct/total*100
+            logging.info(f"[{timestamp()}] [Epoch {epoch}] TrainLoss={avg_train:.4f}, ValLoss={avg_val:.4f}, Acc={acc:.2f}%")
+
+            # Scheduler step
+            scheduler.step(avg_val)
+
+            # Checkpoint bei Verbesserung
+            if avg_val < best_loss:
+                best_loss = avg_val
+                torch.save(model.state_dict(), ckpt_path)
+                logging.info(f"[{timestamp()}] [INFO] Checkpoint saved: {ckpt_path}")
+
+        # End
+        final_model = f"fashion_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pth"
+        torch.save(model.state_dict(), final_model)
+        logging.info(f"[{timestamp()}] [END] IQ-AI-TORCH4 completed, model: {final_model}")
+        sys.exit(0)
+
+    # Fünftes Pipeline: IQ-AI-TORCH5 (IPRP alias)
+    if len(sys.argv) >= 7 and sys.argv[1].upper() in ("IPRP", "IQ-AI-TORCH5"):
+        import torch
+        import torch.nn as nn
+        import torch.optim as optim
+        from torch.optim.lr_scheduler import OneCycleLR
+        from torchvision import datasets, transforms, models
+        from torch.utils.data import DataLoader
+
+        def print_usage():
+            print("Usage:")
+            print("  IPRP command5.py IQ-AI-TORCH5 <batch> <epochs> <max_lr> <pct_start> [arch] [checkpoint]")
+            sys.exit(1)
+
+        # Alias IPRP → python
+        if sys.argv[1].upper() == "IPRP":
+            sys.argv[1] = "python"
+
+        mode = sys.argv[1]
+        if mode not in ("python", "IQ-AI-TORCH5"):
+            print_usage()
+
+        try:
+            batch_size = int(sys.argv[3])
+            epochs = int(sys.argv[4])
+            max_lr = float(sys.argv[5])
+            pct_start = float(sys.argv[6])
+            arch = sys.argv[7] if len(sys.argv) > 7 else "resnet18"
+            ckpt_path = sys.argv[8] if len(sys.argv) > 8 else "checkpoint5.pth"
+            if batch_size <= 0 or epochs <= 0 or max_lr <= 0 or not (0 < pct_start < 1):
+                raise ValueError("Invalid numeric parameters.")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Invalid parameters: {e}")
+            print_usage()
+
+        # Logging setup
+        logging.basicConfig(level=logging.INFO, format="%(message)s")
+        logging.info(f"[{timestamp()}] [INFO] Start IQ-AI-TORCH5: batch={batch_size}, epochs={epochs}, max_lr={max_lr}, pct_start={pct_start}, arch={arch}")
+
+        # Optional .env
+        env_path = os.path.join(os.path.expanduser("~"), ".env")
+        if os.path.isfile(env_path):
+            from dotenv import load_dotenv
+            load_dotenv(env_path)
+            logging.info(f"[{timestamp()}] [INFO] Loaded .env from {env_path}")
+        else:
+            logging.warning(f"[{timestamp()}] [WARN] .env not found at {env_path}")
+
+        # Device
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        logging.info(f"[{timestamp()}] [INFO] Using device: {device}")
+
+        # Model
+        model = getattr(models, arch)(pretrained=False, num_classes=100).to(device)
+
+        # Optimizer and Scheduler
+        optimizer = optim.SGD(model.parameters(), lr=max_lr, momentum=0.9)
+        scheduler = OneCycleLR(optimizer, max_lr=max_lr, total_steps=epochs * (50000 // batch_size), pct_start=pct_start)
+        criterion = nn.CrossEntropyLoss()
+
+        # Dataset CIFAR-100
+        transform_train = transforms.Compose([
+            transforms.RandomCrop(32, padding=4),
+            transforms.RandomHorizontalFlip(),
+            transforms.ToTensor(),
+            transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761))
+        ])
+        transform_test = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761))
+        ])
+        train_ds = datasets.CIFAR100('.', train=True, download=True, transform=transform_train)
+        test_ds = datasets.CIFAR100('.', train=False, download=True, transform=transform_test)
+        train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True, num_workers=4, pin_memory=True)
+        test_loader = DataLoader(test_ds, batch_size=batch_size, shuffle=False, num_workers=4, pin_memory=True)
+        logging.info(f"[{timestamp()}] [INFO] CIFAR-100 data loaded")
+
+        # Training loop
+        best_acc = 0.0
+        for epoch in range(1, epochs + 1):
+            model.train()
+            running_loss = 0.0
+            for batch_idx, (data, target) in enumerate(train_loader, 1):
+                data, target = data.to(device), target.to(device)
+                optimizer.zero_grad()
+                output = model(data)
+                loss = criterion(output, target)
+                loss.backward()
+                optimizer.step()
+                scheduler.step()
+                running_loss += loss.item()
+            avg_loss = running_loss / len(train_loader)
+
+            # Validation
+            model.eval()
+            correct = total = 0
+            with torch.no_grad():
+                for data, target in test_loader:
+                    data, target = data.to(device), target.to(device)
+                    output = model(data)
+                    pred = output.argmax(dim=1)
+                    correct += (pred == target).sum().item()
+                    total += target.size(0)
+            acc = correct / total * 100
+            logging.info(f"[{timestamp()}] [Epoch {epoch}] Loss={avg_loss:.4f}, Acc={acc:.2f}%")
+
+            # Checkpoint best
+            if acc > best_acc:
+                best_acc = acc
+                torch.save(model.state_dict(), ckpt_path)
+                logging.info(f"[{timestamp()}] [INFO] Saved best checkpoint: {ckpt_path} (acc={best_acc:.2f}%)")
+
+        # Save final
+        final_model = f"c100_{arch}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pth"
+        torch.save(model.state_dict(), final_model)
+        logging.info(f"[{timestamp()}] [END] IQ-AI-TORCH5 completed, final model: {final_model}")
+        sys.exit(0)
+
+    if len(sys.argv) >= 5 and sys.argv[1].upper() in ("IPRP", "IQ-AI-TF"):
+        # Alias IPRP → IQ-AI-TF (damit sys.argv[1] danach == "IQ-AI-TF")
+        if sys.argv[1].upper() == "IPRP":
             sys.argv[1] = "IQ-AI-TF"
 
         # --- alles Weitere bleibt exakt wie gehabt ---
@@ -14791,9 +15324,193 @@ def handle_special_commands(user_input):
         print(f"[{timestamp()}] [END] IQ-AI-TF Pipeline abgeschlossen")
         sys.exit(0)
 
-    if len(sys.argv) >= 5 and sys.argv[1].upper() in ("PRP", "IQ-AI-JAX"):
-        # Alias PRP → IQ-AI-JAX
-        if sys.argv[1].upper() == "PRP":
+    if len(sys.argv) >= 6 and sys.argv[1].upper() in ("IPRP", "IQ-AI-TF2"):
+        import tensorflow as tf
+        from tensorflow.keras import layers, models, callbacks
+        from tensorflow.keras.datasets import cifar10
+
+        def print_usage():
+            print("Usage:")
+            print("  IPRP command_tf2.py IQ-AI-TF2 <batch_size> <epochs> <learning_rate> <patience> [model_name]")
+            sys.exit(1)
+
+        # Alias IPRP → IQ-AI-TF2
+        if sys.argv[1].upper() == "IPRP":
+            sys.argv[1] = "IQ-AI-TF2"
+
+        # Parameter parsen
+        try:
+            batch_size    = int(sys.argv[2])
+            epochs        = int(sys.argv[3])
+            learning_rate = float(sys.argv[4])
+            patience      = int(sys.argv[5])
+            model_name    = sys.argv[6] if len(sys.argv) > 6 else "model_tf2.h5"
+            if batch_size <= 0 or epochs <= 0 or learning_rate <= 0 or patience < 0:
+                raise ValueError("Numeric parameters must be positive.")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Invalid parameters: {e}")
+            print_usage()
+
+        # Logging konfigurieren
+        logging.basicConfig(level=logging.INFO, format="%(message)s")
+        logging.info(f"[{timestamp()}] [INFO] Start IQ-AI-TF2: batch={batch_size}, epochs={epochs}, lr={learning_rate}, patience={patience}")
+
+        # Daten laden (CIFAR-10)
+        (x_train, y_train), (x_test, y_test) = cifar10.load_data()
+        x_train = x_train.astype("float32") / 255.0
+        x_test  = x_test.astype("float32") / 255.0
+        logging.info(f"[{timestamp()}] [INFO] CIFAR-10 loaded and normalized")
+
+        # Modell definieren
+        model = models.Sequential([
+            layers.Input(shape=(32,32,3)),
+            layers.Conv2D(32, 3, activation="relu"),
+            layers.MaxPooling2D(),
+            layers.Conv2D(64, 3, activation="relu"),
+            layers.MaxPooling2D(),
+            layers.Flatten(),
+            layers.Dense(128, activation="relu"),
+            layers.Dropout(0.5),
+            layers.Dense(10, activation="softmax")
+        ])
+        model.compile(
+            optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate),
+            loss="sparse_categorical_crossentropy",
+            metrics=["accuracy"]
+        )
+        logging.info(f"[{timestamp()}] [INFO] Model compiled")
+
+        # Callbacks: EarlyStopping & ReduceLROnPlateau
+        cb_list = [
+            callbacks.EarlyStopping(patience=patience, restore_best_weights=True),
+            callbacks.ReduceLROnPlateau(patience=max(1, patience//2))
+        ]
+
+        # Callback zur Protokollierung pro Epoche
+        log_callback = callbacks.LambdaCallback(
+            on_epoch_end=lambda epoch, logs: logging.info(
+                f"[{timestamp()}] [INFO] Epoch {epoch+1}/{epochs} "
+                f"Loss={logs['loss']:.4f} ValLoss={logs['val_loss']:.4f} "
+                f"Acc={logs['accuracy']*100:.2f}% ValAcc={logs['val_accuracy']*100:.2f}%"
+            )
+        )
+
+        # Training
+        history = model.fit(
+            x_train, y_train,
+            batch_size=batch_size,
+            epochs=epochs,
+            validation_split=0.2,
+            callbacks=cb_list + [log_callback],
+            verbose=0
+        )
+
+        # Evaluation
+        eval_loss, eval_acc = model.evaluate(x_test, y_test, batch_size=batch_size, verbose=0)
+        logging.info(f"[{timestamp()}] [INFO] Test Loss={eval_loss:.4f} Accuracy={eval_acc*100:.2f}%")
+
+        # Modell speichern
+        model.save(model_name)
+        logging.info(f"[{timestamp()}] [INFO] Model saved as {model_name}")
+
+        print(f"[{timestamp()}] [END] IQ-AI-TF2 completed")
+        sys.exit(0)
+
+    # Drittes TensorFlow Pipeline: IQ-AI-TF3 (IPRP alias)
+    if len(sys.argv) >= 6 and sys.argv[1].upper() in ("IPRP", "IQ-AI-TF3"):
+        import tensorflow as tf
+        from tensorflow.keras import layers, models, callbacks
+        from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+        from tensorflow.keras.datasets import fashion_mnist
+
+        def print_usage():
+            print("Usage:")
+            print("  IPRP command_tf3.py IQ-AI-TF3 <batch_size> <epochs> <learning_rate> <dropout> [model_name]")
+            sys.exit(1)
+
+        # Alias IPRP → IQ-AI-TF3
+        if sys.argv[1].upper() == "IPRP":
+            sys.argv[1] = "IQ-AI-TF3"
+
+        # Parameter parsen
+        try:
+            batch_size    = int(sys.argv[2])
+            epochs        = int(sys.argv[3])
+            learning_rate = float(sys.argv[4])
+            dropout_rate  = float(sys.argv[5])
+            model_name    = sys.argv[6] if len(sys.argv) > 6 else "model_tf3.h5"
+            if batch_size <= 0 or epochs <= 0 or learning_rate <= 0 or not (0 <= dropout_rate < 1):
+                raise ValueError("Invalid numeric parameters.")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Invalid parameters: {e}")
+            print_usage()
+
+        # Logging konfigurieren
+        logging.basicConfig(level=logging.INFO, format="%(message)s")
+        logging.info(f"[{timestamp()}] [INFO] Start IQ-AI-TF3: batch={batch_size}, epochs={epochs}, lr={learning_rate}, dropout={dropout_rate}")
+
+        # Daten laden (FashionMNIST)
+        (x_train, y_train), (x_test, y_test) = fashion_mnist.load_data()
+        x_train = x_train.reshape(-1, 28, 28, 1).astype("float32") / 255.0
+        x_test  = x_test.reshape(-1, 28, 28, 1).astype("float32") / 255.0
+        logging.info(f"[{timestamp()}] [INFO] FashionMNIST loaded and normalized")
+
+        # Modell definieren
+        model = models.Sequential([
+            layers.Input(shape=(28,28,1)),
+            layers.Conv2D(32, 3, activation="relu"),
+            layers.MaxPooling2D(),
+            layers.Conv2D(64, 3, activation="relu"),
+            layers.MaxPooling2D(),
+            layers.Flatten(),
+            layers.Dense(128, activation="relu"),
+            layers.Dropout(dropout_rate),
+            layers.Dense(10, activation="softmax")
+        ])
+        model.compile(
+            optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate),
+            loss="sparse_categorical_crossentropy",
+            metrics=["accuracy"]
+        )
+        logging.info(f"[{timestamp()}] [INFO] Model compiled")
+
+        # Callbacks: ModelCheckpoint & EarlyStopping
+        cb_list = [
+            ModelCheckpoint(model_name, save_best_only=True),
+            EarlyStopping(patience=3, restore_best_weights=True)
+        ]
+
+        # **log_callback auch hier definieren**
+        log_callback = callbacks.LambdaCallback(
+            on_epoch_end=lambda epoch, logs: logging.info(
+                f"[{timestamp()}] [INFO] Epoch {epoch+1}/{epochs} "
+                f"Loss={logs['loss']:.4f} ValLoss={logs['val_loss']:.4f} "
+                f"Acc={logs['accuracy']*100:.2f}% ValAcc={logs['val_accuracy']*100:.2f}%"
+            )
+        )
+
+        combined_callbacks = cb_list + [log_callback]
+
+        # Training
+        history = model.fit(
+            x_train, y_train,
+            batch_size=batch_size,
+            epochs=epochs,
+            validation_split=0.2,
+            callbacks=combined_callbacks,
+            verbose=0
+        )
+
+        # Evaluation
+        eval_loss, eval_acc = model.evaluate(x_test, y_test, batch_size=batch_size, verbose=0)
+        logging.info(f"[{timestamp()}] [INFO] Test Loss={eval_loss:.4f} Accuracy={eval_acc*100:.2f}%")
+
+        print(f"[{timestamp()}] [END] IQ-AI-TF3 completed, best model saved as {model_name}")
+        sys.exit(0)
+
+    if len(sys.argv) >= 5 and sys.argv[1].upper() in ("IPRP", "IQ-AI-JAX"):
+        # Alias IPRP → IQ-AI-JAX
+        if sys.argv[1].upper() == "IPRP":
             sys.argv[1] = "IQ-AI-JAX"
 
         import jax
