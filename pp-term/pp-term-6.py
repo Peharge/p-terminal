@@ -16124,9 +16124,6 @@ def handle_special_commands(user_input):
         import jax.numpy as jnp
         from jax import grad, jit, random
 
-        def timestamp():
-            return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
         def print_usage():
             print("Usage: python script.py IQ-AI-JAX2 <returns_csv> <learning_rate> <epochs> [output_weights.npy]")
             sys.exit(1)
@@ -16215,9 +16212,6 @@ def handle_special_commands(user_input):
         import jax
         import jax.numpy as jnp
         from jax import jit, vmap
-
-        def timestamp():
-            return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         def print_usage():
             print("Usage: python script.py IQ-AI-JAX3 <data_csv> <n_clusters> <max_iter> [output_centroids.npy]")
@@ -25142,6 +25136,24 @@ def main():
                 set_python_path(active)
 
                 print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+
+            elif user_input.strip() == "psv":
+                # Suche nach dem ersten venv im gesamten Verzeichnisbaum ab current_dir
+                found = False
+                for root, dirs, files in os.walk(current_dir):
+                    if "pyvenv.cfg" in files:
+                        env_path = Path(root).resolve()
+
+                        # setzt und speichert das aktive Env
+                        active = find_active_env(str(env_path))
+                        set_python_path(active)
+
+                        print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                        found = True
+                        break
+
+                if not found:
+                    print(f"[{timestamp()}] [WARN] No virtual environment found in current directory tree.")
 
             elif user_input.startswith("p-venv-f "):
                 env_name = user_input[9:].strip()
