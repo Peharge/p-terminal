@@ -117,6 +117,10 @@ import urllib.request
 import urllib.error
 import nbformat
 import cirq
+import sqlite3
+import urllib.parse
+import html
+import faiss
 
 try:
     import ujson as _json
@@ -7791,6 +7795,328 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [INFO] Debugging aborted by user.")
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] Error running PHP script: {e}", file=sys.stderr)
+
+        return True
+
+    if user_input.startswith("prsql "):
+        filepath = os.path.abspath(user_input[6:].strip())
+
+        if not os.path.isfile(filepath):
+            print(f"[{timestamp()}] [ERROR] File '{filepath}' does not exist.")
+            return True
+
+        if not filepath.lower().endswith((".sqlite", ".db", ".sql")):
+            print(f"[{timestamp()}] [ERROR] Unsupported SQL file type: '{filepath}'")
+            return True
+
+        requested_port = 8000
+        port_container = {}
+        server_started_event = threading.Event()
+
+        class SQLiteRequestHandler(http.server.SimpleHTTPRequestHandler):
+            def do_GET(self):
+                parsed_path = urllib.parse.urlparse(self.path)
+                if parsed_path.path == "/":
+                    self.send_response(200)
+                    self.send_header("Content-type", "text/html")
+                    self.end_headers()
+
+                    try:
+                        conn = sqlite3.connect(filepath)
+                        cursor = conn.cursor()
+
+                        cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+                        tables = [row[0] for row in cursor.fetchall()]
+
+                        html_content = "<html><head><title>SQLite Browser</title></head><body>"
+                        html_content += f"<h1>Database: {html.escape(os.path.basename(filepath))}</h1>"
+
+                        for table in tables:
+                            html_content += f"<h2>Table: {html.escape(table)}</h2><table border='1'>"
+                            cursor.execute(f"SELECT * FROM {table} LIMIT 50;")
+                            rows = cursor.fetchall()
+                            col_names = [description[0] for description in cursor.description]
+
+                            html_content += "<tr>" + "".join(f"<th>{html.escape(col)}</th>" for col in col_names) + "</tr>"
+                            for row in rows:
+                                html_content += "<tr>" + "".join(f"<td>{html.escape(str(cell))}</td>" for cell in row) + "</tr>"
+                            html_content += "</table><br>"
+
+                        html_content += "</body></html>"
+                        self.wfile.write(html_content.encode('utf-8'))
+
+                    except Exception as e:
+                        self.wfile.write(f"<h1>Error</h1><p>{html.escape(str(e))}</p>".encode('utf-8'))
+                    finally:
+                        conn.close()
+                else:
+                    self.send_error(404, "File not found.")
+
+        def start_sql_server(port, container, event):
+            with socketserver.TCPServer(("", port), SQLiteRequestHandler) as httpd:
+                container['port'] = httpd.server_address[1]
+                event.set()
+                httpd.serve_forever()
+
+        server_thread = threading.Thread(
+            target=start_sql_server,
+            args=(requested_port, port_container, server_started_event),
+            daemon=True
+        )
+        server_thread.start()
+
+        if not server_started_event.wait(timeout=5):
+            print(f"[{timestamp()}] [ERROR] Server could not be started within 5 seconds.")
+            return True
+
+        actual_port = port_container.get('port')
+        url = f"http://localhost:{actual_port}/"
+        print(f"[{timestamp()}] [INFO] Opening database in browser: {url}")
+        webbrowser.open(url)
+        print(f"[{timestamp()}] [INFO] Server is running on port {actual_port}. Press 'q' to stop it.")
+
+        try:
+            while True:
+                user_cmd = input().strip()
+                if user_cmd.lower() == 'q' or user_cmd.lower() == '\x11':
+                    print(f"[{timestamp()}] [INFO] Stopping server...")
+                    break
+                else:
+                    print(f"[{timestamp()}] [INFO] Invalid input. Press 'q' to quit.")
+        except (KeyboardInterrupt, EOFError):
+            print(f"\n[{timestamp()}] [INFO] Input interrupted. Stopping server...")
+
+        try:
+            urllib.request.urlopen(url, timeout=1)
+        except:
+            pass
+
+        server_thread.join(timeout=5)
+
+        for _ in range(5):
+            try:
+                urllib.request.urlopen(url, timeout=1)
+                print(f"[{timestamp()}] [INFO] URL still reachable, waiting 1s...")
+                time.sleep(1)
+            except (urllib.error.URLError, ConnectionRefusedError):
+                print(f"[{timestamp()}] [INFO] URL is now offline.")
+                break
+        else:
+            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+
+        return True
+
+    if user_input.startswith("prvec "):
+        filepath = os.path.abspath(user_input[6:].strip())
+
+        if not os.path.isfile(filepath):
+            print(f"[{timestamp()}] [ERROR] File '{filepath}' does not exist.")
+            return True
+
+        if not filepath.lower().endswith((".index", ".faiss", ".vecdb")):
+            print(f"[{timestamp()}] [ERROR] Unsupported vector database file: '{filepath}'")
+            return True
+
+        try:
+            index = faiss.read_index(filepath)
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Could not load FAISS index: {e}")
+            return True
+
+        num_vectors = index.ntotal
+        dim = index.d
+
+        requested_port = 8000
+        port_container = {}
+        server_started_event = threading.Event()
+
+        class VectorDBRequestHandler(http.server.SimpleHTTPRequestHandler):
+            def do_GET(self):
+                if self.path == "/":
+                    self.send_response(200)
+                    self.send_header("Content-type", "text/html")
+                    self.end_headers()
+                    html_content = "<html><head><title>Vector DB Info</title></head><body>"
+                    html_content += f"<h1>FAISS Vector Database</h1>"
+                    html_content += f"<p><strong>File:</strong> {html.escape(os.path.basename(filepath))}</p>"
+                    html_content += f"<p><strong>Total Vectors:</strong> {num_vectors}</p>"
+                    html_content += f"<p><strong>Dimensions:</strong> {dim}</p>"
+                    html_content += "</body></html>"
+                    self.wfile.write(html_content.encode('utf-8'))
+                else:
+                    self.send_error(404, "Not Found")
+
+        def start_vec_server(port, container, event):
+            with socketserver.TCPServer(("", port), VectorDBRequestHandler) as httpd:
+                container['port'] = httpd.server_address[1]
+                event.set()
+                httpd.serve_forever()
+
+        server_thread = threading.Thread(
+            target=start_vec_server,
+            args=(requested_port, port_container, server_started_event),
+            daemon=True
+        )
+        server_thread.start()
+
+        if not server_started_event.wait(timeout=5):
+            print(f"[{timestamp()}] [ERROR] Server could not start within 5 seconds.")
+            return True
+
+        actual_port = port_container.get('port')
+        url = f"http://localhost:{actual_port}/"
+        print(f"[{timestamp()}] [INFO] Opening vector database in browser: {url}")
+        webbrowser.open(url)
+        print(f"[{timestamp()}] [INFO] Server is running on port {actual_port}. Press 'q' to stop it.")
+
+        try:
+            while True:
+                user_cmd = input().strip()
+                if user_cmd.lower() == 'q' or user_cmd.lower() == '\x11':
+                    print(f"[{timestamp()}] [INFO] Stopping server...")
+                    break
+                else:
+                    print(f"[{timestamp()}] [INFO] Invalid input. Press 'q' to quit.")
+        except (KeyboardInterrupt, EOFError):
+            print(f"\n[{timestamp()}] [INFO] Input interrupted. Stopping server...")
+
+        try:
+            urllib.request.urlopen(url, timeout=1)
+        except:
+            pass
+
+        server_thread.join(timeout=5)
+
+        for _ in range(5):
+            try:
+                urllib.request.urlopen(url, timeout=1)
+                print(f"[{timestamp()}] [INFO] URL still reachable, waiting 1s...")
+                time.sleep(1)
+            except (urllib.error.URLError, ConnectionRefusedError):
+                print(f"[{timestamp()}] [INFO] URL is now offline.")
+                break
+        else:
+            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+
+        return True
+
+    if user_input.startswith("prrel "):
+        filepath = os.path.abspath(user_input[6:].strip())
+
+        if not os.path.isfile(filepath):
+            print(f"[{timestamp()}] [ERROR] File '{filepath}' does not exist.")
+            return True
+
+        if not filepath.lower().endswith((".sqlite", ".db")):
+            print(f"[{timestamp()}] [ERROR] Unsupported relational DB file: '{filepath}'")
+            return True
+
+        try:
+            conn = sqlite3.connect(filepath)
+            cursor = conn.cursor()
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+            tables = cursor.fetchall()
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Could not read database: {e}")
+            return True
+        finally:
+            conn.close()
+
+        requested_port = 8000
+        port_container = {}
+        server_started_event = threading.Event()
+
+        class RelationalDBHandler(http.server.SimpleHTTPRequestHandler):
+            def do_GET(self):
+                if self.path == "/":
+                    self.send_response(200)
+                    self.send_header("Content-type", "text/html")
+                    self.end_headers()
+
+                    html_content = "<html><head><title>Relational Database</title></head><body>"
+                    html_content += f"<h1>Relational Database Viewer</h1>"
+                    html_content += f"<p><strong>File:</strong> {html.escape(os.path.basename(filepath))}</p>"
+                    html_content += "<ul>"
+
+                    try:
+                        conn = sqlite3.connect(filepath)
+                        cursor = conn.cursor()
+
+                        for (table,) in tables:
+                            html_content += f"<li><strong>Table:</strong> {html.escape(table)}<br>"
+                            try:
+                                cursor.execute(f"PRAGMA table_info({table});")
+                                columns = cursor.fetchall()
+                                html_content += "<ul><li>Columns:<ul>"
+                                for col in columns:
+                                    html_content += f"<li>{html.escape(col[1])} ({col[2]})</li>"
+                                html_content += "</ul></li>"
+
+                                cursor.execute(f"SELECT COUNT(*) FROM {table};")
+                                count = cursor.fetchone()[0]
+                                html_content += f"<li>Total Rows: {count}</li></ul></li><br>"
+                            except Exception as e:
+                                html_content += f"<li>Error reading table: {html.escape(str(e))}</li>"
+                        conn.close()
+                    except Exception as e:
+                        html_content += f"<p>Error loading DB: {html.escape(str(e))}</p>"
+
+                    html_content += "</ul></body></html>"
+                    self.wfile.write(html_content.encode('utf-8'))
+                else:
+                    self.send_error(404, "Not Found")
+
+        def start_rel_server(port, container, event):
+            with socketserver.TCPServer(("", port), RelationalDBHandler) as httpd:
+                container['port'] = httpd.server_address[1]
+                event.set()
+                httpd.serve_forever()
+
+        server_thread = threading.Thread(
+            target=start_rel_server,
+            args=(requested_port, port_container, server_started_event),
+            daemon=True
+        )
+        server_thread.start()
+
+        if not server_started_event.wait(timeout=5):
+            print(f"[{timestamp()}] [ERROR] Server could not start within 5 seconds.")
+            return True
+
+        actual_port = port_container.get('port')
+        url = f"http://localhost:{actual_port}/"
+        print(f"[{timestamp()}] [INFO] Opening relational DB in browser: {url}")
+        webbrowser.open(url)
+        print(f"[{timestamp()}] [INFO] Server is running on port {actual_port}. Press 'q' to stop it.")
+
+        try:
+            while True:
+                user_cmd = input().strip()
+                if user_cmd.lower() == 'q' or user_cmd.lower() == '\x11':
+                    print(f"[{timestamp()}] [INFO] Stopping server...")
+                    break
+                else:
+                    print(f"[{timestamp()}] [INFO] Invalid input. Press 'q' to quit.")
+        except (KeyboardInterrupt, EOFError):
+            print(f"\n[{timestamp()}] [INFO] Input interrupted. Stopping server...")
+
+        try:
+            urllib.request.urlopen(url, timeout=1)
+        except:
+            pass
+
+        server_thread.join(timeout=5)
+
+        for _ in range(5):
+            try:
+                urllib.request.urlopen(url, timeout=1)
+                print(f"[{timestamp()}] [INFO] URL still reachable, waiting 1s...")
+                time.sleep(1)
+            except (urllib.error.URLError, ConnectionRefusedError):
+                print(f"[{timestamp()}] [INFO] URL is now offline.")
+                break
+        else:
+            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
 
         return True
 
