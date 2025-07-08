@@ -18610,7 +18610,7 @@ def compile_mp_cpp_with_vs(mp_cpp_file, mp_exe_file):
     Kompiliert run_pp_command.cpp mit cl.exe über die Visual Studio-Umgebung.
     Die Ausgabe wird im UTF-8 Format eingelesen – ungültige Zeichen werden ersetzt.
     """
-    logging.info("[INFO] Compile run_pp_command.cpp with Visual Studio C++...")
+    logging.info("[INFO] Compile run_pp_command.cpp with the MSVC compiler from Visual Studio...")
     vcvarsall = find_vcvarsall()
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{mp_cpp_file}" /Fe:"{mp_exe_file}"'
@@ -18898,7 +18898,7 @@ def compile_lx_cpp_with_vs(lx_cpp_file, lx_exe_file):
     Kompiliert run_command.cpp mit cl.exe über die Visual Studio-Umgebung.
     Die Ausgabe wird im UTF-8 Format eingelesen – ungültige Zeichen werden ersetzt.
     """
-    logging.info("[INFO] Compile run_lx_command.cpp with Visual Studio C++...")
+    logging.info("[INFO] Compile run_lx_command.cpp with the MSVC compiler from Visual Studio...")
     vcvarsall = find_vcvarsall()
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{lx_cpp_file}" /Fe:"{lx_exe_file}"'
@@ -18976,7 +18976,7 @@ def compile_lx_cpp_c_with_vs(lx_cpp_c_file, lx_exe_c_file):
     Kompiliert run_command.cpp mit cl.exe über die Visual Studio-Umgebung.
     Die Ausgabe wird im UTF-8 Format eingelesen – ungültige Zeichen werden ersetzt.
     """
-    logging.info("[INFO] Compile run_lx_c_command.cpp with Visual Studio C++...")
+    logging.info("[INFO] Compile run_lx_c_command.cpp with the MSVC compiler from Visual Studio...")
     vcvarsall = find_vcvarsall()
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{lx_cpp_c_file}" /Fe:"{lx_exe_c_file}"'
@@ -19238,7 +19238,7 @@ def compile_ubuntu_cpp_with_vs(ubuntu_cpp_file, ubuntu_exe_file):
     Kompiliert run_command.cpp mit cl.exe über die Visual Studio-Umgebung.
     Die Ausgabe wird im UTF-8 Format eingelesen – ungültige Zeichen werden ersetzt.
     """
-    logging.info("[INFO] Compile run_ubuntu_command.cpp with Visual Studio C++...")
+    logging.info("[INFO] Compile run_ubuntu_command.cpp with the MSVC compiler from Visual Studio...")
     vcvarsall = find_vcvarsall()
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{ubuntu_cpp_file}" /Fe:"{ubuntu_exe_file}"'
@@ -19408,7 +19408,7 @@ def compile_debian_cpp_with_vs(debian_cpp_file, debian_exe_file):
     Kompiliert run_command.cpp mit cl.exe über die Visual Studio-Umgebung.
     Die Ausgabe wird im UTF-8 Format eingelesen – ungültige Zeichen werden ersetzt.
     """
-    logging.info("[INFO] Compile run_debian_command.cpp with Visual Studio C++...")
+    logging.info("[INFO] Compile run_debian_command.cpp with the MSVC compiler from Visual Studio...")
     vcvarsall = find_vcvarsall()
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{debian_cpp_file}" /Fe:"{debian_exe_file}"'
@@ -19578,7 +19578,7 @@ def compile_kali_cpp_with_vs(kali_cpp_file, kali_exe_file):
     Kompiliert run_command.cpp mit cl.exe über die Visual Studio-Umgebung.
     Die Ausgabe wird im UTF-8 Format eingelesen – ungültige Zeichen werden ersetzt.
     """
-    logging.info("[INFO] Compile run_kali_command.cpp with Visual Studio C++...")
+    logging.info("[INFO] Compile run_kali_command.cpp with the MSVC compiler from Visual Studio...")
     vcvarsall = find_vcvarsall()
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{kali_cpp_file}" /Fe:"{kali_exe_file}"'
@@ -19748,7 +19748,7 @@ def compile_arch_cpp_with_vs(arch_cpp_file, arch_exe_file):
     Kompiliert run_command.cpp mit cl.exe über die Visual Studio-Umgebung.
     Die Ausgabe wird im UTF-8 Format eingelesen – ungültige Zeichen werden ersetzt.
     """
-    logging.info("[INFO] Compile run_arch_command.cpp with Visual Studio C++...")
+    logging.info("[INFO] Compile run_arch_command.cpp with the MSVC compiler from Visual Studio...")
     vcvarsall = find_vcvarsall()
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{arch_cpp_file}" /Fe:"{arch_exe_file}"'
@@ -19918,7 +19918,7 @@ def compile_opensuse_cpp_with_vs(opensuse_cpp_file, opensuse_exe_file):
     Kompiliert run_command.cpp mit cl.exe über die Visual Studio-Umgebung.
     Die Ausgabe wird im UTF-8 Format eingelesen – ungültige Zeichen werden ersetzt.
     """
-    logging.info("[INFO] Compile run_opensuse_command.cpp with Visual Studio C++...")
+    logging.info("[INFO] Compile run_opensuse_command.cpp with the MSVC compiler from Visual Studio...")
     vcvarsall = find_vcvarsall()
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{opensuse_cpp_file}" /Fe:"{opensuse_exe_file}"'
@@ -20088,7 +20088,7 @@ def compile_mint_cpp_with_vs(mint_cpp_file, mint_exe_file):
     Kompiliert run_mint_command.cpp mit cl.exe über die Visual Studio-Umgebung.
     Die Ausgabe wird im UTF-8 Format eingelesen – ungültige Zeichen werden ersetzt.
     """
-    logging.info("[INFO] Compile run_mint_command.cpp with Visual Studio C++...")
+    logging.info("[INFO] Compile run_mint_command.cpp with the MSVC compiler from Visual Studio...")
     vcvarsall = find_vcvarsall()
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{mint_cpp_file}" /Fe:"{mint_exe_file}"'
@@ -20258,7 +20258,7 @@ def compile_fedora_cpp_with_vs(fedora_cpp_file, fedora_exe_file):
     Kompiliert run_fedora_command.cpp mit cl.exe über die Visual Studio-Umgebung.
     Die Ausgabe wird im UTF-8 Format eingelesen – ungültige Zeichen werden ersetzt.
     """
-    logging.info("[INFO] Compile run_fedora_command.cpp with Visual Studio C++...")
+    logging.info("[INFO] Compile run_fedora_command.cpp with the MSVC compiler from Visual Studio...")
     vcvarsall = find_vcvarsall()
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{fedora_cpp_file}" /Fe:"{fedora_exe_file}"'
@@ -20428,7 +20428,7 @@ def compile_redhat_cpp_with_vs(redhat_cpp_file, redhat_exe_file):
     Kompiliert run_redhat_command.cpp mit cl.exe über die Visual Studio-Umgebung.
     Die Ausgabe wird im UTF-8 Format eingelesen – ungültige Zeichen werden ersetzt.
     """
-    logging.info("[INFO] Compile run_redhat_command.cpp with Visual Studio C++...")
+    logging.info("[INFO] Compile run_redhat_command.cpp with the MSVC compiler from Visual Studio...")
     vcvarsall = find_vcvarsall()
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{redhat_cpp_file}" /Fe:"{redhat_exe_file}"'
@@ -20598,7 +20598,7 @@ def compile_sles_cpp_with_vs(sles_cpp_file, sles_exe_file):
     Kompiliert run_sles_command.cpp mit cl.exe über die Visual Studio-Umgebung.
     Die Ausgabe wird im UTF-8 Format eingelesen – ungültige Zeichen werden ersetzt.
     """
-    logging.info("[INFO] Compile run_sles_command.cpp with Visual Studio C++...")
+    logging.info("[INFO] Compile run_sles_command.cpp with the MSVC compiler from Visual Studio...")
     vcvarsall = find_vcvarsall()
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{sles_cpp_file}" /Fe:"{sles_exe_file}"'
@@ -20768,7 +20768,7 @@ def compile_pengwin_cpp_with_vs(pengwin_cpp_file, pengwin_exe_file):
     Kompiliert run_pengwin_command.cpp mit cl.exe über die Visual Studio-Umgebung.
     Die Ausgabe wird im UTF-8 Format eingelesen – ungültige Zeichen werden ersetzt.
     """
-    logging.info("[INFO] Compile run_pengwin_command.cpp with Visual Studio C++...")
+    logging.info("[INFO] Compile run_pengwin_command.cpp with the MSVC compiler from Visual Studio...")
     vcvarsall = find_vcvarsall()
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{pengwin_cpp_file}" /Fe:"{pengwin_exe_file}"'
@@ -20938,7 +20938,7 @@ def compile_oracle_cpp_with_vs(oracle_cpp_file, oracle_exe_file):
     Kompiliert run_oracle_command.cpp mit cl.exe über die Visual Studio-Umgebung.
     Die Ausgabe wird im UTF-8 Format eingelesen – ungültige Zeichen werden ersetzt.
     """
-    logging.info("[INFO] Compile run_oracle_command.cpp with Visual Studio C++...")
+    logging.info("[INFO] Compile run_oracle_command.cpp with the MSVC compiler from Visual Studio...")
     vcvarsall = find_vcvarsall()
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{oracle_cpp_file}" /Fe:"{oracle_exe_file}"'
@@ -21108,7 +21108,7 @@ def compile_alpine_cpp_with_vs(alpine_cpp_file, alpine_exe_file):
     Kompiliert run_alpine_command.cpp mit cl.exe über die Visual Studio-Umgebung.
     Die Ausgabe wird im UTF-8 Format eingelesen – ungültige Zeichen werden ersetzt.
     """
-    logging.info("[INFO] Compile run_alpine_command.cpp with Visual Studio C++...")
+    logging.info("[INFO] Compile run_alpine_command.cpp with the MSVC compiler from Visual Studio...")
     vcvarsall = find_vcvarsall()
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{alpine_cpp_file}" /Fe:"{alpine_exe_file}"'
@@ -21278,7 +21278,7 @@ def compile_clear_cpp_with_vs(clear_cpp_file, clear_exe_file):
     Kompiliert run_clear_command.cpp mit cl.exe über die Visual Studio-Umgebung.
     Die Ausgabe wird im UTF-8 Format eingelesen – ungültige Zeichen werden ersetzt.
     """
-    logging.info("[INFO] Compile run_clear_command.cpp with Visual Studio C++...")
+    logging.info("[INFO] Compile run_clear_command.cpp with the MSVC compiler from Visual Studio...")
     vcvarsall = find_vcvarsall()
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{clear_cpp_file}" /Fe:"{clear_exe_file}"'
