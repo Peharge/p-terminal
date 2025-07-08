@@ -273,6 +273,12 @@
        - PP-Terminal 6.1.1.18
        - PP-Terminal 6.1.1.19
        - PP-Terminal 6.1.1.30
+       - PP-Terminal 6.1.1.31
+       - PP-Terminal 6.1.1.33
+       - PP-Terminal 6.1.1.34
+       - PP-Terminal 6.1.1.35
+       - PP-Terminal 6.1.1.36
+       - PP-Terminal 6.1.1.38
 
 # PP-Terminal Launcher Version
 
