@@ -74,7 +74,7 @@ Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vo
 param (
     [string]$ScriptPath = "$PSScriptRoot\pp-term-6-3.py",
     [string]$PythonExe  = "$PSScriptRoot\.env\Scripts\python.exe",
-    [string]$LogFile    = "$HOME\p-terminal\pp-term\WSL_Diagnostics.log"
+    [string]$LogFile    = "$HOME\p-terminal\pp-term\PP_Terminal_Diagnostics.log"
 )
 
 function Write-Log {
