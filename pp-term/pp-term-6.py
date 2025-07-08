@@ -14286,6 +14286,56 @@ def handle_special_commands(user_input):
 
         return True
 
+    # Python REPL starten
+    if user_input.strip().lower() == "ppy":
+        user_input = "py"
+        import code as code_module
+
+        load_dotenv()
+
+        APP_NAME = os.getenv("APP_NAME", "p-terminal/pp-term").replace("\\", "/")
+        USER_NAME = os.getenv("USER_NAME", os.getlogin())
+        STATE_FILE = Path(f"C:/Users/{USER_NAME}/{APP_NAME}/current_env.json")
+
+        print(f"[{timestamp()}] [INFO] Initializing Python REPL startup sequence...")
+        print(f"[{timestamp()}] [INFO] Using STATE_FILE at: {STATE_FILE}")
+
+        try:
+            active = find_active_env()
+            if active is None:
+                raise ValueError("Active environment is None")
+            print(f"[{timestamp()}] [INFO] Active environment successfully located.")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Failed to find active environment: {e}")
+            traceback.print_exc()
+        else:
+            print(f"[{timestamp()}] [INFO] Launching interactive Python REPL.")
+            print(f"[{timestamp()}] [INFO] Type 'exit()' or press Ctrl-D to quit.")
+
+            try:
+                if isinstance(active, dict):
+                    local_ns = active
+                else:
+                    try:
+                        local_ns = vars(active)
+                    except TypeError:
+                        print(f"[{timestamp()}] [WARNING] Could not extract vars() from active object; using empty namespace.")
+                        local_ns = {}
+
+                local_ns['STATE_FILE'] = STATE_FILE
+
+                code_module.interact(local=local_ns)
+
+            except SystemExit:
+                print(f"[{timestamp()}] [INFO] Exiting REPL via SystemExit.")
+            except Exception as e:
+                print(f"[{timestamp()}] [ERROR] Unhandled exception during REPL session: {e}")
+                traceback.print_exc()
+            finally:
+                print(f"[{timestamp()}] [INFO] Python REPL session terminated.")
+
+        return True
+
     if user_input.startswith("pb "):
         # Remove "pb " and strip any surrounding whitespace
         user_input = user_input[3:].strip()
