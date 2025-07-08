@@ -123,6 +123,7 @@ import html
 import faiss
 import pandas as pd
 import traceback
+import numpy as onp
 
 try:
     import ujson as _json
@@ -16108,11 +16109,176 @@ def handle_special_commands(user_input):
 
         # Modell speichern
         # Speichere Parameter als NumPy-Archive
-        import numpy as onp
         onp.savez(model_name, **{k: onp.array(v) for k, v in params.items()})
         logging.info(f"[{timestamp()}] [INFO] Model saved as {model_name}")
 
         print(f"[{timestamp()}] [END] IQ-AI-JAX pipeline completed")
+        sys.exit(0)
+
+    if len(sys.argv) >= 5 and sys.argv[1].upper() in ("IPRP", "IQ-AI-JAX2"):
+        # Alias IPRP → IQ-AI-JAX2
+        if sys.argv[1].upper() == "IPRP":
+            sys.argv[1] = "IQ-AI-JAX2"
+
+        import jax
+        import jax.numpy as jnp
+        from jax import grad, jit, random
+
+        def timestamp():
+            return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        def print_usage():
+            print("Usage: python script.py IQ-AI-JAX2 <returns_csv> <learning_rate> <epochs> [output_weights.npy]")
+            sys.exit(1)
+
+        # Parameter parsen
+        try:
+            returns_csv   = sys.argv[2]
+            learning_rate = float(sys.argv[3])
+            epochs        = int(sys.argv[4])
+            out_file      = sys.argv[5] if len(sys.argv) > 5 else "weights_jax2.npy"
+            if learning_rate <= 0 or epochs <= 0:
+                raise ValueError("Learning rate und Epochen müssen > 0 sein.")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Invalid parameters: {e}")
+            print_usage()
+
+        # Logging konfigurieren
+        logging.basicConfig(level=logging.INFO, format="%(message)s")
+        logging.info(f"[{timestamp()}] [INFO] Start IQ-AI-JAX2 with returns_csv={returns_csv}, lr={learning_rate}, epochs={epochs}")
+
+        # .env laden (optional)
+        USERNAME = os.getlogin()
+        env_path = fr"C:\Users\{USERNAME}\p-terminal\pp-term\.env"
+        if os.path.isfile(env_path):
+            with open(env_path) as f:
+                for line in f:
+                    if "=" in line and not line.strip().startswith("#"):
+                        k, v = line.strip().split("=", 1)
+                        os.environ[k] = v
+            logging.info(f"[{timestamp()}] [INFO] .env geladen von {env_path}")
+        else:
+            logging.warning(f"[{timestamp()}] [WARN] .env nicht gefunden unter {env_path}")
+
+        # Renditedaten laden
+        try:
+            data = onp.loadtxt(returns_csv, delimiter=",", skiprows=1)
+            # data: rows = days, columns = assets
+            mu = jnp.mean(data, axis=0)          # erwartete Renditen
+            cov = jnp.cov(data, rowvar=False)    # Kovarianzmatrix
+            n_assets = mu.shape[0]
+            logging.info(f"[{timestamp()}] [INFO] Loaded returns for {n_assets} assets")
+        except Exception as e:
+            logging.error(f"[{timestamp()}] [ERROR] Error loading data: {e}")
+            sys.exit(1)
+
+        # Parameter: rohe Gewichte (unconstrained)
+        key = jax.random.PRNGKey(42)
+        weights_raw = jax.random.normal(key, (n_assets,))
+
+        # Sharpe-Ratio Loss (wir minimieren negative Sharpe)
+        risk_free = float(os.environ.get("RISK_FREE_RATE", 0.01))
+        def sharpe_loss(w_raw):
+            w = jax.nn.softmax(w_raw)           # summiert zu 1, alle > 0
+            ret = jnp.dot(mu, w) - risk_free
+            vol = jnp.sqrt(w @ cov @ w)
+            return - (ret / vol)
+
+        grad_fn = jit(grad(sharpe_loss))
+
+        # Optimizer: einfacher SGD
+        for epoch in range(1, epochs+1):
+            grads = grad_fn(weights_raw)
+            weights_raw = weights_raw - learning_rate * grads
+            if epoch % max(1, epochs//10) == 0 or epoch == 1:
+                loss = sharpe_loss(weights_raw)
+                logging.info(f"[{timestamp()}] [INFO] Epoch {epoch}/{epochs} Loss (neg. Sharpe)={loss:.6f}")
+
+        # Finale Gewichte
+        weights = onp.array(jax.nn.softmax(weights_raw))
+        sharpe_final = - float(sharpe_loss(weights_raw))
+        logging.info(f"[{timestamp()}] [INFO] Optimization completed. Sharpe ratio={sharpe_final:.4f}")
+
+        # Gewichte speichern
+        onp.save(out_file, weights)
+        logging.info(f"[{timestamp()}] [INFO] Weights saved as {out_file}")
+
+        print(f"[{timestamp()}] [END] IQ-AI-JAX2 pipeline completed – Sharpe ratio={sharpe_final:.4f}")
+        sys.exit(0)
+
+
+    if len(sys.argv) >= 5 and sys.argv[1].upper() in ("IPRP", "IQ-AI-JAX3"):
+        # Alias IPRP → IQ-AI-JAX3
+        if sys.argv[1].upper() == "IPRP":
+            sys.argv[1] = "IQ-AI-JAX3"
+
+        import jax
+        import jax.numpy as jnp
+        from jax import jit, vmap
+
+        def timestamp():
+            return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        def print_usage():
+            print("Usage: python script.py IQ-AI-JAX3 <data_csv> <n_clusters> <max_iter> [output_centroids.npy]")
+            sys.exit(1)
+
+        # Parameter parsen
+        try:
+            data_csv   = sys.argv[2]
+            n_clusters = int(sys.argv[3])
+            max_iter   = int(sys.argv[4])
+            out_file   = sys.argv[5] if len(sys.argv) > 5 else "centroids_jax3.npy"
+            if n_clusters <= 0 or max_iter <= 0:
+                raise ValueError("n_clusters und max_iter müssen > 0 sein.")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Invalid parameters: {e}")
+            print_usage()
+
+        # Logging konfigurieren
+        logging.basicConfig(level=logging.INFO, format="%(message)s")
+        logging.info(f"[{timestamp()}] [INFO] Start IQ-AI-JAX3 with data_csv={data_csv}, clusters={n_clusters}, max_iter={max_iter}")
+
+        # Daten laden
+        try:
+            data = onp.loadtxt(data_csv, delimiter=",", skiprows=1)
+            logging.info(f"[{timestamp()}] [INFO] Loaded data: {data.shape[0]} samples, {data.shape[1]} features")
+        except Exception as e:
+            logging.error(f"[{timestamp()}] [ERROR] Error loading data: {e}")
+            sys.exit(1)
+
+        # K-Means Initialisierung
+        key = jax.random.PRNGKey(0)
+        centroids = jax.random.permutation(key, data)[:n_clusters]
+
+        # Euklidischer Abstand berechnen
+        def assign_clusters(pts, cents):
+            dists = jnp.linalg.norm(pts[:, None, :] - cents[None, :, :], axis=-1)
+            return jnp.argmin(dists, axis=1)
+
+        @jit
+        def update_centroids(pts, cents):
+            labels = assign_clusters(pts, cents)
+            def centroid_fn(i):
+                mask = labels == i
+                return jnp.where(mask.sum() > 0, jnp.mean(pts[mask], axis=0), cents[i])
+            return vmap(centroid_fn)(jnp.arange(n_clusters))
+
+        # Training (Iterationen)
+        for i in range(1, max_iter+1):
+            new_cents = update_centroids(jnp.array(data), centroids)
+            shift = jnp.max(jnp.linalg.norm(new_cents - centroids, axis=1))
+            centroids = new_cents
+            logging.info(f"[{timestamp()}] [INFO] Iter {i}/{max_iter} max shift={shift:.6f}")
+            if shift < 1e-6:
+                logging.info(f"[{timestamp()}] [INFO] Konvergenz erreicht nach {i} Iterationen")
+                break
+
+        # Centroids speichern
+        onp.save(out_file, onp.array(centroids))
+        logging.info(f"[{timestamp()}] [INFO] Centroids saved as {out_file}")
+
+        print(f"[{timestamp()}] [END] IQ-AI-JAX3 K-Means completed")
         sys.exit(0)
 
     if user_input.startswith("pa "):
@@ -23733,7 +23899,7 @@ def get_cool_23_pin():
 COMMANDS = [
     "p", "p git", "p git mavis", "p git mavis-web", "p git simon", "p htop", "p ls", "p ls mavis",
     "ps ls mavis-web", "p ls simon", "p simon", "p wsl", "p pip", "p models", "p ubuntu", "gitk", "git ls all",
-    "git ls hole",
+    "git ls hole", "pcd", "ppy", "IQ", "IQ-AI", "pcd", "pls",
     "pp", "pp-cpp", "pp-c", "pp-p", "ps", "ps-github", "ps-huggingface", "ps-ollama", "ps-stackoverflow", "nano",
     "htop", "btop", "atop", "glances", "ncdu", "fzf", "bat", "gitui", "lazygit", "starship",
     "emacs", "vim", "nvim", "nano", "kate", "gedit", "geany", "code", "ps-all", "pps", "pb", "pt",
