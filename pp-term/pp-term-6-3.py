@@ -4336,6 +4336,66 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
         return True
 
+    if user_input.startswith("gnatmake ") and " -o " in ui:
+        command = f"wsl {user_input}"
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling with gnatmake...\n")
+            process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
+        return True
+
+    if user_input.startswith("gdc ") and " -o " in ui:
+        command = f"wsl {user_input}"
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling with gdc (D compiler)...\n")
+            process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
+        return True
+
+    if user_input.startswith("gm2 ") and " -o " in ui:
+        command = f"wsl {user_input}"
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling with gm2 (Modula-2)...\n")
+            process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
+        return True
+
+    if user_input.startswith("gpas ") and " -o " in ui:
+        command = f"wsl {user_input}"
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling with gpas (GNU Pascal)...\n")
+            process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
+        return True
+
+    if user_input.startswith("gpc ") and " -o " in ui:
+        command = f"wsl {user_input}"
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling with gpc (GNU Pascal Compiler)...\n")
+            process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
+        return True
+
     elif user_input.startswith("vs-cpp "):
         user_input = user_input[7:].strip()
         print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Studio Building Tools 2022\n")
