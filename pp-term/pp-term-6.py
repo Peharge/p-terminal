@@ -14750,7 +14750,6 @@ def handle_special_commands(user_input):
         # .env laden
         env_path = os.path.join(os.path.expanduser("~"), ".env")
         if os.path.isfile(env_path):
-            from dotenv import load_dotenv
             load_dotenv(env_path)
             logging.info(f"[{timestamp()}] [INFO] Loaded .env from {env_path}")
         else:
@@ -15035,7 +15034,6 @@ def handle_special_commands(user_input):
         # .env laden (optional)
         env_path = os.path.join(os.path.expanduser("~"), ".env")
         if os.path.isfile(env_path):
-            from dotenv import load_dotenv
             load_dotenv(env_path)
             logging.info(f"[{timestamp()}] [INFO] Loaded .env from {env_path}")
         else:
@@ -15161,7 +15159,6 @@ def handle_special_commands(user_input):
         # Optional .env
         env_path = os.path.join(os.path.expanduser("~"), ".env")
         if os.path.isfile(env_path):
-            from dotenv import load_dotenv
             load_dotenv(env_path)
             logging.info(f"[{timestamp()}] [INFO] Loaded .env from {env_path}")
         else:
