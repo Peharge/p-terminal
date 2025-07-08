@@ -25155,6 +25155,21 @@ def main():
                 if not found:
                     print(f"[{timestamp()}] [WARN] No virtual environment found in current directory tree.")
 
+            elif user_input.strip() == "psvls":
+                print(f"[{timestamp()}] [INFO] Searching for virtual environments in '{current_dir}'...\n")
+                venvs = []
+
+                for item in current_dir.rglob("pyvenv.cfg"):
+                    env_path = item.parent.resolve()
+                    venvs.append(env_path)
+
+                if venvs:
+                    print(f"[{timestamp()}] [INFO] Found {len(venvs)} virtual environment(s):\n")
+                    for i, env in enumerate(venvs, 1):
+                        print(f"  {i}. {env}")
+                else:
+                    print(f"[{timestamp()}] [WARN] No virtual environments found in directory tree.")
+
             elif user_input.startswith("p-venv-f "):
                 env_name = user_input[9:].strip()
                 env_path = str(env_name)
