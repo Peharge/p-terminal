@@ -4145,6 +4145,197 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [WARN] Usage: gcc clean <directory_path>")
         return True
 
+    if ui.startswith("gfortran ") and " -o " in ui:
+        command = f"wsl {user_input}"
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling with gfortran...\n")
+            process = subprocess.Popen(
+                command,
+                stdin=sys.stdin,
+                stdout=sys.stdout,
+                stderr=sys.stderr,
+                shell=True,
+                text=True
+            )
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
+        return True
+
+    if ui.startswith("gccgo ") and " -o " in ui:
+        command = f"wsl {user_input}"
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling with gccgo...\n")
+            process = subprocess.Popen(
+                command,
+                stdin=sys.stdin,
+                stdout=sys.stdout,
+                stderr=sys.stderr,
+                shell=True,
+                text=True
+            )
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
+        return True
+
+    if ui.startswith("gcj ") and " -o " in ui:
+        command = f"wsl {user_input}"
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling with gcj...\n")
+            process = subprocess.Popen(
+                command,
+                stdin=sys.stdin,
+                stdout=sys.stdout,
+                stderr=sys.stderr,
+                shell=True,
+                text=True
+            )
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
+        return True
+
+    if ui.startswith("gnat ") and " -o " in ui:
+        command = f"wsl {user_input}"
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling with gnat...\n")
+            process = subprocess.Popen(
+                command,
+                stdin=sys.stdin,
+                stdout=sys.stdout,
+                stderr=sys.stderr,
+                shell=True,
+                text=True
+            )
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
+        return True
+
+    if ui.startswith("gfortran ") and " -o " in ui:
+        command = f"wsl {user_input}"
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling with gfortran...\n")
+            process = subprocess.Popen(
+                command,
+                stdin=sys.stdin,
+                stdout=sys.stdout,
+                stderr=sys.stderr,
+                shell=True,
+                text=True
+            )
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
+        return True
+
+    if ui.startswith("gccgo ") and " -o " in ui:
+        command = f"wsl {user_input}"
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling with gccgo...\n")
+            process = subprocess.Popen(
+                command,
+                stdin=sys.stdin,
+                stdout=sys.stdout,
+                stderr=sys.stderr,
+                shell=True,
+                text=True
+            )
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
+        return True
+
+    if ui.startswith("gcj ") and " -o " in ui:
+        command = f"wsl {user_input}"
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling with gcj...\n")
+            process = subprocess.Popen(
+                command,
+                stdin=sys.stdin,
+                stdout=sys.stdout,
+                stderr=sys.stderr,
+                shell=True,
+                text=True
+            )
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
+        return True
+
+    if ui.startswith("gnat ") and " -o " in ui:
+        command = f"wsl {user_input}"
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling with gnat...\n")
+            process = subprocess.Popen(
+                command,
+                stdin=sys.stdin,
+                stdout=sys.stdout,
+                stderr=sys.stderr,
+                shell=True,
+                text=True
+            )
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
+        return True
+
+    # Weitere bekannte GCC-Frontends (jeweils eigenes if)
+    if ui.startswith("objc ") and " -o " in ui:
+        command = f"wsl {user_input}"
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling with objc...\n")
+            process = subprocess.Popen(
+                command,
+                stdin=sys.stdin,
+                stdout=sys.stdout,
+                stderr=sys.stderr,
+                shell=True,
+                text=True
+            )
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
+        return True
+
+    if ui.startswith("objc++ ") and " -o " in ui:
+        command = f"wsl {user_input}"
+        try:
+            print(f"[{timestamp()}] [INFO] Compiling with objc++...\n")
+            process = subprocess.Popen(
+                command,
+                stdin=sys.stdin,
+                stdout=sys.stdout,
+                stderr=sys.stderr,
+                shell=True,
+                text=True
+            )
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
+        return True
+
     elif user_input.startswith("vs-cpp "):
         user_input = user_input[7:].strip()
         print(f"[{timestamp()}] [INFO] Compile {user_input} with Visual Studio Building Tools 2022\n")
