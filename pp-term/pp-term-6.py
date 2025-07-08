@@ -25544,6 +25544,9 @@ def main():
                 user_input = user_input[5:]
                 run_command_with_admin_python_privileges(user_input)
 
+            elif user_input.startswith("pp-rust "):
+                print(f"[{timestamp()}] [INFO] Please use the pp command or compile the corresponding Rust file yourself with cargo...")
+
             elif user_input.startswith("powershell "):
                 run_command(user_input, shell=True)
 
@@ -25677,6 +25680,38 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on Linux: {user_input}")
                     run_linux_cpp_c_command(user_input)
 
+            elif user_input.startswith("lx-rust "):
+                user_input = user_input[8:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the lx command or compile the corresponding Rust file yourself with cargo...")
+
+            elif user_input.startswith("pl-rust "):
+                user_input = user_input[8:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the lx command or compile the corresponding Rust file yourself with cargo...")
+
+            elif user_input.startswith("lx-rust-c "):
+                user_input = user_input[10:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the lx command or compile the corresponding Rust file yourself with cargo...")
+
+
+            elif user_input.startswith("pl-rust-c "):
+                user_input = user_input[10:].strip()
+                if not is_wsl_installed():
+                    print(f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the lx command or compile the corresponding Rust file yourself with cargo...")
+
             elif user_input.startswith("lx-c "):
                 user_input = user_input[5:].strip()
                 if not is_wsl_installed():
@@ -25785,6 +25820,30 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on Ubuntu: {user_input}")
                     run_ubuntu_command(user_input)
 
+            elif user_input.startswith("ubuntu-rust "):
+                user_input = user_input[12:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the ubuntu command or compile the corresponding Rust file yourself with cargo...")
+
+            elif user_input.startswith("pl-u-rust "):
+                user_input = user_input[10:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the ubuntu command or compile the corresponding Rust file yourself with cargo...")
+
+            elif user_input.startswith("pl-ubuntu-rust "):
+                user_input = user_input[15:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the ubuntu command or compile the corresponding Rust file yourself with cargo...")
+
             elif user_input.startswith("ubuntu-c "):
                 user_input = user_input[9:].strip()
                 if not is_wsl_installed():
@@ -25867,6 +25926,30 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on Debian: {user_input}")
                     run_debian_command(user_input)
 
+            elif user_input.startswith("debian-rust "):
+                user_input = user_input[12:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the debian command or compile the corresponding Rust file yourself with cargo...")
+
+            elif user_input.startswith("pl-d-rust "):
+                user_input = user_input[10:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the debian command or compile the corresponding Rust file yourself with cargo...")
+
+            elif user_input.startswith("pl-debian-rust "):
+                user_input = user_input[15:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the debian command or compile the corresponding Rust file yourself with cargo...")
+
             elif user_input.startswith("debian-c "):
                 user_input = user_input[9:].strip()  # Remove the "debian " prefix
                 if not is_wsl_installed():
@@ -25938,6 +26021,39 @@ def main():
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Kali: {user_input}")
                     run_kali_command(user_input)
+
+            elif user_input.startswith("pl-kali "):
+                user_input = user_input[8:].strip()  # Remove the "kali " prefix
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Executing the following command on Kali: {user_input}")
+                    run_kali_command(user_input)
+
+            elif user_input.startswith("kali-rust "):
+                user_input = user_input[10:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the kali command or compile the corresponding Rust file yourself with cargo...")
+
+            elif user_input.startswith("pl-k-rust "):
+                user_input = user_input[10:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the kali command or compile the corresponding Rust file yourself with cargo...")
+
+            elif user_input.startswith("pl-kali-rust "):
+                user_input = user_input[13:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the kali command or compile the corresponding Rust file yourself with cargo...")
 
             elif user_input.startswith("kali-c "):
                 user_input = user_input[7:].strip()  # Remove the "kali " prefix
@@ -26029,6 +26145,30 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on Arch: {user_input}")
                     run_arch_command(user_input)
 
+            elif user_input.startswith("arch-rust "):
+                user_input = user_input[10:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the arch command or compile the corresponding Rust file yourself with cargo...")
+
+            elif user_input.startswith("pl-a-rust "):
+                user_input = user_input[10:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the arch command or compile the corresponding Rust file yourself with cargo...")
+
+            elif user_input.startswith("pl-arch-rust "):
+                user_input = user_input[13:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the arch command or compile the corresponding Rust file yourself with cargo...")
+
             elif user_input.startswith("arch-c "):
                 user_input = user_input[7:].strip()  # Remove the "arch " prefix
                 if not is_wsl_installed():
@@ -26101,6 +26241,22 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on openSUSE: {user_input}")
                     run_opensuse_command(user_input)
 
+            elif user_input.startswith("openSUSE-rust "):
+                user_input = user_input[14:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the openSUSE command or compile the corresponding Rust file yourself with cargo...")
+
+            elif user_input.startswith("pl-openSUSE-rust "):
+                user_input = user_input[16:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the openSUSE command or compile the corresponding Rust file yourself with cargo...")
+
             elif user_input.startswith("openSUSE-c "):
                 user_input = user_input[11:].strip()  # Remove the "openSUSE " prefix
                 if not is_wsl_installed():
@@ -26154,6 +26310,22 @@ def main():
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on openSUSE: {user_input}")
                     run_mint_command(user_input)
+
+            elif user_input.startswith("mint-rust "):
+                user_input = user_input[10:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the mint command or compile the corresponding Rust file yourself with cargo...")
+
+            elif user_input.startswith("pl-mint-rust "):
+                user_input = user_input[13:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the mint command or compile the corresponding Rust file yourself with cargo...")
 
             elif user_input.startswith("mint-c "):
                 user_input = user_input[7:].strip()  # Remove the "mint " prefix
@@ -26209,6 +26381,22 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on Fedora: {user_input}")
                     run_fedora_command(user_input)
 
+            elif user_input.startswith("fedora-rust "):
+                user_input = user_input[12:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the fedora command or compile the corresponding Rust file yourself with cargo...")
+
+            elif user_input.startswith("pl-fedora-rust "):
+                user_input = user_input[15:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the fedora command or compile the corresponding Rust file yourself with cargo...")
+
             elif user_input.startswith("fedora-c "):
                 user_input = user_input[9:].strip()  # Remove the "fedora " prefix
                 if not is_wsl_installed():
@@ -26263,6 +26451,22 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on RedHat: {user_input}")
                     run_redhat_command(user_input)
 
+            elif user_input.startswith("redhat-rust "):
+                user_input = user_input[12:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the redhat command or compile the corresponding Rust file yourself with cargo...")
+
+            elif user_input.startswith("pl-redhat-rust "):
+                user_input = user_input[15:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the redhat command or compile the corresponding Rust file yourself with cargo...")
+
             elif user_input.startswith("redhat-c "):
                 user_input = user_input[9:].strip()  # Remove the "redhat " prefix
                 if not is_wsl_installed():
@@ -26300,7 +26504,7 @@ def main():
                     run_redhat_python_command(user_input)
 
             elif user_input.startswith("sles "):
-                user_input = user_input[7:].strip()  # Remove the "sles " prefix
+                user_input = user_input[5:].strip()  # Remove the "sles " prefix
                 if not is_wsl_installed():
                     print(
                         f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
@@ -26309,13 +26513,29 @@ def main():
                     run_sles_command(user_input)
 
             elif user_input.startswith("pl-sles "):
-                user_input = user_input[10:].strip()  # Remove the "sles " prefix
+                user_input = user_input[8:].strip()  # Remove the "sles " prefix
                 if not is_wsl_installed():
                     print(
                         f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on SLES: {user_input}")
                     run_sles_command(user_input)
+
+            elif user_input.startswith("sles-rust "):
+                user_input = user_input[10:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the sles command or compile the corresponding Rust file yourself with cargo...")
+
+            elif user_input.startswith("pl-sles-rust "):
+                user_input = user_input[13:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the sles command or compile the corresponding Rust file yourself with cargo...")
 
             elif user_input.startswith("sles-c "):
                 user_input = user_input[9:].strip()  # Remove the "sles " prefix
@@ -26362,15 +26582,6 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on Pengwin: {user_input}")
                     run_pengwin_command(user_input)
 
-            elif user_input.startswith("pengwin "):
-                user_input = user_input[7:].strip()  # Remove the "pengwin " prefix
-                if not is_wsl_installed():
-                    print(
-                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
-                else:
-                    print(f"[{timestamp()}] [INFO] Executing the following command on Pengwin: {user_input}")
-                    run_pengwin_command(user_input)
-
             elif user_input.startswith("pl-pengwin "):
                 user_input = user_input[10:].strip()  # Remove the "pengwin " prefix
                 if not is_wsl_installed():
@@ -26379,6 +26590,22 @@ def main():
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Pengwin: {user_input}")
                     run_pengwin_command(user_input)
+
+            elif user_input.startswith("pengwin-rust "):
+                user_input = user_input[13:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the pengwin command or compile the corresponding Rust file yourself with cargo...")
+
+            elif user_input.startswith("pl-pengwin-rust "):
+                user_input = user_input[16:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the pengwin command or compile the corresponding Rust file yourself with cargo...")
 
             elif user_input.startswith("pengwin-c "):
                 user_input = user_input[9:].strip()  # Remove the "pengwin " prefix
@@ -26434,6 +26661,22 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on Oracle: {user_input}")
                     run_oracle_command(user_input)
 
+            elif user_input.startswith("oracle-rust "):
+                user_input = user_input[12:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the oracle command or compile the corresponding Rust file yourself with cargo...")
+
+            elif user_input.startswith("pl-oracle-rust "):
+                user_input = user_input[15:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the oracle command or compile the corresponding Rust file yourself with cargo...")
+
             elif user_input.startswith("oracle-c "):
                 user_input = user_input[9:].strip()  # Remove the "oracle " prefix
                 if not is_wsl_installed():
@@ -26488,6 +26731,22 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on Alpine: {user_input}")
                     run_alpine_command(user_input)
 
+            elif user_input.startswith("alpine-rust "):
+                user_input = user_input[12:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the alpine command or compile the corresponding Rust file yourself with cargo...")
+
+            elif user_input.startswith("pl-alpine-rust "):
+                user_input = user_input[15:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the alpine command or compile the corresponding Rust file yourself with cargo...")
+
             elif user_input.startswith("alpine-c "):
                 user_input = user_input[9:].strip()  # Remove the "alpine " prefix
                 if not is_wsl_installed():
@@ -26541,6 +26800,22 @@ def main():
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Clear: {user_input}")
                     run_clear_command(user_input)
+
+            elif user_input.startswith("clear-rust "):
+                user_input = user_input[11:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the clear command or compile the corresponding Rust file yourself with cargo...")
+
+            elif user_input.startswith("pl-clear-rust "):
+                user_input = user_input[14:].strip()
+                if not is_wsl_installed():
+                    print(
+                        f"[{timestamp()}] [ERROR] WSL is not installed or could not be found. Please install WSL to use this feature.")
+                else:
+                    print(f"[{timestamp()}] [INFO] Please use the clear command or compile the corresponding Rust file yourself with cargo...")
 
             elif user_input.startswith("clear-c "):
                 user_input = user_input[9:].strip()  # Remove the "clear " prefix
