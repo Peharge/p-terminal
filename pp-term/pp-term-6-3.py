@@ -4145,7 +4145,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [WARN] Usage: gcc clean <directory_path>")
         return True
 
-    if ui.startswith("gfortran ") and " -o " in ui:
+    if user_input.startswith("gfortran ") and " -o " in ui:
         command = f"wsl {user_input}"
         try:
             print(f"[{timestamp()}] [INFO] Compiling with gfortran...\n")
@@ -4164,7 +4164,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
         return True
 
-    if ui.startswith("gccgo ") and " -o " in ui:
+    if user_input.startswith("gccgo ") and " -o " in ui:
         command = f"wsl {user_input}"
         try:
             print(f"[{timestamp()}] [INFO] Compiling with gccgo...\n")
@@ -4183,7 +4183,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
         return True
 
-    if ui.startswith("gcj ") and " -o " in ui:
+    if user_input.startswith("gcj ") and " -o " in ui:
         command = f"wsl {user_input}"
         try:
             print(f"[{timestamp()}] [INFO] Compiling with gcj...\n")
@@ -4202,7 +4202,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
         return True
 
-    if ui.startswith("gnat ") and " -o " in ui:
+    if user_input.startswith("gnat ") and " -o " in ui:
         command = f"wsl {user_input}"
         try:
             print(f"[{timestamp()}] [INFO] Compiling with gnat...\n")
@@ -4221,7 +4221,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
         return True
 
-    if ui.startswith("gfortran ") and " -o " in ui:
+    if user_input.startswith("gfortran ") and " -o " in ui:
         command = f"wsl {user_input}"
         try:
             print(f"[{timestamp()}] [INFO] Compiling with gfortran...\n")
@@ -4240,7 +4240,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
         return True
 
-    if ui.startswith("gccgo ") and " -o " in ui:
+    if user_input.startswith("gccgo ") and " -o " in ui:
         command = f"wsl {user_input}"
         try:
             print(f"[{timestamp()}] [INFO] Compiling with gccgo...\n")
@@ -4259,7 +4259,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
         return True
 
-    if ui.startswith("gcj ") and " -o " in ui:
+    if user_input.startswith("gcj ") and " -o " in ui:
         command = f"wsl {user_input}"
         try:
             print(f"[{timestamp()}] [INFO] Compiling with gcj...\n")
@@ -4278,7 +4278,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
         return True
 
-    if ui.startswith("gnat ") and " -o " in ui:
+    if user_input.startswith("gnat ") and " -o " in ui:
         command = f"wsl {user_input}"
         try:
             print(f"[{timestamp()}] [INFO] Compiling with gnat...\n")
@@ -4298,7 +4298,7 @@ def handle_special_commands(user_input):
         return True
 
     # Weitere bekannte GCC-Frontends (jeweils eigenes if)
-    if ui.startswith("objc ") and " -o " in ui:
+    if user_input.startswith("objc ") and " -o " in ui:
         command = f"wsl {user_input}"
         try:
             print(f"[{timestamp()}] [INFO] Compiling with objc...\n")
@@ -4317,7 +4317,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
         return True
 
-    if ui.startswith("objc++ ") and " -o " in ui:
+    if user_input.startswith("objc++ ") and " -o " in ui:
         command = f"wsl {user_input}"
         try:
             print(f"[{timestamp()}] [INFO] Compiling with objc++...\n")
