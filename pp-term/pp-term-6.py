@@ -122,6 +122,7 @@ import urllib.parse
 import html
 import faiss
 import pandas as pd
+import traceback
 
 try:
     import ujson as _json
@@ -14238,9 +14239,16 @@ def handle_special_commands(user_input):
 
     # Python REPL starten
     if user_input.strip().lower() == "py":
-        import traceback
+        import code as code_module
+
+        load_dotenv()
+
+        APP_NAME = os.getenv("APP_NAME", "p-terminal/pp-term").replace("\\", "/")
+        USER_NAME = os.getenv("USER_NAME", os.getlogin())
+        STATE_FILE = Path(f"C:/Users/{USER_NAME}/{APP_NAME}/current_env.json")
 
         print(f"[{timestamp()}] [INFO] Initializing Python REPL startup sequence...")
+        print(f"[{timestamp()}] [INFO] Using STATE_FILE at: {STATE_FILE}")
 
         try:
             active = find_active_env()
@@ -14261,11 +14269,12 @@ def handle_special_commands(user_input):
                     try:
                         local_ns = vars(active)
                     except TypeError:
-                        print(
-                            f"[{timestamp()}] [WARNING] Could not extract vars() from active object. Using empty namespace.")
+                        print(f"[{timestamp()}] [WARNING] Could not extract vars() from active object; using empty namespace.")
                         local_ns = {}
 
-                code.interact(local=local_ns)
+                local_ns['STATE_FILE'] = STATE_FILE
+
+                code_module.interact(local=local_ns)
 
             except SystemExit:
                 print(f"[{timestamp()}] [INFO] Exiting REPL via SystemExit.")
