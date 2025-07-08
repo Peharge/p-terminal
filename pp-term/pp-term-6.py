@@ -14284,6 +14284,8 @@ def handle_special_commands(user_input):
             finally:
                 print(f"[{timestamp()}] [INFO] Python REPL session terminated.")
 
+        return True
+
     if user_input.startswith("pb "):
         # Remove "pb " and strip any surrounding whitespace
         user_input = user_input[3:].strip()
