@@ -17851,7 +17851,7 @@ def handle_special_commands(user_input):
         return True
 
     # Pipeline TF1: IQ-AI-TF
-    if tf_input.startswith("IQ-AI-TF "):
+    if user_input.startswith("IQ-AI-TF "):
         import tensorflow as tf
         from tensorflow.keras import layers, models
         from tensorflow.keras.datasets import mnist
@@ -17860,7 +17860,7 @@ def handle_special_commands(user_input):
             print("Usage: IQ-AI-TF <hidden> <batch> <epochs> [model_name.h5]")
             return True
 
-        raw = tf_input[len("IQ-AI-TF "):].split()
+        raw = user_input[len("IQ-AI-TF "):].split()
         try:
             hidden_size = int(raw[0])
             batch_size  = int(raw[1])
@@ -17907,7 +17907,7 @@ def handle_special_commands(user_input):
         return True
 
     # Pipeline TF2: IQ-AI-TF2
-    if tf2_input.startswith("IQ-AI-TF2 "):
+    if user_input.startswith("IQ-AI-TF2 "):
         import tensorflow as tf
         from tensorflow.keras import layers, models, callbacks
         from tensorflow.keras.datasets import cifar10
@@ -17916,7 +17916,7 @@ def handle_special_commands(user_input):
             print("Usage: IQ-AI-TF2 <batch> <epochs> <lr> <patience> [model.h5]")
             return True
 
-        raw = tf2_input[len("IQ-AI-TF2 "):].split()
+        raw = user_input[len("IQ-AI-TF2 "):].split()
         try:
             batch_size    = int(raw[0])
             epochs        = int(raw[1])
@@ -17970,7 +17970,7 @@ def handle_special_commands(user_input):
         return True
 
     # Pipeline TF3: IQ-AI-TF3
-    if tf3_input.startswith("IQ-AI-TF3 "):
+    if user_input.startswith("IQ-AI-TF3 "):
         import tensorflow as tf
         from tensorflow.keras import layers, models, callbacks
         from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
@@ -17980,7 +17980,7 @@ def handle_special_commands(user_input):
             print("Usage: IQ-AI-TF3 <batch_size> <epochs> <learning_rate> <dropout> [model_name.h5]")
             return True
 
-        raw = tf3_input[len("IQ-AI-TF3 "):].split()
+        raw = user_input[len("IQ-AI-TF3 "):].split()
         try:
             batch_size    = int(raw[0])
             epochs        = int(raw[1])
@@ -18041,7 +18041,7 @@ def handle_special_commands(user_input):
         return True
 
     # Pipeline JAX: IQ-AI-JAX
-    if jax_input.startswith("IQ-AI-JAX "):
+    if user_input.startswith("IQ-AI-JAX "):
         import jax
         import jax.numpy as jnp
         from jax import random, grad, jit
@@ -18051,7 +18051,7 @@ def handle_special_commands(user_input):
             print("Usage: IQ-AI-JAX <hidden_size> <batch_size> <epochs> [model_name.npz]")
             return True
 
-        raw = jax_input[len("IQ-AI-JAX "):].split()
+        raw = user_input[len("IQ-AI-JAX "):].split()
         try:
             hidden_size = int(raw[0])
             batch_size  = int(raw[1])
@@ -18121,7 +18121,7 @@ def handle_special_commands(user_input):
         return True
 
     # Pipeline JAX2: IQ-AI-JAX2
-    if jax2_input.startswith("IQ-AI-JAX2 "):
+    if user_input.startswith("IQ-AI-JAX2 "):
         import jax
         import jax.numpy as jnp
         from jax import random, grad, jit
@@ -18130,7 +18130,7 @@ def handle_special_commands(user_input):
             print("Usage: IQ-AI-JAX2 <returns_csv> <learning_rate> <epochs> [output_weights.npy]")
             return True
 
-        raw = jax2_input[len("IQ-AI-JAX2 "):].split()
+        raw = user_input[len("IQ-AI-JAX2 "):].split()
         try:
             returns_csv   = raw[0]
             learning_rate = float(raw[1])
@@ -18185,7 +18185,7 @@ def handle_special_commands(user_input):
         return True
 
     # Pipeline JAX3: IQ-AI-JAX3
-    if jax3_input.startswith("IQ-AI-JAX3 "):
+    if user_input.startswith("IQ-AI-JAX3 "):
         import jax
         import jax.numpy as jnp
         from jax import random, jit, vmap
@@ -18194,7 +18194,7 @@ def handle_special_commands(user_input):
             print("Usage: IQ-AI-JAX3 <data_csv> <n_clusters> <max_iter> [output_centroids.npy]")
             return True
 
-        raw = jax3_input[len("IQ-AI-JAX3 "):].split()
+        raw = user_input[len("IQ-AI-JAX3 "):].split()
         try:
             data_csv   = raw[0]
             n_clusters = int(raw[1])
