@@ -8160,6 +8160,1977 @@ def handle_special_commands(user_input):
 
         return True
 
+
+    if user_input.startswith("prmysql "):#
+        import mysql.connector
+        from mysql.connector import Error
+        
+        # Beispiel: prmysql user:pass@localhost:3306/dbname
+        conn_info = user_input[8:].strip()
+
+        try:
+            creds, host_db = conn_info.split("@")
+            user, pwd = creds.split(":")
+            host_port, db_name = host_db.split("/")
+            host, port = host_port.split(":")
+            port = int(port)
+        except ValueError:
+            print(f"[{timestamp()}] [ERROR] Invalid connection string format.")
+            return True
+
+        requested_port = 8000
+        port_container = {}
+        server_started_event = threading.Event()
+
+        class MySQLRequestHandler(http.server.SimpleHTTPRequestHandler):
+            def do_GET(self):
+                parsed_path = urllib.parse.urlparse(self.path)
+                if parsed_path.path == "/":
+                    self.send_response(200)
+                    self.send_header("Content-type", "text/html")
+                    self.end_headers()
+
+                    html_content = "<html><head><title>MySQL Browser</title></head><body>"
+                    html_content += f"<h1>Database: {html.escape(db_name)}</h1>"
+
+                    try:
+                        conn = mysql.connector.connect(
+                            host=host,
+                            port=port,
+                            user=user,
+                            password=pwd,
+                            database=db_name
+                        )
+                        cursor = conn.cursor()
+
+                        cursor.execute("SHOW TABLES;")
+                        tables = [row[0] for row in cursor.fetchall()]
+
+                        for table in tables:
+                            html_content += f"<h2>Table: {html.escape(table)}</h2><table border='1'>"
+                            cursor.execute(f"SELECT * FROM `{table}` LIMIT 50;")
+                            rows = cursor.fetchall()
+                            col_names = [desc[0] for desc in cursor.description]
+
+                            html_content += "<tr>" + "".join(f"<th>{html.escape(col)}</th>" for col in col_names) + "</tr>"
+                            for row in rows:
+                                html_content += "<tr>" + "".join(f"<td>{html.escape(str(cell))}</td>" for cell in row) + "</tr>"
+                            html_content += "</table><br>"
+
+                        cursor.close()
+                        conn.close()
+
+                    except Error as e:
+                        html_content += f"<h1>Error</h1><p>{html.escape(str(e))}</p>"
+
+                    html_content += "</body></html>"
+                    self.wfile.write(html_content.encode('utf-8'))
+                else:
+                    self.send_error(404, "Not Found")
+
+        def start_sql_server(port, container, event):
+            with socketserver.TCPServer(("", port), MySQLRequestHandler) as httpd:
+                container['port'] = httpd.server_address[1]
+                event.set()
+                httpd.serve_forever()
+
+        server_thread = threading.Thread(
+            target=start_sql_server,
+            args=(requested_port, port_container, server_started_event),
+            daemon=True
+        )
+        server_thread.start()
+
+        if not server_started_event.wait(timeout=5):
+            print(f"[{timestamp()}] [ERROR] Server could not be started within 5 seconds.")
+            return True
+
+        actual_port = port_container.get('port')
+        url = f"http://localhost:{actual_port}/"
+        print(f"[{timestamp()}] [INFO] Opening MySQL browser at {url}")
+        webbrowser.open(url)
+        print(f"[{timestamp()}] [INFO] Server is running on port {actual_port}. Press 'q' to stop it.")
+
+        try:
+            while True:
+                user_cmd = input().strip()
+                if user_cmd.lower() == 'q' or user_cmd.lower() == '\x11':
+                    print(f"[{timestamp()}] [INFO] Stopping server...")
+                    break
+                else:
+                    print(f"[{timestamp()}] [INFO] Invalid input. Press 'q' to quit.")
+        except (KeyboardInterrupt, EOFError):
+            print(f"\n[{timestamp()}] [INFO] Input interrupted. Stopping server...")
+
+        try:
+            urllib.request.urlopen(url, timeout=1)
+        except:
+            pass
+
+        server_thread.join(timeout=5)
+
+        for _ in range(5):
+            try:
+                urllib.request.urlopen(url, timeout=1)
+                print(f"[{timestamp()}] [INFO] URL still reachable, waiting 1s...")
+                time.sleep(1)
+            except:
+                print(f"[{timestamp()}] [INFO] URL is now offline.")
+                break
+        else:
+            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+
+        return True
+
+    if user_input.startswith("prpgsql "):
+        import psycopg2
+        from psycopg2 import OperationalError
+
+        # Beispiel: prpgsql user:pass@localhost:5432/dbname
+        conn_info = user_input[8:].strip()
+
+        try:
+            creds, host_db = conn_info.split("@")
+            user, pwd = creds.split(":")
+            host_port, db_name = host_db.split("/")
+            host, port = host_port.split(":")
+            port = int(port)
+        except ValueError:
+            print(f"[{timestamp()}] [ERROR] Invalid connection string format.")
+            return True
+
+        requested_port = 8000
+        port_container = {}
+        server_started_event = threading.Event()
+
+        class PostgresRequestHandler(http.server.SimpleHTTPRequestHandler):
+            def do_GET(self):
+                parsed_path = urllib.parse.urlparse(self.path)
+                if parsed_path.path == "/":
+                    self.send_response(200)
+                    self.send_header("Content-type", "text/html")
+                    self.end_headers()
+
+                    html_content = "<html><head><title>PostgreSQL Browser</title></head><body>"
+                    html_content += f"<h1>Database: {html.escape(db_name)}</h1>"
+
+                    try:
+                        conn = psycopg2.connect(
+                            host=host,
+                            port=port,
+                            user=user,
+                            password=pwd,
+                            dbname=db_name
+                        )
+                        cursor = conn.cursor()
+
+                        cursor.execute("""
+                            SELECT table_name FROM information_schema.tables
+                            WHERE table_schema = 'public';
+                        """)
+                        tables = [row[0] for row in cursor.fetchall()]
+
+                        for table in tables:
+                            html_content += f"<h2>Table: {html.escape(table)}</h2><table border='1'>"
+                            cursor.execute(f'SELECT * FROM "{table}" LIMIT 50;')
+                            rows = cursor.fetchall()
+                            col_names = [desc[0] for desc in cursor.description]
+
+                            html_content += "<tr>" + "".join(f"<th>{html.escape(col)}</th>" for col in col_names) + "</tr>"
+                            for row in rows:
+                                html_content += "<tr>" + "".join(f"<td>{html.escape(str(cell))}</td>" for cell in row) + "</tr>"
+                            html_content += "</table><br>"
+
+                        cursor.close()
+                        conn.close()
+
+                    except OperationalError as e:
+                        html_content += f"<h1>Connection Error</h1><p>{html.escape(str(e))}</p>"
+                    except Exception as e:
+                        html_content += f"<h1>Error</h1><p>{html.escape(str(e))}</p>"
+
+                    html_content += "</body></html>"
+                    self.wfile.write(html_content.encode('utf-8'))
+                else:
+                    self.send_error(404, "Not Found")
+
+        def start_sql_server(port, container, event):
+            with socketserver.TCPServer(("", port), PostgresRequestHandler) as httpd:
+                container['port'] = httpd.server_address[1]
+                event.set()
+                httpd.serve_forever()
+
+        server_thread = threading.Thread(
+            target=start_sql_server,
+            args=(requested_port, port_container, server_started_event),
+            daemon=True
+        )
+        server_thread.start()
+
+        if not server_started_event.wait(timeout=5):
+            print(f"[{timestamp()}] [ERROR] Server could not be started within 5 seconds.")
+            return True
+
+        actual_port = port_container.get('port')
+        url = f"http://localhost:{actual_port}/"
+        print(f"[{timestamp()}] [INFO] Opening PostgreSQL browser at {url}")
+        webbrowser.open(url)
+        print(f"[{timestamp()}] [INFO] Server is running on port {actual_port}. Press 'q' to stop it.")
+
+        try:
+            while True:
+                user_cmd = input().strip()
+                if user_cmd.lower() == 'q' or user_cmd.lower() == '\x11':
+                    print(f"[{timestamp()}] [INFO] Stopping server...")
+                    break
+                else:
+                    print(f"[{timestamp()}] [INFO] Invalid input. Press 'q' to quit.")
+        except (KeyboardInterrupt, EOFError):
+            print(f"\n[{timestamp()}] [INFO] Input interrupted. Stopping server...")
+
+        try:
+            urllib.request.urlopen(url, timeout=1)
+        except:
+            pass
+
+        server_thread.join(timeout=5)
+
+        for _ in range(5):
+            try:
+                urllib.request.urlopen(url, timeout=1)
+                print(f"[{timestamp()}] [INFO] URL still reachable, waiting 1s...")
+                time.sleep(1)
+            except:
+                print(f"[{timestamp()}] [INFO] URL is now offline.")
+                break
+        else:
+            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+
+        return True
+
+    if user_input.startswith("prsqlite "):
+        import sqlite3
+
+        filepath = os.path.abspath(user_input[9:].strip())
+
+        if not os.path.isfile(filepath):
+            print(f"[{timestamp()}] [ERROR] File '{filepath}' does not exist.")
+            return True
+
+        if not filepath.lower().endswith((".sqlite", ".db", ".sql")):
+            print(f"[{timestamp()}] [ERROR] Unsupported SQL file type: '{filepath}'")
+            return True
+
+        requested_port = 8000
+        port_container = {}
+        server_started_event = threading.Event()
+
+        class SQLiteRequestHandler(http.server.SimpleHTTPRequestHandler):
+            def do_GET(self):
+                parsed_path = urllib.parse.urlparse(self.path)
+                if parsed_path.path == "/":
+                    self.send_response(200)
+                    self.send_header("Content-type", "text/html")
+                    self.end_headers()
+
+                    html_content = "<html><head><title>SQLite Browser</title></head><body>"
+                    html_content += f"<h1>Database: {html.escape(os.path.basename(filepath))}</h1>"
+
+                    try:
+                        conn = sqlite3.connect(filepath)
+                        cursor = conn.cursor()
+
+                        cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+                        tables = [row[0] for row in cursor.fetchall()]
+
+                        for table in tables:
+                            html_content += f"<h2>Table: {html.escape(table)}</h2><table border='1'>"
+                            cursor.execute(f"SELECT * FROM '{table}' LIMIT 50;")
+                            rows = cursor.fetchall()
+                            col_names = [description[0] for description in cursor.description]
+
+                            html_content += "<tr>" + "".join(f"<th>{html.escape(col)}</th>" for col in col_names) + "</tr>"
+                            for row in rows:
+                                html_content += "<tr>" + "".join(f"<td>{html.escape(str(cell))}</td>" for cell in row) + "</tr>"
+                            html_content += "</table><br>"
+
+                    except Exception as e:
+                        html_content += f"<h1>Error</h1><p>{html.escape(str(e))}</p>"
+                    finally:
+                        conn.close()
+
+                    html_content += "</body></html>"
+                    self.wfile.write(html_content.encode('utf-8'))
+                else:
+                    self.send_error(404, "File not found.")
+
+        def start_sql_server(port, container, event):
+            with socketserver.TCPServer(("", port), SQLiteRequestHandler) as httpd:
+                container['port'] = httpd.server_address[1]
+                event.set()
+                httpd.serve_forever()
+
+        server_thread = threading.Thread(
+            target=start_sql_server,
+            args=(requested_port, port_container, server_started_event),
+            daemon=True
+        )
+        server_thread.start()
+
+        if not server_started_event.wait(timeout=5):
+            print(f"[{timestamp()}] [ERROR] Server could not be started within 5 seconds.")
+            return True
+
+        actual_port = port_container.get('port')
+        url = f"http://localhost:{actual_port}/"
+        print(f"[{timestamp()}] [INFO] Opening database in browser: {url}")
+        webbrowser.open(url)
+        print(f"[{timestamp()}] [INFO] Server is running on port {actual_port}. Press 'q' to stop it.")
+
+        try:
+            while True:
+                user_cmd = input().strip()
+                if user_cmd.lower() == 'q' or user_cmd.lower() == '\x11':
+                    print(f"[{timestamp()}] [INFO] Stopping server...")
+                    break
+                else:
+                    print(f"[{timestamp()}] [INFO] Invalid input. Press 'q' to quit.")
+        except (KeyboardInterrupt, EOFError):
+            print(f"\n[{timestamp()}] [INFO] Input interrupted. Stopping server...")
+
+        try:
+            urllib.request.urlopen(url, timeout=1)
+        except:
+            pass
+
+        server_thread.join(timeout=5)
+
+        for _ in range(5):
+            try:
+                urllib.request.urlopen(url, timeout=1)
+                print(f"[{timestamp()}] [INFO] URL still reachable, waiting 1s...")
+                time.sleep(1)
+            except:
+                print(f"[{timestamp()}] [INFO] URL is now offline.")
+                break
+        else:
+            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+
+        return True
+
+    if user_input.startswith("proracle "):
+        import cx_Oracle  # Oracle DB API
+
+        conn_info = user_input[9:].strip()
+
+        try:
+            creds, netloc = conn_info.split("@")
+            user, pwd = creds.split(":")
+            host_port, sid = netloc.split("/")
+            host, port = host_port.split(":")
+            port = int(port)
+        except ValueError:
+            print(f"[{timestamp()}] [ERROR] Invalid Oracle connection string format.")
+            return True
+
+        requested_port = 8000
+        port_container = {}
+        server_started_event = threading.Event()
+
+        class OracleRequestHandler(http.server.SimpleHTTPRequestHandler):
+            def do_GET(self):
+                parsed_path = urllib.parse.urlparse(self.path)
+                if parsed_path.path == "/":
+                    self.send_response(200)
+                    self.send_header("Content-type", "text/html")
+                    self.end_headers()
+
+                    html_content = "<html><head><title>Oracle DB Browser</title></head><body>"
+                    html_content += f"<h1>Oracle Database: {html.escape(sid)}</h1>"
+
+                    try:
+                        dsn = cx_Oracle.makedsn(host, port, sid)
+                        conn = cx_Oracle.connect(user=user, password=pwd, dsn=dsn)
+                        cursor = conn.cursor()
+
+                        cursor.execute("SELECT table_name FROM user_tables")
+                        tables = [row[0] for row in cursor.fetchall()]
+
+                        for table in tables:
+                            html_content += f"<h2>Table: {html.escape(table)}</h2><table border='1'>"
+                            cursor.execute(f'SELECT * FROM "{table}" WHERE ROWNUM <= 50')
+                            rows = cursor.fetchall()
+                            col_names = [desc[0] for desc in cursor.description]
+
+                            html_content += "<tr>" + "".join(f"<th>{html.escape(col)}</th>" for col in col_names) + "</tr>"
+                            for row in rows:
+                                html_content += "<tr>" + "".join(f"<td>{html.escape(str(cell))}</td>" for cell in row) + "</tr>"
+                            html_content += "</table><br>"
+
+                        cursor.close()
+                        conn.close()
+
+                    except cx_Oracle.DatabaseError as e:
+                        html_content += f"<h1>Oracle Error</h1><p>{html.escape(str(e))}</p>"
+                    except Exception as e:
+                        html_content += f"<h1>Error</h1><p>{html.escape(str(e))}</p>"
+
+                    html_content += "</body></html>"
+                    self.wfile.write(html_content.encode('utf-8'))
+                else:
+                    self.send_error(404, "Not Found")
+
+        def start_sql_server(port, container, event):
+            with socketserver.TCPServer(("", port), OracleRequestHandler) as httpd:
+                container['port'] = httpd.server_address[1]
+                event.set()
+                httpd.serve_forever()
+
+        server_thread = threading.Thread(
+            target=start_sql_server,
+            args=(requested_port, port_container, server_started_event),
+            daemon=True
+        )
+        server_thread.start()
+
+        if not server_started_event.wait(timeout=5):
+            print(f"[{timestamp()}] [ERROR] Server could not be started within 5 seconds.")
+            return True
+
+        actual_port = port_container.get('port')
+        url = f"http://localhost:{actual_port}/"
+        print(f"[{timestamp()}] [INFO] Opening Oracle DB browser at {url}")
+        webbrowser.open(url)
+        print(f"[{timestamp()}] [INFO] Server is running on port {actual_port}. Press 'q' to stop it.")
+
+        try:
+            while True:
+                user_cmd = input().strip()
+                if user_cmd.lower() == 'q' or user_cmd.lower() == '\x11':
+                    print(f"[{timestamp()}] [INFO] Stopping server...")
+                    break
+                else:
+                    print(f"[{timestamp()}] [INFO] Invalid input. Press 'q' to quit.")
+        except (KeyboardInterrupt, EOFError):
+            print(f"\n[{timestamp()}] [INFO] Input interrupted. Stopping server...")
+
+        try:
+            urllib.request.urlopen(url, timeout=1)
+        except:
+            pass
+
+        server_thread.join(timeout=5)
+
+        for _ in range(5):
+            try:
+                urllib.request.urlopen(url, timeout=1)
+                print(f"[{timestamp()}] [INFO] URL still reachable, waiting 1s...")
+                time.sleep(1)
+            except:
+                print(f"[{timestamp()}] [INFO] URL is now offline.")
+                break
+        else:
+            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+
+        return True
+    
+    if user_input.startswith("prmssql "):
+        import pyodbc  # SQL Server-Treiber
+
+        conn_info = user_input[8:].strip()
+
+        try:
+            creds, host_part = conn_info.split("@")
+            user, pwd = creds.split(":")
+            host_port, database = host_part.split("/")
+            host, port = host_port.split(":")
+            port = int(port)
+        except ValueError:
+            print(f"[{timestamp()}] [ERROR] Invalid connection string format. Use: user:pass@host:port/database")
+            return True
+
+        requested_port = 8000
+        port_container = {}
+        server_started_event = threading.Event()
+
+        class MSSQLRequestHandler(http.server.SimpleHTTPRequestHandler):
+            def do_GET(self):
+                parsed_path = urllib.parse.urlparse(self.path)
+                if parsed_path.path == "/":
+                    self.send_response(200)
+                    self.send_header("Content-type", "text/html")
+                    self.end_headers()
+
+                    html_content = "<html><head><title>SQL Server Browser</title></head><body>"
+                    html_content += f"<h1>Microsoft SQL Server – Database: {html.escape(database)}</h1>"
+
+                    try:
+                        conn_str = (
+                            f"DRIVER={{ODBC Driver 17 for SQL Server}};"
+                            f"SERVER={host},{port};DATABASE={database};UID={user};PWD={pwd}"
+                        )
+                        conn = pyodbc.connect(conn_str, timeout=5)
+                        cursor = conn.cursor()
+
+                        cursor.execute("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'")
+                        tables = [row[0] for row in cursor.fetchall()]
+
+                        for table in tables:
+                            html_content += f"<h2>Table: {html.escape(table)}</h2><table border='1'>"
+                            cursor.execute(f"SELECT TOP 50 * FROM [{table}]")
+                            rows = cursor.fetchall()
+                            col_names = [desc[0] for desc in cursor.description]
+
+                            html_content += "<tr>" + "".join(f"<th>{html.escape(col)}</th>" for col in col_names) + "</tr>"
+                            for row in rows:
+                                html_content += "<tr>" + "".join(f"<td>{html.escape(str(cell))}</td>" for cell in row) + "</tr>"
+                            html_content += "</table><br>"
+
+                        cursor.close()
+                        conn.close()
+
+                    except Exception as e:
+                        html_content += f"<h1>Error</h1><p>{html.escape(str(e))}</p>"
+
+                    html_content += "</body></html>"
+                    self.wfile.write(html_content.encode('utf-8'))
+                else:
+                    self.send_error(404, "Not Found")
+
+        def start_sql_server(port, container, event):
+            with socketserver.TCPServer(("", port), MSSQLRequestHandler) as httpd:
+                container['port'] = httpd.server_address[1]
+                event.set()
+                httpd.serve_forever()
+
+        server_thread = threading.Thread(
+            target=start_sql_server,
+            args=(requested_port, port_container, server_started_event),
+            daemon=True
+        )
+        server_thread.start()
+
+        if not server_started_event.wait(timeout=5):
+            print(f"[{timestamp()}] [ERROR] Server could not be started within 5 seconds.")
+            return True
+
+        actual_port = port_container.get('port')
+        url = f"http://localhost:{actual_port}/"
+        print(f"[{timestamp()}] [INFO] Opening SQL Server DB in browser: {url}")
+        webbrowser.open(url)
+        print(f"[{timestamp()}] [INFO] Server is running on port {actual_port}. Press 'q' to stop it.")
+
+        try:
+            while True:
+                user_cmd = input().strip()
+                if user_cmd.lower() == 'q' or user_cmd.lower() == '\x11':
+                    print(f"[{timestamp()}] [INFO] Stopping server...")
+                    break
+                else:
+                    print(f"[{timestamp()}] [INFO] Invalid input. Press 'q' to quit.")
+        except (KeyboardInterrupt, EOFError):
+            print(f"\n[{timestamp()}] [INFO] Input interrupted. Stopping server...")
+
+        try:
+            urllib.request.urlopen(url, timeout=1)
+        except:
+            pass
+
+        server_thread.join(timeout=5)
+
+        for _ in range(5):
+            try:
+                urllib.request.urlopen(url, timeout=1)
+                print(f"[{timestamp()}] [INFO] URL still reachable, waiting 1s...")
+                time.sleep(1)
+            except:
+                print(f"[{timestamp()}] [INFO] URL is now offline.")
+                break
+        else:
+            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+
+        return True
+    
+    if user_input.startswith("prdb2 "):
+        import ibm_db
+        import ibm_db_dbi
+        conn_info = user_input[6:].strip()
+
+        try:
+            creds, host_part = conn_info.split("@")
+            user, pwd = creds.split(":")
+            host_port, database = host_part.split("/")
+            host, port = host_port.split(":")
+            port = int(port)
+        except ValueError:
+            print(f"[{timestamp()}] [ERROR] Invalid connection string format. Use: user:pass@host:port/database")
+            return True
+
+        requested_port = 8000
+        port_container = {}
+        server_started_event = threading.Event()
+
+        class Db2RequestHandler(http.server.SimpleHTTPRequestHandler):
+            def do_GET(self):
+                parsed_path = urllib.parse.urlparse(self.path)
+                if parsed_path.path == "/":
+                    self.send_response(200)
+                    self.send_header("Content-type", "text/html")
+                    self.end_headers()
+
+                    html_content = "<html><head><title>IBM Db2 Browser</title></head><body>"
+                    html_content += f"<h1>IBM Db2 – Database: {html.escape(database)}</h1>"
+
+                    try:
+                        conn_str = f"DATABASE={database};HOSTNAME={host};PORT={port};PROTOCOL=TCPIP;UID={user};PWD={pwd};"
+                        conn = ibm_db.connect(conn_str, "", "")
+                        dbi_conn = ibm_db_dbi.Connection(conn)
+                        cursor = dbi_conn.cursor()
+
+                        cursor.execute("SELECT tabname FROM syscat.tables WHERE tabschema = CURRENT SCHEMA")
+                        tables = [row[0] for row in cursor.fetchall()]
+
+                        for table in tables:
+                            html_content += f"<h2>Table: {html.escape(table)}</h2><table border='1'>"
+                            cursor.execute(f'SELECT * FROM "{table}" FETCH FIRST 50 ROWS ONLY')
+                            rows = cursor.fetchall()
+                            col_names = [desc[0] for desc in cursor.description]
+
+                            html_content += "<tr>" + "".join(f"<th>{html.escape(col)}</th>" for col in col_names) + "</tr>"
+                            for row in rows:
+                                html_content += "<tr>" + "".join(f"<td>{html.escape(str(cell))}</td>" for cell in row) + "</tr>"
+                            html_content += "</table><br>"
+
+                        cursor.close()
+                        dbi_conn.close()
+                        ibm_db.close(conn)
+
+                    except Exception as e:
+                        html_content += f"<h1>Error</h1><p>{html.escape(str(e))}</p>"
+
+                    html_content += "</body></html>"
+                    self.wfile.write(html_content.encode('utf-8'))
+                else:
+                    self.send_error(404, "Not Found")
+
+        def start_sql_server(port, container, event):
+            with socketserver.TCPServer(("", port), Db2RequestHandler) as httpd:
+                container['port'] = httpd.server_address[1]
+                event.set()
+                httpd.serve_forever()
+
+        server_thread = threading.Thread(
+            target=start_sql_server,
+            args=(requested_port, port_container, server_started_event),
+            daemon=True
+        )
+        server_thread.start()
+
+        if not server_started_event.wait(timeout=5):
+            print(f"[{timestamp()}] [ERROR] Server could not be started within 5 seconds.")
+            return True
+
+        actual_port = port_container.get('port')
+        url = f"http://localhost:{actual_port}/"
+        print(f"[{timestamp()}] [INFO] Opening IBM Db2 browser at {url}")
+        webbrowser.open(url)
+        print(f"[{timestamp()}] [INFO] Server is running on port {actual_port}. Press 'q' to stop it.")
+
+        try:
+            while True:
+                user_cmd = input().strip()
+                if user_cmd.lower() == 'q' or user_cmd.lower() == '\x11':
+                    print(f"[{timestamp()}] [INFO] Stopping server...")
+                    break
+                else:
+                    print(f"[{timestamp()}] [INFO] Invalid input. Press 'q' to quit.")
+        except (KeyboardInterrupt, EOFError):
+            print(f"\n[{timestamp()}] [INFO] Input interrupted. Stopping server...")
+
+        try:
+            urllib.request.urlopen(url, timeout=1)
+        except:
+            pass
+
+        server_thread.join(timeout=5)
+
+        for _ in range(5):
+            try:
+                urllib.request.urlopen(url, timeout=1)
+                print(f"[{timestamp()}] [INFO] URL still reachable, waiting 1s...")
+                time.sleep(1)
+            except:
+                print(f"[{timestamp()}] [INFO] URL is now offline.")
+                break
+        else:
+            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+
+        return True
+
+    if user_input.startswith("praurora "):
+        import mysql.connector
+        import psycopg2
+
+        conn_info = user_input[8:].strip()
+
+        # Versuch, Connection-String zu parsen: user:pass@host:port/dbname
+        try:
+            creds, host_part = conn_info.split("@")
+            user, pwd = creds.split(":")
+            host_port, database = host_part.split("/")
+            host, port = host_port.split(":")
+            port = int(port)
+        except Exception:
+            print(f"[{timestamp()}] [ERROR] Invalid connection string. Format: user:pass@host:port/dbname")
+            return True
+
+        requested_port = 8000
+        port_container = {}
+        server_started_event = threading.Event()
+
+        class AuroraRequestHandler(http.server.SimpleHTTPRequestHandler):
+            def do_GET(self):
+                parsed_path = urllib.parse.urlparse(self.path)
+                if parsed_path.path == "/":
+                    self.send_response(200)
+                    self.send_header("Content-type", "text/html")
+                    self.end_headers()
+
+                    html_content = f"<html><head><title>Aurora Browser</title></head><body>"
+                    html_content += f"<h1>Amazon Aurora Database: {html.escape(database)}</h1>"
+
+                    try:
+                        # Versuche MySQL-Verbindung
+                        conn = mysql.connector.connect(
+                            user=user,
+                            password=pwd,
+                            host=host,
+                            port=port,
+                            database=database,
+                            connection_timeout=5
+                        )
+                        cursor = conn.cursor()
+
+                        cursor.execute("SHOW TABLES")
+                        tables = [row[0] for row in cursor.fetchall()]
+
+                    except mysql.connector.Error:
+                        # Fallback auf PostgreSQL versuchen
+                        try:
+                            conn = psycopg2.connect(
+                                user=user,
+                                password=pwd,
+                                host=host,
+                                port=port,
+                                dbname=database,
+                                connect_timeout=5
+                            )
+                            cursor = conn.cursor()
+                            cursor.execute(
+                                "SELECT tablename FROM pg_tables WHERE schemaname = 'public';"
+                            )
+                            tables = [row[0] for row in cursor.fetchall()]
+                        except Exception as e:
+                            self.wfile.write(f"<h1>Connection error</h1><p>{html.escape(str(e))}</p>".encode('utf-8'))
+                            return
+
+                    # Tabellen anzeigen
+                    for table in tables:
+                        html_content += f"<h2>Table: {html.escape(table)}</h2><table border='1'>"
+                        try:
+                            cursor.execute(f"SELECT * FROM {table} LIMIT 50;")
+                            rows = cursor.fetchall()
+                            col_names = [desc[0] for desc in cursor.description]
+
+                            html_content += "<tr>" + "".join(f"<th>{html.escape(str(c))}</th>" for c in col_names) + "</tr>"
+                            for row in rows:
+                                html_content += "<tr>" + "".join(f"<td>{html.escape(str(cell))}</td>" for cell in row) + "</tr>"
+                        except Exception as e:
+                            html_content += f"<tr><td colspan='100%'>Error reading table: {html.escape(str(e))}</td></tr>"
+                        html_content += "</table><br>"
+
+                    cursor.close()
+                    conn.close()
+
+                    html_content += "</body></html>"
+                    self.wfile.write(html_content.encode('utf-8'))
+
+                else:
+                    self.send_error(404, "File not found.")
+
+        def start_sql_server(port, container, event):
+            with socketserver.TCPServer(("", port), AuroraRequestHandler) as httpd:
+                container['port'] = httpd.server_address[1]
+                event.set()
+                httpd.serve_forever()
+
+        server_thread = threading.Thread(
+            target=start_sql_server,
+            args=(requested_port, port_container, server_started_event),
+            daemon=True
+        )
+        server_thread.start()
+
+        if not server_started_event.wait(timeout=5):
+            print(f"[{timestamp()}] [ERROR] Server could not start within 5 seconds.")
+            return True
+
+        actual_port = port_container.get('port')
+        url = f"http://localhost:{actual_port}/"
+        print(f"[{timestamp()}] [INFO] Opening Amazon Aurora browser at {url}")
+        webbrowser.open(url)
+        print(f"[{timestamp()}] [INFO] Server running on port {actual_port}. Press 'q' to stop it.")
+
+        try:
+            while True:
+                user_cmd = input().strip()
+                if user_cmd.lower() == 'q' or user_cmd.lower() == '\x11':
+                    print(f"[{timestamp()}] [INFO] Stopping server...")
+                    break
+                else:
+                    print(f"[{timestamp()}] [INFO] Invalid input. Press 'q' to quit.")
+        except (KeyboardInterrupt, EOFError):
+            print(f"\n[{timestamp()}] [INFO] Input interrupted. Stopping server...")
+
+        try:
+            urllib.request.urlopen(url, timeout=1)
+        except:
+            pass
+
+        server_thread.join(timeout=5)
+
+        for _ in range(5):
+            try:
+                urllib.request.urlopen(url, timeout=1)
+                print(f"[{timestamp()}] [INFO] URL still reachable, waiting 1s...")
+                time.sleep(1)
+            except:
+                print(f"[{timestamp()}] [INFO] URL is now offline.")
+                break
+        else:
+            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+
+        return True
+    
+    if user_input.startswith("prrds "):
+        conn_info = user_input[6:].strip()
+
+        try:
+            creds, host_part = conn_info.split("@")
+            user, pwd = creds.split(":")
+            host_port, database = host_part.split("/")
+            host, port = host_port.split(":")
+            port = int(port)
+        except Exception:
+            print(f"[{timestamp()}] [ERROR] Invalid connection string. Format: user:pass@host:port/dbname")
+            return True
+
+        requested_port = 8000
+        port_container = {}
+        server_started_event = threading.Event()
+
+        class RDSRequestHandler(http.server.SimpleHTTPRequestHandler):
+            def do_GET(self):
+                parsed_path = urllib.parse.urlparse(self.path)
+                if parsed_path.path == "/":
+                    self.send_response(200)
+                    self.send_header("Content-type", "text/html")
+                    self.end_headers()
+
+                    html_content = f"<html><head><title>Amazon RDS Browser</title></head><body>"
+                    html_content += f"<h1>Amazon RDS Database: {html.escape(database)}</h1>"
+
+                    try:
+                        # Versuch MySQL
+                        import mysql.connector
+                        conn = mysql.connector.connect(
+                            user=user,
+                            password=pwd,
+                            host=host,
+                            port=port,
+                            database=database,
+                            connection_timeout=5
+                        )
+                        cursor = conn.cursor()
+                        cursor.execute("SHOW TABLES")
+                        tables = [row[0] for row in cursor.fetchall()]
+                    except Exception:
+                        try:
+                            # Versuch PostgreSQL
+                            import psycopg2
+                            conn = psycopg2.connect(
+                                user=user,
+                                password=pwd,
+                                host=host,
+                                port=port,
+                                dbname=database,
+                                connect_timeout=5
+                            )
+                            cursor = conn.cursor()
+                            cursor.execute("SELECT tablename FROM pg_tables WHERE schemaname = 'public';")
+                            tables = [row[0] for row in cursor.fetchall()]
+                        except Exception as e:
+                            self.wfile.write(f"<h1>Connection error</h1><p>{html.escape(str(e))}</p>".encode('utf-8'))
+                            return
+
+                    for table in tables:
+                        html_content += f"<h2>Table: {html.escape(table)}</h2><table border='1'>"
+                        try:
+                            cursor.execute(f"SELECT * FROM {table} LIMIT 50;")
+                            rows = cursor.fetchall()
+                            col_names = [desc[0] for desc in cursor.description]
+
+                            html_content += "<tr>" + "".join(f"<th>{html.escape(str(c))}</th>" for c in col_names) + "</tr>"
+                            for row in rows:
+                                html_content += "<tr>" + "".join(f"<td>{html.escape(str(cell))}</td>" for cell in row) + "</tr>"
+                        except Exception as e:
+                            html_content += f"<tr><td colspan='100%'>Error reading table: {html.escape(str(e))}</td></tr>"
+                        html_content += "</table><br>"
+
+                    cursor.close()
+                    conn.close()
+
+                    html_content += "</body></html>"
+                    self.wfile.write(html_content.encode('utf-8'))
+                else:
+                    self.send_error(404, "File not found.")
+
+        def start_sql_server(port, container, event):
+            with socketserver.TCPServer(("", port), RDSRequestHandler) as httpd:
+                container['port'] = httpd.server_address[1]
+                event.set()
+                httpd.serve_forever()
+
+        server_thread = threading.Thread(
+            target=start_sql_server,
+            args=(requested_port, port_container, server_started_event),
+            daemon=True
+        )
+        server_thread.start()
+
+        if not server_started_event.wait(timeout=5):
+            print(f"[{timestamp()}] [ERROR] Server could not start within 5 seconds.")
+            return True
+
+        actual_port = port_container.get('port')
+        url = f"http://localhost:{actual_port}/"
+        print(f"[{timestamp()}] [INFO] Opening Amazon RDS browser at {url}")
+        webbrowser.open(url)
+        print(f"[{timestamp()}] [INFO] Server running on port {actual_port}. Press 'q' to stop it.")
+
+        try:
+            while True:
+                user_cmd = input().strip()
+                if user_cmd.lower() == 'q' or user_cmd.lower() == '\x11':
+                    print(f"[{timestamp()}] [INFO] Stopping server...")
+                    break
+                else:
+                    print(f"[{timestamp()}] [INFO] Invalid input. Press 'q' to quit.")
+        except (KeyboardInterrupt, EOFError):
+            print(f"\n[{timestamp()}] [INFO] Input interrupted. Stopping server...")
+
+        try:
+            urllib.request.urlopen(url, timeout=1)
+        except:
+            pass
+
+        server_thread.join(timeout=5)
+
+        for _ in range(5):
+            try:
+                urllib.request.urlopen(url, timeout=1)
+                print(f"[{timestamp()}] [INFO] URL still reachable, waiting 1s...")
+                time.sleep(1)
+            except:
+                print(f"[{timestamp()}] [INFO] URL is now offline.")
+                break
+        else:
+            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+
+        return True
+    
+    if user_input.startswith("prredis "):
+        import redis
+        # Verbindungstring: host:port,password (Passwort optional)
+        conn_info = user_input[8:].strip()
+
+        try:
+            # host:port,password optional (z.B. localhost:6379,mysecret)
+            parts = conn_info.split(",")
+            host_port = parts[0]
+            password = parts[1] if len(parts) > 1 else None
+            host, port = host_port.split(":")
+            port = int(port)
+        except Exception:
+            print(f"[{timestamp()}] [ERROR] Invalid Redis connection string. Format: host:port,password(optional)")
+            return True
+
+        requested_port = 8000
+        port_container = {}
+        server_started_event = threading.Event()
+
+        class RedisRequestHandler(http.server.SimpleHTTPRequestHandler):
+            def do_GET(self):
+                parsed_path = urllib.parse.urlparse(self.path)
+                if parsed_path.path == "/":
+                    self.send_response(200)
+                    self.send_header("Content-type", "text/html")
+                    self.end_headers()
+
+                    try:
+                        r = redis.Redis(host=host, port=port, password=password, socket_connect_timeout=5)
+                        keys = r.keys('*')[:50]  # max 50 keys
+                    except Exception as e:
+                        self.wfile.write(f"<h1>Connection error</h1><p>{html.escape(str(e))}</p>".encode('utf-8'))
+                        return
+
+                    html_content = f"<html><head><title>Redis Browser</title></head><body>"
+                    html_content += f"<h1>Redis Server at {host}:{port}</h1>"
+                    html_content += f"<h2>Keys (max 50)</h2><table border='1'>"
+                    html_content += "<tr><th>Key</th><th>Type</th><th>Value (truncated)</th></tr>"
+
+                    for key in keys:
+                        try:
+                            key_str = key.decode('utf-8')
+                            key_type = r.type(key).decode('utf-8')
+                            if key_type == 'string':
+                                val = r.get(key)
+                                val_str = val.decode('utf-8') if val else ''
+                            elif key_type == 'list':
+                                val = r.lrange(key, 0, 4)
+                                val_str = ', '.join(x.decode('utf-8') for x in val) + ('...' if r.llen(key) > 5 else '')
+                            elif key_type == 'set':
+                                val = r.smembers(key)
+                                val_str = ', '.join(x.decode('utf-8') for x in list(val)[:5]) + ('...' if len(val) > 5 else '')
+                            else:
+                                val_str = "(type not shown)"
+                        except Exception as e:
+                            val_str = f"Error reading: {e}"
+
+                        html_content += f"<tr><td>{html.escape(key_str)}</td><td>{html.escape(key_type)}</td><td>{html.escape(val_str)}</td></tr>"
+
+                    html_content += "</table></body></html>"
+                    self.wfile.write(html_content.encode('utf-8'))
+
+                else:
+                    self.send_error(404, "File not found.")
+
+        def start_redis_server(port, container, event):
+            with socketserver.TCPServer(("", port), RedisRequestHandler) as httpd:
+                container['port'] = httpd.server_address[1]
+                event.set()
+                httpd.serve_forever()
+
+        server_thread = threading.Thread(
+            target=start_redis_server,
+            args=(requested_port, port_container, server_started_event),
+            daemon=True
+        )
+        server_thread.start()
+
+        if not server_started_event.wait(timeout=5):
+            print(f"[{timestamp()}] [ERROR] Server could not start within 5 seconds.")
+            return True
+
+        actual_port = port_container.get('port')
+        url = f"http://localhost:{actual_port}/"
+        print(f"[{timestamp()}] [INFO] Opening Redis browser at {url}")
+        webbrowser.open(url)
+        print(f"[{timestamp()}] [INFO] Server running on port {actual_port}. Press 'q' to stop it.")
+
+        try:
+            while True:
+                user_cmd = input().strip()
+                if user_cmd.lower() == 'q' or user_cmd.lower() == '\x11':
+                    print(f"[{timestamp()}] [INFO] Stopping server...")
+                    break
+                else:
+                    print(f"[{timestamp()}] [INFO] Invalid input. Press 'q' to quit.")
+        except (KeyboardInterrupt, EOFError):
+            print(f"\n[{timestamp()}] [INFO] Input interrupted. Stopping server...")
+
+        try:
+            urllib.request.urlopen(url, timeout=1)
+        except:
+            pass
+
+        server_thread.join(timeout=5)
+
+        for _ in range(5):
+            try:
+                urllib.request.urlopen(url, timeout=1)
+                print(f"[{timestamp()}] [INFO] URL still reachable, waiting 1s...")
+                time.sleep(1)
+            except:
+                print(f"[{timestamp()}] [INFO] URL is now offline.")
+                break
+        else:
+            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+
+        return True
+    
+    if user_input.startswith("prmongo "):
+        from bson.json_util import dumps
+        from pymongo import MongoClient
+
+        # Verbindungstring erwartet im Format: mongodb://user:pass@host:port/dbname
+        conn_str = user_input[8:].strip()
+
+        requested_port = 8000
+        port_container = {}
+        server_started_event = threading.Event()
+
+        class MongoRequestHandler(http.server.SimpleHTTPRequestHandler):
+            def do_GET(self):
+                parsed_path = urllib.parse.urlparse(self.path)
+                if parsed_path.path == "/":
+                    self.send_response(200)
+                    self.send_header("Content-type", "text/html")
+                    self.end_headers()
+
+                    try:
+                        client = MongoClient(conn_str, serverSelectionTimeoutMS=5000)
+                        # Verbindungscheck
+                        client.admin.command('ping')
+                        db_name = conn_str.rsplit('/', 1)[-1]
+                        db = client[db_name]
+                        collections = db.list_collection_names()
+                    except Exception as e:
+                        self.wfile.write(f"<h1>Connection error</h1><p>{html.escape(str(e))}</p>".encode('utf-8'))
+                        return
+
+                    html_content = f"<html><head><title>MongoDB Browser</title></head><body>"
+                    html_content += f"<h1>MongoDB Database: {html.escape(db_name)}</h1>"
+
+                    for coll in collections:
+                        html_content += f"<h2>Collection: {html.escape(coll)}</h2><table border='1'>"
+                        html_content += "<tr><th>Document (JSON)</th></tr>"
+
+                        try:
+                            cursor = db[coll].find().limit(50)
+                            for doc in cursor:
+                                json_doc = dumps(doc, indent=2)
+                                html_content += f"<tr><td><pre>{html.escape(json_doc)}</pre></td></tr>"
+                        except Exception as e:
+                            html_content += f"<tr><td>Error reading collection: {html.escape(str(e))}</td></tr>"
+
+                        html_content += "</table><br>"
+
+                    html_content += "</body></html>"
+                    self.wfile.write(html_content.encode('utf-8'))
+                else:
+                    self.send_error(404, "File not found.")
+
+        def start_mongo_server(port, container, event):
+            with socketserver.TCPServer(("", port), MongoRequestHandler) as httpd:
+                container['port'] = httpd.server_address[1]
+                event.set()
+                httpd.serve_forever()
+
+        server_thread = threading.Thread(
+            target=start_mongo_server,
+            args=(requested_port, port_container, server_started_event),
+            daemon=True
+        )
+        server_thread.start()
+
+        if not server_started_event.wait(timeout=5):
+            print(f"[{timestamp()}] [ERROR] Server could not start within 5 seconds.")
+            return True
+
+        actual_port = port_container.get('port')
+        url = f"http://localhost:{actual_port}/"
+        print(f"[{timestamp()}] [INFO] Opening MongoDB browser at {url}")
+        webbrowser.open(url)
+        print(f"[{timestamp()}] [INFO] Server running on port {actual_port}. Press 'q' to stop it.")
+
+        try:
+            while True:
+                user_cmd = input().strip()
+                if user_cmd.lower() == 'q' or user_cmd.lower() == '\x11':
+                    print(f"[{timestamp()}] [INFO] Stopping server...")
+                    break
+                else:
+                    print(f"[{timestamp()}] [INFO] Invalid input. Press 'q' to quit.")
+        except (KeyboardInterrupt, EOFError):
+            print(f"\n[{timestamp()}] [INFO] Input interrupted. Stopping server...")
+
+        try:
+            urllib.request.urlopen(url, timeout=1)
+        except:
+            pass
+
+        server_thread.join(timeout=5)
+
+        for _ in range(5):
+            try:
+                urllib.request.urlopen(url, timeout=1)
+                print(f"[{timestamp()}] [INFO] URL still reachable, waiting 1s...")
+                time.sleep(1)
+            except:
+                print(f"[{timestamp()}] [INFO] URL is now offline.")
+                break
+        else:
+            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+
+        return True
+    
+    if user_input.startswith("prcassandra "):
+        from cassandra.cluster import Cluster
+        from cassandra.query import SimpleStatement
+
+        # Eingabeformat: host:port,keyspace
+        conn_info = user_input[11:].strip()
+
+        try:
+            host_port, keyspace = conn_info.split(",")
+            host, port = host_port.split(":")
+            port = int(port)
+        except Exception:
+            print(f"[{timestamp()}] [ERROR] Invalid input format. Use: host:port,keyspace")
+            return True
+
+        requested_port = 8000
+        port_container = {}
+        server_started_event = threading.Event()
+
+        class CassandraRequestHandler(http.server.SimpleHTTPRequestHandler):
+            def do_GET(self):
+                parsed_path = urllib.parse.urlparse(self.path)
+                if parsed_path.path == "/":
+                    self.send_response(200)
+                    self.send_header("Content-type", "text/html")
+                    self.end_headers()
+
+                    try:
+                        cluster = Cluster([host], port=port)
+                        session = cluster.connect(keyspace)
+                        tables = session.execute(
+                            "SELECT table_name FROM system_schema.tables WHERE keyspace_name = %s", (keyspace,)
+                        )
+                        table_names = [row.table_name for row in tables]
+                    except Exception as e:
+                        self.wfile.write(f"<h1>Connection error</h1><p>{html.escape(str(e))}</p>".encode('utf-8'))
+                        return
+
+                    html_content = f"<html><head><title>Cassandra Browser</title></head><body>"
+                    html_content += f"<h1>Cassandra Keyspace: {html.escape(keyspace)}</h1>"
+
+                    for table in table_names:
+                        html_content += f"<h2>Table: {html.escape(table)}</h2><table border='1'>"
+                        try:
+                            stmt = SimpleStatement(f"SELECT * FROM {table} LIMIT 50")
+                            rows = session.execute(stmt)
+                            col_names = rows.column_names
+                            html_content += "<tr>" + "".join(f"<th>{html.escape(col)}</th>" for col in col_names) + "</tr>"
+                            for row in rows:
+                                html_content += "<tr>" + "".join(f"<td>{html.escape(str(getattr(row, col)))}</td>" for col in col_names) + "</tr>"
+                        except Exception as e:
+                            html_content += f"<tr><td colspan='100%'>Error reading table: {html.escape(str(e))}</td></tr>"
+                        html_content += "</table><br>"
+
+                    html_content += "</body></html>"
+                    self.wfile.write(html_content.encode('utf-8'))
+                else:
+                    self.send_error(404, "File not found.")
+
+        def start_cassandra_server(port, container, event):
+            with socketserver.TCPServer(("", port), CassandraRequestHandler) as httpd:
+                container['port'] = httpd.server_address[1]
+                event.set()
+                httpd.serve_forever()
+
+        server_thread = threading.Thread(
+            target=start_cassandra_server,
+            args=(requested_port, port_container, server_started_event),
+            daemon=True
+        )
+        server_thread.start()
+
+        if not server_started_event.wait(timeout=5):
+            print(f"[{timestamp()}] [ERROR] Server could not start within 5 seconds.")
+            return True
+
+        actual_port = port_container.get('port')
+        url = f"http://localhost:{actual_port}/"
+        print(f"[{timestamp()}] [INFO] Opening Cassandra browser at {url}")
+        webbrowser.open(url)
+        print(f"[{timestamp()}] [INFO] Server running on port {actual_port}. Press 'q' to stop it.")
+
+        try:
+            while True:
+                user_cmd = input().strip()
+                if user_cmd.lower() == 'q' or user_cmd.lower() == '\x11':
+                    print(f"[{timestamp()}] [INFO] Stopping server...")
+                    break
+                else:
+                    print(f"[{timestamp()}] [INFO] Invalid input. Press 'q' to quit.")
+        except (KeyboardInterrupt, EOFError):
+            print(f"\n[{timestamp()}] [INFO] Input interrupted. Stopping server...")
+
+        try:
+            urllib.request.urlopen(url, timeout=1)
+        except:
+            pass
+
+        server_thread.join(timeout=5)
+
+        for _ in range(5):
+            try:
+                urllib.request.urlopen(url, timeout=1)
+                print(f"[{timestamp()}] [INFO] URL still reachable, waiting 1s...")
+                time.sleep(1)
+            except:
+                print(f"[{timestamp()}] [INFO] URL is now offline.")
+                break
+        else:
+            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+
+        return True
+
+    if user_input.startswith("prcouchdb "):
+        # Input format: http://user:pass@host:port
+        base_url = user_input[10:].strip().rstrip("/")
+
+        requested_port = 8000
+        port_container = {}
+        server_started_event = threading.Event()
+
+        class CouchDBRequestHandler(http.server.SimpleHTTPRequestHandler):
+            def do_GET(self):
+                parsed_path = urllib.parse.urlparse(self.path)
+                if parsed_path.path == "/":
+                    self.send_response(200)
+                    self.send_header("Content-type", "text/html")
+                    self.end_headers()
+
+                    try:
+                        # Retrieve all databases
+                        resp = requests.get(f"{base_url}/_all_dbs", timeout=5)
+                        resp.raise_for_status()
+                        dbs = resp.json()
+                    except Exception as e:
+                        self.wfile.write(f"<h1>Connection error</h1><p>{html.escape(str(e))}</p>".encode('utf-8'))
+                        return
+
+                    html_content = f"<html><head><title>CouchDB Browser</title></head><body>"
+                    html_content += f"<h1>CouchDB Server: {html.escape(base_url)}</h1>"
+
+                    for db in dbs:
+                        html_content += f"<h2>Database: {html.escape(db)}</h2><table border='1'>"
+                        html_content += "<tr><th>Document ID</th><th>Content (JSON)</th></tr>"
+
+                        try:
+                            docs_resp = requests.get(f"{base_url}/{db}/_all_docs?include_docs=true&limit=50", timeout=5)
+                            docs_resp.raise_for_status()
+                            docs = docs_resp.json().get('rows', [])
+                            for doc in docs:
+                                doc_id = doc.get('id', '')
+                                doc_content = doc.get('doc', {})
+                                json_doc = json.dumps(doc_content, indent=2)
+                                html_content += f"<tr><td>{html.escape(doc_id)}</td><td><pre>{html.escape(json_doc)}</pre></td></tr>"
+                        except Exception as e:
+                            html_content += f"<tr><td colspan='2'>Error reading database: {html.escape(str(e))}</td></tr>"
+
+                        html_content += "</table><br>"
+
+                    html_content += "</body></html>"
+                    self.wfile.write(html_content.encode('utf-8'))
+
+                else:
+                    self.send_error(404, "File not found.")
+
+        def start_couchdb_server(port, container, event):
+            with socketserver.TCPServer(("", port), CouchDBRequestHandler) as httpd:
+                container['port'] = httpd.server_address[1]
+                event.set()
+                httpd.serve_forever()
+
+        server_thread = threading.Thread(
+            target=start_couchdb_server,
+            args=(requested_port, port_container, server_started_event),
+            daemon=True
+        )
+        server_thread.start()
+
+        if not server_started_event.wait(timeout=5):
+            print(f"[{timestamp()}] [ERROR] Server could not be started within 5 seconds.")
+            return True
+
+        actual_port = port_container.get('port')
+        url = f"http://localhost:{actual_port}/"
+        print(f"[{timestamp()}] [INFO] Opening CouchDB Browser at: {url}")
+        webbrowser.open(url)
+        print(f"[{timestamp()}] [INFO] Server running on port {actual_port}. Press 'q' to stop.")
+
+        try:
+            while True:
+                user_cmd = input().strip()
+                if user_cmd.lower() == 'q' or user_cmd.lower() == '\x11':
+                    print(f"[{timestamp()}] [INFO] Stopping server...")
+                    break
+                else:
+                    print(f"[{timestamp()}] [INFO] Invalid input. Press 'q' to exit.")
+        except (KeyboardInterrupt, EOFError):
+            print(f"\n[{timestamp()}] [INFO] Input interrupted. Stopping server...")
+
+        try:
+            urllib.request.urlopen(url, timeout=1)
+        except:
+            pass
+
+        server_thread.join(timeout=5)
+
+        for _ in range(5):
+            try:
+                urllib.request.urlopen(url, timeout=1)
+                print(f"[{timestamp()}] [INFO] URL still reachable, waiting 1 second...")
+                time.sleep(1)
+            except:
+                print(f"[{timestamp()}] [INFO] URL is now offline.")
+                break
+        else:
+            print(f"[{timestamp()}] [WARN] URL still reachable after multiple attempts.")
+
+        return True
+
+    if user_input.startswith("prarangodb "):
+        from arango import ArangoClient
+        # Input format: http://user:pass@host:port
+        conn_str = user_input[11:].strip().rstrip("/")
+
+        # Parse the URL
+        import re
+        m = re.match(r"http://(?:(?P<user>[^:]+):(?P<pass>[^@]+)@)?(?P<host>[^:]+):(?P<port>\d+)", conn_str)
+        if not m:
+            print(f"[{timestamp()}] [ERROR] Invalid connection format. Use: http://user:pass@host:port")
+            return True
+
+        user = m.group("user")
+        password = m.group("pass")
+        host = m.group("host")
+        port = int(m.group("port"))
+
+        requested_port = 8000
+        port_container = {}
+        server_started_event = threading.Event()
+
+        class ArangoRequestHandler(http.server.SimpleHTTPRequestHandler):
+            def do_GET(self):
+                parsed_path = urllib.parse.urlparse(self.path)
+                if parsed_path.path == "/":
+                    self.send_response(200)
+                    self.send_header("Content-type", "text/html")
+                    self.end_headers()
+
+                    try:
+                        client = ArangoClient(hosts=f"http://{host}:{port}")
+                        sys_db = client.db('_system', username=user, password=password)
+
+                        # Retrieve all databases
+                        dbs = sys_db.databases()
+
+                        html_content = f"<html><head><title>ArangoDB Browser</title></head><body>"
+                        html_content += f"<h1>ArangoDB Server: {html.escape(host)}:{port}</h1>"
+
+                        for db_name in dbs:
+                            html_content += f"<h2>Database: {html.escape(db_name)}</h2>"
+                            try:
+                                db = client.db(db_name, username=user, password=password)
+                                collections = db.collections()
+                            except Exception as e:
+                                html_content += f"<p>Error accessing database: {html.escape(str(e))}</p>"
+                                continue
+
+                            for coll in collections:
+                                if coll['type'] not in (2, 3):  # Document and Edge collections
+                                    continue
+                                coll_name = coll['name']
+                                html_content += f"<h3>Collection: {html.escape(coll_name)}</h3><table border='1'>"
+
+                                try:
+                                    docs = db.aql.execute(f"FOR doc IN {coll_name} LIMIT 50 RETURN doc")
+                                    docs_list = list(docs)
+                                    if not docs_list:
+                                        html_content += "<tr><td>No documents</td></tr>"
+                                    else:
+                                        keys = docs_list[0].keys()
+                                        html_content += "<tr>" + "".join(f"<th>{html.escape(k)}</th>" for k in keys) + "</tr>"
+                                        for doc in docs_list:
+                                            html_content += "<tr>" + "".join(f"<td>{html.escape(str(doc.get(k, '')))}</td>" for k in keys) + "</tr>"
+                                except Exception as e:
+                                    html_content += f"<tr><td colspan='100%'>Error reading collection: {html.escape(str(e))}</td></tr>"
+
+                                html_content += "</table><br>"
+
+                        html_content += "</body></html>"
+                        self.wfile.write(html_content.encode('utf-8'))
+
+                    except Exception as e:
+                        self.wfile.write(f"<h1>Connection error</h1><p>{html.escape(str(e))}</p>".encode('utf-8'))
+                else:
+                    self.send_error(404, "File not found.")
+
+        def start_arango_server(port, container, event):
+            with socketserver.TCPServer(("", port), ArangoRequestHandler) as httpd:
+                container['port'] = httpd.server_address[1]
+                event.set()
+                httpd.serve_forever()
+
+        server_thread = threading.Thread(
+            target=start_arango_server,
+            args=(requested_port, port_container, server_started_event),
+            daemon=True
+        )
+        server_thread.start()
+
+        if not server_started_event.wait(timeout=5):
+            print(f"[{timestamp()}] [ERROR] Server could not be started within 5 seconds.")
+            return True
+
+        actual_port = port_container.get('port')
+        url = f"http://localhost:{actual_port}/"
+        print(f"[{timestamp()}] [INFO] Opening ArangoDB Browser at: {url}")
+        webbrowser.open(url)
+        print(f"[{timestamp()}] [INFO] Server running on port {actual_port}. Press 'q' to stop.")
+
+        try:
+            while True:
+                user_cmd = input().strip()
+                if user_cmd.lower() == 'q' or user_cmd.lower() == '\x11':
+                    print(f"[{timestamp()}] [INFO] Stopping server...")
+                    break
+                else:
+                    print(f"[{timestamp()}] [INFO] Invalid input. Press 'q' to exit.")
+        except (KeyboardInterrupt, EOFError):
+            print(f"\n[{timestamp()}] [INFO] Input interrupted. Stopping server...")
+
+        try:
+            urllib.request.urlopen(url, timeout=1)
+        except:
+            pass
+
+        server_thread.join(timeout=5)
+
+        for _ in range(5):
+            try:
+                urllib.request.urlopen(url, timeout=1)
+                print(f"[{timestamp()}] [INFO] URL still reachable, waiting 1 second...")
+                time.sleep(1)
+            except:
+                print(f"[{timestamp()}] [INFO] URL is now offline.")
+                break
+        else:
+            print(f"[{timestamp()}] [WARN] URL still reachable after multiple attempts.")
+
+        return True
+    
+    if user_input.startswith("prneo4j "):
+        from neo4j import GraphDatabase
+
+        # Input format: bolt://user:pass@host:port or neo4j://user:pass@host:port
+        conn_str = user_input[8:].strip()
+
+        import re
+        # Parse connection string like bolt://user:pass@host:port
+        pattern = r'^(bolt|neo4j)://(?P<user>[^:]+):(?P<pass>[^@]+)@(?P<host>[^:]+):(?P<port>\d+)$'
+        match = re.match(pattern, conn_str)
+        if not match:
+            print(f"[{timestamp()}] [ERROR] Invalid connection format. Use: bolt://user:pass@host:port")
+            return True
+
+        scheme = match.group(1)
+        user = match.group('user')
+        password = match.group('pass')
+        host = match.group('host')
+        port = int(match.group('port'))
+
+        requested_port = 8000
+        port_container = {}
+        server_started_event = threading.Event()
+
+        class Neo4jRequestHandler(http.server.SimpleHTTPRequestHandler):
+            def do_GET(self):
+                if self.path != "/":
+                    self.send_error(404, "File not found.")
+                    return
+
+                self.send_response(200)
+                self.send_header("Content-type", "text/html")
+                self.end_headers()
+
+                try:
+                    uri = f"{scheme}://{host}:{port}"
+                    driver = GraphDatabase.driver(uri, auth=(user, password))
+
+                    with driver.session() as session:
+                        # Get all node labels
+                        labels = session.run("CALL db.labels() YIELD label RETURN label").values()
+                        labels = [label[0] for label in labels]
+
+                        html_content = f"<html><head><title>Neo4j Browser</title></head><body>"
+                        html_content += f"<h1>Neo4j Server: {host}:{port}</h1>"
+
+                        for label in labels:
+                            html_content += f"<h2>Label: {html.escape(label)}</h2><table border='1'>"
+                            # Get up to 50 nodes of this label and their properties
+                            query = f"MATCH (n:`{label}`) RETURN n LIMIT 50"
+                            result = session.run(query)
+                            nodes = [record["n"] for record in result]
+
+                            if not nodes:
+                                html_content += "<tr><td>No nodes found</td></tr>"
+                            else:
+                                # Collect all property keys from the first node to create header
+                                keys = set()
+                                for node in nodes:
+                                    keys.update(node.keys())
+                                keys = sorted(keys)
+
+                                html_content += "<tr>" + "".join(f"<th>{html.escape(k)}</th>" for k in keys) + "</tr>"
+
+                                for node in nodes:
+                                    html_content += "<tr>"
+                                    for k in keys:
+                                        val = node.get(k, "")
+                                        html_content += f"<td>{html.escape(str(val))}</td>"
+                                    html_content += "</tr>"
+
+                            html_content += "</table><br>"
+
+                        html_content += "</body></html>"
+                        self.wfile.write(html_content.encode('utf-8'))
+
+                    driver.close()
+
+                except Exception as e:
+                    self.wfile.write(f"<h1>Error</h1><p>{html.escape(str(e))}</p>".encode('utf-8'))
+
+        def start_neo4j_server(port, container, event):
+            with socketserver.TCPServer(("", port), Neo4jRequestHandler) as httpd:
+                container['port'] = httpd.server_address[1]
+                event.set()
+                httpd.serve_forever()
+
+        server_thread = threading.Thread(
+            target=start_neo4j_server,
+            args=(requested_port, port_container, server_started_event),
+            daemon=True
+        )
+        server_thread.start()
+
+        if not server_started_event.wait(timeout=5):
+            print(f"[{timestamp()}] [ERROR] Server could not be started within 5 seconds.")
+            return True
+
+        actual_port = port_container.get('port')
+        url = f"http://localhost:{actual_port}/"
+        print(f"[{timestamp()}] [INFO] Opening Neo4j Browser at: {url}")
+        webbrowser.open(url)
+        print(f"[{timestamp()}] [INFO] Server running on port {actual_port}. Press 'q' to stop.")
+
+        try:
+            while True:
+                user_cmd = input().strip()
+                if user_cmd.lower() == 'q' or user_cmd.lower() == '\x11':
+                    print(f"[{timestamp()}] [INFO] Stopping server...")
+                    break
+                else:
+                    print(f"[{timestamp()}] [INFO] Invalid input. Press 'q' to quit.")
+        except (KeyboardInterrupt, EOFError):
+            print(f"\n[{timestamp()}] [INFO] Input interrupted. Stopping server...")
+
+        try:
+            urllib.request.urlopen(url, timeout=1)
+        except:
+            pass
+
+        server_thread.join(timeout=5)
+
+        for _ in range(5):
+            try:
+                urllib.request.urlopen(url, timeout=1)
+                print(f"[{timestamp()}] [INFO] URL still reachable, waiting 1s...")
+                time.sleep(1)
+            except:
+                print(f"[{timestamp()}] [INFO] URL is now offline.")
+                break
+        else:
+            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+
+        return True
+    
+    if user_input.startswith("prorientdb "):
+        from pyorient import OrientDB
+
+        # Input format: host:port user password
+        # Example: prorientdb 127.0.0.1:2424 root root_password
+        parts = user_input[11:].strip().split()
+        if len(parts) != 3:
+            print(f"[{timestamp()}] [ERROR] Invalid input. Use: prorientdb host:port user password")
+            return True
+
+        host_port, user, password = parts
+        if ':' not in host_port:
+            print(f"[{timestamp()}] [ERROR] Invalid host:port format")
+            return True
+        host, port_str = host_port.split(':', 1)
+        try:
+            port = int(port_str)
+        except ValueError:
+            print(f"[{timestamp()}] [ERROR] Invalid port number")
+            return True
+
+        requested_port = 8000
+        port_container = {}
+        server_started_event = threading.Event()
+
+        class OrientDBRequestHandler(http.server.SimpleHTTPRequestHandler):
+            def do_GET(self):
+                if self.path != "/":
+                    self.send_error(404, "File not found.")
+                    return
+
+                self.send_response(200)
+                self.send_header("Content-type", "text/html")
+                self.end_headers()
+
+                try:
+                    client = OrientDB(host, port)
+                    session_id = client.connect(user, password)
+
+                    # List all databases (only local server databases)
+                    # pyorient does not provide a direct method to list all DBs, so this is a limitation
+                    # Instead, we try a default DB or ask user to specify DB name (simple approach here)
+                    # For demo, we ask user to specify a database to explore:
+
+                    # Just example with a fixed DB name, or you can extend to dynamic input
+                    db_name = "demo"  # Change to your database name or extend to ask user
+
+                    if not client.db_exists(db_name, pyorient.STORAGE_TYPE_PLOCAL):
+                        self.wfile.write(f"<h1>Error</h1><p>Database '{db_name}' does not exist.</p>".encode('utf-8'))
+                        return
+
+                    client.db_open(db_name, user, password)
+
+                    # Get classes (tables)
+                    classes = client.command("SELECT FROM (SELECT expand(classes) FROM metadata:schema)")
+
+                    html_content = f"<html><head><title>OrientDB Browser</title></head><body>"
+                    html_content += f"<h1>OrientDB Database: {html.escape(db_name)}</h1>"
+
+                    for cls in classes:
+                        class_name = cls.oRecordData['name']
+                        html_content += f"<h2>Class: {html.escape(class_name)}</h2><table border='1'>"
+
+                        try:
+                            records = client.command(f"SELECT FROM {class_name} LIMIT 50")
+                            if not records:
+                                html_content += "<tr><td>No records found</td></tr>"
+                            else:
+                                # Extract keys from first record
+                                keys = records[0].oRecordData.keys()
+                                html_content += "<tr>" + "".join(f"<th>{html.escape(k)}</th>" for k in keys) + "</tr>"
+
+                                for rec in records:
+                                    html_content += "<tr>" + "".join(
+                                        f"<td>{html.escape(str(rec.oRecordData.get(k, '')))}</td>" for k in keys) + "</tr>"
+                        except Exception as e:
+                            html_content += f"<tr><td colspan='100%'>Error reading class: {html.escape(str(e))}</td></tr>"
+
+                        html_content += "</table><br>"
+
+                    html_content += "</body></html>"
+                    self.wfile.write(html_content.encode('utf-8'))
+
+                    client.db_close()
+                    client.close()
+
+                except Exception as e:
+                    self.wfile.write(f"<h1>Connection error</h1><p>{html.escape(str(e))}</p>".encode('utf-8'))
+
+        def start_orientdb_server(port, container, event):
+            with socketserver.TCPServer(("", port), OrientDBRequestHandler) as httpd:
+                container['port'] = httpd.server_address[1]
+                event.set()
+                httpd.serve_forever()
+
+        server_thread = threading.Thread(
+            target=start_orientdb_server,
+            args=(requested_port, port_container, server_started_event),
+            daemon=True
+        )
+        server_thread.start()
+
+        if not server_started_event.wait(timeout=5):
+            print(f"[{timestamp()}] [ERROR] Server could not be started within 5 seconds.")
+            return True
+
+        actual_port = port_container.get('port')
+        url = f"http://localhost:{actual_port}/"
+        print(f"[{timestamp()}] [INFO] Opening OrientDB Browser at: {url}")
+        webbrowser.open(url)
+        print(f"[{timestamp()}] [INFO] Server running on port {actual_port}. Press 'q' to stop.")
+
+        try:
+            while True:
+                user_cmd = input().strip()
+                if user_cmd.lower() == 'q' or user_cmd.lower() == '\x11':
+                    print(f"[{timestamp()}] [INFO] Stopping server...")
+                    break
+                else:
+                    print(f"[{timestamp()}] [INFO] Invalid input. Press 'q' to quit.")
+        except (KeyboardInterrupt, EOFError):
+            print(f"\n[{timestamp()}] [INFO] Input interrupted. Stopping server...")
+
+        try:
+            urllib.request.urlopen(url, timeout=1)
+        except:
+            pass
+
+        server_thread.join(timeout=5)
+
+        for _ in range(5):
+            try:
+                urllib.request.urlopen(url, timeout=1)
+                print(f"[{timestamp()}] [INFO] URL still reachable, waiting 1s...")
+                time.sleep(1)
+            except:
+                print(f"[{timestamp()}] [INFO] URL is now offline.")
+                break
+        else:
+            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+
+        return True
+    
+    if user_input.startswith("prravendb "):
+        from ravendb import DocumentStore
+        
+        # Input format: url database_name
+        # Example: prravendb http://localhost:8080 Northwind
+        parts = user_input[10:].strip().split(maxsplit=1)
+        if len(parts) != 2:
+            print(f"[{timestamp()}] [ERROR] Invalid input. Use: prravendb url database_name")
+            return True
+
+        url, database_name = parts
+
+        requested_port = 8000
+        port_container = {}
+        server_started_event = threading.Event()
+
+        class RavenDBRequestHandler(http.server.SimpleHTTPRequestHandler):
+            def do_GET(self):
+                if self.path != "/":
+                    self.send_error(404, "File not found.")
+                    return
+
+                self.send_response(200)
+                self.send_header("Content-type", "text/html")
+                self.end_headers()
+
+                try:
+                    store = DocumentStore([url], database_name)
+                    store.initialize()
+
+                    with store.open_session() as session:
+                        # Get all collections - RavenDB doesn't provide direct API for all collections
+                        # Workaround: Query all documents' metadata to extract collections
+                        # Here, query the system collection of documents metadata and extract collections
+                        collections_query = "from @all_docs as doc select distinct(doc['@collection'])"
+                        # Note: RavenDB Python client does not support raw queries easily,
+                        # so we'll approximate by querying indexes or use a known list if available.
+                        # For demo, we will assume user provides collection names or you extend this.
+                        
+                        # For simplicity, list a few collections manually or just try one:
+                        collections = ["Employees", "Orders"]  # Replace or make dynamic as needed
+
+                        html_content = f"<html><head><title>RavenDB Browser</title></head><body>"
+                        html_content += f"<h1>RavenDB Database: {database_name}</h1>"
+
+                        for coll in collections:
+                            html_content += f"<h2>Collection: {html.escape(coll)}</h2><table border='1'>"
+
+                            # Query up to 50 documents in collection
+                            results = session.query(collection_name=coll).take(50).all()
+                            if not results:
+                                html_content += "<tr><td>No documents found</td></tr>"
+                            else:
+                                # Use dict keys from first document for columns
+                                keys = set()
+                                for doc in results:
+                                    keys.update(doc.keys())
+                                keys = sorted(keys)
+
+                                html_content += "<tr>" + "".join(f"<th>{html.escape(k)}</th>" for k in keys) + "</tr>"
+
+                                for doc in results:
+                                    html_content += "<tr>" + "".join(f"<td>{html.escape(str(doc.get(k, '')))}</td>" for k in keys) + "</tr>"
+
+                            html_content += "</table><br>"
+
+                        html_content += "</body></html>"
+                        self.wfile.write(html_content.encode('utf-8'))
+
+                    store.dispose()
+
+                except Exception as e:
+                    self.wfile.write(f"<h1>Error</h1><p>{html.escape(str(e))}</p>".encode('utf-8'))
+
+        def start_ravendb_server(port, container, event):
+            with socketserver.TCPServer(("", port), RavenDBRequestHandler) as httpd:
+                container['port'] = httpd.server_address[1]
+                event.set()
+                httpd.serve_forever()
+
+        server_thread = threading.Thread(
+            target=start_ravendb_server,
+            args=(requested_port, port_container, server_started_event),
+            daemon=True
+        )
+        server_thread.start()
+
+        if not server_started_event.wait(timeout=5):
+            print(f"[{timestamp()}] [ERROR] Server could not be started within 5 seconds.")
+            return True
+
+        actual_port = port_container.get('port')
+        url_local = f"http://localhost:{actual_port}/"
+        print(f"[{timestamp()}] [INFO] Opening RavenDB Browser at: {url_local}")
+        webbrowser.open(url_local)
+        print(f"[{timestamp()}] [INFO] Server running on port {actual_port}. Press 'q' to stop.")
+
+        try:
+            while True:
+                user_cmd = input().strip()
+                if user_cmd.lower() == 'q' or user_cmd.lower() == '\x11':
+                    print(f"[{timestamp()}] [INFO] Stopping server...")
+                    break
+                else:
+                    print(f"[{timestamp()}] [INFO] Invalid input. Press 'q' to quit.")
+        except (KeyboardInterrupt, EOFError):
+            print(f"\n[{timestamp()}] [INFO] Input interrupted. Stopping server...")
+
+        try:
+            urllib.request.urlopen(url_local, timeout=1)
+        except:
+            pass
+
+        server_thread.join(timeout=5)
+
+        for _ in range(5):
+            try:
+                urllib.request.urlopen(url_local, timeout=1)
+                print(f"[{timestamp()}] [INFO] URL still reachable, waiting 1s...")
+                time.sleep(1)
+            except:
+                print(f"[{timestamp()}] [INFO] URL is now offline.")
+                break
+        else:
+            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+
+        return True
+
     if user_input.startswith("prvec "):
         filepath = os.path.abspath(user_input[6:].strip())
 
