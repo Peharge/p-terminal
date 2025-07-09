@@ -27455,18 +27455,27 @@ def main():
 
             elif user_input.startswith("pcsvf "):
                 user_input = user_input[6:].strip()
+                urrent_dir = Path.cwd()
+                env_path = (current_dir / user_input).resolve()
                 command = f"virtualenv -p {user_input}"
 
-                process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
-                                           text=True)
-
                 try:
-                    process.wait()
-                    print(f"[{timestamp()}] [INFO] The '{user_input}' venv was created.")
+                    subprocess.run(command, shell=True, check=True, text=True,
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+
+                    print(f"[{timestamp()}] [INFO] The '{user_input}' venv was created at {env_path}.")
+
+                    # Annahme: find_active_env und set_python_path sind irgendwo definiert
+                    active = find_active_env(str(env_path))
+                    set_python_path(active)
+                    print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+
+                except subprocess.CalledProcessError as e:
+                    print(f"[{timestamp()}] [ERROR] Failed to create venv '{user_input}': {e}")
                 except KeyboardInterrupt:
                     print(f"[{timestamp()}] [INFO] Cancellation by user.")
-                except subprocess.CalledProcessError as e:
-                    print(f"[{timestamp()}] [ERROR] executing ls command: {e}")
+                except Exception as e:
+                    print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
 
             elif user_input.startswith("pcv-p313 "):
                 user_input = user_input[9:].strip()
