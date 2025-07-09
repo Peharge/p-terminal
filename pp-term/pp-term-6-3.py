@@ -13294,6 +13294,40 @@ def handle_special_commands(user_input):
 
         return False
 
+    if user_input.startswith("pcfo&pcd "):
+        folder_name = user_input[8:].strip()
+        current_dir = Path.cwd().resolve()
+        new_folder_path = current_dir / folder_name
+
+        # Create folder
+        try:
+            new_folder_path.mkdir(parents=True, exist_ok=True)
+            print(f"[{timestamp()}] [INFO] Folder created: {new_folder_path}")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Could not create folder: {e}")
+            return False
+
+        # Change directory
+        try:
+            change_directory(new_folder_path)
+            print(f"[{timestamp()}] [INFO] Changed directory to: {new_folder_path}")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Error changing directory: {e}")
+            return False
+
+        # Environment handling
+        found = find_env_in_current_dir()
+        saved = load_saved_env()
+
+        if found:
+            if found != saved:
+                save_current_env(found)
+            return found
+        else:
+            return saved if saved else str(Path(DEFAULT_ENV_DIR).resolve())
+
+        return False
+
     # pc-postgresql: startet einen PostgreSQL-Dienst (Service-Name muss als Argument angegeben werden)
     # Beispiel-Aufruf: "pc-postgresql postgresql-x64-15"
     if user_input.startswith("pc-postgresql "):
