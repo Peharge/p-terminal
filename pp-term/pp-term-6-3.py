@@ -17553,7 +17553,8 @@ def handle_special_commands(user_input):
 
         # Load .env
         env_path=os.path.expanduser("~/.env")
-        if os.path.isfile(env_path): from dotenv import load_dotenv; load_dotenv(env_path)
+        if os.path.isfile(env_path):
+            load_dotenv(env_path)
 
         # Model
         class CIFARNet(nn.Module):
@@ -18044,7 +18045,6 @@ def handle_special_commands(user_input):
         import jax
         import jax.numpy as jnp
         from jax import random, grad, jit
-        import numpy as onp
         from tensorflow.keras.datasets import mnist
 
         def print_usage_jax():
@@ -18125,7 +18125,6 @@ def handle_special_commands(user_input):
         import jax
         import jax.numpy as jnp
         from jax import random, grad, jit
-        import numpy as onp
 
         def print_usage_jax2():
             print("Usage: IQ-AI-JAX2 <returns_csv> <learning_rate> <epochs> [output_weights.npy]")
@@ -18190,7 +18189,6 @@ def handle_special_commands(user_input):
         import jax
         import jax.numpy as jnp
         from jax import random, jit, vmap
-        import numpy as onp
 
         def print_usage_jax3():
             print("Usage: IQ-AI-JAX3 <data_csv> <n_clusters> <max_iter> [output_centroids.npy]")
