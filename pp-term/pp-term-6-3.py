@@ -18708,12 +18708,14 @@ def handle_special_commands(user_input):
             return True
 
         try:
-            fig = px.bar(df, x=date_col, y=val_col, title=title) if chart_type=='bar' else \
+            fig = px.bar(df, x=date_col, y=val_col, title=title) if chart_type == 'bar' else \
                   px.line(df, x=date_col, y=val_col, title=title, markers=True)
             fig.update_layout(xaxis_title=date_col, yaxis_title=val_col)
             fig.write_html(output, include_plotlyjs='cdn')
             logging.info(f"[{timestamp()}] [INFO] Saved Plotly chart: {output}")
-            fig.show()
+
+            # HTML im Browser öffnen
+            webbrowser.open(f"file://{os.path.abspath(output)}")
         except Exception as e:
             print(f"[{timestamp()}] [ERROR] Chart creation failed: {e}")
             return True
