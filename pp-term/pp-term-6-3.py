@@ -8161,7 +8161,7 @@ def handle_special_commands(user_input):
         return True
 
 
-    if user_input.startswith("prmysql "):#
+    if user_input.startswith("prmysql "):
         import mysql.connector
         from mysql.connector import Error
         
@@ -10005,7 +10005,7 @@ def handle_special_commands(user_input):
     
     if user_input.startswith("prravendb "):
         from ravendb import DocumentStore
-        
+
         # Input format: url database_name
         # Example: prravendb http://localhost:8080 Northwind
         parts = user_input[10:].strip().split(maxsplit=1)
@@ -10130,6 +10130,131 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
 
         return True
+    
+    if user_input.startswith("prdynamodb "):
+    # Input format: aws_access_key aws_secret_key region
+    # Example: prdynamodb AKIA... abc123... us-west-2
+    parts = user_input[11:].strip().split()
+    if len(parts) != 3:
+        print(f"[{timestamp()}] [ERROR] Invalid input. Use: prdynamodb aws_access_key aws_secret_key region")
+        return True
+
+    aws_access_key, aws_secret_key, region = parts
+
+    requested_port = 8000
+    port_container = {}
+    server_started_event = threading.Event()
+
+    class DynamoDBRequestHandler(http.server.SimpleHTTPRequestHandler):
+        def do_GET(self):
+            if self.path != "/":
+                self.send_error(404, "File not found.")
+                return
+
+            self.send_response(200)
+            self.send_header("Content-type", "text/html")
+            self.end_headers()
+
+            try:
+                dynamodb = boto3.resource(
+                    'dynamodb',
+                    aws_access_key_id=aws_access_key,
+                    aws_secret_access_key=aws_secret_key,
+                    region_name=region
+                )
+
+                tables = list(dynamodb.tables.all())
+                html_content = f"<html><head><title>DynamoDB Browser</title></head><body>"
+                html_content += f"<h1>DynamoDB Tables in Region: {html.escape(region)}</h1>"
+
+                if not tables:
+                    html_content += "<p>No tables found.</p>"
+                else:
+                    for table in tables:
+                        html_content += f"<h2>Table: {html.escape(table.name)}</h2><table border='1'>"
+                        try:
+                            # Scan up to 50 items from the table
+                            response = table.scan(Limit=50)
+                            items = response.get('Items', [])
+                            if not items:
+                                html_content += "<tr><td>No items found</td></tr>"
+                            else:
+                                # Collect all keys from items
+                                keys = set()
+                                for item in items:
+                                    keys.update(item.keys())
+                                keys = sorted(keys)
+
+                                html_content += "<tr>" + "".join(f"<th>{html.escape(k)}</th>" for k in keys) + "</tr>"
+
+                                for item in items:
+                                    html_content += "<tr>" + "".join(
+                                        f"<td>{html.escape(str(item.get(k, '')))}</td>" for k in keys) + "</tr>"
+
+                        except ClientError as e:
+                            html_content += f"<tr><td colspan='100%'>Error reading table: {html.escape(str(e))}</td></tr>"
+
+                        html_content += "</table><br>"
+
+                html_content += "</body></html>"
+                self.wfile.write(html_content.encode('utf-8'))
+
+            except Exception as e:
+                self.wfile.write(f"<h1>Error</h1><p>{html.escape(str(e))}</p>".encode('utf-8'))
+
+    def start_dynamodb_server(port, container, event):
+        with socketserver.TCPServer(("", port), DynamoDBRequestHandler) as httpd:
+            container['port'] = httpd.server_address[1]
+            event.set()
+            httpd.serve_forever()
+
+    server_thread = threading.Thread(
+        target=start_dynamodb_server,
+        args=(requested_port, port_container, server_started_event),
+        daemon=True
+    )
+    server_thread.start()
+
+    if not server_started_event.wait(timeout=5):
+        print(f"[{timestamp()}] [ERROR] Server could not be started within 5 seconds.")
+        return True
+
+    actual_port = port_container.get('port')
+    url = f"http://localhost:{actual_port}/"
+    print(f"[{timestamp()}] [INFO] Opening DynamoDB Browser at: {url}")
+    webbrowser.open(url)
+    print(f"[{timestamp()}] [INFO] Server running on port {actual_port}. Press 'q' to stop.")
+
+    try:
+        while True:
+            user_cmd = input().strip()
+            if user_cmd.lower() == 'q' or user_cmd.lower() == '\x11':
+                print(f"[{timestamp()}] [INFO] Stopping server...")
+                break
+            else:
+                print(f"[{timestamp()}] [INFO] Invalid input. Press 'q' to quit.")
+    except (KeyboardInterrupt, EOFError):
+        print(f"\n[{timestamp()}] [INFO] Input interrupted. Stopping server...")
+
+    try:
+        urllib.request.urlopen(url, timeout=1)
+    except:
+        pass
+
+    server_thread.join(timeout=5)
+
+    for _ in range(5):
+        try:
+            urllib.request.urlopen(url, timeout=1)
+            print(f"[{timestamp()}] [INFO] URL still reachable, waiting 1s...")
+            time.sleep(1)
+        except:
+            print(f"[{timestamp()}] [INFO] URL is now offline.")
+            break
+    else:
+        print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+
+    return True
 
     if user_input.startswith("prvec "):
         filepath = os.path.abspath(user_input[6:].strip())
