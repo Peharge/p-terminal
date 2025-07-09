@@ -72,22 +72,20 @@ print ("""
 ██║ ╚═╝ ██║██║  ██║ ╚████╔╝ ██║███████║
 ╚═╝     ╚═╝╚═╝  ╚═╝  ╚═══╝  ╚═╝╚══════╝
 
-Please note that this is an outdated version of MAVIS. To run the latest version, execute 'run mavis main' to ensure the most up-to-date version of MAVIS is launched.
+Please note that this is an outdated version of MAVIS.
+To run the latest version, please execute the command
+`run mavis main`
+in the PP-Terminal. This will launch MAVIS directly from the official repository at https://github.com/Peharge/MAVIS.
+Make sure you have installed MAVIS from there before running the command.
 
-Note: The p-terminal repository does not include any desktop images required for MAVIS.
+Important: If you choose to use the MAVIS version included in the p-terminal repository, please be aware that it does NOT include the desktop images required by MAVIS.
 Please ensure the following image files are present:
 
-/static/images/mavis-1-5-banner-1.png
-
-/static/images/mavis1.3-banner.png
-
-/static/images/mavis-4-banner-1.png
-
-/static/images/mavis-banner40.png
-
-/static/images/mavis-4-banner-3.png
-
-Alternatively, you can use MAVIS from the official repository: https://github.com/Peharge/MAVIS
+- /static/images/mavis-1-5-banner-1.png
+- /static/images/mavis1.3-banner.png
+- /static/images/mavis-4-banner-1.png
+- /static/images/mavis-banner40.png
+- /static/images/mavis-4-banner-3.png
 """)
 
 print(f"""🎉 A warm welcome from Peharge 🎉\n""")
