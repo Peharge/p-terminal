@@ -27717,13 +27717,42 @@ def main():
 
             elif user_input.startswith("pav "):
                 env_name = user_input[4:].strip()
-                env_path = str((current_dir / env_name).resolve())
+                env_path = (current_dir / env_name).resolve()
+
+                if not env_path.exists():
+                    print(f"[{timestamp()}] [WARN] Environment '{env_name}' does not exist at '{env_path}'.")
+                    user_confirm = input("Do you want to create this virtual environment? [y/n]: ").strip().lower()
+                    if user_confirm == 'y':
+                        command = f'python -m venv "{env_path}"'
+                        try:
+                            subprocess.run(command, shell=True, check=True, text=True,
+                                           stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                            print(f"[{timestamp()}] [INFO] The '{env_name}' venv was created at {env_path}.")
+                        except subprocess.CalledProcessError as e:
+                            print(f"[{timestamp()}] [ERROR] Failed to create venv: {e}")
+                            continue
+                    else:
+                        print(f"[{timestamp()}] [INFO] Activation cancelled.")
+                        continue
+
+                if os.name == "nt":
+                    python_exe = env_path / "Scripts" / "python.exe"
+                else:
+                    python_exe = env_path / "bin" / "python"
+
+                if not python_exe.exists():
+                    print(f"[{timestamp()}] [WARN] No Python interpreter found in '{python_exe}'.")
+                    user_confirm = input("Do you still want to activate this environment? [y/N)] ).strip().lower()
+                    if user_confirm != 'y':
+                        print(f"[{timestamp()}] [INFO] Activation cancelled.")
+                        continue
 
                 # setzt und speichert das aktive Env
                 active = find_active_env(env_path)
                 set_python_path(active)
 
                 print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+
 
             elif user_input.strip() == "psv":
                 # Suche nach dem ersten venv im gesamten Verzeichnisbaum ab current_dir
