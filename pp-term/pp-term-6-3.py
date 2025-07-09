@@ -1843,96 +1843,6 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] {str(e)}", file=sys.stderr)
         return True
 
-    if user_input.lower() == "p-venv-info":
-        active_env_path = Path(find_active_env()).resolve()
-        print(f"[{timestamp()}] [INFO] Active environment: '{active_env_path}'.")
-        return True
-
-    elif user_input.startswith("p-venv-c "):
-        user_input = user_input[9:].strip()
-        command = f"python -m venv {user_input}"
-
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
-                                   text=True)
-
-        try:
-            process.wait()
-            print(f"[{timestamp()}] [INFO] The '{user_input}' venv was created.")
-        except KeyboardInterrupt:
-            print(f"[{timestamp()}] [INFO] Cancellation by user.")
-        except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing ls command: {e}")
-        return True
-
-    elif user_input.startswith("pcv "):
-        user_input = user_input[4:].strip()
-        command = f"python -m venv {user_input}"
-
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
-                                   text=True)
-
-        try:
-            process.wait()
-            print(f"[{timestamp()}] [INFO] The '{user_input}' venv was created.")
-        except KeyboardInterrupt:
-            print(f"[{timestamp()}] [INFO] Cancellation by user.")
-        except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing ls command: {e}")
-        return True
-
-    elif user_input.startswith("pcvf "):
-        user_input = user_input[5:].strip()
-        command = f"python -m venv {user_input}"
-
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
-                                   text=True)
-
-        try:
-            process.wait()
-            print(f"[{timestamp()}] [INFO] The '{user_input}' venv was created.")
-        except KeyboardInterrupt:
-            print(f"[{timestamp()}] [INFO] Cancellation by user.")
-        except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing ls command: {e}")
-        return True
-
-    elif user_input.startswith("pcsvf "):
-        user_input = user_input[6:].strip()
-        command = f"virtualenv -p {user_input}"
-
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
-                                   text=True)
-
-        try:
-            process.wait()
-            print(f"[{timestamp()}] [INFO] The '{user_input}' venv was created.")
-        except KeyboardInterrupt:
-            print(f"[{timestamp()}] [INFO] Cancellation by user.")
-        except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing ls command: {e}")
-        return True
-
-    elif user_input.lower() == "pv-info":
-        active_env_path = Path(find_active_env()).resolve()
-        print(f"[{timestamp()}] [INFO] Active environment: '{active_env_path}'.")
-        return True
-
-    elif user_input.startswith("p-venv-create "):
-        user_input = user_input[14:].strip()
-        command = f"python -m venv {user_input}"
-
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
-                                   text=True)
-
-        try:
-            process.wait()
-            print(f"[{timestamp()}] [INFO] The '{user_input}' venv was created.")
-        except KeyboardInterrupt:
-            print(f"[{timestamp()}] [INFO] Cancellation by user.")
-        except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing ls command: {e}")
-        return True
-
     if user_input.lower() == "exit":
         print(f"[{timestamp()}] [INFO] {yellow}Exiting PP-Terminal... Goodbye {user_name}!{reset}")
         sys.exit(0)
@@ -27466,6 +27376,325 @@ def main():
             elif user_input.lower() == "pin cool-23":
                 state = "cool-23"
                 continue
+
+            elif user_input.lower() == "p-venv-info":
+                active_env_path = Path(find_active_env()).resolve()
+                print(f"[{timestamp()}] [INFO] Active environment: '{active_env_path}'.")
+
+            elif user_input.startswith("p-venv-c "):
+                user_input = user_input[9:].strip()
+                current_dir = Path.cwd()
+                env_path = (current_dir / user_input).resolve()
+                command = f'python -m venv "{env_path}"'
+
+                try:
+                    subprocess.run(command, shell=True, check=True, text=True,
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+
+                    print(f"[{timestamp()}] [INFO] The '{user_input}' venv was created at {env_path}.")
+
+                    # Annahme: find_active_env und set_python_path sind irgendwo definiert
+                    active = find_active_env(str(env_path))
+                    set_python_path(active)
+                    print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+
+                except subprocess.CalledProcessError as e:
+                    print(f"[{timestamp()}] [ERROR] Failed to create venv '{user_input}': {e}")
+                except KeyboardInterrupt:
+                    print(f"[{timestamp()}] [INFO] Cancellation by user.")
+                except Exception as e:
+                    print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
+
+            elif user_input.startswith("pcv "):
+                user_input = user_input[4:].strip()
+                current_dir = Path.cwd()
+                env_path = (current_dir / user_input).resolve()
+                command = f'python -m venv "{env_path}"'
+
+                try:
+                    subprocess.run(command, shell=True, check=True, text=True,
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+
+                    print(f"[{timestamp()}] [INFO] The '{user_input}' venv was created at {env_path}.")
+
+                    # Annahme: find_active_env und set_python_path sind irgendwo definiert
+                    active = find_active_env(str(env_path))
+                    set_python_path(active)
+                    print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+
+                except subprocess.CalledProcessError as e:
+                    print(f"[{timestamp()}] [ERROR] Failed to create venv '{user_input}': {e}")
+                except KeyboardInterrupt:
+                    print(f"[{timestamp()}] [INFO] Cancellation by user.")
+                except Exception as e:
+                    print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
+
+            elif user_input.startswith("pcvf "):
+                user_input = user_input[5:].strip()
+                current_dir = Path.cwd()
+                env_path = (current_dir / user_input).resolve()
+                command = f'python -m venv "{env_path}"'
+
+                try:
+                    subprocess.run(command, shell=True, check=True, text=True,
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+
+                    print(f"[{timestamp()}] [INFO] The '{user_input}' venv was created at {env_path}.")
+
+                    # Annahme: find_active_env und set_python_path sind irgendwo definiert
+                    active = find_active_env(str(env_path))
+                    set_python_path(active)
+                    print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+
+                except subprocess.CalledProcessError as e:
+                    print(f"[{timestamp()}] [ERROR] Failed to create venv '{user_input}': {e}")
+                except KeyboardInterrupt:
+                    print(f"[{timestamp()}] [INFO] Cancellation by user.")
+                except Exception as e:
+                    print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
+
+            elif user_input.startswith("pcsvf "):
+                user_input = user_input[6:].strip()
+                command = f"virtualenv -p {user_input}"
+
+                process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                           text=True)
+
+                try:
+                    process.wait()
+                    print(f"[{timestamp()}] [INFO] The '{user_input}' venv was created.")
+                except KeyboardInterrupt:
+                    print(f"[{timestamp()}] [INFO] Cancellation by user.")
+                except subprocess.CalledProcessError as e:
+                    print(f"[{timestamp()}] [ERROR] executing ls command: {e}")
+
+            elif user_input.startswith("pcv-p313 "):
+                user_input = user_input[9:].strip()
+                current_dir = Path.cwd()
+                env_path = (current_dir / user_input).resolve()
+
+                # Search for python3.13 interpreter using 'where'
+                try:
+                    result = subprocess.run(["where", "python3.13"], capture_output=True, text=True, check=True)
+                    paths = result.stdout.strip().splitlines()
+                    python_3_13_executable = None
+                    for p in paths:
+                        if Path(p).exists():
+                            python_3_13_executable = p
+                            break
+                    if not python_3_13_executable:
+                        print(f"[{timestamp()}] [ERROR] Python 3.13 executable not found on the system.")
+                        # Optionally, return or exit here depending on your context
+                    else:
+                        print(f"[{timestamp()}] [INFO] Found Python 3.13 interpreter at: {python_3_13_executable}")
+                        command = f'"{python_3_13_executable}" -m venv "{env_path}"'
+                        try:
+                            subprocess.run(command, shell=True, check=True, text=True,
+                                           stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+
+                            print(f"[{timestamp()}] [INFO] Virtual environment '{user_input}' created at {env_path} using Python 3.13.")
+
+                            active = find_active_env(str(env_path))
+                            set_python_path(active)
+                            print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+
+                        except subprocess.CalledProcessError as e:
+                            print(f"[{timestamp()}] [ERROR] Failed to create venv '{user_input}': {e}")
+                        except KeyboardInterrupt:
+                            print(f"[{timestamp()}] [INFO] Operation cancelled by user.")
+                        except Exception as e:
+                            print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
+
+                except subprocess.CalledProcessError:
+                    print(f"[{timestamp()}] [ERROR] Failed to execute 'where python3.13'. Make sure Python 3.13 is installed and accessible.")
+
+            elif user_input.startswith("pcv-p312 "):
+                user_input = user_input[9:].strip()
+                current_dir = Path.cwd()
+                env_path = (current_dir / user_input).resolve()
+
+                # Search for python3.12 interpreter using 'where'
+                try:
+                    result = subprocess.run(["where", "python3.12"], capture_output=True, text=True, check=True)
+                    paths = result.stdout.strip().splitlines()
+                    python_3_12_executable = None
+                    for p in paths:
+                        if Path(p).exists():
+                            python_3_12_executable = p
+                            break
+                    if not python_3_12_executable:
+                        print(f"[{timestamp()}] [ERROR] Python 3.12 executable not found on the system.")
+                        # Optionally, return or exit here depending on your context
+                    else:
+                        print(f"[{timestamp()}] [INFO] Found Python 3.12 interpreter at: {python_3_12_executable}")
+                        command = f'"{python_3_12_executable}" -m venv "{env_path}"'
+                        try:
+                            subprocess.run(command, shell=True, check=True, text=True,
+                                           stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+
+                            print(f"[{timestamp()}] [INFO] Virtual environment '{user_input}' created at {env_path} using Python 3.12.")
+
+                            active = find_active_env(str(env_path))
+                            set_python_path(active)
+                            print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+
+                        except subprocess.CalledProcessError as e:
+                            print(f"[{timestamp()}] [ERROR] Failed to create venv '{user_input}': {e}")
+                        except KeyboardInterrupt:
+                            print(f"[{timestamp()}] [INFO] Operation cancelled by user.")
+                        except Exception as e:
+                            print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
+
+                except subprocess.CalledProcessError:
+                    print(f"[{timestamp()}] [ERROR] Failed to execute 'where python3.12'. Make sure Python 3.12 is installed and accessible.")
+
+            elif user_input.startswith("pcv-p311 "):
+                user_input = user_input[9:].strip()
+                current_dir = Path.cwd()
+                env_path = (current_dir / user_input).resolve()
+
+                # Search for python3.11 interpreter using 'where'
+                try:
+                    result = subprocess.run(["where", "python3.11"], capture_output=True, text=True, check=True)
+                    paths = result.stdout.strip().splitlines()
+                    python_3_11_executable = None
+                    for p in paths:
+                        if Path(p).exists():
+                            python_3_11_executable = p
+                            break
+                    if not python_3_11_executable:
+                        print(f"[{timestamp()}] [ERROR] Python 3.11 executable not found on the system.")
+                        # Optionally, return or exit here depending on your context
+                    else:
+                        print(f"[{timestamp()}] [INFO] Found Python 3.11 interpreter at: {python_3_11_executable}")
+                        command = f'"{python_3_11_executable}" -m venv "{env_path}"'
+                        try:
+                            subprocess.run(command, shell=True, check=True, text=True,
+                                           stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+
+                            print(f"[{timestamp()}] [INFO] Virtual environment '{user_input}' created at {env_path} using Python 3.11.")
+
+                            active = find_active_env(str(env_path))
+                            set_python_path(active)
+                            print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+
+                        except subprocess.CalledProcessError as e:
+                            print(f"[{timestamp()}] [ERROR] Failed to create venv '{user_input}': {e}")
+                        except KeyboardInterrupt:
+                            print(f"[{timestamp()}] [INFO] Operation cancelled by user.")
+                        except Exception as e:
+                            print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
+
+                except subprocess.CalledProcessError:
+                    print(f"[{timestamp()}] [ERROR] Failed to execute 'where python3.11'. Make sure Python 3.11 is installed and accessible.")
+
+            elif user_input.startswith("pcv-p310 "):
+                user_input = user_input[9:].strip()
+                current_dir = Path.cwd()
+                env_path = (current_dir / user_input).resolve()
+
+                # Search for python3.10 interpreter using 'where'
+                try:
+                    result = subprocess.run(["where", "python3.10"], capture_output=True, text=True, check=True)
+                    paths = result.stdout.strip().splitlines()
+                    python_3_10_executable = None
+                    for p in paths:
+                        if Path(p).exists():
+                            python_3_10_executable = p
+                            break
+                    if not python_3_10_executable:
+                        print(f"[{timestamp()}] [ERROR] Python 3.10 executable not found on the system.")
+                        # Optionally, return or exit here depending on your context
+                    else:
+                        print(f"[{timestamp()}] [INFO] Found Python 3.10 interpreter at: {python_3_10_executable}")
+                        command = f'"{python_3_10_executable}" -m venv "{env_path}"'
+                        try:
+                            subprocess.run(command, shell=True, check=True, text=True,
+                                           stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+
+                            print(f"[{timestamp()}] [INFO] Virtual environment '{user_input}' created at {env_path} using Python 3.10.")
+
+                            active = find_active_env(str(env_path))
+                            set_python_path(active)
+                            print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+
+                        except subprocess.CalledProcessError as e:
+                            print(f"[{timestamp()}] [ERROR] Failed to create venv '{user_input}': {e}")
+                        except KeyboardInterrupt:
+                            print(f"[{timestamp()}] [INFO] Operation cancelled by user.")
+                        except Exception as e:
+                            print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
+
+                except subprocess.CalledProcessError:
+                    print(f"[{timestamp()}] [ERROR] Failed to execute 'where python3.10'. Make sure Python 3.10 is installed and accessible.")
+
+            elif user_input.startswith("pcv-p309 "):
+                user_input = user_input[9:].strip()
+                current_dir = Path.cwd()
+                env_path = (current_dir / user_input).resolve()
+
+                # Search for python3.9 interpreter using 'where'
+                try:
+                    result = subprocess.run(["where", "python3.9"], capture_output=True, text=True, check=True)
+                    paths = result.stdout.strip().splitlines()
+                    python_3_9_executable = None
+                    for p in paths:
+                        if Path(p).exists():
+                            python_3_9_executable = p
+                            break
+                    if not python_3_9_executable:
+                        print(f"[{timestamp()}] [ERROR] Python 3.9 executable not found on the system.")
+                        # Optionally, return or exit here depending on your context
+                    else:
+                        print(f"[{timestamp()}] [INFO] Found Python 3.9 interpreter at: {python_3_9_executable}")
+                        command = f'"{python_3_9_executable}" -m venv "{env_path}"'
+                        try:
+                            subprocess.run(command, shell=True, check=True, text=True,
+                                           stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+
+                            print(f"[{timestamp()}] [INFO] Virtual environment '{user_input}' created at {env_path} using Python 3.9.")
+
+                            active = find_active_env(str(env_path))
+                            set_python_path(active)
+                            print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+
+                        except subprocess.CalledProcessError as e:
+                            print(f"[{timestamp()}] [ERROR] Failed to create venv '{user_input}': {e}")
+                        except KeyboardInterrupt:
+                            print(f"[{timestamp()}] [INFO] Operation cancelled by user.")
+                        except Exception as e:
+                            print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
+
+                except subprocess.CalledProcessError:
+                    print(f"[{timestamp()}] [ERROR] Failed to execute 'where python3.9'. Make sure Python 3.9 is installed and accessible.")
+
+            elif user_input.lower() == "pv-info":
+                active_env_path = Path(find_active_env()).resolve()
+                print(f"[{timestamp()}] [INFO] Active environment: '{active_env_path}'.")
+
+            elif user_input.startswith("p-venv-create "):
+                user_input = user_input[14:].strip()
+                current_dir = Path.cwd()
+                env_path = (current_dir / user_input).resolve()
+                command = f'python -m venv "{env_path}"'
+
+                try:
+                    subprocess.run(command, shell=True, check=True, text=True,
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+
+                    print(f"[{timestamp()}] [INFO] The '{user_input}' venv was created at {env_path}.")
+
+                    # Annahme: find_active_env und set_python_path sind irgendwo definiert
+                    active = find_active_env(str(env_path))
+                    set_python_path(active)
+                    print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+
+                except subprocess.CalledProcessError as e:
+                    print(f"[{timestamp()}] [ERROR] Failed to create venv '{user_input}': {e}")
+                except KeyboardInterrupt:
+                    print(f"[{timestamp()}] [INFO] Cancellation by user.")
+                except Exception as e:
+                    print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
 
             elif user_input.startswith("p-venv "):
                 env_name = user_input[7:].strip()
