@@ -17427,40 +17427,35 @@ def handle_special_commands(user_input):
             run_circuit(circuit, repetitions=shots)
             return True
 
-    if len(sys.argv) >= 5 and sys.argv[1].upper() in ("IPRP", "IQ-AI-TORCH"):
-        import torch
+    # IQ-AI-TORCH
+    if user_input.startswith("IQ-AI-TORCH "):
         import torch.nn as nn
         import torch.optim as optim
         from torchvision import datasets, transforms
         from torch.utils.data import DataLoader
 
-        # Alias IPRP → python (damit später sys.argv[1]=="python")
-        if sys.argv[1].upper() == "IPRP":
-            sys.argv[1] = "python"
+        # Argument-Parsing
+        raw = user_input[len("IQ-AI-TORCH "):].strip().split()
+        opts = {}
+        positionals = raw
 
-        # Ab hier nur, wenn sys.argv[1] == "python" oder "IQ-AI-TORCH2"
-        mode = sys.argv[1]
-        if mode not in ("python", "IQ-AI-TORCH2"):
-            print_usage()
-
-        # alles Weitere nur für IQ-AI-TORCH
-        # (die If‑Klausel oben stellt sicher, dass wir hier nur hin gelangen, wenn sys.argv[1] jetzt "IQ-AI-TORCH" ist)
+        # Positionals: hidden_size, batch_size, epochs, [model_name]
         try:
-            hidden_size = int(sys.argv[2])
-            batch_size  = int(sys.argv[3])
-            epochs      = int(sys.argv[4])
-            model_name  = sys.argv[5] if len(sys.argv) > 5 else "model.pth"
+            hidden_size = int(positionals[0])
+            batch_size  = int(positionals[1])
+            epochs      = int(positionals[2])
+            model_name  = positionals[3] if len(positionals) > 3 else "model.pth"
             if hidden_size <= 0 or batch_size <= 0 or epochs <= 0:
                 raise ValueError("All numeric parameters must be > 0.")
-        except ValueError as e:
+        except Exception as e:
             print(f"[{timestamp()}] [ERROR] Invalid parameters: {e}")
-            print_usage()
+            print("Usage: IQ-AI-TORCH <hidden_size> <batch_size> <epochs> [model_name.pth]")
             return True
 
         logging.basicConfig(level=logging.INFO, format="%(message)s")
         logging.info(f"[{timestamp()}] [INFO] Start IQ-AI-TORCH with hidden={hidden_size}, batch={batch_size}, epochs={epochs}")
 
-        # Optional: .env laden
+        # Load .env if exists
         USERNAME = os.getlogin()
         env_path = fr"C:\Users\{USERNAME}\p-terminal\pp-term\.env"
         if os.path.isfile(env_path):
@@ -17471,11 +17466,11 @@ def handle_special_commands(user_input):
                         continue
                     key, val = line.split("=", 1)
                     os.environ[key] = val
-            logging.info(f"[{timestamp()}] [INFO] .env loaded by {env_path}")
+            logging.info(f"[{timestamp()}] [INFO] .env loaded from {env_path}")
         else:
-            logging.warning(f"[{timestamp()}] [WARN] .env not found under {env_path}")
+            logging.warning(f"[{timestamp()}] [WARN] .env not found: {env_path}")
 
-        # Netzwerk definieren
+        # Define network
         class SimpleNet(nn.Module):
             def __init__(self, hidden):
                 super().__init__()
@@ -17492,6 +17487,7 @@ def handle_special_commands(user_input):
         optimizer = optim.Adam(model.parameters(), lr=1e-3)
         criterion = nn.CrossEntropyLoss()
 
+        # Data loaders
         transform    = transforms.Compose([
             transforms.ToTensor(),
             transforms.Normalize((0.1307,), (0.3081,))
@@ -17502,6 +17498,7 @@ def handle_special_commands(user_input):
         test_loader  = DataLoader(test_set,  batch_size=batch_size, shuffle=False)
         logging.info(f"[{timestamp()}] [INFO] Data loaded")
 
+        # Training
         model.train()
         for epoch in range(1, epochs+1):
             total_loss = 0.0
@@ -17513,8 +17510,9 @@ def handle_special_commands(user_input):
                 loss.backward()
                 optimizer.step()
                 total_loss += loss.item()
-            logging.info(f"[{timestamp()}] [INFO] Epoche {epoch}/{epochs} Loss={total_loss/len(train_loader):.4f}")
+            logging.info(f"[{timestamp()}] [INFO] Epoch {epoch}/{epochs} Loss={total_loss/len(train_loader):.4f}")
 
+        # Evaluation
         model.eval()
         correct = total = 0
         with torch.no_grad():
@@ -17527,297 +17525,150 @@ def handle_special_commands(user_input):
         accuracy = correct/total*100
         logging.info(f"[{timestamp()}] [INFO] Accuracy: {accuracy:.2f}%")
 
+        # Save model
         torch.save(model.state_dict(), model_name)
         logging.info(f"[{timestamp()}] [INFO] Model saved as {model_name}")
 
         print(f"[{timestamp()}] [END] IQ-AI-TORCH pipeline completed")
-        sys.exit(0)
+        return True
 
-    # Zweites Pipeline: IQ-AI-TORCH2 (IPRP alias)
-    if len(sys.argv) >= 6 and sys.argv[1].upper() in ("IPRP", "IQ-AI-TORCH2"):
+    if user_input.startswith("IQ-AI-TORCH2 "):
         import torch
         import torch.nn as nn
         import torch.optim as optim
-        from torch.optim.lr_scheduler import StepLR
         from torchvision import datasets, transforms
         from torch.utils.data import DataLoader
 
-        def print_usage():
-            print("Usage:")
-            print("  IPRP main.py IQ-AI-TORCH2 <batch> <epochs> <lr> [hidden] [checkpoint]")
-            return True
-
-        # Alias IPRP → python
-        if sys.argv[1].upper() == "IPRP":
-            sys.argv[1] = "python"
-
-        mode = sys.argv[1]
-        if mode not in ("python", "IQ-AI-TORCH2"):
-            print_usage()
-
+        raw = user_input[len("IQ-AI-TORCH2 "):].split()
+        def usage2(): print("Usage: IQ-AI-TORCH2 <batch> <epochs> <lr> [hidden] [checkpoint]"); return True
         try:
-            batch_size = int(sys.argv[3])
-            epochs = int(sys.argv[4])
-            lr = float(sys.argv[5])
-            hidden_size = int(sys.argv[6]) if len(sys.argv) > 6 else 128
-            ckpt_path = sys.argv[7] if len(sys.argv) > 7 else "checkpoint.pth"
-            if batch_size <= 0 or epochs <= 0 or lr <= 0 or hidden_size <= 0:
-                raise ValueError("Numeric parameters must be > 0.")
-        except Exception as e:
-            print(f"[{timestamp()}] [ERROR] Invalid parameters: {e}")
-            print_usage()
+            batch_size=int(raw[0]); epochs=int(raw[1]); lr=float(raw[2])
+            hidden=int(raw[3]) if len(raw)>3 else 128
+            ckpt=raw[4] if len(raw)>4 else "checkpoint.pth"
+        except:
+            return usage2()
 
-        # Logging
         logging.basicConfig(level=logging.INFO, format="%(message)s")
-        logging.info(f"[{timestamp()}] [INFO] Start IQ-AI-TORCH2: batch={batch_size}, epochs={epochs}, lr={lr}, hidden={hidden_size}")
+        logging.info(f"[{timestamp()}] [INFO] Start IQ-AI-TORCH2 batch={batch_size} epochs={epochs} lr={lr} hidden={hidden}")
 
-        # .env laden
-        env_path = os.path.join(os.path.expanduser("~"), ".env")
-        if os.path.isfile(env_path):
-            load_dotenv(env_path)
-            logging.info(f"[{timestamp()}] [INFO] Loaded .env from {env_path}")
-        else:
-            logging.warning(f"[{timestamp()}] [WARN] .env not found at {env_path}")
+        # Load .env
+        env_path=os.path.expanduser("~/.env")
+        if os.path.isfile(env_path): from dotenv import load_dotenv; load_dotenv(env_path)
 
-        # Netzwerk definieren
+        # Model
         class CIFARNet(nn.Module):
-            def __init__(self, hidden):
-                super().__init__()
-                self.features = nn.Sequential(
-                    nn.Conv2d(3, 32, 3, padding=1), nn.ReLU(True), nn.MaxPool2d(2),
-                    nn.Conv2d(32, 64, 3, padding=1), nn.ReLU(True), nn.MaxPool2d(2),
-                )
-                self.classifier = nn.Sequential(
-                    nn.Flatten(),
-                    nn.Linear(64*8*8, hidden),
-                    nn.ReLU(True),
-                    nn.Dropout(0.5),
-                    nn.Linear(hidden, 10)
-                )
-            def forward(self, x):
-                return self.classifier(self.features(x))
+            def __init__(self,h): super().__init__(); self.features=nn.Sequential(
+                nn.Conv2d(3,32,3,padding=1),nn.ReLU(True),nn.MaxPool2d(2),
+                nn.Conv2d(32,64,3,padding=1),nn.ReLU(True),nn.MaxPool2d(2)
+            ); self.classifier=nn.Sequential(nn.Flatten(),nn.Linear(64*8*8,h),nn.ReLU(True),nn.Dropout(0.5),nn.Linear(h,10))
+            def forward(self,x): return self.classifier(self.features(x))
 
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        model = CIFARNet(hidden_size).to(device)
-        optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9)
-        scheduler = StepLR(optimizer, step_size=10, gamma=0.1)
-        criterion = nn.CrossEntropyLoss()
+        device=torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        model=CIFARNet(hidden).to(device)
+        opt=optim.SGD(model.parameters(), lr=lr, momentum=0.9)
+        sched=optim.lr_scheduler.StepLR(opt,step_size=10,gamma=0.1)
+        loss_fn=nn.CrossEntropyLoss()
 
-        # Daten laden
-        transform_train = transforms.Compose([
-            transforms.RandomHorizontalFlip(),
-            transforms.ToTensor(),
-            transforms.Normalize((0.4914,0.4822,0.4465),(0.2470,0.2435,0.2616))
-        ])
-        transform_test = transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize((0.4914,0.4822,0.4465),(0.2470,0.2435,0.2616))
-        ])
-        train_ds = datasets.CIFAR10('.', train=True,  download=True, transform=transform_train)
-        test_ds  = datasets.CIFAR10('.', train=False, download=True, transform=transform_test)
-        train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True,  num_workers=4)
-        test_loader  = DataLoader(test_ds,  batch_size=batch_size, shuffle=False, num_workers=4)
-
+        tf_train=transforms.Compose([transforms.RandomHorizontalFlip(),transforms.ToTensor(),transforms.Normalize((0.4914,0.4822,0.4465),(0.2470,0.2435,0.2616))])
+        tf_test =transforms.Compose([transforms.ToTensor(),transforms.Normalize((0.4914,0.4822,0.4465),(0.2470,0.2435,0.2616))])
+        train=DataLoader(datasets.CIFAR10('.',True,True,tf_train),batch_size=batch_size,shuffle=True,num_workers=4)
+        test =DataLoader(datasets.CIFAR10('.',False,True,tf_test),batch_size=batch_size,shuffle=False,num_workers=4)
         logging.info(f"[{timestamp()}] [INFO] Data ready")
 
-        # Trainings‑ und Validierungsschleife
-        history = {"loss": [], "acc": []}
-        for epoch in range(1, epochs + 1):
-            model.train()
-            running_loss = 0.0
-            for idx, (x, y) in enumerate(train_loader, 1):
-                x, y = x.to(device), y.to(device)
-                optimizer.zero_grad()
-                out = model(x)
-                loss = criterion(out, y)
-                loss.backward()
-                optimizer.step()
-                running_loss += loss.item()
-                if idx % 100 == 0:
-                    logging.info(f"[{timestamp()}] [Epoch {epoch}] Batch {idx}: loss={running_loss/idx:.4f}")
-            avg_loss = running_loss / len(train_loader)
-
-            model.eval()
-            correct = total = 0
+        history={"loss":[],"acc":[]}
+        for ep in range(1,epochs+1):
+            model.train(); run_loss=0
+            for i,(x,y) in enumerate(train,1):
+                x,y=x.to(device),y.to(device)
+                opt.zero_grad(); out=model(x); l=loss_fn(out,y); l.backward(); opt.step(); run_loss+=l.item()
+                if i%100==0: logging.info(f"[{timestamp()}] [E{ep}] Batch{i} loss={run_loss/i:.4f}")
+            avg=run_loss/len(train)
+            model.eval(); corr=tot=0
             with torch.no_grad():
-                for x, y in test_loader:
-                    x, y = x.to(device), y.to(device)
-                    preds = model(x).argmax(dim=1)
-                    correct += (preds == y).sum().item()
-                    total   += y.size(0)
-            acc = correct/total*100
+                for x,y in test: x,y=x.to(device),y.to(device); preds=model(x).argmax(1); corr+=(preds==y).sum().item(); tot+=y.size(0)
+            acc=corr/tot*100
+            sched.step(); history["loss"].append(avg); history["acc"].append(acc)
+            logging.info(f"[{timestamp()}] [E{ep}] Loss={avg:.4f} Acc={acc:.2f}%")
+            if ep%5==0 or ep==epochs: torch.save({"epoch":ep,"model":model.state_dict(),"opt":opt.state_dict(),"sched":sched.state_dict(),"history":history}, ckpt)
 
-            scheduler.step()
-            history["loss"].append(avg_loss)
-            history["acc"].append(acc)
-            logging.info(f"[{timestamp()}] [Epoch {epoch}] Loss={avg_loss:.4f}, Acc={acc:.2f}%")
+        final=f"cifar_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pth"
+        torch.save(model.state_dict(), final)
+        with open("history.json","w") as f: json.dump(history,f,indent=2)
+        logging.info(f"[{timestamp()}] [END] IQ-AI-TORCH2 done, saved {final}")
+        return True
 
-            if epoch % 5 == 0 or epoch == epochs:
-                ckpt = {
-                    "epoch": epoch,
-                    "model": model.state_dict(),
-                    "opt": optimizer.state_dict(),
-                    "sched": scheduler.state_dict(),
-                    "history": history
-                }
-                torch.save(ckpt, ckpt_path)
-                logging.info(f"[{timestamp()}] [INFO] Checkpoint saved at {ckpt_path}")
-
-        # End‑Model und History speichern
-        final_name = f"cifar_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pth"
-        torch.save(model.state_dict(), final_name)
-        with open("history.json", "w") as f:
-            json.dump(history, f, indent=2)
-        logging.info(f"[{timestamp()}] [INFO] Final model → {final_name}")
-        logging.info(f"[{timestamp()}] [END] {mode} training completed 🎉")
-
-        sys.exit(0)
-
-    # Drittes Pipeline: IQ-AI-TORCH3 (XPRP alias)
-    if len(sys.argv) >= 7 and sys.argv[1].upper() in ("IPRP", "IQ-AI-TORCH3"):
+    # Pipeline 3: IQ-AI-TORCH3
+    if user_input.startswith("IQ-AI-TORCH3 "):
         import torch
         import torch.nn as nn
         import torch.optim as optim
+        from torchvision import datasets, transforms
+        from torch.utils.data import DataLoader
+
+        raw = user_input[len("IQ-AI-TORCH3 "):].split()
+        def usage3(): print("Usage: IQ-AI-TORCH3 <batch> <epochs> <lr> <wd> [arch] [ckpt]"); return True
+        try:
+            batch_size=int(raw[0]); epochs=int(raw[1]); lr=float(raw[2]); wd=float(raw[3])
+            arch=raw[4] if len(raw)>4 else "resnet18"
+            ckpt=raw[5] if len(raw)>5 else "checkpoint2.pth"
+        except:
+            return usage3()
+
+        import torchvision.models as models
         from torch.optim.lr_scheduler import CosineAnnealingLR
         from torch.cuda.amp import GradScaler, autocast
-        from torchvision import datasets, transforms, models
-        from torch.utils.data import DataLoader
         from torch.utils.tensorboard import SummaryWriter
 
-        def print_usage():
-            print("Usage:")
-            print("  IPRP main.py IQ-AI-TORCH3 <batch> <epochs> <lr> <wd> [model] [checkpoint]")
-            return True
+        logging.basicConfig(level=logging.INFO, format="%(message)s")
+        tb=SummaryWriter(log_dir="runs/torch3_"+datetime.now().strftime('%Y%m%d_%H%M%S'))
+        logging.info(f"[{timestamp()}] [INFO] Start IQ-AI-TORCH3 batch={batch_size} epochs={epochs} lr={lr} wd={wd} arch={arch}")
 
-        # Alias IPRP → python
-        if sys.argv[1].upper() == "IPRP":
-            sys.argv[1] = "python"
-
-        mode = sys.argv[1]
-        if mode not in ("python", "IQ-AI-TORCH3"):
-            print_usage()
-
-        try:
-            batch_size = int(sys.argv[3])
-            epochs = int(sys.argv[4])
-            lr = float(sys.argv[5])
-            weight_decay = float(sys.argv[6])
-            model_arch = sys.argv[7] if len(sys.argv) > 7 else "resnet18"
-            ckpt_path = sys.argv[8] if len(sys.argv) > 8 else "checkpoint2.pth"
-            if batch_size <= 0 or epochs <= 0 or lr <= 0 or weight_decay < 0:
-                raise ValueError("Numeric parameters invalid.")
-        except Exception as e:
-            print(f"[{timestamp()}] [ERROR] Invalid parameters: {e}")
-            print_usage()
-
-        # Logging & TensorBoard
-        logging.basicConfig(level=logging.INFO, format="[%(asctime)s] [%(levelname)s] %(message)s")
-        tb = SummaryWriter(log_dir="runs/iq_ai_torch3_" + datetime.now().strftime("%Y%m%d_%H%M%S"))
-        logging.info(f"[{timestamp()}] [INFO] Start IQ-AI-TORCH3: batch={batch_size}, epochs={epochs}, lr={lr}, wd={weight_decay}, arch={model_arch}")
-
-        # .env laden
-        env_path = os.path.join(os.path.expanduser("~"), ".env")
+        env_path=os.path.expanduser("~/.env")
         if os.path.isfile(env_path):
             load_dotenv(env_path)
-            logging.info(f"[{timestamp()}] [INFO] Loaded .env from {env_path}")
-        else:
-            logging.warning(f"[{timestamp()}] [WARN] .env not found at {env_path}")
 
-        # Gerät
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        logging.info(f"[{timestamp()}] [INFO] Using device: {device}")
+        device=torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        model=getattr(models,arch)(pretrained=False,num_classes=10).to(device)
+        opt=optim.AdamW(model.parameters(),lr=lr,weight_decay=wd)
+        sched=CosineAnnealingLR(opt,T_max=epochs,eta_min=1e-6)
+        scaler=GradScaler(); loss_fn=nn.CrossEntropyLoss()
 
-        # Modell laden (aus torchvision.models)
-        model = getattr(models, model_arch)(pretrained=False, num_classes=10).to(device)
+        tr=transforms.Compose([transforms.RandomCrop(32,padding=4),transforms.RandomHorizontalFlip(),transforms.ColorJitter(0.4,0.4,0.4,0.1),transforms.ToTensor(),transforms.Normalize((0.5071,0.4867,0.4408),(0.2675,0.2565,0.2761))])
+        te=transforms.Compose([transforms.ToTensor(),transforms.Normalize((0.5071,0.4867,0.4408),(0.2675,0.2565,0.2761))])
+        train=DataLoader(datasets.CIFAR100('.',True,True,tr),batch_size=batch_size,shuffle=True,num_workers=8,pin_memory=True)
+        test =DataLoader(datasets.CIFAR100('.',False,True,te),batch_size=batch_size,shuffle=False,num_workers=8,pin_memory=True)
+        history={"best_acc":0.0}
 
-        # Optimizer, Scheduler, AMP-Scaler, Loss
-        optimizer = optim.AdamW(model.parameters(), lr=lr, weight_decay=weight_dec)
-        scheduler = CosineAnnealingLR(optimizer, T_max=epochs, eta_min=1e-6)
-        scaler    = GradScaler()
-        criterion = nn.CrossEntropyLoss()
+        for ep in range(1,epochs+1):
+            model.train(); rl=0
+            for i,(x,y) in enumerate(train,1):
+                x,y=x.to(device),y.to(device)
+                opt.zero_grad()
+                with autocast(): out=model(x); l=loss_fn(out,y)
+                scaler.scale(l).backward(); scaler.step(opt); scaler.update(); rl+=l.item()
+                if i%200==0: logging.info(f"[{timestamp()}] [E{ep}] Batch{i} loss={rl/i:.4f}")
+            avg=rl/len(train); tb.add_scalar("Train/Loss",avg,ep)
 
-        # Daten-Transforms und Loader (CIFAR‑100)
-        transform_train = transforms.Compose([
-            transforms.RandomCrop(32, padding=4),
-            transforms.RandomHorizontalFlip(),
-            transforms.ColorJitter(0.4, 0.4, 0.4, 0.1),
-            transforms.ToTensor(),
-            transforms.Normalize((0.5071,0.4867,0.4408),(0.2675,0.2565,0.2761))
-        ])
-        transform_test = transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize((0.5071,0.4867,0.4408),(0.2675,0.2565,0.2761))
-        ])
-        train_ds = datasets.CIFAR100('.', train=True,  download=True, transform=transform_train)
-        test_ds  = datasets.CIFAR100('.', train=False, download=True, transform=transform_test)
-        train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True,  num_workers=8, pin_memory=True)
-        test_loader  = DataLoader(test_ds,  batch_size=batch_size, shuffle=False, num_workers=8, pin_memory=True)
-        logging.info(f"[{timestamp()}] [INFO] Data loaders ready")
-
-        # Trainings‑ und Validierungsschleife mit AMP und TensorBoard
-        best_acc = 0.0
-        for epoch in range(1, epochs + 1):
-            # Training
-            model.train()
-            running_loss = 0.0
-            for i, (x, y) in enumerate(train_loader, 1):
-                x, y = x.to(device), y.to(device)
-                optimizer.zero_grad()
-                with autocast():
-                    out  = model(x)
-                    loss = criterion(out, y)
-                scaler.scale(loss).backward()
-                scaler.step(optimizer)
-                scaler.update()
-                running_loss += loss.item()
-                if i % 200 == 0:
-                    logging.info(f"[{timestamp()}] [E{epoch}] Batch {i}/{len(train_loader)} loss={running_loss/i:.4f}")
-
-            avg_loss = running_loss / len(train_loader)
-            tb.add_scalar("Train/Loss", avg_loss, epoch)
-
-            # Validation
-            model.eval()
-            correct = total = 0
+            model.eval(); corr=tot=0
             with torch.no_grad():
-                for x, y in test_loader:
-                    x, y = x.to(device), y.to(device)
-                    preds = model(x).argmax(dim=1)
-                    correct += (preds == y).sum().item()
-                    total   += y.size(0)
-            acc = correct/total * 100
-            tb.add_scalar("Val/Accuracy", acc, epoch)
-            logging.info(f"[{timestamp()}] [E{epoch}] Val Acc={acc:.2f}%")
+                for x,y in test: x,y=x.to(device),y.to(device); preds=model(x).argmax(1); corr+=(preds==y).sum().item(); tot+=y.size(0)
+            acc=corr/tot*100; tb.add_scalar("Val/Acc",acc,ep)
+            logging.info(f"[{timestamp()}] [E{ep}] Val Acc={acc:.2f}%")
 
-            # Scheduler step
-            scheduler.step()
+            sched.step()
+            if acc>history["best_acc"] or ep==epochs:
+                history["best_acc"]=acc
+                torch.save({"epoch":ep,"model":model.state_dict(),"opt":opt.state_dict(),"sched":sched.state_dict(),"scaler":scaler.state_dict(),"best_acc":acc}, ckpt)
 
-            # Checkpoint, wenn best
-            if acc > best_acc or epoch == epochs:
-                best_acc = max(best_acc, acc)
-                state = {
-                    "epoch": epoch,
-                    "model":  model.state_dict(),
-                    "optim":  optimizer.state_dict(),
-                    "sched":  scheduler.state_dict(),
-                    "scaler": scaler.state_dict(),
-                    "best_acc": best_acc
-                }
-                torch.save(state, ckpt_path)
-                logging.info(f"[{timestamp()}] [INFO] Saved checkpoint (best_acc={best_acc:.2f}%) → {ckpt_path}")
-
-        # Abschluss
-        final_model = f"c100_{model_arch}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pth"
-        torch.save(model.state_dict(), final_model)
-        with open("history_iq2.json", "w") as f:
-            json.dump({"best_acc": best_acc}, f, indent=2)
+        final=f"c100_{arch}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pth"
+        torch.save(model.state_dict(), final)
+        with open("history_iq2.json","w") as f: json.dump(history,f,indent=2)
         tb.close()
-        logging.info(f"[{timestamp()}] [END] Training finished, final model: {final_model}")
-        sys.exit(0)
+        logging.info(f"[{timestamp()}] [END] IQ-AI-TORCH3 done, final model: {final}")
+        return True
 
-
-    # Viertes Pipeline: IQ-AI-TORCH4 (IPRP alias)
-    if len(sys.argv) >= 6 and sys.argv[1].upper() in ("IPRP", "IQ-AI-TORCH4"):
+    # Pipeline 4: IQ-AI-TORCH4
+    if user_input.startswith("IQ-AI-TORCH4 "):
         import torch
         import torch.nn as nn
         import torch.optim as optim
@@ -17826,73 +17677,54 @@ def handle_special_commands(user_input):
         from torch.utils.data import DataLoader
 
         def print_usage():
-            print("Usage:")
-            print("  IPRP command4.py IQ-AI-TORCH4 <batch> <epochs> <lr> <patience> [model] [checkpoint]")
+            print("Usage: IQ-AI-TORCH4 <batch> <epochs> <lr> <patience> [hidden] [checkpoint]")
             return True
 
-        # Alias IPRP → python
-        if sys.argv[1].upper() == "IPRP":
-            sys.argv[1] = "python"
-
-        mode = sys.argv[1]
-        if mode not in ("python", "IQ-AI-TORCH4"):
-            print_usage()
-
+        # Parse args
+        raw = user_input[len("IQ-AI-TORCH4 "):].split()
         try:
-            batch_size = int(sys.argv[3])
-            epochs = int(sys.argv[4])
-            lr = float(sys.argv[5])
-            patience = int(sys.argv[6])
-            model_arch = sys.argv[7] if len(sys.argv) > 7 else "SimpleNet"
-            ckpt_path = sys.argv[8] if len(sys.argv) > 8 else "checkpoint4.pth"
-            if batch_size <= 0 or epochs <= 0 or lr <= 0 or patience < 0:
-                raise ValueError("Numeric parameters invalid.")
+            batch_size = int(raw[0])
+            epochs     = int(raw[1])
+            lr         = float(raw[2])
+            patience   = int(raw[3])
+            hidden     = int(raw[4]) if len(raw)>4 else 128
+            ckpt_path  = raw[5] if len(raw)>5 else "checkpoint4.pth"
+            if batch_size<=0 or epochs<=0 or lr<=0 or patience<0 or hidden<=0:
+                raise ValueError("Invalid numeric parameters.")
         except Exception as e:
-            print(f"[{timestamp()}] [ERROR] Invalid parameters: {e}")
-            print_usage()
+            print(f"[{timestamp()}] [ERROR] {e}")
+            return print_usage()
 
-        # Logging
         logging.basicConfig(level=logging.INFO, format="%(message)s")
-        logging.info(f"[{timestamp()}] [INFO] Start IQ-AI-TORCH4: batch={batch_size}, epochs={epochs}, lr={lr}, patience={patience}")
+        logging.info(f"[{timestamp()}] Start IQ-AI-TORCH4: batch={batch_size}, epochs={epochs}, lr={lr}, patience={patience}, hidden={hidden}")
 
-        # .env laden (optional)
-        env_path = os.path.join(os.path.expanduser("~"), ".env")
-        if os.path.isfile(env_path):
-            load_dotenv(env_path)
-            logging.info(f"[{timestamp()}] [INFO] Loaded .env from {env_path}")
-        else:
-            logging.warning(f"[{timestamp()}] [WARN] .env not found at {env_path}")
-
-        # Netzwerk definieren je nach Arch
-        class SimpleNet(nn.Module):
-            def __init__(self, hidden=128):
+        # Network
+        class SimpleNet4(nn.Module):
+            def __init__(self, h):
                 super().__init__()
                 self.net = nn.Sequential(
                     nn.Flatten(),
-                    nn.Linear(28*28, hidden),
+                    nn.Linear(28*28, h),
                     nn.ReLU(True),
-                    nn.Linear(hidden, 10)
+                    nn.Linear(h, 10)
                 )
             def forward(self, x):
                 return self.net(x)
 
-        # Modell instanziieren
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        model = SimpleNet().to(device)
+        model  = SimpleNet4(hidden).to(device)
         optimizer = optim.Adam(model.parameters(), lr=lr)
         scheduler = ReduceLROnPlateau(optimizer, mode='min', patience=patience, factor=0.5)
         criterion = nn.CrossEntropyLoss()
 
-        # Daten laden (FashionMNIST)
+        # Data
         transform = transforms.Compose([
             transforms.ToTensor(),
             transforms.Normalize((0.5,), (0.5,))
         ])
-        train_ds = datasets.FashionMNIST('.', train=True, download=True, transform=transform)
-        valid_ds = datasets.FashionMNIST('.', train=False, download=True, transform=transform)
-        train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True)
-        valid_loader = DataLoader(valid_ds, batch_size=batch_size, shuffle=False)
-        logging.info(f"[{timestamp()}] [INFO] FashionMNIST data loaded")
+        train_loader = DataLoader(datasets.FashionMNIST('.', True, True, transform), batch_size=batch_size, shuffle=True)
+        valid_loader = DataLoader(datasets.FashionMNIST('.', False, True, transform), batch_size=batch_size, shuffle=False)
+        logging.info(f"[{timestamp()}] FashionMNIST data loaded")
 
         best_loss = float('inf')
         for epoch in range(1, epochs+1):
@@ -17907,12 +17739,11 @@ def handle_special_commands(user_input):
                 loss.backward()
                 optimizer.step()
                 train_loss += loss.item()
-            avg_train = train_loss/len(train_loader)
+            avg_train = train_loss / len(train_loader)
 
-            # Validierung
+            # Validation
             model.eval()
-            val_loss = 0
-            correct = total = 0
+            val_loss = 0; correct = total = 0
             with torch.no_grad():
                 for x, y in valid_loader:
                     x, y = x.to(device), y.to(device)
@@ -17922,27 +17753,25 @@ def handle_special_commands(user_input):
                     preds = out.argmax(dim=1)
                     correct += (preds == y).sum().item()
                     total += y.size(0)
-            avg_val = val_loss/len(valid_loader)
+            avg_val = val_loss / len(valid_loader)
             acc = correct/total*100
-            logging.info(f"[{timestamp()}] [Epoch {epoch}] TrainLoss={avg_train:.4f}, ValLoss={avg_val:.4f}, Acc={acc:.2f}%")
+            logging.info(f"[{timestamp()}] Epoch {epoch}/{epochs} TrainLoss={avg_train:.4f}, ValLoss={avg_val:.4f}, Acc={acc:.2f}%")
 
-            # Scheduler step
+            # Scheduler
             scheduler.step(avg_val)
-
-            # Checkpoint bei Verbesserung
             if avg_val < best_loss:
                 best_loss = avg_val
                 torch.save(model.state_dict(), ckpt_path)
-                logging.info(f"[{timestamp()}] [INFO] Checkpoint saved: {ckpt_path}")
+                logging.info(f"[{timestamp()}] Checkpoint saved: {ckpt_path}")
 
-        # End
+        # Finish
         final_model = f"fashion_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pth"
         torch.save(model.state_dict(), final_model)
-        logging.info(f"[{timestamp()}] [END] IQ-AI-TORCH4 completed, model: {final_model}")
-        sys.exit(0)
+        logging.info(f"[{timestamp()}] IQ-AI-TORCH4 completed, final model: {final_model}")
+        return True
 
-    # Fünftes Pipeline: IQ-AI-TORCH5 (IPRP alias)
-    if len(sys.argv) >= 7 and sys.argv[1].upper() in ("IPRP", "IQ-AI-TORCH5"):
+    # Pipeline 5: IQ-AI-TORCH5
+    if user_input.startswith("IQ-AI-TORCH5 "):
         import torch
         import torch.nn as nn
         import torch.optim as optim
@@ -17951,657 +17780,472 @@ def handle_special_commands(user_input):
         from torch.utils.data import DataLoader
 
         def print_usage():
-            print("Usage:")
-            print("  IPRP command5.py IQ-AI-TORCH5 <batch> <epochs> <max_lr> <pct_start> [arch] [checkpoint]")
+            print("Usage: IQ-AI-TORCH5 <batch> <epochs> <max_lr> <pct_start> [arch] [checkpoint]")
             return True
 
-        # Alias IPRP → python
-        if sys.argv[1].upper() == "IPRP":
-            sys.argv[1] = "python"
-
-        mode = sys.argv[1]
-        if mode not in ("python", "IQ-AI-TORCH5"):
-            print_usage()
-
+        raw = user_input[len("IQ-AI-TORCH5 "):].split()
         try:
-            batch_size = int(sys.argv[3])
-            epochs = int(sys.argv[4])
-            max_lr = float(sys.argv[5])
-            pct_start = float(sys.argv[6])
-            arch = sys.argv[7] if len(sys.argv) > 7 else "resnet18"
-            ckpt_path = sys.argv[8] if len(sys.argv) > 8 else "checkpoint5.pth"
-            if batch_size <= 0 or epochs <= 0 or max_lr <= 0 or not (0 < pct_start < 1):
+            batch_size = int(raw[0])
+            epochs     = int(raw[1])
+            max_lr     = float(raw[2])
+            pct_start  = float(raw[3])
+            arch       = raw[4] if len(raw)>4 else "resnet18"
+            ckpt_path  = raw[5] if len(raw)>5 else "checkpoint5.pth"
+            if batch_size<=0 or epochs<=0 or max_lr<=0 or not (0<pct_start<1):
                 raise ValueError("Invalid numeric parameters.")
         except Exception as e:
-            print(f"[{timestamp()}] [ERROR] Invalid parameters: {e}")
-            print_usage()
+            print(f"[{timestamp()}] [ERROR] {e}")
+            return print_usage()
 
-        # Logging setup
         logging.basicConfig(level=logging.INFO, format="%(message)s")
-        logging.info(f"[{timestamp()}] [INFO] Start IQ-AI-TORCH5: batch={batch_size}, epochs={epochs}, max_lr={max_lr}, pct_start={pct_start}, arch={arch}")
+        logging.info(f"[{timestamp()}] Start IQ-AI-TORCH5: batch={batch_size}, epochs={epochs}, max_lr={max_lr}, pct_start={pct_start}, arch={arch}")
 
-        # Optional .env
-        env_path = os.path.join(os.path.expanduser("~"), ".env")
-        if os.path.isfile(env_path):
-            load_dotenv(env_path)
-            logging.info(f"[{timestamp()}] [INFO] Loaded .env from {env_path}")
-        else:
-            logging.warning(f"[{timestamp()}] [WARN] .env not found at {env_path}")
-
-        # Device
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        logging.info(f"[{timestamp()}] [INFO] Using device: {device}")
+        model  = getattr(models, arch)(pretrained=False, num_classes=100).to(device)
 
-        # Model
-        model = getattr(models, arch)(pretrained=False, num_classes=100).to(device)
-
-        # Optimizer and Scheduler
         optimizer = optim.SGD(model.parameters(), lr=max_lr, momentum=0.9)
-        scheduler = OneCycleLR(optimizer, max_lr=max_lr, total_steps=epochs * (50000 // batch_size), pct_start=pct_start)
+        scheduler = OneCycleLR(optimizer, max_lr=max_lr, total_steps=epochs*(50000//batch_size), pct_start=pct_start)
         criterion = nn.CrossEntropyLoss()
 
-        # Dataset CIFAR-100
         transform_train = transforms.Compose([
-            transforms.RandomCrop(32, padding=4),
-            transforms.RandomHorizontalFlip(),
-            transforms.ToTensor(),
-            transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761))
+            transforms.RandomCrop(32, padding=4), transforms.RandomHorizontalFlip(),
+            transforms.ToTensor(), transforms.Normalize((0.5071,0.4867,0.4408),(0.2675,0.2565,0.2761))
         ])
         transform_test = transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761))
+            transforms.ToTensor(), transforms.Normalize((0.5071,0.4867,0.4408),(0.2675,0.2565,0.2761))
         ])
-        train_ds = datasets.CIFAR100('.', train=True, download=True, transform=transform_train)
-        test_ds = datasets.CIFAR100('.', train=False, download=True, transform=transform_test)
-        train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True, num_workers=4, pin_memory=True)
-        test_loader = DataLoader(test_ds, batch_size=batch_size, shuffle=False, num_workers=4, pin_memory=True)
-        logging.info(f"[{timestamp()}] [INFO] CIFAR-100 data loaded")
+        train_loader = DataLoader(datasets.CIFAR100('.', True, True, transform_train), batch_size=batch_size, shuffle=True, num_workers=4, pin_memory=True)
+        test_loader  = DataLoader(datasets.CIFAR100('.', False, True, transform_test), batch_size=batch_size, shuffle=False, num_workers=4, pin_memory=True)
+        logging.info(f"[{timestamp()}] CIFAR-100 data loaded")
 
-        # Training loop
         best_acc = 0.0
-        for epoch in range(1, epochs + 1):
+        for epoch in range(1, epochs+1):
             model.train()
-            running_loss = 0.0
-            for batch_idx, (data, target) in enumerate(train_loader, 1):
+            run_loss=0
+            for data, target in train_loader:
                 data, target = data.to(device), target.to(device)
                 optimizer.zero_grad()
-                output = model(data)
-                loss = criterion(output, target)
-                loss.backward()
-                optimizer.step()
-                scheduler.step()
-                running_loss += loss.item()
-            avg_loss = running_loss / len(train_loader)
+                out = model(data)
+                loss=criterion(out, target)
+                loss.backward(); optimizer.step(); scheduler.step(); run_loss+=loss.item()
+            avg_loss = run_loss/len(train_loader)
 
-            # Validation
-            model.eval()
-            correct = total = 0
+            model.eval(); corr=tot=0
             with torch.no_grad():
                 for data, target in test_loader:
                     data, target = data.to(device), target.to(device)
-                    output = model(data)
-                    pred = output.argmax(dim=1)
-                    correct += (pred == target).sum().item()
-                    total += target.size(0)
-            acc = correct / total * 100
-            logging.info(f"[{timestamp()}] [Epoch {epoch}] Loss={avg_loss:.4f}, Acc={acc:.2f}%")
+                    preds = model(data).argmax(dim=1)
+                    corr += (preds==target).sum().item(); tot += target.size(0)
+            acc = corr/tot*100
+            logging.info(f"[{timestamp()}] Epoch {epoch}/{epochs} Loss={avg_loss:.4f}, Acc={acc:.2f}%")
 
-            # Checkpoint best
-            if acc > best_acc:
-                best_acc = acc
+            if acc>best_acc:
+                best_acc=acc
                 torch.save(model.state_dict(), ckpt_path)
-                logging.info(f"[{timestamp()}] [INFO] Saved best checkpoint: {ckpt_path} (acc={best_acc:.2f}%)")
+                logging.info(f"[{timestamp()}] Checkpoint saved: {ckpt_path} (acc={best_acc:.2f}%)")
 
-        # Save final
         final_model = f"c100_{arch}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pth"
         torch.save(model.state_dict(), final_model)
-        logging.info(f"[{timestamp()}] [END] IQ-AI-TORCH5 completed, final model: {final_model}")
-        sys.exit(0)
+        logging.info(f"[{timestamp()}] IQ-AI-TORCH5 completed, final model: {final_model}")
+        return True
 
-    if len(sys.argv) >= 5 and sys.argv[1].upper() in ("IPRP", "IQ-AI-TF"):
-        # Alias IPRP → IQ-AI-TF (damit sys.argv[1] danach == "IQ-AI-TF")
-        if sys.argv[1].upper() == "IPRP":
-            sys.argv[1] = "IQ-AI-TF"
-
-        # --- alles Weitere bleibt exakt wie gehabt ---
+    # Pipeline TF1: IQ-AI-TF
+    if tf_input.startswith("IQ-AI-TF "):
         import tensorflow as tf
         from tensorflow.keras import layers, models
         from tensorflow.keras.datasets import mnist
 
-        # Parameter parsen
-        try:
-            hidden_size = int(sys.argv[2])
-            batch_size  = int(sys.argv[3])
-            epochs      = int(sys.argv[4])
-            model_name  = sys.argv[5] if len(sys.argv) > 5 else "model_tf.h5"
-            if hidden_size <= 0 or batch_size <= 0 or epochs <= 0:
-                raise ValueError("All numeric parameters must be > 0.")
-        except ValueError as e:
-            print(f"[{timestamp()}] [ERROR] Invalid parameters: {e}")
-            print_usage()
+        def print_usage():
+            print("Usage: IQ-AI-TF <hidden> <batch> <epochs> [model_name.h5]")
             return True
 
-        # Logging konfigurieren
+        raw = tf_input[len("IQ-AI-TF "):].split()
+        try:
+            hidden_size = int(raw[0])
+            batch_size  = int(raw[1])
+            epochs      = int(raw[2])
+            model_name  = raw[3] if len(raw)>3 else "model_tf.h5"
+            if hidden_size<=0 or batch_size<=0 or epochs<=0:
+                raise ValueError("Parameters must be >0")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] {e}")
+            return print_usage()
+
         logging.basicConfig(level=logging.INFO, format="%(message)s")
-        logging.info(f"[{timestamp()}] [INFO] Start IQ-AI-TF with hidden={hidden_size}, batch={batch_size}, epochs={epochs}")
+        logging.info(f"[{timestamp()}] Start IQ-AI-TF hidden={hidden_size}, batch={batch_size}, epochs={epochs}")
 
-        # Manueller .env‑Loader
-        USERNAME = os.getlogin()
-        env_path = fr"C:\Users\{USERNAME}\p-terminal\pp-term\.env"
-        if os.path.isfile(env_path):
-            with open(env_path, "r") as f:
-                for line in f:
-                    line = line.strip()
-                    if not line or line.startswith("#") or "=" not in line:
-                        continue
-                    key, val = line.split("=", 1)
-                    os.environ[key] = val
-            logging.info(f"[{timestamp()}] [INFO] .env loaded from {env_path}")
-        else:
-            logging.warning(f"[{timestamp()}] [WARN] .env not found under {env_path}")
+        # Load MNIST
+        (x_train,y_train),(x_test,y_test) = mnist.load_data()
+        x_train = x_train.reshape(-1,28*28)/255.0
+        x_test  = x_test.reshape(-1,28*28)/255.0
+        logging.info(f"[{timestamp()}] MNIST loaded")
 
-        # Daten laden
-        (x_train, y_train), (x_test, y_test) = mnist.load_data()
-        x_train = x_train.reshape(-1, 28*28).astype("float32") / 255.0
-        x_test  = x_test.reshape(-1, 28*28).astype("float32")  / 255.0
-        logging.info(f"[{timestamp()}] [INFO] MNIST loaded and preprocessed")
-
-        # Modell definieren
+        # Model
         model = models.Sequential([
             layers.Input(shape=(28*28,)),
-            layers.Dense(hidden_size, activation="relu"),
-            layers.Dense(10, activation="softmax")
+            layers.Dense(hidden_size, activation='relu'),
+            layers.Dense(10, activation='softmax')
         ])
-        model.compile(
-            optimizer="adam",
-            loss="sparse_categorical_crossentropy",
-            metrics=["accuracy"]
-        )
-        logging.info(f"[{timestamp()}] [INFO] Model compiled")
+        model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+        logging.info(f"[{timestamp()}] Model compiled")
 
         # Training
-        history = model.fit(
-            x_train, y_train,
-            batch_size=batch_size,
-            epochs=epochs,
-            validation_split=0.1,
-            verbose=0,
-            callbacks=[tf.keras.callbacks.LambdaCallback(
-                on_epoch_end=lambda epoch, logs: logging.info(
-                    f"[{timestamp()}] [INFO] Epoch {epoch+1}/{epochs} "
-                    f"Loss={logs['loss']:.4f} Val_Loss={logs['val_loss']:.4f}"
-                )
-            )]
-        )
+        model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs, verbose=0,
+                  callbacks=[tf.keras.callbacks.LambdaCallback(on_epoch_end=lambda ep, logs: logging.info(
+                      f"[{timestamp()}] Epoch {ep+1}/{epochs} Loss={logs['loss']:.4f} Val_Loss={logs['val_loss']:.4f}"))],
+                  validation_split=0.1)
 
         # Evaluation
-        eval_loss, eval_acc = model.evaluate(x_test, y_test, batch_size=batch_size, verbose=0)
-        logging.info(f"[{timestamp()}] [INFO] Test Loss={eval_loss:.4f} Accuracy={eval_acc*100:.2f}%")
+        loss, acc = model.evaluate(x_test, y_test, batch_size=batch_size, verbose=0)
+        logging.info(f"[{timestamp()}] Test Loss={loss:.4f} Accuracy={acc*100:.2f}%")
 
-        # Modell speichern
+        # Save
         model.save(model_name)
-        logging.info(f"[{timestamp()}] [INFO] Model saved as {model_name}")
+        logging.info(f"[{timestamp()}] Model saved: {model_name}")
+        print(f"[{timestamp()}] IQ-AI-TF completed")
+        return True
 
-        print(f"[{timestamp()}] [END] IQ-AI-TF Pipeline abgeschlossen")
-        sys.exit(0)
-
-    if len(sys.argv) >= 6 and sys.argv[1].upper() in ("IPRP", "IQ-AI-TF2"):
+    # Pipeline TF2: IQ-AI-TF2
+    if tf2_input.startswith("IQ-AI-TF2 "):
         import tensorflow as tf
         from tensorflow.keras import layers, models, callbacks
         from tensorflow.keras.datasets import cifar10
 
-        def print_usage():
-            print("Usage:")
-            print("  IPRP command_tf2.py IQ-AI-TF2 <batch_size> <epochs> <learning_rate> <patience> [model_name]")
+        def print_usage2():
+            print("Usage: IQ-AI-TF2 <batch> <epochs> <lr> <patience> [model.h5]")
             return True
 
-        # Alias IPRP → IQ-AI-TF2
-        if sys.argv[1].upper() == "IPRP":
-            sys.argv[1] = "IQ-AI-TF2"
-
-        # Parameter parsen
+        raw = tf2_input[len("IQ-AI-TF2 "):].split()
         try:
-            batch_size    = int(sys.argv[2])
-            epochs        = int(sys.argv[3])
-            learning_rate = float(sys.argv[4])
-            patience      = int(sys.argv[5])
-            model_name    = sys.argv[6] if len(sys.argv) > 6 else "model_tf2.h5"
-            if batch_size <= 0 or epochs <= 0 or learning_rate <= 0 or patience < 0:
-                raise ValueError("Numeric parameters must be positive.")
+            batch_size    = int(raw[0])
+            epochs        = int(raw[1])
+            learning_rate = float(raw[2])
+            patience      = int(raw[3])
+            model_name    = raw[4] if len(raw)>4 else "model_tf2.h5"
+            if batch_size<=0 or epochs<=0 or learning_rate<=0 or patience<0:
+                raise ValueError("Parameters invalid")
         except Exception as e:
-            print(f"[{timestamp()}] [ERROR] Invalid parameters: {e}")
-            print_usage()
+            print(f"[{timestamp()}] [ERROR] {e}")
+            return print_usage2()
 
-        # Logging konfigurieren
         logging.basicConfig(level=logging.INFO, format="%(message)s")
-        logging.info(f"[{timestamp()}] [INFO] Start IQ-AI-TF2: batch={batch_size}, epochs={epochs}, lr={learning_rate}, patience={patience}")
+        logging.info(f"[{timestamp()}] Start IQ-AI-TF2 batch={batch_size}, epochs={epochs}, lr={learning_rate}, patience={patience}")
 
-        # Daten laden (CIFAR-10)
-        (x_train, y_train), (x_test, y_test) = cifar10.load_data()
-        x_train = x_train.astype("float32") / 255.0
-        x_test  = x_test.astype("float32") / 255.0
-        logging.info(f"[{timestamp()}] [INFO] CIFAR-10 loaded and normalized")
+        # Load CIFAR-10
+        (x_train,y_train),(x_test,y_test) = cifar10.load_data()
+        x_train, x_test = x_train/255.0, x_test/255.0
+        logging.info(f"[{timestamp()}] CIFAR-10 loaded")
 
-        # Modell definieren
+        # Model
         model = models.Sequential([
             layers.Input(shape=(32,32,3)),
-            layers.Conv2D(32, 3, activation="relu"),
-            layers.MaxPooling2D(),
-            layers.Conv2D(64, 3, activation="relu"),
-            layers.MaxPooling2D(),
-            layers.Flatten(),
-            layers.Dense(128, activation="relu"),
-            layers.Dropout(0.5),
-            layers.Dense(10, activation="softmax")
+            layers.Conv2D(32,3,activation='relu'), layers.MaxPooling2D(),
+            layers.Conv2D(64,3,activation='relu'), layers.MaxPooling2D(),
+            layers.Flatten(), layers.Dense(128, activation='relu'), layers.Dropout(0.5),
+            layers.Dense(10, activation='softmax')
         ])
-        model.compile(
-            optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate),
-            loss="sparse_categorical_crossentropy",
-            metrics=["accuracy"]
-        )
-        logging.info(f"[{timestamp()}] [INFO] Model compiled")
+        model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate),
+                      loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+        logging.info(f"[{timestamp()}] Model compiled")
 
-        # Callbacks: EarlyStopping & ReduceLROnPlateau
-        cb_list = [
-            callbacks.EarlyStopping(patience=patience, restore_best_weights=True),
-            callbacks.ReduceLROnPlateau(patience=max(1, patience//2))
-        ]
-
-        # Callback zur Protokollierung pro Epoche
-        log_callback = callbacks.LambdaCallback(
-            on_epoch_end=lambda epoch, logs: logging.info(
-                f"[{timestamp()}] [INFO] Epoch {epoch+1}/{epochs} "
-                f"Loss={logs['loss']:.4f} ValLoss={logs['val_loss']:.4f} "
-                f"Acc={logs['accuracy']*100:.2f}% ValAcc={logs['val_accuracy']*100:.2f}%"
-            )
-        )
+        cb = [callbacks.EarlyStopping(patience=patience, restore_best_weights=True),
+              callbacks.ReduceLROnPlateau(patience=patience//2)]
+        logcb = callbacks.LambdaCallback(on_epoch_end=lambda ep, logs: logging.info(
+            f"[{timestamp()}] Epoch {ep+1}/{epochs} Loss={logs['loss']:.4f} Val_Loss={logs['val_loss']:.4f} "
+            f"Acc={logs['accuracy']*100:.2f}% Val_Acc={logs['val_accuracy']*100:.2f}%"))
 
         # Training
-        history = model.fit(
-            x_train, y_train,
-            batch_size=batch_size,
-            epochs=epochs,
-            validation_split=0.2,
-            callbacks=cb_list + [log_callback],
-            verbose=0
-        )
+        model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs, validation_split=0.2,
+                  callbacks=cb+[logcb], verbose=0)
 
         # Evaluation
-        eval_loss, eval_acc = model.evaluate(x_test, y_test, batch_size=batch_size, verbose=0)
-        logging.info(f"[{timestamp()}] [INFO] Test Loss={eval_loss:.4f} Accuracy={eval_acc*100:.2f}%")
+        loss, acc = model.evaluate(x_test, y_test, batch_size=batch_size, verbose=0)
+        logging.info(f"[{timestamp()}] Test Loss={loss:.4f} Accuracy={acc*100:.2f}%")
 
-        # Modell speichern
+        # Save
         model.save(model_name)
-        logging.info(f"[{timestamp()}] [INFO] Model saved as {model_name}")
+        logging.info(f"[{timestamp()}] Model saved: {model_name}")
+        print(f"[{timestamp()}] IQ-AI-TF2 completed")
+        return True
 
-        print(f"[{timestamp()}] [END] IQ-AI-TF2 completed")
-        sys.exit(0)
-
-    # Drittes TensorFlow Pipeline: IQ-AI-TF3 (IPRP alias)
-    if len(sys.argv) >= 6 and sys.argv[1].upper() in ("IPRP", "IQ-AI-TF3"):
+    # Pipeline TF3: IQ-AI-TF3
+    if tf3_input.startswith("IQ-AI-TF3 "):
         import tensorflow as tf
         from tensorflow.keras import layers, models, callbacks
         from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
         from tensorflow.keras.datasets import fashion_mnist
 
-        def print_usage():
-            print("Usage:")
-            print("  IPRP command_tf3.py IQ-AI-TF3 <batch_size> <epochs> <learning_rate> <dropout> [model_name]")
+        def print_usage_tf3():
+            print("Usage: IQ-AI-TF3 <batch_size> <epochs> <learning_rate> <dropout> [model_name.h5]")
             return True
 
-        # Alias IPRP → IQ-AI-TF3
-        if sys.argv[1].upper() == "IPRP":
-            sys.argv[1] = "IQ-AI-TF3"
-
-        # Parameter parsen
+        raw = tf3_input[len("IQ-AI-TF3 "):].split()
         try:
-            batch_size    = int(sys.argv[2])
-            epochs        = int(sys.argv[3])
-            learning_rate = float(sys.argv[4])
-            dropout_rate  = float(sys.argv[5])
-            model_name    = sys.argv[6] if len(sys.argv) > 6 else "model_tf3.h5"
-            if batch_size <= 0 or epochs <= 0 or learning_rate <= 0 or not (0 <= dropout_rate < 1):
+            batch_size    = int(raw[0])
+            epochs        = int(raw[1])
+            learning_rate = float(raw[2])
+            dropout_rate  = float(raw[3])
+            model_name    = raw[4] if len(raw)>4 else "model_tf3.h5"
+            if batch_size<=0 or epochs<=0 or learning_rate<=0 or not (0<=dropout_rate<1):
                 raise ValueError("Invalid numeric parameters.")
         except Exception as e:
-            print(f"[{timestamp()}] [ERROR] Invalid parameters: {e}")
-            print_usage()
+            print(f"[{timestamp()}] [ERROR] {e}")
+            return print_usage_tf3()
 
-        # Logging konfigurieren
         logging.basicConfig(level=logging.INFO, format="%(message)s")
-        logging.info(f"[{timestamp()}] [INFO] Start IQ-AI-TF3: batch={batch_size}, epochs={epochs}, lr={learning_rate}, dropout={dropout_rate}")
+        logging.info(f"[{timestamp()}] Start IQ-AI-TF3 batch={batch_size}, epochs={epochs}, lr={learning_rate}, dropout={dropout_rate}")
 
-        # Daten laden (FashionMNIST)
+        # Load Fashion MNIST
         (x_train, y_train), (x_test, y_test) = fashion_mnist.load_data()
-        x_train = x_train.reshape(-1, 28, 28, 1).astype("float32") / 255.0
-        x_test  = x_test.reshape(-1, 28, 28, 1).astype("float32") / 255.0
-        logging.info(f"[{timestamp()}] [INFO] FashionMNIST loaded and normalized")
+        x_train = x_train.reshape(-1,28,28,1)/255.0
+        x_test  = x_test.reshape(-1,28,28,1)/255.0
+        logging.info(f"[{timestamp()}] FashionMNIST loaded and normalized")
 
-        # Modell definieren
+        # Model definition
         model = models.Sequential([
             layers.Input(shape=(28,28,1)),
-            layers.Conv2D(32, 3, activation="relu"),
-            layers.MaxPooling2D(),
-            layers.Conv2D(64, 3, activation="relu"),
-            layers.MaxPooling2D(),
-            layers.Flatten(),
-            layers.Dense(128, activation="relu"),
-            layers.Dropout(dropout_rate),
-            layers.Dense(10, activation="softmax")
+            layers.Conv2D(32,3,activation='relu'), layers.MaxPooling2D(),
+            layers.Conv2D(64,3,activation='relu'), layers.MaxPooling2D(),
+            layers.Flatten(), layers.Dense(128,activation='relu'),
+            layers.Dropout(dropout_rate), layers.Dense(10,activation='softmax')
         ])
-        model.compile(
-            optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate),
-            loss="sparse_categorical_crossentropy",
-            metrics=["accuracy"]
-        )
-        logging.info(f"[{timestamp()}] [INFO] Model compiled")
+        model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate),
+                      loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+        logging.info(f"[{timestamp()}] Model compiled")
 
-        # Callbacks: ModelCheckpoint & EarlyStopping
+        # Callbacks
         cb_list = [
             ModelCheckpoint(model_name, save_best_only=True),
             EarlyStopping(patience=3, restore_best_weights=True)
         ]
-
-        # **log_callback auch hier definieren**
-        log_callback = callbacks.LambdaCallback(
-            on_epoch_end=lambda epoch, logs: logging.info(
-                f"[{timestamp()}] [INFO] Epoch {epoch+1}/{epochs} "
+        log_cb = callbacks.LambdaCallback(
+            on_epoch_end=lambda ep,logs: logging.info(
+                f"[{timestamp()}] Epoch {ep+1}/{epochs} "
                 f"Loss={logs['loss']:.4f} ValLoss={logs['val_loss']:.4f} "
                 f"Acc={logs['accuracy']*100:.2f}% ValAcc={logs['val_accuracy']*100:.2f}%"
             )
         )
 
-        combined_callbacks = cb_list + [log_callback]
-
         # Training
-        history = model.fit(
-            x_train, y_train,
-            batch_size=batch_size,
-            epochs=epochs,
-            validation_split=0.2,
-            callbacks=combined_callbacks,
-            verbose=0
-        )
+        model.fit(x_train, y_train,
+                  batch_size=batch_size, epochs=epochs,
+                  validation_split=0.2,
+                  callbacks=cb_list+[log_cb], verbose=0)
 
         # Evaluation
-        eval_loss, eval_acc = model.evaluate(x_test, y_test, batch_size=batch_size, verbose=0)
-        logging.info(f"[{timestamp()}] [INFO] Test Loss={eval_loss:.4f} Accuracy={eval_acc*100:.2f}%")
+        loss, acc = model.evaluate(x_test, y_test, batch_size=batch_size, verbose=0)
+        logging.info(f"[{timestamp()}] Test Loss={loss:.4f} Accuracy={acc*100:.2f}%")
 
-        print(f"[{timestamp()}] [END] IQ-AI-TF3 completed, best model saved as {model_name}")
-        sys.exit(0)
+        print(f"[{timestamp()}] IQ-AI-TF3 completed, best model saved as {model_name}")
+        return True
 
-    if len(sys.argv) >= 5 and sys.argv[1].upper() in ("IPRP", "IQ-AI-JAX"):
-        # Alias IPRP → IQ-AI-JAX
-        if sys.argv[1].upper() == "IPRP":
-            sys.argv[1] = "IQ-AI-JAX"
-
+    # Pipeline JAX: IQ-AI-JAX
+    if jax_input.startswith("IQ-AI-JAX "):
         import jax
         import jax.numpy as jnp
-        from jax import random, grad, jit, vmap
+        from jax import random, grad, jit
+        import numpy as onp
         from tensorflow.keras.datasets import mnist
 
-        def print_usage():
-            print("Usage: python script.py IQ-AI-JAX <hidden_size> <batch_size> <epochs> [model_name]")
-
-        # Parameter parsen
-        try:
-            hidden_size = int(sys.argv[2])
-            batch_size  = int(sys.argv[3])
-            epochs      = int(sys.argv[4])
-            model_name  = sys.argv[5] if len(sys.argv) > 5 else "model_jax.npy"
-            if hidden_size <= 0 or batch_size <= 0 or epochs <= 0:
-                raise ValueError("All numeric parameters must be > 0.")
-        except ValueError as e:
-            print(f"[{timestamp()}] [ERROR] Invalid parameters: {e}")
-            print_usage()
+        def print_usage_jax():
+            print("Usage: IQ-AI-JAX <hidden_size> <batch_size> <epochs> [model_name.npz]")
             return True
 
-        # Logging konfigurieren
+        raw = jax_input[len("IQ-AI-JAX "):].split()
+        try:
+            hidden_size = int(raw[0])
+            batch_size  = int(raw[1])
+            epochs      = int(raw[2])
+            model_name  = raw[3] if len(raw)>3 else "model_jax.npz"
+            if hidden_size<=0 or batch_size<=0 or epochs<=0:
+                raise ValueError("Invalid numeric parameters.")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] {e}")
+            return print_usage_jax()
+
         logging.basicConfig(level=logging.INFO, format="%(message)s")
-        logging.info(f"[{timestamp()}] [INFO] Start IQ-AI-JAX with hidden={hidden_size}, batch={batch_size}, epochs={epochs}")
+        logging.info(f"[{timestamp()}] Start IQ-AI-JAX hidden={hidden_size}, batch={batch_size}, epochs={epochs}")
 
-        # Manueller .env‑Loader
-        USERNAME = os.getlogin()
-        env_path = fr"C:\Users\{USERNAME}\p-terminal\pp-term\.env"
-        if os.path.isfile(env_path):
-            with open(env_path, "r") as f:
-                for line in f:
-                    line = line.strip()
-                    if not line or line.startswith("#") or "=" not in line:
-                        continue
-                    key, val = line.split("=", 1)
-                    os.environ[key] = val
-            logging.info(f"[{timestamp()}] [INFO] .env loaded from {env_path}")
-        else:
-            logging.warning(f"[{timestamp()}] [WARN] .env not found under {env_path}")
-
-        # Daten laden und vorverarbeiten
-        (x_train, y_train), (x_test, y_test) = mnist.load_data()
-        x_train = x_train.reshape(-1, 28*28) / 255.0
-        x_test  = x_test.reshape(-1, 28*28)  / 255.0
-
+        # Load MNIST
+        (x_train,y_train),(x_test,y_test) = mnist.load_data()
+        x_train = x_train.reshape(-1,28*28)/255.0
+        x_test  = x_test.reshape(-1,28*28)/255.0
         num_train = x_train.shape[0]
-        steps_per_epoch = num_train // batch_size
-
+        steps_per_epoch = num_train//batch_size
         key = random.PRNGKey(0)
-        logging.info(f"[{timestamp()}] [INFO] MNIST loaded and preprocessed")
+        logging.info(f"[{timestamp()}] MNIST loaded and preprocessed")
 
-        # Modellparameter initialisieren
-        def init_params(key):
-            k1, k2 = random.split(key)
-            W1 = random.normal(k1, (28*28, hidden_size)) * jnp.sqrt(2/(28*28))
-            b1 = jnp.zeros((hidden_size,))
-            W2 = random.normal(k2, (hidden_size, 10))    * jnp.sqrt(2/hidden_size)
-            b2 = jnp.zeros((10,))
-            return {"W1": W1, "b1": b1, "W2": W2, "b2": b2}
-
+        # Initialize params
+        def init_params(k):
+            k1,k2 = random.split(k)
+            W1 = random.normal(k1,(28*28,hidden_size))*jnp.sqrt(2/(28*28))
+            b1 = jnp.zeros(hidden_size)
+            W2 = random.normal(k2,(hidden_size,10))*jnp.sqrt(2/hidden_size)
+            b2 = jnp.zeros(10)
+            return {'W1':W1,'b1':b1,'W2':W2,'b2':b2}
         params = init_params(key)
 
-        # Forward- und Loss-Funktion
-        def forward(params, x):
-            h = jnp.dot(x, params["W1"]) + params["b1"]
-            h = jnp.maximum(h, 0)  # ReLU
-            logits = jnp.dot(h, params["W2"]) + params["b2"]
-            return logits
-
-        def loss_fn(params, x, y):
-            logits = forward(params, x)
-            one_hot = jax.nn.one_hot(y, 10)
-            return -jnp.mean(jnp.sum(one_hot * jax.nn.log_softmax(logits), axis=-1))
-
+        # Forward and loss
+        def forward(p,x):
+            h = jnp.dot(x,p['W1'])+p['b1']; h=jnp.maximum(h,0)
+            return jnp.dot(h,p['W2'])+p['b2']
+        def loss_fn(p,x,y):
+            logits = forward(p,x)
+            one_hot = jax.nn.one_hot(y,10)
+            return -jnp.mean(jnp.sum(one_hot*jax.nn.log_softmax(logits),axis=-1))
         grad_fn = jit(grad(loss_fn))
 
-        # Optimizer (SGD)
-        learning_rate = 1e-3
-        def update(params, grads):
-            return {k: params[k] - learning_rate * grads[k] for k in params}
+        # Update
+        lr=1e-3
+        def update(p,g): return {k:p[k]-lr*g[k] for k in p}
 
         # Training
-        for epoch in range(1, epochs+1):
-            perm = random.permutation(key, num_train)
+        for epoch in range(1,epochs+1):
+            perm = random.permutation(key,num_train)
             for i in range(steps_per_epoch):
                 idx = perm[i*batch_size:(i+1)*batch_size]
-                xb, yb = x_train[idx], y_train[idx]
-                grads = grad_fn(params, xb, yb)
-                params = update(params, grads)
-            # Loss auf Trainingsset
-            train_loss = loss_fn(params, x_train[:10000], y_train[:10000])
-            logging.info(f"[{timestamp()}] [INFO] Epoch {epoch}/{epochs} Loss={train_loss:.4f}")
+                grads = grad_fn(params,x_train[idx],y_train[idx])
+                params = update(params,grads)
+            train_loss = loss_fn(params,x_train[:10000],y_train[:10000])
+            logging.info(f"[{timestamp()}] Epoch {epoch}/{epochs} Loss={train_loss:.4f}")
 
         # Evaluation
-        def accuracy(params, x, y):
-            preds = jnp.argmax(forward(params, x), axis=-1)
-            return jnp.mean(preds == y)
+        def accuracy(p,x,y): return jnp.mean(jnp.argmax(forward(p,x),axis=-1)==y)
+        test_acc = accuracy(params,x_test,y_test)*100
+        logging.info(f"[{timestamp()}] Test Accuracy={test_acc:.2f}%")
 
-        test_acc = accuracy(params, x_test, y_test) * 100
-        logging.info(f"[{timestamp()}] [INFO] Test Accuracy={test_acc:.2f}%")
+        # Save
+        onp.savez(model_name, **{k:onp.array(v) for k,v in params.items()})
+        logging.info(f"Model saved as {model_name}")
+        print(f"[{timestamp()}] IQ-AI-JAX pipeline completed")
+        return True
 
-        # Modell speichern
-        # Speichere Parameter als NumPy-Archive
-        onp.savez(model_name, **{k: onp.array(v) for k, v in params.items()})
-        logging.info(f"[{timestamp()}] [INFO] Model saved as {model_name}")
-
-        print(f"[{timestamp()}] [END] IQ-AI-JAX pipeline completed")
-        sys.exit(0)
-
-    if len(sys.argv) >= 5 and sys.argv[1].upper() in ("IPRP", "IQ-AI-JAX2"):
-        # Alias IPRP → IQ-AI-JAX2
-        if sys.argv[1].upper() == "IPRP":
-            sys.argv[1] = "IQ-AI-JAX2"
-
+    # Pipeline JAX2: IQ-AI-JAX2
+    if jax2_input.startswith("IQ-AI-JAX2 "):
         import jax
         import jax.numpy as jnp
-        from jax import grad, jit, random
+        from jax import random, grad, jit
+        import numpy as onp
 
-        def print_usage():
-            print("Usage: python script.py IQ-AI-JAX2 <returns_csv> <learning_rate> <epochs> [output_weights.npy]")
+        def print_usage_jax2():
+            print("Usage: IQ-AI-JAX2 <returns_csv> <learning_rate> <epochs> [output_weights.npy]")
             return True
 
-        # Parameter parsen
+        raw = jax2_input[len("IQ-AI-JAX2 "):].split()
         try:
-            returns_csv   = sys.argv[2]
-            learning_rate = float(sys.argv[3])
-            epochs        = int(sys.argv[4])
-            out_file      = sys.argv[5] if len(sys.argv) > 5 else "weights_jax2.npy"
+            returns_csv   = raw[0]
+            learning_rate = float(raw[1])
+            epochs        = int(raw[2])
+            out_file      = raw[3] if len(raw)>3 else "weights_jax2.npy"
             if learning_rate <= 0 or epochs <= 0:
-                raise ValueError("Learning rate und Epochen müssen > 0 sein.")
+                raise ValueError("Learning rate and epochs must be > 0.")
         except Exception as e:
-            print(f"[{timestamp()}] [ERROR] Invalid parameters: {e}")
-            print_usage()
+            print(f"[{timestamp()}] [ERROR] {e}")
+            return print_usage_jax2()
 
-        # Logging konfigurieren
         logging.basicConfig(level=logging.INFO, format="%(message)s")
-        logging.info(f"[{timestamp()}] [INFO] Start IQ-AI-JAX2 with returns_csv={returns_csv}, lr={learning_rate}, epochs={epochs}")
+        logging.info(f"[{timestamp()}] Start IQ-AI-JAX2 returns_csv={returns_csv}, lr={learning_rate}, epochs={epochs}")
 
-        # .env laden (optional)
-        USERNAME = os.getlogin()
-        env_path = fr"C:\Users\{USERNAME}\p-terminal\pp-term\.env"
-        if os.path.isfile(env_path):
-            with open(env_path) as f:
-                for line in f:
-                    if "=" in line and not line.strip().startswith("#"):
-                        k, v = line.strip().split("=", 1)
-                        os.environ[k] = v
-            logging.info(f"[{timestamp()}] [INFO] .env geladen von {env_path}")
-        else:
-            logging.warning(f"[{timestamp()}] [WARN] .env nicht gefunden unter {env_path}")
-
-        # Renditedaten laden
+        # Load returns data
         try:
             data = onp.loadtxt(returns_csv, delimiter=",", skiprows=1)
-            # data: rows = days, columns = assets
-            mu = jnp.mean(data, axis=0)          # erwartete Renditen
-            cov = jnp.cov(data, rowvar=False)    # Kovarianzmatrix
+            mu = jnp.mean(data, axis=0)
+            cov = jnp.cov(data, rowvar=False)
             n_assets = mu.shape[0]
-            logging.info(f"[{timestamp()}] [INFO] Loaded returns for {n_assets} assets")
+            logging.info(f"[{timestamp()}] Loaded returns for {n_assets} assets")
         except Exception as e:
-            logging.error(f"[{timestamp()}] [ERROR] Error loading data: {e}")
+            logging.error(f"[{timestamp()}] Error loading data: {e}")
             return True
 
-        # Parameter: rohe Gewichte (unconstrained)
-        key = jax.random.PRNGKey(42)
-        weights_raw = jax.random.normal(key, (n_assets,))
-
-        # Sharpe-Ratio Loss (wir minimieren negative Sharpe)
+        key = random.PRNGKey(0)
+        weights_raw = random.normal(key, (n_assets,))
         risk_free = float(os.environ.get("RISK_FREE_RATE", 0.01))
+
         def sharpe_loss(w_raw):
-            w = jax.nn.softmax(w_raw)           # summiert zu 1, alle > 0
+            w = jax.nn.softmax(w_raw)
             ret = jnp.dot(mu, w) - risk_free
             vol = jnp.sqrt(w @ cov @ w)
             return - (ret / vol)
 
         grad_fn = jit(grad(sharpe_loss))
 
-        # Optimizer: einfacher SGD
         for epoch in range(1, epochs+1):
             grads = grad_fn(weights_raw)
             weights_raw = weights_raw - learning_rate * grads
             if epoch % max(1, epochs//10) == 0 or epoch == 1:
                 loss = sharpe_loss(weights_raw)
-                logging.info(f"[{timestamp()}] [INFO] Epoch {epoch}/{epochs} Loss (neg. Sharpe)={loss:.6f}")
+                logging.info(f"[{timestamp()}] Epoch {epoch}/{epochs} Loss(negSharpe)={loss:.6f}")
 
-        # Finale Gewichte
         weights = onp.array(jax.nn.softmax(weights_raw))
-        sharpe_final = - float(sharpe_loss(weights_raw))
-        logging.info(f"[{timestamp()}] [INFO] Optimization completed. Sharpe ratio={sharpe_final:.4f}")
+        sharpe_ratio = - float(sharpe_loss(weights_raw))
+        logging.info(f"[{timestamp()}] Final Sharpe ratio={sharpe_ratio:.4f}")
 
-        # Gewichte speichern
         onp.save(out_file, weights)
-        logging.info(f"[{timestamp()}] [INFO] Weights saved as {out_file}")
+        logging.info(f"[{timestamp()}] Weights saved to {out_file}")
+        print(f"[{timestamp()}] IQ-AI-JAX2 completed – Sharpe={sharpe_ratio:.4f}")
+        return True
 
-        print(f"[{timestamp()}] [END] IQ-AI-JAX2 pipeline completed – Sharpe ratio={sharpe_final:.4f}")
-        sys.exit(0)
-
-
-    if len(sys.argv) >= 5 and sys.argv[1].upper() in ("IPRP", "IQ-AI-JAX3"):
-        # Alias IPRP → IQ-AI-JAX3
-        if sys.argv[1].upper() == "IPRP":
-            sys.argv[1] = "IQ-AI-JAX3"
-
+    # Pipeline JAX3: IQ-AI-JAX3
+    if jax3_input.startswith("IQ-AI-JAX3 "):
         import jax
         import jax.numpy as jnp
-        from jax import jit, vmap
+        from jax import random, jit, vmap
+        import numpy as onp
 
-        def print_usage():
-            print("Usage: python script.py IQ-AI-JAX3 <data_csv> <n_clusters> <max_iter> [output_centroids.npy]")
+        def print_usage_jax3():
+            print("Usage: IQ-AI-JAX3 <data_csv> <n_clusters> <max_iter> [output_centroids.npy]")
             return True
 
-        # Parameter parsen
+        raw = jax3_input[len("IQ-AI-JAX3 "):].split()
         try:
-            data_csv   = sys.argv[2]
-            n_clusters = int(sys.argv[3])
-            max_iter   = int(sys.argv[4])
-            out_file   = sys.argv[5] if len(sys.argv) > 5 else "centroids_jax3.npy"
+            data_csv   = raw[0]
+            n_clusters = int(raw[1])
+            max_iter   = int(raw[2])
+            out_file   = raw[3] if len(raw)>3 else "centroids_jax3.npy"
             if n_clusters <= 0 or max_iter <= 0:
-                raise ValueError("n_clusters und max_iter müssen > 0 sein.")
+                raise ValueError("n_clusters and max_iter must be > 0.")
         except Exception as e:
-            print(f"[{timestamp()}] [ERROR] Invalid parameters: {e}")
-            print_usage()
+            print(f"[{timestamp()}] [ERROR] {e}")
+            return print_usage_jax3()
 
-        # Logging konfigurieren
         logging.basicConfig(level=logging.INFO, format="%(message)s")
-        logging.info(f"[{timestamp()}] [INFO] Start IQ-AI-JAX3 with data_csv={data_csv}, clusters={n_clusters}, max_iter={max_iter}")
+        logging.info(f"[{timestamp()}] Start IQ-AI-JAX3 data_csv={data_csv}, clusters={n_clusters}, max_iter={max_iter}")
 
-        # Daten laden
         try:
             data = onp.loadtxt(data_csv, delimiter=",", skiprows=1)
-            logging.info(f"[{timestamp()}] [INFO] Loaded data: {data.shape[0]} samples, {data.shape[1]} features")
+            logging.info(f"Loaded data: {data.shape[0]} samples, {data.shape[1]} features")
         except Exception as e:
-            logging.error(f"[{timestamp()}] [ERROR] Error loading data: {e}")
+            logging.error(f"Error loading data: {e}")
             return True
 
-        # K-Means Initialisierung
-        key = jax.random.PRNGKey(0)
-        centroids = jax.random.permutation(key, data)[:n_clusters]
+        key = random.PRNGKey(0)
+        centroids = random.permutation(key, data)[:n_clusters]
 
-        # Euklidischer Abstand berechnen
         def assign_clusters(pts, cents):
-            dists = jnp.linalg.norm(pts[:, None, :] - cents[None, :, :], axis=-1)
-            return jnp.argmin(dists, axis=1)
+            d = jnp.linalg.norm(pts[:,None,:] - cents[None,:,:], axis=-1)
+            return jnp.argmin(d, axis=1)
 
         @jit
         def update_centroids(pts, cents):
             labels = assign_clusters(pts, cents)
             def centroid_fn(i):
                 mask = labels == i
-                return jnp.where(mask.sum() > 0, jnp.mean(pts[mask], axis=0), cents[i])
+                return jnp.where(mask.sum()>0, jnp.mean(pts[mask], axis=0), cents[i])
             return vmap(centroid_fn)(jnp.arange(n_clusters))
 
-        # Training (Iterationen)
         for i in range(1, max_iter+1):
-            new_cents = update_centroids(jnp.array(data), centroids)
-            shift = jnp.max(jnp.linalg.norm(new_cents - centroids, axis=1))
-            centroids = new_cents
-            logging.info(f"[{timestamp()}] [INFO] Iter {i}/{max_iter} max shift={shift:.6f}")
+            new_c = update_centroids(jnp.array(data), centroids)
+            shift = jnp.max(jnp.linalg.norm(new_c - centroids, axis=1))
+            centroids = new_c
+            logging.info(f"Epoch {i}/{max_iter} max shift={shift:.6f}")
             if shift < 1e-6:
-                logging.info(f"[{timestamp()}] [INFO] Konvergenz erreicht nach {i} Iterationen")
+                logging.info(f"Converged after {i} iterations")
                 break
 
-        # Centroids speichern
         onp.save(out_file, onp.array(centroids))
-        logging.info(f"[{timestamp()}] [INFO] Centroids saved as {out_file}")
-
-        print(f"[{timestamp()}] [END] IQ-AI-JAX3 K-Means completed")
-        sys.exit(0)
+        logging.info(f"Centroids saved to {out_file}")
+        print(f"[{timestamp()}] IQ-AI-JAX3 K-Means completed")
+        return True
 
     if user_input.startswith("IQ-FINANCE-MATPLOTLIB "):
         import matplotlib.pyplot as plt
