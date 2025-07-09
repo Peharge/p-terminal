@@ -18603,63 +18603,31 @@ def handle_special_commands(user_input):
         print(f"[{timestamp()}] [END] IQ-AI-JAX3 K-Means completed")
         sys.exit(0)
 
-    if len(sys.argv) >= 5 and sys.argv[1].upper() in ("IPRP", "IQ-FINANCE-MATPLOTLIB"):
+    if user_input.startswith("IQ-FINANCE-MATPLOTLIB "):
         import matplotlib.pyplot as plt
+        # Remove the command prefix and split arguments
+        args_str = user_input[len("IQ-FINANCE-MATPLOTLIB "):].strip()
+        args = args_str.split()
 
-        # Handle IPRP alias
-        if sys.argv[1].upper() == "IPRP":
-            sys.argv[1] = "python"
-
-        mode = sys.argv[1]
-        if mode not in ("python", "IQ-FINANCE-MATPLOTLIB"):
-            def print_usage():
-                print("Usage:")
-                print("  IQ-FINANCE-matplotlib <CSV_PATH> <DATE_COLUMN> <VALUE_COLUMN> [OUTPUT_IMAGE_NAME]")
-                print("Example:")
-                print("  IQ-FINANCE-matplotlib finance.csv Date Price plot.png")
-            print_usage()
+        # Validate minimum number of args
+        if len(args) < 3:
+            print("Usage:")
+            print("  IQ-FINANCE-MATPLOTLIB <CSV_PATH> <DATE_COLUMN> <VALUE_COLUMN> [OUTPUT_IMAGE_NAME]")
             return True
 
-        try:
-            csv_path     = sys.argv[2]
-            date_column  = sys.argv[3]
-            value_column = sys.argv[4]
-            output_image = sys.argv[5] if len(sys.argv) > 5 else "finance_plot.png"
-
-            if not os.path.isfile(csv_path):
-                raise FileNotFoundError(f"CSV file not found: {csv_path}")
-
-        except Exception as e:
-            print(f"[{timestamp()}] [ERROR] {e}")
-            def print_usage():
-                print("Usage:")
-                print("  IQ-FINANCE-matplotlib <CSV_PATH> <DATE_COLUMN> <VALUE_COLUMN> [OUTPUT_IMAGE_NAME]")
-                print("Example:")
-                print("  IQ-FINANCE-matplotlib finance.csv Date Price plot.png")
-            print_usage()
-            return True
+        csv_path = args[0]
+        date_column = args[1]
+        value_column = args[2]
+        output_image = args[3] if len(args) > 3 else "finance_plot.png"
 
         logging.basicConfig(level=logging.INFO, format="%(message)s")
         logging.info(f"[{timestamp()}] [INFO] Starting IQ-FINANCE-matplotlib")
         logging.info(f"[{timestamp()}] [INFO] Loading file: {csv_path}")
 
-        # Optional: Load .env
-        try:
-            USERNAME = os.getlogin()
-            env_path = fr"C:\Users\{USERNAME}\p-terminal\pp-term\.env"
-            if os.path.isfile(env_path):
-                with open(env_path, "r") as f:
-                    for line in f:
-                        line = line.strip()
-                        if not line or line.startswith("#") or "=" not in line:
-                            continue
-                        key, val = line.split("=", 1)
-                        os.environ[key] = val
-                logging.info(f"[{timestamp()}] [INFO] .env loaded from {env_path}")
-            else:
-                logging.warning(f"[{timestamp()}] [WARN] .env not found at {env_path}")
-        except Exception as e:
-            logging.warning(f"[{timestamp()}] [WARN] Could not load .env: {e}")
+        # Check file existence
+        if not os.path.isfile(csv_path):
+            print(f"[{timestamp()}] [ERROR] CSV file not found: {csv_path}")
+            return True
 
         # Load and process data
         try:
@@ -18669,10 +18637,10 @@ def handle_special_commands(user_input):
             df.sort_values(by=date_column, inplace=True)
             logging.info(f"[{timestamp()}] [INFO] CSV data loaded successfully")
         except Exception as e:
-            logging.error(f"[{timestamp()}] [ERROR] Failed to load CSV file: {e}")
+            print(f"[{timestamp()}] [ERROR] Failed to load CSV file: {e}")
             return True
 
-        # Create plot
+        # Create and save plot
         try:
             plt.figure(figsize=(12, 6))
             plt.plot(df[date_column], df[value_column], marker='o', linestyle='-')
@@ -18685,171 +18653,129 @@ def handle_special_commands(user_input):
             logging.info(f"[{timestamp()}] [INFO] Plot saved as {output_image}")
             plt.show()
         except Exception as e:
-            logging.error(f"[{timestamp()}] [ERROR] Failed to generate plot: {e}")
+            print(f"[{timestamp()}] [ERROR] Failed to generate plot: {e}")
             return True
 
         print(f"[{timestamp()}] [END] IQ-FINANCE-matplotlib completed")
         return True
 
-    if len(sys.argv) >= 5 and sys.argv[1].upper() in ("IPRP", "IQ-FINANCE-PLOTLY"):
+    # IQ-FINANCE-PLOTLY
+    if user_input.startswith("IQ-FINANCE-PLOTLY "):
         import plotly.express as px
+        # Argument-Parsing
+        raw = user_input[len("IQ-FINANCE-PLOTLY "):].strip().split()
+        positionals, opts = [], {}
+        i = 0
+        while i < len(raw):
+            tok = raw[i]
+            if tok.startswith("--"):
+                key = tok.lstrip('-')
+                if '=' in key:
+                    k, v = key.split('=', 1)
+                else:
+                    i += 1
+                    v = raw[i] if i < len(raw) else True
+                    k = key
+                opts[k] = v.strip("'\"")
+            else:
+                positionals.append(tok)
+            i += 1
 
-        # Handle IPRP alias
-        if sys.argv[1].upper() == "IPRP":
-            sys.argv[1] = "python"
-
-        mode = sys.argv[1]
-        if mode not in ("python", "IQ-FINANCE-PLOTLY"):
-            def print_usage():
-                print("Usage:")
-                print("  IQ-FINANCE-plotly <CSV_PATH> <DATE_COLUMN> <VALUE_COLUMN> [OUTPUT_HTML_NAME]")
-                print("Example:")
-                print("  IQ-FINANCE-plotly finance.csv Date Price chart.html")
-            print_usage()
+        if len(positionals) < 3:
+            print("Usage: IQ-FINANCE-PLOTLY <CSV> <DATE_COLUMN> <VALUE_COLUMN> [--type line|bar] [--title TITLE] [--output FILE]")
             return True
 
-        try:
-            csv_path     = sys.argv[2]
-            date_column  = sys.argv[3]
-            value_column = sys.argv[4]
-            output_html  = sys.argv[5] if len(sys.argv) > 5 else "finance_plot.html"
-
-            if not os.path.isfile(csv_path):
-                raise FileNotFoundError(f"CSV file not found: {csv_path}")
-
-        except Exception as e:
-            print(f"[{timestamp()}] [ERROR] {e}")
-            def print_usage():
-                print("Usage:")
-                print("  IQ-FINANCE-plotly <CSV_PATH> <DATE_COLUMN> <VALUE_COLUMN> [OUTPUT_HTML_NAME]")
-                print("Example:")
-                print("  IQ-FINANCE-plotly finance.csv Date Price chart.html")
-            print_usage()
-            return True
+        csv_path, date_col, val_col = positionals[:3]
+        chart_type = opts.get('type', 'line')
+        title = opts.get('title', f"{val_col} over Time")
+        output = opts.get('output', 'chart.html')
 
         logging.basicConfig(level=logging.INFO, format="%(message)s")
-        logging.info(f"[{timestamp()}] [INFO] Starting IQ-FINANCE-plotly")
-        logging.info(f"[{timestamp()}] [INFO] Loading file: {csv_path}")
+        logging.info(f"[{timestamp()}] [INFO] Loading CSV: {csv_path}")
 
-        # Optional: Load .env
-        try:
-            USERNAME = os.getlogin()
-            env_path = fr"C:\Users\{USERNAME}\p-terminal\pp-term\.env"
-            if os.path.isfile(env_path):
-                with open(env_path, "r") as f:
-                    for line in f:
-                        line = line.strip()
-                        if not line or line.startswith("#") or "=" not in line:
-                            continue
-                        key, val = line.split("=", 1)
-                        os.environ[key] = val
-                logging.info(f"[{timestamp()}] [INFO] .env loaded from {env_path}")
-            else:
-                logging.warning(f"[{timestamp()}] [WARN] .env not found at {env_path}")
-        except Exception as e:
-            logging.warning(f"[{timestamp()}] [WARN] Could not load .env: {e}")
-
-        # Load and process data
-        try:
-            df = pd.read_csv(csv_path)
-            df[date_column] = pd.to_datetime(df[date_column], errors='coerce')
-            df = df.dropna(subset=[date_column, value_column])
-            df.sort_values(by=date_column, inplace=True)
-            logging.info(f"[{timestamp()}] [INFO] CSV data loaded successfully")
-        except Exception as e:
-            logging.error(f"[{timestamp()}] [ERROR] Failed to load CSV file: {e}")
+        if not os.path.isfile(csv_path):
+            print(f"[{timestamp()}] [ERROR] CSV not found: {csv_path}")
             return True
 
-        # Create interactive plot
         try:
-            fig = px.line(
-                df,
-                x=date_column,
-                y=value_column,
-                title=f"Financial Data: {value_column} over Time",
-                markers=True
-            )
-            fig.update_layout(xaxis_title="Date", yaxis_title=value_column)
-            fig.write_html(output_html)
-            logging.info(f"[{timestamp()}] [INFO] Interactive chart saved as {output_html}")
+            df = pd.read_csv(csv_path)
+            df[date_col] = pd.to_datetime(df[date_col], errors='coerce')
+            df = df.dropna(subset=[date_col, val_col])
+            df.sort_values(by=date_col, inplace=True)
+            logging.info(f"[{timestamp()}] [INFO] Data rows: {len(df)}")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Load failed: {e}")
+            return True
+
+        try:
+            fig = px.bar(df, x=date_col, y=val_col, title=title) if chart_type=='bar' else \
+                  px.line(df, x=date_col, y=val_col, title=title, markers=True)
+            fig.update_layout(xaxis_title=date_col, yaxis_title=val_col)
+            fig.write_html(output, include_plotlyjs='cdn')
+            logging.info(f"[{timestamp()}] [INFO] Saved Plotly chart: {output}")
             fig.show()
         except Exception as e:
-            logging.error(f"[{timestamp()}] [ERROR] Failed to generate interactive chart: {e}")
+            print(f"[{timestamp()}] [ERROR] Chart creation failed: {e}")
             return True
 
         print(f"[{timestamp()}] [END] IQ-FINANCE-plotly completed")
         return True
 
-    if len(sys.argv) >= 5 and sys.argv[1].upper() in ("IPRP", "IQ-FINANCE-GRAFANA"):
-        # Handle IPRP alias
-        if sys.argv[1].upper() == "IPRP":
-            sys.argv[1] = "python"
-
-        mode = sys.argv[1]
-        if mode not in ("python", "IQ-FINANCE-GRAFANA"):
-            def print_usage():
-                print("Usage:")
-                print("  IQ-FINANCE-grafana <CSV_PATH> <DATE_COLUMN> <VALUE_COLUMN>")
-                print("Example:")
-                print("  IQ-FINANCE-grafana finance.csv Date Price")
-            print_usage()
-            return True
-
-        # Parse arguments
-        try:
-            csv_path     = sys.argv[2]
-            date_column  = sys.argv[3]
-            value_column = sys.argv[4]
-
-            if not os.path.isfile(csv_path):
-                raise FileNotFoundError(f"CSV file not found: {csv_path}")
-        except Exception as e:
-            print(f"[{timestamp()}] [ERROR] {e}")
-            def print_usage():
-                print("Usage:")
-                print("  IQ-FINANCE-grafana <CSV_PATH> <DATE_COLUMN> <VALUE_COLUMN>")
-                print("Example:")
-                print("  IQ-FINANCE-grafana finance.csv Date Price")
-            print_usage()
-            return True
-
-        # Basic logging
-        logging.basicConfig(level=logging.INFO, format="%(message)s")
-        logging.info(f"[{timestamp()}] [INFO] Starting IQ-FINANCE-grafana")
-        logging.info(f"[{timestamp()}] [INFO] Loading file: {csv_path}")
-
-        # Load CSV so user can pre‑configure Grafana datasource if desired
-        try:
-            df = pd.read_csv(csv_path)
-            df[date_column] = pd.to_datetime(df[date_column], errors='coerce')
-            df = df.dropna(subset=[date_column, value_column])
-            df.sort_values(by=date_column, inplace=True)
-            logging.info(f"[{timestamp()}] [INFO] CSV data loaded successfully")
-        except Exception as e:
-            logging.error(f"[{timestamp()}] [ERROR] Failed to load CSV file: {e}")
-            return True
-
-        # Determine Grafana folder & executable
-        USERNAME = os.getlogin()
-        base_folder = fr"C:\Users\{USERNAME}\p-terminal\pp-term\mavis-run-grafana"
-        grafana_bin = os.path.join(base_folder, "bin", "grafana-server.exe")
-        fallback_py = os.path.join(base_folder, "run-grafana.py")
-
-        # Launch Grafana
-        try:
-            if os.path.isfile(grafana_bin):
-                logging.info(f"[{timestamp()}] [INFO] Launching Grafana server at {grafana_bin}")
-                subprocess.Popen([grafana_bin, "--homepath", base_folder], shell=False)
-            elif os.path.isfile(fallback_py):
-                logging.info(f"[{timestamp()}] [INFO] grafana-server not found, running fallback script")
-                subprocess.Popen([sys.executable, fallback_py], shell=False)
+    # IQ-FINANCE-GRAFANA
+    if user_input.startswith("IQ-FINANCE-GRAFANA "):
+        raw = user_input[len("IQ-FINANCE-GRAFANA "):].strip().split()
+        pos, opts = [], {}
+        i = 0
+        while i < len(raw):
+            t = raw[i]
+            if t.startswith("--"):
+                key = t.lstrip('-')
+                if '=' in key:
+                    k, v = key.split('=',1)
+                else:
+                    i += 1
+                    v = raw[i] if i < len(raw) else True
+                    k = key
+                opts[k] = v.strip("'\"")
             else:
-                raise FileNotFoundError("Neither grafana-server.exe nor run-grafana.py found.")
-        except Exception as e:
-            logging.error(f"[{timestamp()}] [ERROR] Could not start Grafana: {e}")
+                pos.append(t)
+            i += 1
+
+        if len(pos) < 3:
+            print("Usage: IQ-FINANCE-GRAFANA <CSV> <DATE_COLUMN> <VALUE_COLUMN> [--folder DIR] [--dashboard NAME]")
             return True
 
-        print(f"[{timestamp()}] [END] IQ-FINANCE-grafana launched successfully")
+        csv_path, date_col, val_col = pos[:3]
+        folder = opts.get('folder', 'grafana-data')
+        dashboard = opts.get('dashboard', 'Finance Dashboard')
+
+        os.makedirs(folder, exist_ok=True)
+        ds = os.path.join(folder, 'datasource.csv')
+        try:
+            pd.read_csv(csv_path).to_csv(ds, index=False)
+            logging.info(f"[{timestamp()}] [INFO] Datasource at: {ds}")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Copy failed: {e}")
+            return True
+
+        dash = {
+            "dashboard": {"title": dashboard, "panels":[{
+                "type":"graph","title":val_col,
+                "targets":[{"refId":"A","csv":ds,"timeColumn":date_col,"valueColumn":val_col}],
+                "xaxis":{"mode":"time"},"yaxes":[{},{}]
+            }]},"overwrite":True
+        }
+        dp = os.path.join(folder,'dashboard.json')
+        with open(dp,'w') as f: json.dump(dash,f,indent=2)
+        logging.info(f"[{timestamp()}] [INFO] Dashboard JSON: {dp}")
+
+        try:
+            subprocess.Popen(['grafana-server','--homepath',folder], shell=False)
+            logging.info(f"[{timestamp()}] [INFO] Grafana started")
+        except Exception:
+            print(f"[{timestamp()}] [WARN] Start grafana-server manually in {folder}")
+
+        print(f"[{timestamp()}] [END] IQ-FINANCE-grafana completed")
         return True
 
     if user_input.startswith("pa "):
