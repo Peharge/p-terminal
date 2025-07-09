@@ -27520,6 +27520,41 @@ def main():
                 else:
                     print(f"[{timestamp()}] [WARN] No virtual environments found in directory tree.")
 
+            elif user_input.strip() == "ps&av":
+                print(f"[{timestamp()}] [INFO] Searching for virtual environments in '{current_dir}'...\n")
+                venvs = []
+
+                # Suche nach pyvenv.cfg-Dateien als Hinweis auf virtuelle Umgebungen
+                for item in current_dir.rglob("pyvenv.cfg"):
+                    env_path = item.parent.resolve()
+                    venvs.append(env_path)
+
+                if venvs:
+                    print(f"[{timestamp()}] [INFO] Found {len(venvs)} virtual environment(s):\n")
+                    for i, env in enumerate(venvs, 1):
+                        print(f"  {i}. {env}")
+
+                    # Benutzer zur Auswahl auffordern
+                    while True:
+                        try:
+                            selection = int(input("\nWhich environment do you want to activate? Enter the number: "))
+                            if 1 <= selection <= len(venvs):
+                                selected_env = venvs[selection - 1]
+                                env_path = str(selected_env.resolve())
+
+                                # Aktive Umgebung setzen und speichern
+                                active = find_active_env(env_path)
+                                set_python_path(active)
+
+                                print(f"\n[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                                break
+                            else:
+                                print("Invalid selection. Please enter a number from the list.")
+                        except ValueError:
+                            print("Please enter a valid number.")
+                else:
+                    print(f"[{timestamp()}] [WARN] No virtual environments found in directory tree.")
+
             elif user_input.startswith("p-venv-f "):
                 env_name = user_input[9:].strip()
                 env_path = str(env_name)
