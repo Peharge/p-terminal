@@ -27742,7 +27742,7 @@ def main():
 
                 if not python_exe.exists():
                     print(f"[{timestamp()}] [WARN] No Python interpreter found in '{python_exe}'.")
-                    user_confirm = input("Do you still want to activate this environment? [y/N)] ).strip().lower()
+                    user_confirm = input("Do you still want to activate this environment? [y/N)] ").strip().lower()
                     if user_confirm != 'y':
                         print(f"[{timestamp()}] [INFO] Activation cancelled.")
                         continue
