@@ -17421,7 +17421,7 @@ def handle_special_commands(user_input):
         except ValueError as e:
             print(f"[{timestamp()}] [ERROR] Invalid parameters: {e}")
             print_usage()
-            sys.exit(1)
+            return True
 
         logging.basicConfig(level=logging.INFO, format="%(message)s")
         logging.info(f"[{timestamp()}] [INFO] Start IQ-AI-TORCH with hidden={hidden_size}, batch={batch_size}, epochs={epochs}")
@@ -17511,7 +17511,7 @@ def handle_special_commands(user_input):
         def print_usage():
             print("Usage:")
             print("  IPRP main.py IQ-AI-TORCH2 <batch> <epochs> <lr> [hidden] [checkpoint]")
-            sys.exit(1)
+            return True
 
         # Alias IPRP → python
         if sys.argv[1].upper() == "IPRP":
@@ -17653,7 +17653,7 @@ def handle_special_commands(user_input):
         def print_usage():
             print("Usage:")
             print("  IPRP main.py IQ-AI-TORCH3 <batch> <epochs> <lr> <wd> [model] [checkpoint]")
-            sys.exit(1)
+            return True
 
         # Alias IPRP → python
         if sys.argv[1].upper() == "IPRP":
@@ -17794,7 +17794,7 @@ def handle_special_commands(user_input):
         def print_usage():
             print("Usage:")
             print("  IPRP command4.py IQ-AI-TORCH4 <batch> <epochs> <lr> <patience> [model] [checkpoint]")
-            sys.exit(1)
+            return True
 
         # Alias IPRP → python
         if sys.argv[1].upper() == "IPRP":
@@ -17919,7 +17919,7 @@ def handle_special_commands(user_input):
         def print_usage():
             print("Usage:")
             print("  IPRP command5.py IQ-AI-TORCH5 <batch> <epochs> <max_lr> <pct_start> [arch] [checkpoint]")
-            sys.exit(1)
+            return True
 
         # Alias IPRP → python
         if sys.argv[1].upper() == "IPRP":
@@ -18045,7 +18045,7 @@ def handle_special_commands(user_input):
         except ValueError as e:
             print(f"[{timestamp()}] [ERROR] Invalid parameters: {e}")
             print_usage()
-            sys.exit(1)
+            return True
 
         # Logging konfigurieren
         logging.basicConfig(level=logging.INFO, format="%(message)s")
@@ -18119,7 +18119,7 @@ def handle_special_commands(user_input):
         def print_usage():
             print("Usage:")
             print("  IPRP command_tf2.py IQ-AI-TF2 <batch_size> <epochs> <learning_rate> <patience> [model_name]")
-            sys.exit(1)
+            return True
 
         # Alias IPRP → IQ-AI-TF2
         if sys.argv[1].upper() == "IPRP":
@@ -18213,7 +18213,7 @@ def handle_special_commands(user_input):
         def print_usage():
             print("Usage:")
             print("  IPRP command_tf3.py IQ-AI-TF3 <batch_size> <epochs> <learning_rate> <dropout> [model_name]")
-            sys.exit(1)
+            return True
 
         # Alias IPRP → IQ-AI-TF3
         if sys.argv[1].upper() == "IPRP":
@@ -18319,7 +18319,7 @@ def handle_special_commands(user_input):
         except ValueError as e:
             print(f"[{timestamp()}] [ERROR] Invalid parameters: {e}")
             print_usage()
-            sys.exit(1)
+            return True
 
         # Logging konfigurieren
         logging.basicConfig(level=logging.INFO, format="%(message)s")
@@ -18420,7 +18420,7 @@ def handle_special_commands(user_input):
 
         def print_usage():
             print("Usage: python script.py IQ-AI-JAX2 <returns_csv> <learning_rate> <epochs> [output_weights.npy]")
-            sys.exit(1)
+            return True
 
         # Parameter parsen
         try:
@@ -18461,7 +18461,7 @@ def handle_special_commands(user_input):
             logging.info(f"[{timestamp()}] [INFO] Loaded returns for {n_assets} assets")
         except Exception as e:
             logging.error(f"[{timestamp()}] [ERROR] Error loading data: {e}")
-            sys.exit(1)
+            return True
 
         # Parameter: rohe Gewichte (unconstrained)
         key = jax.random.PRNGKey(42)
@@ -18509,7 +18509,7 @@ def handle_special_commands(user_input):
 
         def print_usage():
             print("Usage: python script.py IQ-AI-JAX3 <data_csv> <n_clusters> <max_iter> [output_centroids.npy]")
-            sys.exit(1)
+            return True
 
         # Parameter parsen
         try:
@@ -18533,7 +18533,7 @@ def handle_special_commands(user_input):
             logging.info(f"[{timestamp()}] [INFO] Loaded data: {data.shape[0]} samples, {data.shape[1]} features")
         except Exception as e:
             logging.error(f"[{timestamp()}] [ERROR] Error loading data: {e}")
-            sys.exit(1)
+            return True
 
         # K-Means Initialisierung
         key = jax.random.PRNGKey(0)
@@ -18568,6 +18568,255 @@ def handle_special_commands(user_input):
 
         print(f"[{timestamp()}] [END] IQ-AI-JAX3 K-Means completed")
         sys.exit(0)
+
+    if len(sys.argv) >= 5 and sys.argv[1].upper() in ("IPRP", "IQ-FINANCE-MATPLOTLIB"):
+        import matplotlib.pyplot as plt
+
+        # Handle IPRP alias
+        if sys.argv[1].upper() == "IPRP":
+            sys.argv[1] = "python"
+
+        mode = sys.argv[1]
+        if mode not in ("python", "IQ-FINANCE-MATPLOTLIB"):
+            def print_usage():
+                print("Usage:")
+                print("  IQ-FINANCE-matplotlib <CSV_PATH> <DATE_COLUMN> <VALUE_COLUMN> [OUTPUT_IMAGE_NAME]")
+                print("Example:")
+                print("  IQ-FINANCE-matplotlib finance.csv Date Price plot.png")
+            print_usage()
+            return True
+
+        try:
+            csv_path     = sys.argv[2]
+            date_column  = sys.argv[3]
+            value_column = sys.argv[4]
+            output_image = sys.argv[5] if len(sys.argv) > 5 else "finance_plot.png"
+
+            if not os.path.isfile(csv_path):
+                raise FileNotFoundError(f"CSV file not found: {csv_path}")
+
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] {e}")
+            def print_usage():
+                print("Usage:")
+                print("  IQ-FINANCE-matplotlib <CSV_PATH> <DATE_COLUMN> <VALUE_COLUMN> [OUTPUT_IMAGE_NAME]")
+                print("Example:")
+                print("  IQ-FINANCE-matplotlib finance.csv Date Price plot.png")
+            print_usage()
+            return True
+
+        logging.basicConfig(level=logging.INFO, format="%(message)s")
+        logging.info(f"[{timestamp()}] [INFO] Starting IQ-FINANCE-matplotlib")
+        logging.info(f"[{timestamp()}] [INFO] Loading file: {csv_path}")
+
+        # Optional: Load .env
+        try:
+            USERNAME = os.getlogin()
+            env_path = fr"C:\Users\{USERNAME}\p-terminal\pp-term\.env"
+            if os.path.isfile(env_path):
+                with open(env_path, "r") as f:
+                    for line in f:
+                        line = line.strip()
+                        if not line or line.startswith("#") or "=" not in line:
+                            continue
+                        key, val = line.split("=", 1)
+                        os.environ[key] = val
+                logging.info(f"[{timestamp()}] [INFO] .env loaded from {env_path}")
+            else:
+                logging.warning(f"[{timestamp()}] [WARN] .env not found at {env_path}")
+        except Exception as e:
+            logging.warning(f"[{timestamp()}] [WARN] Could not load .env: {e}")
+
+        # Load and process data
+        try:
+            df = pd.read_csv(csv_path)
+            df[date_column] = pd.to_datetime(df[date_column], errors='coerce')
+            df = df.dropna(subset=[date_column, value_column])
+            df.sort_values(by=date_column, inplace=True)
+            logging.info(f"[{timestamp()}] [INFO] CSV data loaded successfully")
+        except Exception as e:
+            logging.error(f"[{timestamp()}] [ERROR] Failed to load CSV file: {e}")
+            return True
+
+        # Create plot
+        try:
+            plt.figure(figsize=(12, 6))
+            plt.plot(df[date_column], df[value_column], marker='o', linestyle='-')
+            plt.title(f"Financial Data: {value_column} over Time")
+            plt.xlabel("Date")
+            plt.ylabel(value_column)
+            plt.grid(True)
+            plt.tight_layout()
+            plt.savefig(output_image)
+            logging.info(f"[{timestamp()}] [INFO] Plot saved as {output_image}")
+            plt.show()
+        except Exception as e:
+            logging.error(f"[{timestamp()}] [ERROR] Failed to generate plot: {e}")
+            return True
+
+        print(f"[{timestamp()}] [END] IQ-FINANCE-matplotlib completed")
+        return True
+
+    if len(sys.argv) >= 5 and sys.argv[1].upper() in ("IPRP", "IQ-FINANCE-PLOTLY"):
+        import plotly.express as px
+
+        # Handle IPRP alias
+        if sys.argv[1].upper() == "IPRP":
+            sys.argv[1] = "python"
+
+        mode = sys.argv[1]
+        if mode not in ("python", "IQ-FINANCE-PLOTLY"):
+            def print_usage():
+                print("Usage:")
+                print("  IQ-FINANCE-plotly <CSV_PATH> <DATE_COLUMN> <VALUE_COLUMN> [OUTPUT_HTML_NAME]")
+                print("Example:")
+                print("  IQ-FINANCE-plotly finance.csv Date Price chart.html")
+            print_usage()
+            return True
+
+        try:
+            csv_path     = sys.argv[2]
+            date_column  = sys.argv[3]
+            value_column = sys.argv[4]
+            output_html  = sys.argv[5] if len(sys.argv) > 5 else "finance_plot.html"
+
+            if not os.path.isfile(csv_path):
+                raise FileNotFoundError(f"CSV file not found: {csv_path}")
+
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] {e}")
+            def print_usage():
+                print("Usage:")
+                print("  IQ-FINANCE-plotly <CSV_PATH> <DATE_COLUMN> <VALUE_COLUMN> [OUTPUT_HTML_NAME]")
+                print("Example:")
+                print("  IQ-FINANCE-plotly finance.csv Date Price chart.html")
+            print_usage()
+            return True
+
+        logging.basicConfig(level=logging.INFO, format="%(message)s")
+        logging.info(f"[{timestamp()}] [INFO] Starting IQ-FINANCE-plotly")
+        logging.info(f"[{timestamp()}] [INFO] Loading file: {csv_path}")
+
+        # Optional: Load .env
+        try:
+            USERNAME = os.getlogin()
+            env_path = fr"C:\Users\{USERNAME}\p-terminal\pp-term\.env"
+            if os.path.isfile(env_path):
+                with open(env_path, "r") as f:
+                    for line in f:
+                        line = line.strip()
+                        if not line or line.startswith("#") or "=" not in line:
+                            continue
+                        key, val = line.split("=", 1)
+                        os.environ[key] = val
+                logging.info(f"[{timestamp()}] [INFO] .env loaded from {env_path}")
+            else:
+                logging.warning(f"[{timestamp()}] [WARN] .env not found at {env_path}")
+        except Exception as e:
+            logging.warning(f"[{timestamp()}] [WARN] Could not load .env: {e}")
+
+        # Load and process data
+        try:
+            df = pd.read_csv(csv_path)
+            df[date_column] = pd.to_datetime(df[date_column], errors='coerce')
+            df = df.dropna(subset=[date_column, value_column])
+            df.sort_values(by=date_column, inplace=True)
+            logging.info(f"[{timestamp()}] [INFO] CSV data loaded successfully")
+        except Exception as e:
+            logging.error(f"[{timestamp()}] [ERROR] Failed to load CSV file: {e}")
+            return True
+
+        # Create interactive plot
+        try:
+            fig = px.line(
+                df,
+                x=date_column,
+                y=value_column,
+                title=f"Financial Data: {value_column} over Time",
+                markers=True
+            )
+            fig.update_layout(xaxis_title="Date", yaxis_title=value_column)
+            fig.write_html(output_html)
+            logging.info(f"[{timestamp()}] [INFO] Interactive chart saved as {output_html}")
+            fig.show()
+        except Exception as e:
+            logging.error(f"[{timestamp()}] [ERROR] Failed to generate interactive chart: {e}")
+            return True
+
+        print(f"[{timestamp()}] [END] IQ-FINANCE-plotly completed")
+        return True
+
+    if len(sys.argv) >= 5 and sys.argv[1].upper() in ("IPRP", "IQ-FINANCE-GRAFANA"):
+        # Handle IPRP alias
+        if sys.argv[1].upper() == "IPRP":
+            sys.argv[1] = "python"
+
+        mode = sys.argv[1]
+        if mode not in ("python", "IQ-FINANCE-GRAFANA"):
+            def print_usage():
+                print("Usage:")
+                print("  IQ-FINANCE-grafana <CSV_PATH> <DATE_COLUMN> <VALUE_COLUMN>")
+                print("Example:")
+                print("  IQ-FINANCE-grafana finance.csv Date Price")
+            print_usage()
+            return True
+
+        # Parse arguments
+        try:
+            csv_path     = sys.argv[2]
+            date_column  = sys.argv[3]
+            value_column = sys.argv[4]
+
+            if not os.path.isfile(csv_path):
+                raise FileNotFoundError(f"CSV file not found: {csv_path}")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] {e}")
+            def print_usage():
+                print("Usage:")
+                print("  IQ-FINANCE-grafana <CSV_PATH> <DATE_COLUMN> <VALUE_COLUMN>")
+                print("Example:")
+                print("  IQ-FINANCE-grafana finance.csv Date Price")
+            print_usage()
+            return True
+
+        # Basic logging
+        logging.basicConfig(level=logging.INFO, format="%(message)s")
+        logging.info(f"[{timestamp()}] [INFO] Starting IQ-FINANCE-grafana")
+        logging.info(f"[{timestamp()}] [INFO] Loading file: {csv_path}")
+
+        # Load CSV so user can pre‑configure Grafana datasource if desired
+        try:
+            df = pd.read_csv(csv_path)
+            df[date_column] = pd.to_datetime(df[date_column], errors='coerce')
+            df = df.dropna(subset=[date_column, value_column])
+            df.sort_values(by=date_column, inplace=True)
+            logging.info(f"[{timestamp()}] [INFO] CSV data loaded successfully")
+        except Exception as e:
+            logging.error(f"[{timestamp()}] [ERROR] Failed to load CSV file: {e}")
+            return True
+
+        # Determine Grafana folder & executable
+        USERNAME = os.getlogin()
+        base_folder = fr"C:\Users\{USERNAME}\p-terminal\pp-term\mavis-run-grafana"
+        grafana_bin = os.path.join(base_folder, "bin", "grafana-server.exe")
+        fallback_py = os.path.join(base_folder, "run-grafana.py")
+
+        # Launch Grafana
+        try:
+            if os.path.isfile(grafana_bin):
+                logging.info(f"[{timestamp()}] [INFO] Launching Grafana server at {grafana_bin}")
+                subprocess.Popen([grafana_bin, "--homepath", base_folder], shell=False)
+            elif os.path.isfile(fallback_py):
+                logging.info(f"[{timestamp()}] [INFO] grafana-server not found, running fallback script")
+                subprocess.Popen([sys.executable, fallback_py], shell=False)
+            else:
+                raise FileNotFoundError("Neither grafana-server.exe nor run-grafana.py found.")
+        except Exception as e:
+            logging.error(f"[{timestamp()}] [ERROR] Could not start Grafana: {e}")
+            return True
+
+        print(f"[{timestamp()}] [END] IQ-FINANCE-grafana launched successfully")
+        return True
 
     if user_input.startswith("pa "):
         user_input = user_input[3:].strip()
