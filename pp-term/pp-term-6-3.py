@@ -27753,7 +27753,6 @@ def main():
 
                 print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
 
-
             elif user_input.strip() == "psv":
                 # Suche nach dem ersten venv im gesamten Verzeichnisbaum ab current_dir
                 found = False
