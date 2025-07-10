@@ -729,7 +729,7 @@ def run_command_ov(command, shell=False, cwd=None, extra_env=None):
 
     # Pfade zu JSON-Dateien
     current_env_path = Path(f"C:/Users/{user_name}/p-terminal/pp-term/current_env.json")
-    info_main_path = Path(f"C:/Users/{user_name}/p-terminal/pp-term/info-main-3.json")
+    info_main_path = Path(f"C:/Users/{user_name}/p-terminal/pp-term/info-main-v-3.json")
 
     # Lade aktuelle Env-Infos
     try:
