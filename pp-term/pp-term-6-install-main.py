@@ -113,7 +113,7 @@ REQUIRED_PACKAGES = [
     "legacy-cgi", "colorama", "ipykernel", "ipython", "bash_kernel", "urllib3", "markdown", "cirq", 
     "mysql-connector-python", "psycopg2-binary", "cx_Oracle", "pyodbc", "ibm_db ibm_db_dbi",
     "redis", "pymongo", "bson", "cassandra-driver", "python-arango", "neo4j", "pyorient", "ravendb",
-    "boto3"
+    "boto3", "yfinance"
 ]
 
 
