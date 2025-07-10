@@ -72,7 +72,7 @@ Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vo
 #>
 
 param (
-    [string]$ScriptPath = "$PSScriptRoot\pp-term-6-3.py",
+    [string]$ScriptPath = "$PSScriptRoot\pp-term-6-4.py",
     [string]$PythonExe  = "$PSScriptRoot\.env\Scripts\python.exe",
     [string]$LogFile    = "$HOME\p-terminal\pp-term\PP_Terminal_Diagnostics.log"
 )
