@@ -18299,7 +18299,7 @@ def handle_special_commands(user_input):
             return True
 
         print(f"[{timestamp()}] [END] IQ-FINANCE-matplotlib completed")
-        return True#
+        return True
 
     if user_input.startswith("IQ-FINANCE-MATPLOTLIB-AD "):
         import yfinance as yf
@@ -26658,7 +26658,7 @@ def get_cool_23_pin():
 COMMANDS = [
     "p", "p git", "p git mavis", "p git mavis-web", "p git simon", "p htop", "p ls", "p ls mavis",
     "ps ls mavis-web", "p ls simon", "p simon", "p wsl", "p pip", "p models", "p ubuntu", "gitk", "git ls all",
-    "git ls hole", "pcd", "ppy", "IQ", "IQ-AI", "pcd", "pls",
+    "git ls hole", "pcd", "ppy", "IQ", "IQ-AI", "pcd", "pls", "IQ-FINANCE"
     "pp", "pp-cpp", "pp-c", "pp-p", "ps", "ps-github", "ps-huggingface", "ps-ollama", "ps-stackoverflow", "nano",
     "htop", "btop", "atop", "glances", "ncdu", "fzf", "bat", "gitui", "lazygit", "starship",
     "emacs", "vim", "nvim", "nano", "kate", "gedit", "geany", "code", "ps-all", "pps", "pb", "pt",
