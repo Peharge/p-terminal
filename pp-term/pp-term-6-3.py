@@ -18299,6 +18299,327 @@ def handle_special_commands(user_input):
             return True
 
         print(f"[{timestamp()}] [END] IQ-FINANCE-matplotlib completed")
+        return True#
+
+    if user_input.startswith("IQ-FINANCE-MATPLOTLIB-AD "):
+        import yfinance as yf
+        import matplotlib.pyplot as plt
+        import seaborn as sns
+
+        args_str = user_input[len("IQ-FINANCE-MATPLOTLIB-AD "):].strip()
+        args = args_str.split()
+
+        if len(args) < 2:
+            print("Usage: IQ-FINANCE-MATPLOTLIB-AD <MODE> <PARAMETERS...>")
+            return True
+
+        mode = args[0].lower()
+        logging.basicConfig(level=logging.INFO, format="%(message)s")
+        logging.info(f"[{timestamp()}] [INFO] Starting mode '{mode}'")
+
+        try:
+            if mode == "csv":
+                csv_path, date_col, val_col = args[1], args[2], args[3]
+                output_image = args[4] if len(args) > 4 else "csv_plot.png"
+                df = pd.read_csv(csv_path)
+                df[date_col] = pd.to_datetime(df[date_col], errors='coerce')
+                df.dropna(subset=[date_col, val_col], inplace=True)
+                plt.figure(figsize=(12, 6))
+                plt.plot(df[date_col], df[val_col])
+                plt.title(f"{val_col} over Time")
+                plt.xlabel("Date")
+                plt.ylabel(val_col)
+                plt.tight_layout()
+                plt.savefig(output_image)
+                plt.show()
+
+            elif mode == "yf":
+                tickers, start, end, metric = args[1].split(","), args[2], args[3], args[4]
+                output = args[5] if len(args) > 5 else "yf_plot.png"
+                data = yf.download(tickers, start=start, end=end)
+                plt.figure(figsize=(14, 7))
+                for t in tickers:
+                    plt.plot(data[t][metric] if len(tickers) > 1 else data[metric], label=t)
+                plt.legend()
+                plt.title(f"{metric} from {start} to {end}")
+                plt.tight_layout()
+                plt.savefig(output)
+                plt.show()
+
+            elif mode == "yf-ma":
+                ticker, start, end, metric, window = args[1], args[2], args[3], args[4], int(args[5])
+                df = yf.download(ticker, start=start, end=end)
+                df["MA"] = df[metric].rolling(window=window).mean()
+                plt.figure(figsize=(12, 6))
+                plt.plot(df[metric], label=metric)
+                plt.plot(df["MA"], label=f"{window}-day MA")
+                plt.title(f"{ticker} {metric} with {window}-day Moving Average")
+                plt.legend()
+                plt.tight_layout()
+                plt.show()
+
+            elif mode == "yf-vol":
+                ticker, start, end, metric, window = args[1], args[2], args[3], args[4], int(args[5])
+                df = yf.download(ticker, start=start, end=end)
+                df["Volatility"] = df[metric].rolling(window=window).std()
+                plt.figure(figsize=(12, 6))
+                plt.plot(df["Volatility"], label="Rolling Std Dev")
+                plt.title(f"{ticker} Rolling Volatility ({window} days)")
+                plt.tight_layout()
+                plt.show()
+
+            elif mode == "yf-compare":
+                tickers, start, end = args[1].split(","), args[2], args[3]
+                df = yf.download(tickers, start=start, end=end)["Close"]
+                df = df / df.iloc[0]  # Normalize
+                df.plot(figsize=(14, 7), title="Normalized Price Comparison")
+                plt.tight_layout()
+                plt.show()
+
+            elif mode == "yf-bar":
+                ticker, start, end, metric = args[1], args[2], args[3], args[4]
+                df = yf.download(ticker, start=start, end=end)
+                plt.figure(figsize=(12, 6))
+                plt.bar(df.index, df[metric])
+                plt.title(f"{ticker} {metric} as Bar Chart")
+                plt.tight_layout()
+                plt.show()
+
+            elif mode == "yf-corr":
+                tickers, start, end = args[1].split(","), args[2], args[3]
+                df = yf.download(tickers, start=start, end=end)["Close"]
+                corr = df.corr()
+                plt.figure(figsize=(10, 8))
+                sns.heatmap(corr, annot=True, cmap="coolwarm", fmt=".2f")
+                plt.title("Correlation Matrix of Closing Prices")
+                plt.tight_layout()
+                plt.show()
+
+            else:
+                print(f"[{timestamp()}] [ERROR] Unknown mode '{mode}'")
+
+            print(f"[{timestamp()}] [END] IQ-FINANCE-MATPLOTLIB-AD completed")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Exception occurred: {e}")
+        return True
+
+    if user_input.startswith("IQ-FINANCE-MATPLOTLIB-AD2 "):
+        import yfinance as yf
+        import matplotlib.pyplot as plt
+
+        args_str = user_input[len("IQ-FINANCE-MATPLOTLIB-AD2 "):].strip()
+        args = args_str.split()
+
+        if len(args) < 4:
+            print("Usage: IQ-FINANCE-MATPLOTLIB-AD2 <OPERATOR> <TICKER> <START_DATE> <END_DATE> [ADDITIONAL_ARGS]")
+            return True
+
+        operator = args[0].lower()
+        ticker = args[1]
+        start_date = args[2]
+        end_date = args[3]
+
+        logging.basicConfig(level=logging.INFO, format="%(message)s")
+        logging.info(f"[{timestamp()}] [INFO] Running operator: {operator}")
+
+        try:
+            df = yf.download(ticker, start=start_date, end=end_date)
+            close = df["Close"]
+
+            if operator == "returns":
+                freq = args[4] if len(args) > 4 else "daily"
+                ret = close.pct_change()
+                if freq == "monthly":
+                    ret = close.resample("M").ffill().pct_change()
+                ret.plot(title=f"{ticker} {freq.capitalize()} Returns")
+                plt.grid(True)
+                plt.tight_layout()
+                plt.show()
+
+            elif operator == "logret":
+                logret = onp.log(close / close.shift(1))
+                logret.plot(title=f"{ticker} Log Returns")
+                plt.grid(True)
+                plt.tight_layout()
+                plt.show()
+
+            elif operator == "sharpe":
+                rate = float(args[5]) if len(args) > 5 else 0.01
+                daily_ret = close.pct_change().dropna()
+                sharpe = ((daily_ret.mean() - rate / 252) / daily_ret.std()) * onp.sqrt(252)
+                print(f"Sharpe Ratio ({ticker}): {sharpe:.4f}")
+
+            elif operator == "stats":
+                metric = args[4] if len(args) > 4 else "Close"
+                series = df[metric]
+                print(series.describe())
+
+            elif operator == "diff":
+                diff = close.diff()
+                diff.plot(title=f"{ticker} Price Differences")
+                plt.grid(True)
+                plt.tight_layout()
+                plt.show()
+
+            elif operator == "rollingmean":
+                window = int(args[4]) if len(args) > 4 else 20
+                ma = close.rolling(window).mean()
+                plt.plot(close, label="Close")
+                plt.plot(ma, label=f"{window}-day MA")
+                plt.title(f"{ticker} Moving Average")
+                plt.legend()
+                plt.tight_layout()
+                plt.show()
+
+            elif operator == "rollingstd":
+                window = int(args[4]) if len(args) > 4 else 14
+                std = close.rolling(window).std()
+                std.plot(title=f"{ticker} Rolling Volatility ({window}d)")
+                plt.tight_layout()
+                plt.show()
+
+            elif operator == "drawdown":
+                cummax = close.cummax()
+                drawdown = (close - cummax) / cummax
+                drawdown.plot(title=f"{ticker} Drawdown")
+                plt.grid(True)
+                plt.tight_layout()
+                plt.show()
+                print(f"Max Drawdown: {drawdown.min():.2%}")
+
+            elif operator == "cumsum":
+                perf = close.pct_change().fillna(0).cumsum()
+                perf.plot(title=f"{ticker} Cumulative Return")
+                plt.grid(True)
+                plt.tight_layout()
+                plt.show()
+
+            elif operator == "resample":
+                rule = args[4] if len(args) > 4 else "W"
+                resampled = close.resample(rule).last()
+                resampled.plot(title=f"{ticker} Resampled ({rule})")
+                plt.grid(True)
+                plt.tight_layout()
+                plt.show()
+
+            else:
+                print(f"[{timestamp()}] [ERROR] Unknown operator: {operator}")
+                return True
+
+            print(f"[{timestamp()}] [END] IQ-FINANCE-MATPLOTLIB-AD2 completed")
+
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Exception: {e}")
+        return True
+
+    if user_input.startswith("IQ-FINANCE-MATPLOTLIB-AD3 "):
+        import yfinance as yf
+        import matplotlib.pyplot as plt
+        import seaborn as sns
+        import mplfinance as mpf
+
+        args_str = user_input[len("IQ-FINANCE-MATPLOTLIB-AD3 "):].strip()
+        args = args_str.split()
+
+        if len(args) < 4:
+            print("Usage: IQ-FINANCE-MATPLOTLIB-AD3 <MODE> <TICKER(S)> <START_DATE> <END_DATE> [MORE]")
+            return True
+
+        mode = args[0].lower()
+        tickers = args[1].split(",")
+        start_date = args[2]
+        end_date = args[3]
+
+        logging.basicConfig(level=logging.INFO, format="%(message)s")
+        logging.info(f"[{timestamp()}] [INFO] Mode selected: {mode}")
+
+        try:
+            df = yf.download(tickers, start=start_date, end=end_date)
+            if "Close" in df:
+                close_data = df["Close"]
+            else:
+                close_data = df["Adj Close"] if "Adj Close" in df else df.iloc[:, 0]
+
+            if mode == "heatmap":
+                corr = close_data.corr()
+                plt.figure(figsize=(10, 8))
+                sns.heatmap(corr, annot=True, cmap="YlGnBu", fmt=".2f")
+                plt.title("Correlation Heatmap")
+                plt.tight_layout()
+                plt.show()
+
+            elif mode == "histogram":
+                ticker = tickers[0]
+                metric = args[4] if len(args) > 4 else "returns"
+                data = df["Close"][ticker] if isinstance(df["Close"], pd.DataFrame) else df["Close"]
+                if metric == "returns":
+                    values = data.pct_change().dropna()
+                else:
+                    values = data.dropna()
+                plt.figure(figsize=(10, 6))
+                plt.hist(values, bins=50, alpha=0.7, color="skyblue")
+                plt.title(f"{ticker} Histogram of {metric}")
+                plt.tight_layout()
+                plt.show()
+
+            elif mode == "boxplot":
+                ticker = tickers[0]
+                metric = args[4] if len(args) > 4 else "Close"
+                series = df[metric][ticker] if isinstance(df[metric], pd.DataFrame) else df[metric]
+                plt.figure(figsize=(6, 8))
+                sns.boxplot(y=series.dropna())
+                plt.title(f"{ticker} {metric} Boxplot")
+                plt.tight_layout()
+                plt.show()
+
+            elif mode == "pairplot":
+                df_close = df["Close"]
+                df_sampled = df_close.resample("W").last().dropna()
+                sns.pairplot(df_sampled)
+                plt.suptitle("Pairplot of Weekly Closing Prices", y=1.02)
+                plt.tight_layout()
+                plt.show()
+
+            elif mode == "kdeplot":
+                ticker = tickers[0]
+                returns = df["Close"][ticker].pct_change().dropna()
+                sns.kdeplot(returns, fill=True, color="purple")
+                plt.title(f"{ticker} Return Density (KDE)")
+                plt.tight_layout()
+                plt.show()
+
+            elif mode == "dualaxis":
+                ticker = tickers[0]
+                metric1 = args[4]
+                metric2 = args[5]
+                df1 = df[metric1][ticker] if isinstance(df[metric1], pd.DataFrame) else df[metric1]
+                df2 = df[metric2][ticker] if isinstance(df[metric2], pd.DataFrame) else df[metric2]
+
+                fig, ax1 = plt.subplots(figsize=(12, 6))
+                ax2 = ax1.twinx()
+                ax1.plot(df1, color='blue', label=metric1)
+                ax2.plot(df2, color='orange', label=metric2)
+                ax1.set_ylabel(metric1)
+                ax2.set_ylabel(metric2)
+                plt.title(f"{ticker}: {metric1} vs {metric2}")
+                fig.tight_layout()
+                plt.show()
+
+            elif mode == "candlestick":
+                ticker = tickers[0]
+                df_candle = yf.download(ticker, start=start_date, end=end_date)
+                df_candle.index.name = 'Date'
+                df_candle = df_candle[["Open", "High", "Low", "Close", "Volume"]]
+                mpf.plot(df_candle, type='candle', volume=True, style='yahoo', title=f"{ticker} Candlestick Chart")
+
+            else:
+                print(f"[{timestamp()}] [ERROR] Unknown mode: {mode}")
+                return True
+
+            print(f"[{timestamp()}] [END] IQ-FINANCE-MATPLOTLIB-AD3 completed")
+
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Exception occurred: {e}")
         return True
 
     # IQ-FINANCE-PLOTLY
@@ -18363,6 +18684,303 @@ def handle_special_commands(user_input):
             return True
 
         print(f"[{timestamp()}] [END] IQ-FINANCE-plotly completed")
+        return True
+
+    if user_input.startswith("IQ-FINANCE-PLOTLY-AD "):
+        import yfinance as yf
+        import plotly.graph_objects as go
+        import plotly.express as px
+
+        args_str = user_input[len("IQ-FINANCE-PLOTLY-AD "):].strip()
+        args = args_str.split()
+
+        if len(args) < 2:
+            print("Usage: IQ-FINANCE-PLOTLY-AD <MODE> <PARAMETERS...>")
+            return True
+
+        mode = args[0].lower()
+        logging.basicConfig(level=logging.INFO, format="%(message)s")
+        logging.info(f"[{timestamp()}] [INFO] Starting mode '{mode}'")
+
+        try:
+            if mode == "csv":
+                csv_path, date_col, val_col = args[1], args[2], args[3]
+                output_image = args[4] if len(args) > 4 else "csv_plot.html"
+                df = pd.read_csv(csv_path)
+                df[date_col] = pd.to_datetime(df[date_col], errors='coerce')
+                df.dropna(subset=[date_col, val_col], inplace=True)
+                fig = px.line(df, x=date_col, y=val_col, title=f"{val_col} over Time")
+                fig.write_html(output_image)
+                fig.show()
+
+            elif mode == "yf":
+                tickers, start, end, metric = args[1].split(","), args[2], args[3], args[4]
+                output = args[5] if len(args) > 5 else "yf_plot.html"
+                data = yf.download(tickers, start=start, end=end)
+                fig = go.Figure()
+                for t in tickers:
+                    y = data[t][metric] if len(tickers) > 1 else data[metric]
+                    fig.add_trace(go.Scatter(x=data.index, y=y, mode='lines', name=t))
+                fig.update_layout(title=f"{metric} from {start} to {end}")
+                fig.write_html(output)
+                fig.show()
+
+            elif mode == "yf-ma":
+                ticker, start, end, metric, window = args[1], args[2], args[3], args[4], int(args[5])
+                df = yf.download(ticker, start=start, end=end)
+                df["MA"] = df[metric].rolling(window=window).mean()
+                fig = go.Figure()
+                fig.add_trace(go.Scatter(x=df.index, y=df[metric], mode='lines', name=metric))
+                fig.add_trace(go.Scatter(x=df.index, y=df["MA"], mode='lines', name=f"{window}-day MA"))
+                fig.update_layout(title=f"{ticker} {metric} with {window}-day Moving Average")
+                fig.show()
+
+            elif mode == "yf-vol":
+                ticker, start, end, metric, window = args[1], args[2], args[3], args[4], int(args[5])
+                df = yf.download(ticker, start=start, end=end)
+                df["Volatility"] = df[metric].rolling(window=window).std()
+                fig = px.line(df, x=df.index, y="Volatility", title=f"{ticker} Rolling Volatility ({window} days)")
+                fig.show()
+
+            elif mode == "yf-compare":
+                tickers, start, end = args[1].split(","), args[2], args[3]
+                df = yf.download(tickers, start=start, end=end)["Close"]
+                df = df / df.iloc[0]  # Normalize
+                fig = px.line(df, x=df.index, y=df.columns, title="Normalized Price Comparison")
+                fig.show()
+
+            elif mode == "yf-bar":
+                ticker, start, end, metric = args[1], args[2], args[3], args[4]
+                df = yf.download(ticker, start=start, end=end)
+                fig = px.bar(df, x=df.index, y=metric, title=f"{ticker} {metric} as Bar Chart")
+                fig.show()
+
+            elif mode == "yf-corr":
+                tickers, start, end = args[1].split(","), args[2], args[3]
+                df = yf.download(tickers, start=start, end=end)["Close"]
+                corr = df.corr().reset_index().melt(id_vars='index')
+                fig = px.imshow(df.corr(), text_auto=True, color_continuous_scale="RdBu", zmin=-1, zmax=1,
+                                title="Correlation Matrix of Closing Prices")
+                fig.show()
+
+            else:
+                print(f"[{timestamp()}] [ERROR] Unknown mode '{mode}'")
+
+            print(f"[{timestamp()}] [END] IQ-FINANCE-PLOTLY-AD completed")
+
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Exception occurred: {e}")
+        return True
+
+    if user_input.startswith("IQ-FINANCE-PLOTLY-AD2 "):
+        import yfinance as yf
+        import plotly.graph_objects as go
+        import plotly.express as px
+
+        args_str = user_input[len("IQ-FINANCE-PLOTLY-AD2 "):].strip()
+        args = args_str.split()
+
+        if len(args) < 4:
+            print("Usage: IQ-FINANCE-PLOTLY-AD2 <OPERATOR> <TICKER> <START_DATE> <END_DATE> [ADDITIONAL_ARGS]")
+            return True
+
+        operator = args[0].lower()
+        ticker = args[1]
+        start_date = args[2]
+        end_date = args[3]
+
+        logging.basicConfig(level=logging.INFO, format="%(message)s")
+        logging.info(f"[{timestamp()}] [INFO] Running operator: {operator}")
+
+        try:
+            df = yf.download(ticker, start=start_date, end=end_date)
+            close = df["Close"]
+
+            if operator == "returns":
+                freq = args[4] if len(args) > 4 else "daily"
+                if freq == "monthly":
+                    ret = close.resample("M").ffill().pct_change()
+                else:
+                    ret = close.pct_change()
+                fig = px.line(x=ret.index, y=ret.values, labels={"x": "Date", "y": "Returns"},
+                            title=f"{ticker} {freq.capitalize()} Returns")
+                fig.show()
+
+            elif operator == "logret":
+                logret = np.log(close / close.shift(1))
+                fig = px.line(x=logret.index, y=logret.values, labels={"x": "Date", "y": "Log Returns"},
+                            title=f"{ticker} Log Returns")
+                fig.show()
+
+            elif operator == "sharpe":
+                rate = float(args[4]) if len(args) > 4 else 0.01
+                daily_ret = close.pct_change().dropna()
+                sharpe = ((daily_ret.mean() - rate / 252) / daily_ret.std()) * np.sqrt(252)
+                print(f"Sharpe Ratio ({ticker}): {sharpe:.4f}")
+
+            elif operator == "stats":
+                metric = args[4] if len(args) > 4 else "Close"
+                series = df[metric]
+                print(series.describe())
+
+            elif operator == "diff":
+                diff = close.diff()
+                fig = px.line(x=diff.index, y=diff.values, labels={"x": "Date", "y": "Price Difference"},
+                            title=f"{ticker} Price Differences")
+                fig.show()
+
+            elif operator == "rollingmean":
+                window = int(args[4]) if len(args) > 4 else 20
+                ma = close.rolling(window).mean()
+                fig = go.Figure()
+                fig.add_trace(go.Scatter(x=close.index, y=close, mode='lines', name="Close"))
+                fig.add_trace(go.Scatter(x=ma.index, y=ma, mode='lines', name=f"{window}-day MA"))
+                fig.update_layout(title=f"{ticker} Moving Average")
+                fig.show()
+
+            elif operator == "rollingstd":
+                window = int(args[4]) if len(args) > 4 else 14
+                std = close.rolling(window).std()
+                fig = px.line(x=std.index, y=std.values, labels={"x": "Date", "y": "Volatility"},
+                            title=f"{ticker} Rolling Volatility ({window}d)")
+                fig.show()
+
+            elif operator == "drawdown":
+                cummax = close.cummax()
+                drawdown = (close - cummax) / cummax
+                fig = px.area(x=drawdown.index, y=drawdown.values, labels={"x": "Date", "y": "Drawdown"},
+                            title=f"{ticker} Drawdown")
+                fig.update_yaxes(tickformat=".0%")
+                fig.show()
+                print(f"Max Drawdown: {drawdown.min():.2%}")
+
+            elif operator == "cumsum":
+                perf = close.pct_change().fillna(0).cumsum()
+                fig = px.line(x=perf.index, y=perf.values, labels={"x": "Date", "y": "Cumulative Return"},
+                            title=f"{ticker} Cumulative Return")
+                fig.show()
+
+            elif operator == "resample":
+                rule = args[4] if len(args) > 4 else "W"
+                resampled = close.resample(rule).last()
+                fig = px.line(x=resampled.index, y=resampled.values, labels={"x": "Date", "y": "Resampled Price"},
+                            title=f"{ticker} Resampled ({rule})")
+                fig.show()
+
+            else:
+                print(f"[{timestamp()}] [ERROR] Unknown operator: {operator}")
+                return True
+
+            print(f"[{timestamp()}] [END] IQ-FINANCE-PLOTLY-AD2 completed")
+
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Exception: {e}")
+        return True
+
+    if user_input.startswith("IQ-FINANCE-PLOTLY-AD3 "):
+        import yfinance as yf
+        import plotly.express as px
+        import plotly.graph_objects as go
+
+        args_str = user_input[len("IQ-FINANCE-PLOTLY-AD3 "):].strip()
+        args = args_str.split()
+
+        if len(args) < 4:
+            print("Usage: IQ-FINANCE-PLOTLY-AD3 <MODE> <TICKER(S)> <START_DATE> <END_DATE> [MORE]")
+            return True
+
+        mode = args[0].lower()
+        tickers = args[1].split(",")
+        start_date = args[2]
+        end_date = args[3]
+
+        logging.basicConfig(level=logging.INFO, format="%(message)s")
+        logging.info(f"[{timestamp()}] [INFO] Mode selected: {mode}")
+
+        try:
+            df = yf.download(tickers, start=start_date, end=end_date, group_by="ticker", auto_adjust=False)
+            close_data = df["Close"] if "Close" in df else df["Adj Close"]
+
+            if mode == "heatmap":
+                corr = close_data.corr()
+                fig = px.imshow(corr, text_auto=".2f", color_continuous_scale="YlGnBu",
+                                title="Correlation Heatmap")
+                fig.update_layout(margin=dict(t=40))
+                fig.show()
+
+            elif mode == "histogram":
+                ticker = tickers[0]
+                metric = args[4] if len(args) > 4 else "returns"
+                data = df["Close"][ticker] if isinstance(df["Close"], pd.DataFrame) else df["Close"]
+                values = data.pct_change().dropna() if metric == "returns" else data.dropna()
+                fig = px.histogram(values, nbins=50, title=f"{ticker} Histogram of {metric}",
+                                labels={"value": metric})
+                fig.show()
+
+            elif mode == "boxplot":
+                ticker = tickers[0]
+                metric = args[4] if len(args) > 4 else "Close"
+                series = df[metric][ticker] if isinstance(df[metric], pd.DataFrame) else df[metric]
+                fig = px.box(y=series.dropna(), title=f"{ticker} {metric} Boxplot",
+                            labels={"y": metric})
+                fig.show()
+
+            elif mode == "pairplot":
+                df_close = df["Close"]
+                df_sampled = df_close.resample("W").last().dropna()
+                fig = px.scatter_matrix(df_sampled, title="Pairplot of Weekly Closing Prices")
+                fig.update_traces(diagonal_visible=True)
+                fig.show()
+
+            elif mode == "kdeplot":
+                ticker = tickers[0]
+                returns = df["Close"][ticker].pct_change().dropna()
+                fig = px.histogram(returns, nbins=100, histnorm='probability density', opacity=0.75,
+                                marginal="violin", title=f"{ticker} Return Density (KDE)")
+                fig.show()
+
+            elif mode == "dualaxis":
+                ticker = tickers[0]
+                metric1 = args[4]
+                metric2 = args[5]
+                df1 = df[metric1][ticker] if isinstance(df[metric1], pd.DataFrame) else df[metric1]
+                df2 = df[metric2][ticker] if isinstance(df[metric2], pd.DataFrame) else df[metric2]
+
+                fig = go.Figure()
+                fig.add_trace(go.Scatter(x=df1.index, y=df1, name=metric1, yaxis="y1"))
+                fig.add_trace(go.Scatter(x=df2.index, y=df2, name=metric2, yaxis="y2"))
+
+                fig.update_layout(
+                    title=f"{ticker}: {metric1} vs {metric2}",
+                    yaxis=dict(title=metric1),
+                    yaxis2=dict(title=metric2, overlaying='y', side='right'),
+                    legend=dict(x=0, y=1.1, orientation='h')
+                )
+                fig.show()
+
+            elif mode == "candlestick":
+                ticker = tickers[0]
+                df_candle = yf.download(ticker, start=start_date, end=end_date)
+                fig = go.Figure(data=[go.Candlestick(
+                    x=df_candle.index,
+                    open=df_candle["Open"],
+                    high=df_candle["High"],
+                    low=df_candle["Low"],
+                    close=df_candle["Close"],
+                    increasing_line_color='green',
+                    decreasing_line_color='red'
+                )])
+                fig.update_layout(title=f"{ticker} Candlestick Chart", xaxis_title="Date", yaxis_title="Price")
+                fig.show()
+
+            else:
+                print(f"[{timestamp()}] [ERROR] Unknown mode: {mode}")
+                return True
+
+            print(f"[{timestamp()}] [END] IQ-FINANCE-PLOTLY-AD3 completed")
+
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Exception occurred: {e}")
         return True
 
     # IQ-FINANCE-GRAFANA
