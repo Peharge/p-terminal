@@ -10383,113 +10383,112 @@ def handle_special_commands(user_input):
 
         return True
 
-    def handle_pandas_input(user_input):
-        if user_input.startswith("prpandas "):
-            filepath = os.path.abspath(user_input[9:].strip())
+    if user_input.startswith("prpandas "):
+        filepath = os.path.abspath(user_input[9:].strip())
 
-            if not os.path.isfile(filepath):
-                print(f"[{timestamp()}] [ERROR] File '{filepath}' does not exist.")
-                return True
+        if not os.path.isfile(filepath):
+            print(f"[{timestamp()}] [ERROR] File '{filepath}' does not exist.")
+            return True
 
-            supported_extensions = (".csv", ".xlsx", ".xls", ".json", ".parquet")
-            if not filepath.lower().endswith(supported_extensions):
-                print(f"[{timestamp()}] [ERROR] Unsupported file type: '{filepath}'")
-                return True
+        supported_extensions = (".csv", ".xlsx", ".xls", ".json", ".parquet")
+        if not filepath.lower().endswith(supported_extensions):
+            print(f"[{timestamp()}] [ERROR] Unsupported file type: '{filepath}'")
+            return True
 
-            requested_port = 8000
-            port_container = {}
-            server_started_event = threading.Event()
+        requested_port = 8000
+        port_container = {}
+        server_started_event = threading.Event()
 
-            class PandasRequestHandler(http.server.SimpleHTTPRequestHandler):
-                def do_GET(self):
-                    parsed_path = urllib.parse.urlparse(self.path)
-                    if parsed_path.path == "/":
-                        self.send_response(200)
-                        self.send_header("Content-type", "text/html")
-                        self.end_headers()
+        class PandasRequestHandler(http.server.SimpleHTTPRequestHandler):
+            def do_GET(self):
+                parsed_path = urllib.parse.urlparse(self.path)
+                if parsed_path.path == "/":
+                    self.send_response(200)
+                    self.send_header("Content-type", "text/html")
+                    self.end_headers()
 
-                        try:
-                            # Datei einlesen
-                            if filepath.endswith(".csv"):
-                                df = pd.read_csv(filepath)
-                            elif filepath.endswith((".xlsx", ".xls")):
-                                df = pd.read_excel(filepath)
-                            elif filepath.endswith(".json"):
-                                df = pd.read_json(filepath)
-                            elif filepath.endswith(".parquet"):
-                                df = pd.read_parquet(filepath)
-                            else:
-                                raise ValueError("Unsupported file format")
+                    try:
+                        # Datei einlesen
+                        if filepath.endswith(".csv"):
+                            df = pd.read_csv(filepath)
+                        elif filepath.endswith((".xlsx", ".xls")):
+                            df = pd.read_excel(filepath)
+                        elif filepath.endswith(".json"):
+                            df = pd.read_json(filepath)
+                        elif filepath.endswith(".parquet"):
+                            df = pd.read_parquet(filepath)
+                        else:
+                            raise ValueError("Unsupported file format")
 
-                            # HTML-Ausgabe
-                            html_content = "<html><head><title>Pandas Viewer</title></head><body>"
-                            html_content += f"<h1>DataFrame Preview: {html.escape(os.path.basename(filepath))}</h1>"
+                        # HTML-Ausgabe
+                        html_content = "<html><head><title>Pandas Viewer</title></head><body>"
+                        html_content += f"<h1>DataFrame Preview: {html.escape(os.path.basename(filepath))}</h1>"
 
-                            df_preview = df.head(50)
-                            html_content += df_preview.to_html(border=1, escape=True, index=False)
+                        df_preview = df.head(50)
+                        html_content += df_preview.to_html(border=1, escape=True, index=False)
 
-                            html_content += "</body></html>"
-                            self.wfile.write(html_content.encode('utf-8'))
+                        html_content += "</body></html>"
+                        self.wfile.write(html_content.encode('utf-8'))
 
-                        except Exception as e:
-                            self.wfile.write(f"<h1>Error</h1><p>{html.escape(str(e))}</p>".encode('utf-8'))
+                    except Exception as e:
+                        self.wfile.write(f"<h1>Error</h1><p>{html.escape(str(e))}</p>".encode('utf-8'))
 
-                    else:
-                        self.send_error(404, "File not found.")
+                else:
+                    self.send_error(404, "File not found.")
 
-            def start_pandas_server(port, container, event):
-                with socketserver.TCPServer(("", port), PandasRequestHandler) as httpd:
-                    container['port'] = httpd.server_address[1]
-                    event.set()
-                    httpd.serve_forever()
+        def start_pandas_server(port, container, event):
+            with socketserver.TCPServer(("", port), PandasRequestHandler) as httpd:
+                container['port'] = httpd.server_address[1]
+                event.set()
+                httpd.serve_forever()
 
-            server_thread = threading.Thread(
-                target=start_pandas_server,
-                args=(requested_port, port_container, server_started_event),
-                daemon=True
-            )
-            server_thread.start()
+        server_thread = threading.Thread(
+            target=start_pandas_server,
+            args=(requested_port, port_container, server_started_event),
+            daemon=True
+        )
+        server_thread.start()
 
-            if not server_started_event.wait(timeout=5):
-                print(f"[{timestamp()}] [ERROR] Server could not be started within 5 seconds.")
-                return True
+        if not server_started_event.wait(timeout=5):
+            print(f"[{timestamp()}] [ERROR] Server could not be started within 5 seconds.")
+            return True
 
-            actual_port = port_container.get('port')
-            url = f"http://localhost:{actual_port}/"
-            print(f"[{timestamp()}] [INFO] Opening DataFrame in browser: {url}")
-            webbrowser.open(url)
-            print(f"[{timestamp()}] [INFO] Server is running on port {actual_port}. Press 'q' to stop it.")
+        actual_port = port_container.get('port')
+        url = f"http://localhost:{actual_port}/"
+        print(f"[{timestamp()}] [INFO] Opening DataFrame in browser: {url}")
+        webbrowser.open(url)
+        print(f"[{timestamp()}] [INFO] Server is running on port {actual_port}. Press 'q' to stop it.")
 
-            try:
-                while True:
-                    user_cmd = input().strip()
-                    if user_cmd.lower() == 'q' or user_cmd.lower() == '\x11':
-                        print(f"[{timestamp()}] [INFO] Stopping server...")
-                        break
-                    else:
-                        print(f"[{timestamp()}] [INFO] Invalid input. Press 'q' to quit.")
-            except (KeyboardInterrupt, EOFError):
-                print(f"\n[{timestamp()}] [INFO] Input interrupted. Stopping server...")
+        try:
+            while True:
+                user_cmd = input().strip()
+                if user_cmd.lower() == 'q' or user_cmd.lower() == '\x11':
+                    print(f"[{timestamp()}] [INFO] Stopping server...")
+                    break
+                else:
+                    print(f"[{timestamp()}] [INFO] Invalid input. Press 'q' to quit.")
+        except (KeyboardInterrupt, EOFError):
+            print(f"\n[{timestamp()}] [INFO] Input interrupted. Stopping server...")
 
+        try:
+            urllib.request.urlopen(url, timeout=1)
+        except:
+            pass
+
+        server_thread.join(timeout=5)
+
+        for _ in range(5):
             try:
                 urllib.request.urlopen(url, timeout=1)
-            except:
-                pass
+                print(f"[{timestamp()}] [INFO] URL still reachable, waiting 1s...")
+                time.sleep(1)
+            except (urllib.error.URLError, ConnectionRefusedError):
+                print(f"[{timestamp()}] [INFO] URL is now offline.")
+                break
+        else:
+            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
 
-            server_thread.join(timeout=5)
-
-            for _ in range(5):
-                try:
-                    urllib.request.urlopen(url, timeout=1)
-                    print(f"[{timestamp()}] [INFO] URL still reachable, waiting 1s...")
-                    time.sleep(1)
-                except (urllib.error.URLError, ConnectionRefusedError):
-                    print(f"[{timestamp()}] [INFO] URL is now offline.")
-                    break
-            else:
-                print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
-
-            return True
+        return True
 
     if user_input.startswith("prhtml "):
         filepath = os.path.abspath(user_input[7:].strip())
