@@ -440,20 +440,33 @@ def run_command(command, shell=False, cwd=None, extra_env=None):
     try:
         with open(json_path, 'r') as file:
             data = json.load(file)
-            active = data.get("active_env")
+            env_type = data.get("type")
+            active_env = data.get("path")
 
-        if active:
-            active_env_path = Path(active)  # Convert to Path object
+        if not active_env:
+            print(f"[{timestamp()}] [ERROR] No environment path found in JSON.")
+            return 1  # Fehlercode zurückgeben
 
-            # Example usage
-            python_exe = active_env_path / "Scripts" / "python.exe"
-
-            if python_exe.exists():
-                pass
+        if env_type == "nodejs":
+            # Aktivieren der Node-Version via nvm (nur sinnvoll im Shell-Modus!)
+            if shell:
+                nvm_command = f'nvm use {active_env}'
+                subprocess.run(nvm_command, shell=True, check=False)
             else:
-                print(f"[{timestamp()}] [ERROR] Python executable not found.")
+                print(f"[{timestamp()}] [INFO] Node.js environment set, but nvm is only used in shell mode.")
+            venv_env = {}
+        elif env_type in ("python", "venv"):
+            python_exe = Path(active_env) / ("Scripts" if os.name == "nt" else "bin") / ("python.exe" if os.name == "nt" else "python")
+            if not python_exe.exists():
+                print(f"[{timestamp()}] [ERROR] Python executable not found at {python_exe}")
+                return 1
+            venv_env = {
+                "VIRTUAL_ENV": active_env,
+                "PATH": str(python_exe.parent) + os.pathsep + os.environ.get("PATH", "")
+            }
         else:
-            print(f"[{timestamp()}] [ERROR] Key 'active_env' not found.")
+            print(f"[{timestamp()}] [ERROR] Unknown environment type: {env_type}")
+            return 1
 
     except FileNotFoundError:
         print(f"[{timestamp()}] [ERROR] File not found: {json_path}")
@@ -28344,6 +28357,78 @@ def main():
                 set_python_path(active)
 
                 print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+
+            elif user_input.startswith("pcjsv "):
+                user_input = user_input[6:].strip()
+                current_dir = Path.cwd()
+                env_path = (current_dir / user_input).resolve()
+
+                try:
+                    # NVM ist shell-spezifisch – also muss ein bash-kompatibles Kommando verwendet werden
+                    command = f'nvm install node && mkdir "{env_path}"'
+
+                    subprocess.run(command, shell=True, check=True, text=True,
+                                stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+
+                    print(f"[{timestamp()}] [INFO] Node.js environment created at {env_path}.")
+
+                    # Pfad zur aktuellen env-Datei
+                    user = getpass.getuser()
+                    env_file_path = Path(f"C:/Users/{user}/p-terminal/pp-term/current_env.json")
+                    env_file_path.parent.mkdir(parents=True, exist_ok=True)
+
+                    # Daten in JSON speichern
+                    env_data = {
+                        "type": "nodejs",
+                        "name": user_input,
+                        "path": str(env_path),
+                        "created_at": timestamp()
+                    }
+
+                    with open(env_file_path, "w", encoding="utf-8") as f:
+                        json.dump(env_data, f, indent=4)
+
+                    print(f"[{timestamp()}] [INFO] Environment info written to {env_file_path}.")
+
+                except subprocess.CalledProcessError as e:
+                    print(f"[{timestamp()}] [ERROR] Failed to create Node.js env '{user_input}': {e}")
+                except KeyboardInterrupt:
+                    print(f"[{timestamp()}] [INFO] Cancellation by user.")
+                except Exception as e:
+                    print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
+
+            elif user_input.startswith("pajsv "):
+                user_input = user_input[6:].strip()
+                current_dir = Path.cwd()
+                env_path = (current_dir / user_input).resolve()
+
+                try:
+                    if not env_path.exists():
+                        print(f"[{timestamp()}] [ERROR] Environment path '{env_path}' does not exist.")
+                    else:
+                        # Pfad zur JSON-Datei
+                        user = getpass.getuser()
+                        env_file_path = Path(f"C:/Users/{user}/p-terminal/pp-term/current_env.json")
+                        env_file_path.parent.mkdir(parents=True, exist_ok=True)
+
+                        # Neue Aktivierungsdaten speichern
+                        env_data = {
+                            "type": "nodejs",
+                            "name": user_input,
+                            "path": str(env_path),
+                            "activated_at": timestamp()
+                        }
+
+                        with open(env_file_path, "w", encoding="utf-8") as f:
+                            json.dump(env_data, f, indent=4)
+
+                        print(f"[{timestamp()}] [INFO] Node.js environment '{user_input}' activated.")
+                        print(f"[{timestamp()}] [INFO] Info written to {env_file_path}.")
+
+                except KeyboardInterrupt:
+                    print(f"[{timestamp()}] [INFO] Cancellation by user.")
+                except Exception as e:
+                    print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
 
             elif user_input.startswith("pp "):
                 user_input = user_input[3:]
