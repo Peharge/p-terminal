@@ -28446,7 +28446,7 @@ def main():
                 if venvs:
                     print(f"[{timestamp()}] [INFO] Found {len(venvs)} virtual environment(s):\n")
                     for i, env in enumerate(venvs, 1):
-                        print(f"  {i}. {env}")
+                        print(f"  {blue}[{i}]{reset} {env}")
                 else:
                     print(f"[{timestamp()}] [INFO] No virtual environments found in directory tree.")
 
@@ -28461,7 +28461,7 @@ def main():
                 if venvs:
                     print(f"[{timestamp()}] [INFO] Found {len(venvs)} virtual environment(s):\n")
                     for i, env in enumerate(venvs, 1):
-                        print(f"  {i}. {env}")
+                        print(f"  {blue}[{i}]{reset} {env}")
                 else:
                     print(f"[{timestamp()}] [INFO] No virtual environments found in directory tree.")
 
@@ -28477,7 +28477,7 @@ def main():
                 if venvs:
                     print(f"[{timestamp()}] [INFO] Found {len(venvs)} virtual environment(s):\n")
                     for i, env in enumerate(venvs, 1):
-                        print(f"  {i}. {env}")
+                        print(f"  {blue}[{i}]{reset} {env}")
 
                     # Benutzer zur Auswahl auffordern
                     while True:
