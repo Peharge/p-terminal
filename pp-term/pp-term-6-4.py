@@ -714,37 +714,27 @@ def run_quantum_command(
 
 def run_command_ov(command, shell=False, cwd=None, extra_env=None):
     """
-    Führt einen externen Befehl aus und unterstützt beliebige virtuelle Umgebungen.
-    Erfasst Aktivierung/Deaktivierung dynamisch und speichert Umgebungsinfos in JSON.
-
-    Args:
-        command (str | List[str]): Der auszuführende Befehl.
-        shell (bool): Wenn True, über die Shell ausführen.
-        cwd (str | None): Arbeitsverzeichnis.
-        extra_env (dict | None): Zusätzliche Umgebungsvariablen.
-
-    Returns:
-        int: Exit-Code des Prozesses.
+    Führt beliebige Befehle aus und verwaltet virtuelle Umgebungen dynamisch.
     """
 
-    # Pfade zu JSON-Dateien
+    user_name = os.getlogin()
     current_env_path = Path(f"C:/Users/{user_name}/p-terminal/pp-term/current_env.json")
     info_main_path = Path(f"C:/Users/{user_name}/p-terminal/pp-term/info-main-v-3.json")
-
-    # Lade aktuelle Env-Infos
-    try:
-        with open(current_env_path, 'r') as f:
-            data = json.load(f)
-            active = data.get("active_env")
-    except (FileNotFoundError, json.JSONDecodeError):
-        data = {}
-        active = None
 
     def save_json(path, content):
         with open(path, 'w') as f:
             json.dump(content, f, indent=4)
 
-    # Kommando als Liste vorbereiten
+    def load_json(path):
+        try:
+            with open(path, 'r') as f:
+                return json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            return {}
+
+    current_env = load_json(current_env_path)
+    info_data = load_json(info_main_path)
+
     if isinstance(command, str) and not shell:
         cmd_list = shlex.split(command, posix=(os.name != "nt"))
     elif isinstance(command, list):
@@ -752,115 +742,74 @@ def run_command_ov(command, shell=False, cwd=None, extra_env=None):
     else:
         cmd_list = []
 
-    # Allgemeine Erkennung für "virtuelle Umgebung Befehle"
-    # z.B. "[tool] use/activate VERSION" oder "[tool] deactivate/off/none"
-    # Dynamisch: Erstes Wort als Tool-Name, zweites als Aktion, drittes als Version
-
-    is_venv_command = False
-    tool_name = None
-    action = None
-    version = None
-
-    if cmd_list and len(cmd_list) >= 2:
-        tool_name = cmd_list[0].lower()
+    # Versuche zu erkennen, ob es sich um ein "env"-Kommando handelt
+    is_env_command = False
+    if len(cmd_list) >= 2:
+        tool = cmd_list[0].lower()
         action = cmd_list[1].lower()
         version = cmd_list[2] if len(cmd_list) > 2 else None
 
-        activate_actions = {"use", "activate"}
-        deactivate_actions = {"deactivate", "off", "none"}
-
-        if action in activate_actions or action in deactivate_actions:
-            is_venv_command = True
-
-    if is_venv_command:
-        # Lade bestehende info-main-3.json
-        try:
-            with open(info_main_path, 'r') as f:
-                info_data = json.load(f)
-        except (FileNotFoundError, json.JSONDecodeError):
-            info_data = {}
-
         if action in {"use", "activate"} and version:
-            # Setze virtuelle Umgebung aktiv
-            display_info = f"({tool_name}-v{version})"
-            info_data[tool_name] = {
+            is_env_command = True
+            # Aktiviere Umgebung
+            display = f"({tool}-v{version})"
+            bin_path = f"C:/Users/{user_name}/.virtualenvs/{tool}/{version}/bin"  # Beispielpfad
+            info_data[tool] = {
                 "version": version,
-                "display": display_info,
+                "display": display,
+                "bin_path": bin_path,
                 "activated_at": timestamp()
             }
+            current_env["active_env"] = current_env.get("active_env", {})
+            current_env["active_env"][tool] = version
             save_json(info_main_path, info_data)
-
-            data["active_env"] = {
-                "type": tool_name,
-                "version": version,
-                "display": display_info
-            }
-            save_json(current_env_path, data)
-
-            print(f"[{timestamp()}] [{tool_name}] Aktiviert Version {version} {display_info}")
+            save_json(current_env_path, current_env)
+            print(f"[{timestamp()}] [{tool}] aktiviert: Version {version} {display}")
 
         elif action in {"deactivate", "off", "none"}:
-            # Entferne virtuelle Umgebung info
-            if tool_name in info_data:
-                del info_data[tool_name]
-                save_json(info_main_path, info_data)
+            is_env_command = True
+            if tool in info_data:
+                del info_data[tool]
+            if "active_env" in current_env and tool in current_env["active_env"]:
+                del current_env["active_env"][tool]
+            save_json(info_main_path, info_data)
+            save_json(current_env_path, current_env)
+            print(f"[{timestamp()}] [{tool}] deaktiviert.")
 
-            if isinstance(data.get("active_env"), dict) and data["active_env"].get("type") == tool_name:
-                data["active_env"] = None
-                save_json(current_env_path, data)
+        if is_env_command:
+            proc = subprocess.Popen(
+                command if shell else cmd_list,
+                shell=shell,
+                cwd=cwd,
+                env=os.environ,
+                stdin=sys.stdin,
+                stdout=sys.stdout,
+                stderr=sys.stderr,
+                text=True
+            )
+            try:
+                return proc.wait()
+            except KeyboardInterrupt:
+                proc.send_signal(signal.SIGINT)
+                return proc.wait()
 
-            print(f"[{timestamp()}] [{tool_name}] Deaktiviert virtuelle Umgebung")
-
-        # Führe den Befehl aus, System-Umgebung verwenden (da der Tool selbst env verwaltet)
-        proc = subprocess.Popen(
-            command if shell else cmd_list,
-            shell=shell,
-            cwd=cwd,
-            env=os.environ,
-            stdin=sys.stdin,
-            stdout=sys.stdout,
-            stderr=sys.stderr,
-            text=True
-        )
-        try:
-            return proc.wait()
-        except KeyboardInterrupt:
-            proc.send_signal(signal.SIGINT)
-            return proc.wait()
-
-    # Falls keine venv-Befehle, prüfe aktive Umgebung (alle Tools)
-    active_env = None
+    # Wenn es KEIN spezielles Aktivierungs-/Deaktivierungs-Kommando war, führe unter Umgebung aus
     env = os.environ.copy()
 
-    if isinstance(active, dict) and "type" in active and "version" in active:
-        # Beispiel: setze evtl. Umgebungsvariablen für das aktive Tool
-        # Wenn es spezielle Variablen gibt, könnten diese hier ergänzt werden
-        # Bspw. VIRTUAL_ENV, PATH, o.Ä. (Anpassung je Tool nötig, hier nur exemplarisch)
+    for tool, info in info_data.items():
+        version = info.get("version")
+        bin_path = info.get("bin_path")
+        env[f"{tool.upper()}_VERSION"] = version
+        if bin_path:
+            env["PATH"] = bin_path + os.pathsep + env.get("PATH", "")
 
-        tool = active["type"]
-        version = active["version"]
-        # Beispielhafter Pfad (kann je Tool anders sein!)
-        # Hier einfach als Beispiel eine Umgebungsvariable setzen
-        env_var_name = f"{tool.upper()}_VERSION"
-        env[env_var_name] = version
-
-        # PATH ggf. anpassen (wenn bekannt)
-        # (Hier müsste man Toolspezifisch den Pfad aus info-main-3.json auslesen, falls vorhanden)
-        try:
-            with open(info_main_path, 'r') as f:
-                info_data = json.load(f)
-            tool_info = info_data.get(tool, {})
-            # Beispiel: Angenommen tool_info hat 'bin_path'
-            bin_path = tool_info.get("bin_path")
-            if bin_path:
-                env["PATH"] = bin_path + os.pathsep + env.get("PATH", "")
-        except Exception:
-            pass
+        # Optionale Variable z. B. VIRTUAL_ENV
+        if tool == "venv":
+            env["VIRTUAL_ENV"] = bin_path
 
     if extra_env:
         env.update(extra_env)
 
-    # Prozess starten
     if shell:
         proc = subprocess.Popen(
             command,
@@ -878,8 +827,9 @@ def run_command_ov(command, shell=False, cwd=None, extra_env=None):
             proc.send_signal(signal.SIGINT)
             return proc.wait()
 
+    # Non-shell-Ausführung mit selektiver Ausgabe
     proc = subprocess.Popen(
-        command,
+        cmd_list,
         shell=False,
         cwd=cwd,
         env=env,
