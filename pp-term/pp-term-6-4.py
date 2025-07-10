@@ -28345,45 +28345,6 @@ def main():
 
                 print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
 
-            elif user_input.startswith("pcjv "):
-                user_input = user_input[5:].strip()
-                current_dir = Path.cwd()
-                env_path = (current_dir / user_input).resolve()
-
-                try:
-                    # NVM ist shell-spezifisch – also muss ein bash-kompatibles Kommando verwendet werden
-                    command = f'nvm install node && mkdir "{env_path}"'
-
-                    subprocess.run(command, shell=True, check=True, text=True,
-                                stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
-
-                    print(f"[{timestamp()}] [INFO] Node.js environment created at {env_path}.")
-
-                    # Pfad zur aktuellen env-Datei
-                    user = getpass.getuser()
-                    env_file_path = Path(f"C:/Users/{user}/p-terminal/pp-term/current_env.json")
-                    env_file_path.parent.mkdir(parents=True, exist_ok=True)
-
-                    # Daten in JSON speichern
-                    env_data = {
-                        "type": "nodejs",
-                        "name": user_input,
-                        "path": str(env_path),
-                        "created_at": timestamp()
-                    }
-
-                    with open(env_file_path, "w", encoding="utf-8") as f:
-                        json.dump(env_data, f, indent=4)
-
-                    print(f"[{timestamp()}] [INFO] Environment info written to {env_file_path}.")
-
-                except subprocess.CalledProcessError as e:
-                    print(f"[{timestamp()}] [ERROR] Failed to create Node.js env '{user_input}': {e}")
-                except KeyboardInterrupt:
-                    print(f"[{timestamp()}] [INFO] Cancellation by user.")
-                except Exception as e:
-                    print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
-
             elif user_input.startswith("pp "):
                 user_input = user_input[3:]
                 run_command_with_admin_python_privileges(user_input)
