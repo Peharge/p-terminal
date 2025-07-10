@@ -803,7 +803,7 @@ def run_command_ov(command, shell=False, cwd=None, extra_env=None):
         if bin_path:
             env["PATH"] = bin_path + os.pathsep + env.get("PATH", "")
 
-        # Optionale Variable z. B. VIRTUAL_ENV
+        # Optionale Variable z.B. VIRTUAL_ENV
         if tool == "venv":
             env["VIRTUAL_ENV"] = bin_path
 
