@@ -28557,6 +28557,7 @@ def main():
 
             elif user_input.startswith("pov "):
                 user_input = user_input[4:]
+                print(f"[{timestamp()}] [INFO] Note that the pov command only supports CMD commands, not PP terminal!")
                 run_command_ov(user_input, shell=True)
 
             elif user_input.startswith("pp "):
