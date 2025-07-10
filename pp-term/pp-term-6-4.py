@@ -4212,7 +4212,7 @@ def handle_special_commands(user_input):
             except subprocess.CalledProcessError as e:
                 print(f"[{timestamp()}] [ERROR] Clean command failed: {e}")
         else:
-            print(f"[{timestamp()}] [WARN] Usage: gcc clean <directory_path>")
+            print(f"[{timestamp()}] [INFO] Usage: gcc clean <directory_path>")
         return True
 
     if user_input.startswith("gfortran ") and " -o " in ui:
@@ -6353,7 +6353,7 @@ def handle_special_commands(user_input):
             # Wait up to 5s for thread to finish
             server_thread.join(timeout=5)
             if server_thread.is_alive():
-                print(f"[{timestamp()}] [WARN] Server thread did not terminate in time.")
+                print(f"[{timestamp()}] [INFO] Server thread did not terminate in time.")
 
             # Verify URL is offline
             max_retries = 5
@@ -6367,11 +6367,11 @@ def handle_special_commands(user_input):
                     print(f"[{timestamp()}] [INFO] URL is now offline.")
                     return True
 
-            print(f"[{timestamp()}] [WARN] URL still reachable after retries. Returning True anyway.")
+            print(f"[{timestamp()}] [INFO] URL still reachable after retries. Returning True anyway.")
             return True
 
         else:
-            print(f"[{timestamp()}] [WARN] Unsupported file extension: '{ext}'")
+            print(f"[{timestamp()}] [INFO] Unsupported file extension: '{ext}'")
             return True
 
     if user_input.startswith("pd-node "):
@@ -6816,7 +6816,7 @@ def handle_special_commands(user_input):
             return True
 
         if not filepath.lower().endswith(".rb"):
-            print(f"[{timestamp()}] [WARN] Unsupported file extension for Ruby: {filepath}")
+            print(f"[{timestamp()}] [INFO] Unsupported file extension for Ruby: {filepath}")
             return True
 
         print(f"[{timestamp()}] [INFO] Running Ruby script: {filepath}")
@@ -8075,7 +8075,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] URL is now offline.")
                 break
         else:
-            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+            print(f"[{timestamp()}] [INFO] URL still reachable after retries.")
 
         # Jetzt erst zurückkehren
         return True
@@ -8226,7 +8226,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] URL is now offline.")
                 break
         else:
-            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+            print(f"[{timestamp()}] [INFO] URL still reachable after retries.")
 
         return True
 
@@ -8348,7 +8348,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] URL is now offline.")
                 break
         else:
-            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+            print(f"[{timestamp()}] [INFO] URL still reachable after retries.")
 
         return True
 
@@ -8474,7 +8474,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] URL is now offline.")
                 break
         else:
-            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+            print(f"[{timestamp()}] [INFO] URL still reachable after retries.")
 
         return True
 
@@ -8584,7 +8584,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] URL is now offline.")
                 break
         else:
-            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+            print(f"[{timestamp()}] [INFO] URL still reachable after retries.")
 
         return True
 
@@ -8700,7 +8700,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] URL is now offline.")
                 break
         else:
-            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+            print(f"[{timestamp()}] [INFO] URL still reachable after retries.")
 
         return True
     
@@ -8817,7 +8817,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] URL is now offline.")
                 break
         else:
-            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+            print(f"[{timestamp()}] [INFO] URL still reachable after retries.")
 
         return True
     
@@ -8933,7 +8933,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] URL is now offline.")
                 break
         else:
-            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+            print(f"[{timestamp()}] [INFO] URL still reachable after retries.")
 
         return True
 
@@ -9078,7 +9078,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] URL is now offline.")
                 break
         else:
-            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+            print(f"[{timestamp()}] [INFO] URL still reachable after retries.")
 
         return True
     
@@ -9215,7 +9215,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] URL is now offline.")
                 break
         else:
-            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+            print(f"[{timestamp()}] [INFO] URL still reachable after retries.")
 
         return True
     
@@ -9335,7 +9335,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] URL is now offline.")
                 break
         else:
-            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+            print(f"[{timestamp()}] [INFO] URL still reachable after retries.")
 
         return True
     
@@ -9441,7 +9441,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] URL is now offline.")
                 break
         else:
-            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+            print(f"[{timestamp()}] [INFO] URL still reachable after retries.")
 
         return True
     
@@ -9554,7 +9554,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] URL is now offline.")
                 break
         else:
-            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+            print(f"[{timestamp()}] [INFO] URL still reachable after retries.")
 
         return True
 
@@ -9660,7 +9660,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] URL is now offline.")
                 break
         else:
-            print(f"[{timestamp()}] [WARN] URL still reachable after multiple attempts.")
+            print(f"[{timestamp()}] [INFO] URL still reachable after multiple attempts.")
 
         return True
 
@@ -9791,7 +9791,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] URL is now offline.")
                 break
         else:
-            print(f"[{timestamp()}] [WARN] URL still reachable after multiple attempts.")
+            print(f"[{timestamp()}] [INFO] URL still reachable after multiple attempts.")
 
         return True
     
@@ -9926,7 +9926,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] URL is now offline.")
                 break
         else:
-            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+            print(f"[{timestamp()}] [INFO] URL still reachable after retries.")
 
         return True
     
@@ -10069,7 +10069,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] URL is now offline.")
                 break
         else:
-            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+            print(f"[{timestamp()}] [INFO] URL still reachable after retries.")
 
         return True
     
@@ -10197,7 +10197,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] URL is now offline.")
                 break
         else:
-            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+            print(f"[{timestamp()}] [INFO] URL still reachable after retries.")
 
         return True
     
@@ -10325,7 +10325,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] URL is now offline.")
                 break
         else:
-            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+            print(f"[{timestamp()}] [INFO] URL still reachable after retries.")
 
         return True
 
@@ -10419,7 +10419,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] URL is now offline.")
                 break
         else:
-            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+            print(f"[{timestamp()}] [INFO] URL still reachable after retries.")
 
         return True
 
@@ -10539,7 +10539,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] URL is now offline.")
                 break
         else:
-            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+            print(f"[{timestamp()}] [INFO] URL still reachable after retries.")
 
         return True
 
@@ -10646,7 +10646,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] URL is now offline.")
                 break
         else:
-            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+            print(f"[{timestamp()}] [INFO] URL still reachable after retries.")
 
         return True
 
@@ -10708,7 +10708,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] URL is now offline.")
                 break
         else:
-            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+            print(f"[{timestamp()}] [INFO] URL still reachable after retries.")
 
         return True
 
@@ -10790,7 +10790,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] URL is now offline.")
                 break
         else:
-            print(f"[{timestamp()}] [WARN] URL still reachable after retries.")
+            print(f"[{timestamp()}] [INFO] URL still reachable after retries.")
 
         return True
 
@@ -10908,7 +10908,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] URL is now offline.")
                 break
         else:
-            print(f"[{timestamp()}] [WARN] URL still reachable after multiple attempts.")
+            print(f"[{timestamp()}] [INFO] URL still reachable after multiple attempts.")
 
         return True
 
@@ -17627,7 +17627,7 @@ def handle_special_commands(user_input):
                     os.environ[key] = val
             logging.info(f"[{timestamp()}] [INFO] .env loaded from {env_path}")
         else:
-            logging.warning(f"[{timestamp()}] [WARN] .env not found: {env_path}")
+            logging.warning(f"[{timestamp()}] [INFO] .env not found: {env_path}")
 
         # Define network
         class SimpleNet(nn.Module):
@@ -19194,7 +19194,7 @@ def handle_special_commands(user_input):
             subprocess.Popen(['grafana-server','--homepath',folder], shell=False)
             logging.info(f"[{timestamp()}] [INFO] Grafana started")
         except Exception:
-            print(f"[{timestamp()}] [WARN] Start grafana-server manually in {folder}")
+            print(f"[{timestamp()}] [INFO] Start grafana-server manually in {folder}")
 
         print(f"[{timestamp()}] [END] IQ-FINANCE-grafana completed")
         return True
@@ -20610,7 +20610,7 @@ def start_local_server(directory: str,
                 # Port belegt → Fehler provozieren, damit wir in den Except-Zweig springen
                 raise OSError(f"Port {chosen_port} belegt.")
     except OSError:
-        print(f"[{timestamp()}] [WARN] Port {requested_port} is busy. Searching for a free port...")
+        print(f"[{timestamp()}] [INFO] Port {requested_port} is busy. Searching for a free port...")
         chosen_port = find_free_port()
 
     handler = http.server.SimpleHTTPRequestHandler
@@ -20831,7 +20831,7 @@ def ensure_admin():
         except Exception as e:
             logging.error(f"[{timestamp()}] [ERROR] Admin check failed: {e}")
     else:
-        logging.warning(f"[{timestamp()}] [WARN] Unsupported OS for admin elevation: {os.name}")
+        logging.warning(f"[{timestamp()}] [INFO] Unsupported OS for admin elevation: {os.name}")
 
 
 def delete_target(path: str):
@@ -21265,7 +21265,7 @@ def search_websites_all(command, num_results=50, results_per_page=10):
         soup = BeautifulSoup(response.text, 'html.parser')
         results = soup.find_all('div', class_='result')
         if not results:
-            print(f"[{timestamp()}] [WARN] No further results at Offset {offset}.")
+            print(f"[{timestamp()}] [INFO] No further results at Offset {offset}.")
             break
 
         for result in results:
@@ -28384,7 +28384,7 @@ def main():
                 env_path = (current_dir / env_name).resolve()
 
                 if not env_path.exists():
-                    print(f"[{timestamp()}] [WARN] Environment '{env_name}' does not exist at '{env_path}'.")
+                    print(f"[{timestamp()}] [INFO] Environment '{env_name}' does not exist at '{env_path}'.")
                     user_confirm = input("Do you want to create this virtual environment? [y/n]: ").strip().lower()
                     if user_confirm == 'y':
                         command = f'python -m venv "{env_path}"'
@@ -28405,7 +28405,7 @@ def main():
                     python_exe = env_path / "bin" / "python"
 
                 if not python_exe.exists():
-                    print(f"[{timestamp()}] [WARN] No Python interpreter found in '{python_exe}'.")
+                    print(f"[{timestamp()}] [INFO] No Python interpreter found in '{python_exe}'.")
                     user_confirm = input("Do you still want to activate this environment? [y/N)] ").strip().lower()
                     if user_confirm != 'y':
                         print(f"[{timestamp()}] [INFO] Activation cancelled.")
@@ -28433,7 +28433,7 @@ def main():
                         break
 
                 if not found:
-                    print(f"[{timestamp()}] [WARN] No virtual environment found in current directory tree.")
+                    print(f"[{timestamp()}] [INFO] No virtual environment found in current directory tree.")
 
             elif user_input.strip() == "plv":
                 print(f"[{timestamp()}] [INFO] Searching for virtual environments in '{current_dir}'...\n")
@@ -28448,7 +28448,7 @@ def main():
                     for i, env in enumerate(venvs, 1):
                         print(f"  {i}. {env}")
                 else:
-                    print(f"[{timestamp()}] [WARN] No virtual environments found in directory tree.")
+                    print(f"[{timestamp()}] [INFO] No virtual environments found in directory tree.")
 
             elif user_input.strip() == "psvls":
                 print(f"[{timestamp()}] [INFO] Searching for virtual environments in '{current_dir}'...\n")
@@ -28463,7 +28463,7 @@ def main():
                     for i, env in enumerate(venvs, 1):
                         print(f"  {i}. {env}")
                 else:
-                    print(f"[{timestamp()}] [WARN] No virtual environments found in directory tree.")
+                    print(f"[{timestamp()}] [INFO] No virtual environments found in directory tree.")
 
             elif user_input.strip() == "ps&av":
                 print(f"[{timestamp()}] [INFO] Searching for virtual environments in '{current_dir}'...\n")
@@ -28498,7 +28498,7 @@ def main():
                         except ValueError:
                             print("Please enter a valid number.")
                 else:
-                    print(f"[{timestamp()}] [WARN] No virtual environments found in directory tree.")
+                    print(f"[{timestamp()}] [INFO] No virtual environments found in directory tree.")
 
             elif user_input.startswith("p-venv-f "):
                 env_name = user_input[9:].strip()
