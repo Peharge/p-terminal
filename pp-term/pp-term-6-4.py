@@ -28494,9 +28494,9 @@ def main():
                                 print(f"\n[{timestamp()}] [INFO] Active environment set to '{active}'.")
                                 break
                             else:
-                                print("Invalid selection. Please enter a number from the list.")
+                                print(f"[{timestamp()}] [INFO] Invalid selection. Please enter a number from the list.")
                         except ValueError:
-                            print("Please enter a valid number.")
+                            print(f"[{timestamp()}] [INFO] Please enter a valid number.")
                 else:
                     print(f"[{timestamp()}] [INFO] No virtual environments found in directory tree.")
 
