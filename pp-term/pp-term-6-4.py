@@ -19199,6 +19199,260 @@ def handle_special_commands(user_input):
         print(f"[{timestamp()}] [END] IQ-FINANCE-grafana completed")
         return True
 
+    if user_input.startswith("SIMON-IQ "):
+        import nibabel as nib
+        from monai.transforms import (
+            Compose, LoadImaged, EnsureChannelFirstd, ScaleIntensityd,
+            Orientationd, Spacingd, ResizeWithPadOrCropd, ToTensord
+        )
+        from monai.networks.nets import UNet, SwinUNETR, SegResNet
+        from monai.inferers import sliding_window_inference
+        from monai.data import DataLoader, Dataset
+
+        # --- Command Parsing ---
+        from argparse import ArgumentParser
+
+        # Rebuild args from input string
+        try:
+            cmd_args = shlex.split(user_input.replace("SIMON-IQ", ""))
+        except Exception as e:
+            print(f"[PARSE ERROR] Could not parse command: {e}")
+            sys.exit(1)
+
+        parser = ArgumentParser(description="SIMON-IQ MONAI Segmentation Pipeline")
+        parser.add_argument("--model", type=str, required=True, help="Model name: unet, swinunetr, segresnet")
+        parser.add_argument("--image", type=str, required=True, help="Path to NIfTI image")
+        parser.add_argument("--output", type=str, default="SIMON-IQ_OUTPUT_SEG.nii.gz", help="Output file path")
+        parser.add_argument("--roi", type=int, nargs=3, default=[96, 96, 96], help="ROI size (x y z)")
+        parser.add_argument("--spacing", type=float, nargs=3, default=[1.5, 1.5, 2.0], help="Target spacing")
+        parser.add_argument("--device", type=str, default="cuda" if torch.cuda.is_available() else "cpu", help="Device: cuda or cpu")
+
+        try:
+            args = parser.parse_args(cmd_args)
+        except SystemExit:
+            print("[ERROR] Invalid SIMON-IQ command. Use --model, --image, etc.")
+            sys.exit(1)
+
+        # --- Model Setup ---
+        model_name = args.model.lower()
+        image_path = args.image
+        output_path = args.output
+        roi_size = tuple(args.roi)
+        spacing = tuple(args.spacing)
+        device = torch.device(args.device)
+
+        models = {
+            "unet": UNet(
+                spatial_dims=3,
+                in_channels=1,
+                out_channels=2,
+                channels=(16, 32, 64, 128, 256),
+                strides=(2, 2, 2, 2),
+            ),
+            "swinunetr": SwinUNETR(
+                img_size=roi_size,
+                in_channels=1,
+                out_channels=2,
+                feature_size=48,
+                use_checkpoint=False,
+            ),
+            "segresnet": SegResNet(
+                spatial_dims=3,
+                in_channels=1,
+                out_channels=2,
+                init_filters=16,
+            ),
+        }
+
+        if model_name not in models:
+            print(f"[ERROR] Unsupported model '{model_name}'. Choose from: {list(models.keys())}")
+            sys.exit(1)
+        if not os.path.isfile(image_path):
+            print(f"[ERROR] Image not found: {image_path}")
+            sys.exit(1)
+
+        model = models[model_name].to(device)
+        model.eval()
+
+        # --- Data & Transforms ---
+        transforms = Compose([
+            LoadImaged(keys=["image"]),
+            EnsureChannelFirstd(keys=["image"]),
+            ScaleIntensityd(keys=["image"]),
+            Orientationd(keys=["image"], axcodes="RAS"),
+            Spacingd(keys=["image"], pixdim=spacing, mode="bilinear"),
+            ResizeWithPadOrCropd(keys=["image"], spatial_size=roi_size),
+            ToTensord(keys=["image"]),
+        ])
+        dataset = Dataset(data=[{"image": image_path}], transform=transforms)
+        loader = DataLoader(dataset, batch_size=1)
+
+        # --- Inference ---
+        with torch.no_grad():
+            for data in loader:
+                input_image = data["image"].to(device)
+                output = sliding_window_inference(input_image, roi_size=roi_size, sw_batch_size=1, predictor=model)
+                prediction = torch.argmax(output, dim=1).cpu().numpy()[0]
+
+        # --- Save Output ---
+        original_affine = nib.load(image_path).affine
+        nib.save(nib.Nifti1Image(prediction.astype("uint8"), affine=original_affine), output_path)
+        print(f"[SUCCESS] Segmentation complete. Output saved to: {output_path}")
+
+    if user_input.startswith("SIMONLABEL-IQ "):
+        from argparse import ArgumentParser
+        from monailabel.client.client import MONAILabelClient
+        from monailabel.datastore.local import LocalDatastore
+        import torch
+
+        # --- Parse command ---
+        try:
+            cmd = shlex.split(user_input.replace("SIMONLABEL-IQ", ""))
+        except Exception as e:
+            print(f"[PARSE ERROR] {e}"); sys.exit(1)
+
+        parser = ArgumentParser(description="SIMONLABEL-IQ CLI for MONAI Label (Python client)")
+        parser.add_argument("--server", required=True, help="MONAILabel server URL (e.g. http://127.0.0.1:8000)")
+        parser.add_argument("--task", default="segmentation", help="Task name: segmentation, deepedit, deepgrow, next_sample, scoring, train, batch_infer")
+        parser.add_argument("--image", help="Single image file path or image ID")
+        parser.add_argument("--images", nargs="*", help="Multiple image file paths for batch operations")
+        parser.add_argument("--model", help="Model name (optional if default)")
+        parser.add_argument("--strategy", help="Strategy name for next_sample task")
+        parser.add_argument("--method", help="Method name for scoring task")
+        parser.add_argument("--train_epochs", type=int, help="Max epochs for train task")
+        parser.add_argument("--params", nargs="*", help="Extra key=value parameters for inference/train")
+        parser.add_argument("--upload", action="store_true", help="Upload image(s) to datastore before infer")
+        parser.add_argument("--download_label", action="store_true", help="Download predicted label to local file")
+        parser.add_argument("--download_image", action="store_true", help="Download processed image from server")
+        parser.add_argument("--output", default="simonlabel_output.nii.gz", help="Local filename for downloaded label")
+        parser.add_argument("--info", action="store_true", help="Fetch server info (models/tasks)")
+        args = parser.parse_args(cmd)
+
+        client = MONAILabelClient(args.server)
+
+        if args.info:
+            info = client.info()
+            print("[SERVER INFO]", json.dumps(info, indent=2))
+            sys.exit(0)
+
+        def parse_params(arr):
+            return dict(p.split("=",1) for p in arr if "=" in p) if arr else {}
+
+        params = parse_params(args.params)
+
+        image_ids = []
+        # upload files if requested
+        if args.upload and args.images:
+            for fp in args.images:
+                resp = client.upload_image(fp)
+                iid = resp.get("id") or os.path.basename(fp)
+                print(f"[UPLOADED] {fp} -> ID: {iid}")
+                image_ids.append(iid)
+        elif args.upload and args.image:
+            resp = client.upload_image(args.image)
+            iid = resp.get("id") or os.path.basename(args.image)
+            print(f"[UPLOADED] {args.image} -> ID: {iid}")
+            image_ids = [iid]
+        else:
+            if args.images:
+                image_ids = args.images
+            elif args.image:
+                image_ids = [args.image]
+            else:
+                print("[ERROR] No image or images provided"); sys.exit(1)
+
+        result = None
+
+        # Choose and execute task
+        if args.task == "batch_infer":
+            result = client.datastore().batch_infer(task=args.task, images=image_ids, model=args.model, params=params)
+        elif args.task == "next_sample":
+            result = client.next_sample(args.strategy, params)
+        elif args.task == "scoring":
+            result = client.scoring(method=args.method, params=params)
+        elif args.task == "train":
+            train_params = {"train_epochs": args.train_epochs, **params}
+            result = client.train_start(args.model, train_params)
+        else:
+            # default: single-image inference
+            result_file, result_body = client.infer(model=args.model, image_id=image_ids[0], params=params)
+            result = result_body
+            print(f"[INFER] Label file saved temporary: {result_file}")
+
+        print(f"[RESULT] Task={args.task} completed:\n{json.dumps(result, indent=2)}")
+
+        if args.download_label and result.get("label"):
+            label_id = result["label"]
+            client.datastore().download_label(label_id, tag=result.get("tag",""))
+            print(f"[DOWNLOADED] Label for ID {label_id}")
+
+        if args.download_image and result.get("image"):
+            img_id = result["image"]
+            # requires client logic or REST to download
+            print(f"[NOTE] To download processed image ID: {img_id}")
+
+    if user_input.startswith("SIMONDEPLOY-IQ "):
+        # MONAI Deploy App SDK imports
+        from monai.deploy.core import Application
+        from monai.deploy.core import Operator, InputContext, OutputContext, ExecutionContext
+        from monai.deploy.core import DataPath, IOType, OperatorSpec
+        from monai.deploy.conditions import CountCondition
+        from monai.deploy.core.models import ModelFactory, TorchScriptModel, TritonModel
+
+        # --- Parse CLI command from input ---
+        try:
+            cmd_args = shlex.split(user_input.replace("SIMONDEPLOY-IQ", ""))
+        except Exception as e:
+            print(f"[PARSE ERROR] {e}"); sys.exit(1)
+
+        parser = argparse.ArgumentParser(description="SIMONDEPLOY‑IQ CLI for MONAI Deploy")
+        parser.add_argument("--mode", choices=["develop","package","run"], required=True, help="Mode: develop (local debug), package to MAP, or run a packaged app")
+        parser.add_argument("--app_dir", type=str, help="Path to application folder (develop or package)")
+        parser.add_argument("--app_yaml", type=str, help="Path to app.yaml configuration file")
+        parser.add_argument("--input", nargs="+", help="Input image/file paths, DICOM folder or NIfTI")
+        parser.add_argument("--output", type=str, default="output", help="Output directory")
+        parser.add_argument("--model_path", type=str, help="TorchScript or ONNX model path (for packaging)")
+        parser.add_argument("--use_triton", action="store_true", help="Use Triton remote model server")
+        parser.add_argument("--docker_tag", type=str, default="simondeploy_app:latest", help="Docker tag for MAP packaging")
+        parser.add_argument("--roi", nargs=3, type=int, help="ROI size if needed")
+        parser.add_argument("--spacing", nargs=3, type=float, help="Target spacing")
+        args = parser.parse_args(cmd_args)
+
+        # --- Mode: develop (local debug) ---
+        if args.mode == "develop":
+            # assume app_dir contains an app.py with Application subclass
+            sys.path.insert(0, args.app_dir)
+            from app import App  # your custom Application
+            print("[DEVELOP] Running application in local debug mode")
+            App(do_run=True).run()
+
+        # --- Mode: package (create MAP docker using monai‑deploy CLI) ---
+        elif args.mode == "package":
+            print("[PACKAGE] Packaging application into MAP")
+            cmd = [
+                "monai-deploy", "package", args.app_dir,
+                "-c", args.app_yaml,
+                "-t", args.docker_tag
+            ]
+            if args.model_path:
+                cmd += ["--model", args.model_path]
+            subprocess.run(cmd, check=True)
+            print(f"[PACKAGE] Created MAP image: {args.docker_tag}")
+
+        # --- Mode: run MAP (docker image) ---
+        elif args.mode == "run":
+            print("[RUN] Executing packaged MAP")
+            cmd = [
+                "monai-deploy", "run", args.docker_tag,
+                "-i", *args.input,
+                "-o", args.output
+            ]
+            subprocess.run(cmd, check=True)
+            print(f"[RUN] Output available in directory: {args.output}")
+
+        else:
+            print("[ERROR] Invalid mode"); sys.exit(1)
+
     if user_input.startswith("pa "):
         user_input = user_input[3:].strip()
         ollama_installed = check_command_installed("ollama")
