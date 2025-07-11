@@ -27441,9 +27441,9 @@ def handle_history_command():
     if not history:
         print(f"[{timestamp()}] [ERROR] No commands in the history.")
     else:
-        print(f"[{timestamp()}] [INFO] Previous commands:")
+        print(f"[{timestamp()}] [INFO] Previous commands:\n")
         for idx, cmd in enumerate(history, start=1):
-            print(f"  {idx}: {cmd}")
+            print(f"  {blue}[{idx}]{reset} {cmd}")
     return True
 
 
