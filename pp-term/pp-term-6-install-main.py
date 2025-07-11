@@ -107,13 +107,14 @@ REQUIRED_PACKAGES = [
     "requests", "ollama", "transformers", "numpy", "pandas", "python-dotenv", "beautifulsoup4",
     "PyQt6", "PyQt6-sip", "PyQt6-Charts", "PyQt6-WebEngine", "keyboard", "pyreadline3",
     "psutil", "speedtest-cli", "colorama", "pyperclip", "termcolor", "docker", "flask",
-    "typer", "click", "blessed", "prompt-toolkit", "tqdm", "watchdog", "fire", "notebook", "jupyterlab", "jax",
-    "chardet", "plotly", "py-cpuinfo", "gputil", "tabulate", "pyqtgraph", "deep-translator",
-    "duckduckgo-search", "pillow", "GitPython", "matplotlib", "pyinstaller", "virtualenv",
-    "legacy-cgi", "colorama", "ipykernel", "ipython", "bash_kernel", "urllib3", "markdown", "cirq", 
-    "mysql-connector-python", "psycopg2-binary", "cx_Oracle", "pyodbc", "ibm_db ibm_db_dbi",
-    "redis", "pymongo", "bson", "cassandra-driver", "python-arango", "neo4j", "pyorient", "ravendb",
-    "boto3", "yfinance"
+    "typer", "click", "blessed", "prompt-toolkit", "tqdm", "watchdog", "fire", "notebook",
+    "jupyterlab", "jax", "chardet", "plotly", "py-cpuinfo", "gputil", "tabulate", "pyqtgraph",
+    "deep-translator", "duckduckgo-search", "pillow", "GitPython", "matplotlib", "pyinstaller",
+    "virtualenv", "legacy-cgi", "colorama", "ipykernel", "ipython", "bash_kernel", "urllib3",
+    "markdown", "cirq", "mysql-connector-python", "psycopg2-binary", "cx_Oracle", "pyodbc",
+    "ibm_db ibm_db_dbi", "redis", "pymongo", "bson", "cassandra-driver", "python-arango", "neo4j",
+    "pyorient", "ravendb", "boto3", "yfinance", "monai", "nibabel", "monailabel", "monai-deploy-app-sdk",
+    "scikit-image", "pydicom", "SimpleITK"
 ]
 
 
