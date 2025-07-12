@@ -107,7 +107,7 @@ REQUIRED_PACKAGES = [
     "requests", "ollama", "transformers", "numpy", "pandas", "python-dotenv", "beautifulsoup4",
     "PyQt6", "PyQt6-sip", "PyQt6-Charts", "PyQt6-WebEngine", "keyboard", "pyreadline3",
     "psutil", "speedtest-cli", "colorama", "pyperclip", "termcolor", "docker", "flask",
-    "typer", "click", "blessed", "prompt-toolkit", "tqdm", "watchdog", "fire", "notebook",
+    "typer", "click", "blessed", "prompt-toolkit", "tqdm", "watchdog", "fire", "notebook", "jupyter",
     "jupyterlab", "jax", "chardet", "plotly", "py-cpuinfo", "gputil", "tabulate", "pyqtgraph",
     "deep-translator", "duckduckgo-search", "pillow", "GitPython", "matplotlib", "pyinstaller",
     "virtualenv", "legacy-cgi", "colorama", "ipykernel", "ipython", "bash_kernel", "urllib3",
