@@ -923,9 +923,6 @@ def handle_special_commands(user_input):
         "neofetch-4": "pp-commands\\neofetch-4.py",  # new
         "fastfetch-4": "pp-commands\\neofetch-4.py",  # new
         "screenfetch-4": "pp-commands\\neofetch-4.py",  # new
-        "jupyter": "mavis-run-jup\\run-jup.py",
-        "run jupyter": "mavis-run-jup\\run-jup.py",
-        "run jup": "mavis-run-jup\\run-jup.py",  # new
         "run mavis-4": "pp-commands\\run-mavis-4.py",  # new
         "run mavis-4-3": "pp-commands\\run-mavis-4-3.py",  # new
         "run mavis-4-fast": "mavis-4-main.py",  # new
@@ -1282,6 +1279,9 @@ def handle_special_commands(user_input):
         "install fun aquarium": "pp-commands\\fun-asciiquarium.py",  # new
         "install fun aqua": "pp-commands\\fun-asciiquarium.py",  # new
         "install fun bb": "pp-commands\\fun-bb.py",  # new
+        "jupyter": "mavis-run-jup\\run-jup.py",
+        "run jupyter": "mavis-run-jup\\run-jup.py",
+        "run jup": "mavis-run-jup\\run-jup.py",  # new
         "htop": "pp-commands\\htop.py",  # new
         "bashtop": "pp-commands\\bashtop.py",  # new
         "taskmanager": "pp-commands\\bashtop.py",  # new
