@@ -13402,35 +13402,52 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("pcfo "):
-        user_input = user_input[4:].strip()
+        user_input = user_input[5:].strip()
         current_dir = Path.cwd().resolve()
+        folder_path = current_dir / user_input
 
-        command = f"mkdir {user_input}"
+        if folder_path.exists():
+            print(f"[{timestamp()}] [INFO] Folder already exists: {folder_path}")
+        else:
+            command = f'mkdir "{user_input}"'  # In Anführungszeichen für Leerzeichen-Support
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
-                                   text=True)
+            try:
+                process = subprocess.Popen(
+                    command,
+                    stdin=sys.stdin,
+                    stdout=sys.stdout,
+                    stderr=sys.stderr,
+                    shell=True,
+                    text=True
+                )
+                process.wait()
 
-        try:
-            print(f"[{timestamp()}] [INFO] Folder created: {current_dir}\\{user_input}")
-            process.wait()
-        except KeyboardInterrupt:
-            print(f"[{timestamp()}] [INFO] Cancellation by user.")
-        except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing pcf command: {e}")
+                # Prüfen, ob mkdir erfolgreich war (Ordner jetzt existiert)
+                if folder_path.exists():
+                    print(f"[{timestamp()}] [INFO] Folder created: {folder_path}")
+                else:
+                    print(f"[{timestamp()}] [ERROR] Folder creation failed: {folder_path}")
+            except KeyboardInterrupt:
+                print(f"[{timestamp()}] [INFO] Cancellation by user.")
+            except subprocess.CalledProcessError as e:
+                print(f"[{timestamp()}] [ERROR] executing mkdir command: {e}")
+        # Ende des pcfo-Kommandos
         return True
 
     if user_input.startswith("pcfo&cd "):
-        folder_name = user_input[7:].strip()
+        folder_name = user_input[8:].strip()
         current_dir = Path.cwd().resolve()
         new_folder_path = current_dir / folder_name
 
-        # Create folder
-        try:
-            new_folder_path.mkdir(parents=True, exist_ok=True)
-            print(f"[{timestamp()}] [INFO] Folder created: {new_folder_path}")
-        except Exception as e:
-            print(f"[{timestamp()}] [ERROR] Could not create folder: {e}")
-            return False
+        if new_folder_path.exists():
+            print(f"[{timestamp()}] [INFO] Folder already exists: {new_folder_path}")
+        else:
+            try:
+                new_folder_path.mkdir(parents=True, exist_ok=False)
+                print(f"[{timestamp()}] [INFO] Folder created: {new_folder_path}")
+            except Exception as e:
+                print(f"[{timestamp()}] [ERROR] Could not create folder: {e}")
+                return False
 
         # Change directory
         try:
@@ -13458,13 +13475,15 @@ def handle_special_commands(user_input):
         current_dir = Path.cwd().resolve()
         new_folder_path = current_dir / folder_name
 
-        # Create folder
-        try:
-            new_folder_path.mkdir(parents=True, exist_ok=True)
-            print(f"[{timestamp()}] [INFO] Folder created: {new_folder_path}")
-        except Exception as e:
-            print(f"[{timestamp()}] [ERROR] Could not create folder: {e}")
-            return False
+        if new_folder_path.exists():
+            print(f"[{timestamp()}] [INFO] Folder already exists: {new_folder_path}")
+        else:
+            try:
+                new_folder_path.mkdir(parents=True, exist_ok=False)
+                print(f"[{timestamp()}] [INFO] Folder created: {new_folder_path}")
+            except Exception as e:
+                print(f"[{timestamp()}] [ERROR] Could not create folder: {e}")
+                return False
 
         # Change directory
         try:
