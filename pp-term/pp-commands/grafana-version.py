@@ -72,7 +72,7 @@ def timestamp() -> str:
 
 def main():
     # Pfad zur VERSION-Datei
-    grafana_file = rf"C:\Users\{os.getlogin()}\PycharmProjects\MAVIS\run-grafana\Grafana\grafana-v11.1.5\VERSION"
+    grafana_file = rf"C:\Users\{os.getlogin()}\p-terminal\pp-term\mavis-run-grafana\Grafana\grafana-v11.1.5\VERSION"
 
     # Überprüfen, ob die Datei existiert
     if not os.path.exists(grafana_file):
