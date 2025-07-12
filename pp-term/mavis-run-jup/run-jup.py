@@ -65,6 +65,7 @@ import subprocess
 import sys
 import os
 from datetime import datetime
+import getpass
 
 def timestamp() -> str:
     """Returns current time formatted with milliseconds"""
@@ -77,7 +78,7 @@ def start_jupyter():
         print("\nJupyter Information:")
         print("--------------------")
 
-        user_home = os.path.expanduser("~")
+        user_home = f"C:/Users/{getpass.getuser()}"
         venv_python = os.path.join(user_home, "p-terminal", "pp-term", ".env", "Scripts", "python.exe")
 
         if not os.path.isfile(venv_python):
