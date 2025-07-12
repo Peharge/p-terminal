@@ -92,7 +92,7 @@ def install_nvim():
     """Installs nvim if it is not installed."""
     logging.info("[INFO] nvim is not installed. Installing nvim...")
     subprocess.run(["wsl", "sudo", "apt", "update"], check=True)
-    subprocess.run(["wsl", "sudo", "apt", "install", "-y", "nvim"], check=True)
+    subprocess.run(["wsl", "sudo", "apt", "install", "-y", "neovim"], check=True)
     logging.info("[INFO] nvim has been successfully installed.")
 
 
