@@ -67,7 +67,7 @@ import subprocess
 
 def main():
     # Pfad zum Python-Interpreter in der virtuellen Umgebung
-    python_path = f"C:\\Users\\{os.getlogin()}\\PycharmProjects\\MAVIS\\.env\\Scripts\\python.exe"
+    python_path = f"C:\\Users\\{os.getlogin()}\\p-terminal\\pp-term\\.env\\Scripts\\python.exe"
 
     # Befehl: pip show jupyter
     command = [python_path, "-m", "pip", "show", "jupyter"]
