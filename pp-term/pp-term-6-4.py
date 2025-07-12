@@ -17053,13 +17053,16 @@ def handle_special_commands(user_input):
         parts = user_input.split()
         if len(parts) != 2:
             print("[{timestamp()}] [INFO] Usage: IQ-QFT <n_qubits>")
+            return True
         else:
             try:
                 n = int(parts[1])
                 if n <= 0:
                     raise ValueError(f"[{timestamp()}] [INFO] n_qubits must be greater than 0")
+                    return True
             except ValueError as ve:
                 print(f"[{timestamp()}] [ERROR] {ve}")
+                return True
             else:
                 logging.info(f"[INFO] Starting IQ-QFT with {n} qubits")
 
