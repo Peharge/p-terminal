@@ -68,6 +68,12 @@ import threading
 import time
 import importlib.util
 import os
+from datetime import datetime
+
+def timestamp() -> str:
+    """Returns current time formatted with milliseconds"""
+    now = datetime.now()
+    return now.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
 
 required_packages = [
     "requests", "py-cpuinfo", "psutil", "GPUtil"
@@ -81,12 +87,12 @@ def activate_virtualenv(venv_path):
                                                                                                           "activate")
 
     if not os.path.exists(activate_script):
-        print(f"Error: Virtual environment not found at {venv_path}.")
+        print(f"[{timestamp()}] [ERROR] Virtual environment not found at {venv_path}.")
         sys.exit(1)
 
     os.environ["VIRTUAL_ENV"] = venv_path
     os.environ["PATH"] = os.path.join(venv_path, "Scripts") + os.pathsep + os.environ["PATH"]
-    print(f"Virtual environment {venv_path} activated.")
+    print(f"[{timestamp()}] [INFO] Virtual environment {venv_path} activated.")
 
 
 def ensure_packages_installed(packages):
@@ -94,12 +100,12 @@ def ensure_packages_installed(packages):
     to_install = [pkg for pkg in packages if importlib.util.find_spec(pkg) is None]
 
     if to_install:
-        print(f"Installing missing packages: {', '.join(to_install)}...")
+        print(f"[{timestamp()}] [INFO] Installing missing packages: {', '.join(to_install)}...")
         subprocess.run([sys.executable, "-m", "pip", "install"] + to_install, check=True, stdout=subprocess.DEVNULL,
                        stderr=subprocess.DEVNULL)
-        print("All missing packages installed.")
+        print(f"[{timestamp()}] [INFO] All missing packages installed.")
     else:
-        print("All required packages are already installed.")
+        print(f"[{timestamp()}] [INFO] All required packages are already installed.")
 
 
 # Virtuelle Umgebung aktivieren und Pakete sicherstellen
@@ -252,7 +258,7 @@ def get_system_info():
 
 def check_python_interpreter():
     # Den Pfad zum Python-Interpreter definieren
-    python_path = r'C:\Users\%USERNAME%\p-terminal\p-term\.env\Scripts\python.exe'
+    python_path = r'C:\Users\%USERNAME%\p-terminal\pp-term\.env\Scripts\python.exe'
     python_path = os.path.expandvars(python_path)  # Variablen im Pfad expandieren
 
     print(f"\nPython Information:\n-------------------\n{blue}Checking for Python interpreter at{reset}: {python_path}")
