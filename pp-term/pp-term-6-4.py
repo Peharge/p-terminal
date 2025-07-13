@@ -28346,308 +28346,581 @@ def main():
                     print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
 
             elif user_input.startswith("pcv "):
+                def find_existing_venvs(directory: Path):
+                    venvs = []
+                    for item in directory.iterdir():
+                        if item.is_dir() and (item / "pyvenv.cfg").exists():
+                            venvs.append(item.name)
+                    return venvs
+
                 user_input = user_input[4:].strip()
                 current_dir = Path.cwd()
                 env_path = (current_dir / user_input).resolve()
-                command = f'python -m venv "{env_path}"'
 
-                try:
-                    subprocess.run(command, shell=True, check=True, text=True,
-                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                # Prüfen, ob dieses venv bereits existiert
+                if (env_path / "pyvenv.cfg").exists():
+                    print(f"[{timestamp()}] [INFO] The virtual environment '{user_input}' already exists at {env_path}.")
+                    try:
+                        active = find_active_env(str(env_path))
+                        set_python_path(active)
+                        print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                    except Exception as e:
+                        print(f"[{timestamp()}] [ERROR] Failed to activate existing venv: {e}")
+                else:
+                    # venv erstellen
+                    command = f'python -m venv "{env_path}"'
+                    try:
+                        subprocess.run(command, shell=True, check=True, text=True,
+                                       stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
 
-                    print(f"[{timestamp()}] [INFO] The '{user_input}' venv was created at {env_path}.")
+                        print(f"[{timestamp()}] [INFO] The virtual environment '{user_input}' was created at {env_path}.")
 
-                    # Annahme: find_active_env und set_python_path sind irgendwo definiert
-                    active = find_active_env(str(env_path))
-                    set_python_path(active)
-                    print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                        try:
+                            active = find_active_env(str(env_path))
+                            set_python_path(active)
+                            print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                        except Exception as e:
+                            print(f"[{timestamp()}] [ERROR] Failed to set active environment: {e}")
 
-                except subprocess.CalledProcessError as e:
-                    print(f"[{timestamp()}] [ERROR] Failed to create venv '{user_input}': {e}")
-                except KeyboardInterrupt:
-                    print(f"[{timestamp()}] [INFO] Cancellation by user.")
-                except Exception as e:
-                    print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
+                        # Nach anderen vorhandenen venvs im aktuellen Verzeichnis suchen
+                        existing_venvs = find_existing_venvs(current_dir)
+                        other_venvs = [name for name in existing_venvs if name != user_input]
+
+                        if other_venvs:
+                            print(f"[{timestamp()}] [INFO] Other virtual environments found in this directory: {', '.join(other_venvs)}")
+
+                    except subprocess.CalledProcessError as e:
+                        print(f"[{timestamp()}] [ERROR] Failed to create venv '{user_input}': {e}")
+                    except KeyboardInterrupt:
+                        print(f"[{timestamp()}] [INFO] Cancelled by user.")
+                    except Exception as e:
+                        print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
 
             elif user_input.startswith("pcvf "):
+                def find_existing_venvs(directory: Path):
+                    venvs = []
+                    for item in directory.iterdir():
+                        if item.is_dir() and (item / "pyvenv.cfg").exists():
+                            venvs.append(item.name)
+                    return venvs
+
                 user_input = user_input[5:].strip()
                 current_dir = Path.cwd()
                 env_path = (current_dir / user_input).resolve()
-                command = f'python -m venv "{env_path}"'
 
-                try:
-                    subprocess.run(command, shell=True, check=True, text=True,
-                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                # Prüfen, ob dieses venv bereits existiert
+                if (env_path / "pyvenv.cfg").exists():
+                    print(f"[{timestamp()}] [INFO] The virtual environment '{user_input}' already exists at {env_path}.")
+                    try:
+                        active = find_active_env(str(env_path))
+                        set_python_path(active)
+                        print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                    except Exception as e:
+                        print(f"[{timestamp()}] [ERROR] Failed to activate existing venv: {e}")
+                else:
+                    # venv erstellen
+                    command = f'python -m venv "{env_path}"'
+                    try:
+                        subprocess.run(command, shell=True, check=True, text=True,
+                                       stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
 
-                    print(f"[{timestamp()}] [INFO] The '{user_input}' venv was created at {env_path}.")
+                        print(f"[{timestamp()}] [INFO] The virtual environment '{user_input}' was created at {env_path}.")
 
-                    # Annahme: find_active_env und set_python_path sind irgendwo definiert
-                    active = find_active_env(str(env_path))
-                    set_python_path(active)
-                    print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                        try:
+                            active = find_active_env(str(env_path))
+                            set_python_path(active)
+                            print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                        except Exception as e:
+                            print(f"[{timestamp()}] [ERROR] Failed to set active environment: {e}")
 
-                except subprocess.CalledProcessError as e:
-                    print(f"[{timestamp()}] [ERROR] Failed to create venv '{user_input}': {e}")
-                except KeyboardInterrupt:
-                    print(f"[{timestamp()}] [INFO] Cancellation by user.")
-                except Exception as e:
-                    print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
+                        # Nach anderen vorhandenen venvs im aktuellen Verzeichnis suchen
+                        existing_venvs = find_existing_venvs(current_dir)
+                        other_venvs = [name for name in existing_venvs if name != user_input]
+
+                        if other_venvs:
+                            print(f"[{timestamp()}] [INFO] Other virtual environments found in this directory: {', '.join(other_venvs)}")
+
+                    except subprocess.CalledProcessError as e:
+                        print(f"[{timestamp()}] [ERROR] Failed to create venv '{user_input}': {e}")
+                    except KeyboardInterrupt:
+                        print(f"[{timestamp()}] [INFO] Cancelled by user.")
+                    except Exception as e:
+                        print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
 
             elif user_input.startswith("pcsvf "):
+                def find_existing_venvs(directory: Path):
+                    venvs = []
+                    for item in directory.iterdir():
+                        if item.is_dir() and (item / "pyvenv.cfg").exists():
+                            venvs.append(item.name)
+                    return venvs
+
                 user_input = user_input[6:].strip()
-                urrent_dir = Path.cwd()
+                current_dir = Path.cwd()
                 env_path = (current_dir / user_input).resolve()
-                command = f"virtualenv -p {user_input}"
 
-                try:
-                    subprocess.run(command, shell=True, check=True, text=True,
-                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                # 1. Existiert die gewünschte venv schon?
+                if (env_path / "pyvenv.cfg").exists():
+                    print(f"[{timestamp()}] [INFO] A virtual environment named '{user_input}' already exists at {env_path}.")
+                    try:
+                        active = find_active_env(str(env_path))
+                        set_python_path(active)
+                        print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                    except Exception as e:
+                        print(f"[{timestamp()}] [ERROR] Failed to activate existing environment: {e}")
+                else:
+                    # 2. Erstelle neue venv mit virtualenv
+                    command = f'virtualenv "{env_path}"'
+                    try:
+                        subprocess.run(command, shell=True, check=True, text=True,
+                                       stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
 
-                    print(f"[{timestamp()}] [INFO] The '{user_input}' venv was created at {env_path}.")
+                        print(f"[{timestamp()}] [INFO] The virtual environment '{user_input}' was created at {env_path}.")
 
-                    # Annahme: find_active_env und set_python_path sind irgendwo definiert
-                    active = find_active_env(str(env_path))
-                    set_python_path(active)
-                    print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                        try:
+                            active = find_active_env(str(env_path))
+                            set_python_path(active)
+                            print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                        except Exception as e:
+                            print(f"[{timestamp()}] [ERROR] Failed to set active environment: {e}")
 
-                except subprocess.CalledProcessError as e:
-                    print(f"[{timestamp()}] [ERROR] Failed to create venv '{user_input}': {e}")
-                except KeyboardInterrupt:
-                    print(f"[{timestamp()}] [INFO] Cancellation by user.")
-                except Exception as e:
-                    print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
+                        # 3. Finde andere venvs im aktuellen Verzeichnis
+                        existing_venvs = find_existing_venvs(current_dir)
+                        other_venvs = [name for name in existing_venvs if name != user_input]
+
+                        if other_venvs:
+                            print(f"[{timestamp()}] [INFO] Other virtual environments found in this directory:")
+                            for venv_name in other_venvs:
+                                print(f"  - {venv_name}")
+
+                    except subprocess.CalledProcessError as e:
+                        print(f"[{timestamp()}] [ERROR] Failed to create venv '{user_input}': {e}")
+                    except KeyboardInterrupt:
+                        print(f"[{timestamp()}] [INFO] Cancelled by user.")
+                    except Exception as e:
+                        print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
 
             elif user_input.startswith("pcv-p313 "):
+                def find_existing_venvs(directory: Path):
+                    venvs = []
+                    for item in directory.iterdir():
+                        if item.is_dir() and (item / "pyvenv.cfg").exists():
+                            venvs.append(item.name)
+                    return venvs
+
                 user_input = user_input[9:].strip()
                 current_dir = Path.cwd()
                 env_path = (current_dir / user_input).resolve()
 
-                # Search for python3.13 interpreter using 'where'
-                try:
-                    result = subprocess.run(["where", "python3.13"], capture_output=True, text=True, check=True)
-                    paths = result.stdout.strip().splitlines()
-                    python_3_13_executable = None
-                    for p in paths:
-                        if Path(p).exists():
-                            python_3_13_executable = p
-                            break
-                    if not python_3_13_executable:
-                        print(f"[{timestamp()}] [ERROR] Python 3.13 executable not found on the system.")
-                        # Optionally, return or exit here depending on your context
-                    else:
-                        print(f"[{timestamp()}] [INFO] Found Python 3.13 interpreter at: {python_3_13_executable}")
-                        command = f'"{python_3_13_executable}" -m venv "{env_path}"'
-                        try:
-                            subprocess.run(command, shell=True, check=True, text=True,
-                                           stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                # 1. Prüfen, ob Environment bereits existiert
+                if (env_path / "pyvenv.cfg").exists():
+                    print(f"[{timestamp()}] [INFO] Virtual environment '{user_input}' already exists at {env_path}.")
+                    try:
+                        active = find_active_env(str(env_path))
+                        set_python_path(active)
+                        print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                    except Exception as e:
+                        print(f"[{timestamp()}] [ERROR] Failed to activate existing environment: {e}")
+                else:
+                    # 2. Nach Python 3.13 suchen
+                    try:
+                        result = subprocess.run(["where", "python3.13"], capture_output=True, text=True, check=True)
+                        paths = result.stdout.strip().splitlines()
+                        python_3_13_executable = None
+                        for p in paths:
+                            if Path(p).exists():
+                                python_3_13_executable = p
+                                break
 
-                            print(f"[{timestamp()}] [INFO] Virtual environment '{user_input}' created at {env_path} using Python 3.13.")
+                        if not python_3_13_executable:
+                            print(f"[{timestamp()}] [ERROR] Python 3.13 executable not found on the system.")
+                        else:
+                            print(f"[{timestamp()}] [INFO] Found Python 3.13 interpreter at: {python_3_13_executable}")
+                            command = f'"{python_3_13_executable}" -m venv "{env_path}"'
+                            try:
+                                subprocess.run(command, shell=True, check=True, text=True,
+                                               stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
 
-                            active = find_active_env(str(env_path))
-                            set_python_path(active)
-                            print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                                print(f"[{timestamp()}] [INFO] Virtual environment '{user_input}' created at {env_path} using Python 3.13.")
 
-                        except subprocess.CalledProcessError as e:
-                            print(f"[{timestamp()}] [ERROR] Failed to create venv '{user_input}': {e}")
-                        except KeyboardInterrupt:
-                            print(f"[{timestamp()}] [INFO] Operation cancelled by user.")
-                        except Exception as e:
-                            print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
+                                try:
+                                    active = find_active_env(str(env_path))
+                                    set_python_path(active)
+                                    print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                                except Exception as e:
+                                    print(f"[{timestamp()}] [ERROR] Failed to set active environment: {e}")
 
-                except subprocess.CalledProcessError:
-                    print(f"[{timestamp()}] [ERROR] Failed to execute 'where python3.13'. Make sure Python 3.13 is installed and accessible.")
+                                # 3. Nach weiteren venvs im Verzeichnis suchen
+                                existing_venvs = find_existing_venvs(current_dir)
+                                other_venvs = [name for name in existing_venvs if name != user_input]
+
+                                if other_venvs:
+                                    print(f"[{timestamp()}] [INFO] Other virtual environments found in this directory: {', '.join(other_venvs)}")
+
+                            except subprocess.CalledProcessError as e:
+                                print(f"[{timestamp()}] [ERROR] Failed to create venv '{user_input}': {e}")
+                            except KeyboardInterrupt:
+                                print(f"[{timestamp()}] [INFO] Operation cancelled by user.")
+                            except Exception as e:
+                                print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
+
+                    except subprocess.CalledProcessError:
+                        print(f"[{timestamp()}] [ERROR] Failed to execute 'where python3.13'. Make sure Python 3.13 is installed and accessible.")
 
             elif user_input.startswith("pcv-p312 "):
+                def find_existing_venvs(directory: Path):
+                    venvs = []
+                    for item in directory.iterdir():
+                        if item.is_dir() and (item / "pyvenv.cfg").exists():
+                            venvs.append(item.name)
+                    return venvs
+
                 user_input = user_input[9:].strip()
                 current_dir = Path.cwd()
                 env_path = (current_dir / user_input).resolve()
 
-                # Search for python3.12 interpreter using 'where'
-                try:
-                    result = subprocess.run(["where", "python3.12"], capture_output=True, text=True, check=True)
-                    paths = result.stdout.strip().splitlines()
-                    python_3_12_executable = None
-                    for p in paths:
-                        if Path(p).exists():
-                            python_3_12_executable = p
-                            break
-                    if not python_3_12_executable:
-                        print(f"[{timestamp()}] [ERROR] Python 3.12 executable not found on the system.")
-                        # Optionally, return or exit here depending on your context
-                    else:
-                        print(f"[{timestamp()}] [INFO] Found Python 3.12 interpreter at: {python_3_12_executable}")
-                        command = f'"{python_3_12_executable}" -m venv "{env_path}"'
-                        try:
-                            subprocess.run(command, shell=True, check=True, text=True,
-                                           stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                # 1. Prüfen, ob Environment bereits existiert
+                if (env_path / "pyvenv.cfg").exists():
+                    print(f"[{timestamp()}] [INFO] Virtual environment '{user_input}' already exists at {env_path}.")
+                    try:
+                        active = find_active_env(str(env_path))
+                        set_python_path(active)
+                        print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                    except Exception as e:
+                        print(f"[{timestamp()}] [ERROR] Failed to activate existing environment: {e}")
+                else:
+                    # 2. Nach Python 3.12 suchen
+                    try:
+                        result = subprocess.run(["where", "python3.12"], capture_output=True, text=True, check=True)
+                        paths = result.stdout.strip().splitlines()
+                        python_3_12_executable = None
+                        for p in paths:
+                            if Path(p).exists():
+                                python_3_12_executable = p
+                                break
 
-                            print(f"[{timestamp()}] [INFO] Virtual environment '{user_input}' created at {env_path} using Python 3.12.")
+                        if not python_3_12_executable:
+                            print(f"[{timestamp()}] [ERROR] Python 3.12 executable not found on the system.")
+                        else:
+                            print(f"[{timestamp()}] [INFO] Found Python 3.12 interpreter at: {python_3_12_executable}")
+                            command = f'"{python_3_12_executable}" -m venv "{env_path}"'
+                            try:
+                                subprocess.run(command, shell=True, check=True, text=True,
+                                               stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
 
-                            active = find_active_env(str(env_path))
-                            set_python_path(active)
-                            print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                                print(f"[{timestamp()}] [INFO] Virtual environment '{user_input}' created at {env_path} using Python 3.12.")
 
-                        except subprocess.CalledProcessError as e:
-                            print(f"[{timestamp()}] [ERROR] Failed to create venv '{user_input}': {e}")
-                        except KeyboardInterrupt:
-                            print(f"[{timestamp()}] [INFO] Operation cancelled by user.")
-                        except Exception as e:
-                            print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
+                                try:
+                                    active = find_active_env(str(env_path))
+                                    set_python_path(active)
+                                    print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                                except Exception as e:
+                                    print(f"[{timestamp()}] [ERROR] Failed to set active environment: {e}")
 
-                except subprocess.CalledProcessError:
-                    print(f"[{timestamp()}] [ERROR] Failed to execute 'where python3.12'. Make sure Python 3.12 is installed and accessible.")
+                                # 3. Nach weiteren venvs im Verzeichnis suchen
+                                existing_venvs = find_existing_venvs(current_dir)
+                                other_venvs = [name for name in existing_venvs if name != user_input]
+
+                                if other_venvs:
+                                    print(f"[{timestamp()}] [INFO] Other virtual environments found in this directory: {', '.join(other_venvs)}")
+
+                            except subprocess.CalledProcessError as e:
+                                print(f"[{timestamp()}] [ERROR] Failed to create venv '{user_input}': {e}")
+                            except KeyboardInterrupt:
+                                print(f"[{timestamp()}] [INFO] Operation cancelled by user.")
+                            except Exception as e:
+                                print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
+
+                    except subprocess.CalledProcessError:
+                        print(f"[{timestamp()}] [ERROR] Failed to execute 'where python3.12'. Make sure Python 3.12 is installed and accessible.")
 
             elif user_input.startswith("pcv-p311 "):
+                def find_existing_venvs(directory: Path):
+                    venvs = []
+                    for item in directory.iterdir():
+                        if item.is_dir() and (item / "pyvenv.cfg").exists():
+                            venvs.append(item.name)
+                    return venvs
+
                 user_input = user_input[9:].strip()
                 current_dir = Path.cwd()
                 env_path = (current_dir / user_input).resolve()
 
-                # Search for python3.11 interpreter using 'where'
-                try:
-                    result = subprocess.run(["where", "python3.11"], capture_output=True, text=True, check=True)
-                    paths = result.stdout.strip().splitlines()
-                    python_3_11_executable = None
-                    for p in paths:
-                        if Path(p).exists():
-                            python_3_11_executable = p
-                            break
-                    if not python_3_11_executable:
-                        print(f"[{timestamp()}] [ERROR] Python 3.11 executable not found on the system.")
-                        # Optionally, return or exit here depending on your context
-                    else:
-                        print(f"[{timestamp()}] [INFO] Found Python 3.11 interpreter at: {python_3_11_executable}")
-                        command = f'"{python_3_11_executable}" -m venv "{env_path}"'
-                        try:
-                            subprocess.run(command, shell=True, check=True, text=True,
-                                           stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                # 1. Prüfen, ob Environment bereits existiert
+                if (env_path / "pyvenv.cfg").exists():
+                    print(f"[{timestamp()}] [INFO] Virtual environment '{user_input}' already exists at {env_path}.")
+                    try:
+                        active = find_active_env(str(env_path))
+                        set_python_path(active)
+                        print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                    except Exception as e:
+                        print(f"[{timestamp()}] [ERROR] Failed to activate existing environment: {e}")
+                else:
+                    # 2. Nach Python 3.11 suchen
+                    try:
+                        result = subprocess.run(["where", "python3.11"], capture_output=True, text=True, check=True)
+                        paths = result.stdout.strip().splitlines()
+                        python_3_11_executable = None
+                        for p in paths:
+                            if Path(p).exists():
+                                python_3_11_executable = p
+                                break
 
-                            print(f"[{timestamp()}] [INFO] Virtual environment '{user_input}' created at {env_path} using Python 3.11.")
+                        if not python_3_11_executable:
+                            print(f"[{timestamp()}] [ERROR] Python 3.11 executable not found on the system.")
+                        else:
+                            print(f"[{timestamp()}] [INFO] Found Python 3.11 interpreter at: {python_3_11_executable}")
+                            command = f'"{python_3_11_executable}" -m venv "{env_path}"'
+                            try:
+                                subprocess.run(command, shell=True, check=True, text=True,
+                                               stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
 
-                            active = find_active_env(str(env_path))
-                            set_python_path(active)
-                            print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                                print(f"[{timestamp()}] [INFO] Virtual environment '{user_input}' created at {env_path} using Python 3.11.")
 
-                        except subprocess.CalledProcessError as e:
-                            print(f"[{timestamp()}] [ERROR] Failed to create venv '{user_input}': {e}")
-                        except KeyboardInterrupt:
-                            print(f"[{timestamp()}] [INFO] Operation cancelled by user.")
-                        except Exception as e:
-                            print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
+                                try:
+                                    active = find_active_env(str(env_path))
+                                    set_python_path(active)
+                                    print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                                except Exception as e:
+                                    print(f"[{timestamp()}] [ERROR] Failed to set active environment: {e}")
 
-                except subprocess.CalledProcessError:
-                    print(f"[{timestamp()}] [ERROR] Failed to execute 'where python3.11'. Make sure Python 3.11 is installed and accessible.")
+                                # 3. Weitere vorhandene Environments auflisten
+                                existing_venvs = find_existing_venvs(current_dir)
+                                other_venvs = [name for name in existing_venvs if name != user_input]
+
+                                if other_venvs:
+                                    print(f"[{timestamp()}] [INFO] Other virtual environments found in this directory: {', '.join(other_venvs)}")
+
+                            except subprocess.CalledProcessError as e:
+                                print(f"[{timestamp()}] [ERROR] Failed to create venv '{user_input}': {e}")
+                            except KeyboardInterrupt:
+                                print(f"[{timestamp()}] [INFO] Operation cancelled by user.")
+                            except Exception as e:
+                                print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
+
+                    except subprocess.CalledProcessError:
+                        print(f"[{timestamp()}] [ERROR] Failed to execute 'where python3.11'. Make sure Python 3.11 is installed and accessible.")
 
             elif user_input.startswith("pcv-p310 "):
+                def find_existing_venvs(directory: Path):
+                    venvs = []
+                    for item in directory.iterdir():
+                        if item.is_dir() and (item / "pyvenv.cfg").exists():
+                            venvs.append(item.name)
+                    return venvs
+
                 user_input = user_input[9:].strip()
                 current_dir = Path.cwd()
                 env_path = (current_dir / user_input).resolve()
 
-                # Search for python3.10 interpreter using 'where'
-                try:
-                    result = subprocess.run(["where", "python3.10"], capture_output=True, text=True, check=True)
-                    paths = result.stdout.strip().splitlines()
-                    python_3_10_executable = None
-                    for p in paths:
-                        if Path(p).exists():
-                            python_3_10_executable = p
-                            break
-                    if not python_3_10_executable:
-                        print(f"[{timestamp()}] [ERROR] Python 3.10 executable not found on the system.")
-                        # Optionally, return or exit here depending on your context
-                    else:
-                        print(f"[{timestamp()}] [INFO] Found Python 3.10 interpreter at: {python_3_10_executable}")
-                        command = f'"{python_3_10_executable}" -m venv "{env_path}"'
-                        try:
-                            subprocess.run(command, shell=True, check=True, text=True,
-                                           stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                # 1. Prüfen, ob Environment bereits existiert
+                if (env_path / "pyvenv.cfg").exists():
+                    print(f"[{timestamp()}] [INFO] Virtual environment '{user_input}' already exists at {env_path}.")
+                    try:
+                        active = find_active_env(str(env_path))
+                        set_python_path(active)
+                        print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                    except Exception as e:
+                        print(f"[{timestamp()}] [ERROR] Failed to activate existing environment: {e}")
+                else:
+                    # 2. Nach Python 3.10 suchen
+                    try:
+                        result = subprocess.run(["where", "python3.10"], capture_output=True, text=True, check=True)
+                        paths = result.stdout.strip().splitlines()
+                        python_3_10_executable = None
+                        for p in paths:
+                            if Path(p).exists():
+                                python_3_10_executable = p
+                                break
 
-                            print(f"[{timestamp()}] [INFO] Virtual environment '{user_input}' created at {env_path} using Python 3.10.")
+                        if not python_3_10_executable:
+                            print(f"[{timestamp()}] [ERROR] Python 3.10 executable not found on the system.")
+                        else:
+                            print(f"[{timestamp()}] [INFO] Found Python 3.10 interpreter at: {python_3_10_executable}")
+                            command = f'"{python_3_10_executable}" -m venv "{env_path}"'
+                            try:
+                                subprocess.run(command, shell=True, check=True, text=True,
+                                               stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
 
-                            active = find_active_env(str(env_path))
-                            set_python_path(active)
-                            print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                                print(f"[{timestamp()}] [INFO] Virtual environment '{user_input}' created at {env_path} using Python 3.10.")
 
-                        except subprocess.CalledProcessError as e:
-                            print(f"[{timestamp()}] [ERROR] Failed to create venv '{user_input}': {e}")
-                        except KeyboardInterrupt:
-                            print(f"[{timestamp()}] [INFO] Operation cancelled by user.")
-                        except Exception as e:
-                            print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
+                                try:
+                                    active = find_active_env(str(env_path))
+                                    set_python_path(active)
+                                    print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                                except Exception as e:
+                                    print(f"[{timestamp()}] [ERROR] Failed to set active environment: {e}")
 
-                except subprocess.CalledProcessError:
-                    print(f"[{timestamp()}] [ERROR] Failed to execute 'where python3.10'. Make sure Python 3.10 is installed and accessible.")
+                                # 3. Weitere vorhandene Environments auflisten
+                                existing_venvs = find_existing_venvs(current_dir)
+                                other_venvs = [name for name in existing_venvs if name != user_input]
+
+                                if other_venvs:
+                                    print(f"[{timestamp()}] [INFO] Other virtual environments found in this directory: {', '.join(other_venvs)}")
+
+                            except subprocess.CalledProcessError as e:
+                                print(f"[{timestamp()}] [ERROR] Failed to create venv '{user_input}': {e}")
+                            except KeyboardInterrupt:
+                                print(f"[{timestamp()}] [INFO] Operation cancelled by user.")
+                            except Exception as e:
+                                print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
+
+                    except subprocess.CalledProcessError:
+                        print(f"[{timestamp()}] [ERROR] Failed to execute 'where python3.10'. Make sure Python 3.10 is installed and accessible.")
 
             elif user_input.startswith("pcv-p309 "):
+                def find_existing_venvs(directory: Path):
+                    venvs = []
+                    for item in directory.iterdir():
+                        if item.is_dir() and (item / "pyvenv.cfg").exists():
+                            venvs.append(item.name)
+                    return venvs
+
                 user_input = user_input[9:].strip()
                 current_dir = Path.cwd()
                 env_path = (current_dir / user_input).resolve()
 
-                # Search for python3.9 interpreter using 'where'
-                try:
-                    result = subprocess.run(["where", "python3.9"], capture_output=True, text=True, check=True)
-                    paths = result.stdout.strip().splitlines()
-                    python_3_9_executable = None
-                    for p in paths:
-                        if Path(p).exists():
-                            python_3_9_executable = p
-                            break
-                    if not python_3_9_executable:
-                        print(f"[{timestamp()}] [ERROR] Python 3.9 executable not found on the system.")
-                        # Optionally, return or exit here depending on your context
-                    else:
-                        print(f"[{timestamp()}] [INFO] Found Python 3.9 interpreter at: {python_3_9_executable}")
-                        command = f'"{python_3_9_executable}" -m venv "{env_path}"'
-                        try:
-                            subprocess.run(command, shell=True, check=True, text=True,
-                                           stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                # 1. Prüfen, ob Environment bereits existiert
+                if (env_path / "pyvenv.cfg").exists():
+                    print(f"[{timestamp()}] [INFO] Virtual environment '{user_input}' already exists at {env_path}.")
+                    try:
+                        active = find_active_env(str(env_path))
+                        set_python_path(active)
+                        print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                    except Exception as e:
+                        print(f"[{timestamp()}] [ERROR] Failed to activate existing environment: {e}")
+                else:
+                    # 2. Nach Python 3.9 suchen
+                    try:
+                        result = subprocess.run(["where", "python3.9"], capture_output=True, text=True, check=True)
+                        paths = result.stdout.strip().splitlines()
+                        python_3_9_executable = None
+                        for p in paths:
+                            if Path(p).exists():
+                                python_3_9_executable = p
+                                break
 
-                            print(f"[{timestamp()}] [INFO] Virtual environment '{user_input}' created at {env_path} using Python 3.9.")
+                        if not python_3_9_executable:
+                            print(f"[{timestamp()}] [ERROR] Python 3.9 executable not found on the system.")
+                        else:
+                            print(f"[{timestamp()}] [INFO] Found Python 3.9 interpreter at: {python_3_9_executable}")
+                            command = f'"{python_3_9_executable}" -m venv "{env_path}"'
+                            try:
+                                subprocess.run(command, shell=True, check=True, text=True,
+                                               stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
 
-                            active = find_active_env(str(env_path))
-                            set_python_path(active)
-                            print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                                print(f"[{timestamp()}] [INFO] Virtual environment '{user_input}' created at {env_path} using Python 3.9.")
 
-                        except subprocess.CalledProcessError as e:
-                            print(f"[{timestamp()}] [ERROR] Failed to create venv '{user_input}': {e}")
-                        except KeyboardInterrupt:
-                            print(f"[{timestamp()}] [INFO] Operation cancelled by user.")
-                        except Exception as e:
-                            print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
+                                try:
+                                    active = find_active_env(str(env_path))
+                                    set_python_path(active)
+                                    print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                                except Exception as e:
+                                    print(f"[{timestamp()}] [ERROR] Failed to set active environment: {e}")
 
-                except subprocess.CalledProcessError:
-                    print(f"[{timestamp()}] [ERROR] Failed to execute 'where python3.9'. Make sure Python 3.9 is installed and accessible.")
+                                # 3. Weitere vorhandene Environments auflisten
+                                existing_venvs = find_existing_venvs(current_dir)
+                                other_venvs = [name for name in existing_venvs if name != user_input]
+
+                                if other_venvs:
+                                    print(f"[{timestamp()}] [INFO] Other virtual environments found in this directory: {', '.join(other_venvs)}")
+
+                            except subprocess.CalledProcessError as e:
+                                print(f"[{timestamp()}] [ERROR] Failed to create venv '{user_input}': {e}")
+                            except KeyboardInterrupt:
+                                print(f"[{timestamp()}] [INFO] Operation cancelled by user.")
+                            except Exception as e:
+                                print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
+
+                    except subprocess.CalledProcessError:
+                        print(f"[{timestamp()}] [ERROR] Failed to execute 'where python3.9'. Make sure Python 3.9 is installed and accessible.")
 
             elif user_input.lower() == "pv-info":
                 active_env_path = Path(find_active_env()).resolve()
                 print(f"[{timestamp()}] [INFO] Active environment: '{active_env_path}'.")
 
             elif user_input.startswith("p-venv-create "):
+                def find_existing_venvs(directory: Path):
+                    venvs = []
+                    for item in directory.iterdir():
+                        if item.is_dir() and (item / "pyvenv.cfg").exists():
+                            venvs.append(item.name)
+                    return venvs
+
                 user_input = user_input[14:].strip()
                 current_dir = Path.cwd()
                 env_path = (current_dir / user_input).resolve()
-                command = f'python -m venv "{env_path}"'
 
-                try:
-                    subprocess.run(command, shell=True, check=True, text=True,
-                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                # Prüfen, ob dieses venv bereits existiert
+                if (env_path / "pyvenv.cfg").exists():
+                    print(f"[{timestamp()}] [INFO] The virtual environment '{user_input}' already exists at {env_path}.")
+                    try:
+                        active = find_active_env(str(env_path))
+                        set_python_path(active)
+                        print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                    except Exception as e:
+                        print(f"[{timestamp()}] [ERROR] Failed to activate existing venv: {e}")
+                else:
+                    # venv erstellen
+                    command = f'python -m venv "{env_path}"'
+                    try:
+                        subprocess.run(command, shell=True, check=True, text=True,
+                                       stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
 
-                    print(f"[{timestamp()}] [INFO] The '{user_input}' venv was created at {env_path}.")
+                        print(f"[{timestamp()}] [INFO] The virtual environment '{user_input}' was created at {env_path}.")
 
-                    # Annahme: find_active_env und set_python_path sind irgendwo definiert
-                    active = find_active_env(str(env_path))
-                    set_python_path(active)
-                    print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                        try:
+                            active = find_active_env(str(env_path))
+                            set_python_path(active)
+                            print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                        except Exception as e:
+                            print(f"[{timestamp()}] [ERROR] Failed to set active environment: {e}")
 
-                except subprocess.CalledProcessError as e:
-                    print(f"[{timestamp()}] [ERROR] Failed to create venv '{user_input}': {e}")
-                except KeyboardInterrupt:
-                    print(f"[{timestamp()}] [INFO] Cancellation by user.")
-                except Exception as e:
-                    print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
+                        # Nach anderen vorhandenen venvs im aktuellen Verzeichnis suchen
+                        existing_venvs = find_existing_venvs(current_dir)
+                        other_venvs = [name for name in existing_venvs if name != user_input]
+
+                        if other_venvs:
+                            print(f"[{timestamp()}] [INFO] Other virtual environments found in this directory: {', '.join(other_venvs)}")
+
+                    except subprocess.CalledProcessError as e:
+                        print(f"[{timestamp()}] [ERROR] Failed to create venv '{user_input}': {e}")
+                    except KeyboardInterrupt:
+                        print(f"[{timestamp()}] [INFO] Cancelled by user.")
+                    except Exception as e:
+                        print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
 
             elif user_input.startswith("p-venv "):
                 env_name = user_input[7:].strip()
-                env_path = str((current_dir / env_name).resolve())
+                env_path = (current_dir / env_name).resolve()
+
+                if not env_path.exists():
+                    print(f"[{timestamp()}] [INFO] Environment '{env_name}' does not exist at '{env_path}'.")
+                    user_confirm = input("Do you want to create this virtual environment? [y/n]: ").strip().lower()
+                    if user_confirm == 'y':
+                        command = f'python -m venv "{env_path}"'
+                        try:
+                            subprocess.run(command, shell=True, check=True, text=True,
+                                           stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                            print(f"[{timestamp()}] [INFO] The '{env_name}' venv was created at {env_path}.")
+                        except subprocess.CalledProcessError as e:
+                            print(f"[{timestamp()}] [ERROR] Failed to create venv: {e}")
+                            continue
+                    else:
+                        print(f"[{timestamp()}] [INFO] Activation cancelled.")
+                        continue
+
+                if os.name == "nt":
+                    python_exe = env_path / "Scripts" / "python.exe"
+                else:
+                    python_exe = env_path / "bin" / "python"
+
+                if not python_exe.exists():
+                    print(f"[{timestamp()}] [INFO] No Python interpreter found in '{python_exe}'.")
+                    user_confirm = input("Do you still want to activate this environment? [y/N)] ").strip().lower()
+                    if user_confirm != 'y':
+                        print(f"[{timestamp()}] [INFO] Activation cancelled.")
+                        continue
 
                 # setzt und speichert das aktive Env
                 active = find_active_env(env_path)
