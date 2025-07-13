@@ -83,7 +83,7 @@ bold = "\033[1m"
 
 def show_help():
     # Kopfzeile
-    print("\n[{timestamp()}] [INFO] This guide provides descriptions of the available terminal commands and usage instructions.\n")
+    print(f"\n[{timestamp()}] [INFO] This guide provides descriptions of the available terminal commands and usage instructions.\n")
 
     # Verfügbare Befehle und Beschreibungen
     print("Available Commands and Their Descriptions")
