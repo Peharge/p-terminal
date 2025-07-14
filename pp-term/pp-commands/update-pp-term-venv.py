@@ -146,6 +146,7 @@ from typing import Optional
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 import importlib.metadata
+import json
 
 # Farbcodes definieren
 red = "\033[91m"
@@ -159,6 +160,19 @@ black = "\033[30m"
 orange = "\033[38;5;214m"
 reset = "\033[0m"
 bold = "\033[1m"
+
+def state_info():
+    with open(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/state-info.json", "r") as file:
+        data = json.load(file)
+    return data["state"]
+
+
+if "adv" in state_info():
+    main_color = "\033[92m"
+elif "evil" in state_info():
+    main_color = "\033[91m"
+else:
+    main_color = "\033[94m"
 
 def confirm_action(message: str) -> bool:
     """Fordert den Benutzer zur Bestätigung auf."""
@@ -528,7 +542,7 @@ def process_packages(packages: List[str]):
         print(f"\n[{timestamp()}] [INFO] [{idx}/{len(packages)}] Checking package: {package}")
         install_or_update_package(package)
 
-print(f"\n[{timestamp()}] [INFO] All frameworks for {blue}PP-Term 6{reset} are currently being installed and updated.")
+print(f"\n[{timestamp()}] [INFO] All frameworks for {main_color}PP-Term 6{reset} are currently being installed and updated.")
 
 # Paketlisten
 packages = [
