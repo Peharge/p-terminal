@@ -313,6 +313,8 @@
       - PP-Terminal 6.4.1.4
       - PP-Terminal 6.4.1.5
       - PP-Terminal 6.4.1.6
+      - PP-Terminal 6.4.1.8
+      - PP-Terminal 6.4.1.9
 
 # PP-Terminal Launcher Version
 
