@@ -363,10 +363,10 @@
       - PP-Terminal Launcher 6.3.1.1
       - PP-Terminal Launcher 6.3.1.3
       - PP-Terminal Launcher 6.3.1.4
-  - PP-Terminal Launcher 6.3
-    - PP-Terminal Launcher 6.3.1
-      - PP-Terminal Launcher 6.3.1.1
-      - PP-Terminal Launcher 6.3.1.3
+  - PP-Terminal Launcher 6.4
+    - PP-Terminal Launcher 6.4.1
+      - PP-Terminal Launcher 6.4.1.1
+      - PP-Terminal Launcher 6.4.1.3
 
 # Peharge Compiler Version
 
