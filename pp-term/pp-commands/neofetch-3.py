@@ -73,6 +73,19 @@ import os
 from datetime import datetime
 import io
 
+def state_info():
+    with open(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/state-info.json", "r") as file:
+        data = json.load(file)
+    return data["state"]
+
+
+if "adv" in state_info():
+    main_color = "\033[92m"
+elif "evil" in state_info():
+    main_color = "\033[91m"
+else:
+    main_color = "\033[94m"
+
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 
@@ -145,6 +158,18 @@ black = "\033[30m"
 orange = "\033[38;5;214m"
 reset = "\033[0m"
 bold = "\033[1m"
+
+def state_info():
+    with open(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/state-info.json", "r") as file:
+        data = json.load(file)
+    return data["state"]
+
+if "adv" in state_info():
+    main_color = "\033[92m"
+elif "evil" in state_info():
+    main_color = "\033[91m"
+else:
+    main_color = "\033[94m"
 
 def format_bytes(byte_value: int) -> float:
     """Bytes in GB umwandeln und auf 2 Nachkommastellen runden."""
@@ -438,57 +463,57 @@ def gather_info_lines(sys_info: dict, versions: dict) -> list:
     lines.append("")
     lines.append(f"                                 {title}")
     lines.append(f"               {line}")
-    lines.append(f"          {blue}P-Terminal Version{reset}: {p_terminal_ver}")
-    lines.append(f"        {blue}PP-Terminal Version{reset}: {pp_terminal_ver}")
-    lines.append(f"       {blue}PP-Terminal Launcher Version{reset}: {launcher_ver}")
-    lines.append(f"      {blue}Peharge Compiler Version{reset}: {p_compiler_ver}")
-    lines.append(f"      {blue}Peharge Kernel Version{reset}: {p_cernel_ver}")
-    lines.append(f"      {blue}IQ Kernel Version{reset}: {iq_cernel_ver}")
-    lines.append(f"      {blue}P-Terminal License{reset}: {license_info}")
-    lines.append(f"      {blue}MAVIS Version{reset}: 4.3")
-    lines.append(f"      {blue}MAVIS Launcher Version{reset}: 4")
-    lines.append(f"      {blue}MAVIS Terminal Version{reset}: 5")
-    lines.append(f"      {blue}MAVIS License{reset}: MIT")
+    lines.append(f"          {main_color}P-Terminal Version{reset}: {p_terminal_ver}")
+    lines.append(f"        {main_color}PP-Terminal Version{reset}: {pp_terminal_ver}")
+    lines.append(f"       {main_color}PP-Terminal Launcher Version{reset}: {launcher_ver}")
+    lines.append(f"      {main_color}Peharge Compiler Version{reset}: {p_compiler_ver}")
+    lines.append(f"      {main_color}Peharge Kernel Version{reset}: {p_cernel_ver}")
+    lines.append(f"      {main_color}IQ Kernel Version{reset}: {iq_cernel_ver}")
+    lines.append(f"      {main_color}P-Terminal License{reset}: {license_info}")
+    lines.append(f"      {main_color}MAVIS Version{reset}: 4.3")
+    lines.append(f"      {main_color}MAVIS Launcher Version{reset}: 4")
+    lines.append(f"      {main_color}MAVIS Terminal Version{reset}: 5")
+    lines.append(f"      {main_color}MAVIS License{reset}: MIT")
 
     # Betriebssystem
-    lines.append(f"      {blue}OS{reset}: {sys_info['os_name']} {sys_info['os_release']}")
-    lines.append(f"      {blue}Version{reset}: {sys_info['os_version']}")
-    lines.append(f"      {blue}Architecture{reset}: {sys_info['os_arch']}")
-    # lines.append(f"      {blue}Hostname{reset}: {sys_info['hostname']}")
-    lines.append(f"      {blue}IP Address{reset}: {sys_info['ip_address']}")
+    lines.append(f"      {main_color}OS{reset}: {sys_info['os_name']} {sys_info['os_release']}")
+    lines.append(f"      {main_color}Version{reset}: {sys_info['os_version']}")
+    lines.append(f"      {main_color}Architecture{reset}: {sys_info['os_arch']}")
+    # lines.append(f"      {main_color}Hostname{reset}: {sys_info['hostname']}")
+    lines.append(f"      {main_color}IP Address{reset}: {sys_info['ip_address']}")
 
     # CPU
-    lines.append(f"      {blue}CPU{reset}: {sys_info['cpu_model']}")
-    # lines.append(f"      {blue}Architektur{reset}: {sys_info['cpu_arch']}")
-    # lines.append(f"      {blue}Cores{reset}: {sys_info['cpu_cores']} (logical: {sys_info['cpu_threads']})")
-    # lines.append(f"      {blue}Max Frequency{reset}: {sys_info['cpu_freq']} MHz")
+    lines.append(f"      {main_color}CPU{reset}: {sys_info['cpu_model']}")
+    # lines.append(f"      {main_color}Architektur{reset}: {sys_info['cpu_arch']}")
+    # lines.append(f"      {main_color}Cores{reset}: {sys_info['cpu_cores']} (logical: {sys_info['cpu_threads']})")
+    # lines.append(f"      {main_color}Max Frequency{reset}: {sys_info['cpu_freq']} MHz")
 
     # RAM / Swap
-    # lines.append(f"      {blue}RAM{reset}: {sys_info['ram_total']} GB")
-    # lines.append(f"      {blue}RAM Total{reset}: {sys_info['ram_total']} GB")
-    # lines.append(f"      {blue}RAM Used{reset}: {sys_info['ram_used']} GB ({sys_info['ram_usage']}%)")
-    # lines.append(f"      {blue}RAM Free{reset}: {sys_info['ram_free']} GB")
-    lines.append(f"      {blue}Swap{reset}: {sys_info['swap_total']} GB")
-    # lines.append(f"      {blue}Swap Total{reset}: {sys_info['swap_total']} GB")
-    # lines.append(f"      {blue}Swap Used{reset}: {sys_info['swap_used']} GB")
-    # lines.append(f"      {blue}Swap Free{reset}: {sys_info['swap_free']} GB")
+    # lines.append(f"      {main_color}RAM{reset}: {sys_info['ram_total']} GB")
+    # lines.append(f"      {main_color}RAM Total{reset}: {sys_info['ram_total']} GB")
+    # lines.append(f"      {main_color}RAM Used{reset}: {sys_info['ram_used']} GB ({sys_info['ram_usage']}%)")
+    # lines.append(f"      {main_color}RAM Free{reset}: {sys_info['ram_free']} GB")
+    lines.append(f"      {main_color}Swap{reset}: {sys_info['swap_total']} GB")
+    # lines.append(f"      {main_color}Swap Total{reset}: {sys_info['swap_total']} GB")
+    # lines.append(f"      {main_color}Swap Used{reset}: {sys_info['swap_used']} GB")
+    # lines.append(f"      {main_color}Swap Free{reset}: {sys_info['swap_free']} GB")
 
     # Storage
-    lines.append(f"      {blue}Storage{reset}: {sys_info['storage_total']} GB")
-    # lines.append(f"      {blue}Storage Total{reset}: {sys_info['storage_total']} GB")
-    # lines.append(f"      {blue}Storage Used{reset}: {sys_info['storage_used']} GB")
-    # lines.append(f"      {blue}Storage Free{reset}: {sys_info['storage_free']} GB")
+    lines.append(f"      {main_color}Storage{reset}: {sys_info['storage_total']} GB")
+    # lines.append(f"      {main_color}Storage Total{reset}: {sys_info['storage_total']} GB")
+    # lines.append(f"      {main_color}Storage Used{reset}: {sys_info['storage_used']} GB")
+    # lines.append(f"      {main_color}Storage Free{reset}: {sys_info['storage_free']} GB")
 
     # Load Average oder CPU-Auslastung
     """
     if isinstance(sys_info['load_avg'], dict):
         la = sys_info['load_avg']
-        lines.append(f"      {blue}Load Average{reset}: 1m={la['1m']}, 5m={la['5m']}, 15m={la['15m']}")
+        lines.append(f"      {main_color}Load Average{reset}: 1m={la['1m']}, 5m={la['5m']}, 15m={la['15m']}")
     else:
-        lines.append(f"      {blue}Load Average{reset}: {sys_info['load_avg']}")
+        lines.append(f"      {main_color}Load Average{reset}: {sys_info['load_avg']}")
 
     # Uptime
-    lines.append(f"      {blue}Uptime{reset}: {sys_info['uptime']}")
+    lines.append(f"      {main_color}Uptime{reset}: {sys_info['uptime']}")
     """
 
     """
@@ -496,41 +521,41 @@ def gather_info_lines(sys_info: dict, versions: dict) -> list:
     for iface, details in sys_info['network_interfaces'].items():
         ipv4 = details.get('IPv4', 'N/A')
         mac  = details.get('MAC', 'N/A')
-        lines.append(f"      {blue}Interface {iface}{reset}: IPv4={ipv4}, MAC={mac}")
+        lines.append(f"      {main_color}Interface {iface}{reset}: IPv4={ipv4}, MAC={mac}")
 
     """
 
     # Benutzer
     for user in sys_info['user_info']:
         lines.append(
-            f"      {blue}User{reset}: {user['user']} (terminal: {user['terminal']}, started: {user['started']})")
+            f"      {main_color}User{reset}: {user['user']} (terminal: {user['terminal']}, started: {user['started']})")
 
     # Python/Pip/Git
-    lines.append(f"      {blue}Python Version{reset}: {sys_info['python_version']}")
-    lines.append(f"      {blue}PIP Version{reset}: {sys_info['pip_version']}")
+    lines.append(f"      {main_color}Python Version{reset}: {sys_info['python_version']}")
+    lines.append(f"      {main_color}PIP Version{reset}: {sys_info['pip_version']}")
     try:
         git_ver = subprocess.check_output(['git', '--version'], text=True).strip()
     except Exception:
         git_ver = "unbekannt"
-    lines.append(f"      {blue}Git Version{reset}: {git_ver}")
+    lines.append(f"      {main_color}Git Version{reset}: {git_ver}")
 
     # Windows-spezifische Utilities
-    lines.append(f"      {blue}PowerShell Version{reset}: {get_powershell_version()}")
-    lines.append(f"      {blue}WSL Version{reset}: {get_wsl_version()}")
-    lines.append(f"      {blue}Kernelversion{reset}: {get_kernel_version()}")
-    lines.append(f"      {blue}WSLg Version{reset}: {get_wslg_version()}")
-    lines.append(f"      {blue}MSRDC Version{reset}: {get_msrpc_version()}")
-    lines.append(f"      {blue}Direct3D Version{reset}: {get_direct3d_version()}")
-    lines.append(f"       {blue}DXCore Version{reset}: {get_dxcore_version()}")
-    lines.append(f"         {blue}Ollama Version{reset}: {get_ollama_version()}")
-    lines.append(f"            {blue}Visual Studio Version{reset}: {get_visual_studio_version()}")
+    lines.append(f"      {main_color}PowerShell Version{reset}: {get_powershell_version()}")
+    lines.append(f"      {main_color}WSL Version{reset}: {get_wsl_version()}")
+    lines.append(f"      {main_color}Kernelversion{reset}: {get_kernel_version()}")
+    lines.append(f"      {main_color}WSLg Version{reset}: {get_wslg_version()}")
+    lines.append(f"      {main_color}MSRDC Version{reset}: {get_msrpc_version()}")
+    lines.append(f"      {main_color}Direct3D Version{reset}: {get_direct3d_version()}")
+    lines.append(f"       {main_color}DXCore Version{reset}: {get_dxcore_version()}")
+    lines.append(f"         {main_color}Ollama Version{reset}: {get_ollama_version()}")
+    lines.append(f"            {main_color}Visual Studio Version{reset}: {get_visual_studio_version()}")
 
     # Rust
     try:
         rust_ver = subprocess.check_output(['rustc', '--version'], text=True).strip()
     except Exception:
         rust_ver = "unbekannt"
-    lines.append(f"                                 {blue}Rust Version{reset}: {rust_ver}")
+    lines.append(f"                                 {main_color}Rust Version{reset}: {rust_ver}")
 
     # Farbpaletten
     lines.append("")
