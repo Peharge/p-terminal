@@ -16019,7 +16019,7 @@ def handle_special_commands(user_input):
               "main-15", "main-16", "main-17", "main-18", "main-19", "main-20", "main-21", "main-22", "main-23",
               "main-24", "main-25", "main-26", "main-27",
               "main-28", "main-29", "main-30", "main-31", "main-32", "main-33", "main-34", "main-35", "evil/evil-1",
-              "evil-2", "evil-3", "evil-4", "evil-5",
+              "evil-2", "evil-3", "evil-4", "evil-5", "adv/adv-1", "adv-2", "adv-3", "adv-4", "adv-5",
               "stable/stable-1", "stable-2", "stable-3", "stable-4", "stable-5", "cool/cool-1", "cool-2", "cool-3",
               "cool-4", "cool-5", "cool-6", "cool-7",
               "cool-8", "cool-9", "cool-10", "cool-11", "cool-12", "cool-13", "cool-14", "cool-15", "cool-16",
@@ -21077,14 +21077,14 @@ def get_weather():
             icon = weather_icons.get(condition, "🌈")
 
             # Coole Ausgabe
-            print(f"{blue}Location{reset}: {location}")
-            print(f"{blue}Time{reset}: {observation_time}")
-            print(f"{blue}Condition{reset}: {icon} {condition}")
-            print(f"{blue}Temperature{reset}: {temperature}")
-            print(f"{blue}Humidity{reset}: {humidity}")
-            print(f"{blue}Wind{reset}: {wind}")
-            print(f"{blue}Moon Phase{reset}: {moon_phase}")
-            print(f"{blue}Precipitation{reset}: {precipitation}\n")
+            print(f"{main_color}Location{reset}: {location}")
+            print(f"{main_color}Time{reset}: {observation_time}")
+            print(f"{main_color}Condition{reset}: {icon} {condition}")
+            print(f"{main_color}Temperature{reset}: {temperature}")
+            print(f"{main_color}Humidity{reset}: {humidity}")
+            print(f"{main_color}Wind{reset}: {wind}")
+            print(f"{main_color}Moon Phase{reset}: {moon_phase}")
+            print(f"{main_color}Precipitation{reset}: {precipitation}\n")
         else:
             print(f"[{timestamp()}] [ERROR] Failed to retrieve weather data. Status code: {response.status_code}")
     except Exception as e:
@@ -21527,7 +21527,7 @@ def search_websites(command):
 
     for i, a in enumerate(soup.find_all('a', class_='result__a', href=True), start=1):
         links.append(a['href'])
-        print(f"{blue}[{i}]{reset} {a['href']}")
+        print(f"{main_color}[{i}]{reset} {a['href']}")
 
     if not links:
         print(f"[{timestamp()}] [ERROR] No results found.")
@@ -21567,7 +21567,7 @@ def search_websites_all(command, num_results=50, results_per_page=10):
             if url and (url, snippet) not in collected:
                 collected.append((url, snippet))
                 idx = len(collected)
-                print(f"{blue}[{idx}]{reset} {url}\n{snippet}\n")
+                print(f"{main_color}[{idx}]{reset} {url}\n{snippet}\n")
 
             if len(collected) >= num_results:
                 break
@@ -21627,7 +21627,7 @@ def search_github(command):
 
     for i, a in enumerate(soup.find_all('a', class_='result__a', href=True), start=1):
         links.append(a['href'])
-        print(f"{blue}[{i}]{reset} {a['href']}")
+        print(f"{main_color}[{i}]{reset} {a['href']}")
 
     if not links:
         print(f"[{timestamp()}] [ERROR] No results found.")
@@ -21656,7 +21656,7 @@ def search_huggingface(command):
 
     for i, a in enumerate(soup.find_all('a', class_='result__a', href=True), start=1):
         links.append(a['href'])
-        print(f"{blue}[{i}]{reset} {a['href']}")
+        print(f"{main_color}[{i}]{reset} {a['href']}")
 
     if not links:
         print(f"[{timestamp()}] [ERROR] No results found.")
@@ -21685,7 +21685,7 @@ def search_ollama(command):
 
     for i, a in enumerate(soup.find_all('a', class_='result__a', href=True), start=1):
         links.append(a['href'])
-        print(f"{blue}[{i}]{reset} {a['href']}")
+        print(f"{main_color}[{i}]{reset} {a['href']}")
 
     if not links:
         print(f"[{timestamp()}] [ERROR] No results found.")
@@ -21714,7 +21714,7 @@ def search_stackoverflow(command):
 
     for i, a in enumerate(soup.find_all('a', class_='result__a', href=True), start=1):
         links.append(a['href'])
-        print(f"{blue}[{i}]{reset} {a['href']}")
+        print(f"{main_color}[{i}]{reset} {a['href']}")
 
     if not links:
         print(f"[{timestamp()}] [ERROR] No results found.")
@@ -21743,7 +21743,7 @@ def search_stackexchange(command):
 
     for i, a in enumerate(soup.find_all('a', class_='result__a', href=True), start=1):
         links.append(a['href'])
-        print(f"{blue}[{i}]{reset} {a['href']}")
+        print(f"{main_color}[{i}]{reset} {a['href']}")
 
     if not links:
         print(f"[{timestamp()}] [ERROR] No results found.")
@@ -21772,7 +21772,7 @@ def search_pypi(command):
 
     for i, a in enumerate(soup.find_all('a', class_='result__a', href=True), start=1):
         links.append(a['href'])
-        print(f"{blue}[{i}]{reset} {a['href']}")
+        print(f"{main_color}[{i}]{reset} {a['href']}")
 
     if not links:
         print(f"[{timestamp()}] [ERROR] No results found.")
@@ -21801,7 +21801,7 @@ def search_arxiv(command):
 
     for i, a in enumerate(soup.find_all('a', class_='result__a', href=True), start=1):
         links.append(a['href'])
-        print(f"{blue}[{i}]{reset} {a['href']}")
+        print(f"{main_color}[{i}]{reset} {a['href']}")
 
     if not links:
         print(f"[{timestamp()}] [ERROR] No results found.")
@@ -21830,7 +21830,7 @@ def search_paperswithcode(command):
 
     for i, a in enumerate(soup.find_all('a', class_='result__a', href=True), start=1):
         links.append(a['href'])
-        print(f"{blue}[{i}]{reset} {a['href']}")
+        print(f"{main_color}[{i}]{reset} {a['href']}")
 
     if not links:
         print(f"[{timestamp()}] [ERROR] No results found.")
@@ -21859,7 +21859,7 @@ def search_kaggle(command):
 
     for i, a in enumerate(soup.find_all('a', class_='result__a', href=True), start=1):
         links.append(a['href'])
-        print(f"{blue}[{i}]{reset} {a['href']}")
+        print(f"{main_color}[{i}]{reset} {a['href']}")
 
     if not links:
         print(f"[{timestamp()}] [ERROR] No results found.")
@@ -21888,7 +21888,7 @@ def search_geeksforgeeks(command):
 
     for i, a in enumerate(soup.find_all('a', class_='result__a', href=True), start=1):
         links.append(a['href'])
-        print(f"{blue}[{i}]{reset} {a['href']}")
+        print(f"{main_color}[{i}]{reset} {a['href']}")
 
     if not links:
         print(f"[{timestamp()}] [ERROR] No results found.")
@@ -21917,7 +21917,7 @@ def search_realpython(command):
 
     for i, a in enumerate(soup.find_all('a', class_='result__a', href=True), start=1):
         links.append(a['href'])
-        print(f"{blue}[{i}]{reset} {a['href']}")
+        print(f"{main_color}[{i}]{reset} {a['href']}")
 
     if not links:
         print(f"[{timestamp()}] [ERROR] No results found.")
@@ -21946,7 +21946,7 @@ def search_w3schools(command):
 
     for i, a in enumerate(soup.find_all('a', class_='result__a', href=True), start=1):
         links.append(a['href'])
-        print(f"{blue}[{i}]{reset} {a['href']}")
+        print(f"{main_color}[{i}]{reset} {a['href']}")
 
     if not links:
         print(f"[{timestamp()}] [ERROR] No results found.")
@@ -21975,7 +21975,7 @@ def search_developer_mozilla(command):
 
     for i, a in enumerate(soup.find_all('a', class_='result__a', href=True), start=1):
         links.append(a['href'])
-        print(f"{blue}[{i}]{reset} {a['href']}")
+        print(f"{main_color}[{i}]{reset} {a['href']}")
 
     if not links:
         print(f"[{timestamp()}] [ERROR] No results found.")
@@ -26177,6 +26177,50 @@ def get_evil_5_pin(current_dir, env_indicator_3):
     )
 
 
+def get_adv_pin(current_dir, env_indicator_12):
+    return (
+            f"\n{white}┌──({reset}{green}root"
+            + colored("㋐", attrs=["bold"])
+            + f"{green}Peharge{reset}{white})-[{reset}{green}{current_dir}{reset}{white}]-{reset}{env_indicator_12}"
+              f"\n{white}└─{reset}{green}#{reset} "
+    )
+
+
+def get_adv_2_pin(current_dir, env_indicator_4):
+    return (
+            f"\n{green}┌──({reset}{getpass.getuser()}"
+            + colored("㋐", attrs=["bold"])
+            + f"Peharge{green})-[{reset}{current_dir}{green}]-{reset}{env_indicator_4}"
+              f"\n{green}└─{reset}{green}#{reset} "
+    )
+
+
+def get_adv_3_pin(current_dir, env_indicator_9):
+    return (
+            f"\n{blue}┌──({reset}{green}root"
+            + colored("㋐", attrs=["bold"])
+            + f"{green}Peharge{reset}{blue})-[{reset}{current_dir}{blue}]-{reset}{env_indicator_9}"
+              f"\n{blue}└─{reset}{green}#{reset} "
+    )
+
+
+def get_adv_4_pin(current_dir, env_indicator_3):
+    print("")
+
+    return (
+        f"{env_indicator_3} {green}PP{reset} {current_dir}:~{green}#{reset} "
+    )
+
+
+def get_adv_5_pin(current_dir, env_indicator_3):
+    print("")
+
+    return (
+            f"{env_indicator_3} {green}root" + colored("㋐", attrs=[
+        "bold"]) + f"{green}Peharge{reset} {current_dir}:~{green}#{reset} "
+    )
+
+
 def get_stable_pin(current_dir, env_indicator_6):
     return (
             f"\n┌──({getpass.getuser()}"
@@ -27147,7 +27191,7 @@ COMMANDS = [
     "run qwen-2-5-vl:72b", "run llama-4-maverick:17b", "run llama-4-scout:17b", "run deepcoder:1.5b",
     "run deepcoder:14b", "run mistral-small3.1", "help", "image generation", "video generation", "models",
     "models ls", "install 3d-slicer", "run 3d-slicer", "install simon", "run simon", "jupyter --version",
-    "grafana --version", "3d-slicer --version", "pin-evil", "pin-main", "pin-cool", "pin-cool-3", "pin-cool-4",
+    "grafana --version", "3d-slicer --version", "pin-evil", "pin-adv", "pin-main", "pin-cool", "pin-cool-3", "pin-cool-4",
     "p install", "p uninstall", "p upgrade", "p list", "p show", "p freeze", "p search", "install cool pin",
     "install cool pin-3", "install cool pin-4"
                           "p check", "p config", "p debug", "p cache", "p download", "p verify", "p wheel",
@@ -27479,7 +27523,7 @@ def handle_history_command():
     else:
         print(f"[{timestamp()}] [INFO] Previous commands:\n")
         for idx, cmd in enumerate(history, start=1):
-            print(f"  {blue}[{idx}]{reset} {cmd}")
+            print(f"  {main_color}[{idx}]{reset} {cmd}")
     return True
 
 
@@ -27620,6 +27664,18 @@ def main():
                 f"{white}[{reset}{red}{display_env_path}{reset}{white}]{reset}"
                 if env_active else
                 f"{white}[{reset}{red}no venv{reset}{white}]{reset}"
+            )
+
+            env_indicator_12 = (
+                f"{white}[{reset}{green}{display_env_path}{reset}{white}]{reset}"
+                if env_active else
+                f"{white}[{reset}{red}no venv{reset}{white}]{reset}"
+            )
+
+            env_indicator_13 = (
+                f"{green}[{reset}{display_env_path}{green}]{reset}"
+                if env_active else
+                f"{green}[no venv recorded]{reset}"
             )
 
             # PIN-Design je nach state
@@ -27905,6 +27961,41 @@ def main():
                 user_input = input().strip()
                 history.append(user_input)
 
+            elif state == "adv":
+                setup_autocomplete()
+                pin = get_adv_pin(current_dir, env_indicator_12)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+            elif state == "adv-2":
+                setup_autocomplete()
+                pin = get_adv_2_pin(current_dir, env_indicator_13)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+            elif state == "adv-3":
+                setup_autocomplete()
+                pin = get_adv_3_pin(current_dir, env_indicator_9)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+            elif state == "adv-4":
+                setup_autocomplete()
+                pin = get_adv_4_pin(current_dir, env_indicator_3)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
+            elif state == "adv-5":
+                setup_autocomplete()
+                pin = get_adv_5_pin(current_dir, env_indicator_3)
+                print(pin, end='')
+                user_input = input().strip()
+                history.append(user_input)
+
             elif state == "stable":
                 setup_autocomplete()
                 pin = get_stable_pin(current_dir, env_indicator_6)
@@ -28042,294 +28133,792 @@ def main():
 
             elif user_input.lower() == "pin main":
                 state = "main"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-1":
                 state = "main"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-2":
                 state = "main-2"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-3":
                 state = "main-3"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-4":
                 state = "main-4"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-5":
                 state = "main-5"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-6":
                 state = "main-6"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-7":
                 state = "main-7"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-8":
                 state = "main-8"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-9":
                 state = "main-9"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-10":
                 state = "main-10"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-11":
                 state = "main-11"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-12":
                 state = "main-12"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-13":
                 state = "main-13"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-14":
                 state = "main-14"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-15":
                 state = "main-15"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-16":
                 state = "main-16"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-17":
                 state = "main-17"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-18":
                 state = "main-18"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-19":
                 state = "main-19"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-20":
                 state = "main-20"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-21":
                 state = "main-21"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-22":
                 state = "main-22"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-23":
                 state = "main-23"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-24":
                 state = "main-24"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-25":
                 state = "main-25"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-26":
                 state = "main-26"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-27":
                 state = "main-27"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-28":
                 state = "main-28"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-29":
                 state = "main-29"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-30":
                 state = "main-30"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-31":
                 state = "main-31"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-32":
                 state = "main-32"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-33":
                 state = "main-33"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-34":
                 state = "main-34"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin main-35":
                 state = "main-35"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin evil":
                 state = "evil"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin evil-1":
                 state = "evil"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin evil-2":
                 state = "evil-2"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin evil-3":
                 state = "evil-3"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin evil-4":
                 state = "evil-4"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin evil-5":
                 state = "evil-5"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
+                continue
+
+            elif user_input.lower() == "pin adv":
+                state = "adv"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
+                continue
+
+            elif user_input.lower() == "pin adv-1":
+                state = "adv"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
+                continue
+
+            elif user_input.lower() == "pin adv-2":
+                state = "adv-2"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
+                continue
+
+            elif user_input.lower() == "pin adv-3":
+                state = "adv-3"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
+                continue
+
+            elif user_input.lower() == "pin adv-4":
+                state = "adv-4"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
+                continue
+
+            elif user_input.lower() == "pin adv-5":
+                state = "adv-5"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin stable":
                 state = "stable"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin stable-1":
                 state = "stable"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin stable-2":
                 state = "stable-2"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin stable-3":
                 state = "stable-3"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin stable-4":
                 state = "stable-4"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin stable-5":
                 state = "stable-5"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin stable-6":
                 state = "stable-6"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin cool":
                 state = "cool"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin cool-1":
                 state = "cool"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin cool-2":
                 state = "cool-2"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin cool-3":
                 state = "cool-3"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin cool-4":
                 state = "cool-4"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin cool-5":
                 state = "cool-5"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin cool-6":
                 state = "cool-6"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin cool-7":
                 state = "cool-7"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin cool-8":
                 state = "cool-8"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin cool-9":
                 state = "cool-9"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin cool-10":
                 state = "cool-10"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin cool-11":
                 state = "cool_11"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin cool-12":
                 state = "cool-12"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin cool-13":
                 state = "cool-13"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin cool-14":
                 state = "cool-14"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin cool-15":
                 state = "cool-15"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin cool-16":
                 state = "cool-16"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin cool-17":
                 state = "cool-17"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin cool-18":
                 state = "cool-18"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin cool-19":
                 state = "cool-19"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin cool-20":
                 state = "cool-20"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin cool-21":
                 state = "cool-21"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin cool-22":
                 state = "cool-22"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "pin cool-23":
                 state = "cool-23"
+
+                data = {"state": state}
+
+                with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
+                    json.dump(data, f, indent=4)
+
                 continue
 
             elif user_input.lower() == "p-venv-info":
@@ -29010,7 +29599,7 @@ def main():
                 if venvs:
                     print(f"[{timestamp()}] [INFO] Found {len(venvs)} virtual environment(s):\n")
                     for i, env in enumerate(venvs, 1):
-                        print(f"  {blue}[{i}]{reset} {env}")
+                        print(f"  {main_color}[{i}]{reset} {env}")
                 else:
                     print(f"[{timestamp()}] [INFO] No virtual environments found in directory tree.")
 
@@ -29025,7 +29614,7 @@ def main():
                 if venvs:
                     print(f"[{timestamp()}] [INFO] Found {len(venvs)} virtual environment(s):\n")
                     for i, env in enumerate(venvs, 1):
-                        print(f"  {blue}[{i}]{reset} {env}")
+                        print(f"  {main_color}[{i}]{reset} {env}")
                 else:
                     print(f"[{timestamp()}] [INFO] No virtual environments found in directory tree.")
 
@@ -29041,7 +29630,7 @@ def main():
                 if venvs:
                     print(f"[{timestamp()}] [INFO] Found {len(venvs)} virtual environment(s):\n")
                     for i, env in enumerate(venvs, 1):
-                        print(f"  {blue}[{i}]{reset} {env}")
+                        print(f"  {main_color}[{i}]{reset} {env}")
 
                     # Benutzer zur Auswahl auffordern
                     while True:
