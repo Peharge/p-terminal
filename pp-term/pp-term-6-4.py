@@ -213,16 +213,30 @@ def hyperlink(text, url):
     return f"\033]8;;{url}\033\\{text}\033]8;;\033\\"
 
 
+def state_info():
+    with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "r") as file:
+        data = json.load(file)
+    return data["state"]
+
+
+if (state_info() == "adv"):
+    main_color = "\033[92m"
+elif (state_info() == "evil"):
+    main_color = "\033[91m"
+else:
+    main_color = "\033[94m"
+
+
 def print_banner():
     print(f"""
-{blue}██████╗ ██████╗{reset}{white}    ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗     {reset}
-{blue}██╔══██╗██╔══██╗{reset}{white}   ╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║     {reset}
-{blue}██████╔╝██████╔╝{reset}{white}█████╗██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║     {reset}
-{blue}██╔═══╝ ██╔═══╝ {reset}{white}╚════╝██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║██║     {reset}
-{blue}██║     ██║     {reset}{white}      ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗{reset}
-{blue}╚═╝     ╚═╝     {reset}{white}      ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝{reset}
+{main_color}██████╗ ██████╗{reset}{white}    ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗     {reset}
+{main_color}██╔══██╗██╔══██╗{reset}{white}   ╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║     {reset}
+{main_color}██████╔╝██████╔╝{reset}{white}█████╗██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║     {reset}
+{main_color}██╔═══╝ ██╔═══╝ {reset}{white}╚════╝██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║██║     {reset}
+{main_color}██║     ██║     {reset}{white}      ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗{reset}
+{main_color}╚═╝     ╚═╝     {reset}{white}      ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝{reset}
 """)
-    print(f"""A warm welcome, {blue}{user_name}{reset}, to Peharge Python Terminal!
+    print(f"""A warm welcome, {main_color}{user_name}{reset}, to Peharge Python Terminal!
 Developed by Peharge and JK (Peharge Projects 2025)
 Thank you so much for using PP-Terminal. We truly appreciate your support ❤️\n
 {hyperlink("[GitHub Repository]", "https://github.com/Peharge/p-terminal")} {hyperlink("[Project Website]", f"file:///C:/Users/{user_name}/peharge-web/p-term.html")} {hyperlink("[Learn PP-Term]", f"file:///C:/Users/{user_name}/peharge-web/pp-term-hole.html")}""")
@@ -237,7 +251,7 @@ Thank you so much for using PP-Terminal. We truly appreciate your support ❤️
 
         # Versionsinformationen ausgeben
         for key, value in versions.items():
-            print(f"{blue}{key}{reset}: {value}")
+            print(f"{main_color}{key}{reset}: {value}")
     except FileNotFoundError:
         print(f"[{timestamp()}] [INFO] Version file not found under{json_path}")
     except json.JSONDecodeError:
@@ -1981,7 +1995,7 @@ def handle_special_commands(user_input):
     if "=" in user_input:
         var, value = map(str.strip, user_input.split("=", 1))
         os.environ[var] = value
-        print(f"{blue}Environment variable set{reset}: {var}={value}")
+        print(f"{main_color}Environment variable set{reset}: {var}={value}")
         return True
     """
 
@@ -15584,13 +15598,13 @@ def handle_special_commands(user_input):
         try:
             hostname = socket.gethostname()
             ip_address = socket.gethostbyname(hostname)
-            print(f"{blue}IP Address{reset}: {ip_address}")
+            print(f"{main_color}IP Address{reset}: {ip_address}")
         except:
             print(f"[{timestamp()}] [ERROR] Could not retrieve IP address")
         return True
 
     if user_input.lower() == "os":
-        print(f"{blue}OS{reset}: {platform.system()} {platform.release()}")
+        print(f"{main_color}OS{reset}: {platform.system()} {platform.release()}")
         return True
 
     if user_input.lower() == "time":
@@ -15866,8 +15880,8 @@ def handle_special_commands(user_input):
 
     # RAM- und CPU-Status
     if user_input.lower() == "sysinfo":
-        print(f"{blue}CPU Usage{reset}: {psutil.cpu_percent()}%")
-        print(f"{blue}RAM Usage{reset}: {psutil.virtual_memory().percent}%")
+        print(f"{main_color}CPU Usage{reset}: {psutil.cpu_percent()}%")
+        print(f"{main_color}RAM Usage{reset}: {psutil.virtual_memory().percent}%")
         return True
 
     # Inhalt der Zwischenablage festlegen (verbessert durch erweiterte Validierung und Fehlerbehandlung)
@@ -16163,9 +16177,9 @@ def handle_special_commands(user_input):
             ping = st.results.ping
 
             # Drucken Sie die Ergebnisse in einem coolen Format aus
-            print(f"{blue}Download{reset}: {download:.2f} Mbps")
-            print(f"{blue}Upload{reset}: {upload:.2f} Mbps")
-            print(f"{blue}Ping{reset}: {ping} ms")
+            print(f"{main_color}Download{reset}: {download:.2f} Mbps")
+            print(f"{main_color}Upload{reset}: {upload:.2f} Mbps")
+            print(f"{main_color}Ping{reset}: {ping} ms")
 
             return True
 
@@ -16692,7 +16706,7 @@ def handle_special_commands(user_input):
     if user_input.lower() == "chucknorris":
         try:
             joke = requests.get("https://api.chucknorris.io/jokes/random").json()['value']
-            print(f"{blue}Chuck Norris says{reset}: {joke}")
+            print(f"{main_color}Chuck Norris says{reset}: {joke}")
         except:
             print(f"[{timestamp()}] [ERROR] Couldn't fetch Chuck Norris joke!")
         return True
@@ -19488,7 +19502,7 @@ def handle_special_commands(user_input):
 
         response = get_response_from_ollama(user_input, ollama)
 
-        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        print(f"{main_color}🤖 AI says{reset}:", end=" ")
         type_out_text(response)
 
         return True
@@ -19506,7 +19520,7 @@ def handle_special_commands(user_input):
 
         response = get_response_from_ollama_qwen0_6(user_input, ollama)
 
-        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        print(f"{main_color}🤖 AI says{reset}:", end=" ")
         type_out_text(response)
 
         return True
@@ -19524,7 +19538,7 @@ def handle_special_commands(user_input):
 
         response = get_response_from_ollama_qwen1_7(user_input, ollama)
 
-        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        print(f"{main_color}🤖 AI says{reset}:", end=" ")
         type_out_text(response)
 
         return True
@@ -19542,7 +19556,7 @@ def handle_special_commands(user_input):
 
         response = get_response_from_ollama_qwen4(user_input, ollama)
 
-        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        print(f"{main_color}🤖 AI says{reset}:", end=" ")
         type_out_text(response)
 
         return True
@@ -19560,7 +19574,7 @@ def handle_special_commands(user_input):
 
         response = get_response_from_ollama_qwen8(user_input, ollama)
 
-        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        print(f"{main_color}🤖 AI says{reset}:", end=" ")
         type_out_text(response)
 
         return True
@@ -19578,7 +19592,7 @@ def handle_special_commands(user_input):
 
         response = get_response_from_ollama(user_input, ollama)
 
-        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        print(f"{main_color}🤖 AI says{reset}:", end=" ")
         type_out_text(response)
 
         return True
@@ -19596,7 +19610,7 @@ def handle_special_commands(user_input):
 
         response = get_response_from_ollama_qwen32(user_input, ollama)
 
-        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        print(f"{main_color}🤖 AI says{reset}:", end=" ")
         type_out_text(response)
 
         return True
@@ -19614,7 +19628,7 @@ def handle_special_commands(user_input):
 
         response = get_response_from_ollama_qwen30(user_input, ollama)
 
-        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        print(f"{main_color}🤖 AI says{reset}:", end=" ")
         type_out_text(response)
 
         return True
@@ -19632,7 +19646,7 @@ def handle_special_commands(user_input):
 
         response = get_response_from_ollama_qwen235(user_input, ollama)
 
-        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        print(f"{main_color}🤖 AI says{reset}:", end=" ")
         type_out_text(response)
 
         return True
@@ -19650,7 +19664,7 @@ def handle_special_commands(user_input):
 
         response = get_response_from_ollama_llama4_scout(user_input, ollama)
 
-        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        print(f"{main_color}🤖 AI says{reset}:", end=" ")
         type_out_text(response)
 
         return True
@@ -19668,7 +19682,7 @@ def handle_special_commands(user_input):
 
         response = get_response_from_ollama_llama4_maverick(user_input, ollama)
 
-        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        print(f"{main_color}🤖 AI says{reset}:", end=" ")
         type_out_text(response)
 
         return True
@@ -19686,7 +19700,7 @@ def handle_special_commands(user_input):
 
         response = get_response_from_ollama_deepseek_r1_1_5(user_input, ollama)
 
-        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        print(f"{main_color}🤖 AI says{reset}:", end=" ")
         type_out_text(response)
 
         return True
@@ -19704,7 +19718,7 @@ def handle_special_commands(user_input):
 
         response = get_response_from_ollama_deepseek_r1_7(user_input, ollama)
 
-        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        print(f"{main_color}🤖 AI says{reset}:", end=" ")
         type_out_text(response)
 
         return True
@@ -19722,7 +19736,7 @@ def handle_special_commands(user_input):
 
         response = get_response_from_ollama_deepseek_r1_8(user_input, ollama)
 
-        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        print(f"{main_color}🤖 AI says{reset}:", end=" ")
         type_out_text(response)
 
         return True
@@ -19740,7 +19754,7 @@ def handle_special_commands(user_input):
 
         response = get_response_from_ollama_deepseek_r1_14(user_input, ollama)
 
-        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        print(f"{main_color}🤖 AI says{reset}:", end=" ")
         type_out_text(response)
 
         return True
@@ -19758,7 +19772,7 @@ def handle_special_commands(user_input):
 
         response = get_response_from_ollama_deepseek_r1_32(user_input, ollama)
 
-        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        print(f"{main_color}🤖 AI says{reset}:", end=" ")
         type_out_text(response)
 
         return True
@@ -19776,7 +19790,7 @@ def handle_special_commands(user_input):
 
         response = get_response_from_ollama_deepseek_r1_70(user_input, ollama)
 
-        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        print(f"{main_color}🤖 AI says{reset}:", end=" ")
         type_out_text(response)
 
         return True
@@ -19794,7 +19808,7 @@ def handle_special_commands(user_input):
 
         response = get_response_from_ollama_deepseek_r1_671(user_input, ollama)
 
-        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        print(f"{main_color}🤖 AI says{reset}:", end=" ")
         type_out_text(response)
 
         return True
@@ -19812,7 +19826,7 @@ def handle_special_commands(user_input):
 
         response = get_response_from_ollama_gemma3_1(user_input, ollama)
 
-        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        print(f"{main_color}🤖 AI says{reset}:", end=" ")
         type_out_text(response)
 
         return True
@@ -19830,7 +19844,7 @@ def handle_special_commands(user_input):
 
         response = get_response_from_ollama_gemma3_4(user_input, ollama)
 
-        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        print(f"{main_color}🤖 AI says{reset}:", end=" ")
         type_out_text(response)
 
         return True
@@ -19848,7 +19862,7 @@ def handle_special_commands(user_input):
 
         response = get_response_from_ollama_gemma3_12(user_input, ollama)
 
-        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        print(f"{main_color}🤖 AI says{reset}:", end=" ")
         type_out_text(response)
 
         return True
@@ -19866,7 +19880,7 @@ def handle_special_commands(user_input):
 
         response = get_response_from_ollama_gemma3_27(user_input, ollama)
 
-        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        print(f"{main_color}🤖 AI says{reset}:", end=" ")
         type_out_text(response)
 
         return True
@@ -19884,7 +19898,7 @@ def handle_special_commands(user_input):
 
         response = get_response_from_ollama_devstral(user_input, ollama)
 
-        print(f"{blue}🤖 AI says{reset}:", end=" ")
+        print(f"{main_color}🤖 AI says{reset}:", end=" ")
         type_out_text(response)
 
         return True
@@ -27470,7 +27484,8 @@ def handle_history_command():
 
 
 def main():
-    state = "main"
+    state = state_info()
+
     active = Path(find_active_env()).resolve()
 
     print_banner()
