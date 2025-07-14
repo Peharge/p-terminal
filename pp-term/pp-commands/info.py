@@ -140,6 +140,18 @@ orange = "\033[38;5;214m"
 reset = "\033[0m"
 bold = "\033[1m"
 
+def state_info():
+    with open(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/state-info.json", "r") as file:
+        data = json.load(file)
+    return data["state"]
+
+if "adv" in state_info():
+    main_color = "\033[92m"
+elif "evil" in state_info():
+    main_color = "\033[91m"
+else:
+    main_color = "\033[94m"
+
 # Funktion zur Prüfung auf CUDA-Unterstützung
 '''
 def check_cuda():
@@ -206,14 +218,14 @@ def get_system_info():
     network_interfaces = psutil.net_if_addrs()
     interfaces_info = []
     for interface, addresses in network_interfaces.items():
-        interface_details = f"   {blue}{interface}{reset}:\n"
+        interface_details = f"   {main_color}{interface}{reset}:\n"
         for address in addresses:
             if address.family == socket.AF_INET:
-                interface_details += f"      {blue}IPv4{reset}: {address.address}\n"
+                interface_details += f"      {main_color}IPv4{reset}: {address.address}\n"
             elif address.family == socket.AF_INET6:
-                interface_details += f"      {blue}IPv6{reset}: {address.address}\n"
+                interface_details += f"      {main_color}IPv6{reset}: {address.address}\n"
             elif address.family == psutil.AF_LINK:
-                interface_details += f"      {blue}MAC{reset}: {address.address}\n"
+                interface_details += f"      {main_color}MAC{reset}: {address.address}\n"
         interfaces_info.append(interface_details)
     interfaces_formatted = "".join(interfaces_info)
 
@@ -234,24 +246,24 @@ def get_system_info():
     # Benutzerinformationen
     user_info = psutil.users()
     user_data_formatted = "\n".join([
-        f"\n   {blue}User{reset}: {user.name}\n   {blue}Terminal{reset}: {user.terminal or 'N/A'}\n   {blue}Started{reset}: {time.ctime(user.started)}"
+        f"\n   {main_color}User{reset}: {user.name}\n   {main_color}Terminal{reset}: {user.terminal or 'N/A'}\n   {main_color}Started{reset}: {time.ctime(user.started)}"
         for user in user_info
     ])
 
     # Formatierte Ausgabe
     system_info = {
-        f"{blue}OS{reset}": f"{os_name} {os_release}\n   {blue}Version{reset}: {os_version}\n   {blue}Architecture{reset}: {os_arch}\n",
-        f"{blue}Hostname{reset}": f"{hostname}",
-        f"{blue}IP Address{reset}": f"{ip_address}",
-        f"{blue}CPU{reset}": f"{cpu_model}\n   {blue}Architecture{reset}: {cpu_arch}\n   {blue}Cores{reset}: {cpu_cores}\n   {blue}Threads{reset}: {cpu_threads}\n   {blue}Max Frequency{reset}: {cpu_freq} MHz\n",
-        f"{blue}RAM{reset}": f"\n   {blue}Total{reset}: {ram_total} GB\n   {blue}Used{reset}: {ram_used} GB\n   {blue}Free{reset}: {ram_free} GB, Usage{reset}: {ram_usage}%\n",
-        f"{blue}Swap{reset}": f"\n   {blue}Total{reset}: {swap_total} GB\n   {blue}Used{reset}: {swap_used} GBFree{reset}: {swap_free} GB\n",
-        f"{blue}Storage{reset}": f"\n   {blue}Total{reset}: {total_storage} GB\n   {blue}Used{reset}: {used_storage} GB\n   {blue}Free{reset}: {free_storage} GB\n",
-        f"{blue}System Load Average{reset}": load_avg,
-        f"{blue}Uptime{reset}": uptime_str,
-        f"{blue}Network Interfaces{reset}": f"\n{interfaces_formatted}",
-        f"{blue}Disk Partitions{reset}": "\n".join([f"\n   {blue}Part Device{reset}: {part.device}\n   {blue}Part Mountpoint{reset}: {part.mountpoint}\n" for part in partitions]),
-        f"{blue}User Information{reset}": user_data_formatted,
+        f"{main_color}OS{reset}": f"{os_name} {os_release}\n   {main_color}Version{reset}: {os_version}\n   {main_color}Architecture{reset}: {os_arch}\n",
+        f"{main_color}Hostname{reset}": f"{hostname}",
+        f"{main_color}IP Address{reset}": f"{ip_address}",
+        f"{main_color}CPU{reset}": f"{cpu_model}\n   {main_color}Architecture{reset}: {cpu_arch}\n   {main_color}Cores{reset}: {cpu_cores}\n   {main_color}Threads{reset}: {cpu_threads}\n   {main_color}Max Frequency{reset}: {cpu_freq} MHz\n",
+        f"{main_color}RAM{reset}": f"\n   {main_color}Total{reset}: {ram_total} GB\n   {main_color}Used{reset}: {ram_used} GB\n   {main_color}Free{reset}: {ram_free} GB, Usage{reset}: {ram_usage}%\n",
+        f"{main_color}Swap{reset}": f"\n   {main_color}Total{reset}: {swap_total} GB\n   {main_color}Used{reset}: {swap_used} GBFree{reset}: {swap_free} GB\n",
+        f"{main_color}Storage{reset}": f"\n   {main_color}Total{reset}: {total_storage} GB\n   {main_color}Used{reset}: {used_storage} GB\n   {main_color}Free{reset}: {free_storage} GB\n",
+        f"{main_color}System Load Average{reset}": load_avg,
+        f"{main_color}Uptime{reset}": uptime_str,
+        f"{main_color}Network Interfaces{reset}": f"\n{interfaces_formatted}",
+        f"{main_color}Disk Partitions{reset}": "\n".join([f"\n   {main_color}Part Device{reset}: {part.device}\n   {main_color}Part Mountpoint{reset}: {part.mountpoint}\n" for part in partitions]),
+        f"{main_color}User Information{reset}": user_data_formatted,
     }
 
     return system_info
@@ -261,22 +273,22 @@ def check_python_interpreter():
     python_path = r'C:\Users\%USERNAME%\p-terminal\pp-term\.env\Scripts\python.exe'
     python_path = os.path.expandvars(python_path)  # Variablen im Pfad expandieren
 
-    print(f"\nPython Information:\n-------------------\n{blue}Checking for Python interpreter at{reset}: {python_path}")
+    print(f"\nPython Information:\n-------------------\n{main_color}Checking for Python interpreter at{reset}: {python_path}")
 
     # Definiere, wie oft der Versuch wiederholt werden soll
     attempts = 5
     for attempt in range(attempts):
         if os.path.exists(python_path):
             try:
-                print(f"{blue}Attempt {attempt + 1} of {attempts}{reset}: Trying to start Python interpreter...")
+                print(f"{main_color}Attempt {attempt + 1} of {attempts}{reset}: Trying to start Python interpreter...")
                 # Versuche, die Version des Python-Interpreters zu bekommen
                 result = subprocess.run([python_path, '--version'], capture_output=True, text=True)
 
                 if result.returncode == 0:
                     # Erfolg: Ausgabe der Python-Version
                     print(f"{green}Python interpreter started successfully{reset}: {result.stdout.strip()}")
-                    print(f"{blue}Interpreter path{reset}: {python_path}")
-                    print(f"{blue}Interpreter version{reset}: {result.stdout.strip()}")
+                    print(f"{main_color}Interpreter path{reset}: {python_path}")
+                    print(f"{main_color}Interpreter version{reset}: {result.stdout.strip()}")
 
                     # Weitere Details zur virtuellen Umgebung:
                     check_pip_version(python_path)
@@ -310,7 +322,7 @@ def check_pip_version(python_path):
     try:
         result = subprocess.run([python_path, '-m', 'pip', '--version'], capture_output=True, text=True)
         if result.returncode == 0:
-            print(f"{blue}pip version{reset}: {result.stdout.strip()}\n")
+            print(f"{main_color}pip version{reset}: {result.stdout.strip()}\n")
         else:
             print(f"{red}Error checking pip version{reset}: {result.stderr.strip()}")
     except Exception as e:
@@ -326,8 +338,8 @@ def list_installed_packages(python_path):
             for line in result.stdout.strip().split('\n'):
                 if '==' in line:
                     package, version = line.split('==')
-                    packages.append(f"   {blue}{package}{reset}: {version}")
-            print(f"{blue}Installed packages{reset}:")
+                    packages.append(f"   {main_color}{package}{reset}: {version}")
+            print(f"{main_color}Installed packages{reset}:")
             for pkg in packages:
                 print(pkg)
         else:
@@ -339,15 +351,15 @@ def list_installed_packages(python_path):
 def display_venv_environment_variables(python_path):
     """Umgebungsvariablen für die virtuelle Umgebung anzeigen."""
     venv_path = os.path.dirname(os.path.dirname(python_path))  # Der Pfad zur venv
-    print(f"\n{blue}Virtual environment path{reset}: {venv_path}")
+    print(f"\n{main_color}Virtual environment path{reset}: {venv_path}")
 
     # Auflisten der wichtigsten Umgebungsvariablen
     try:
         env_vars = os.environ.copy()
         venv_vars = {key: env_vars[key] for key in env_vars if venv_path in env_vars.get(key, '')}
-        print(f"{blue}Virtual environment-related environment variables{reset}:")
+        print(f"{main_color}Virtual environment-related environment variables{reset}:")
         for key, value in venv_vars.items():
-            print(f"   {blue}{key}{reset}: {value}")
+            print(f"   {main_color}{key}{reset}: {value}")
     except Exception as e:
         print(f"{red}Error displaying environment variables{reset}: {e}")
 
@@ -359,9 +371,9 @@ def display_venv_details(python_path):
         executables_path = os.path.join(venv_path, 'Scripts')
         libraries_path = os.path.join(venv_path, 'Lib', 'site-packages')
 
-        print(f"{blue}Virtual environment executables path{reset}: {executables_path}")
-        print(f"{blue}Virtual environment libraries path{reset}: {libraries_path}")
-        print(f"{blue}Python executable{reset}: {python_path}")
+        print(f"{main_color}Virtual environment executables path{reset}: {executables_path}")
+        print(f"{main_color}Virtual environment libraries path{reset}: {libraries_path}")
+        print(f"{main_color}Python executable{reset}: {python_path}")
 
         # Zusätzliche Systemdetails
         print(f"\nSystem Python paths:")
@@ -376,12 +388,12 @@ def display_system_info():
     """Detaillierte Systeminformationen anzeigen."""
     try:
         system_info = {
-            f"{blue}Python Implementation{reset}": platform.python_implementation(),
-            f"{blue}Python Version{reset}": platform.python_version(),
-            f"{blue}Processor{reset}": platform.processor(),
-            f"{blue}Machine Type{reset}": platform.machine(),
-            f"{blue}System Configuration{reset}": platform.uname()._asdict(),
-            f"{blue}Python Config (sysconfig){reset}": sysconfig.get_config_vars()
+            f"{main_color}Python Implementation{reset}": platform.python_implementation(),
+            f"{main_color}Python Version{reset}": platform.python_version(),
+            f"{main_color}Processor{reset}": platform.processor(),
+            f"{main_color}Machine Type{reset}": platform.machine(),
+            f"{main_color}System Configuration{reset}": platform.uname()._asdict(),
+            f"{main_color}Python Config (sysconfig){reset}": sysconfig.get_config_vars()
         }
 
         print(f"\nSystem Information from Python:")
@@ -389,11 +401,11 @@ def display_system_info():
 
         for key, value in system_info.items():
             if isinstance(value, dict):  # Unterkategorien für dicts
-                print(f"{blue}{key}:{reset}")
+                print(f"{main_color}{key}:{reset}")
                 for sub_key, sub_value in value.items():
-                    print(f"  {blue}{sub_key}{reset}: {sub_value}")
+                    print(f"  {main_color}{sub_key}{reset}: {sub_value}")
             else:
-                print(f"{blue}{key}{reset}: {value}")
+                print(f"{main_color}{key}{reset}: {value}")
 
     except Exception as e:
         print(f"{red}Error displaying system information: {e}{reset}")
