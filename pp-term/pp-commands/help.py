@@ -62,6 +62,8 @@
 # Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 
 from datetime import datetime
+import json
+import getpass
 
 def timestamp() -> str:
     """Returns current time formatted with milliseconds"""
@@ -80,6 +82,18 @@ black = "\033[30m"
 orange = "\033[38;5;214m"
 reset = "\033[0m"
 bold = "\033[1m"
+
+def state_info():
+    with open(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/state-info.json", "r") as file:
+        data = json.load(file)
+    return data["state"]
+
+if "adv" in state_info():
+    main_color = "\033[92m"
+elif "evil" in state_info():
+    main_color = "\033[91m"
+else:
+    main_color = "\033[94m"
 
 def show_help():
     # Kopfzeile
@@ -305,7 +319,7 @@ def show_help():
 
     # Drucken der Befehle in einem übersichtlichen, tabellenähnlichen Format
     for command, description in commands.items():
-        print(f"{blue}{command}{reset}: {description}")
+        print(f"{main_color}{command}{reset}: {description}")
 
     print("and more...")
 
@@ -315,32 +329,32 @@ def show_help():
 
     # Instructions for the terminal command execution
     print(f"1. To execute a Linux command on a specific distribution, use the following format:")
-    print(f"  {blue}lx <command>{reset}, {blue}ubuntu <command>{reset}, {blue}debian <command>{reset},")
-    print(f"  {blue}kali <command>{reset}, {blue}arch <command>{reset}, {blue}mint <command>{reset},")
-    print(f"  {blue}redhat <command>{reset}")
-    print(f"  Example: {blue}lx neofetch{reset} will execute 'neofetch' on the default Linux distro (WSL).")
-    print(f"  Example: {blue}ubuntu sudo apt update{reset} will run 'sudo apt update' on an Ubuntu system.")
-    print(f"  Example: {blue}arch pacman -Syu{reset} will update Arch Linux with the command 'pacman -Syu'.\n")
+    print(f"  {main_color}lx <command>{reset}, {main_color}ubuntu <command>{reset}, {main_color}debian <command>{reset},")
+    print(f"  {main_color}kali <command>{reset}, {main_color}arch <command>{reset}, {main_color}mint <command>{reset},")
+    print(f"  {main_color}redhat <command>{reset}")
+    print(f"  Example: {main_color}lx neofetch{reset} will execute 'neofetch' on the default Linux distro (WSL).")
+    print(f"  Example: {main_color}ubuntu sudo apt update{reset} will run 'sudo apt update' on an Ubuntu system.")
+    print(f"  Example: {main_color}arch pacman -Syu{reset} will update Arch Linux with the command 'pacman -Syu'.\n")
 
     # Example of how each distribution works
     print(f"2. Example Commands (You can replace <command> with any Linux command):")
-    print(f" - To execute a command on {blue}Linux (WSL){reset}:")
-    print(f"  {blue}lx <command>{reset} (e.g., {blue}lx neofetch{reset})")
-    print(f" - To execute a command on {blue}Ubuntu{reset}:")
-    print(f"  {blue}ubuntu <command>{reset} (e.g., {blue}ubuntu sudo apt update{reset})")
-    print(f" - To execute a command on {blue}Debian{reset}:")
-    print(f"  {blue}debian <command>{reset} (e.g., {blue}debian sudo apt upgrade{reset})")
-    print(f" - To execute a command on {blue}Kali Linux{reset}:")
-    print(f"  {blue}kali <command>{reset} (e.g., {blue}kali apt-get install nmap{reset})")
-    print(f" - To execute a command on {blue}Arch Linux{reset}:")
-    print(f"  {blue}arch <command>{reset} (e.g., {blue}arch pacman -Syu{reset})")
-    print(f" - To execute a command on {blue}Mint{reset}:")
-    print(f"  {blue}mint <command>{reset} (e.g., {blue}mint sudo apt install vlc{reset})")
-    print(f" - To execute a command on {blue}Red Hat{reset}:")
-    print(f"  {blue}redhat <command>{reset} (e.g., {blue}redhat sudo yum install git{reset})")
+    print(f" - To execute a command on {main_color}Linux (WSL){reset}:")
+    print(f"  {main_color}lx <command>{reset} (e.g., {main_color}lx neofetch{reset})")
+    print(f" - To execute a command on {main_color}Ubuntu{reset}:")
+    print(f"  {main_color}ubuntu <command>{reset} (e.g., {main_color}ubuntu sudo apt update{reset})")
+    print(f" - To execute a command on {main_color}Debian{reset}:")
+    print(f"  {main_color}debian <command>{reset} (e.g., {main_color}debian sudo apt upgrade{reset})")
+    print(f" - To execute a command on {main_color}Kali Linux{reset}:")
+    print(f"  {main_color}kali <command>{reset} (e.g., {main_color}kali apt-get install nmap{reset})")
+    print(f" - To execute a command on {main_color}Arch Linux{reset}:")
+    print(f"  {main_color}arch <command>{reset} (e.g., {main_color}arch pacman -Syu{reset})")
+    print(f" - To execute a command on {main_color}Mint{reset}:")
+    print(f"  {main_color}mint <command>{reset} (e.g., {main_color}mint sudo apt install vlc{reset})")
+    print(f" - To execute a command on {main_color}Red Hat{reset}:")
+    print(f"  {main_color}redhat <command>{reset} (e.g., {main_color}redhat sudo yum install git{reset})")
 
     print(f"\n3. Notes:")
-    print(f" - You can replace <command> with any valid Linux command, e.g., {blue}lx neofetch{reset}, {blue}ubuntu ls -l{reset}, {blue}kali sudo apt install nmap{reset}.")
+    print(f" - You can replace <command> with any valid Linux command, e.g., {main_color}lx neofetch{reset}, {main_color}ubuntu ls -l{reset}, {main_color}kali sudo apt install nmap{reset}.")
     print(f" - The distribution alias (e.g., lx, ubuntu, debian) determines which environment the command will be executed in.\n")
 
     # How to use pip and PowerShell
@@ -348,117 +362,117 @@ def show_help():
     print("-----------------------------")
 
     # pip instructions
-    print(f"1. Using {blue}pip` (Python Package Installer){reset}:")
+    print(f"1. Using {main_color}pip` (Python Package Installer){reset}:")
     print(f" - To install a Python package, execute the following command in your terminal or command prompt:")
-    print(f"  {blue}pip install <package_name>{reset}")
+    print(f"  {main_color}pip install <package_name>{reset}")
     print(f"  Example: pip install numpy")
     print(f" - To upgrade pip itself, run:")
-    print(f"  {blue}python -m pip install --upgrade pip{reset}")
+    print(f"  {main_color}python -m pip install --upgrade pip{reset}")
     print(f" - Note: In some environments, you may need to use `pip3` instead of `pip`.\n")
 
     # PowerShell instructions
     print(f"2. Using PowerShell:")
-    print(f" - To {blue}run Python scripts{blue} in PowerShell, navigate to the script directory and execute the command:")
-    print(f"  {blue}python <script_name>.py{reset}")
+    print(f" - To {main_color}run Python scripts{main_color} in PowerShell, navigate to the script directory and execute the command:")
+    print(f"  {main_color}python <script_name>.py{reset}")
     print(f"  Example: python my_script.py")
     print(f" - To install Python packages in PowerShell using pip, run:")
-    print(f"  {blue}pip install <package_name>{reset}")
+    print(f"  {main_color}pip install <package_name>{reset}")
     print(f"  Example: pip install requests")
     print(f" - If you're using PowerShell as an administrator and face any permission issues, try running it as Administrator.\n")
 
     print("\nHow to Use Ollama")
     print("-----------------")
     # Added third point for using Ollama
-    print(f" - To {blue}use Ollama{blue} in PowerShell, you first need to have Ollama installed. If it's not installed, run:")
-    print(f"  {blue}pip install ollama{reset}")
+    print(f" - To {main_color}use Ollama{main_color} in PowerShell, you first need to have Ollama installed. If it's not installed, run:")
+    print(f"  {main_color}pip install ollama{reset}")
     print(f"  Example: pip install ollama")
     print(f" - After installation, you can use the following commands to interact with Ollama:\n")
 
     # Listing Ollama commands
     print(f"  Available Ollama commands:")
-    print(f"  {blue}serve{reset}: Start Ollama server")
-    print(f"  {blue}create{reset}: Create a model from a Modelfile")
-    print(f"  {blue}show{reset}: Show information for a model")
-    print(f"  {blue}run{reset}: Run a model")
-    print(f"  {blue}stop{reset}: Stop a running model")
-    print(f"  {blue}pull{reset}: Pull a model from a registry")
-    print(f"  {blue}push{reset}: Push a model to a registry")
-    print(f"  {blue}list{reset}: List available models")
-    print(f"  {blue}ps{reset}: List running models")
-    print(f"  {blue}cp{reset}: Copy a model")
-    print(f"  {blue}rm{reset}: Remove a model")
-    print(f"  {blue}help{reset}: Get help for any command\n")
+    print(f"  {main_color}serve{reset}: Start Ollama server")
+    print(f"  {main_color}create{reset}: Create a model from a Modelfile")
+    print(f"  {main_color}show{reset}: Show information for a model")
+    print(f"  {main_color}run{reset}: Run a model")
+    print(f"  {main_color}stop{reset}: Stop a running model")
+    print(f"  {main_color}pull{reset}: Pull a model from a registry")
+    print(f"  {main_color}push{reset}: Push a model to a registry")
+    print(f"  {main_color}list{reset}: List available models")
+    print(f"  {main_color}ps{reset}: List running models")
+    print(f"  {main_color}cp{reset}: Copy a model")
+    print(f"  {main_color}rm{reset}: Remove a model")
+    print(f"  {main_color}help{reset}: Get help for any command\n")
 
     # Flags and version
     print(f" - To see version information, use the command:")
-    print(f"  {blue}ollama --version{reset}")
+    print(f"  {main_color}ollama --version{reset}")
     print(f"  Example: ollama --version")
 
     print(f" - For additional help on any command, type:")
-    print(f"  {blue}ollama [command] --help{reset}")
+    print(f"  {main_color}ollama [command] --help{reset}")
     print(f"  Example: ollama run --help")
 
     print("\nHow to Use PowerShell")
     print("---------------------")
 
     # PowerShell instructions
-    print(f" - To {blue}run a basic command{blue}, just type it and press Enter.")
-    print(f"  Example: {blue}dir{reset} - Lists the contents of the current directory.")
-    print(f" - To navigate between directories, use the {blue}cd{reset} command:")
-    print(f"  Example: {blue}cd C:\\Users\\UserName\\Documents{reset} - Changes the directory to Documents.")
-    print(f" - To go back to the previous directory, use {blue}cd ..{reset}.")
-    print(f" - To go to the root of the current drive, use {blue}cd \\{reset}.")
-    print(f" - To create a new directory, use {blue}mkdir{reset}:")
-    print(f"  Example: {blue}mkdir NewFolder{reset} - Creates a new folder called 'NewFolder'.")
-    print(f" - To remove a file, use {blue}rm{reset}, and to remove an empty directory, use {blue}rmdir{reset}:")
-    print(f"  Example: {blue}rm file.txt{reset} - Deletes the file 'file.txt'.")
-    print(f"  Example: {blue}rmdir EmptyFolder{reset} - Removes the empty folder 'EmptyFolder'.")
-    print(f" - To view the contents of a file, use the {blue}cat{reset} command:")
-    print(f"  Example: {blue}cat file.txt{reset} - Displays the contents of 'file.txt'.")
-    print(f" - To copy files or directories, use {blue}cp{reset}:")
-    print(f"  Example: {blue}cp file.txt D:\\Backup{reset} - Copies 'file.txt' to the 'D:\\Backup' directory.")
-    print(f" - To move or rename files, use {blue}mv{reset}:")
-    print(f"  Example: {blue}mv file.txt newfile.txt{reset} - Renames 'file.txt' to 'newfile.txt'.")
-    print(f" - To find files or folders, use the {blue}find{reset} command:")
-    print(f"  Example: {blue}find . -name 'file.txt'{reset} - Searches for 'file.txt' in the current directory and subdirectories.")
-    print(f" - To search inside a file, use the {blue}select-string{reset} command:")
-    print(f"  Example: {blue}select-string -Path 'file.txt' -Pattern 'keyword'{reset} - Searches for 'keyword' in 'file.txt'.")
-    print(f" - To get a list of running processes, use {blue}Get-Process{reset}:")
-    print(f"  Example: {blue}Get-Process{reset} - Lists all active processes.")
-    print(f" - To stop a process, use {blue}Stop-Process{reset}:")
-    print(f"  Example: {blue}Stop-Process -Name notepad{reset} - Stops the Notepad process.")
-    print(f" - To view system information, use {blue}Get-ComputerInfo{reset} or {blue}systeminfo{reset}.")
-    print(f" - To get help on a specific command, use {blue}Get-Help <command>{reset}:")
-    print(f"  Example: {blue}Get-Help dir{reset} - Displays help for the 'dir' command.")
-    print(f" - To view the command history, use {blue}Get-History{reset}.")
-    print(f" - To clear the screen, use {blue}Clear{reset}.")
-    print(f" - To get the current working directory, use {blue}Get-Location{reset}.")
-    print(f" - To set the current location (directory), use {blue}Set-Location{reset}:")
-    print(f"  Example: {blue}Set-Location C:\\Users\\UserName{reset} - Changes the current directory to 'C:\\Users\\UserName'.")
+    print(f" - To {main_color}run a basic command{main_color}, just type it and press Enter.")
+    print(f"  Example: {main_color}dir{reset} - Lists the contents of the current directory.")
+    print(f" - To navigate between directories, use the {main_color}cd{reset} command:")
+    print(f"  Example: {main_color}cd C:\\Users\\UserName\\Documents{reset} - Changes the directory to Documents.")
+    print(f" - To go back to the previous directory, use {main_color}cd ..{reset}.")
+    print(f" - To go to the root of the current drive, use {main_color}cd \\{reset}.")
+    print(f" - To create a new directory, use {main_color}mkdir{reset}:")
+    print(f"  Example: {main_color}mkdir NewFolder{reset} - Creates a new folder called 'NewFolder'.")
+    print(f" - To remove a file, use {main_color}rm{reset}, and to remove an empty directory, use {main_color}rmdir{reset}:")
+    print(f"  Example: {main_color}rm file.txt{reset} - Deletes the file 'file.txt'.")
+    print(f"  Example: {main_color}rmdir EmptyFolder{reset} - Removes the empty folder 'EmptyFolder'.")
+    print(f" - To view the contents of a file, use the {main_color}cat{reset} command:")
+    print(f"  Example: {main_color}cat file.txt{reset} - Displays the contents of 'file.txt'.")
+    print(f" - To copy files or directories, use {main_color}cp{reset}:")
+    print(f"  Example: {main_color}cp file.txt D:\\Backup{reset} - Copies 'file.txt' to the 'D:\\Backup' directory.")
+    print(f" - To move or rename files, use {main_color}mv{reset}:")
+    print(f"  Example: {main_color}mv file.txt newfile.txt{reset} - Renames 'file.txt' to 'newfile.txt'.")
+    print(f" - To find files or folders, use the {main_color}find{reset} command:")
+    print(f"  Example: {main_color}find . -name 'file.txt'{reset} - Searches for 'file.txt' in the current directory and subdirectories.")
+    print(f" - To search inside a file, use the {main_color}select-string{reset} command:")
+    print(f"  Example: {main_color}select-string -Path 'file.txt' -Pattern 'keyword'{reset} - Searches for 'keyword' in 'file.txt'.")
+    print(f" - To get a list of running processes, use {main_color}Get-Process{reset}:")
+    print(f"  Example: {main_color}Get-Process{reset} - Lists all active processes.")
+    print(f" - To stop a process, use {main_color}Stop-Process{reset}:")
+    print(f"  Example: {main_color}Stop-Process -Name notepad{reset} - Stops the Notepad process.")
+    print(f" - To view system information, use {main_color}Get-ComputerInfo{reset} or {main_color}systeminfo{reset}.")
+    print(f" - To get help on a specific command, use {main_color}Get-Help <command>{reset}:")
+    print(f"  Example: {main_color}Get-Help dir{reset} - Displays help for the 'dir' command.")
+    print(f" - To view the command history, use {main_color}Get-History{reset}.")
+    print(f" - To clear the screen, use {main_color}Clear{reset}.")
+    print(f" - To get the current working directory, use {main_color}Get-Location{reset}.")
+    print(f" - To set the current location (directory), use {main_color}Set-Location{reset}:")
+    print(f"  Example: {main_color}Set-Location C:\\Users\\UserName{reset} - Changes the current directory to 'C:\\Users\\UserName'.")
     print(f" - To run a script, make sure the execution policy allows it. To set the execution policy, use:")
-    print(f"  {blue}Set-ExecutionPolicy RemoteSigned{reset} - Allows running scripts locally and downloaded ones if signed.")
+    print(f"  {main_color}Set-ExecutionPolicy RemoteSigned{reset} - Allows running scripts locally and downloaded ones if signed.")
     print(f" - To run a script, navigate to its location and type the script name with a .ps1 extension:")
-    print(f"  Example: {blue}.\\script.ps1{reset}")
-    print(f" - To see all the environment variables, use {blue}Get-ChildItem Env:{reset}.")
-    print(f" - To add a new environment variable, use {blue}$env:VariableName = 'Value'{reset}:")
-    print(f"  Example: {blue}$env:MyVar = 'Hello'{reset} - Sets the environment variable 'MyVar' to 'Hello'.")
-    print(f" - To display the contents of an environment variable, use {blue}$env:VariableName{reset}:")
-    print(f"  Example: {blue}$env:MyVar{reset} - Displays the value of 'MyVar'.")
-    print(f" - To change the default drive, use the {blue}cd{reset} command followed by the drive letter:")
-    print(f"  Example: {blue}cd D:\\{reset} - Switches to the D: drive.")
-    print(f" - To get the current date and time, use {blue}Get-Date{reset}.")
-    print(f"  Example: {blue}Get-Date{reset} - Displays the current date and time.")
-    print(f" - To format the date and time output, use {blue}Get-Date -Format <format>{reset}:")
-    print(f"  Example: {blue}Get-Date -Format 'yyyy-MM-dd HH:mm:ss'{reset} - Displays the date in the specified format.")
+    print(f"  Example: {main_color}.\\script.ps1{reset}")
+    print(f" - To see all the environment variables, use {main_color}Get-ChildItem Env:{reset}.")
+    print(f" - To add a new environment variable, use {main_color}$env:VariableName = 'Value'{reset}:")
+    print(f"  Example: {main_color}$env:MyVar = 'Hello'{reset} - Sets the environment variable 'MyVar' to 'Hello'.")
+    print(f" - To display the contents of an environment variable, use {main_color}$env:VariableName{reset}:")
+    print(f"  Example: {main_color}$env:MyVar{reset} - Displays the value of 'MyVar'.")
+    print(f" - To change the default drive, use the {main_color}cd{reset} command followed by the drive letter:")
+    print(f"  Example: {main_color}cd D:\\{reset} - Switches to the D: drive.")
+    print(f" - To get the current date and time, use {main_color}Get-Date{reset}.")
+    print(f"  Example: {main_color}Get-Date{reset} - Displays the current date and time.")
+    print(f" - To format the date and time output, use {main_color}Get-Date -Format <format>{reset}:")
+    print(f"  Example: {main_color}Get-Date -Format 'yyyy-MM-dd HH:mm:ss'{reset} - Displays the date in the specified format.")
     print(f" - For advanced scripting, you can write scripts in .ps1 files, which are executed by typing:")
-    print(f"  {blue}.\\script_name.ps1{reset} - Executes the 'script_name.ps1' script.")
-    print(f" - To make sure scripts can run, set the execution policy with {blue}Set-ExecutionPolicy RemoteSigned{reset}.")
-    print(f" - To use pipelines in PowerShell (sending the output of one command to another), use {blue}|{reset}:")
-    print(f'  Example: {blue}Get-Process | Where-Object (Curly bracket open)$_.CPU -gt 100(Curly bracket closed){reset} - Filters processes with CPU usage greater than 100.')
-    print(f" - To create a loop, use {blue}for, foreach, while, do{reset} loops. Example:")
-    print(f"  {blue}foreach ($item in 1..5) {{Write-Output $item}}{reset} - Prints numbers 1 to 5.")
-    print(f" - You can use {blue}if{reset} statements for conditional execution:")
-    print(f"  Example: {blue}if ($a -gt $b) {{Write-Output 'a is greater than b'}}{reset}")
+    print(f"  {main_color}.\\script_name.ps1{reset} - Executes the 'script_name.ps1' script.")
+    print(f" - To make sure scripts can run, set the execution policy with {main_color}Set-ExecutionPolicy RemoteSigned{reset}.")
+    print(f" - To use pipelines in PowerShell (sending the output of one command to another), use {main_color}{main_color}|{reset}:")
+    print(f'  Example: {main_color}Get-Process | Where-Object (Curly bracket open)$_.CPU -gt 100(Curly bracket closed){reset} - Filters processes with CPU usage greater than 100.')
+    print(f" - To create a loop, use {main_color}for, foreach, while, do{reset} loops. Example:")
+    print(f"  {main_color}foreach ($item in 1..5) {{Write-Output $item}}{reset} - Prints numbers 1 to 5.")
+    print(f" - You can use {main_color}if{reset} statements for conditional execution:")
+    print(f"  Example: {main_color}if ($a -gt $b) {{Write-Output 'a is greater than b'}}{reset}")
     print(f" - PowerShell supports object-oriented scripting, allowing you to work with .NET objects, classes, and methods.")
 
     print("For more information, refer to the official documentation or contact support.")
