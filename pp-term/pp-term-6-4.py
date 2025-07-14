@@ -219,9 +219,9 @@ def state_info():
     return data["state"]
 
 
-if (state_info() == "adv"):
+if "adv" in state_info():
     main_color = "\033[92m"
-elif (state_info() == "evil"):
+elif "evil" in state_info():
     main_color = "\033[91m"
 else:
     main_color = "\033[94m"
