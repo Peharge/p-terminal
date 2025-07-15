@@ -16790,6 +16790,11 @@ def handle_special_commands(user_input):
         switch_theme(user_input)
         return True
 
+    if user_input.startswith("pcctheme "):
+        user_input = user_input[9:].strip()
+        create_custom_theme(user_input)
+        return True
+
     # Temp Dateien löschen
     if user_input.lower() == "cleantemp":
         temp = os.getenv('TEMP') or os.getenv('TMP')  # Falls TEMP nicht gesetzt ist
@@ -19984,6 +19989,8 @@ def handle_special_commands(user_input):
 SETTINGS_PATH = os.path.expandvars(
     r"%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
 )
+
+IMAGE_DEST_DIR = os.path.expanduser(r'~\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\images')
 BACKUP_SUFFIX = ".bak"
 THEMES_PATH = f'C:\\Users\\{os.getlogin()}\\p-terminal\\pp-term\\themes.json'
 
@@ -20820,6 +20827,29 @@ except (FileNotFoundError, json.JSONDecodeError) as e:
     THEME_DEFAULTS = {}
 
 
+def load_json(path: str) -> dict:
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {}
+
+
+def save_json(path: str, data: dict) -> None:
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(data, f, indent=4, ensure_ascii=False)
+    print(f"[{timestamp()}] [INFO] JSON gespeichert: {path}")
+
+
+"""
+def backup_file(path):
+    if os.path.exists(path):
+        bak = path + BACKUP_SUFFIX
+        shutil.copy2(path, bak)
+        print(f"[{timestamp()}] INFO: Backup created at {bak}")
+"""
+
 def run_script(*args):
     try:
         run(args, shell=True)
@@ -20870,6 +20900,103 @@ def restart_terminal() -> None:
     print(f"[{timestamp()}] [INFO] Terminal restarted with new tab.")
 
 
+def move_image(src_path: str) -> str:
+    if not os.path.isfile(src_path):
+        raise FileNotFoundError(f"Bild nicht gefunden: {src_path}")
+    os.makedirs(IMAGE_DEST_DIR, exist_ok=True)
+    dest_path = os.path.join(IMAGE_DEST_DIR, os.path.basename(src_path))
+    shutil.copy2(src_path, dest_path)
+    print(f"[{timestamp()}] [INFO] Bild kopiert nach: {dest_path}")
+    return dest_path
+
+
+def prompt_colors() -> dict:
+    keys = ['background', 'foreground', 'black', 'blue', 'cyan', 'green', 'purple', 'red', 'white',
+            'brightBlack', 'brightBlue', 'brightCyan', 'brightGreen', 'brightPurple', 'brightRed', 'brightWhite']
+    colors = {}
+    print("Farben auswählen (Hex, z.B. #ff0000). Leer lassen = Standardwert überspringen.")
+    for key in keys:
+        val = input(f"  {key}: ").strip()
+        if val:
+            colors[key] = val
+    return colors
+
+'''
+def prompt_defaults():
+    d = {}
+    # Acrylic
+    if input("Enable acrylic? [y/N]: ").strip().lower() == 'y':
+        d['useAcrylic'] = True
+        ao = input("  Acrylic opacity (0.0–1.0) [0.4]: ").strip()
+        if ao: d['acrylicOpacity'] = float(ao)
+    # Background image
+    img = input("Background image path (jpg/png/heic), leave blank = none: ").strip()
+    if img and os.path.isfile(img):
+        os.makedirs(IMAGE_DEST_DIR, exist_ok=True)
+        dest = os.path.join(IMAGE_DEST_DIR, os.path.basename(img))
+        shutil.copy2(img, dest)
+        d['backgroundImage'] = dest.replace('\\','/')
+        d['backgroundImageStretchMode']    = input("  Stretch mode [uniformToFill]: ").strip() or "uniformToFill"
+        d['backgroundImageAlignment']      = input("  Alignment [center]: ").strip() or "center"
+        biop = input("  Image opacity (0.0–1.0) [0.8]: ").strip()
+        if biop: d['backgroundImageOpacity'] = float(biop)
+    # Cursor color
+    cc = input("Cursor color hex [#ffffff]: ").strip() or "#ffffff"
+    d['cursorColor'] = cc
+    return d
+'''
+
+def create_custom_theme(name: str):
+    print(f"== Custom Theme: {name} ==")
+    # 1) Prompt for colors
+    colors = prompt_colors()
+
+    # 2) Prompt for background image path
+    img_input = input("Path to background image (jpg/png/heic), leave empty = no image: ").strip()
+    image_path = None
+    if img_input:
+        image_path = move_image(img_input)
+
+    # 3) Load settings JSON and create a backup
+    create_backup(SETTINGS_PATH)
+    settings = load_json(SETTINGS_PATH)
+
+    # 4) Build the new color scheme dictionary
+    new_scheme = {'name': name}
+    new_scheme.update(colors)
+    if image_path:
+        new_scheme['backgroundImage'] = image_path
+
+    # 5) Update the list of schemes in settings
+    schemes = settings.setdefault('schemes', [])
+    # Remove any existing scheme with the same name (case-insensitive)
+    schemes = [s for s in schemes if s.get('name', '').lower() != name.lower()]
+    schemes.append(new_scheme)
+    settings['schemes'] = schemes
+
+    # 6) Set all profiles to use the new color scheme
+    for profile in settings.get('profiles', {}).get('list', []):
+        profile['colorScheme'] = name
+
+    # 7) Save defaults in profiles defaults section
+    defaults = settings.setdefault('profiles', {}).setdefault('defaults', {})
+    if image_path:
+        defaults['backgroundImage'] = image_path
+        defaults['backgroundImageAlignment'] = "bottomRight"
+        defaults['backgroundImageOpacity'] = 0.8
+        defaults['backgroundImageStretchMode'] = "none"
+
+    defaults['colorScheme'] = name
+    defaults.setdefault('cursorColor', "#FFFFFF")
+    defaults.setdefault('opacity', 40)
+    defaults.setdefault('useAcrylic', True)
+
+    # 8) Save the updated settings JSON and restart the terminal
+    save_json(SETTINGS_PATH, settings)
+    print(f"[{timestamp()}] [PASS] Custom theme '{name}' created.")
+    subprocess.run(["wt.exe", "new-tab"], check=False)
+
+
 def switch_theme(user_input: str) -> bool:
     if not user_input.lower().startswith("theme "):
         return False
@@ -20901,7 +21028,6 @@ def switch_theme(user_input: str) -> bool:
         print(f"[{timestamp()}] [ERROR] Failed to apply theme '{choice}': {e}")
 
     return True
-
 
 
 def run_circuit(circuit: cirq.Circuit, repetitions: int = 1):
