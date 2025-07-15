@@ -87,8 +87,8 @@ reset = "\033[0m"
 bold = "\033[1m"
 
 # GitHub repository
-repo_url = "https://github.com/Peharge/p-terminal.git"
-repo_name = "p-terminal"
+# repo_url = "https://github.com/Peharge/p-terminal.git"
+# repo_name = "p-terminal"
 
 def get_expected_directory() -> Path:
     """Returns the expected working directory based on the current username."""
@@ -104,7 +104,7 @@ def is_correct_directory() -> bool:
 def get_latest_commits():
     """Fetches and displays the latest commits from the GitHub repository."""
     try:
-        github_api_url = f"https://api.github.com/repos/Peharge/{repo_name}/commits"
+        github_api_url = f"https://api.github.com/repos/Peharge/p-terminal/commits"
         response = requests.get(github_api_url)
         response.raise_for_status()
 
