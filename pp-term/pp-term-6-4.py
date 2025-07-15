@@ -228,6 +228,31 @@ else:
 
 
 def print_banner():
+    def get_commit_info(local_path):
+        branch = subprocess.check_output(
+            ["git", "-C", local_path, "rev-parse", "--abbrev-ref", "HEAD"],
+            text=True).strip()
+
+        subprocess.run(["git", "-C", local_path, "fetch"], check=True)
+
+        remote_total = subprocess.check_output(
+            ["git", "-C", local_path, "rev-list", "--count", f"origin/{branch}"],
+            text=True).strip()
+
+        behind = subprocess.check_output(
+            ["git", "-C", local_path, "rev-list", "--count", f"{branch}..origin/{branch}"],
+            text=True).strip()
+
+        return int(remote_total), int(behind)
+
+    user_name = os.getlogin()
+    local_repo_path = fr"C:/Users/{user_name}/p-terminal"
+
+    remote_total, behind = get_commit_info(local_repo_path)
+    remote_total_all = 500 + 971 + remote_total
+    if behind != 0:
+        print(f"[{timestamp()}] [INFO] The local repository is {main_color}{behind}{reset} commits behind the remote repository, which contains a total of main {main_color}{remote_total}{reset}/ hole {main_color}{remote_total_all}{reset} commits.")
+
     print(f"""
 {main_color}██████╗ ██████╗{reset}{white}    ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗     {reset}
 {main_color}██╔══██╗██╔══██╗{reset}{white}   ╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║     {reset}
