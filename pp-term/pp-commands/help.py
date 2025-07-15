@@ -98,6 +98,7 @@ else:
 def show_help():
     # Kopfzeile
     print(f"\n[{timestamp()}] [INFO] This guide provides descriptions of the available terminal commands and usage instructions.\n")
+    print(f"\n[{timestamp()}] [INFO] For more detailed information, please visit https://github.com/Peharge/p-terminal/wiki/Documentation or https://github.com/Peharge/peharge-web/blob/main/pp-term-hole.html\n")
 
     # Verfügbare Befehle und Beschreibungen
     print("Available Commands and Their Descriptions")
