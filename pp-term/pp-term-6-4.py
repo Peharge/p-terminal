@@ -972,78 +972,87 @@ def handle_special_commands(user_input):
         "run mavis-4-3-fast": "mavis-4-3-main.py",  # new
         "run mavis-launcher-4": "pp-commands\\run-launcher-4.py",  # new
         "run ollama mavis-4": "mavis-install\\install-ollama-mavis-4.py",  # new
+        "run mavis-4": "pp-commands\\run-mavis-4.py",  # new
+        "pr mavis-4-3": "pp-commands\\run-mavis-4-3.py",  # new
+        "pr mavis-4-fast": "mavis-4-main.py",  # new
+        "pr mavis-4-3-fast": "mavis-4-3-main.py",  # new
+        "pr mavis-launcher-4": "pp-commands\\run-launcher-4.py",  # new
+        "pr ollama mavis-4": "mavis-install\\install-ollama-mavis-4.py",  # new
         "install ollama mavis-4": "mavis-install\\install-ollama-mavis-4.py",  # new
         "change models mavis-4": "mavis-install\\install-ollama-mavis-4.py",  # new
         "change models": "mavis-install\\install-ollama-mavis-4.py",  # new
         "run solution": "mavis-solution\\run-solution-4.py",
         "run solution-3": "mavis-solution\\run-solution-3.py",
         "run solution-4": "mavis-solution\\run-solution-4.py",
+        "pr solution": "mavis-solution\\run-solution-4.py",
+        "pr solution-3": "mavis-solution\\run-solution-3.py",
+        "pr solution-4": "mavis-solution\\run-solution-4.py",
         "account": "mavis-account\\account.py",
-        "run deepseek-r1:1.5b": "pp-commands\\deepseek-r1-1-5b.py",
-        "run deepseek-r1:7b": "pp-commands\\deepseek-r1-7b.py",
-        "run deepseek-r1:8b": "pp-commands\\deepseek-r1-8b.py",
-        "run deepseek-r1:14b": "pp-commands\\deepseek-r1-14b.py",
-        "run deepseek-r1:32b": "pp-commands\\deepseek-r1-32b.py",
-        "run deepseek-r1:70b": "pp-commands\\deepseek-r1-70b.py",
-        "run deepseek-r1:671b": "pp-commands\\deepseek-r1-671b.py",
-        "run deepscaler": "pp-commands\\deepscaler.py",
-        "run llama3.1:8b": "pp-commands\\llama-3-1-8b.py",
-        "run llama3.1:70b": "pp-commands\\llama-3-1-70b.py",
-        "run llama3.1:405": "pp-commands\\llama-3-1-405b.py",
-        "run llama3.2:1b": "pp-commands\\llama-3-2-1b.py",
-        "run llama3.2:3b": "pp-commands\\llama-3-2-3b.py",
-        "run llama3.3": "pp-commands\\llama-3-3.py",
-        "run llama3:8b": "pp-commands\\llama-3-8b.py",
-        "run llama3:70b": "pp-commands\\llama-3-70b.py",
-        "run mistral": "pp-commands\\mistral.py",
-        "run mistral-large": "pp-commands\\mistral-large.py",  # new
-        "run mistral-nemo": "pp-commands\\mistral-nemo.py",  # new
-        "run mistral-openorca": "pp-commands\\mistral-openorca.py",  # new
-        "run mistral-small:22b": "pp-commands\\mistral-small-22b.py",  # new
-        "run mistral-small:24b": "pp-commands\\mistral-small-24b.py",  # new
-        "run phi4": "pp-commands\\phi-4.py",
-        "run qwen2.5:0.5b": "pp-commands\\qwen-2-5-0.5b.py",
-        "run qwen2.5:1.5b": "pp-commands\\qwen-2-5-1.5b.py",
-        "run qwen2.5:3b": "pp-commands\\qwen-2-5-3b.py",
-        "run qwen2.5:7b": "pp-commands\\qwen-2-5-7b.py",
-        "run qwen2.5:14b": "pp-commands\\qwen-2-5-14b.py",
-        "run qwen2.5:32b": "pp-commands\\qwen-2-5-32b.py",
-        "run qwen2.5:72b": "pp-commands\\qwen-2-5-72b.py",
-        "run qwen2.5-coder:0.5b": "pp-commands\\qwen-2-5-coder-0.5b.py",
-        "run qwen2.5-coder:1.5b": "pp-commands\\qwen-2-5-coder-0.5b.py",
-        "run qwen2.5-coder:3b": "pp-commands\\qwen-2-5-coder-0.5b.py",
-        "run qwen2.5-coder:7b": "pp-commands\\qwen-2-5-coder-0.5b.py",
-        "run qwen2.5-coder:14b": "pp-commands\\qwen-2-5-coder-0.5b.py",
-        "run qwen2.5-coder:32b": "pp-commands\\qwen-2-5-coder-0.5b.py",
-        "run qwen3:0.6b": "pp-commands\\qwen-3-0-6b.py",  # new
-        "run qwen3:1.7b": "pp-commands\\qwen-3-1-7b.py",  # new
-        "run qwen3:4b": "pp-commands\\qwen-3-4b.py",  # new
-        "run qwen3:8b": "pp-commands\\qwen-3-8b.py",  # new
-        "run qwen3:14b": "pp-commands\\qwen-3-14b.py",  # new
-        "run qwen3:32b": "pp-commands\\qwen-3-32.py",  # new
-        "run qwen3:30b": "pp-commands\\qwen-3-30.py",  # new
-        "run qwen3:235b": "pp-commands\\qwen-3-235.py",  # new
-        "run gemma3:1b": "pp-commands\\gemma-3-1b.py",  # new
-        "run gemma3:4b": "pp-commands\\gemma-3-4b.py",  # new
-        "run gemma3:12b": "pp-commands\\gemma-3-12b.py",  # new
-        "run gemma3:27b": "pp-commands\\gemma-3-27b.py",  # new
-        "run qwq": "pp-commands\\qwq.py",  # new
-        "run command-a": "pp-commands\\command-a.py",  # new
-        "run phi4-mini": "pp-commands\\phi-4-mini.py",  # new
-        "run granite3.2:8b": "pp-commands\\granite-3-2-8b.py",  # new
-        "run granite3.2:2b": "pp-commands\\granite-3-2-2b.py",  # new
-        "run granite3.2-vision:2b": "pp-commands\\granite-3-2-2b-vision.py",  # new
-        "run qwen2.5-omni:7b": "pp-commands\\qwen-2-5-omni-7b.py",  # new
-        "run qvq:72b": "pp-commands\\qvq-72b.py",  # new
-        "run qwen2.5-vl:32b": "pp-commands\\qwen-2-5-vl-32b.py",  # new
-        "run qwen2.5-vl:72b": "pp-commands\\qwen-2-5-vl-72b.py",  # new
-        "run llama4-maverick:17b": "pp-commands\\llama-4-maverick-17b-ollama.py",  # new
-        "run llama4-scout:17b": "pp-commands\\llama-4-scout-17b-ollama.py",  # new
-        "run llama4-maverick:17b hg": "pp-commands\\llama-4-maverick-17b.py",  # new
-        "run llama4-scout:17b hg": "pp-commands\\llama-4-scout-17b.py",  # new
-        "run deepcoder:1.5b": "pp-commands\\deepcoder-1-5b.py",  # new
-        "run deepcoder:14b": "pp-commands\\deepcoder-14b.py",  # new
-        "run mistral-small3.1": "pp-commands\\mistral-small-3-1.py",  # new
+        "mr deepseek-r1:1.5b": "pp-commands\\deepseek-r1-1-5b.py",
+        "mr deepseek-r1:7b": "pp-commands\\deepseek-r1-7b.py",
+        "mr deepseek-r1:8b": "pp-commands\\deepseek-r1-8b.py",
+        "mr deepseek-r1:14b": "pp-commands\\deepseek-r1-14b.py",
+        "mr deepseek-r1:32b": "pp-commands\\deepseek-r1-32b.py",
+        "mr deepseek-r1:70b": "pp-commands\\deepseek-r1-70b.py",
+        "mr deepseek-r1:671b": "pp-commands\\deepseek-r1-671b.py",
+        "mr deepscaler": "pp-commands\\deepscaler.py",
+        "mr llama3.1:8b": "pp-commands\\llama-3-1-8b.py",
+        "mr llama3.1:70b": "pp-commands\\llama-3-1-70b.py",
+        "mr llama3.1:405": "pp-commands\\llama-3-1-405b.py",
+        "mr llama3.2:1b": "pp-commands\\llama-3-2-1b.py",
+        "mr llama3.2:3b": "pp-commands\\llama-3-2-3b.py",
+        "mr llama3.3": "pp-commands\\llama-3-3.py",
+        "mr llama3:8b": "pp-commands\\llama-3-8b.py",
+        "mr llama3:70b": "pp-commands\\llama-3-70b.py",
+        "mr mistral": "pp-commands\\mistral.py",
+        "mr mistral-large": "pp-commands\\mistral-large.py",  # new
+        "mr mistral-nemo": "pp-commands\\mistral-nemo.py",  # new
+        "mr mistral-openorca": "pp-commands\\mistral-openorca.py",  # new
+        "mr mistral-small:22b": "pp-commands\\mistral-small-22b.py",  # new
+        "mr mistral-small:24b": "pp-commands\\mistral-small-24b.py",  # new
+        "mr phi4": "pp-commands\\phi-4.py",
+        "mr qwen2.5:0.5b": "pp-commands\\qwen-2-5-0.5b.py",
+        "mr qwen2.5:1.5b": "pp-commands\\qwen-2-5-1.5b.py",
+        "mr qwen2.5:3b": "pp-commands\\qwen-2-5-3b.py",
+        "mr qwen2.5:7b": "pp-commands\\qwen-2-5-7b.py",
+        "mr qwen2.5:14b": "pp-commands\\qwen-2-5-14b.py",
+        "mr qwen2.5:32b": "pp-commands\\qwen-2-5-32b.py",
+        "mr qwen2.5:72b": "pp-commands\\qwen-2-5-72b.py",
+        "mr qwen2.5-coder:0.5b": "pp-commands\\qwen-2-5-coder-0.5b.py",
+        "mr qwen2.5-coder:1.5b": "pp-commands\\qwen-2-5-coder-0.5b.py",
+        "mr qwen2.5-coder:3b": "pp-commands\\qwen-2-5-coder-0.5b.py",
+        "mr qwen2.5-coder:7b": "pp-commands\\qwen-2-5-coder-0.5b.py",
+        "mr qwen2.5-coder:14b": "pp-commands\\qwen-2-5-coder-0.5b.py",
+        "mr qwen2.5-coder:32b": "pp-commands\\qwen-2-5-coder-0.5b.py",
+        "mr qwen3:0.6b": "pp-commands\\qwen-3-0-6b.py",  # new
+        "mr qwen3:1.7b": "pp-commands\\qwen-3-1-7b.py",  # new
+        "mr qwen3:4b": "pp-commands\\qwen-3-4b.py",  # new
+        "mr qwen3:8b": "pp-commands\\qwen-3-8b.py",  # new
+        "mr qwen3:14b": "pp-commands\\qwen-3-14b.py",  # new
+        "mr qwen3:32b": "pp-commands\\qwen-3-32.py",  # new
+        "mr qwen3:30b": "pp-commands\\qwen-3-30.py",  # new
+        "mr qwen3:235b": "pp-commands\\qwen-3-235.py",  # new
+        "mr gemma3:1b": "pp-commands\\gemma-3-1b.py",  # new
+        "mr gemma3:4b": "pp-commands\\gemma-3-4b.py",  # new
+        "mr gemma3:12b": "pp-commands\\gemma-3-12b.py",  # new
+        "mr gemma3:27b": "pp-commands\\gemma-3-27b.py",  # new
+        "mr qwq": "pp-commands\\qwq.py",  # new
+        "mr command-a": "pp-commands\\command-a.py",  # new
+        "mr phi4-mini": "pp-commands\\phi-4-mini.py",  # new
+        "mr granite3.2:8b": "pp-commands\\granite-3-2-8b.py",  # new
+        "mr granite3.2:2b": "pp-commands\\granite-3-2-2b.py",  # new
+        "mr granite3.2-vision:2b": "pp-commands\\granite-3-2-2b-vision.py",  # new
+        "mr qwen2.5-omni:7b": "pp-commands\\qwen-2-5-omni-7b.py",  # new
+        "mr qvq:72b": "pp-commands\\qvq-72b.py",  # new
+        "mr qwen2.5-vl:32b": "pp-commands\\qwen-2-5-vl-32b.py",  # new
+        "mr qwen2.5-vl:72b": "pp-commands\\qwen-2-5-vl-72b.py",  # new
+        "mr llama4-maverick:17b": "pp-commands\\llama-4-maverick-17b-ollama.py",  # new
+        "mr llama4-scout:17b": "pp-commands\\llama-4-scout-17b-ollama.py",  # new
+        "mr llama4-maverick:17b hg": "pp-commands\\llama-4-maverick-17b.py",  # new
+        "mr llama4-scout:17b hg": "pp-commands\\llama-4-scout-17b.py",  # new
+        "mr deepcoder:1.5b": "pp-commands\\deepcoder-1-5b.py",  # new
+        "mr deepcoder:14b": "pp-commands\\deepcoder-14b.py",  # new
+        "mr mistral-small3.1": "pp-commands\\mistral-small-3-1.py",  # new
         "install deepseek-r1:1.5b": "pp-commands\\deepseek-r1-1-5b.py",
         "install deepseek-r1:7b": "pp-commands\\deepseek-r1-7b.py",
         "install deepseek-r1:8b": "pp-commands\\deepseek-r1-8b.py",
@@ -1103,12 +1112,13 @@ def handle_special_commands(user_input):
         "image generation": "pp-commands\\stable-diffusion-3-5-large-turbo.py",
         "video generation": "pp-commands\\wan-2-1-t2v-14b.py",
         "run mavis": "mavis-installer-3-main-windows.py",
-        "p run all": "pp-commands\\p-run-all.py",  # new
-        "p htop": "pp-commands\\p-htop.py",  # new
-        "p run gemma3": "pp-commands\\p-gemma-3.py",  # new
-        "p run deepseek-r1": "pp-commands\\p-deepseek-r1.py",  # new
-        "p run qwen2.5": "pp-commands\\p-qwen-2-5.py",  # new
-        "p run qwen2.5-coder": "pp-commands\\p-qwen-2-5-coder.py",  # new
+        "pr mavis": "mavis-installer-3-main-windows.py",
+        "pmr run all": "pp-commands\\p-run-all.py",  # new
+        "pmr htop": "pp-commands\\p-htop.py",  # new
+        "pmr run gemma3": "pp-commands\\p-gemma-3.py",  # new
+        "pmr run deepseek-r1": "pp-commands\\p-deepseek-r1.py",  # new
+        "pmr run qwen2.5": "pp-commands\\p-qwen-2-5.py",  # new
+        "pmr run qwen2.5-coder": "pp-commands\\p-qwen-2-5-coder.py",  # new
         "p python frameworks": "pp-commands\\p-python-frameworks.py",  # new
         "p pip list": "pp-commands\\p-python-frameworks.py",  # new
         "p pip ls": "pp-commands\\p-python-frameworks.py",  # new
@@ -1199,8 +1209,10 @@ def handle_special_commands(user_input):
         "p speedtest": "pp-commands\\p-speedtest.py",  # new
         "install 3d-slicer": "run\\simon\\3d-slicer\\install-3d-slicer.py",  # new
         "run 3d-slicer": "run\\simon\\3d-slicer\\run-3d-slicer.py",  # new
+        "pr 3d-slicer": "run\\simon\\3d-slicer\\run-3d-slicer.py",  # new
         "install simon": "run\\simon\\install-simon-1.py",  # new
         "run simon": "mavis-run-jup\\run-jup.py",  # new
+        "pr simon": "mavis-run-jup\\run-jup.py",  # new
         "jupyter --version": "pp-commands\\jupyter-version.py",  # new
         "grafana --version": "pp-commands\\grafana-version.py",  # new
         "3d-slicer --version": "pp-commands\\3d-slicer-version.py",  # new
@@ -1233,6 +1245,11 @@ def handle_special_commands(user_input):
         "run pycharm": "pp-commands\\run-pycharm.py",  # new
         "run vs-code": "pp-commands\\run-vs-code.py",  # new
         "run vs": "pp-commands\\run-vs.py",  # new
+        "pr githubdesktop": "pp-commands\\githubdesktop.py",  # new
+        "pr dockerdesktop": "pp-commands\\dockerdesktop.py",  # new
+        "pr pycharm": "pp-commands\\run-pycharm.py",  # new
+        "pr vs-code": "pp-commands\\run-vs-code.py",  # new
+        "pr vs": "pp-commands\\run-vs.py",  # new
         "p map": "pp-commands\\p-map.py",  # new
         "p weather": "pp-commands\\p-weather.py",  # new
         "p you": "pp-commands\\you.py",  # new
@@ -1252,7 +1269,9 @@ def handle_special_commands(user_input):
         "p gnu software": "pp-commands\\p-gnu-software.py",  # new
         "p git.com": "pp-commands\\p-git-com.py",  # new
         "run mavis main": "pp-commands\\run-mavis-main.py",  # new
-        "run mavis main fast": "pp-commands\\run-mavis-main-fast.py"  # new
+        "run mavis main fast": "pp-commands\\run-mavis-main-fast.py",  # new
+        "pr mavis main": "pp-commands\\run-mavis-main.py",  # new
+        "pr mavis main fast": "pp-commands\\run-mavis-main-fast.py"  # new
     }
 
     commands3 = {
@@ -1324,7 +1343,9 @@ def handle_special_commands(user_input):
         "install fun bb": "pp-commands\\fun-bb.py",  # new
         "jupyter": "mavis-run-jup\\run-jup.py",
         "run jupyter": "mavis-run-jup\\run-jup.py",
-        "run jup": "mavis-run-jup\\run-jup.py",  # new
+        "pr jup": "mavis-run-jup\\run-jup.py",  # new
+        "pr jupyter": "mavis-run-jup\\run-jup.py",
+        "pr jup": "mavis-run-jup\\run-jup.py",  # new
         "htop": "pp-commands\\htop.py",  # new
         "bashtop": "pp-commands\\bashtop.py",  # new
         "taskmanager": "pp-commands\\bashtop.py",  # new
@@ -1537,6 +1558,7 @@ def handle_special_commands(user_input):
         "update powershell": "pp-commands\\update-powershell.py",  # new
         "grafana": "mavis-run-grafana\\run-grafana.py",
         "run grafana": "mavis-run-grafana\\run-grafana.py",
+        "pr grafana": "mavis-run-grafana\\run-grafana.py",
         "pi mavis env": "mavis-install\\install-info-mavis-4.py",
         "pi mavis-3": "mavis-install\\install-info-mavis-4.py",  # new
         "pi mavis-3.3": "mavis-install\\install-info-mavis-4.py",  # new
