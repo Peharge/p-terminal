@@ -119,13 +119,32 @@ def get_latest_commits():
         print(f"[{timestamp()}] [ERROR] Failed to retrieve commits: {e}")
 
 def update_repo():
-    """Runs git pull to update the repository."""
+    """Runs git pull to update the repository and shows changed files with diffs."""
     try:
         print(f"\n[{timestamp()}] [INFO] Starting update...")
+        # Erst holen wir die aktuelle HEAD für späteren Vergleich
+        before_pull = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True)
+        old_commit = before_pull.stdout.strip()
+
+        # Dann machen wir den Pull
         result = subprocess.run(["git", "pull"], capture_output=True, text=True)
 
         if result.returncode == 0:
             print(f"[{timestamp()}] {green}[PASS]{reset} Repository successfully updated!")
+            print(f"[{timestamp()}] [INFO] Pull Output:\n{result.stdout}")
+
+            # Jetzt holen wir den neuen Commit
+            after_pull = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True)
+            new_commit = after_pull.stdout.strip()
+
+            # Wenn sich was geändert hat, zeigen wir die Diffs
+            if old_commit != new_commit:
+                print(f"\n[{timestamp()}] [INFO] Showing file changes between commits:")
+                diff_result = subprocess.run(["git", "diff", "--color=always", f"{old_commit}", f"{new_commit}"],
+                                             text=True)
+                print(diff_result.stdout)
+            else:
+                print(f"[{timestamp()}] [INFO] No file-level changes detected.")
         else:
             print(f"[{timestamp()}] {red}[ERROR]{reset} Update failed:\n{result.stderr}")
     except Exception as e:
