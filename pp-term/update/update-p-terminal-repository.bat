@@ -92,7 +92,7 @@ REM Execute the Python script
 
 REM Output success message
 echo.
-call :Log INFO "The scripts have been executed."
+call :Log INFO "The update Repository scripts have been executed."
 
 REM Wait for user input before exiting
 pause
