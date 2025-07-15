@@ -31560,7 +31560,7 @@ def main():
             sys.stderr.flush()
 
         except KeyboardInterrupt:
-            print(f"\n[{timestamp()}] [INFO] Exiting...")
+            print(f"\n[{timestamp()}] [INFO] {yellow}Exiting PP-Terminal... Goodbye {user_name}!{reset}")
             break
         except Exception as e:
             print(f"[{timestamp()}] [ERROR] {str(e)}", file=sys.stderr)
