@@ -320,14 +320,14 @@ class MainWindow(QMainWindow):
         widget.setGraphicsEffect(shadow)
 
     def run_install(self):
-        script_path = os.path.join("C:\\", "Users", os.getlogin(), "PycharmProjects", "MAVIS", "run", "simon", "3d-slicer", "install-3d-slicer.py")
+        script_path = os.path.join("C:\\", "Users", os.getlogin(), "p-terminal", "pp-term", "run", "simon", "3d-slicer", "install-3d-slicer.py")
         try:
             subprocess.Popen(["python", script_path])
         except Exception as e:
             print(f"Error executing {script_path}: {e}")
 
     def run_run(self):
-        script_path = os.path.join("C:\\", "Users", os.getlogin(), "PycharmProjects", "MAVIS", "run", "simon", "3d-slicer", "run-3d-slicer.py")
+        script_path = os.path.join("C:\\", "Users", os.getlogin(), "p-terminal", "pp-term", "run", "simon", "3d-slicer", "run-3d-slicer.py")
         try:
             subprocess.Popen(["python", script_path])
         except Exception as e:
@@ -336,7 +336,7 @@ class MainWindow(QMainWindow):
     def simon_github(self):
         try:
             user_folder = os.path.expanduser("~")  # Plattformunabhängig
-            script_path = os.path.join(user_folder, "PycharmProjects", "MAVIS", "mavis-terminal", "p-simon-git.py")
+            script_path = os.path.join(user_folder, "p-terminal", "pp-term", "pp-commands", "p-simon-git.py")
 
             if not os.path.exists(script_path):
                 print(f"Script nicht gefunden: {script_path}")
