@@ -19986,7 +19986,7 @@ def handle_special_commands(user_input):
 
 
 # Konstanten
-SETTINGS_PATH = os.path.expandvars(
+SETTINGS_PATH_THEME = os.path.expandvars(
     r"%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
 )
 
@@ -20827,7 +20827,7 @@ except (FileNotFoundError, json.JSONDecodeError) as e:
     THEME_DEFAULTS = {}
 
 
-def load_json(path: str) -> dict:
+def load_json_theme(path: str) -> dict:
     try:
         with open(path, 'r', encoding='utf-8') as f:
             return json.load(f)
@@ -20835,7 +20835,7 @@ def load_json(path: str) -> dict:
         return {}
 
 
-def save_json(path: str, data: dict) -> None:
+def save_json_theme(path: str, data: dict) -> None:
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
@@ -20850,29 +20850,30 @@ def backup_file(path):
         print(f"[{timestamp()}] INFO: Backup created at {bak}")
 """
 
-def run_script(*args):
+"""
+def run_script_theme(*args):
     try:
         run(args, shell=True)
     except Exception as e:
         print(f"[{timestamp()}] [ERROR] Error executing the script: {e}")
+"""
 
-
-def create_backup(file_path: str) -> str:
-    backup_path = file_path + BACKUP_SUFFIX
-    shutil.copy2(file_path, backup_path)
+def create_backup(file_theme_path: str) -> str:
+    backup_path = file_theme_path + BACKUP_SUFFIX
+    shutil.copy2(file_theme_path, backup_path)
     print(f"[{timestamp()}] [INFO] Backup created at: {backup_path}")
     return backup_path
 
 
-def load_settings(file_path: str) -> dict:
-    with open(file_path, 'r', encoding='utf-8') as f:
+def load_settings(file_theme_path: str) -> dict:
+    with open(file_theme_path, 'r', encoding='utf-8') as f:
         return json.load(f)
 
 
-def save_settings(file_path: str, settings: dict) -> None:
-    with open(file_path, 'w', encoding='utf-8') as f:
+def save_settings(file_theme_path: str, settings: dict) -> None:
+    with open(file_theme_path, 'w', encoding='utf-8') as f:
         json.dump(settings, f, indent=4)
-    print(f"[{timestamp()}] [INFO] Settings saved to {file_path}")
+    print(f"[{timestamp()}] [INFO] Settings saved to {file_theme_path}")
 
 
 def apply_color_scheme(settings: dict, scheme_name: str) -> None:
@@ -20958,8 +20959,8 @@ def create_custom_theme(name: str):
         image_path = move_image(img_input)
 
     # 3) Load settings JSON and create a backup
-    create_backup(SETTINGS_PATH)
-    settings = load_json(SETTINGS_PATH)
+    create_backup(SETTINGS_PATH_THEME)
+    settings = load_json_theme(SETTINGS_PATH_THEME)
 
     # 4) Build the new color scheme dictionary
     new_scheme = {'name': name}
@@ -20992,7 +20993,7 @@ def create_custom_theme(name: str):
     defaults.setdefault('useAcrylic', True)
 
     # 8) Save the updated settings JSON and restart the terminal
-    save_json(SETTINGS_PATH, settings)
+    save_json_theme(SETTINGS_PATH_THEME, settings)
     print(f"[{timestamp()}] [PASS] Custom theme '{name}' created.")
     subprocess.run(["wt.exe", "new-tab"], check=False)
 
@@ -21010,8 +21011,8 @@ def switch_theme(user_input: str) -> bool:
         return True
 
     try:
-        create_backup(SETTINGS_PATH)
-        settings = load_settings(SETTINGS_PATH)
+        create_backup(SETTINGS_PATH_THEME)
+        settings = load_settings(SETTINGS_PATH_THEME)
 
         if key in COLOR_SCHEMES:
             apply_color_scheme(settings, key)
@@ -21019,7 +21020,7 @@ def switch_theme(user_input: str) -> bool:
         if key in THEME_DEFAULTS:
             apply_theme_defaults(settings, key)
 
-        save_settings(SETTINGS_PATH, settings)
+        save_settings(SETTINGS_PATH_THEME, settings)
         print(f"[{timestamp()}] [PASS] Theme '{choice}' applied successfully.")
 
         restart_terminal()
