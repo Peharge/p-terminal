@@ -953,15 +953,19 @@ def handle_special_commands(user_input):
         "neofetch": "pp-commands\\neofetch.py",
         "fastfetch": "pp-commands\\neofetch.py",  # new
         "screenfetch": "pp-commands\\neofetch.py",  # new
+        "pfetch": "pp-commands\\neofetch.py",  # new
         "neofetch-2": "pp-commands\\neofetch-2.py",  # new
         "fastfetch-2": "pp-commands\\neofetch-2.py",  # new
         "screenfetch-2": "pp-commands\\neofetch-2.py",  # new
+        "pfetch-2": "pp-commands\\neofetch-2.py",  # new
         "neofetch-3": "pp-commands\\neofetch-3.py",  # new
         "fastfetch-3": "pp-commands\\neofetch-3.py",  # new
         "screenfetch-3": "pp-commands\\neofetch-3.py",  # new
+        "pfetch-3": "pp-commands\\neofetch-3.py",  # new
         "neofetch-4": "pp-commands\\neofetch-4.py",  # new
         "fastfetch-4": "pp-commands\\neofetch-4.py",  # new
         "screenfetch-4": "pp-commands\\neofetch-4.py",  # new
+        "pfetch-4": "pp-commands\\neofetch-4.py",  # new
         "run mavis-4": "pp-commands\\run-mavis-4.py",  # new
         "run mavis-4-3": "pp-commands\\run-mavis-4-3.py",  # new
         "run mavis-4-fast": "mavis-4-main.py",  # new
