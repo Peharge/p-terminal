@@ -313,6 +313,7 @@ class CompilerInspector(QWidget):
             font-family: 'Roboto', sans-serif;
             font-size: 14px;
         }
+
         QLineEdit, QPushButton {
             background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2c3e50, stop:1 #1c2833);
             border: 1px solid #778899;
@@ -320,28 +321,92 @@ class CompilerInspector(QWidget):
             padding: 5px;
             color: #FFFFFF;
         }
+
         QPushButton:hover {
             background-color: #1c2833;
         }
+
         QTableWidget {
             background-color: transparent;
             border: 1px solid #778899;
             border-radius: 8px;
             gridline-color: #778899;
         }
+
         QTableWidget::item:selected {
             background-color: #34495e;
             color: #FFFFFF;
         }
+
         QHeaderView::section {
             background-color: transparent;
             padding: 8px;
             border: none;
             color: #FFFFFF;
         }
+
         QLabel {
             background: transparent;
             font-size: 16px;
+        }
+
+        QScrollArea {
+            border: none;
+            background-color: transparent;
+        }
+
+        QScrollBar:vertical {
+            background-color: transparent;  /* Hintergrund (Schiene) in transparent */
+            width: 10px;
+            border-radius: 5px;
+        }
+
+        QScrollBar::handle:vertical {
+            background-color: #ffffff;  /* Schieber (Block) in Weiß */
+            min-height: 20px;
+            border-radius: 5px;
+        }
+
+        QScrollBar::add-line:vertical,
+        QScrollBar::sub-line:vertical {
+            background: transparent;
+        }
+
+        QScrollBar::up-arrow:vertical,
+        QScrollBar::down-arrow:vertical {
+            background: transparent;
+        }
+
+        QScrollBar::add-page:vertical,
+        QScrollBar::sub-page:vertical {
+            background: transparent;
+        }
+
+        QScrollBar:horizontal {
+            background-color: transparent;  /* Auch der horizontale Balken in transparent */
+            height: 10px;
+            border-radius: 5px;
+        }
+
+        QScrollBar::handle:horizontal {
+            background-color: #ffffff;
+            min-width: 20px;
+            border-radius: 5px;
+        }
+
+        QScrollBar::add-line:horizontal,
+        QScrollBar::sub-line:horizontal {
+            background: transparent;
+        }
+
+        QScrollBar::left-arrow:horizontal,
+        QScrollBar::right-arrow:horizontal {
+            background: transparent;
+        }
+
+        QScrollBar::add-page:horizontal,
+        QScrollBar::sub-page:horizontal {
+            background: transparent;
         }
         """
 
