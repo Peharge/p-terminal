@@ -106,7 +106,7 @@ def ensure_packages_installed(packages: list[str]) -> None:
     missing = [pkg for pkg in packages if importlib.util.find_spec(pkg) is None]
 
     if not missing:
-        logging.info("[{timestamp()}] [PASS] ✅ All required packages are already installed.")
+        logging.info(f"[{timestamp()}] [PASS] All required packages are already installed.")
         return
 
     logging.info(f"[{timestamp()}] [INFO] Installing missing packages: {', '.join(missing)}")
@@ -119,9 +119,9 @@ def ensure_packages_installed(packages: list[str]) -> None:
             ],
             check=True
         )
-        logging.info("[{timestamp()}] [PASS] ✅ Missing packages installed successfully.")
+        logging.info(f"[{timestamp()}] [PASS] Missing packages installed successfully.")
     except subprocess.CalledProcessError as e:
-        logging.error("[{timestamp()}] [ERROR] ❌ Failed to install required packages.")
+        logging.error(f"[{timestamp()}] [ERROR] Failed to install required packages.")
         logging.debug(f"[{timestamp()}] [ERROR] Error details: {e}")
 
 
