@@ -81,12 +81,14 @@ from PyQt6.QtCore import Qt, QThread, pyqtSignal
 
 # Stylesheet für einen modernen, dunklen Look
 STYLE_SHEET = """
+
 QWidget {
     background-color: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #1b2631, stop:1 #0f1626);
     color: #FFFFFF;
     font-family: 'Roboto', sans-serif;
     font-size: 14px;
 }
+
 QLineEdit {
     background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2c3e50, stop:1 #1c2833);
     border: 1px solid #778899;
@@ -94,37 +96,46 @@ QLineEdit {
     padding: 5px;
     color: #FFFFFF;
 }
+
 QPushButton {
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #ffffff, stop:1 #bbdefb);
-    color: #000000;
-    padding: 2px 8px;
-    border-radius: 8px;
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2c3e50, stop:1 #1c2833);
+    border: 1px solid #778899;
+    border-radius: 5px;
+    padding: 5px;
+    color: #FFFFFF;
 }
+
 QPushButton:hover {
-    background-color: #bbdefb;
+    background-color: #1c2833;
 }
+
 QTreeWidget {
     background-color: transparent;
     border: 1px solid #778899;
     border-radius: 8px;
 }
+
 QTreeWidget::item {
     padding: 8px;
     border-bottom: 1px solid #778899;
 }
+
 QTreeWidget::item:selected {
     background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #34495e, stop:1 #1c2833);
     color: #FFFFFF;
 }
+
 QHeaderView::section {
     background-color: transparent;
     padding: 8px;
     border: none;
 }
+
 QLabel {
     background: transparent;
     font-size: 16px;
 }
+
 QTextEdit {
     background-color: transparent;
     border: 1px solid #778899;
@@ -132,59 +143,72 @@ QTextEdit {
     font-family: 'Courier New', monospace;
     font-size: 12px;
 }
+
 QTableWidget {
     background-color: #222;
     gridline-color: #566573;
 }
+
 QHeaderView::section {
     background-color: #2c3e50;
     padding: 4px;
     border: 1px solid #566573;
 }
+
 QScrollArea {
     border: none;
     background-color: transparent;
 }
+
 QScrollBar:vertical {
     background-color: transparent;  /* Hintergrund (Schiene) in transparent */
     width: 10px;
     border-radius: 5px;
 }
+
 QScrollBar::handle:vertical {
     background-color: #ffffff;  /* Schieber (Block) in Weiß */
     min-height: 20px;
     border-radius: 5px;
 }
+
 QScrollBar::add-line:vertical,
 QScrollBar::sub-line:vertical {
     background: transparent;
 }
+
 QScrollBar::up-arrow:vertical,
 QScrollBar::down-arrow:vertical {
     background: transparent;
 }
+
 QScrollBar::add-page:vertical,
 QScrollBar::sub-page:vertical {
     background: transparent;
 }
+
 QScrollBar:horizontal {
     background-color: transparent;  /* Auch der horizontale Balken in transparent */
     height: 10px;
     border-radius: 5px;
 }
+
 QScrollBar::handle:horizontal {
     background-color: #ffffff;
     min-width: 20px;
     border-radius: 5px;
 }
+
 QScrollBar::add-line:horizontal,
 QScrollBar::sub-line:horizontal {
     background: transparent;
 }
+
 QScrollBar::left-arrow:horizontal,
 QScrollBar::right-arrow:horizontal {
     background: transparent;
 }
+
 QScrollBar::add-page:horizontal,
 QScrollBar::sub-page:horizontal {
     background: transparent;

@@ -646,9 +646,9 @@ class MainWindow(QMainWindow):
 
             QPushButton {
                 background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2c3e50, stop:1 #1c2833);
-                border: none;
+                border: 1px solid #778899;
                 border-radius: 5px;
-                padding: 5px 10px;
+                padding: 5px;
                 color: #FFFFFF;
             }
 
