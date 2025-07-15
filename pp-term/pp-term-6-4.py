@@ -26169,7 +26169,7 @@ def get_evil_pin(current_dir, env_indicator_11):
 
 def get_evil_2_pin(current_dir, env_indicator_4):
     return (
-            f"\n{red}┌──({reset}{getpass.getuser()}"
+            f"\n{red}┌──({reset}root"
             + colored("㋐", attrs=["bold"])
             + f"Peharge{red})-[{reset}{current_dir}{red}]-{reset}{env_indicator_4}"
               f"\n{red}└─{reset}{red}#{reset} "
@@ -26204,7 +26204,7 @@ def get_evil_5_pin(current_dir, env_indicator_3):
 
 def get_adv_pin(current_dir, env_indicator_12):
     return (
-            f"\n{white}┌──({reset}{green}root"
+            f"\n{white}┌──({reset}{green}{getpass.getuser()}"
             + colored("㋐", attrs=["bold"])
             + f"{green}Peharge{reset}{white})-[{reset}{green}{current_dir}{reset}{white}]-{reset}{env_indicator_12}"
               f"\n{white}└─{reset}{green}§{reset} "
@@ -26222,7 +26222,7 @@ def get_adv_2_pin(current_dir, env_indicator_4):
 
 def get_adv_3_pin(current_dir, env_indicator_9):
     return (
-            f"\n{blue}┌──({reset}{green}root"
+            f"\n{blue}┌──({reset}{green}{getpass.getuser()}"
             + colored("㋐", attrs=["bold"])
             + f"{green}Peharge{reset}{blue})-[{reset}{current_dir}{blue}]-{reset}{env_indicator_9}"
               f"\n{blue}└─{reset}{green}§{reset} "
@@ -26241,7 +26241,7 @@ def get_adv_5_pin(current_dir, env_indicator_3):
     print("")
 
     return (
-            f"{env_indicator_3} {green}root" + colored("㋐", attrs=[
+            f"{env_indicator_3} {green}{getpass.getuser()}" + colored("㋐", attrs=[
         "bold"]) + f"{green}Peharge{reset} {current_dir}:~{green}§{reset} "
     )
 
