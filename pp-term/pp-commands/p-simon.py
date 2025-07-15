@@ -198,19 +198,22 @@ COLUMNS = [
 ]
 
 class PackageInfoWorker(QThread):
-    # Signal wird für jedes einzelne Paket gesendet
     packageInfoReady = pyqtSignal(dict)
 
     def __init__(self, packages):
         super().__init__()
         self.packages = packages
 
+        # Pfad zum Python-Interpreter in deiner virtuellen Umgebung (venv)
+        self.venv_python = f"C:\\Users\\{os.getlogin()}\\p-terminal\\pp-term\\.env\\Scripts\\python.exe"
+
     def run(self):
         for pkg in self.packages:
             info_dict = {}
             try:
+                # Hier rufst du pip über den venv-Interpreter auf
                 result = subprocess.run(
-                    ["pip", "show", pkg],
+                    [self.venv_python, "-m", "pip", "show", pkg],
                     capture_output=True, text=True, check=False
                 )
                 if result.stdout:
@@ -223,9 +226,8 @@ class PackageInfoWorker(QThread):
             except Exception as e:
                 info_dict["Name"] = pkg
                 info_dict["Error"] = str(e)
-            # Jedes Ergebnis wird sofort ausgestrahlt
+
             self.packageInfoReady.emit(info_dict)
-            # Kurze Pause, sodass die Einträge nacheinander erscheinen (500 ms)
             self.msleep(500)
 
 class MainWindow(QMainWindow):
