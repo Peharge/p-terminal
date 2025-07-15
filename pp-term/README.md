@@ -21,8 +21,9 @@ P-Terminal hole size: 5700 MB (Without LLm model, Linux OS or additional apps...
 
 ### Code-Statistik (17.07.2025) - cloc .
 
-| Sprache                  | Dateien | Leere Zeilen | Kommentarzeilen | Codezeilen   |
+| Language                 | Files   | Empty lines  | Comment lines    | Code lines   |
 |--------------------------|---------|--------------|------------------|--------------|
+| Python                   | 38,202  | 2,186,448    | 2,842,548        | 8,715,675    |
 | C/C++ Header             | 15.816  | 351.792      | 605.501          | 1.788.989    |
 | JavaScript               | 536     | 48.957       | 120.020          | 550.279      |
 | Pascal                   | 198     | 216.402      | 916.360          | 314.758      |
