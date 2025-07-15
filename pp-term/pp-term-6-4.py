@@ -26182,7 +26182,7 @@ def get_adv_pin(current_dir, env_indicator_12):
             f"\n{white}┌──({reset}{green}root"
             + colored("㋐", attrs=["bold"])
             + f"{green}Peharge{reset}{white})-[{reset}{green}{current_dir}{reset}{white}]-{reset}{env_indicator_12}"
-              f"\n{white}└─{reset}{green}#{reset} "
+              f"\n{white}└─{reset}{green}§{reset} "
     )
 
 
@@ -26191,7 +26191,7 @@ def get_adv_2_pin(current_dir, env_indicator_4):
             f"\n{green}┌──({reset}{getpass.getuser()}"
             + colored("㋐", attrs=["bold"])
             + f"Peharge{green})-[{reset}{current_dir}{green}]-{reset}{env_indicator_4}"
-              f"\n{green}└─{reset}{green}#{reset} "
+              f"\n{green}└─{reset}{green}§{reset} "
     )
 
 
@@ -26200,7 +26200,7 @@ def get_adv_3_pin(current_dir, env_indicator_9):
             f"\n{blue}┌──({reset}{green}root"
             + colored("㋐", attrs=["bold"])
             + f"{green}Peharge{reset}{blue})-[{reset}{current_dir}{blue}]-{reset}{env_indicator_9}"
-              f"\n{blue}└─{reset}{green}#{reset} "
+              f"\n{blue}└─{reset}{green}§{reset} "
     )
 
 
@@ -26208,7 +26208,7 @@ def get_adv_4_pin(current_dir, env_indicator_3):
     print("")
 
     return (
-        f"{env_indicator_3} {green}PP{reset} {current_dir}:~{green}#{reset} "
+        f"{env_indicator_3} {green}PP{reset} {current_dir}:~{green}§{reset} "
     )
 
 
@@ -26217,7 +26217,7 @@ def get_adv_5_pin(current_dir, env_indicator_3):
 
     return (
             f"{env_indicator_3} {green}root" + colored("㋐", attrs=[
-        "bold"]) + f"{green}Peharge{reset} {current_dir}:~{green}#{reset} "
+        "bold"]) + f"{green}Peharge{reset} {current_dir}:~{green}§{reset} "
     )
 
 
