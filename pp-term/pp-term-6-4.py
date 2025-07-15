@@ -20839,7 +20839,7 @@ def save_json_theme(path: str, data: dict) -> None:
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
-    print(f"[{timestamp()}] [INFO] JSON gespeichert: {path}")
+    print(f"[{timestamp()}] [INFO] JSON saved: {path}")
 
 
 """
@@ -20903,24 +20903,31 @@ def restart_terminal() -> None:
 
 def move_image(src_path: str) -> str:
     if not os.path.isfile(src_path):
-        raise FileNotFoundError(f"Bild nicht gefunden: {src_path}")
+        raise FileNotFoundError(f"Image not found: {src_path}")
     os.makedirs(IMAGE_DEST_DIR, exist_ok=True)
     dest_path = os.path.join(IMAGE_DEST_DIR, os.path.basename(src_path))
     shutil.copy2(src_path, dest_path)
-    print(f"[{timestamp()}] [INFO] Bild kopiert nach: {dest_path}")
+    print(f"[{timestamp()}] [INFO] Image copied to: {dest_path}")
     return dest_path
 
 
-def prompt_colors() -> dict:
-    keys = ['background', 'foreground', 'black', 'blue', 'cyan', 'green', 'purple', 'red', 'white',
-            'brightBlack', 'brightBlue', 'brightCyan', 'brightGreen', 'brightPurple', 'brightRed', 'brightWhite']
-    colors = {}
-    print("Farben auswählen (Hex, z.B. #ff0000). Leer lassen = Standardwert überspringen.")
+def prompt_colors(name: str) -> dict:
+    keys = [
+        'black', 'red', 'green', 'yellow', 'blue', 'purple', 'cyan', 'white',
+        'brightBlack', 'brightRed', 'brightGreen', 'brightYellow',
+        'brightBlue', 'brightPurple', 'brightCyan', 'brightWhite',
+        'background', 'foreground'
+    ]
+
+    print("Choose colors (Hex, e.g. #ff0000). Leave blank to skip a value.")
+    theme = {"name": name}
+
     for key in keys:
         val = input(f"  {key}: ").strip()
         if val:
-            colors[key] = val
-    return colors
+            theme[key] = val
+
+    return theme
 
 '''
 def prompt_defaults():
@@ -20947,53 +20954,54 @@ def prompt_defaults():
     return d
 '''
 
+
 def create_custom_theme(name: str):
-    print(f"== Custom Theme: {name} ==")
+    code_line = f"Custom Theme: {name}"
+    print("")
+    print(code_line)
+    print('-' * len(code_line))
+
     # 1) Prompt for colors
-    colors = prompt_colors()
+    theme_dict = prompt_colors(name)
 
     # 2) Prompt for background image path
     img_input = input("Path to background image (jpg/png/heic), leave empty = no image: ").strip()
-    image_path = None
-    if img_input:
-        image_path = move_image(img_input)
+    image_path = move_image(img_input) if img_input else None
 
     # 3) Load settings JSON and create a backup
     create_backup(SETTINGS_PATH_THEME)
     settings = load_json_theme(SETTINGS_PATH_THEME)
 
-    # 4) Build the new color scheme dictionary
-    new_scheme = {'name': name}
-    new_scheme.update(colors)
-    if image_path:
-        new_scheme['backgroundImage'] = image_path
-
-    # 5) Update the list of schemes in settings
+    # 4) Prepare schemes and remove old one if exists
     schemes = settings.setdefault('schemes', [])
-    # Remove any existing scheme with the same name (case-insensitive)
     schemes = [s for s in schemes if s.get('name', '').lower() != name.lower()]
+
+    # 5) Add new scheme
+    new_scheme = theme_dict.copy()
     schemes.append(new_scheme)
     settings['schemes'] = schemes
 
-    # 6) Set all profiles to use the new color scheme
+    # 6) Apply to all profiles
     for profile in settings.get('profiles', {}).get('list', []):
         profile['colorScheme'] = name
 
-    # 7) Save defaults in profiles defaults section
+    # 7) Update profile defaults
     defaults = settings.setdefault('profiles', {}).setdefault('defaults', {})
+    defaults['colorScheme'] = name
+    defaults.setdefault('cursorColor', "#FFFFFF")
+    defaults.setdefault('opacity', 40)
+    defaults.setdefault('useAcrylic', True)
+
     if image_path:
         defaults['backgroundImage'] = image_path
         defaults['backgroundImageAlignment'] = "bottomRight"
         defaults['backgroundImageOpacity'] = 0.8
         defaults['backgroundImageStretchMode'] = "none"
 
-    defaults['colorScheme'] = name
-    defaults.setdefault('cursorColor', "#FFFFFF")
-    defaults.setdefault('opacity', 40)
-    defaults.setdefault('useAcrylic', True)
-
-    # 8) Save the updated settings JSON and restart the terminal
+    # 8) Save updated settings
     save_json_theme(SETTINGS_PATH_THEME, settings)
+
+    # 9) Restart terminal (optional)
     print(f"[{timestamp()}] [PASS] Custom theme '{name}' created.")
     subprocess.run(["wt.exe", "new-tab"], check=False)
 
