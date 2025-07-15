@@ -61,27 +61,73 @@
 #
 # Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 
-import subprocess
 import sys
-import platform
+import getpass
+import subprocess
+import threading
+import time
 import importlib.util
+import os
+import logging
+import platform
+from datetime import datetime
+
+def timestamp() -> str:
+    """Returns current time formatted with milliseconds"""
+    now = datetime.now()
+    return now.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
 
 required_packages = ["requests", "Flask", "numpy", "pandas", "python-dotenv", "pipdeptree", "urllib3", "PyQt6", "pipdeptree", "jupyter_server_terminals"]
 
-def ensure_packages_installed(packages):
-    """Stellt sicher, dass alle erforderlichen Pakete installiert sind."""
-    for package in packages:
-        if importlib.util.find_spec(package) is None:
-            print(f"Installing {package}...")
-            try:
-                subprocess.run([sys.executable, "-m", "pip", "install", package], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-                print(f"{package} installed successfully.")
-            except subprocess.CalledProcessError:
-                print(f"WARNING: Failed to install {package}. Please install it manually.")
-        else:
-            print(f"{package} is already installed.")
+def activate_virtualenv(venv_path):
+    """Aktiviert eine bestehende virtuelle Umgebung."""
+    activate_script = os.path.join(venv_path, "Scripts", "activate") if os.name == "nt" else os.path.join(venv_path,
+                                                                                                          "bin",
+                                                                                                          "activate")
 
-# Stellen Sie sicher, dass alle erforderlichen Pakete installiert sind
+    if not os.path.exists(activate_script):
+        print(f"[{timestamp()}] [ERROR] Virtual environment not found at {venv_path}.")
+        sys.exit(1)
+
+    os.environ["VIRTUAL_ENV"] = venv_path
+    os.environ["PATH"] = os.path.join(venv_path, "Scripts") + os.pathsep + os.environ["PATH"]
+    print(f"[{timestamp()}] [PASS] Virtual environment {venv_path} activated.")
+
+
+def ensure_packages_installed(packages: list[str]) -> None:
+    """
+    Stellt sicher, dass die angegebenen Python-Pakete installiert werden.
+
+    Installiert nur fehlende Pakete. Leise, schnell und robust.
+    """
+
+    logging.basicConfig(level=logging.INFO, format='%(message)s')
+
+    missing = [pkg for pkg in packages if importlib.util.find_spec(pkg) is None]
+
+    if not missing:
+        logging.info(f"[{timestamp()}] [PASS] All required packages are already installed.")
+        return
+
+    logging.info(f"[{timestamp()}] [INFO] Installing missing packages: {', '.join(missing)}")
+
+    try:
+        subprocess.run(
+            [
+                sys.executable, "-m", "pip", "install", "--quiet", "--disable-pip-version-check",
+                *missing
+            ],
+            check=True
+        )
+        logging.info(f"[{timestamp()}] [PASS] Missing packages installed successfully.")
+    except subprocess.CalledProcessError as e:
+        logging.error(f"[{timestamp()}] [ERROR] Failed to install required packages.")
+        logging.debug(f"[{timestamp()}] [ERROR] Error details: {e}")
+
+
+# Virtuelle Umgebung aktivieren und Pakete sicherstellen
+venv_path = f"C:\\Users\\{os.getlogin()}\\p-terminal\\pp-term\\.env"
+activate_virtualenv(venv_path)
 ensure_packages_installed(required_packages)
 
 import requests
@@ -100,6 +146,7 @@ from typing import Optional
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 import importlib.metadata
+import json
 
 # Farbcodes definieren
 red = "\033[91m"
@@ -114,15 +161,28 @@ orange = "\033[38;5;214m"
 reset = "\033[0m"
 bold = "\033[1m"
 
+def state_info():
+    with open(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/state-info.json", "r") as file:
+        data = json.load(file)
+    return data["state"]
+
+
+if "adv" in state_info():
+    main_color = "\033[92m"
+elif "evil" in state_info():
+    main_color = "\033[91m"
+else:
+    main_color = "\033[94m"
+
 def confirm_action(message: str) -> bool:
     """Fordert den Benutzer zur Bestätigung auf."""
     while True:
-        response = input(f"{message} [y/n]:").strip().lower()
+        response = input(f"{message} [y/n]: ").strip().lower()
         if response in ["y", "yes"]:
             return True
         elif response in ["n", "no"]:
             return False
-        print("Invalid input. Please enter 'y/yes' or 'n/no'.")
+        print(f"[{timestamp()}] [ERROR] Invalid input. Please enter 'y/yes' or 'n/no'.")
 
 def is_package_installed(package: str) -> bool:
     """Prüft, ob ein Paket installiert ist."""
@@ -163,7 +223,7 @@ def get_latest_package_version(package: str, timeout: int = 10, retries: int = 3
     """
     # Paketname validieren
     if not re.match(r"^[a-zA-Z0-9_\-\.]+$", package):
-        raise ValueError(f"Invalid package name: '{package}'.")
+        raise ValueError(f"[{timestamp()}] [INFO] Invalid package name: '{package}'.")
 
     url = f"https://pypi.org/pypi/{package}/json"
 
@@ -187,12 +247,12 @@ def get_latest_package_version(package: str, timeout: int = 10, retries: int = 3
         try:
             package_info = response.json()
         except ValueError:
-            raise RuntimeError(f"Invalid JSON format from PyPI for '{package}'.")
+            raise RuntimeError(f"[{timestamp()}] [INFO] Invalid JSON format from PyPI for '{package}'.")
 
         # Version extrahieren
         version: Optional[str] = package_info.get("info", {}).get("version")
         if not version:
-            raise ValueError(f"No version information found for '{package}'.")
+            raise ValueError(f"[{timestamp()}] [ERROR] No version information found for '{package}'.")
 
         return version
 
@@ -200,43 +260,43 @@ def get_latest_package_version(package: str, timeout: int = 10, retries: int = 3
         # Handling von Rate Limits (HTTP 429)
         if response.status_code == 429:
             retry_after = int(response.headers.get("Retry-After", 5))
-            print(f"Rate limit reached. Retry in {retry_after} seconds...")
+            print(f"[{timestamp()}] [INFO] Rate limit reached. Retry in {retry_after} seconds...")
             time.sleep(retry_after)
             return get_latest_package_version(package, timeout, retries - 1, backoff_factor)
-        raise ConnectionError(f"HTTP error at '{package}': {http_err}")
+        raise ConnectionError(f"[{timestamp()}] [ERROR] HTTP error at '{package}': {http_err}")
 
     except requests.exceptions.ConnectionError as conn_err:
-        raise ConnectionError(f"Connection error to PyPI for '{package}': {conn_err}")
+        raise ConnectionError(f"[{timestamp()}] [ERROR] Connection error to PyPI for '{package}': {conn_err}")
 
     except requests.exceptions.Timeout:
-        raise TimeoutError(f"Timeout after {timeout} seconds while retrieving '{package}'.")
+        raise TimeoutError(f"[{timestamp()}] [INFO] Timeout after {timeout} seconds while retrieving '{package}'.")
 
     except requests.exceptions.RequestException as req_err:
-        raise ConnectionError(f"General network error at '{package}': {req_err}")
+        raise ConnectionError(f"[{timestamp()}] [ERROR] General network error at '{package}': {req_err}")
 
     except ValueError as json_err:
-        raise RuntimeError(f"Invalid JSON response for '{package}': {json_err}")
+        raise RuntimeError(f"[{timestamp()}] [ERROR] Invalid JSON response for '{package}': {json_err}")
 
     except Exception as e:
-        raise RuntimeError(f"Unexpected error in '{package}': {e}")
+        raise RuntimeError(f"[{timestamp()}] [ERROR] Unexpected error in '{package}': {e}")
 
 
 def get_latest_version(package):
-    # Verwende pip, um die neueste Version des Pakets zu finden
+    # Use pip to find the latest version of the package
     result = subprocess.run(['pip', 'index', 'versions', package], stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                             text=True)
 
     if result.returncode == 0:
-        # Extrahiere die neueste Version aus dem Output
+        # Extract the latest version from the output
         latest_version_line = [line for line in result.stdout.splitlines() if 'Available versions' in line]
         if latest_version_line:
             latest_version = latest_version_line[0].split(":")[-1].strip().split(',')[-1].strip()
             return latest_version
         else:
-            print(f"Fehler: Konnte die neueste Version von {package} nicht ermitteln.")
+            print(f"[{timestamp()}] [ERROR] Could not determine the latest version of {package}.")
             return None
     else:
-        print(f"Fehler beim Abrufen der neuesten Version von {package}: {result.stderr}")
+        print(f"[{timestamp()}] [ERROR] Error retrieving the latest version of {package}: {result.stderr}")
         return None
 
 
@@ -250,12 +310,12 @@ def check_package_compatibility(package):
 
     installed_packages = {pkg.metadata['Name'].lower(): pkg.version for pkg in importlib.metadata.distributions()}
 
-    print(f"{blue}{package} is outdated ({current_version} -> {latest_version}).{reset}")
+    print(f"[{timestamp()}] [INFO] {package} is outdated ({current_version} -> {latest_version}).")
 
     # Überprüfen Sie, ob das Paket bereits installiert ist und welche Version
 
     # Prüfe Inkompatibilitäten mit installierten Paketen
-    print(f"\nCheck for incompatibilities with installed packages...")
+    print(f"\n[{timestamp()}] [INFO] Check for incompatibilities with installed packages...")
 
     # Verwenden Sie pipdeptree, um alle Pakete und deren Abhängigkeiten zu überprüfen
     pipdeptree_result = subprocess.run([sys.executable, "-m", 'pipdeptree', '-r', '-p', package], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
@@ -268,13 +328,13 @@ def check_package_compatibility(package):
         for line in incompatible_packages:
             if package in line:
                 # Extrahiere das Paket, das eine inkompatible Version benötigt
-                print(f"{red}Incompatibility found with{reset}: {line}")
+                print(f"[{timestamp()}] [ERROR] Incompatibility found with: {line}")
                 # Optional: Wenn du mehr Details zu den Abhängigkeiten sehen möchtest, kannst du nach dem Paket suchen,
                 # das eine inkompatible Version benötigt.
                 package_dependency = line.split('==')[0]  # Extrahiere den Namen des Pakets
-                print(f"{red}{package_dependency} requires an incompatible version of {package}{reset}")
+                print(f"[{timestamp()}] [INFO] {package_dependency} requires an incompatible version of {package}")
     else:
-        print(f"Error retrieving package dependencies: {pipdeptree_result.stderr}")
+        print(f"[{timestamp()}] [ERROR] Error retrieving package dependencies: {pipdeptree_result.stderr}")
 
 """
 # Funktion, um die Kompatibilität eines Pakets zu prüfen
@@ -317,9 +377,9 @@ def install_or_update_package(package: str):
     if not is_package_installed(package):
         if confirm_action(f"{package} is not installed. Do you want to install it?"):
             subprocess.run([sys.executable, "-m", "pip", "install", package], check=True)
-            print(f"{green}{package} has been installed.{reset}")
+            print(f"[{timestamp()}] [PASS] {package} has been installed.")
         else:
-            print(f"{yellow}{package} will not be installed.{reset}")
+            print(f"[{timestamp()}] [ERROR] {package} will not be installed.")
     else:
         current_version = get_package_version(package)
         latest_version = get_latest_package_version(package)
@@ -342,42 +402,42 @@ def install_or_update_package(package: str):
                 check_package_compatibility(package)
                 if confirm_action(f"\nDo you want to update {package} to {latest_version}?"):
                     subprocess.run([sys.executable, "-m", "pip", "install", "--upgrade", package], check=True)
-                    print(f"{green}{package} was updated to version {latest_version}.{reset}")
-                    print(f"\nCheck again for incompatibilities after installation...")
+                    print(f"[{timestamp()}] [PASS] {package} was updated to version {latest_version}.")
+                    print(f"\n[{timestamp()}] [INFO] Check again for incompatibilities after installation...")
                     pipdeptree_result = subprocess.run([sys.executable, "-m", 'pipdeptree', '-r', '-p', package], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
                     if pipdeptree_result.returncode == 0:
-                        print("Packages installed after installation:")
+                        print(f"[{timestamp()}] [INFO] Packages installed after installation:")
                         print(pipdeptree_result.stdout)
 
                         incompatible_packages = pipdeptree_result.stdout.splitlines()
                         for line in incompatible_packages:
                             if package in line:
-                                print(f"Incompatibility found after update with: {line}")
+                                print(f"[{timestamp()}] [ERROR] Incompatibility found after update with: {line}")
                     else:
                         print(
-                            f"Error retrieving package dependencies after update: {pipdeptree_result.stderr}")
+                            f"[{timestamp()}] [ERROR] Error retrieving package dependencies after update: {pipdeptree_result.stderr}")
                 else:
-                    print(f"{yellow}{package} remains at {current_version}.{reset}")
+                    print(f"[{timestamp()}] [INFO] {package} remains at {current_version}.")
 
         except Exception as e:
             # Falls bei der Prüfung ein Fehler auftritt, geben wir diesen aus
-            print(f"{red}Error while checking dependencies for {package}: {str(e)}{reset}")
+            print(f"[{timestamp()}] [ERROR] Error while checking dependencies for {package}: {str(e)}")
             return  # Funktion vorzeitig verlassen, wenn ein Fehler auftritt
 
         # Wenn das Paket auf dem neuesten Stand ist, wird dies ebenfalls angezeigt
         if current_version and latest_version and current_version == latest_version:
-            print(f"{green}{package} is up to date (Version {current_version}).{reset}")
+            print(f"[{timestamp()}] [INFO] {package} is up to date (Version {current_version}).")
 
 
 def install_package(package: str):
     """Installiert ein Paket basierend auf Benutzerbestätigung."""
-    print(f"{red}{package} is not installed.{reset}")
+    print(f"[{timestamp()}] [INFO] {package} is not installed.")
     if confirm_action(f"Do you want to install {package}?"):
         subprocess.run([sys.executable, "-m", "pip", "install", package], check=True)
-        print(f"{green}{package} has been installed.{reset}")
+        print(f"[{timestamp()}] [PASS] {package} has been installed.")
     else:
-        print(f"{yellow}Skipping installation for {package}.{reset}")
+        print(f"[{timestamp()}] [INFO] Skipping installation for {package}.")
 
 """
 def get_package_dependencies(package: str) -> List[str]:
@@ -479,10 +539,10 @@ def check_all_installed_packages_compatibility(packages: List[str]) -> None:
 def process_packages(packages: List[str]):
     """Überprüft und installiert oder aktualisiert eine Liste von Paketen."""
     for idx, package in enumerate(packages, start=1):
-        print(f"\n[{idx}/{len(packages)}] Checking package: {blue}{package}{reset}")
+        print(f"\n[{timestamp()}] [INFO] [{idx}/{len(packages)}] Checking package: {package}")
         install_or_update_package(package)
 
-print(f"\nAll frameworks for {blue}SIMON 1{reset} are currently being installed and updated.")
+print(f"\n[{timestamp()}] [INFO] All frameworks for {main_color}SIMON{reset} are currently being installed and updated.")
 
 # Paketlisten
 packages = [
