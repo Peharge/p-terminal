@@ -675,7 +675,7 @@ etc.
 <img width="600" src="https://raw.githubusercontent.com/Peharge/peharge-web/main/images/p-term-img.png" alt="pp-term"/><br><br>
 </div>
 
-# **_Install PP-Terminal_**
+# **_Install P-Terminal_**
 
 soon
 
