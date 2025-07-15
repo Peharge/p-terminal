@@ -242,17 +242,28 @@ class MainWindow(QtWidgets.QMainWindow):
         splitter.addWidget(self.tree)
         splitter.addWidget(self.detail)
         splitter.setStretchFactor(1, 1)
-        self.setCentralWidget(splitter)
 
-        # Toolbar
-        toolbar = self.addToolBar("main")
-        refresh_icon = self.style().standardIcon(
-            QtWidgets.QStyle.StandardPixmap.SP_BrowserReload
-        )
-        action = QtGui.QAction(refresh_icon, "Refresh", self)
-        action.setToolTip("Reload data")
-        action.triggered.connect(self.load_data)
-        toolbar.addAction(action)
+        # Zentrales Widget mit vertikalem Layout, damit Button unten kommt
+        central_widget = QtWidgets.QWidget()
+        main_layout = QtWidgets.QVBoxLayout(central_widget)
+        main_layout.addWidget(splitter)
+
+        # Refresh-Button unten mittig
+        refresh_btn = QtWidgets.QPushButton("Refresh")
+        refresh_icon = self.style().standardIcon(QtWidgets.QStyle.StandardPixmap.SP_BrowserReload)
+        refresh_btn.setIcon(refresh_icon)
+        refresh_btn.setFixedWidth(120)  # Optional: feste Breite
+        refresh_btn.setToolTip("Reload data")
+        refresh_btn.clicked.connect(self.load_data)
+
+        # Button mittig mit horizontalem Layout
+        btn_layout = QtWidgets.QHBoxLayout()
+        btn_layout.addStretch()
+        btn_layout.addWidget(refresh_btn)
+        btn_layout.addStretch()
+        main_layout.addLayout(btn_layout)
+
+        self.setCentralWidget(central_widget)
 
         # Status bar
         self.status = self.statusBar()
@@ -260,16 +271,19 @@ class MainWindow(QtWidgets.QMainWindow):
         # Overlay
         self.overlay = LoadingOverlay(self.tree)
 
+        # Globale Styles
         self.setStyleSheet("""
             QWidget {
-                background-color: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #1b2631, stop:1 #0f1626);
+                background-color: qlineargradient(x1:0, y1:0, x2:1, y2:1,
+                                                  stop:0 #1b2631, stop:1 #0f1626);
                 color: #FFFFFF;
                 font-family: 'Roboto', sans-serif;
                 font-size: 14px;
             }
 
             QLineEdit {
-                background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2c3e50, stop:1 #1c2833);
+                background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                                  stop:0 #2c3e50, stop:1 #1c2833);
                 border: 1px solid #778899;
                 border-radius: 5px;
                 padding: 5px;
@@ -277,11 +291,16 @@ class MainWindow(QtWidgets.QMainWindow):
             }
 
             QPushButton {
-                background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2c3e50, stop:1 #1c2833);
+                background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                                  stop:0 #2c3e50, stop:1 #1c2833);
                 border: none;
                 border-radius: 5px;
                 padding: 5px 10px;
                 color: #FFFFFF;
+            }
+
+            QPushButton:hover {
+                background-color: #1c2833;
             }
 
             QPushButton:hover {
