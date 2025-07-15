@@ -1207,6 +1207,7 @@ def handle_special_commands(user_input):
         "p screenfetch": "pp-commands\\p-neofetch.py",  # new
         "p vswhere": "pp-commands\\p-vswhere.py",  # new
         "p speedtest": "pp-commands\\p-speedtest.py",  # new
+        "p compiler": "pp-commands\\p-compiler.py",  # new
         "install 3d-slicer": "run\\simon\\3d-slicer\\install-3d-slicer.py",  # new
         "run 3d-slicer": "run\\simon\\3d-slicer\\run-3d-slicer.py",  # new
         "pr 3d-slicer": "run\\simon\\3d-slicer\\run-3d-slicer.py",  # new
