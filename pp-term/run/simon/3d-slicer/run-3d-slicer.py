@@ -154,8 +154,15 @@ def parse_arguments():
 
 
 def main():
-    # Configure logging with timestamped messages.
-    logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+    # Configure logging with timestamped messages and msecs, as requested.
+    logging.basicConfig(
+        level=logging.INFO,
+        format="[%(asctime)s.%(msecs)03d] %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+        handlers=[
+            logging.StreamHandler(sys.stdout)
+        ]
+    )
 
     # Ensure the script is executed on Windows.
     if os.name != "nt":
