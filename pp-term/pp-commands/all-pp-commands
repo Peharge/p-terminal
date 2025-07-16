@@ -387,6 +387,16 @@ COMMANDS = [
     "prts ",
     "pc-typescript ",
     "pd-ts ",
+    "pd-typescript ",
+    "kotlinc ",
+    "kotlinc1 ",
+    "kotlinc2 ",
+    "kotlinc3 ",
+    "pc-kotlin ",
+    "swift ",
+    "swiftc ",
+    "pc-swift ",
+    "pd-swift ",
     "
 
 
