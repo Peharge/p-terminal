@@ -8325,7 +8325,6 @@ def handle_special_commands(user_input):
 
         return True
 
-
     if user_input.startswith("prmysql "):
         import mysql.connector
         from mysql.connector import Error
