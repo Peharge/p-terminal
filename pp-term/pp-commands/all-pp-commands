@@ -397,6 +397,10 @@ COMMANDS = [
     "swiftc ",
     "pc-swift ",
     "pd-swift ",
+    "dart run ",
+    "dartc ",
+    "pc-dart ",
+    "pd-dart ",
     "
 
 
