@@ -406,6 +406,7 @@ COMMANDS = [
 
 
 
+    "peharge"
     "mavis env install",
     "install mavis env",
     "install mavis-3",
