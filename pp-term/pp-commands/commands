@@ -464,7 +464,7 @@ commands = {
         "githubdesktop": "pp-commands\\githubdesktop.py",  # new
         "nvim": "pp-commands\\nvim.py",  # new
         "code-lx": "pp-commands\\code.py",  # new
-        "thonny-lx": "pp-commands\\code.py",  # new
+        "thonny-lx": "pp-commands\\thonny.py",  # new
         "micro": "pp-commands\\micro.py",  # new
         "gedit": "pp-commands\\gedit.py",  # new
         "update": "pp-commands\\update.py",  # new
