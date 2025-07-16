@@ -3894,7 +3894,7 @@ def handle_special_commands(user_input):
 
         # 15. Display help for g++
         #     e.g., "g++ help"
-    if if user_input.startswith(("g++ help", "g++ -help", "g++ --help")):
+    if user_input.startswith(("g++ help", "g++ -help", "g++ --help")):
         command = "wsl g++ --help"
         process = subprocess.Popen(
             command,
