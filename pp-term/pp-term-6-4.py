@@ -3894,7 +3894,7 @@ def handle_special_commands(user_input):
 
         # 15. Display help for g++
         #     e.g., "g++ help"
-    if user_input.lower() == "g++ help":
+    if if user_input.startswith(("g++ help", "g++ -help", "g++ --help")):
         command = "wsl g++ --help"
         process = subprocess.Popen(
             command,
@@ -4055,7 +4055,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Optimization compilation failed: {e}")
         return True
 
-    if user_input.startswith("gcc -l") or user_input.startswith("gcc -L "):
+    if user_input.startswith("gcc -l ") or user_input.startswith("gcc -L "):
         args = user_input[len("gcc "):].strip()  # e.g. "-lm -L/usr/local/lib main.o -o main"
         command = f"wsl gcc {args}"
         process = subprocess.Popen(command,
@@ -4293,7 +4293,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Dependency generation failed: {e}")
         return True
 
-    if user_input.startswith("gcc -help") or user_input.startswith("gcc --help"):
+    if user_input.startswith(("gcc help", "gcc -help", "gcc --help")):
         command = "wsl gcc --help"
         process = subprocess.Popen(command,
                                    stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
