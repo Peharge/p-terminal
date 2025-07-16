@@ -1393,7 +1393,8 @@ def handle_special_commands(user_input):
         "phpstorm": "pp-commands\\phpstorm.py",  # new
         "githubdesktop": "pp-commands\\githubdesktop.py",  # new
         "nvim": "pp-commands\\nvim.py",  # new
-        "code": "pp-commands\\code.py",  # new
+        "code-lx": "pp-commands\\code.py",  # new
+        "thonny-lx": "pp-commands\\code.py",  # new
         "micro": "pp-commands\\micro.py",  # new
         "gedit": "pp-commands\\gedit.py",  # new
         "update": "pp-commands\\update.py",  # new
@@ -2507,7 +2508,7 @@ def handle_special_commands(user_input):
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing Ollama command: {e}")
         return True
 
     if user_input.startswith("pol-run "):
@@ -2520,10 +2521,10 @@ def handle_special_commands(user_input):
         try:
             process.wait()
         except KeyboardInterrupt:
-            print(f"[{timestamp()}] [INFO] Aborted by user.")
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] Error executing command: {e}")
-        continue
+            print(f"[{timestamp()}] [ERROR] executing Ollama command: {e}")
+        return True
 
     if user_input.startswith("pol-pull "):
         model_name = user_input[9:].strip()
@@ -2535,10 +2536,10 @@ def handle_special_commands(user_input):
         try:
             process.wait()
         except KeyboardInterrupt:
-            print(f"[{timestamp()}] [INFO] Aborted by user.")
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] Error executing command: {e}")
-        continue
+            print(f"[{timestamp()}] [ERROR] executing Ollama command: {e}")
+        return True
 
     if user_input.startswith("pol-show "):
         model_name = user_input[9:].strip()
@@ -2550,10 +2551,10 @@ def handle_special_commands(user_input):
         try:
             process.wait()
         except KeyboardInterrupt:
-            print(f"[{timestamp()}] [INFO] Aborted by user.")
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] Error executing command: {e}")
-        continue
+            print(f"[{timestamp()}] [ERROR] executing Ollama command: {e}")
+        return True
 
     if user_input.startswith("pol-list"):
         command = "ollama list"
@@ -2563,10 +2564,10 @@ def handle_special_commands(user_input):
         try:
             process.wait()
         except KeyboardInterrupt:
-            print(f"[{timestamp()}] [INFO] Aborted by user.")
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] Error executing command: {e}")
-        continue
+            print(f"[{timestamp()}] [ERROR] executing Ollama command: {e}")
+        return True
 
     if user_input.startswith("pol-ps"):
         command = "ollama ps"
@@ -2576,10 +2577,10 @@ def handle_special_commands(user_input):
         try:
             process.wait()
         except KeyboardInterrupt:
-            print(f"[{timestamp()}] [INFO] Aborted by user.")
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] Error executing command: {e}")
-        continue
+            print(f"[{timestamp()}] [ERROR] executing Ollama command: {e}")
+        return True
 
     if user_input.startswith("pol-stop "):
         model_name = user_input[9:].strip()
@@ -2591,10 +2592,10 @@ def handle_special_commands(user_input):
         try:
             process.wait()
         except KeyboardInterrupt:
-            print(f"[{timestamp()}] [INFO] Aborted by user.")
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] Error executing command: {e}")
-        continue
+            print(f"[{timestamp()}] [ERROR] executing Ollama command: {e}")
+        return True
 
     if user_input.startswith("pol-rm "):
         model_name = user_input[7:].strip()
@@ -2606,10 +2607,10 @@ def handle_special_commands(user_input):
         try:
             process.wait()
         except KeyboardInterrupt:
-            print(f"[{timestamp()}] [INFO] Aborted by user.")
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] Error executing command: {e}")
-        continue
+            print(f"[{timestamp()}] [ERROR] executing Ollama command: {e}")
+        return True
 
     if user_input.lower() == "cloc .":
 
@@ -3200,6 +3201,22 @@ def handle_special_commands(user_input):
         user_input = user_input[8:].strip()
 
         command = f"wsl code {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
+        return True
+
+    if user_input.startswith("thonny-lx "):
+        user_input = user_input[10:].strip()
+
+        command = f"wsl thonny {user_input}"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
                                    text=True)
