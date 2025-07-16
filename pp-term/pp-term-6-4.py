@@ -3647,7 +3647,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error during object file generation: {e}")
         return True
 
-    if user_input.lower().startswith("g++ -e "):
+    if user_input.lower().startswith("g++ -e ") or user_input.startswith("g++ -E "):
         # Interpret "-e" as shorthand for "-E" (preprocess)
         rest = user_input[6:].strip()
         command = f"wsl g++ -E {rest}"
@@ -3668,7 +3668,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error during preprocessing: {e}")
         return True
 
-    if user_input.lower().startswith("g++ -s "):
+    if user_input.lower().startswith("g++ -s ") or user_input.startswith("g++ -S "):
         # Interpret "-s" (lowercase) as "-S" (uppercase) for assembly generation
         rest = user_input[6:].strip()
         command = f"wsl g++ -S {rest}"
@@ -3737,7 +3737,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error during optimization compile: {e}")
         return True
 
-    if user_input.lower().startswith("g++ -i "):
+    if user_input.lower().startswith("g++ -i ") or user_input.startswith("g++ -I "):
         # Interpret "-i" as shorthand for "-I"
         rest = user_input[6:].strip()
         command = f"wsl g++ -I {rest}"
@@ -3995,7 +3995,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Compilation-only failed: {e}")
         return True
 
-    if user_input.startswith("gcc -S "):
+    if user_input.startswith("gcc -s ") or user_input.startswith("gcc -S "):
         args = user_input[len("gcc -S "):].strip()
         command = f"wsl gcc -S {args}"
         process = subprocess.Popen(command,
@@ -4010,7 +4010,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Assembly generation failed: {e}")
         return True
 
-    if user_input.startswith("gcc -E "):
+    if user_input.startswith("gcc -e ") or user_input.startswith("gcc -E "):
         args = user_input[len("gcc -E "):].strip()
         command = f"wsl gcc -E {args}"
         process = subprocess.Popen(command,
@@ -4040,7 +4040,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Compilation with standard flag failed: {e}")
         return True
 
-    if user_input.startswith("gcc -O"):
+    if user_input.startswith("gcc -o ") or user_input.startswith("gcc -O "):
         args = user_input[len("gcc "):].strip()  # e.g. "-O2 main.c -o main"
         command = f"wsl gcc {args}"
         process = subprocess.Popen(command,
@@ -4055,7 +4055,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Optimization compilation failed: {e}")
         return True
 
-    if user_input.startswith("gcc -l") or user_input.startswith("gcc -L"):
+    if user_input.startswith("gcc -l") or user_input.startswith("gcc -L "):
         args = user_input[len("gcc "):].strip()  # e.g. "-lm -L/usr/local/lib main.o -o main"
         command = f"wsl gcc {args}"
         process = subprocess.Popen(command,
