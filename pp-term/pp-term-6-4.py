@@ -5638,21 +5638,6 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing pd-rust-expand: {e}")
         return True
 
-    if user_input.startswith("pd-rust-expand "):
-        user_input = user_input[15:].strip()
-
-        command = f"rustc +nightly -Z unstable-options -Z unpretty=expanded {user_input}"
-        process = run_command(command, shell=True)
-
-        try:
-            print(f"[{timestamp()}] [INFO] Running pd-rust-expand (macro-expanded) on {user_input}\n")
-            process.wait()
-        except KeyboardInterrupt:
-            print(f"[{timestamp()}] [INFO] Cancellation by user.")
-        except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing pd-rust-expand: {e}")
-        return True
-
     if user_input.startswith("pd-rust-llvm-ir "):
         user_input = user_input[16:].strip()
 
