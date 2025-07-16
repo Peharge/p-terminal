@@ -2898,8 +2898,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
         return True
 
-    if user_input.lower() == "grep ":
-
+    if user_input.startswith("grep "):
         user_input = user_input[5:]
         command = f"wsl grep -rnw . -e '{user_input}'"
 
