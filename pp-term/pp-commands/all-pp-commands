@@ -875,6 +875,8 @@ COMMANDS = [
     "githubdesktop",
     "nvim",
     "code",
+    "code-lx",
+    "thonny-lx"
     "micro",
     "gedit",
     "update",
