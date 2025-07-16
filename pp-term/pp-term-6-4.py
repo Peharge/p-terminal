@@ -4325,7 +4325,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [INFO] Usage: gcc clean <directory_path>")
         return True
 
-    if user_input.startswith("gfortran ") and " -o " in ui:
+    if user_input.startswith("gfortran ") and " -o " in user_input:
         command = f"wsl {user_input}"
         try:
             print(f"[{timestamp()}] [INFO] Compiling with gfortran...\n")
@@ -4344,7 +4344,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
         return True
 
-    if user_input.startswith("gccgo ") and " -o " in ui:
+    if user_input.startswith("gccgo ") and " -o " in user_input:
         command = f"wsl {user_input}"
         try:
             print(f"[{timestamp()}] [INFO] Compiling with gccgo...\n")
@@ -4363,7 +4363,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
         return True
 
-    if user_input.startswith("gcj ") and " -o " in ui:
+    if user_input.startswith("gcj ") and " -o " in user_input:
         command = f"wsl {user_input}"
         try:
             print(f"[{timestamp()}] [INFO] Compiling with gcj...\n")
@@ -4382,7 +4382,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
         return True
 
-    if user_input.startswith("gnat ") and " -o " in ui:
+    if user_input.startswith("gnat ") and " -o " in user_input:
         command = f"wsl {user_input}"
         try:
             print(f"[{timestamp()}] [INFO] Compiling with gnat...\n")
@@ -4401,7 +4401,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
         return True
 
-    if user_input.startswith("gfortran ") and " -o " in ui:
+    if user_input.startswith("gfortran ") and " -o " in user_input:
         command = f"wsl {user_input}"
         try:
             print(f"[{timestamp()}] [INFO] Compiling with gfortran...\n")
@@ -4420,7 +4420,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
         return True
 
-    if user_input.startswith("gccgo ") and " -o " in ui:
+    if user_input.startswith("gccgo ") and " -o " in user_input:
         command = f"wsl {user_input}"
         try:
             print(f"[{timestamp()}] [INFO] Compiling with gccgo...\n")
@@ -4439,7 +4439,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
         return True
 
-    if user_input.startswith("gcj ") and " -o " in ui:
+    if user_input.startswith("gcj ") and " -o " in user_input:
         command = f"wsl {user_input}"
         try:
             print(f"[{timestamp()}] [INFO] Compiling with gcj...\n")
@@ -4458,7 +4458,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
         return True
 
-    if user_input.startswith("gnat ") and " -o " in ui:
+    if user_input.startswith("gnat ") and " -o " in user_input:
         command = f"wsl {user_input}"
         try:
             print(f"[{timestamp()}] [INFO] Compiling with gnat...\n")
@@ -4478,7 +4478,7 @@ def handle_special_commands(user_input):
         return True
 
     # Weitere bekannte GCC-Frontends (jeweils eigenes if)
-    if user_input.startswith("objc ") and " -o " in ui:
+    if user_input.startswith("objc ") and " -o " in user_input:
         command = f"wsl {user_input}"
         try:
             print(f"[{timestamp()}] [INFO] Compiling with objc...\n")
@@ -4497,7 +4497,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
         return True
 
-    if user_input.startswith("objc++ ") and " -o " in ui:
+    if user_input.startswith("objc++ ") and " -o " in user_input:
         command = f"wsl {user_input}"
         try:
             print(f"[{timestamp()}] [INFO] Compiling with objc++...\n")
@@ -4516,7 +4516,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
         return True
 
-    if user_input.startswith("gnatmake ") and " -o " in ui:
+    if user_input.startswith("gnatmake ") and " -o " in user_input:
         command = f"wsl {user_input}"
         try:
             print(f"[{timestamp()}] [INFO] Compiling with gnatmake...\n")
@@ -4528,7 +4528,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
         return True
 
-    if user_input.startswith("gdc ") and " -o " in ui:
+    if user_input.startswith("gdc ") and " -o " in user_input:
         command = f"wsl {user_input}"
         try:
             print(f"[{timestamp()}] [INFO] Compiling with gdc (D compiler)...\n")
@@ -4540,7 +4540,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
         return True
 
-    if user_input.startswith("gm2 ") and " -o " in ui:
+    if user_input.startswith("gm2 ") and " -o " in user_input:
         command = f"wsl {user_input}"
         try:
             print(f"[{timestamp()}] [INFO] Compiling with gm2 (Modula-2)...\n")
@@ -4552,7 +4552,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
         return True
 
-    if user_input.startswith("gpas ") and " -o " in ui:
+    if user_input.startswith("gpas ") and " -o " in user_input:
         command = f"wsl {user_input}"
         try:
             print(f"[{timestamp()}] [INFO] Compiling with gpas (GNU Pascal)...\n")
@@ -4564,7 +4564,7 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error during compilation: {e}")
         return True
 
-    if user_input.startswith("gpc ") and " -o " in ui:
+    if user_input.startswith("gpc ") and " -o " in user_input:
         command = f"wsl {user_input}"
         try:
             print(f"[{timestamp()}] [INFO] Compiling with gpc (GNU Pascal Compiler)...\n")
