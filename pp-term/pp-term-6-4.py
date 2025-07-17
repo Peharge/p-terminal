@@ -30037,12 +30037,22 @@ def main():
                 user_input = f"Remove-Item -LiteralPath '{current_dir}\\{user_input_file}' -Recurse -Force"
                 run_command_with_admin_python_privileges(user_input)
 
+            elif user_input.startswith("pp-prm "):
+                user_input_file = user_input[7:]
+                user_input = f"Remove-Item -LiteralPath '{current_dir}\\{user_input_file}' -Recurse -Force"
+                run_command_with_admin_python_privileges(user_input)
+
             elif user_input.startswith("pp-open "):
                 user_input_file = user_input[6:]
                 user_input = f"Invoke-Item '{current_dir}\\{user_input_file}'"
                 run_command_with_admin_python_privileges(user_input)
 
             elif user_input.startswith("pp-run "):
+                user_input_file = user_input[7:]
+                user_input = f"Start-Process '{current_dir}\\{user_input_file}'"
+                run_command_with_admin_python_privileges(user_input)
+
+            elif user_input.startswith("pp-pr "):
                 user_input_file = user_input[6:]
                 user_input = f"Start-Process '{current_dir}\\{user_input_file}'"
                 run_command_with_admin_python_privileges(user_input)
@@ -30052,9 +30062,22 @@ def main():
                 user_input = f"Remove-Item -LiteralPath '{current_dir}\\{user_input_file}' -Recurse -Force"
                 run_command_with_admin_python_privileges(user_input)
 
+            elif user_input.startswith("pp-pdel "):
+                user_input_file = user_input[7:]
+                user_input = f"Remove-Item -LiteralPath '{current_dir}\\{user_input_file}' -Recurse -Force"
+                run_command_with_admin_python_privileges(user_input)
+
             elif user_input.startswith("pp-mkdir "):
                 # Create new directory
                 folder_name = user_input[9:].strip()
+                folder_path = os.path.join(current_dir, folder_name)
+                cmd = f"New-Item -ItemType Directory -Path '{folder_path}' -Force"
+                run_command_with_admin_python_privileges(cmd)
+                logging.info(f"[SUCCESS] Created folder: {folder_path}")
+
+            elif user_input.startswith("pp-pcfo "):
+                # Create new directory
+                folder_name = user_input[8:].strip()
                 folder_path = os.path.join(current_dir, folder_name)
                 cmd = f"New-Item -ItemType Directory -Path '{folder_path}' -Force"
                 run_command_with_admin_python_privileges(cmd)
@@ -30092,6 +30115,26 @@ def main():
                 run_command_with_admin_python_privileges(cmd)
                 logging.info(f"[SUCCESS] Created file: {file_path}")
 
+            elif user_input.startswith("pp-type "):
+                # Display content of file
+                file_name = user_input[8:].strip()
+                file_path = os.path.join(current_dir, file_name)
+                if not os.path.isfile(file_path):
+                    logging.info(f"[ERROR] File not found: {file_path}")
+                else:
+                    cmd = f"Get-Content -Path '{file_path}'"
+                    run_command_with_admin_python_privileges(cmd)
+
+            elif user_input.startswith("pp-ptype "):
+                # Display content of file
+                file_name = user_input[9:].strip()
+                file_path = os.path.join(current_dir, file_name)
+                if not os.path.isfile(file_path):
+                    logging.info(f"[ERROR] File not found: {file_path}")
+                else:
+                    cmd = f"Get-Content -Path '{file_path}'"
+                    run_command_with_admin_python_privileges(cmd)
+
             elif user_input.startswith("pp-cat "):
                 # Display content of file
                 file_name = user_input[7:].strip()
@@ -30102,7 +30145,32 @@ def main():
                     cmd = f"Get-Content -Path '{file_path}'"
                     run_command_with_admin_python_privileges(cmd)
 
+            elif user_input.startswith("pp-pcat "):
+                # Display content of file
+                file_name = user_input[8:].strip()
+                file_path = os.path.join(current_dir, file_name)
+                if not os.path.isfile(file_path):
+                    logging.info(f"[ERROR] File not found: {file_path}")
+                else:
+                    cmd = f"Get-Content -Path '{file_path}'"
+                    run_command_with_admin_python_privileges(cmd)
+
+            elif user_input.strip() == "pp-dir":
+                # List directory contents
+                cmd = f"Get-ChildItem -Path '{current_dir}'"
+                run_command_with_admin_python_privileges(cmd)
+
+            elif user_input.strip() == "pp-pdir":
+                # List directory contents
+                cmd = f"Get-ChildItem -Path '{current_dir}'"
+                run_command_with_admin_python_privileges(cmd)
+
             elif user_input.strip() == "pp-ls":
+                # List directory contents
+                cmd = f"Get-ChildItem -Path '{current_dir}'"
+                run_command_with_admin_python_privileges(cmd)
+
+            elif user_input.strip() == "pp-pls":
                 # List directory contents
                 cmd = f"Get-ChildItem -Path '{current_dir}'"
                 run_command_with_admin_python_privileges(cmd)
@@ -30129,8 +30197,30 @@ def main():
                     run_command_with_admin_python_privileges(cmd)
                     logging.info(f"[SUCCESS] Compressed '{source}' → '{zipfile}'")
 
+            elif user_input.startswith("pp-pz "):
+                parts = user_input[6:].strip().split()
+                if len(parts) < 2:
+                    logging.info("[USAGE] pp-zip <source_folder> <zip_filename>")
+                else:
+                    source = os.path.join(current_dir, parts[0])
+                    zipfile = os.path.join(current_dir, parts[1])
+                    cmd = f"Compress-Archive -Path '{source}\\*' -DestinationPath '{zipfile}' -Force"
+                    run_command_with_admin_python_privileges(cmd)
+                    logging.info(f"[SUCCESS] Compressed '{source}' → '{zipfile}'")
+
             elif user_input.startswith("pp-unzip "):
                 parts = user_input[9:].strip().split()
+                if len(parts) < 2:
+                    logging.info("[USAGE] pp-unzip <zip_file> <destination>")
+                else:
+                    zipfile = os.path.join(current_dir, parts[0])
+                    destination = os.path.join(current_dir, parts[1])
+                    cmd = f"Expand-Archive -Path '{zipfile}' -DestinationPath '{destination}' -Force"
+                    run_command_with_admin_python_privileges(cmd)
+                    logging.info(f"[SUCCESS] Extracted '{zipfile}' → '{destination}'")
+
+            elif user_input.startswith("pp-puz "):
+                parts = user_input[7:].strip().split()
                 if len(parts) < 2:
                     logging.info("[USAGE] pp-unzip <zip_file> <destination>")
                 else:
