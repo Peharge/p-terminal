@@ -6,6 +6,8 @@ COMMANDS = [
     "cls",
     "clear",
     "pcl",
+    "ptd"
+    "ptdmc"
     "cd ",
     "pcd ",
     "dir",
