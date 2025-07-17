@@ -124,6 +124,8 @@ import faiss
 import pandas as pd
 import traceback
 import numpy as onp
+import pythoncom
+import win32com.client
 
 try:
     import ujson as _json
@@ -1964,6 +1966,61 @@ def handle_special_commands(user_input):
 
         # env_path = handle_cd_command()
         # print(f"[{timestamp()}] [INFO] Environment used: {env_path}")
+
+    if user_input.lower().startswith("ptd "):
+        # Beispielbefehl:
+        # ptd from="E:\Ordner\Quelle" to="C:\Ziel\Ordner"
+
+        try:
+            parts = user_input[4:].split('"')  # 'ptd ' sind 4 Zeichen
+            source = parts[1]
+            destination = parts[3]
+
+            print(f"{main_color}[*]{reset} Source: {source}")
+            print(f"{main_color}[*]{reset} Target: {destination}")
+
+            if not os.path.exists(source):
+                print(f"[{timestamp()}] [ERROR] Source folder not found: {source}")
+            else:
+                if not os.path.exists(destination):
+                    os.makedirs(destination)
+                    print(f"[{timestamp()}] [INFO] Target folder created: {destination}")
+
+                files_copied = 0
+                for filename in os.listdir(source):
+                    src_file = os.path.join(source, filename)
+                    dst_file = os.path.join(destination, filename)
+                    if os.path.isfile(src_file):
+                        try:
+                            shutil.copy2(src_file, dst_file)
+                            print(f"{main_color}[+]{reset} Copied: {filename}")
+                            files_copied += 1
+                        except Exception as copy_err:
+                            print(f"[{timestamp()}] [ERROR] Failed to copy {filename}: {copy_err}")
+
+                print(f"[{timestamp()}] [✓] Done. {files_copied} file(s) copied.")
+
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Error parsing or copying: {e}")
+
+
+    if user_input.lower().startswith("ptdmc "):
+        # Beispielbefehl:
+        # ptdmc from="Internal Storage\DCIM\100APPLE" to="C:\Ziel"
+
+        try:
+            # Extrahiere die Pfade, basierend auf der Anordnung von Anführungszeichen
+            parts = user_input[6:].split('"')  # 6 statt 8, weil 'ptdmc ' nur 6 Zeichen sind
+            source = parts[1]
+            destination = parts[3]
+
+            print(f"{main_color}[*]{reset} Source: {source}")
+            print(f"{main_color}[*]{reset} Target: {destination}")
+
+            copy_files_from_iphone(source, destination)
+
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Error parsing command: {e}")
 
     if user_input.lower() in ["dir", "ls"]:
         run_command("dir" if os.name == "nt" else "ls -la", shell=True)
@@ -21472,6 +21529,60 @@ def ensure_admin():
             logging.error(f"[{timestamp()}] [ERROR] Admin check failed: {e}")
     else:
         logging.warning(f"[{timestamp()}] [INFO] Unsupported OS for admin elevation: {os.name}")
+
+
+def copy_files_from_iphone(source_path, destination_path):
+    pythoncom.CoInitialize()
+
+    shell = win32com.client.Dispatch("Shell.Application")
+    iphone = None
+
+    print(f"[{timestamp()}] [INFO] Search iPhone under 'This PC'...")
+    for item in shell.NameSpace(17).Items():  # 17 = "Dieser PC"
+        if "iPhone" in item.Name:
+            iphone = item.GetFolder
+            break
+
+    if not iphone:
+        print(f"[{timestamp()}] [ERROR] iPhone not found. Is it connected and unlocked?")
+        return
+
+    folders = source_path.strip("\\").split("\\")
+    current_folder = iphone
+
+    for folder in folders:
+        found = False
+        for item in current_folder.Items():
+            if item.IsFolder and item.Name == folder:
+                current_folder = item.GetFolder
+                found = True
+                break
+        if not found:
+            print(f"[{timestamp()}] [ERROR] Folder '{folder}' not found.")
+            return
+
+    # Zielordner erstellen, falls nicht vorhanden
+    if not os.path.exists(destination_path):
+        os.makedirs(destination_path)
+
+    print(f"[{timestamp()}] [INFO] Start copying from '{source_path}' to '{destination_path}' ...")
+    for item in current_folder.Items():
+        if not item.IsFolder:
+            dest_file = os.path.join(destination_path, item.Name)
+            print(f"[{timestamp()}] [INFO] Copy: {item.Name}")
+            try:
+                # Versuch mit native copy (funktioniert nicht immer mit MTP)
+                shutil.copy2(item.Path, dest_file)
+            except Exception as e:
+                print(f"[{timestamp()}] [ERROR] Error when copying directly: {e}")
+                try:
+                    # Alternativ per Clipboard (Explorer Trick)
+                    item.InvokeVerb("Copy")
+                    shell.NameSpace(destination_path).Self.InvokeVerb("Paste")
+                except Exception as e2:
+                    print(f"[{timestamp()}] [ERROR] Error when inserting via Explorer: {e2}")
+
+    print(f"[{timestamp()}] [INFO] Copy process completed.")
 
 
 def delete_target(path: str):
