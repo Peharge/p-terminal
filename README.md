@@ -273,6 +273,14 @@ Why show the standard? The PP Terminal does it all<br>
 
 And much more...
 
+<div align="center">
+
+# **_PP-Terminal 8 - SOON_**
+You can't ask for more!!!<br><br>
+<img width="1500" src="https://github.com/Peharge/p-terminal-images/raw/main/images/cpu-ppt-4.png" alt="pp-term"/><br><br>
+
+</div>
+
 # **_Install PP-Terminal_**
 
 <p align="center">
