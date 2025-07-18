@@ -2004,13 +2004,13 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error parsing or copying: {e}")
 
 
-    if user_input.lower().startswith("ptdmc "):
+    if user_input.lower().startswith("ptdios "):
         # Beispielbefehl:
-        # ptdmc from="Internal Storage\DCIM\100APPLE" to="C:\Ziel"
+        # ptdios from="Internal Storage\DCIM\100APPLE" to="C:\Ziel"
 
         try:
             # Extrahiere die Pfade, basierend auf der Anordnung von Anführungszeichen
-            parts = user_input[6:].split('"')  # 6 statt 8, weil 'ptdmc ' nur 6 Zeichen sind
+            parts = user_input[7:].split('"')  # 6 statt 8, weil 'ptdios ' nur 6 Zeichen sind
             source = parts[1]
             destination = parts[3]
 
@@ -27609,7 +27609,7 @@ def get_cool_23_pin():
         return f"[{timestamp()}] [ERROR] Error running oh-my-posh:\n{result.stderr}"
 
 
-with open("autocompletion_commands.json", "r", encoding="utf-8") as file:
+with open(f"C:/Users/{user_name}/p-terminal/pp-term/autocompletion_commands.json", "r", encoding="utf-8") as file:
     commands_data = json.load(file)
 
 # COMMANDS aus der JSON-Datei extrahieren
