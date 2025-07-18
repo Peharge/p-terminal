@@ -318,6 +318,9 @@
       - PP-Terminal 6.4.1.10
       - PP-Terminal 6.4.1.11
       - PP-Terminal 6.4.1.13
+      - PP-Terminal 6.4.1.14
+      - PP-Terminal 6.4.1.15
+      - PP-Terminal 6.4.1.16
 
 # PP-Terminal Launcher Version
 
@@ -416,6 +419,15 @@
     - Peharge Compiler 6.1.1
       - Peharge Compiler 6.1.1.1
       - Peharge Compiler 6.1.1.3
+      - Peharge Compiler 6.1.1.4
+    - Peharge Compiler 6.1.3
+      - Peharge Compiler 6.1.3.1
+      - Peharge Compiler 6.1.3.3
+      - Peharge Compiler 6.1.3.4
+    - Peharge Compiler 6.1.4
+      - Peharge Compiler 6.1.4.1
+      - Peharge Compiler 6.1.4.3
+      - Peharge Compiler 6.1.4.4
 
 # Peharge Kernel Version
 
