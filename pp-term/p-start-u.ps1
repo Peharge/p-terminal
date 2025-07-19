@@ -69,7 +69,7 @@ Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vo
 #>
 
 param (
-    [string]$ScriptPath = "$PSScriptRoot\pp-term-6-4.py",
+    [string]$ScriptPath = "$PSScriptRoot\pp-term-8.py",
     [string]$PythonEnvDir = "$PSScriptRoot\.env",
     [string]$LogFile    = "$HOME\p-terminal\pp-term\PP_Terminal_Diagnostics.log"
 )
@@ -89,7 +89,7 @@ if (!(Test-Path $logDir)) {
 }
 
 try {
-    Write-Log INFO "Launching PP-Term 5 script with max CPU affinity, highest priority, and full RAM execution..."
+    Write-Log INFO "Launching PP-Term 6 script with max CPU affinity, highest priority, and full RAM execution..."
 
     # Check for file existence
     if (!(Test-Path $PythonEnvDir)) {
@@ -127,10 +127,10 @@ try {
 
             # Copy Python environment and script into RAM disk
             Copy-Item $PythonEnvDir "$ramDiskPath\.env" -Recurse -Force
-            Copy-Item $ScriptPath "$ramDiskPath\pp-term-6-4.py" -Force
+            Copy-Item $ScriptPath "$ramDiskPath\pp-term-8.py" -Force
 
             $PythonExe = "$ramDiskPath\.env\Scripts\python.exe"
-            $ScriptPath = "$ramDiskPath\pp-term-6-4.py"
+            $ScriptPath = "$ramDiskPath\pp-term-8.py"
             Push-Location $ramDiskPath
             $ramDisk = $true
         } catch {
