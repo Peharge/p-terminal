@@ -89,7 +89,7 @@ if (!(Test-Path $logDir)) {
 }
 
 try {
-    Write-Log INFO "Launching PP-Term 6 script with max CPU affinity, highest priority, and full RAM execution..."
+    Write-Log INFO "Launching PP-Term 8 script with max CPU affinity, highest priority, and full RAM execution..."
 
     # Check for file existence
     if (!(Test-Path $PythonEnvDir)) {
