@@ -80,15 +80,15 @@ set SCRIPT_install_vs_c=C:\Users\%USERNAME%\p-terminal\pp-term\run\c\install-vs.
 set "VCVARS_PATH=C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat"
 set "PEHARGE_PATH_CPP=C:\Users\%USERNAME%\p-terminal\pp-term\peharge-cpp-compiler"
 set "PEHARGE_PATH_C=C:\Users\%USERNAME%\p-terminal\pp-term\peharge-c-compiler"
-set SCRIPT_PATH_INSTALL_MAIN=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-6-install-main.py
-set SCRIPT_PATH_INSTALL_1=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-6-install-pytorch.py
-set SCRIPT_PATH_INSTALL_2=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-6-install-tensorflow.py
-set SCRIPT_PATH_INSTALL_3=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-6-install-tf-nightly.py
-set SCRIPT_PATH_INSTALL_4=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-6-install-jax.py
-set SCRIPT_PATH_INSTALL_5=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-6-install-cirq.py
-set SCRIPT_PATH_INSTALL_6=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-6-install-faiss.py
-set SCRIPT_PATH_DOCTOR_MAIN=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-6-doctor-main.py
-set SCRIPT_PATH_DOCTOR=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-6-doctor.py
+set SCRIPT_PATH_INSTALL_MAIN=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-8-install-main.py
+set SCRIPT_PATH_INSTALL_1=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-8-install-pytorch.py
+set SCRIPT_PATH_INSTALL_2=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-8-install-tensorflow.py
+set SCRIPT_PATH_INSTALL_3=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-8-install-tf-nightly.py
+set SCRIPT_PATH_INSTALL_4=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-8-install-jax.py
+set SCRIPT_PATH_INSTALL_5=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-8-install-cirq.py
+set SCRIPT_PATH_INSTALL_6=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-8-install-faiss.py
+set SCRIPT_PATH_DOCTOR_MAIN=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-8-doctor-main.py
+set SCRIPT_PATH_DOCTOR=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-8-doctor.py
 
 if not exist "%PYTHON_PATH%" (
     call :Log ERROR "❌ Python interpreter not found: %PYTHON_PATH%"
