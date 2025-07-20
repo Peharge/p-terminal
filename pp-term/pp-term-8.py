@@ -2811,8 +2811,8 @@ def handle_special_commands(user_input):
 
         return True
 
-    if user_input.startswith("pcoa "):  # pcoa = activate
-        env_name = user_input[5:].strip()
+    if user_input.startswith("pcoav "):  # pcoav = activate
+        env_name = user_input[6:].strip()
         current_dir = Path.cwd()  # Oder ein spezieller Pfad, falls nötig
         env_path = (current_dir / env_name).resolve()
 
@@ -2868,9 +2868,9 @@ def handle_special_commands(user_input):
         return True
 
 
-    if user_input.startswith("pcod "):  # pcod = deactivate
+    if user_input.startswith("pcodv "):  # pcodv = deactivate
         # Normalerweise braucht deactivate keinen Env-Namen, aber falls übergeben:
-        env_name = user_input[5:].strip()
+        env_name = user_input[6:].strip()
 
         def set_active_conda_env_in_json(env_path_str):
             json_path = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/current_env.json")
