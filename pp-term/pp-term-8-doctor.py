@@ -61,6 +61,8 @@
 #
 # Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 
+# ⚠️ This script may activate malicious code!
+
 import sys
 import os
 import signal
