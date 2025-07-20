@@ -87,6 +87,7 @@ set SCRIPT_PATH_INSTALL_3=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-8-insta
 set SCRIPT_PATH_INSTALL_4=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-8-install-jax.py
 set SCRIPT_PATH_INSTALL_5=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-8-install-cirq.py
 set SCRIPT_PATH_INSTALL_6=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-8-install-faiss.py
+set SCRIPT_PATH_INSTALL_7=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-8-install-ibm_db.py
 set SCRIPT_PATH_DOCTOR_MAIN=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-8-doctor-main.py
 set SCRIPT_PATH_DOCTOR=C:\Users\%USERNAME%\p-terminal\pp-term\pp-term-8-doctor.py
 
@@ -184,6 +185,13 @@ if not exist "%SCRIPT_PATH_INSTALL_6%" (
 
 "%PYTHON_PATH%" "%SCRIPT_PATH_INSTALL_6%"
 
+if not exist "%SCRIPT_PATH_INSTALL_7%" (
+    call :Log ERROR "❌ Script not found: %SCRIPT_PATH_INSTALL_7%"
+    exit /B 1
+)
+
+"%PYTHON_PATH%" "%SCRIPT_PATH_INSTALL_7%"
+
 if not exist "%SCRIPT_PATH_DOCTOR_MAIN%" (
     call :Log ERROR "❌ Script not found: %SCRIPT_PATH_DOCTOR_MAIN%"
     exit /B 1
@@ -191,31 +199,31 @@ if not exist "%SCRIPT_PATH_DOCTOR_MAIN%" (
 
 "%PYTHON_PATH%" "%SCRIPT_PATH_DOCTOR_MAIN%"
 
-:AskUser
-call :Log WARNING "⚠️ This script may activate malicious code!"
-echo PYTHON_PATH is "%PYTHON_PATH%"
-echo SCRIPT_PATH_DOCTOR is "%SCRIPT_PATH_DOCTOR%"
-pause
+:: :AskUser
+:: echo .
+:: call :Log WARNING "⚠️ This script may activate malicious code!"
+:: echo PYTHON_PATH is "%PYTHON_PATH%"
+:: echo SCRIPT_PATH_DOCTOR is "%SCRIPT_PATH_DOCTOR%"
 
-set /p USER_CONFIRM="Do you really want to run it? [y/n]: "
+:: set /p USER_CONFIRM="Do you really want to run it? [y/n]: "
 
-if /I "%USER_CONFIRM%"=="Y" (
-    if not exist "%SCRIPT_PATH_DOCTOR%" (
-        call :Log ERROR "❌ Script not found: %SCRIPT_PATH_DOCTOR%"
-        exit /B 1
-    )
-    "%PYTHON_PATH%" "%SCRIPT_PATH_DOCTOR%"
-    goto :Continue
-) else if /I "%USER_CONFIRM%"=="N" (
-    echo Skipping doctor script as per user choice.
-    goto :Continue
-) else (
-    echo Invalid input. Please enter Y or N.
-    goto :AskUser
-)
+:: if /I "%USER_CONFIRM%"=="Y" (
+::     if not exist "%SCRIPT_PATH_DOCTOR%" (
+::         call :Log ERROR "❌ Script not found: %SCRIPT_PATH_DOCTOR%"
+::         exit /B 1
+::     )
+::     "%PYTHON_PATH%" "%SCRIPT_PATH_DOCTOR%"
+::     goto :Continue
+:: ) else if /I "%USER_CONFIRM%"=="N" (
+::     echo Skipping doctor script as per user choice.
+::     goto :Continue
+:: ) else (
+::     echo Invalid input. Please enter Y or N.
+::     goto :AskUser
+:: )
 
-:Continue
-:: Rest deines Batch-Scripts
+:: :Continue
+:: :: Rest deines Batch-Scripts
 
 REM Verzeichnis dieser .bat-Datei ermitteln
 set SCRIPT_DIR=%~dp0
