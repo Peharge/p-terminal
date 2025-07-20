@@ -89,6 +89,7 @@ import importlib.util
 from pathlib import Path
 import logging
 from datetime import datetime
+import getpass
 
 # Log setup: timestamp with milliseconds
 log_path = Path(__file__).parent / "installer.log"
@@ -112,7 +113,7 @@ REQUIRED_PACKAGES = [
     "deep-translator", "duckduckgo-search", "pillow", "GitPython", "matplotlib", "pyinstaller",
     "virtualenv", "legacy-cgi", "colorama", "ipykernel", "ipython", "bash_kernel", "urllib3",
     "markdown", "cirq", "mysql-connector-python", "psycopg2-binary", "cx_Oracle", "pyodbc",
-    "ibm_db ibm_db_dbi", "redis", "pymongo", "bson", "cassandra-driver", "python-arango", "neo4j",
+    "redis", "pymongo", "bson", "cassandra-driver", "python-arango", "neo4j",
     "pyorient", "ravendb", "boto3", "yfinance", "monai", "nibabel", "monailabel", "monai-deploy-app-sdk",
     "scikit-image", "pydicom", "SimpleITK", "pywin32"
 ]
