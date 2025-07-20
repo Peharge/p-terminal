@@ -322,6 +322,12 @@
       - PP-Terminal 6.4.1.15
       - PP-Terminal 6.4.1.16
 
+- PP-Terminal 8
+  - PP-Terminal 8.1
+    - PP-Terminal 8.1.1
+      - PP-Terminal 8.1.1.1
+      - PP-Terminal 8.1.1.3
+
 # PP-Terminal Launcher Version
 
 - PP-Terminal Launcher 1
@@ -376,6 +382,11 @@
       - PP-Terminal Launcher 6.4.1.1
       - PP-Terminal Launcher 6.4.1.3
 
+- PP-Terminal Launcher 8
+  - PP-Terminal Launcher 8.1
+    - PP-Terminal Launcher 8.1.1
+      - PP-Terminal Launcher 8.1.1.1
+
 # Peharge Compiler Version
 
 - Peharge Compiler 1
@@ -429,6 +440,12 @@
       - Peharge Compiler 6.1.4.3
       - Peharge Compiler 6.1.4.4
 
+- Peharge Compiler 8
+  - Peharge Compiler 8.1
+    - Peharge Compiler 8.1.1
+      - Peharge Compiler 8.1.1.1
+      - Peharge Compiler 8.1.1.3
+
 # Peharge Kernel Version
 
 - Peharge Kernel 1
@@ -478,6 +495,12 @@
       - Peharge Kernel 6.4.1.1
       - Peharge Kernel 6.4.1.3
       - Peharge Kernel 6.4.1.4
+
+- Peharge Kernel 8
+  - Peharge Kernel 8.1
+    - Peharge Kernel 8.1.1
+      - Peharge Kernel 8.1.1.1
+      - Peharge Kernel 8.1.1.3
 
 # IQ Kernel Version
 
