@@ -68,9 +68,10 @@ import logging
 from pathlib import Path
 from datetime import datetime
 import re
+import getpass
 
 # Log setup: timestamp with milliseconds
-log_path = Path(__file__).parent / "installer_tf.log"
+log_path = Path(__file__).parent / "installer.log"
 logging.basicConfig(
     level=logging.INFO,
     format="[%(asctime)s.%(msecs)03d] %(message)s",
@@ -80,7 +81,6 @@ logging.basicConfig(
         logging.StreamHandler(sys.stdout)
     ]
 )
-
 
 def timestamp() -> str:
     """Returns current time formatted with milliseconds"""
@@ -143,17 +143,17 @@ def install_tensorflow(gpu: bool) -> None:
 
 
 def main():
-    venv = Path(os.getenv('VENV_PATH', Path.home() / '.venv'))
-    logging.info(f"[INFO] [{timestamp()}] Starting virtual environment activation...")
+    venv = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/.env")
+    logging.info(f"[INFO] Starting virtual environment activation...")
     if venv.exists():
         activate_virtualenv(venv)
     else:
-        logging.info(f"[INFO] [{timestamp()}] No venv at {venv}, using current environment")
+        logging.info(f"[INFO] No venv at {venv}, using current environment")
 
-    logging.info(f"[INFO] [{timestamp()}] Checking CUDA availability...")
+    logging.info(f"[INFO] Checking CUDA availability...")
     gpu_available = detect_cuda_available()
 
-    logging.info(f"[INFO] [{timestamp()}] Starting TensorFlow installation...")
+    logging.info(f"[INFO] Starting TensorFlow installation...")
     install_tensorflow(gpu_available)
     logging.info(f"[PASS] ✅ Installation process complete.")
 
