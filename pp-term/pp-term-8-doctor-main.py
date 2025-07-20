@@ -66,27 +66,42 @@ import sys
 import logging
 import subprocess
 from pathlib import Path
+import getpass
 
-USERNAME = os.getlogin()
-P_TERMINAL_PATH = Path.home() / "p-terminal"
-PEHARGE_PATH = Path("C:/Users/julian/peharge-web")
+# Benutzername sicher ermitteln
+try:
+    USERNAME = getpass.getuser()
+except Exception as e:
+    print(f"[FATAL] Failed to get current user: {e}")
+    sys.exit(1)
+
+# Konfiguration der Pfade
+HOME = Path.home()
+P_TERMINAL_PATH = HOME / "p-terminal"
+PEHARGE_PATH = HOME / "peharge-web"
 VENV_PATH = P_TERMINAL_PATH / "pp-term" / ".env"
-LOG_FILE = Path(__file__).parent / "doctor.log"
+LOG_FILE = Path(__file__).resolve().parent / "doctor.log"
 
-# Files/folders that are known to appear during development and shouldn't trigger errors
-KNOWN_LOCAL_ARTIFACTS = [
+# Dateien/Ordner, die in Entwicklung erlaubt sind
+KNOWN_LOCAL_ARTIFACTS = {
     ".idea", "__pycache__", ".log", ".lock", ".gif", ".obj", "target",
-    "installer", "doctor.log", "current_env.json", ".github", "run_arch_command.exe",
-    "run_lx_command.exe"
-]
+    "installer", "doctor.log", "current_env.json", ".github",
+    "run_arch_command.exe", "run_lx_command.exe"
+}
 
-# Logging setup
+# Logging einrichten
 class CustomFormatter(logging.Formatter):
     def format(self, record):
-        prefix = "[INFO]" if record.levelno == logging.INFO else "[WARNING]" if record.levelno == logging.WARNING else "[ERROR]"
-        return f"{prefix} {super().format(record)}"
+        prefix = {
+            logging.INFO: "[INFO]",
+            logging.WARNING: "[WARNING]",
+            logging.ERROR: "[ERROR]"
+        }.get(record.levelno, "[LOG]")
+        # Zeit zuerst, dann Level
+        return f"[{self.formatTime(record, self.datefmt)}.{int(record.msecs):03d}] {prefix} {record.getMessage()}"
 
-formatter = CustomFormatter(fmt="[%(asctime)s.%(msecs)03d] %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
+# Formatter mit Zeitformat
+formatter = CustomFormatter(datefmt="%Y-%m-%d %H:%M:%S")
 
 logging.basicConfig(
     level=logging.INFO,
@@ -98,38 +113,56 @@ logging.basicConfig(
 for handler in logging.getLogger().handlers:
     handler.setFormatter(formatter)
 
-def is_known_artifact(file_path: str) -> bool:
-    return any(part in file_path or file_path.endswith(ext) for part in KNOWN_LOCAL_ARTIFACTS for ext in [part, f"/{part}", f"\\{part}"])
 
-def check_path(path: Path, must_be_dir=True):
-    if path.exists() and (path.is_dir() if must_be_dir else path.is_file()):
-        logging.info(f"Path exists: {path}")
-        return True
-    else:
-        logging.error(f"Missing path: {path}")
+def is_known_artifact(file_path: str) -> bool:
+    """Nur auf Dateinamen prüfen, nicht gesamten Pfad"""
+    name = os.path.basename(file_path)
+    return name in KNOWN_LOCAL_ARTIFACTS
+
+
+def check_path(path: Path, must_be_dir=True) -> bool:
+    """Existenz und Typ von Pfad prüfen"""
+    try:
+        if path.exists() and (path.is_dir() if must_be_dir else path.is_file()):
+            logging.info(f"Path exists: {path}")
+            return True
+        else:
+            logging.error(f"Missing path: {path}")
+            return False
+    except Exception as e:
+        logging.error(f"Path check failed for {path}: {e}")
         return False
 
-def check_virtualenv(venv_path: Path):
-    bin_path = venv_path / ("Scripts" if os.name == "nt" else "bin")
-    python_exe = bin_path / ("python.exe" if os.name == "nt" else "python3")
-    if not python_exe.exists():
-        logging.error(f"Python executable not found in virtual environment: {python_exe}")
-        return None
-    logging.info(f"Virtual environment detected: {venv_path}")
-    return python_exe
 
-def check_git_repo(path: Path):
+def check_virtualenv(venv_path: Path):
+    """Existenz eines Virtualenv prüfen"""
+    bin_dir = venv_path / ("Scripts" if os.name == "nt" else "bin")
+    python_exec = bin_dir / ("python.exe" if os.name == "nt" else "python3")
+
+    if python_exec.exists():
+        logging.info(f"Virtual environment detected: {venv_path}")
+        return python_exec
+    else:
+        logging.error(f"Python executable not found in virtual environment: {python_exec}")
+        return None
+
+
+def check_git_repo(path: Path) -> bool:
+    """Git-Repository prüfen und auf Cleanliness analysieren"""
     git_dir = path / ".git"
     if not git_dir.exists():
         logging.error(f"Not a Git repository: {path}")
         return False
 
     try:
-        result = subprocess.run(["git", "-C", str(path), "status", "--porcelain"],
-                                stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        result = subprocess.run(
+            ["git", "-C", str(path), "status", "--porcelain"],
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            text=True, timeout=10  # Schutz vor Hängenbleiben
+        )
 
         if result.returncode != 0:
-            logging.error(f"Git status failed in: {path}")
+            logging.error(f"Git status failed in {path}: {result.stderr.strip()}")
             return False
 
         lines = result.stdout.strip().splitlines()
@@ -138,37 +171,61 @@ def check_git_repo(path: Path):
             return True
 
         logging.warning(f"Repository not clean: {path}")
+        clean = True
         for line in lines:
-            status, file = line[:2].strip(), line[3:].strip()
-            clean_line = f"  -> {line}"
+            status = line[:2].strip()
+            file = line[3:].strip()
+            display_line = f"  -> {line}"
 
             if is_known_artifact(file):
-                logging.info(f"{clean_line} [Expected in local development]")
+                logging.info(f"{display_line} [Expected in local development]")
             elif status in {"M", "A", "AM"}:
-                logging.error(f"{clean_line} [Modified or staged, but uncommitted]")
+                logging.error(f"{display_line} [Modified or staged, but uncommitted]")
+                clean = False
             elif status == "??":
-                logging.warning(f"{clean_line} [Untracked file — consider adding or cleaning]")
+                logging.warning(f"{display_line} [Untracked file — consider adding or cleaning]")
             else:
-                logging.warning(f"{clean_line} [Status: {status}]")
+                logging.warning(f"{display_line} [Status: {status}]")
+        return clean
 
+    except subprocess.TimeoutExpired:
+        logging.error(f"Git command timed out in {path}")
         return False
-
     except Exception as e:
         logging.error(f"Git check failed in {path}: {e}")
         return False
 
+
 def main():
+    print("")
     logging.info("Starting system diagnostics...")
 
-    check_path(P_TERMINAL_PATH)
-    check_path(VENV_PATH)
-    check_virtualenv(VENV_PATH)
+    overall_success = True
 
-    check_git_repo(P_TERMINAL_PATH)
-    check_path(PEHARGE_PATH)
-    check_git_repo(PEHARGE_PATH)
+    # P-Terminal Verzeichnis
+    if not check_path(P_TERMINAL_PATH):
+        overall_success = False
 
-    logging.info("System diagnostics completed.\n")
+    # Virtualenv
+    if not check_path(VENV_PATH):
+        overall_success = False
+
+    if not check_virtualenv(VENV_PATH):
+        overall_success = False
+
+    if not check_git_repo(P_TERMINAL_PATH):
+        overall_success = False
+
+    # Peharge Web
+    if not check_path(PEHARGE_PATH):
+        overall_success = False
+
+    if not check_git_repo(PEHARGE_PATH):
+        overall_success = False
+
+    logging.info("✅ System diagnostics completed.")
+    sys.exit(0 if overall_success else 1)
+
 
 if __name__ == "__main__":
     main()
