@@ -89,6 +89,7 @@ import importlib.util
 from pathlib import Path
 import logging
 from datetime import datetime
+import getpass
 
 # Log setup: timestamp with milliseconds
 log_path = Path(__file__).parent / "installer.log"
@@ -179,7 +180,7 @@ def ensure_packages(packages: list[str]) -> None:
     logging.info("[PASS] ✅ All missing packages processed.")
 
 def main():
-    venv_path = Path(os.getenv('VENV_PATH', Path.home() / 'p-terminal' / 'pp-term' / '.env'))
+    venv_path = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/.env")
     logging.info("[INFO] Starting virtual environment activation...")
     activate_virtualenv(venv_path)
 
