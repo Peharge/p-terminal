@@ -2552,6 +2552,438 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing Git command: {e}")
         return True
 
+    if user_input.startswith("pco "):
+        user_input = user_input[4:].strip()
+
+        # Load JSON
+        json_path = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/current_env.json")
+
+        try:
+            with open(json_path, 'r') as file:
+                data = json.load(file)
+                active = data.get("active_env")
+
+            if not active:
+                print(f"[{timestamp()}] [ERROR] Key 'active_env' not found in JSON.")
+                return True
+
+            active_env_path = Path(active)
+            python_exe = active_env_path / "Scripts" / "python.exe"
+            conda_bat = active_env_path / "condabin" / "conda.bat"
+            conda_meta = active_env_path / "conda-meta"
+
+            if not python_exe.exists():
+                print(f"[{timestamp()}] [ERROR] Python executable not found in active environment.")
+                return True
+
+            # Check if it's a Conda environment (two checks)
+            is_conda = conda_bat.exists() or conda_meta.exists()
+
+            if not is_conda:
+                print(f"[{timestamp()}] [ERROR] Active environment is not a Conda environment.")
+                return True
+
+            # Build and run the Conda command
+            command = f'"{conda_bat}" {user_input}'
+            # print(f"[{timestamp()}] [INFO] Running: conda {user_input}")
+
+            subprocess.run(command, shell=True)
+
+        except FileNotFoundError:
+            print(f"[{timestamp()}] [ERROR] File not found: {json_path}")
+        except json.JSONDecodeError:
+            print(f"[{timestamp()}] [ERROR] Error decoding JSON file: {json_path}")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Unexpected error: {str(e)}")
+
+        return True
+
+    if user_input.startswith("pcoi "):  # pcoi = install
+        user_input = "install " + user_input[5:].strip()
+
+        # Load JSON
+        json_path = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/current_env.json")
+
+        try:
+            with open(json_path, 'r') as file:
+                data = json.load(file)
+                active = data.get("active_env")
+
+            if not active:
+                print(f"[{timestamp()}] [ERROR] Key 'active_env' not found in JSON.")
+                # hier ggf. return oder weiter
+                # return True
+
+            active_env_path = Path(active)
+            python_exe = active_env_path / "Scripts" / "python.exe"
+            conda_bat = active_env_path / "condabin" / "conda.bat"
+            conda_meta = active_env_path / "conda-meta"
+
+            if not python_exe.exists():
+                print(f"[{timestamp()}] [ERROR] Python executable not found in active environment.")
+                # return True
+
+            is_conda = conda_bat.exists() or conda_meta.exists()
+
+            if not is_conda:
+                print(f"[{timestamp()}] [ERROR] Active environment is not a Conda environment.")
+                # return True
+
+            command = f'"{conda_bat}" {user_input}'
+            # print(f"[{timestamp()}] [INFO] Running: conda {user_input}")
+
+            subprocess.run(command, shell=True)
+
+        except FileNotFoundError:
+            print(f"[{timestamp()}] [ERROR] File not found: {json_path}")
+        except json.JSONDecodeError:
+            print(f"[{timestamp()}] [ERROR] Error decoding JSON file: {json_path}")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Unexpected error: {str(e)}")
+
+        return True
+
+    if user_input.startswith("pcou "):  # pcou = update
+        user_input = "update " + user_input[5:].strip()
+
+        # Load JSON
+        json_path = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/current_env.json")
+
+        try:
+            with open(json_path, 'r') as file:
+                data = json.load(file)
+                active = data.get("active_env")
+
+            if not active:
+                print(f"[{timestamp()}] [ERROR] Key 'active_env' not found in JSON.")
+                # return True
+
+            active_env_path = Path(active)
+            python_exe = active_env_path / "Scripts" / "python.exe"
+            conda_bat = active_env_path / "condabin" / "conda.bat"
+            conda_meta = active_env_path / "conda-meta"
+
+            if not python_exe.exists():
+                print(f"[{timestamp()}] [ERROR] Python executable not found in active environment.")
+                # return True
+
+            is_conda = conda_bat.exists() or conda_meta.exists()
+
+            if not is_conda:
+                print(f"[{timestamp()}] [ERROR] Active environment is not a Conda environment.")
+                # return True
+
+            command = f'"{conda_bat}" {user_input}'
+            # print(f"[{timestamp()}] [INFO] Running: conda {user_input}")
+
+            subprocess.run(command, shell=True)
+
+        except FileNotFoundError:
+            print(f"[{timestamp()}] [ERROR] File not found: {json_path}")
+        except json.JSONDecodeError:
+            print(f"[{timestamp()}] [ERROR] Error decoding JSON file: {json_path}")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Unexpected error: {str(e)}")
+
+        return True
+
+    if user_input.startswith("pcor "):  # pcor = remove
+        user_input = "remove " + user_input[5:].strip()
+
+        json_path = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/current_env.json")
+
+        try:
+            with open(json_path, 'r') as file:
+                data = json.load(file)
+                active = data.get("active_env")
+
+            if not active:
+                print(f"[{timestamp()}] [ERROR] Key 'active_env' not found in JSON.")
+                return True
+
+            active_env_path = Path(active)
+            python_exe = active_env_path / "Scripts" / "python.exe"
+            conda_bat = active_env_path / "condabin" / "conda.bat"
+            conda_meta = active_env_path / "conda-meta"
+
+            if not python_exe.exists():
+                print(f"[{timestamp()}] [ERROR] Python executable not found in active environment.")
+                return True
+
+            is_conda = conda_bat.exists() or conda_meta.exists()
+
+            if not is_conda:
+                print(f"[{timestamp()}] [ERROR] Active environment is not a Conda environment.")
+                return True
+
+            command = f'"{conda_bat}" {user_input}'
+            subprocess.run(command, shell=True)
+
+        except FileNotFoundError:
+            print(f"[{timestamp()}] [ERROR] File not found: {json_path}")
+        except json.JSONDecodeError:
+            print(f"[{timestamp()}] [ERROR] Error decoding JSON file: {json_path}")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Unexpected error: {str(e)}")
+
+        return True
+
+    if user_input.startswith("pcol "):  # pcol = list
+        user_input = "list " + user_input[5:].strip()
+
+        json_path = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/current_env.json")
+
+        try:
+            with open(json_path, 'r') as file:
+                data = json.load(file)
+                active = data.get("active_env")
+
+            if not active:
+                print(f"[{timestamp()}] [ERROR] Key 'active_env' not found in JSON.")
+                return True
+
+            active_env_path = Path(active)
+            python_exe = active_env_path / "Scripts" / "python.exe"
+            conda_bat = active_env_path / "condabin" / "conda.bat"
+            conda_meta = active_env_path / "conda-meta"
+
+            if not python_exe.exists():
+                print(f"[{timestamp()}] [ERROR] Python executable not found in active environment.")
+                return True
+
+            is_conda = conda_bat.exists() or conda_meta.exists()
+
+            if not is_conda:
+                print(f"[{timestamp()}] [ERROR] Active environment is not a Conda environment.")
+                return True
+
+            command = f'"{conda_bat}" {user_input}'
+            subprocess.run(command, shell=True)
+
+        except FileNotFoundError:
+            print(f"[{timestamp()}] [ERROR] File not found: {json_path}")
+        except json.JSONDecodeError:
+            print(f"[{timestamp()}] [ERROR] Error decoding JSON file: {json_path}")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Unexpected error: {str(e)}")
+
+        return True
+
+    if user_input.startswith("pcoh "):  # pcoh = help/info
+        # Hier als Beispiel führen wir 'conda info' aus, oder du kannst eigene Hilfe anzeigen
+        user_input = "info " + user_input[5:].strip()
+
+        json_path = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/current_env.json")
+
+        try:
+            with open(json_path, 'r') as file:
+                data = json.load(file)
+                active = data.get("active_env")
+
+            if not active:
+                print(f"[{timestamp()}] [ERROR] Key 'active_env' not found in JSON.")
+                return True
+
+            active_env_path = Path(active)
+            python_exe = active_env_path / "Scripts" / "python.exe"
+            conda_bat = active_env_path / "condabin" / "conda.bat"
+            conda_meta = active_env_path / "conda-meta"
+
+            if not python_exe.exists():
+                print(f"[{timestamp()}] [ERROR] Python executable not found in active environment.")
+                return True
+
+            is_conda = conda_bat.exists() or conda_meta.exists()
+
+            if not is_conda:
+                print(f"[{timestamp()}] [ERROR] Active environment is not a Conda environment.")
+                return True
+
+            command = f'"{conda_bat}" {user_input}'
+            subprocess.run(command, shell=True)
+
+        except FileNotFoundError:
+            print(f"[{timestamp()}] [ERROR] File not found: {json_path}")
+        except json.JSONDecodeError:
+            print(f"[{timestamp()}] [ERROR] Error decoding JSON file: {json_path}")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Unexpected error: {str(e)}")
+
+        return True
+
+    if user_input.startswith("pcoa "):  # pcoa = activate
+        env_name = user_input[5:].strip()
+        current_dir = Path.cwd()  # Oder ein spezieller Pfad, falls nötig
+        env_path = (current_dir / env_name).resolve()
+
+        def set_active_conda_env_in_json(env_path_str: str):
+            json_path = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/current_env.json")
+            data = {}
+            if json_path.exists():
+                try:
+                    with open(json_path, "r") as f:
+                        data = json.load(f)
+                except json.JSONDecodeError:
+                    print(f"[{timestamp()}] [ERROR] JSON konnte nicht geladen werden. Überschreibe...")
+
+            data["active_env"] = env_path_str
+            try:
+                with open(json_path, "w") as f:
+                    json.dump(data, f, indent=4)
+                print(f"[{timestamp()}] [INFO] Aktives Environment in JSON gespeichert: {env_path_str}")
+            except Exception as e:
+                print(f"[{timestamp()}] [ERROR] JSON konnte nicht gespeichert werden: {e}")
+
+        if not env_path.exists():
+            print(f"[{timestamp()}] [INFO] Environment '{env_name}' existiert nicht unter '{env_path}'.")
+            user_confirm = input("Willst du dieses virtuelle Environment erstellen? [y/n]: ").strip().lower()
+            if user_confirm == 'y':
+                command = f'python -m venv "{env_path}"'
+                try:
+                    subprocess.run(command, shell=True, check=True, text=True,
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                    print(f"[{timestamp()}] [INFO] Das venv '{env_name}' wurde erstellt unter {env_path}.")
+                except subprocess.CalledProcessError as e:
+                    print(f"[{timestamp()}] [ERROR] Fehler beim Erstellen des venv: {e}")
+            else:
+                print(f"[{timestamp()}] [INFO] Aktivierung abgebrochen.")
+                # return True
+
+        if os.name == "nt":
+            python_exe = env_path / "Scripts" / "python.exe"
+        else:
+            python_exe = env_path / "bin" / "python"
+
+        if not python_exe.exists():
+            print(f"[{timestamp()}] [INFO] Kein Python-Interpreter gefunden in '{python_exe}'.")
+            user_confirm = input("Trotzdem aktivieren? [y/N]: ").strip().lower()
+            if user_confirm != 'y':
+                print(f"[{timestamp()}] [INFO] Aktivierung abgebrochen.")
+                # return True
+
+        active = find_active_env(env_path)
+        set_active_conda_env_in_json(active)
+
+        print(f"[{timestamp()}] [INFO] Aktives Environment gesetzt auf '{active}'.")
+        return True
+
+
+    if user_input.startswith("pcod "):  # pcod = deactivate
+        # Normalerweise braucht deactivate keinen Env-Namen, aber falls übergeben:
+        env_name = user_input[5:].strip()
+
+        def set_active_conda_env_in_json(env_path_str):
+            json_path = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/current_env.json")
+            data = {}
+            if json_path.exists():
+                try:
+                    with open(json_path, "r") as f:
+                        data = json.load(f)
+                except json.JSONDecodeError:
+                    print(f"[{timestamp()}] [ERROR] JSON konnte nicht geladen werden. Überschreibe...")
+
+            # Für deactivate setzen wir active_env auf None oder leeren String
+            data["active_env"] = None
+            try:
+                with open(json_path, "w") as f:
+                    json.dump(data, f, indent=4)
+                print(f"[{timestamp()}] [INFO] Environment deaktiviert, active_env auf None gesetzt.")
+            except Exception as e:
+                print(f"[{timestamp()}] [ERROR] JSON konnte nicht gespeichert werden: {e}")
+
+        # Deaktivieren heißt hier nur den aktiven Env-Eintrag löschen/setzen
+        set_active_conda_env_in_json(None)
+
+        print(f"[{timestamp()}] [INFO] Environment wurde deaktiviert.")
+        return True
+
+    if user_input.startswith("pcos "):  # pcos = search packages
+        user_input = "search " + user_input[5:].strip()
+
+        json_path = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/current_env.json")
+
+        try:
+            with open(json_path, 'r') as file:
+                data = json.load(file)
+                active = data.get("active_env")
+
+            if not active:
+                print(f"[{timestamp()}] [ERROR] Key 'active_env' not found in JSON.")
+                # return True
+
+            active_env_path = Path(active)
+            python_exe = active_env_path / "Scripts" / "python.exe"
+            conda_bat = active_env_path / "condabin" / "conda.bat"
+            conda_meta = active_env_path / "conda-meta"
+
+            if not python_exe.exists():
+                print(f"[{timestamp()}] [ERROR] Python executable not found in active environment.")
+                # return True
+
+            is_conda = conda_bat.exists() or conda_meta.exists()
+
+            if not is_conda:
+                print(f"[{timestamp()}] [ERROR] Active environment is not a Conda environment.")
+                # return True
+
+            command = f'"{conda_bat}" {user_input}'
+            # print(f"[{timestamp()}] [INFO] Running: conda {user_input}")
+
+            subprocess.run(command, shell=True)
+
+        except FileNotFoundError:
+            print(f"[{timestamp()}] [ERROR] File not found: {json_path}")
+        except json.JSONDecodeError:
+            print(f"[{timestamp()}] [ERROR] Error decoding JSON file: {json_path}")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Unexpected error: {str(e)}")
+
+        return True
+
+
+    if user_input.startswith("pcoc "):  # pcoc = clean cache
+        user_input = "clean " + user_input[5:].strip()
+
+        json_path = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/current_env.json")
+
+        try:
+            with open(json_path, 'r') as file:
+                data = json.load(file)
+                active = data.get("active_env")
+
+            if not active:
+                print(f"[{timestamp()}] [ERROR] Key 'active_env' not found in JSON.")
+                # return True
+
+            active_env_path = Path(active)
+            python_exe = active_env_path / "Scripts" / "python.exe"
+            conda_bat = active_env_path / "condabin" / "conda.bat"
+            conda_meta = active_env_path / "conda-meta"
+
+            if not python_exe.exists():
+                print(f"[{timestamp()}] [ERROR] Python executable not found in active environment.")
+                # return True
+
+            is_conda = conda_bat.exists() or conda_meta.exists()
+
+            if not is_conda:
+                print(f"[{timestamp()}] [ERROR] Active environment is not a Conda environment.")
+                # return True
+
+            command = f'"{conda_bat}" {user_input}'
+            # print(f"[{timestamp()}] [INFO] Running: conda {user_input}")
+
+            subprocess.run(command, shell=True)
+
+        except FileNotFoundError:
+            print(f"[{timestamp()}] [ERROR] File not found: {json_path}")
+        except json.JSONDecodeError:
+            print(f"[{timestamp()}] [ERROR] Error decoding JSON file: {json_path}")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Unexpected error: {str(e)}")
+
+        return True
+
     if user_input.startswith("pol "):
         user_input = user_input[4:].strip()
 
