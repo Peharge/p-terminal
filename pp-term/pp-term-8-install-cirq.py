@@ -68,6 +68,7 @@ import importlib.util
 import logging
 from datetime import datetime
 from pathlib import Path
+import getpass
 
 # === Configuration ===
 REQUIRED_PACKAGES = [
@@ -149,7 +150,7 @@ def ensure_packages(packages: list[str]) -> None:
     logging.info("[INFO] ✅ Package installation completed.")
 
 def main():
-    venv_path = Path(os.getenv('VENV_PATH', VENV_DEFAULT_PATH))
+    venv_path = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/.env")
     logging.info("[INFO] Activating virtual environment...")
     activate_virtualenv(venv_path)
 
