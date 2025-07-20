@@ -1,9 +1,9 @@
 {
   "P-Terminal Version": "1.1.1.1 EAP",
-  "PP-Terminal Version": "8.1.1.1",
+  "PP-Terminal Version": "8.1.1.3",
   "PP-Terminal Launcher Version": "8.1.1.1",
-  "Peharge Compiler Version": "6.4.1.3",
-  "Peharge Kernel Version": "6.4.1.4",
+  "Peharge Compiler Version": "8.1.1.3",
+  "Peharge Kernel Version": "8.1.1.3",
   "IQ Kernel Version": "4.1.1.3",
   "P-Terminal License": "MIT"
 }
