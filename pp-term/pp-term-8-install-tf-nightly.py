@@ -67,6 +67,7 @@ import subprocess
 import logging
 from pathlib import Path
 from datetime import datetime
+import getpass
 
 # Log setup: timestamp with milliseconds
 log_path = Path(__file__).parent / "installer_tf_nightly.log"
@@ -136,17 +137,17 @@ def install_tf_nightly(gpu: bool) -> None:
 
 
 def main():
-    venv = Path(os.getenv('VENV_PATH', Path.home() / '.venv'))
-    logging.info(f"[INFO] [{timestamp()}] Starting virtual environment activation...")
+    venv = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/.env")
+    logging.info(f"[INFO] Starting virtual environment activation...")
     if venv.exists():
         activate_virtualenv(venv)
     else:
-        logging.info(f"[INFO] [{timestamp()}] No venv at {venv}, using current environment")
+        logging.info(f"[INFO] No venv at {venv}, using current environment")
 
-    logging.info(f"[INFO] [{timestamp()}] Checking CUDA availability...")
+    logging.info(f"[INFO] Checking CUDA availability...")
     gpu_available = detect_cuda_available()
 
-    logging.info(f"[INFO] [{timestamp()}] Starting tf-nightly installation...")
+    logging.info(f"[INFO] Starting tf-nightly installation...")
     install_tf_nightly(gpu_available)
     logging.info(f"[PASS] ✅ Installation process complete.")
 
