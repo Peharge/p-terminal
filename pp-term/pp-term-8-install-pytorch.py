@@ -68,6 +68,7 @@ import logging
 from pathlib import Path
 from datetime import datetime
 import re
+import getpass
 
 # Log setup: timestamp with milliseconds
 log_path = Path(__file__).parent / "installer.log"
@@ -150,16 +151,16 @@ def install_pytorch(cuda_tag: str | None) -> None:
 
 
 def main():
-    venv = Path(os.getenv('VENV_PATH', Path.home() / '.venv'))
-    logging.info(f"[INFO] [{timestamp()}] Starting virtual environment activation...")
+    venv = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/.env")
+    logging.info(f"[INFO] Starting virtual environment activation...")
     if venv.exists():
         activate_virtualenv(venv)
     else:
-        logging.info(f"[INFO] [{timestamp()}] No venv at {venv}, using current environment")
+        logging.info(f"[INFO] No venv at {venv}, using current environment")
 
-    logging.info(f"[INFO] [{timestamp()}] Detecting CUDA version...")
+    logging.info(f"[INFO] Detecting CUDA version...")
     cuda_tag = detect_cuda_version()
-    logging.info(f"[INFO] [{timestamp()}] Starting PyTorch installation...")
+    logging.info(f"[INFO] Starting PyTorch installation...")
     install_pytorch(cuda_tag)
     logging.info(f"[PASS] ✅ Installation process complete.")
 
