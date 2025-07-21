@@ -156,6 +156,16 @@ if !errorlevel! equ 0 (
     call :Log ERROR "❌ Windows Defender is NOT active."
 )
 
+REM Überprüfen, ob das Skript im Windows Terminal läuft
+
+if defined WT_SESSION (
+    call :Log PASS "✅ The script is executed in the Windows Terminal."
+) else (
+    call :Log ERROR "❌ Please use Windows Terminal to run this script, not Kitty or any other type of terminal."
+    pause
+    exit /b 1
+)
+
 :: Check if running inside a Virtual Machine
 systeminfo | findstr /i "Virtual" "VMware" "Hyper-V" "VirtualBox" >nul
 if !errorlevel! equ 0 (
