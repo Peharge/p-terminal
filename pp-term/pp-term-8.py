@@ -1399,7 +1399,7 @@ def handle_special_commands(user_input):
         "golab": "pp-commands\\golab.py",  # new
         "phpstorm": "pp-commands\\phpstorm.py",  # new
         "githubdesktop": "pp-commands\\githubdesktop.py",  # new
-        "nvim": "pp-commands\\nvim.py",  # new
+        "nvim-lx": "pp-commands\\nvim.py",  # new
         "code-lx": "pp-commands\\code.py",  # new
         "thonny-lx": "pp-commands\\thonny.py",  # new
         "pthonny-lx": "pp-commands\\thonny.py",  # new
@@ -1527,7 +1527,7 @@ def handle_special_commands(user_input):
         "install webstorm": "pp-commands\\webstorm.py",  # new
         "install golab": "pp-commands\\golab.py",  # new
         "install phpstorm": "pp-commands\\phpstorm.py",  # new
-        "install nvim": "pp-commands\\nvim.py",  # new
+        "install nvim-lx": "pp-commands\\nvim.py",  # new
         "install code": "pp-commands\\code.py",  # new
         "install micro": "pp-commands\\micro.py",  # new
         "install gedit": "pp-commands\\gedit.py",  # new
@@ -1783,7 +1783,7 @@ def handle_special_commands(user_input):
         "pi webstorm": "pp-commands\\webstorm.py",  # new
         "pi golab": "pp-commands\\golab.py",  # new
         "pi phpstorm": "pp-commands\\phpstorm.py",  # new
-        "pi nvim": "pp-commands\\nvim.py",  # new
+        "pi nvim-lx": "pp-commands\\nvim.py",  # new
         "pi code": "pp-commands\\code.py",  # new
         "pi micro": "pp-commands\\micro.py",  # new
         "pi gedit": "pp-commands\\gedit.py",  # new
@@ -3714,9 +3714,10 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
         return True
 
-    if user_input.startswith("nvim "):
+    if user_input.startswith("nvim-lx "):
+        user_input = user_input[8:].strip()
 
-        command = f"wsl {user_input}"
+        command = f"wsl nvim {user_input}"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
                                    text=True)
@@ -3729,13 +3730,40 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
         return True
 
-    if user_input.startswith("pvim "):
-        user_input = user_input[5:].strip()
+    if user_input.startswith("pvim-lx "):
+        user_input = user_input[8:].strip()
 
         command = f"wsl nvim {user_input}"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
                                    text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
+        return True
+
+    if user_input.startswith("nvim "):
+
+        process =  run_command(user_input, shell=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
+        return True
+
+    if user_input.startswith("pvim "):
+        user_input = user_input[5:].strip()
+
+        command = f"nvim {user_input}"
+
+        process = run_command(command, shell=True)
 
         try:
             process.wait()
