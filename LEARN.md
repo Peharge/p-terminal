@@ -1,4 +1,4 @@
-# Learn Peharge Terminal
+# **_Learn Peharge Terminal_**
 
 <p align="left">
     <img src="./icons/p-term-banner-3.svg" alt="peharge"/>
