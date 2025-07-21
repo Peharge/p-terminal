@@ -126,6 +126,7 @@ import traceback
 import numpy as onp
 import pythoncom
 import win32com.client
+import glob
 
 try:
     import ujson as _json
@@ -16365,6 +16366,88 @@ def handle_special_commands(user_input):
         except ValueError as e:
             print(f"[{timestamp()}] [ERROR] Parse error: {e}")
             return False
+
+    if user_input.lower().startswith("3dslicer "):
+        # Datei relativ zum aktuellen Verzeichnis interpretieren
+        current_dir = Path.cwd().resolve()
+        file_input = user_input[9:].strip()
+        file_path = (current_dir / file_input).resolve()
+
+        if not file_input:
+            print(f"[{timestamp()}] [FAIL] No file specified for 3D Slicer.")
+            return True
+        elif not file_path.exists():
+            print(f"[{timestamp()}] [FAIL] File not found: {file_path}")
+            return True
+        else:
+            start_menu = os.path.join(
+                os.environ["APPDATA"],
+                r"Microsoft\Windows\Start Menu\Programs"
+            )
+            slicer_links = glob.glob(
+                os.path.join(start_menu, "**", "Slicer *.lnk"),
+                recursive=True
+            )
+
+            if not slicer_links:
+                print(f"[{timestamp()}] [FAIL] 3D Slicer shortcut not found.")
+                return True
+            else:
+                shell = win32com.client.Dispatch("WScript.Shell")
+                slicer_exe = shell.CreateShortcut(slicer_links[0]).Targetpath
+
+                if not os.path.exists(slicer_exe):
+                    print(f"[{timestamp()}] [FAIL] Resolved Slicer executable not found: {slicer_exe}")
+                    return True
+                else:
+                    try:
+                        subprocess.Popen([slicer_exe, str(file_path)], shell=False)
+                        print(f"[{timestamp()}] [PASS] File opened in 3D Slicer: {file_path}")
+                        return True
+                    except Exception as e:
+                        print(f"[{timestamp()}] [FAIL] Could not open file in 3D Slicer: {e}")
+                        return True
+
+    if user_input.lower().startswith("p3ds "):
+        # Datei relativ zum aktuellen Verzeichnis interpretieren
+        current_dir = Path.cwd().resolve()
+        file_input = user_input[5:].strip()
+        file_path = (current_dir / file_input).resolve()
+
+        if not file_input:
+            print(f"[{timestamp()}] [FAIL] No file specified for 3D Slicer.")
+            return True
+        elif not file_path.exists():
+            print(f"[{timestamp()}] [FAIL] File not found: {file_path}")
+            return True
+        else:
+            start_menu = os.path.join(
+                os.environ["APPDATA"],
+                r"Microsoft\Windows\Start Menu\Programs"
+            )
+            slicer_links = glob.glob(
+                os.path.join(start_menu, "**", "Slicer *.lnk"),
+                recursive=True
+            )
+
+            if not slicer_links:
+                print(f"[{timestamp()}] [FAIL] 3D Slicer shortcut not found.")
+                return True
+            else:
+                shell = win32com.client.Dispatch("WScript.Shell")
+                slicer_exe = shell.CreateShortcut(slicer_links[0]).Targetpath
+
+                if not os.path.exists(slicer_exe):
+                    print(f"[{timestamp()}] [FAIL] Resolved Slicer executable not found: {slicer_exe}")
+                    return True
+                else:
+                    try:
+                        subprocess.Popen([slicer_exe, str(file_path)], shell=False)
+                        print(f"[{timestamp()}] [PASS] File opened in 3D Slicer: {file_path}")
+                        return True
+                    except Exception as e:
+                        print(f"[{timestamp()}] [FAIL] Could not open file in 3D Slicer: {e}")
+                        return True
 
     if user_input.lower() == "fortune":
         fortunes = [
