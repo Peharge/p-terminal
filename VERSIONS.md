@@ -1,11 +1,19 @@
-# P-Terminal
+# **_VERSIONS_**
+
+<p align="left">
+    <img src="./icons/p-term-banner-3.svg" alt="peharge"/>
+    <img src="./icons/pp-term-banner-3.svg" alt="peharge"/>
+    <img src="./icons/peharge-banner-3.svg" alt="peharge"/>
+</p>
+
+## P-Terminal
 
 - P-Terminal 1
   - P-Terminal 1.1
     - P-Terminal 1.1.1
       - P-Terminal 1.1.1.1
 
-# PP-Terminal
+## PP-Terminal
 
 - PP-Terminal 1
 
@@ -327,8 +335,9 @@
     - PP-Terminal 8.1.1
       - PP-Terminal 8.1.1.1
       - PP-Terminal 8.1.1.3
+      - PP-Terminal 8.1.1.4
 
-# PP-Terminal Launcher Version
+## PP-Terminal Launcher Version
 
 - PP-Terminal Launcher 1
   - PP-Terminal Launcher 1.1
@@ -392,7 +401,7 @@
     - PP-Terminal Launcher 8.1.1
       - PP-Terminal Launcher 8.1.1.1
 
-# Peharge Compiler Version
+## Peharge Compiler Version
 
 - Peharge Compiler 1
   - Peharge Compiler 1.1
@@ -451,7 +460,7 @@
       - Peharge Compiler 8.1.1.1
       - Peharge Compiler 8.1.1.3
 
-# Peharge Kernel Version
+## Peharge Kernel Version
 
 - Peharge Kernel 1
   - Peharge Kernel 1.1
@@ -507,7 +516,7 @@
       - Peharge Kernel 8.1.1.1
       - Peharge Kernel 8.1.1.3
 
-# IQ Kernel Version
+## IQ Kernel Version
 
 - IQ Kernel 1
   - IQ Kernel 1.1
