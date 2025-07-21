@@ -6,6 +6,6 @@
     <img src="./icons/peharge-banner-3.svg" alt="peharge"/>
 </p>
 
-More: https://peharge.github.io/MAVIS-web/pp-term-hole.html
+More: https://github.com/Peharge/p-terminal/wiki
 
 soon
