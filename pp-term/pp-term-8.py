@@ -3792,6 +3792,22 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
         return True
 
+    if user_input.startswith("pthonny-lx "):
+        user_input = user_input[11:].strip()
+
+        command = f"wsl thonny {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
+        return True
+
     if user_input.startswith("gedit "):
 
         command = f"wsl {user_input}"
