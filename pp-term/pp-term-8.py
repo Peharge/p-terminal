@@ -933,6 +933,8 @@ def handle_special_commands(user_input):
     # Spezielle Scripts
     commands = {
         "peharge": "pp-commands\\peharge.py",
+        "pp-term": "pp-commands\\pp-term.py",
+        "pp-terminal": "pp-commands\\pp-term.py",
         "mavis env install": "mavis-install\\install-info-mavis-4.py",
         "install mavis env": "mavis-install\\install-info-mavis-4.py",
         "install mavis-3": "mavis-install\\install-info-mavis-4.py",  # new
