@@ -1,4 +1,4 @@
-# Contributing to P-Terminal
+# **_Contributing to P-Terminal_**
 
 <p align="left">
     <img src="./icons/p-term-banner-3.svg" alt="peharge"/>
