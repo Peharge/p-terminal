@@ -1402,6 +1402,7 @@ def handle_special_commands(user_input):
         "nvim": "pp-commands\\nvim.py",  # new
         "code-lx": "pp-commands\\code.py",  # new
         "thonny-lx": "pp-commands\\thonny.py",  # new
+        "pthonny-lx": "pp-commands\\thonny.py",  # new
         "micro": "pp-commands\\micro.py",  # new
         "gedit": "pp-commands\\gedit.py",  # new
         "update": "pp-commands\\update.py",  # new
