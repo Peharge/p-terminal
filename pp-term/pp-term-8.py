@@ -1215,6 +1215,8 @@ def handle_special_commands(user_input):
         "install 3d-slicer": "run\\simon\\3d-slicer\\install-3d-slicer.py",  # new
         "run 3d-slicer": "run\\simon\\3d-slicer\\run-3d-slicer.py",  # new
         "pr 3d-slicer": "run\\simon\\3d-slicer\\run-3d-slicer.py",  # new
+        "run 3dslicer": "run\\simon\\3d-slicer\\run-3d-slicer.py",  # new
+        "pr 3dslicer": "run\\simon\\3d-slicer\\run-3d-slicer.py",  # new
         "install simon": "run\\simon\\install-simon-1.py",  # new
         "run simon": "mavis-run-jup\\run-jup.py",  # new
         "pr simon": "mavis-run-jup\\run-jup.py",  # new
