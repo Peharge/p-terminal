@@ -1,4 +1,4 @@
-# Code of Conduct for P-Terminal
+# **_Code of Conduct for P-Terminal_**
 
 <p align="left">
     <img src="./icons/p-term-banner-3.svg" alt="peharge"/>
