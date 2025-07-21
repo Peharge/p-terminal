@@ -1400,6 +1400,7 @@ def handle_special_commands(user_input):
         "phpstorm": "pp-commands\\phpstorm.py",  # new
         "githubdesktop": "pp-commands\\githubdesktop.py",  # new
         "nvim-lx": "pp-commands\\nvim.py",  # new
+        "nvim": "pp-commands\\nvim-win.py",  # new
         "code-lx": "pp-commands\\code.py",  # new
         "thonny-lx": "pp-commands\\thonny.py",  # new
         "pthonny-lx": "pp-commands\\thonny.py",  # new
@@ -1528,6 +1529,7 @@ def handle_special_commands(user_input):
         "install golab": "pp-commands\\golab.py",  # new
         "install phpstorm": "pp-commands\\phpstorm.py",  # new
         "install nvim-lx": "pp-commands\\nvim.py",  # new
+        "install nvim": "pp-commands\\nvim-win.py",  # new
         "install code": "pp-commands\\code.py",  # new
         "install micro": "pp-commands\\micro.py",  # new
         "install gedit": "pp-commands\\gedit.py",  # new
@@ -1784,6 +1786,7 @@ def handle_special_commands(user_input):
         "pi golab": "pp-commands\\golab.py",  # new
         "pi phpstorm": "pp-commands\\phpstorm.py",  # new
         "pi nvim-lx": "pp-commands\\nvim.py",  # new
+        "pi nvim": "pp-commands\\nvim-win.py",  # new
         "pi code": "pp-commands\\code.py",  # new
         "pi micro": "pp-commands\\micro.py",  # new
         "pi gedit": "pp-commands\\gedit.py",  # new
