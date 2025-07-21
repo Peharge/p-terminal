@@ -1999,7 +1999,7 @@ def handle_special_commands(user_input):
                         except Exception as copy_err:
                             print(f"[{timestamp()}] [ERROR] Failed to copy {filename}: {copy_err}")
 
-                print(f"[{timestamp()}] [✓] Done. {files_copied} file(s) copied.")
+                print(f"[{timestamp()}] [PASS] Done. {files_copied} file(s) copied.")
 
         except Exception as e:
             print(f"[{timestamp()}] [ERROR] Error parsing or copying: {e}")
@@ -2022,6 +2022,58 @@ def handle_special_commands(user_input):
 
         except Exception as e:
             print(f"[{timestamp()}] [ERROR] Error parsing command: {e}")
+
+    if user_input.lower().startswith("ptdandroid "):
+        try:
+            # Entferne den Befehlsteil "ptdandroid " und analysiere den Rest
+            command_args = user_input[10:].strip()
+
+            # Beispiel: ptdandroid from="Internal Storage/DCIM/Camera" to="/storage/emulated/0/Download"
+            if 'from="' in command_args and 'to="' in command_args:
+                parts = command_args.split('"')
+                source = parts[1]
+                destination = parts[3]
+
+                if source and destination:
+                    print(f"{main_color}[*]{reset} Source: {source}")
+                    print(f"{main_color}[*]{reset} Target: {destination}")
+
+                    # Funktion zum Kopieren definieren – komplett innerhalb der if-Schleife!
+                    def copy_files_from_android(src, dst):
+                        try:
+                            if not os.path.exists(src):
+                                print(f"[{timestamp()}] [ERROR] Source path does not exist: {src}")
+                                return
+                            if not os.path.exists(dst):
+                                os.makedirs(dst)
+
+                            file_count = 0
+                            for root, dirs, files in os.walk(src):
+                                for file in files:
+                                    source_file = os.path.join(root, file)
+                                    relative_path = os.path.relpath(root, src)
+                                    destination_folder = os.path.join(dst, relative_path)
+
+                                    if not os.path.exists(destination_folder):
+                                        os.makedirs(destination_folder)
+
+                                    shutil.copy2(source_file, os.path.join(destination_folder, file))
+                                    file_count += 1
+
+                            print(f"[{timestamp()}] [INFO] {file_count} Files copied successfully.")
+                        except Exception as e:
+                            print(f"[{timestamp()}] [ERROR] Error while copying: {e}")
+
+                    # Funktionsaufruf
+                    copy_files_from_android(source, destination)
+
+                else:
+                    print(f"[{timestamp()}] [ERROR] Paths cannot be empty.")
+            else:
+                print(f'[{timestamp()}] [ERROR]Incorrect format. Use: ptdandroid from=\"<source>\" to=\"<destination>\"')
+
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Error processing command: {e}")
 
     if user_input.lower() in ["dir", "ls"]:
         run_command("dir" if os.name == "nt" else "ls -la", shell=True)
