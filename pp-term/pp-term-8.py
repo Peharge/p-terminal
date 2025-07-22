@@ -127,6 +127,7 @@ import numpy as onp
 import pythoncom
 import win32com.client
 import glob
+import configparser
 
 try:
     import ujson as _json
@@ -1404,8 +1405,13 @@ def handle_special_commands(user_input):
         "pvim-lx": "pp-commands\\nvim.py",  # new
         "pvim": "pp-commands\\nvim-win.py",  # new
         "code-lx": "pp-commands\\code.py",  # new
+        "pcode-lx": "pp-commands\\code.py",  # new
+        "code": "pp-commands\\code-win.py",  # new
+        "pcode": "pp-commands\\code-win.py",  # new
         "thonny-lx": "pp-commands\\thonny.py",  # new
         "pthonny-lx": "pp-commands\\thonny.py",  # new
+        "thonny": "pp-commands\\thonny-win.py",  # new
+        "pthonny": "pp-commands\\thonny-win.py",  # new
         "micro": "pp-commands\\micro.py",  # new
         "gedit": "pp-commands\\gedit.py",  # new
         "update": "pp-commands\\update.py",  # new
@@ -1534,7 +1540,14 @@ def handle_special_commands(user_input):
         "install nvim": "pp-commands\\nvim-win.py",  # new
         "install pvim-lx": "pp-commands\\nvim.py",  # new
         "install pvim": "pp-commands\\nvim-win.py",  # new
-        "install code": "pp-commands\\code.py",  # new
+        "install code-lx": "pp-commands\\code.py",  # new
+        "install pcode-lx": "pp-commands\\code.py",  # new
+        "install code": "pp-commands\\code-win.py",  # new
+        "install pcode": "pp-commands\\code-win.py",  # new
+        "install thonny-lx": "pp-commands\\thonny.py",  # new
+        "install pthonny-lx": "pp-commands\\thonny.py",  # new
+        "install thonny": "pp-commands\\thonny-win.py",  # new
+        "install pthonny": "pp-commands\\thonny-win.py",  # new
         "install micro": "pp-commands\\micro.py",  # new
         "install gedit": "pp-commands\\gedit.py",  # new
         "install update": "pp-commands\\update.py",  # new
@@ -1793,7 +1806,14 @@ def handle_special_commands(user_input):
         "pi nvim": "pp-commands\\nvim-win.py",  # new
         "pi pvim-lx": "pp-commands\\nvim.py",  # new
         "pi pvim": "pp-commands\\nvim-win.py",  # new
-        "pi code": "pp-commands\\code.py",  # new
+        "pi code-lx": "pp-commands\\code.py",  # new
+        "pi pcode-lx": "pp-commands\\code.py",  # new
+        "pi code": "pp-commands\\code-win.py",  # new
+        "pi pcode": "pp-commands\\code-win.py",  # new
+        "pi thonny-lx": "pp-commands\\thonny.py",  # new
+        "pi pthonny-lx": "pp-commands\\thonny.py",  # new
+        "pi thonny": "pp-commands\\thonny-win.py",  # new
+        "pi pthonny": "pp-commands\\thonny-win.py",  # new
         "pi micro": "pp-commands\\micro.py",  # new
         "pi gedit": "pp-commands\\gedit.py",  # new
         "pi update": "pp-commands\\update.py",  # new
@@ -3813,6 +3833,38 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
         return True
 
+    if user_input.startswith("pcode-lx "):
+        user_input = user_input[9:].strip()
+
+        command = f"wsl code {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
+        return True
+
+    if user_input.startswith("pcode "):
+        user_input = user_input[6:].strip()
+
+        command = f"code {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
+        return True
+
     if user_input.startswith("thonny-lx "):
         user_input = user_input[10:].strip()
 
@@ -3843,6 +3895,138 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
+        return True
+
+    if user_input.startswith("thonny "):
+        user_input = user_input[7:].strip()
+        # Script is not executed, so we ignore user_input
+
+        json_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/current_env.json")
+        if not json_path.exists():
+            print(f"[{timestamp()}] [ERROR] current_env.json not found: {json_path}")
+            return True
+
+        try:
+            with open(json_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                venv_path = data.get("active_env")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Error reading current_env.json: {e}")
+            return True
+
+        if not venv_path:
+            print(f"[{timestamp()}] [ERROR] No virtual environment path found in current_env.json.")
+            return True
+
+        python_executable = Path(venv_path) / "Scripts" / "python.exe"
+        if not python_executable.exists():
+            print(f"[{timestamp()}] [ERROR] Python interpreter not found: {python_executable}")
+            return True
+
+        thonny_exe = Path(f"C:/Users/{os.getlogin()}/AppData/Local/Programs/Thonny/thonny.exe")
+        if not thonny_exe.exists():
+            print(f"[{timestamp()}] [ERROR] thonny.exe not found: {thonny_exe}")
+            return True
+
+        try:
+            config_dir = Path(os.getenv("APPDATA")) / "Thonny"
+            config_path = config_dir / "configuration.ini"
+            config = configparser.ConfigParser()
+
+            if config_path.exists():
+                config.read(config_path, encoding='utf-8')
+            else:
+                if not config_dir.exists():
+                    config_dir.mkdir(parents=True)
+                config['Interpreter'] = {}
+
+            if 'Interpreter' not in config:
+                config['Interpreter'] = {}
+
+            config['Interpreter']['executable'] = str(python_executable)
+
+            with open(config_path, 'w', encoding='utf-8') as f:
+                config.write(f)
+
+            print(f"[{timestamp()}] [INFO] Thonny configuration updated: Interpreter={python_executable}")
+
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Error updating Thonny configuration: {e}")
+            return True
+
+        try:
+            subprocess.Popen([str(thonny_exe)])
+            print(f"[{timestamp()}] [INFO] Thonny started.")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Thonny could not be started: {e}")
+            return True
+
+        return True
+
+    if user_input.startswith("pthonny "):
+        user_input = user_input[8:].strip()
+        # Script is not executed, so we ignore user_input
+
+        json_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/current_env.json")
+        if not json_path.exists():
+            print(f"[{timestamp()}] [ERROR] current_env.json not found: {json_path}")
+            return True
+
+        try:
+            with open(json_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                venv_path = data.get("active_env")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Error reading current_env.json: {e}")
+            return True
+
+        if not venv_path:
+            print(f"[{timestamp()}] [ERROR] No virtual environment path found in current_env.json.")
+            return True
+
+        python_executable = Path(venv_path) / "Scripts" / "python.exe"
+        if not python_executable.exists():
+            print(f"[{timestamp()}] [ERROR] Python interpreter not found: {python_executable}")
+            return True
+
+        thonny_exe = Path(f"C:/Users/{os.getlogin()}/AppData/Local/Programs/Thonny/thonny.exe")
+        if not thonny_exe.exists():
+            print(f"[{timestamp()}] [ERROR] thonny.exe not found: {thonny_exe}")
+            return True
+
+        try:
+            config_dir = Path(os.getenv("APPDATA")) / "Thonny"
+            config_path = config_dir / "configuration.ini"
+            config = configparser.ConfigParser()
+
+            if config_path.exists():
+                config.read(config_path, encoding='utf-8')
+            else:
+                if not config_dir.exists():
+                    config_dir.mkdir(parents=True)
+                config['Interpreter'] = {}
+
+            if 'Interpreter' not in config:
+                config['Interpreter'] = {}
+
+            config['Interpreter']['executable'] = str(python_executable)
+
+            with open(config_path, 'w', encoding='utf-8') as f:
+                config.write(f)
+
+            print(f"[{timestamp()}] [INFO] Thonny configuration updated: Interpreter={python_executable}")
+
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Error updating Thonny configuration: {e}")
+            return True
+
+        try:
+            subprocess.Popen([str(thonny_exe)])
+            print(f"[{timestamp()}] [INFO] Thonny started.")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Thonny could not be started: {e}")
+            return True
+
         return True
 
     if user_input.startswith("gedit "):
@@ -30404,6 +30588,45 @@ def main():
                     if user_confirm == 'y':
                         command = f'python -m venv "{env_path}"'
                         try:
+                            subprocess.run(command, check=True, text=True,
+                                           stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                            print(f"[{timestamp()}] [INFO] The '{env_name}' venv was created at {env_path}.")
+                        except subprocess.CalledProcessError as e:
+                            print(f"[{timestamp()}] [ERROR] Failed to create venv: {e}")
+                            continue
+                    else:
+                        print(f"[{timestamp()}] [INFO] Activation cancelled.")
+                        continue
+
+                if os.name == "nt":
+                    python_exe = env_path / "Scripts" / "python.exe"
+                else:
+                    python_exe = env_path / "bin" / "python"
+
+                if not python_exe.exists():
+                    print(f"[{timestamp()}] [INFO] No Python interpreter found in '{python_exe}'.")
+                    user_confirm = input("Do you still want to activate this environment? [y/N)] ").strip().lower()
+                    if user_confirm != 'y':
+                        print(f"[{timestamp()}] [INFO] Activation cancelled.")
+                        continue
+
+                # setzt und speichert das aktive Env
+                active = find_active_env(env_path)
+                set_python_path(active)
+
+                print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+
+            elif user_input.startswith("pp-pav "):
+                env_name = user_input[7:].strip()
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command with shell=True — this can be insecure!")
+                env_path = (current_dir / env_name).resolve()
+
+                if not env_path.exists():
+                    print(f"[{timestamp()}] [INFO] Environment '{env_name}' does not exist at '{env_path}'.")
+                    user_confirm = input("Do you want to create this virtual environment? [y/n]: ").strip().lower()
+                    if user_confirm == 'y':
+                        command = f'python -m venv "{env_path}"'
+                        try:
                             subprocess.run(command, shell=True, check=True, text=True,
                                            stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
                             print(f"[{timestamp()}] [INFO] The '{env_name}' venv was created at {env_path}.")
@@ -30537,6 +30760,12 @@ def main():
 
             elif user_input.startswith("pov "):
                 user_input = user_input[4:]
+                print(f"[{timestamp()}] [INFO] Please note that the pov command supports only CMD commands, no PP terminal and the command was specifically developed for managing virtual environments, so not all CMD commands may be compatible.")
+                run_command_ov(user_input)
+
+            elif user_input.startswith("pp-pov "):
+                user_input = user_input[7:]
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command with shell=True — this can be insecure!")
                 print(f"[{timestamp()}] [INFO] Please note that the pov command supports only CMD commands, no PP terminal and the command was specifically developed for managing virtual environments, so not all CMD commands may be compatible.")
                 run_command_ov(user_input, shell=True)
 
@@ -30797,18 +31026,64 @@ def main():
                 print(f"[{timestamp()}] [INFO] Please use the pp command or compile the corresponding Rust file yourself with cargo...")
 
             elif user_input.startswith("powershell "):
+                run_command(user_input)
+
+            elif user_input.startswith("pp-powershell "):
+                user_input = user_input[3:].strip()
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command with shell=True — this can be insecure!")
                 run_command(user_input, shell=True)
+
+            elif user_input.strip() == "pwsh":
+                run_command(user_input)
+
+            elif user_input.strip() == "pp-pwsh":
+                user_input = user_input[3:].strip()
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command with shell=True — this can be insecure!")
+                run_command(user_input, shell=True)
+
+            elif user_input.startswith("pwsh "):
+                user_input = user_input[5:].strip()
+                run_command(["pwsh", "-Command", user_input])
+
+            elif user_input.startswith("pp-pwsh "):
+                user_input = user_input[8:].strip()
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command with shell=True — this can be insecure!")
+                run_command(["pwsh", "-Command", user_input], shell=True)
+
+            elif user_input.startswith("pwsh "):
+                user_input = user_input[5:].strip()
+                run_command(["pwsh", "-Command", user_input])
+
+            elif user_input.startswith("pp-pwsh "):
+                user_input = user_input[8:].strip()
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command with shell=True — this can be insecure!")
+                run_command(["pwsh", "-Command", user_input], shell=True)
 
             elif user_input.startswith("shell "):
                 user_input = user_input[6:].strip()
+                run_command(user_input)
+
+            elif user_input.startswith("pp-shell "):
+                user_input = user_input[9:].strip()
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command with shell=True — this can be insecure!")
                 run_command(user_input, shell=True)
 
             elif user_input.startswith("pps "):
                 user_input = user_input[4:].strip()
+                run_command("powershell " + user_input)
+
+            elif user_input.startswith("pp-pps "):
+                user_input = user_input[7:].strip()
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command with shell=True — this can be insecure!")
                 run_command("powershell " + user_input, shell=True)
 
             elif user_input.startswith("cmd "):
                 user_input = user_input[4:].strip()
+                run_command(user_input)
+
+            elif user_input.startswith("pp-cmd "):
+                user_input = user_input[7:].strip()
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command with shell=True — this can be insecure!")
                 run_command(user_input, shell=True)
 
             elif user_input.startswith("ps "):
@@ -32297,6 +32572,7 @@ def main():
                     print(f"[{timestamp()}] [ERROR] Error while running: {e}")
 
             else:
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command with shell=True — this can be insecure!")
                 run_command(user_input, shell=True)
 
             sys.stdout.flush()
