@@ -1365,6 +1365,10 @@ def handle_special_commands(user_input):
         "pemacs-lx": "pp-commands\\emacs.py",  # new
         "emacs": "pp-commands\\emacs-win.py",  # new
         "pemacs": "pp-commands\\emacs-win.py",  # new
+        "vim-lx": "pp-commands\\vim.py",  # new
+        "pvim-lx": "pp-commands\\vim.py",  # new
+        "vim": "pp-commands\\vim-win.py",  # new
+        "pvim": "pp-commands\\vim-win.py",  # new
         "vim": "pp-commands\\vim.py",  # new
         "nano": "pp-commands\\nano.py",  # new
         "dstat": "pp-commands\\dstat.py",  # new
@@ -1507,6 +1511,10 @@ def handle_special_commands(user_input):
         "install pemacs-lx": "pp-commands\\emacs.py",  # new
         "install emacs": "pp-commands\\emacs-win.py",  # new
         "install pemacs": "pp-commands\\emacs-win.py",  # new
+        "install vim-lx": "pp-commands\\vim.py",  # new
+        "install pvim-lx": "pp-commands\\vim.py",  # new
+        "install vim": "pp-commands\\vim-win.py",  # new
+        "install pvim": "pp-commands\\vim-win.py",  # new
         "install vim": "pp-commands\\vim.py",  # new
         "install nano": "pp-commands\\nano.py",  # new
         "install dstat": "pp-commands\\dstat.py",  # new
@@ -1776,7 +1784,10 @@ def handle_special_commands(user_input):
         "pi pemacs-lx": "pp-commands\\emacs.py",  # new
         "pi emacs": "pp-commands\\emacs-win.py",  # new
         "pi pemacs": "pp-commands\\emacs-win.py",  # new
-        "pi vim": "pp-commands\\vim.py",  # new
+        "pi vim-lx": "pp-commands\\vim.py",  # new
+        "pi pvim-lx": "pp-commands\\vim.py",  # new
+        "pi vim": "pp-commands\\vim-win.py",  # new
+        "pi pvim": "pp-commands\\vim-win.py",  # new
         "pi nano": "pp-commands\\nano.py",  # new
         "pi dstat": "pp-commands\\dstat.py",  # new
         "pi nmon": "pp-commands\\nmon.py",  # new
@@ -3910,10 +3921,45 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
         return True
 
-    if user_input.startswith("vim "):
+    if user_input.startswith("vim-lx "):
+        user_input = user_input[7:].strip()
         print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
-        command = f"wsl {user_input}"
+        command = f"wsl vim {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
+        return True
+
+    if user_input.startswith("pvim-lx "):
+        user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
+        command = f"wsl vim {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
+        return True
+
+    if user_input.startswith("pvim "):
+        user_input = user_input[5:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
+        command = f"vim {user_input}"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
                                    text=True)
