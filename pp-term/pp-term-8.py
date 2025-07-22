@@ -1957,14 +1957,14 @@ def handle_special_commands(user_input):
 
     if user_input in commands3:
         # Pfad zum Skript zusammenbauen
-        script_path = f"C:\\Users\\{os.getlogin()}\\p-terminal\\pp-term\\{commands3[user_input]}"
-
-        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+        base = Path.home() / "p-terminal" / "pp-term"
+        script_path = base / commands3[user_input]
 
         # Prüfen, ob das Skript eine .bat-Datei ist
         if not user_input.endswith(".bat"):
-            run([python_path, script_path], shell=True)
+            run([python_path, script_path])
         else:
+            print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
             run([script_path], shell=True)
         return True
 
