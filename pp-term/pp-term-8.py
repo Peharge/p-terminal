@@ -22853,6 +22853,56 @@ def start_local_server(directory: str,
     # Ende: Kontext-Manager schließt den Server automatisch
 
 
+def is_cmd_command(cmd_name):
+    """Check if it's a CMD internal command"""
+    try:
+        subprocess.check_output(f'cmd /c "{cmd_name} /?"', stderr=subprocess.STDOUT, shell=True, text=True)
+        return True
+    except subprocess.CalledProcessError:
+        return False
+
+
+def is_powershell_command(cmd_name):
+    """Check if it's a Windows PowerShell (powershell.exe) command"""
+    try:
+        subprocess.check_output(
+            ["powershell", "-Command", f"Get-Command {cmd_name}"],
+            stderr=subprocess.STDOUT,
+            text=True
+        )
+        return True
+    except subprocess.CalledProcessError:
+        return False
+
+
+def is_pwsh_command(cmd_name):
+    """Check if it's a PowerShell 7+ (pwsh.exe) command"""
+    try:
+        subprocess.check_output(
+            ["pwsh", "-Command", f"Get-Command {cmd_name}"],
+            stderr=subprocess.STDOUT,
+            text=True
+        )
+        return True
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return False
+
+
+def is_pp_terminal_command(cmd_name):
+    """Check if the command is in the autocompletion JSON"""
+    json_path = r"C:\Users\julian\p-terminal\pp-term\autocompletion_commands.json"
+    if not os.path.exists(json_path):
+        return False
+    try:
+        with open(json_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            # Erwarte Struktur: {"commands": ["pp-start", "pp-stop", ...]}
+            commands = data.get("commands", [])
+            return cmd_name in commands
+    except json.JSONDecodeError:
+        return False
+
+
 def handle_vs_cpp_command(user_input: str) -> bool:
     """
     Verarbeitet den Befehl 'vs-cpp <datei>.cpp' oder direkt '<datei>.cpp' und kompiliert die angegebene C++-Datei
@@ -33896,6 +33946,17 @@ def main():
 
                 cmd_name = input("What should your command be: ").strip()
 
+                if is_cmd_command(cmd_name):
+                    print(f"[{timestamp()}] [WARNING] '{cmd_name}' is a CMD command.")
+                elif is_powershell_command(cmd_name):
+                    print(f"[{timestamp()}] [WARNING] '{cmd_name}' is a Windows PowerShell command.")
+                elif is_pwsh_command(cmd_name):
+                    print(f"[{timestamp()}] [WARNING] '{cmd_name}' is a PowerShell 7+ (pwsh) command.")
+                elif is_pp_terminal_command(cmd_name):
+                    print(f"[{timestamp()}] [WARNING] '{cmd_name}' is a PP terminal command (from the JSON).")
+                else:
+                    print(f"[{timestamp()}] [WARNING] '{cmd_name}' is not a known command.")
+
                 if cmd_name in commands:
                     print(f"[{timestamp()}] [WARNING] Command '{cmd_name}' already exists.")
 
@@ -33940,6 +34001,18 @@ def main():
                 cmd_name = user_input[5:].strip()
                 print(f"[{timestamp()}] [INFO] Here, you're creating a custom command that can later be executed by anyone with access to this PC. Therefore, make sure your system is free of security vulnerabilities and that only trusted people have access. Insecure or dangerous paths can put your system at risk!\n")
                 # cmd_name = input("What should your command be: ").strip()
+
+                if is_cmd_command(cmd_name):
+                    print(f"[{timestamp()}] [WARNING] '{cmd_name}' is a CMD command.")
+                elif is_powershell_command(cmd_name):
+                    print(f"[{timestamp()}] [WARNING] '{cmd_name}' is a Windows PowerShell command.")
+                elif is_pwsh_command(cmd_name):
+                    print(f"[{timestamp()}] [WARNING] '{cmd_name}' is a PowerShell 7+ (pwsh) command.")
+                elif is_pp_terminal_command(cmd_name):
+                    print(f"[{timestamp()}] [WARNING] '{cmd_name}' is a PP terminal command (from the JSON).")
+                else:
+                    print(f"[{timestamp()}] [WARNING] '{cmd_name}' is not a known command.")
+
                 if cmd_name in commands:
                     print(f"[{timestamp()}] [WARNING] Command '{cmd_name}' already exists.")
 
