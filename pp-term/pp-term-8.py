@@ -18161,6 +18161,24 @@ def handle_special_commands(user_input):
 
         command = f"ollama {user_input}"
 
+        subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                   text=True)
+
+        return True
+
+    if user_input.startswith("pp-po "):
+        user_input = user_input[6:].strip()
+        ollama_installed = check_command_installed("ollama")
+        if ollama_installed:
+            print(f"[{timestamp()}] [INFO] Ollama is installed.")
+        else:
+            print(f"[{timestamp()}] [ERROR] Ollama is not installed. Please install it to proceed.")
+
+        start_ollama()
+        check_ollama_update()
+
+        command = f"ollama {user_input}"
+
         subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
                                    text=True)
 
@@ -22186,6 +22204,7 @@ def handle_vs_cpp_command(user_input: str) -> bool:
 
     logging.info(f"[INFO] Execute:{bat_command}")
     try:
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         # check=True wirft bei Fehler eine CalledProcessError
         subprocess.run(full_command, shell=True, check=True)
     except KeyboardInterrupt:
@@ -22224,6 +22243,7 @@ def handle_vs_c_command(user_input: str) -> bool:
 
     logging.info(f"[INFO] Run C-Build: {bat_command}")
     try:
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run(full_command, shell=True, check=True)
     except KeyboardInterrupt:
         print(f"[{timestamp()}] [INFO] Cancellation by user.")
@@ -22262,6 +22282,7 @@ def handle_vs_cs_command(user_input: str) -> bool:
 
     logging.info(f"[INFO] Execute: {compile_cmd}")
     try:
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run(compile_cmd, shell=True, check=True)
         print(f"[{timestamp()}] [INFO] Compilation successful: {output_exe}")
     except KeyboardInterrupt:
@@ -23333,6 +23354,9 @@ def compile_mp_cpp_with_vs(mp_cpp_file, mp_exe_file):
     """
     logging.info("[INFO] Compile run_pp_command.cpp with the MSVC compiler from Visual Studio...")
     vcvarsall = find_vcvarsall()
+
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{mp_cpp_file}" /Fe:"{mp_exe_file}"'
 
@@ -23410,6 +23434,8 @@ def compile_mp_c_with_vs(mp_c_file, mp_c_exe_file):
     """
     logging.info("[INFO] Compiling run_mp_command.c with Visual Studio...")
     vcvarsall = find_vcvarsall_c()
+
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe "{mp_c_file}" /Fe:"{mp_c_exe_file}"'
@@ -23530,6 +23556,7 @@ def run_command_with_admin_python_privileges(command: str):
     if sys.platform == "win32":
         try:
             if ctypes.windll.shell32.IsUserAnAdmin():
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
                 subprocess.run(command, shell=True, cwd=working_dir, check=True)
             else:
                 ps_script = (
@@ -23621,6 +23648,9 @@ def compile_lx_cpp_with_vs(lx_cpp_file, lx_exe_file):
     """
     logging.info("[INFO] Compile run_lx_command.cpp with the MSVC compiler from Visual Studio...")
     vcvarsall = find_vcvarsall()
+
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{lx_cpp_file}" /Fe:"{lx_exe_file}"'
 
@@ -23699,6 +23729,9 @@ def compile_lx_cpp_c_with_vs(lx_cpp_c_file, lx_exe_c_file):
     """
     logging.info("[INFO] Compile run_lx_c_command.cpp with the MSVC compiler from Visual Studio...")
     vcvarsall = find_vcvarsall()
+
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{lx_cpp_c_file}" /Fe:"{lx_exe_c_file}"'
 
@@ -23776,6 +23809,8 @@ def compile_lx_c_with_vs(lx_c_file, lx_c_exe_file):
     """
     logging.info("[INFO] Compiling run_lx_c_command.c with Visual Studio...")
     vcvarsall = find_vcvarsall_c()
+
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe "{lx_c_file}" /Fe:"{lx_c_exe_file}"'
@@ -23855,6 +23890,8 @@ def compile_lx_c_c_with_vs(lx_c_c_file, lx_c_c_exe_file):
     logging.info("[INFO] Compiling run_lx_c_command.c with Visual Studio...")
     vcvarsall = find_vcvarsall_c()
 
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe "{lx_c_c_file}" /Fe:"{lx_c_c_exe_file}"'
 
@@ -23917,11 +23954,14 @@ def run_linux_python_command(command):
     if isinstance(command, str):
         command = f"wsl -e {command}"
 
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
     try:
         process.wait()
     except KeyboardInterrupt:
+        print(f"[{timestamp()}] [INFO] Process interrupted by user. Terminating...")
         process.terminate()
 
 
@@ -23931,11 +23971,14 @@ def run_linux_p_c_command(command):
     if isinstance(command, str):
         command = f"wsl -c {command}"
 
+     print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
     try:
         process.wait()
     except KeyboardInterrupt:
+        print(f"[{timestamp()}] [INFO] Process interrupted by user. Terminating...")
         process.terminate()
 
 
@@ -23961,6 +24004,9 @@ def compile_ubuntu_cpp_with_vs(ubuntu_cpp_file, ubuntu_exe_file):
     """
     logging.info("[INFO] Compile run_ubuntu_command.cpp with the MSVC compiler from Visual Studio...")
     vcvarsall = find_vcvarsall()
+
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{ubuntu_cpp_file}" /Fe:"{ubuntu_exe_file}"'
 
@@ -24039,6 +24085,8 @@ def compile_ubuntu_c_with_vs(ubuntu_c_file, ubuntu_c_exe_file):
     logging.info("[INFO] Compiling run_ubuntu_command.c with Visual Studio...")
     vcvarsall = find_vcvarsall_c()
 
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe "{ubuntu_c_file}" /Fe:"{ubuntu_c_exe_file}"'
 
@@ -24101,11 +24149,14 @@ def run_ubuntu_python_command(command):
     if isinstance(command, str):
         command = f"wsl -d ubuntu {command}"
 
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
     try:
         process.wait()
     except KeyboardInterrupt:
+        print(f"[{timestamp()}] [INFO] Process interrupted by user. Terminating...")
         process.terminate()
 
 
@@ -24131,6 +24182,9 @@ def compile_debian_cpp_with_vs(debian_cpp_file, debian_exe_file):
     """
     logging.info("[INFO] Compile run_debian_command.cpp with the MSVC compiler from Visual Studio...")
     vcvarsall = find_vcvarsall()
+
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{debian_cpp_file}" /Fe:"{debian_exe_file}"'
 
@@ -24209,6 +24263,8 @@ def compile_debian_c_with_vs(debian_c_file, debian_c_exe_file):
     logging.info("[INFO] Compiling run_debian_command.c with Visual Studio...")
     vcvarsall = find_vcvarsall_c()
 
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe "{debian_c_file}" /Fe:"{debian_c_exe_file}"'
 
@@ -24271,11 +24327,14 @@ def run_debian_python_command(command):
     if isinstance(command, str):
         command = f"wsl -d debian {command}"
 
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
     try:
         process.wait()
     except KeyboardInterrupt:
+        print(f"[{timestamp()}] [INFO] Process interrupted by user. Terminating...")
         process.terminate()
 
 
@@ -24301,6 +24360,9 @@ def compile_kali_cpp_with_vs(kali_cpp_file, kali_exe_file):
     """
     logging.info("[INFO] Compile run_kali_command.cpp with the MSVC compiler from Visual Studio...")
     vcvarsall = find_vcvarsall()
+
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{kali_cpp_file}" /Fe:"{kali_exe_file}"'
 
@@ -24379,6 +24441,8 @@ def compile_kali_c_with_vs(kali_c_file, kali_c_exe_file):
     logging.info("[INFO] Compiling run_kali_command.c with Visual Studio...")
     vcvarsall = find_vcvarsall_c()
 
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe "{kali_c_file}" /Fe:"{kali_c_exe_file}"'
 
@@ -24441,11 +24505,14 @@ def run_kali_python_command(command):
     if isinstance(command, str):
         command = f"wsl -d kali-linux {command}"
 
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
     try:
         process.wait()
     except KeyboardInterrupt:
+        print(f"[{timestamp()}] [INFO] Process interrupted by user. Terminating...")
         process.terminate()
 
 
@@ -24471,6 +24538,9 @@ def compile_arch_cpp_with_vs(arch_cpp_file, arch_exe_file):
     """
     logging.info("[INFO] Compile run_arch_command.cpp with the MSVC compiler from Visual Studio...")
     vcvarsall = find_vcvarsall()
+
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{arch_cpp_file}" /Fe:"{arch_exe_file}"'
 
@@ -24549,6 +24619,8 @@ def compile_arch_c_with_vs(arch_c_file, arch_c_exe_file):
     logging.info("[INFO] Compiling run_arch_command.c with Visual Studio...")
     vcvarsall = find_vcvarsall_c()
 
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe "{arch_c_file}" /Fe:"{arch_c_exe_file}"'
 
@@ -24611,11 +24683,14 @@ def run_arch_python_command(command):
     if isinstance(command, str):
         command = f"wsl -d Arch {command}"
 
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
     try:
         process.wait()
     except KeyboardInterrupt:
+        print(f"[{timestamp()}] [INFO] Process interrupted by user. Terminating...")
         process.terminate()
 
 
@@ -24641,6 +24716,9 @@ def compile_opensuse_cpp_with_vs(opensuse_cpp_file, opensuse_exe_file):
     """
     logging.info("[INFO] Compile run_opensuse_command.cpp with the MSVC compiler from Visual Studio...")
     vcvarsall = find_vcvarsall()
+
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{opensuse_cpp_file}" /Fe:"{opensuse_exe_file}"'
 
@@ -24719,6 +24797,8 @@ def compile_opensuse_c_with_vs(opensuse_c_file, opensuse_c_exe_file):
     logging.info("[INFO] Compiling run_opensuse_command.c with Visual Studio...")
     vcvarsall = find_vcvarsall_c()
 
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe "{opensuse_c_file}" /Fe:"{opensuse_c_exe_file}"'
 
@@ -24781,11 +24861,14 @@ def run_opensuse_python_command(command):
     if isinstance(command, str):
         command = f"wsl -d openSUSE-Leap {command}"
 
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
     try:
         process.wait()
     except KeyboardInterrupt:
+        print(f"[{timestamp()}] [INFO] Process interrupted by user. Terminating...")
         process.terminate()
 
 
@@ -24811,6 +24894,9 @@ def compile_mint_cpp_with_vs(mint_cpp_file, mint_exe_file):
     """
     logging.info("[INFO] Compile run_mint_command.cpp with the MSVC compiler from Visual Studio...")
     vcvarsall = find_vcvarsall()
+
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{mint_cpp_file}" /Fe:"{mint_exe_file}"'
 
@@ -24889,6 +24975,8 @@ def compile_mint_c_with_vs(mint_c_file, mint_c_exe_file):
     logging.info("[INFO] Compiling run_mint_command.c with Visual Studio...")
     vcvarsall = find_vcvarsall_c()
 
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe "{mint_c_file}" /Fe:"{mint_c_exe_file}"'
 
@@ -24951,11 +25039,14 @@ def run_mint_python_command(command):
     if isinstance(command, str):
         command = f"wsl -d mint {command}"
 
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
     try:
         process.wait()
     except KeyboardInterrupt:
+        print(f"[{timestamp()}] [INFO] Process interrupted by user. Terminating...")
         process.terminate()
 
 
@@ -24981,6 +25072,9 @@ def compile_fedora_cpp_with_vs(fedora_cpp_file, fedora_exe_file):
     """
     logging.info("[INFO] Compile run_fedora_command.cpp with the MSVC compiler from Visual Studio...")
     vcvarsall = find_vcvarsall()
+
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{fedora_cpp_file}" /Fe:"{fedora_exe_file}"'
 
@@ -25059,6 +25153,8 @@ def compile_fedora_c_with_vs(fedora_c_file, fedora_c_exe_file):
     logging.info("[INFO] Compiling run_fedora_command.c with Visual Studio...")
     vcvarsall = find_vcvarsall_c()
 
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe "{fedora_c_file}" /Fe:"{fedora_c_exe_file}"'
 
@@ -25121,6 +25217,8 @@ def run_fedora_python_command(command):
     if isinstance(command, str):
         command = f"wsl -d -d Fedora-Remix {command}"
 
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
     try:
@@ -25151,6 +25249,9 @@ def compile_redhat_cpp_with_vs(redhat_cpp_file, redhat_exe_file):
     """
     logging.info("[INFO] Compile run_redhat_command.cpp with the MSVC compiler from Visual Studio...")
     vcvarsall = find_vcvarsall()
+
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{redhat_cpp_file}" /Fe:"{redhat_exe_file}"'
 
@@ -25229,6 +25330,8 @@ def compile_redhat_c_with_vs(redhat_c_file, redhat_c_exe_file):
     logging.info("[INFO] Compiling run_redhat_command.c with Visual Studio...")
     vcvarsall = find_vcvarsall_c()
 
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe "{redhat_c_file}" /Fe:"{redhat_c_exe_file}"'
 
@@ -25291,11 +25394,14 @@ def run_redhat_python_command(command):
     if isinstance(command, str):
         command = f"wsl -d RedHat {command}"
 
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
     try:
         process.wait()
     except KeyboardInterrupt:
+        print(f"[{timestamp()}] [INFO] Process interrupted by user. Terminating...")
         process.terminate()
 
 
@@ -25321,6 +25427,9 @@ def compile_sles_cpp_with_vs(sles_cpp_file, sles_exe_file):
     """
     logging.info("[INFO] Compile run_sles_command.cpp with the MSVC compiler from Visual Studio...")
     vcvarsall = find_vcvarsall()
+
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{sles_cpp_file}" /Fe:"{sles_exe_file}"'
 
@@ -25399,6 +25508,8 @@ def compile_sles_c_with_vs(sles_c_file, sles_c_exe_file):
     logging.info("[INFO] Compiling run_sles_command.c with Visual Studio...")
     vcvarsall = find_vcvarsall_c()
 
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe "{sles_c_file}" /Fe:"{sles_c_exe_file}"'
 
@@ -25461,11 +25572,14 @@ def run_sles_python_command(command):
     if isinstance(command, str):
         command = f"wsl -d SLES {command}"
 
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
     try:
         process.wait()
     except KeyboardInterrupt:
+        print(f"[{timestamp()}] [INFO] Process interrupted by user. Terminating...")
         process.terminate()
 
 
@@ -25491,6 +25605,9 @@ def compile_pengwin_cpp_with_vs(pengwin_cpp_file, pengwin_exe_file):
     """
     logging.info("[INFO] Compile run_pengwin_command.cpp with the MSVC compiler from Visual Studio...")
     vcvarsall = find_vcvarsall()
+
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{pengwin_cpp_file}" /Fe:"{pengwin_exe_file}"'
 
@@ -25569,6 +25686,8 @@ def compile_pengwin_c_with_vs(pengwin_c_file, pengwin_c_exe_file):
     logging.info("[INFO] Compiling run_pengwin_command.c with Visual Studio...")
     vcvarsall = find_vcvarsall_c()
 
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe "{pengwin_c_file}" /Fe:"{pengwin_c_exe_file}"'
 
@@ -25631,11 +25750,14 @@ def run_pengwin_python_command(command):
     if isinstance(command, str):
         command = f"wsl -d Pengwin {command}"
 
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
     try:
         process.wait()
     except KeyboardInterrupt:
+        print(f"[{timestamp()}] [INFO] Process interrupted by user. Terminating...")
         process.terminate()
 
 
@@ -25661,6 +25783,9 @@ def compile_oracle_cpp_with_vs(oracle_cpp_file, oracle_exe_file):
     """
     logging.info("[INFO] Compile run_oracle_command.cpp with the MSVC compiler from Visual Studio...")
     vcvarsall = find_vcvarsall()
+
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{oracle_cpp_file}" /Fe:"{oracle_exe_file}"'
 
@@ -25739,6 +25864,8 @@ def compile_oracle_c_with_vs(oracle_c_file, oracle_c_exe_file):
     logging.info("[INFO] Compiling run_oracle_command.c with Visual Studio...")
     vcvarsall = find_vcvarsall_c()
 
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe "{oracle_c_file}" /Fe:"{oracle_c_exe_file}"'
 
@@ -25801,11 +25928,14 @@ def run_oracle_python_command(command):
     if isinstance(command, str):
         command = f"wsl -d OracleLinux {command}"
 
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
     try:
         process.wait()
     except KeyboardInterrupt:
+        print(f"[{timestamp()}] [INFO] Process interrupted by user. Terminating...")
         process.terminate()
 
 
@@ -25831,6 +25961,9 @@ def compile_alpine_cpp_with_vs(alpine_cpp_file, alpine_exe_file):
     """
     logging.info("[INFO] Compile run_alpine_command.cpp with the MSVC compiler from Visual Studio...")
     vcvarsall = find_vcvarsall()
+
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{alpine_cpp_file}" /Fe:"{alpine_exe_file}"'
 
@@ -25909,6 +26042,8 @@ def compile_alpine_c_with_vs(alpine_c_file, alpine_c_exe_file):
     logging.info("[INFO] Compiling run_alpine_command.c with Visual Studio...")
     vcvarsall = find_vcvarsall_c()
 
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe "{alpine_c_file}" /Fe:"{alpine_c_exe_file}"'
 
@@ -25971,11 +26106,14 @@ def run_alpine_python_command(command):
     if isinstance(command, str):
         command = f"wsl -d Alpine {command}"
 
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
     try:
         process.wait()
     except KeyboardInterrupt:
+        print(f"[{timestamp()}] [INFO] Process interrupted by user. Terminating...")
         process.terminate()
 
 
@@ -26003,6 +26141,8 @@ def compile_clear_cpp_with_vs(clear_cpp_file, clear_exe_file):
     vcvarsall = find_vcvarsall()
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe /EHsc "{clear_cpp_file}" /Fe:"{clear_exe_file}"'
+
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
     result = subprocess.run(
         command,
@@ -26082,6 +26222,8 @@ def compile_clear_c_with_vs(clear_c_file, clear_c_exe_file):
     # Initialisiere die VS-Umgebung (x64) und rufe cl.exe auf
     command = f'"{vcvarsall}" x64 && cl.exe "{clear_c_file}" /Fe:"{clear_c_exe_file}"'
 
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     result = subprocess.run(
         command,
         shell=True,
@@ -26141,11 +26283,14 @@ def run_clear_python_command(command):
     if isinstance(command, str):
         command = f"wsl -d ClearLinux {command}"
 
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
     process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
     try:
         process.wait()
     except KeyboardInterrupt:
+        print(f"[{timestamp()}] [INFO] Process interrupted by user. Terminating...")
         process.terminate()
 
 
