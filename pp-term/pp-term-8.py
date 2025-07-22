@@ -5466,6 +5466,7 @@ def handle_special_commands(user_input):
     if user_input.startswith("gdc ") and " -o " in user_input:
         command = f"wsl {user_input}"
         try:
+            print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
             print(f"[{timestamp()}] [INFO] Compiling with gdc (D compiler)...\n")
             process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
             process.wait()
@@ -5478,6 +5479,7 @@ def handle_special_commands(user_input):
     if user_input.startswith("gm2 ") and " -o " in user_input:
         command = f"wsl {user_input}"
         try:
+            print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
             print(f"[{timestamp()}] [INFO] Compiling with gm2 (Modula-2)...\n")
             process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
             process.wait()
@@ -5490,6 +5492,7 @@ def handle_special_commands(user_input):
     if user_input.startswith("gpas ") and " -o " in user_input:
         command = f"wsl {user_input}"
         try:
+            print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
             print(f"[{timestamp()}] [INFO] Compiling with gpas (GNU Pascal)...\n")
             process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
             process.wait()
@@ -5502,6 +5505,7 @@ def handle_special_commands(user_input):
     if user_input.startswith("gpc ") and " -o " in user_input:
         command = f"wsl {user_input}"
         try:
+            print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
             print(f"[{timestamp()}] [INFO] Compiling with gpc (GNU Pascal Compiler)...\n")
             process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
             process.wait()
@@ -6495,6 +6499,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("rustc "):
         user_input = user_input[6:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"rustc {user_input}"
 
@@ -6512,6 +6517,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-rust "):
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"rustc {user_input}"
 
@@ -6759,6 +6765,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("prr "):
         user_input = user_input[4:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         # // Kompilierbefehl für rustc zusammenbauen
         command = f"rustc {user_input}"
@@ -6789,6 +6796,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("p-cargo "):
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"cargo {user_input}"
 
@@ -6806,6 +6814,7 @@ def handle_special_commands(user_input):
 
     if user_input.lower() == "p-cargo-all":
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         # 1. Code formatieren
         command_1 = f"cargo fmt"
@@ -6860,6 +6869,7 @@ def handle_special_commands(user_input):
 
     if user_input.lower() == "p-cargo-debug":
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         # 1. Projekt im Debug-Modus kompilieren
         command_1 = "cargo build"
@@ -6884,6 +6894,7 @@ def handle_special_commands(user_input):
 
     if user_input.lower() == "p-cargo-release":
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         # 1. Alte Release-Artefakte löschen
         command_1 = "cargo clean --release"
@@ -6917,6 +6928,7 @@ def handle_special_commands(user_input):
 
     if user_input.lower() == "p-cargo-update-all":
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         # 1. Alle Abhängigkeiten in Cargo.lock aktualisieren
         command_1 = "cargo update"
@@ -6945,6 +6957,7 @@ def handle_special_commands(user_input):
 
     if user_input.lower() == "p-cargo-format-lint":
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         # 1. Rust-Code formatieren
         command_1 = "cargo fmt"
@@ -6968,6 +6981,7 @@ def handle_special_commands(user_input):
 
     if user_input.lower() == "p-cargo-publish-all":
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         # 1. Release build
         command_1 = "cargo build --release"
@@ -7001,6 +7015,7 @@ def handle_special_commands(user_input):
 
     if user_input.lower() == "p-cargo-doc-clean":
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         # 1. Alte Dokumentation löschen (manuell das Verzeichnis löschen)
         command_1 = "rm -rf target/doc"
@@ -7029,6 +7044,7 @@ def handle_special_commands(user_input):
 
     if user_input.lower() == "p-cargo-deps-tree":
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         # 1. cargo-tree ausführen (falls nicht installiert: cargo install cargo-tree)
         command_1 = "cargo tree"
@@ -7047,6 +7063,7 @@ def handle_special_commands(user_input):
 
     if user_input.lower() == "p-cargo-clean-target":
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         # 1. cargo clean ohne Release-Flag (löscht Debug- und Release-Artefakte)
         command_1 = "cargo clean"
@@ -7065,6 +7082,7 @@ def handle_special_commands(user_input):
 
     if user_input.lower() == "p-cargo-install-tools":
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         # 1. cargo-edit installieren (für cargo add, remove, upgrade)
         command_1 = "cargo install cargo-edit"
@@ -7093,6 +7111,7 @@ def handle_special_commands(user_input):
 
     if user_input.lower() == "p-cargo-bench":
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         # 1. Benchmarks starten
         command_1 = "cargo bench"
@@ -7111,6 +7130,7 @@ def handle_special_commands(user_input):
 
     if user_input.lower() == "p-cargo-bench-run":
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         # 1. Benchmarks starten
         command_1 = "cargo bench"
@@ -7134,6 +7154,7 @@ def handle_special_commands(user_input):
 
     if user_input.lower() == "p-cargo-coverage":
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         # 1. cargo-tarpaulin installieren (falls nicht vorhanden)
         command_1 = "cargo install cargo-tarpaulin"
@@ -7162,6 +7183,7 @@ def handle_special_commands(user_input):
 
     if user_input.lower() == "p-cargo-cross-build":
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         # 1. WebAssembly-Target hinzufügen (falls nicht installiert)
         command_1 = "rustup target add wasm32-unknown-unknown"
@@ -7190,6 +7212,7 @@ def handle_special_commands(user_input):
 
     if user_input.lower() == "p-cargo-clippy-fix":
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         # 1. Clippy im Fix-Modus starten (erlaubt Änderungen am Code)
         command_1 = "cargo clippy --fix --allow-dirty --allow-staged"
@@ -7208,6 +7231,7 @@ def handle_special_commands(user_input):
 
     if user_input.lower() == "p-cargo-watch-test":
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         # 1. cargo-watch installieren (falls nicht vorhanden)
         command_1 = "cargo install cargo-watch"
@@ -7231,6 +7255,7 @@ def handle_special_commands(user_input):
 
     if user_input.lower() == "p-cargo-watch-run":
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         # 1. cargo-watch installieren (falls nicht vorhanden)
         command_1 = "cargo install cargo-watch"
@@ -7254,6 +7279,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("node "):
         user_input = user_input[5:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"node {user_input}"
 
@@ -7271,6 +7297,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("jsc "):
         user_input = user_input[4:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"node {user_input}"
 
@@ -7288,6 +7315,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-js "):
         user_input = user_input[6:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"node {user_input}"
 
@@ -7306,6 +7334,7 @@ def handle_special_commands(user_input):
     if user_input.startswith("prjs "):
         filepath = user_input[5:].strip()
         filepath = os.path.abspath(filepath)
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         if not os.path.isfile(filepath):
             print(f"[{timestamp()}] [ERROR] File '{filepath}' not found.")
@@ -7422,6 +7451,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("javac "):
         user_input = user_input[6:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"javac {user_input}"
 
@@ -7439,6 +7469,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-java "):
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"javac {user_input}"
 
@@ -7456,6 +7487,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("prjava "):
         user_input = user_input[4:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"javac {user_input}"
 
@@ -7789,6 +7821,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("ruby "):
         user_input = user_input[5:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"ruby {user_input}"
 
@@ -7806,6 +7839,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("rubyc "):
         user_input = user_input[6:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"ruby {user_input}"
 
@@ -7823,6 +7857,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-ruby "):
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"ruby {user_input}"
 
@@ -7859,6 +7894,8 @@ def handle_special_commands(user_input):
 
         # Optional: Delay to allow the server to start
         time.sleep(1)
+
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         # Run Ruby script (it might generate output into HTML in the same dir)
         command = f"ruby \"{filepath}\""
@@ -7933,6 +7970,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("Rscript "):
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"Rscript {user_input}"
 
@@ -7950,6 +7988,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("Rscriptc "):
         user_input = user_input[9:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"Rscript {user_input}"
 
@@ -7967,6 +8006,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-r "):
         user_input = user_input[5:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"Rscript {user_input}"
 
@@ -8025,6 +8065,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pyinstaller --onefile "):
         user_input = user_input[22:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"pyinstaller --onefile {user_input}"
 
@@ -8042,6 +8083,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pythonc "):
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"pyinstaller --onefile {user_input}"
 
@@ -8102,6 +8144,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-python "):
         user_input = user_input[10:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"pyinstaller --onefile {user_input}"
 
@@ -8161,6 +8204,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-python-all-s "):
         user_input = user_input[14:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"pyinstaller --onefile --noconsole --icon={user_input}"
 
@@ -8528,6 +8572,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("go run "):
         user_input = user_input[7:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"go run {user_input}"
 
@@ -8545,6 +8590,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("go build "):
         user_input = user_input[9:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"go build {user_input}"
 
@@ -8562,6 +8608,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("goc "):
         user_input = user_input[4:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"go build {user_input}"
 
@@ -8579,6 +8626,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-go "):
         user_input = user_input[6:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"go build {user_input}"
 
@@ -8890,6 +8938,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("julia "):
         user_input = user_input[6:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"julia {user_input}"
 
@@ -8907,6 +8956,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("juliac "):
         user_input = user_input[7:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"julia {user_input}"
 
@@ -8924,6 +8974,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-julia "):
         user_input = user_input[9:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"julia {user_input}"
 
@@ -8995,6 +9046,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("php "):
         user_input = user_input[4:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"php {user_input}"
 
@@ -9012,6 +9064,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("phpc "):
         user_input = user_input[5:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"php {user_input}"
 
@@ -9029,6 +9082,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-php "):
         user_input = user_input[7:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"php {user_input}"
 
@@ -11943,6 +11997,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("lua "):
         user_input = user_input[4:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"lua {user_input}"
 
@@ -11960,6 +12015,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("glue srlua.exe "):
         user_input = user_input[15:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"glue srlua.exe {user_input}"
 
@@ -11978,6 +12034,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("luac "):
         user_input = user_input[5:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"glue srlua.exe {user_input}"
 
@@ -11996,6 +12053,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-lua "):
         user_input = user_input[7:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"lua {user_input}"
 
@@ -12013,6 +12071,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pce-lua "):
         user_input = user_input[7:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"glue srlua.exe {user_input}"
 
@@ -12083,6 +12142,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("tsc "):
         user_input = user_input[4:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"tsc {user_input}"
 
@@ -12100,6 +12160,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-tsc "):
         user_input = user_input[7:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"tsc {user_input}"
 
