@@ -2309,6 +2309,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pg "):
         user_input = user_input[3:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"git {user_input}"
 
@@ -2325,6 +2326,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pgc "):
         user_input = user_input[4:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"git clone {user_input}"
 
@@ -2340,6 +2342,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "git ls":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"git log --oneline --graph --color --all --decorate"
 
@@ -2355,6 +2358,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "pg ls":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"git log --oneline --graph --color --all --decorate"
 
@@ -2370,6 +2374,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "git ls all":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"git log --graph --all --color --decorate --pretty=format:'%C(yellow)%h%Creset - %Cgreen%ad%Creset - %s %C(red)[%an]%Creset' --date=short"
 
@@ -2385,6 +2390,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "pg ls all":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"git log --graph --all --color --decorate --pretty=format:'%C(yellow)%h%Creset - %Cgreen%ad%Creset - %s %C(red)[%an]%Creset' --date=short"
 
@@ -2400,6 +2406,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "git pretty":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"git log --pretty=format:'%Cred%h%Creset - %Cgreen%cd%Creset - %s %C(bold blue)<%an>%Creset' --date=short"
 
@@ -2415,6 +2422,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "pg pretty":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"git log --pretty=format:'%Cred%h%Creset - %Cgreen%cd%Creset - %s %C(bold blue)<%an>%Creset' --date=short"
 
@@ -2430,6 +2438,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "git tig":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"tig"
 
@@ -2445,6 +2454,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "pg tig":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"tig"
 
@@ -2460,6 +2470,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "git lazy":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"lazygit"
 
@@ -2475,6 +2486,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "pg lazy":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"lazygit"
 
@@ -2490,6 +2502,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "git ls hole":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = "gitk --all"
 
@@ -2505,6 +2518,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "pg ls hole":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = "gitk --all"
 
@@ -2520,6 +2534,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "git status":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = "git status -sb"
 
@@ -2535,6 +2550,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "pg status":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = "git status -sb"
 
@@ -2550,6 +2566,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "git diff":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = "git diff --color-word"
 
@@ -2565,6 +2582,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "pg diff":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = "git diff --color-word"
 
@@ -2580,6 +2598,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "git branches":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = "git branch -vv -a"
 
@@ -2595,6 +2614,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "pg branches":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = "git branch -vv -a"
 
@@ -2610,6 +2630,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "git stash":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = "git stash list --pretty=format:'%C(yellow)%gd%Creset %Cgreen%cr%Creset %s %C(red)[%an]'"
 
@@ -2625,6 +2646,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "pg stash":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = "git stash list --pretty=format:'%C(yellow)%gd%Creset %Cgreen%cr%Creset %s %C(red)[%an]'"
 
@@ -2911,29 +2933,29 @@ def handle_special_commands(user_input):
                     with open(json_path, "r") as f:
                         data = json.load(f)
                 except json.JSONDecodeError:
-                    print(f"[{timestamp()}] [ERROR] JSON konnte nicht geladen werden. Überschreibe...")
+                    print(f"[{timestamp()}] [ERROR] JSON could not be loaded. Overwrite...")
 
             data["active_env"] = env_path_str
             try:
                 with open(json_path, "w") as f:
                     json.dump(data, f, indent=4)
-                print(f"[{timestamp()}] [INFO] Aktives Environment in JSON gespeichert: {env_path_str}")
+                print(f"[{timestamp()}] [INFO] Active Environment saved in JSON: {env_path_str}")
             except Exception as e:
-                print(f"[{timestamp()}] [ERROR] JSON konnte nicht gespeichert werden: {e}")
+                print(f"[{timestamp()}] [ERROR] Failed to save JSON: {e}")
 
         if not env_path.exists():
-            print(f"[{timestamp()}] [INFO] Environment '{env_name}' existiert nicht unter '{env_path}'.")
-            user_confirm = input("Willst du dieses virtuelle Environment erstellen? [y/n]: ").strip().lower()
+            print(f"[{timestamp()}] [INFO] Environment '{env_name}' does not exist under '{env_path}'.")
+            user_confirm = input("Do you want to create this virtual environment? [y/n]: ").strip().lower()
             if user_confirm == 'y':
                 command = f'python -m venv "{env_path}"'
                 try:
-                    subprocess.run(command, shell=True, check=True, text=True,
+                    subprocess.run(command, check=True, text=True,
                                    stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
-                    print(f"[{timestamp()}] [INFO] Das venv '{env_name}' wurde erstellt unter {env_path}.")
+                    print(f"[{timestamp()}] [INFO] The venv '{env_name}' was created under {env_path}.")
                 except subprocess.CalledProcessError as e:
-                    print(f"[{timestamp()}] [ERROR] Fehler beim Erstellen des venv: {e}")
+                    print(f"[{timestamp()}] [ERROR] Error creating the venv: {e}")
             else:
-                print(f"[{timestamp()}] [INFO] Aktivierung abgebrochen.")
+                print(f"[{timestamp()}] [INFO] Activation canceled.")
                 # return True
 
         if os.name == "nt":
@@ -2942,18 +2964,74 @@ def handle_special_commands(user_input):
             python_exe = env_path / "bin" / "python"
 
         if not python_exe.exists():
-            print(f"[{timestamp()}] [INFO] Kein Python-Interpreter gefunden in '{python_exe}'.")
-            user_confirm = input("Trotzdem aktivieren? [y/N]: ").strip().lower()
+            print(f"[{timestamp()}] [INFO] No Python interpreter found in '{python_exe}'.")
+            user_confirm = input("Activate anyway? [y/n]: ").strip().lower()
             if user_confirm != 'y':
-                print(f"[{timestamp()}] [INFO] Aktivierung abgebrochen.")
+                print(f"[{timestamp()}] [INFO] Activation canceled.")
                 # return True
 
         active = find_active_env(env_path)
         set_active_conda_env_in_json(active)
 
-        print(f"[{timestamp()}] [INFO] Aktives Environment gesetzt auf '{active}'.")
+        print(f"[{timestamp()}] [INFO] Active environment set on '{active}'.")
         return True
 
+    if user_input.startswith("pp-pcoav "):  # pcoav = activate
+            env_name = user_input[9:].strip()
+            current_dir = Path.cwd()  # Oder ein spezieller Pfad, falls nötig
+            env_path = (current_dir / env_name).resolve()
+
+            def set_active_conda_env_in_json(env_path_str: str):
+                json_path = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/current_env.json")
+                data = {}
+                if json_path.exists():
+                    try:
+                        with open(json_path, "r") as f:
+                            data = json.load(f)
+                    except json.JSONDecodeError:
+                        print(f"[{timestamp()}] [ERROR] JSON could not be loaded. Overwrite...")
+
+                data["active_env"] = env_path_str
+                try:
+                    with open(json_path, "w") as f:
+                        json.dump(data, f, indent=4)
+                    print(f"[{timestamp()}] [INFO] Active Environment saved in JSON: {env_path_str}")
+                except Exception as e:
+                    print(f"[{timestamp()}] [ERROR] Failed to save JSON: {e}")
+
+            if not env_path.exists():
+                print(f"[{timestamp()}] [INFO] Environment '{env_name}' does not exist under '{env_path}'.")
+                user_confirm = input("Do you want to create this virtual environment? [y/n]: ").strip().lower()
+                if user_confirm == 'y':
+                    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command with shell=True — this can be insecure!")
+                    command = f'python -m venv "{env_path}"'
+                    try:
+                        subprocess.run(command, shell=True, check=True, text=True,
+                                       stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                        print(f"[{timestamp()}] [INFO] The venv '{env_name}' was created under {env_path}.")
+                    except subprocess.CalledProcessError as e:
+                        print(f"[{timestamp()}] [ERROR] Error creating the venv: {e}")
+                else:
+                    print(f"[{timestamp()}] [INFO] Activation canceled.")
+                    # return True
+
+            if os.name == "nt":
+                python_exe = env_path / "Scripts" / "python.exe"
+            else:
+                python_exe = env_path / "bin" / "python"
+
+            if not python_exe.exists():
+                print(f"[{timestamp()}] [INFO] No Python interpreter found in '{python_exe}'.")
+                user_confirm = input("Activate anyway? [y/n]: ").strip().lower()
+                if user_confirm != 'y':
+                    print(f"[{timestamp()}] [INFO] Activation canceled.")
+                    # return True
+
+            active = find_active_env(env_path)
+            set_active_conda_env_in_json(active)
+
+            print(f"[{timestamp()}] [INFO] Active environment set on '{active}'.")
+            return True
 
     if user_input.startswith("pcodv "):  # pcodv = deactivate
         # Normalerweise braucht deactivate keinen Env-Namen, aber falls übergeben:
@@ -3073,6 +3151,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pol "):
         user_input = user_input[4:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"ollama {user_input}"
 
@@ -3089,6 +3168,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pol-run "):
         model_name = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"ollama run {model_name}"
 
@@ -3104,6 +3184,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pol-pull "):
         model_name = user_input[9:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"ollama pull {model_name}"
 
@@ -3119,6 +3200,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pol-show "):
         model_name = user_input[9:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"ollama show {model_name}"
 
@@ -3133,6 +3215,8 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("pol-list"):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
         command = "ollama list"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
@@ -3146,6 +3230,8 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("pol-ps"):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
         command = "ollama ps"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
@@ -3160,6 +3246,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pol-stop "):
         model_name = user_input[9:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"ollama stop {model_name}"
 
@@ -3175,6 +3262,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pol-rm "):
         model_name = user_input[7:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"ollama rm {model_name}"
 
@@ -3189,6 +3277,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "cloc .":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl cloc ."
 
@@ -3204,6 +3293,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "ls count":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl cloc ."
 
@@ -3219,6 +3309,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "pls count":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl cloc ."
 
@@ -3234,6 +3325,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "ls count1":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl cloc ."
 
@@ -3249,6 +3341,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "pls count1":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl cloc ."
 
@@ -3264,6 +3357,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "cloc *":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl cloc *"
 
@@ -3279,6 +3373,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "ls count-2":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl cloc *"
 
@@ -3294,6 +3389,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "pls count-2":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl cloc *"
 
@@ -3309,6 +3405,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("cloc --exclude-dir="):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -3325,6 +3422,8 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("ls count-dir="):
         user_input = user_input[13:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
         command = f"wsl cloc --exclude-dir={user_input}"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -3339,6 +3438,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("cloc --include-lang="):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -3355,6 +3455,8 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("ls count-lang="):
         user_input = user_input[14:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
         command = f"wsl cloc --include-lang={user_input}"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -3369,6 +3471,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "cloc --by-file":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl cloc --by-file"
 
@@ -3384,6 +3487,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "ls count-3":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl cloc --by-file"
 
@@ -3399,6 +3503,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "cloc --csv":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl cloc --csv"
 
@@ -3414,6 +3519,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "ls count-4":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl cloc --csv"
 
@@ -3429,6 +3535,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "cloc --json":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl cloc --json"
 
@@ -3444,6 +3551,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "ls count-5":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl cloc --json"
 
@@ -3459,6 +3567,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "cloc --quiet":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl cloc --quiet"
 
@@ -3474,6 +3583,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "ls count --quiet":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl cloc --quiet"
 
@@ -3489,6 +3599,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "cloc --help":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl cloc --help"
 
@@ -3504,6 +3615,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "ls count --help":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl cloc --help"
 
@@ -3519,6 +3631,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "cloc --versions":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl cloc --versions"
 
@@ -3534,6 +3647,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "ls count --versions":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl cloc --versions"
 
@@ -3549,6 +3663,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "disk usage":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl du -sh ."
 
@@ -3564,6 +3679,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "tree-2":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl tree -L 2"
 
@@ -3579,6 +3695,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "find py":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl find . -name '*.py'"
 
@@ -3595,6 +3712,8 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("grep "):
         user_input = user_input[5:]
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
         command = f"wsl grep -rnw . -e '{user_input}'"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -3609,6 +3728,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "lint":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl pylint ."
 
@@ -3624,6 +3744,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "make":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl make"
 
@@ -3639,6 +3760,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "format":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl black ."
 
@@ -3654,6 +3776,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "top":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl top"
 
@@ -3669,6 +3792,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "disk":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl df -h"
 
@@ -3684,6 +3808,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("sudo "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -3699,6 +3824,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("nano "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -3714,6 +3840,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("emacs "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -3729,6 +3856,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("vim "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -3745,6 +3873,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("nvim-lx "):
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl nvim {user_input}"
 
@@ -3761,6 +3890,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pvim-lx "):
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl nvim {user_input}"
 
@@ -3803,6 +3933,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("micro "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
