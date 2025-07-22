@@ -12117,6 +12117,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("ts-node "):
         user_input = user_input[9:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"ts-node {user_input}"
 
@@ -12134,6 +12135,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("tsc "):
         user_input = user_input[4:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"ts-node {user_input}"
 
@@ -12151,6 +12153,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-ts "):
         user_input = user_input[6:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"ts-node {user_input}"
 
@@ -12194,6 +12197,7 @@ def handle_special_commands(user_input):
             return True
 
         print(f"[{timestamp()}] [INFO] Running compiled JS: {js_path}")
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         run_command_js = f"node \"{js_path}\""
         process = subprocess.Popen(
             run_command_js,
@@ -12211,6 +12215,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-typescript "):
         user_input = user_input[14:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"ts-node {user_input}"
 
@@ -12345,6 +12350,7 @@ def handle_special_commands(user_input):
     if user_input.startswith("kotlinc "):
         user_input = user_input[8:].strip()
         args = user_input.split()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         if len(args) != 2:
             print(f"[{timestamp()}] [ERROR] Syntax: kotlinc <input.kt> <output.jar>")
@@ -12367,6 +12373,7 @@ def handle_special_commands(user_input):
     if user_input.startswith("kotlinc1 "):
         user_input = user_input[9:].strip()
         args = user_input.split()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         if len(args) != 2:
             print(f"[{timestamp()}] [ERROR] Syntax: kotlinc <input.kt> <output.jar>")
@@ -12388,6 +12395,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("kotlinc2 "):
         user_input = user_input[9:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"java -jar {user_input}"  # .jar
 
@@ -12405,6 +12413,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("kotlinc3 "):
         user_input = user_input[9:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"kotlinc -script {user_input}"  # .kts
 
@@ -12422,6 +12431,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-kotlin "):
         user_input = user_input[10:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"kotlinc -script {user_input}"
 
@@ -12439,6 +12449,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("swift "):
         user_input = user_input[6:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"swift {user_input}"
 
@@ -12520,6 +12531,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("swiftc "):
         user_input = user_input[7:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"swift {user_input}"
 
@@ -12538,6 +12550,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-swift "):
         user_input = user_input[9:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"swift {user_input}"
 
@@ -12612,6 +12625,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("dart run "):
         user_input = user_input[9:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"dart run {user_input}"
 
@@ -12629,6 +12643,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("dartc "):
         user_input = user_input[6:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"dart run {user_input}"
 
@@ -12646,6 +12661,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-dart "):
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"dart run {user_input}"
 
@@ -12707,6 +12723,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("ghc "):
         user_input = user_input[4:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"ghc {user_input}"
 
@@ -12725,6 +12742,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("ghci "):
         user_input = user_input[5:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"ghci {user_input}"
 
@@ -12742,6 +12760,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-haskell "):
         user_input = user_input[11:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"ghci {user_input}"
 
@@ -12809,6 +12828,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("dotnet fsi "):
         user_input = user_input[11:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"dotnet fsi {user_input}"
 
@@ -12826,6 +12846,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-fs "):
         user_input = user_input[6:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"dotnet fsi {user_input}"
 
@@ -14789,7 +14810,8 @@ def handle_special_commands(user_input):
     # pc-elasticsearch: startet einen Elasticsearch-Dienst (Service-Name angeben)
     # Beispiel: "pc-elasticsearch elasticsearch-service-x64"
     if user_input.startswith("pc-elasticsearch "):
-        service_name = user_input[16:].strip()print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+        service_name = user_input[16:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f'net start "{service_name}"'
 
