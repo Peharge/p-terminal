@@ -2140,7 +2140,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() in ["pdir-4", "pls-4"]:
-        command = "pwsh ls"
+        command = ["pwsh", "-Command", "ls"]
 
         try:
             run_command(command, shell=True)
@@ -18258,7 +18258,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() == "ps-4":
-        command = "pwsh ps"
+        command = ["pwsh", "-Command", "ps"]
 
         process = run_command(command, shell=True)
 
