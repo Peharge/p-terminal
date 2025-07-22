@@ -4075,11 +4075,10 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("nvim "):
-
-        process =  run_command(user_input, shell=True)
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         try:
-            process.wait()
+            run_command(user_input, shell=True)
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
@@ -4088,13 +4087,12 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pnvim "):
         user_input = user_input[6:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"nvim {user_input}"
 
-        process = run_command(command, shell=True)
-
         try:
-            process.wait()
+            run_command(command, shell=True)
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
