@@ -3046,10 +3046,10 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [INFO] Environment '{env_name}' does not exist under '{env_path}'.")
             user_confirm = input("Do you want to create this virtual environment? [y/n]: ").strip().lower()
             if user_confirm == 'y':
-                command = f'python -m venv "{env_path}"'
+                command = ["python", "-m", "venv", str(env_path)]
                 try:
                     subprocess.run(command, check=True, text=True,
-                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=False)
                     print(f"[{timestamp()}] [INFO] The venv '{env_name}' was created under {env_path}.")
                 except subprocess.CalledProcessError as e:
                     print(f"[{timestamp()}] [ERROR] Error creating the venv: {e}")
@@ -30941,7 +30941,7 @@ def main():
                 user_input = user_input[9:].strip()
                 current_dir = Path.cwd()
                 env_path = (current_dir / user_input).resolve()
-                command = f'python -m venv "{env_path}"'
+                command = ["python", "-m", "venv", str(env_path)]
 
                 try:
                     subprocess.run(command, check=True, text=True,
@@ -31009,7 +31009,7 @@ def main():
                         print(f"[{timestamp()}] [ERROR] Failed to activate existing venv: {e}")
                 else:
                     # venv erstellen
-                    command = f'python -m venv "{env_path}"'
+                    command = ["python", "-m", "venv", str(env_path)]
                     try:
                         subprocess.run(command, check=True, text=True,
                                        stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
@@ -31112,7 +31112,7 @@ def main():
                         print(f"[{timestamp()}] [ERROR] Failed to activate existing venv: {e}")
                 else:
                     # venv erstellen
-                    command = f'python -m venv "{env_path}"'
+                    command = ["python", "-m", "venv", str(env_path)]
                     try:
                         subprocess.run(command, check=True, text=True,
                                        stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
@@ -31215,7 +31215,7 @@ def main():
                         print(f"[{timestamp()}] [ERROR] Failed to activate existing environment: {e}")
                 else:
                     # 2. Erstelle neue venv mit virtualenv
-                    command = f'virtualenv "{env_path}"'
+                    command = ["virtualenv", str(env_path)]
                     try:
                         subprocess.run(command, check=True, text=True,
                                        stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
@@ -31335,7 +31335,7 @@ def main():
                             print(f"[{timestamp()}] [ERROR] Python 3.13 executable not found on the system.")
                         else:
                             print(f"[{timestamp()}] [INFO] Found Python 3.13 interpreter at: {python_3_13_executable}")
-                            command = f'"{python_3_13_executable}" -m venv "{env_path}"'
+                            command = [python_3_13_executable, "-m", "venv", str(env_path)]
                             try:
                                 subprocess.run(command, check=True, text=True,
                                                stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
@@ -31470,7 +31470,7 @@ def main():
                             print(f"[{timestamp()}] [ERROR] Python 3.12 executable not found on the system.")
                         else:
                             print(f"[{timestamp()}] [INFO] Found Python 3.12 interpreter at: {python_3_12_executable}")
-                            command = f'"{python_3_12_executable}" -m venv "{env_path}"'
+                            command = [python_3_12_executable, "-m", "venv", str(env_path)]
                             try:
                                 subprocess.run(command, check=True, text=True,
                                                stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
@@ -31605,7 +31605,7 @@ def main():
                             print(f"[{timestamp()}] [ERROR] Python 3.11 executable not found on the system.")
                         else:
                             print(f"[{timestamp()}] [INFO] Found Python 3.11 interpreter at: {python_3_11_executable}")
-                            command = f'"{python_3_11_executable}" -m venv "{env_path}"'
+                            command = [python_3_11_executable, "-m", "venv", str(env_path)]
                             try:
                                 subprocess.run(command, check=True, text=True,
                                                stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
@@ -31740,7 +31740,7 @@ def main():
                             print(f"[{timestamp()}] [ERROR] Python 3.10 executable not found on the system.")
                         else:
                             print(f"[{timestamp()}] [INFO] Found Python 3.10 interpreter at: {python_3_10_executable}")
-                            command = f'"{python_3_10_executable}" -m venv "{env_path}"'
+                            command = [python_3_10_executable, "-m", "venv", str(env_path)]
                             try:
                                 subprocess.run(command, check=True, text=True,
                                                stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
@@ -31875,7 +31875,7 @@ def main():
                             print(f"[{timestamp()}] [ERROR] Python 3.9 executable not found on the system.")
                         else:
                             print(f"[{timestamp()}] [INFO] Found Python 3.9 interpreter at: {python_3_9_executable}")
-                            command = f'"{python_3_9_executable}" -m venv "{env_path}"'
+                            command = [python_3_9_executable, "-m", "venv", str(env_path)]
                             try:
                                 subprocess.run(command, check=True, text=True,
                                                stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
@@ -32001,7 +32001,7 @@ def main():
                         print(f"[{timestamp()}] [ERROR] Failed to activate existing venv: {e}")
                 else:
                     # venv erstellen
-                    command = f'python -m venv "{env_path}"'
+                    command = ["python", "-m", "venv", str(env_path)]
                     try:
                         subprocess.run(command, check=True, text=True,
                                        stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
@@ -32089,7 +32089,7 @@ def main():
                     print(f"[{timestamp()}] [INFO] Environment '{env_name}' does not exist at '{env_path}'.")
                     user_confirm = input("Do you want to create this virtual environment? [y/n]: ").strip().lower()
                     if user_confirm == 'y':
-                        command = f'python -m venv "{env_path}"'
+                        command = ["python", "-m", "venv", str(env_path)]
                         try:
                             subprocess.run(command, check=True, text=True,
                                            stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
@@ -32166,7 +32166,7 @@ def main():
                     print(f"[{timestamp()}] [INFO] Environment '{env_name}' does not exist at '{env_path}'.")
                     user_confirm = input("Do you want to create this virtual environment? [y/n]: ").strip().lower()
                     if user_confirm == 'y':
-                        command = f'python -m venv "{env_path}"'
+                        command = ["python", "-m", "venv", str(env_path)]
                         try:
                             subprocess.run(command, check=True, text=True,
                                            stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
