@@ -1945,6 +1945,8 @@ def handle_special_commands(user_input):
         # Pfad zum Skript zusammenbauen
         script_path = f"C:\\Users\\{os.getlogin()}\\p-terminal\\pp-term\\{commands3[user_input]}"
 
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
         # Prüfen, ob das Skript eine .bat-Datei ist
         if not user_input.endswith(".bat"):
             run([python_path, script_path], shell=True)
@@ -2135,15 +2137,19 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error processing command: {e}")
 
     if user_input.lower() in ["dir", "ls"]:
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         run_command("dir" if os.name == "nt" else "ls -la", shell=True)
         return True
 
     if user_input.lower() in ["pdir", "pls"]:
-            run_command("dir" if os.name == "nt" else "ls -la", shell=True)
-            return True
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+        run_command("dir" if os.name == "nt" else "ls -la", shell=True)
+        return True
 
     if user_input.lower() in ["dir-2", "ls-2"]:
         command = "powershell ls"
+
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         try:
             run_command(command, shell=True)
@@ -2156,6 +2162,8 @@ def handle_special_commands(user_input):
     if user_input.lower() in ["pdir-2", "pls-2"]:
         command = "powershell ls"
 
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
         try:
             run_command(command, shell=True)
         except KeyboardInterrupt:
@@ -2166,6 +2174,8 @@ def handle_special_commands(user_input):
 
     if user_input.lower() in ["dir-3", "ls-3"]:
         command = "wsl ls"
+
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         try:
             run_command(command, shell=True)
@@ -2178,6 +2188,8 @@ def handle_special_commands(user_input):
     if user_input.lower() in ["pdir-3", "pls-3"]:
         command = "wsl ls"
 
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
         try:
             run_command(command, shell=True)
         except KeyboardInterrupt:
@@ -2189,6 +2201,8 @@ def handle_special_commands(user_input):
     if user_input.lower() in ["dir-4", "ls-4"]:
         command = ["pwsh", "-Command", "ls"]
 
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
         try:
             run_command(command, shell=True)
         except KeyboardInterrupt:
@@ -2199,6 +2213,8 @@ def handle_special_commands(user_input):
 
     if user_input.lower() in ["pdir-4", "pls-4"]:
         command = ["pwsh", "-Command", "ls"]
+
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         try:
             run_command(command, shell=True)
