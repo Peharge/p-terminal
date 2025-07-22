@@ -15649,6 +15649,8 @@ def handle_special_commands(user_input):
         user_input = user_input[4:].strip()
         current_dir = Path.cwd().resolve()
 
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
         command = f"""powershell Get-ChildItem -Path "{current_dir}" -Recurse -Filter "{user_input}" """
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -15666,6 +15668,8 @@ def handle_special_commands(user_input):
     if user_input.startswith("pff-name "):
         user_input = user_input[9:].strip()
         current_dir = Path.cwd().resolve()
+
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"""powershell Get-ChildItem -Path "{current_dir}" -Recurse -Filter "{user_input}" """
 
@@ -15685,6 +15689,8 @@ def handle_special_commands(user_input):
         user_input = user_input[5:].strip()
         current_dir = Path.cwd().resolve()
 
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
         command = f'powershell Get-ChildItem -Path "{current_dir}" -Recurse | Where-Object {{ $_.Name -like "*{user_input}*" }}'
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -15702,6 +15708,8 @@ def handle_special_commands(user_input):
     if user_input.startswith("pff-name-like "):
         user_input = user_input[14:].strip()
         current_dir = Path.cwd().resolve()
+
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f'powershell Get-ChildItem -Path "{current_dir}" -Recurse | Where-Object {{ $_.Name -like "*{user_input}*" }}'
 
@@ -15721,6 +15729,8 @@ def handle_special_commands(user_input):
         user_input = user_input[5:].strip()
         current_dir = Path.cwd().resolve()
 
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
         command = f"""powershell Get-ChildItem -Path "{current_dir}" -Recurse -Include *{user_input}"""
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -15738,6 +15748,8 @@ def handle_special_commands(user_input):
     if user_input.startswith("pff-name-include "):
         user_input = user_input[17:].strip()
         current_dir = Path.cwd().resolve()
+
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"""powershell Get-ChildItem -Path "{current_dir}" -Recurse -Include *{user_input}"""
 
@@ -15762,6 +15774,8 @@ def handle_special_commands(user_input):
 
         patterns = " -Include " + ",".join(extensions)
 
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
         command = f"""powershell -Command "Get-ChildItem -Recurse -Path '{current_dir}'{patterns} | Select-String -Pattern '{user_input}'" """
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -15785,6 +15799,8 @@ def handle_special_commands(user_input):
 
         patterns = " -Include " + ",".join(extensions)
 
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
         command = f"""powershell -Command "Get-ChildItem -Recurse -Path '{current_dir}'{patterns} | Select-String -Pattern '{user_input}'" """
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -15807,6 +15823,8 @@ def handle_special_commands(user_input):
                       "*.yaml", "*.ini", "*.html", "*.js", "*.py"]
 
         patterns = " -Include " + ",".join(extensions)
+
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"""powershell -Command "Get-ChildItem -Recurse -Path '{current_dir}'{patterns} | Select-String -Pattern '{user_input}'" """
 
@@ -15920,6 +15938,8 @@ def handle_special_commands(user_input):
 
         patterns = " -Include " + ",".join(extensions)
 
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
         command = f"""powershell -Command "Get-ChildItem -Recurse -Path '{current_dir}'{patterns} | Select-String -Pattern '{user_input}'" """
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -16032,6 +16052,8 @@ def handle_special_commands(user_input):
 
         patterns = " -Include " + ",".join(extensions)
 
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
         command = f"""powershell -Command "Get-ChildItem -Recurse -Path '{current_dir}'{patterns} | Select-String -Pattern '{user_input}'" """
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -16062,6 +16084,8 @@ def handle_special_commands(user_input):
 
         patterns = " -Include " + ",".join(extensions)
 
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
         command = f"""powershell -Command "Get-ChildItem -Recurse -Path '{current_dir}'{patterns} | Select-String -Pattern '{user_input}'" """
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -16091,6 +16115,8 @@ def handle_special_commands(user_input):
         ]
 
         patterns = " -Include " + ",".join(extensions)
+
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"""powershell -Command "Get-ChildItem -Recurse -Path '{current_dir}'{patterns} | Select-String -Pattern '{user_input}'" """
 
@@ -16128,6 +16154,8 @@ def handle_special_commands(user_input):
 
         patterns = " -Include " + ",".join(extensions)
 
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
         command = f"""powershell -Command "Get-ChildItem -Recurse -Path '{current_dir}'{patterns} | Select-String -Pattern '{user_input}'" """
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -16164,6 +16192,8 @@ def handle_special_commands(user_input):
 
         patterns = " -Include " + ",".join(extensions)
 
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
         command = f"""powershell -Command "Get-ChildItem -Recurse -Path '{current_dir}'{patterns} | Select-String -Pattern '{user_input}'" """
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -16188,6 +16218,8 @@ def handle_special_commands(user_input):
         path_patterns = ",".join(f"'{current_dir}\\{ext}'" for ext in extensions)
         escaped_pattern = user_input.replace("'", "''")
 
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
         command = f"Select-String -Path {path_patterns} -Pattern '{escaped_pattern}' -Recurse"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -16211,6 +16243,8 @@ def handle_special_commands(user_input):
 
         path_patterns = ",".join(f"'{current_dir}\\{ext}'" for ext in extensions)
         escaped_pattern = user_input.replace("'", "''")
+
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"Select-String -Path {path_patterns} -Pattern '{escaped_pattern}' -Recurse"
 
@@ -16325,6 +16359,8 @@ def handle_special_commands(user_input):
         path_patterns = ",".join(f"'{current_dir}\\{ext}'" for ext in extensions)
         escaped_pattern = user_input.replace("'", "''")
 
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
         command = f"Select-String -Path {path_patterns} -Pattern '{escaped_pattern}' -Recurse"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -16438,6 +16474,8 @@ def handle_special_commands(user_input):
         path_patterns = ",".join(f"'{current_dir}\\{ext}'" for ext in extensions)
         escaped_pattern = user_input.replace("'", "''")
 
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
         command = f"Select-String -Path {path_patterns} -Pattern '{escaped_pattern}' -Recurse"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -16468,6 +16506,8 @@ def handle_special_commands(user_input):
         path_patterns = ",".join(f"'{current_dir}\\{ext}'" for ext in extensions)
         escaped_pattern = user_input.replace("'", "''")
 
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
         command = f"Select-String -Path {path_patterns} -Pattern '{escaped_pattern}' -Recurse"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -16497,6 +16537,8 @@ def handle_special_commands(user_input):
         ]
         path_patterns = ",".join(f"'{current_dir}\\{ext}'" for ext in extensions)
         escaped_pattern = user_input.replace("'", "''")
+
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"Select-String -Path {path_patterns} -Pattern '{escaped_pattern}' -Recurse"
 
@@ -16534,6 +16576,8 @@ def handle_special_commands(user_input):
         path_patterns = ",".join(f"'{current_dir}\\{ext}'" for ext in extensions)
         escaped_pattern = user_input.replace("'", "''")
 
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
         command = f"Select-String -Path {path_patterns} -Pattern '{escaped_pattern}' -Recurse"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -16570,6 +16614,8 @@ def handle_special_commands(user_input):
         path_patterns = ",".join(f"'{current_dir}\\{ext}'" for ext in extensions)
         escaped_pattern = user_input.replace("'", "''")
 
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
         command = f"Select-String -Path {path_patterns} -Pattern '{escaped_pattern}' -Recurse"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -16586,6 +16632,8 @@ def handle_special_commands(user_input):
 
     if user_input.lower() == "pff7":
         current_dir = Path.cwd().resolve()
+
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f'Get-ChildItem -Path "{current_dir}" -Recurse | Where-Object {{ -not $_.PSIsContainer }}'
 
@@ -24101,7 +24149,7 @@ def run_linux_p_c_command(command):
     if isinstance(command, str):
         command = f"wsl -c {command}"
 
-     print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
     process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
