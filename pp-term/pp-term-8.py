@@ -3819,6 +3819,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("code-lx "):
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl code {user_input}"
 
@@ -3835,6 +3836,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pcode-lx "):
         user_input = user_input[9:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl code {user_input}"
 
@@ -3851,6 +3853,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pcode "):
         user_input = user_input[6:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"code {user_input}"
 
@@ -3867,6 +3870,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("thonny-lx "):
         user_input = user_input[10:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl thonny {user_input}"
 
@@ -3883,6 +3887,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pthonny-lx "):
         user_input = user_input[11:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl thonny {user_input}"
 
@@ -4030,6 +4035,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("gedit "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4045,6 +4051,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("kakoune "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4060,6 +4067,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("helix "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4075,6 +4083,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("jed "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4090,6 +4099,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("joe "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4105,6 +4115,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("mg "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4120,6 +4131,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("acme "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4135,6 +4147,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("geany "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4150,6 +4163,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("kate "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4165,6 +4179,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("ncdu "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4180,6 +4195,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("tldr "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4195,6 +4211,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("bat "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4210,6 +4227,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("exa "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4225,6 +4243,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("fzf "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4240,6 +4259,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("fd "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4255,6 +4275,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("tmux "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4270,6 +4291,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("entr "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4285,6 +4307,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("asdf "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4300,6 +4323,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("direnv "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4315,6 +4339,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("nmap "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4330,6 +4355,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("iperf3 "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4345,6 +4371,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("speedtest-cli "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4360,6 +4387,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("glow "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4375,6 +4403,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("ranger "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4390,6 +4419,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("zoxide "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4405,6 +4435,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("nala "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4420,6 +4451,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("espanso "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4435,6 +4467,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("plasma-workspace "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4450,6 +4483,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("syncthing "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4465,6 +4499,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("flatpak "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4480,6 +4515,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("mousepad "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4495,6 +4531,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("xed "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4511,6 +4548,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("atom-lx "):
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl atom {user_input}"
 
@@ -4526,6 +4564,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("lite-xl "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl {user_input}"
 
@@ -4564,6 +4603,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower().startswith("g++ -c "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f"wsl {user_input}"
         process = subprocess.Popen(
             command,
@@ -4583,6 +4623,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower().startswith("g++ -e ") or user_input.startswith("g++ -E "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         # Interpret "-e" as shorthand for "-E" (preprocess)
         rest = user_input[6:].strip()
         command = f"wsl g++ -E {rest}"
@@ -4604,6 +4645,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower().startswith("g++ -s ") or user_input.startswith("g++ -S "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         # Interpret "-s" (lowercase) as "-S" (uppercase) for assembly generation
         rest = user_input[6:].strip()
         command = f"wsl g++ -S {rest}"
@@ -4625,6 +4667,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower().startswith("g++ -std="):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f"wsl {user_input}"
         process = subprocess.Popen(
             command,
@@ -4652,6 +4695,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower().startswith("g++ -o2 ") or user_input.lower().startswith("g++ -o3 "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         # User might write "-o2" instead of "-O2". We'll normalize to uppercase O.
         rest = user_input[6:].strip()
         command = f"wsl g++ -O{rest}"
@@ -4673,6 +4717,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower().startswith("g++ -i ") or user_input.startswith("g++ -I "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         # Interpret "-i" as shorthand for "-I"
         rest = user_input[6:].strip()
         command = f"wsl g++ -I {rest}"
@@ -4694,6 +4739,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower().startswith("g++ ") and "-l" in user_input:
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f"wsl {user_input}"
         process = subprocess.Popen(
             command,
@@ -4713,6 +4759,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower().startswith("g++ -wall ") or user_input.lower().startswith("g++ -wextra "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f"wsl {user_input}"
         process = subprocess.Popen(
             command,
@@ -4732,6 +4779,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower().startswith("g++ -g "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f"wsl {user_input}"
         process = subprocess.Popen(
             command,
@@ -4751,6 +4799,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower().startswith("g++ -fpic ") or user_input.lower().startswith("g++ -shared "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f"wsl {user_input}"
         process = subprocess.Popen(
             command,
@@ -4770,6 +4819,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower().startswith("g++ run "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         exec_name = user_input[8:].strip()
         command = f"wsl ./{exec_name}"
         process = subprocess.Popen(
@@ -4790,6 +4840,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower() in ("g++--version", "g++ --version"):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = "wsl g++ --version"
         process = subprocess.Popen(
             command,
@@ -4808,6 +4859,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower().startswith("g++ clean "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         target = user_input[12:].strip()
         command = f"wsl rm -f {target}"
         process = subprocess.Popen(
@@ -4830,6 +4882,7 @@ def handle_special_commands(user_input):
         # 15. Display help for g++
         #     e.g., "g++ help"
     if user_input.startswith(("g++ help", "g++ -help", "g++ --help")):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = "wsl g++ --help"
         process = subprocess.Popen(
             command,
@@ -4872,6 +4925,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("gcc -o "):
         args = user_input[7:].strip()  # everything after "gcc -o "
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f"wsl gcc -o {args}"
         process = subprocess.Popen(command,
                                    stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
@@ -4887,6 +4941,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("gcc -fsyntax-only "):
         args = user_input[len("gcc -fsyntax-only "):].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f"wsl gcc -fsyntax-only {args}"
         process = subprocess.Popen(command,
                                    stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
@@ -4902,6 +4957,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("gcc -g -o "):
         args = user_input[len("gcc -g -o "):].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f"wsl gcc -g -o {args}"
         process = subprocess.Popen(command,
                                    stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
@@ -4917,6 +4973,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("gcc -c "):
         args = user_input[len("gcc -c "):].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f"wsl gcc -c {args}"
         process = subprocess.Popen(command,
                                    stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
@@ -4932,6 +4989,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("gcc -s ") or user_input.startswith("gcc -S "):
         args = user_input[len("gcc -S "):].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f"wsl gcc -S {args}"
         process = subprocess.Popen(command,
                                    stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
@@ -4947,6 +5005,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("gcc -e ") or user_input.startswith("gcc -E "):
         args = user_input[len("gcc -E "):].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f"wsl gcc -E {args}"
         process = subprocess.Popen(command,
                                    stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
@@ -4962,6 +5021,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("gcc -std="):
         args = user_input[len("gcc "):].strip()  # keep everything after "gcc "
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f"wsl gcc {args}"
         process = subprocess.Popen(command,
                                    stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
@@ -4977,6 +5037,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("gcc -o ") or user_input.startswith("gcc -O "):
         args = user_input[len("gcc "):].strip()  # e.g. "-O2 main.c -o main"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f"wsl gcc {args}"
         process = subprocess.Popen(command,
                                    stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
@@ -4992,6 +5053,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("gcc -l ") or user_input.startswith("gcc -L "):
         args = user_input[len("gcc "):].strip()  # e.g. "-lm -L/usr/local/lib main.o -o main"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f"wsl gcc {args}"
         process = subprocess.Popen(command,
                                    stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
@@ -5007,6 +5069,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("gcc -shared "):
         args = user_input[len("gcc -shared "):].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f"wsl gcc -shared {args}"
         process = subprocess.Popen(command,
                                    stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
@@ -5022,6 +5085,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("gcc -static "):
         args = user_input[len("gcc -static "):].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f"wsl gcc -static {args}"
         process = subprocess.Popen(command,
                                    stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
@@ -5037,6 +5101,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("gcc -fPIC "):
         args = user_input[len("gcc -fPIC "):].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f"wsl gcc -fPIC {args}"
         process = subprocess.Popen(command,
                                    stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
@@ -5053,6 +5118,7 @@ def handle_special_commands(user_input):
     if user_input.startswith("gcc -Wall") or user_input.startswith("gcc -Wextra") or user_input.startswith(
             "gcc -pedantic"):
         args = user_input[len("gcc "):].strip()  # e.g. "-Wall -Wextra -pedantic main.c -o main"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f"wsl gcc {args}"
         process = subprocess.Popen(command,
                                    stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
@@ -5068,6 +5134,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("gcc -fsanitize="):
         args = user_input[len("gcc "):].strip()  # e.g. "-fsanitize=address main.c -o main"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f"wsl gcc {args}"
         process = subprocess.Popen(command,
                                    stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
@@ -5082,6 +5149,7 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.lower().startswith("gcc --version") or user_input.lower().startswith("gcc -v "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = "wsl gcc --version"
         process = subprocess.Popen(command,
                                    stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
@@ -5096,6 +5164,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("gcc -v "):
         args = user_input[len("gcc -v "):].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f"wsl gcc -v {args}"
         process = subprocess.Popen(command,
                                    stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
@@ -5111,6 +5180,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("gcc -print-search-dirs"):
         command = "wsl gcc -print-search-dirs"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         process = subprocess.Popen(command,
                                    stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
                                    shell=True, text=True)
@@ -5125,6 +5195,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("gcc -dM"):
         args = user_input[len("gcc "):].strip()  # e.g. "-dM -E /dev/null"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f"wsl gcc {args}"
         process = subprocess.Popen(command,
                                    stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
@@ -5140,6 +5211,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("gcc -static-libgcc"):
         args = user_input[len("gcc "):].strip()  # e.g. "-static-libgcc main.c -o main"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f"wsl gcc {args}"
         process = subprocess.Popen(command,
                                    stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
@@ -5155,6 +5227,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("gcc -fprof-gen") or user_input.startswith("gcc -fprofile-generate"):
         args = user_input[len("gcc "):].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f"wsl gcc -fprofile-generate {args}"
         process = subprocess.Popen(command,
                                    stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
@@ -5170,6 +5243,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("gcc -fprof-use") or user_input.startswith("gcc -fprofile-use"):
         args = user_input[len("gcc "):].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f"wsl gcc -fprofile-use {args}"
         process = subprocess.Popen(command,
                                    stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
@@ -5185,6 +5259,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("gcc -flto"):
         args = user_input[len("gcc "):].strip()  # e.g. "-flto main.c -o main"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f"wsl gcc -flto {args}"
         process = subprocess.Popen(command,
                                    stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
@@ -5200,6 +5275,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("gcc -m32") or user_input.startswith("gcc -m64"):
         args = user_input[len("gcc "):].strip()  # e.g. "-m64 main.c -o main"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f"wsl gcc {args}"
         process = subprocess.Popen(command,
                                    stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
@@ -5215,6 +5291,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("gcc -M") or user_input.startswith("gcc -MM"):
         args = user_input[len("gcc "):].strip()  # e.g. "-M main.c"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f"wsl gcc {args}"
         process = subprocess.Popen(command,
                                    stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
@@ -5230,6 +5307,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith(("gcc help", "gcc -help", "gcc --help")):
         command = "wsl gcc --help"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         process = subprocess.Popen(command,
                                    stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
                                    shell=True, text=True)
@@ -5245,6 +5323,7 @@ def handle_special_commands(user_input):
         parts = user_input.split()
         if len(parts) >= 3:
             target_dir = parts[2]
+            print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
             command = f"wsl rm -rf {target_dir}/*.o {target_dir}/*.d {target_dir}/*.gcda {target_dir}/*.gcno"
             process = subprocess.Popen(command,
                                        stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
@@ -5262,6 +5341,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("gfortran ") and " -o " in user_input:
         command = f"wsl {user_input}"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         try:
             print(f"[{timestamp()}] [INFO] Compiling with gfortran...\n")
             process = subprocess.Popen(
@@ -5281,6 +5361,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("gccgo ") and " -o " in user_input:
         command = f"wsl {user_input}"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         try:
             print(f"[{timestamp()}] [INFO] Compiling with gccgo...\n")
             process = subprocess.Popen(
@@ -5300,6 +5381,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("gcj ") and " -o " in user_input:
         command = f"wsl {user_input}"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         try:
             print(f"[{timestamp()}] [INFO] Compiling with gcj...\n")
             process = subprocess.Popen(
@@ -5319,6 +5401,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("gnat ") and " -o " in user_input:
         command = f"wsl {user_input}"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         try:
             print(f"[{timestamp()}] [INFO] Compiling with gnat...\n")
             process = subprocess.Popen(
@@ -5338,6 +5421,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("gfortran ") and " -o " in user_input:
         command = f"wsl {user_input}"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         try:
             print(f"[{timestamp()}] [INFO] Compiling with gfortran...\n")
             process = subprocess.Popen(
@@ -5357,6 +5441,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("gccgo ") and " -o " in user_input:
         command = f"wsl {user_input}"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         try:
             print(f"[{timestamp()}] [INFO] Compiling with gccgo...\n")
             process = subprocess.Popen(
@@ -5376,6 +5461,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("gcj ") and " -o " in user_input:
         command = f"wsl {user_input}"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         try:
             print(f"[{timestamp()}] [INFO] Compiling with gcj...\n")
             process = subprocess.Popen(
@@ -5395,6 +5481,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("gnat ") and " -o " in user_input:
         command = f"wsl {user_input}"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         try:
             print(f"[{timestamp()}] [INFO] Compiling with gnat...\n")
             process = subprocess.Popen(
@@ -5415,6 +5502,7 @@ def handle_special_commands(user_input):
     # Weitere bekannte GCC-Frontends (jeweils eigenes if)
     if user_input.startswith("objc ") and " -o " in user_input:
         command = f"wsl {user_input}"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         try:
             print(f"[{timestamp()}] [INFO] Compiling with objc...\n")
             process = subprocess.Popen(
@@ -5434,6 +5522,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("objc++ ") and " -o " in user_input:
         command = f"wsl {user_input}"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         try:
             print(f"[{timestamp()}] [INFO] Compiling with objc++...\n")
             process = subprocess.Popen(
@@ -5454,6 +5543,7 @@ def handle_special_commands(user_input):
     if user_input.startswith("gnatmake ") and " -o " in user_input:
         command = f"wsl {user_input}"
         try:
+            print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
             print(f"[{timestamp()}] [INFO] Compiling with gnatmake...\n")
             process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
             process.wait()
