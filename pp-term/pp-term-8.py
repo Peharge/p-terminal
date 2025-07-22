@@ -12843,6 +12843,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("scalac "):
         user_input = user_input[7:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"scalac {user_input}"
 
@@ -12860,6 +12861,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-scala "):
         user_input = user_input[9:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"scalac {user_input}"
 
@@ -12933,6 +12935,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("clj "):
         user_input = user_input[4:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"clj {user_input}"
 
@@ -12950,6 +12953,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-clj "):
         user_input = user_input[7:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"clj {user_input}"
 
@@ -12967,6 +12971,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("ocamlc "):
         user_input = user_input[7:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"ocamlc {user_input}"
 
@@ -12985,6 +12990,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-ocaml "):
         user_input = user_input[9:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"ocamlc {user_input}"
 
@@ -13052,6 +13058,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("elixir "):
         user_input = user_input[7:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"elixir {user_input}"
 
@@ -13069,6 +13076,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-elixir "):
         user_input = user_input[10:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"elixir {user_input}"
 
@@ -13122,6 +13130,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("elm make "):
         user_input = user_input[9:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"elm make {user_input}"
 
@@ -13140,6 +13149,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-elm "):
         user_input = user_input[7:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"elm make {user_input}"
 
@@ -13206,6 +13216,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("v run "):
         user_input = user_input[7:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"v run {user_input}"
 
@@ -13223,6 +13234,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-v "):
         user_input = user_input[5:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"v run {user_input}"
 
@@ -13299,6 +13311,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("zig build-exe "):
         user_input = user_input[14:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"zig build-exe {user_input}"
 
@@ -13316,6 +13329,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("zigc "):
         user_input = user_input[5:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"zig build-exe {user_input}"
 
@@ -13333,6 +13347,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-zig "):
         user_input = user_input[7:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"zig build-exe {user_input}"
 
@@ -13406,6 +13421,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("nim compile "):
         user_input = user_input[12:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"nim compile {user_input}"
 
@@ -13423,6 +13439,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("nimc "):
         user_input = user_input[5:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"nim compile {user_input}"
 
@@ -13440,6 +13457,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-nim "):
         user_input = user_input[7:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"nim compile {user_input}"
 
@@ -13523,6 +13541,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("bazel run //explorer -- ./"):
         user_input = user_input[26:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"bazel run //explorer -- ./{user_input}"
 
@@ -13540,6 +13559,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("carbanc "):
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"bazel run //explorer -- ./{user_input}"
 
@@ -13557,6 +13577,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-carban "):
         user_input = user_input[10:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"bazel run //explorer -- ./{user_input}"
 
@@ -13637,6 +13658,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("solc --bin --abi "):
         user_input = user_input[17:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"solc --bin --abi {user_input}"
 
@@ -13654,6 +13676,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("solidityc "):
         user_input = user_input[10:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"solc --bin --abi {user_input}"
 
@@ -13671,6 +13694,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-solidity "):
         user_input = user_input[12:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"solc --bin --abi {user_input}"
 
@@ -13794,6 +13818,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("hhvm "):
         user_input = user_input[5:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"hhvm {user_input}"
 
@@ -13811,6 +13836,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("hackc "):
         user_input = user_input[6:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"hhvm {user_input}"
 
@@ -13828,6 +13854,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-hack "):
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"hhvm {user_input}"
 
@@ -13947,6 +13974,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("crystal run "):
         user_input = user_input[12:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"crystal run {user_input}"
 
@@ -13964,6 +13992,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("crystalc "):
         user_input = user_input[9:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"crystal run {user_input}"
 
@@ -13981,6 +14010,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-crystal "):
         user_input = user_input[11:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"crystal run {user_input}"
 
@@ -14077,6 +14107,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("haxe -main "):
         user_input = user_input[11:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"haxe -main {user_input}"
 
@@ -14095,6 +14126,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("haxec "):
         user_input = user_input[6:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"haxe -main {user_input}"
 
@@ -14113,6 +14145,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-haxe "):
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"haxe -main {user_input}"
 
@@ -14251,6 +14284,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("gfortran -o "):
         user_input = user_input[12:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"gfortran -o {user_input}"
 
@@ -14269,6 +14303,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("ifort -o "):
         user_input = user_input[9:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"ifort -o {user_input}"
 
@@ -14287,6 +14322,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-fortran "):
         user_input = user_input[11:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"gfortran -o {user_input}"
 
@@ -14305,6 +14341,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("sbcl --script "):
         user_input = user_input[14:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"sbcl --script {user_input}"
 
@@ -14322,6 +14359,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-lisp "):
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"sbcl --script {user_input}"
 
@@ -14339,6 +14377,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("racket "):
         user_input = user_input[7:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"racket {user_input}"
 
@@ -14356,6 +14395,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("racketc "):
         user_input = user_input[8:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"racket {user_input}"
 
@@ -14373,6 +14413,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-racket "):
         user_input = user_input[10:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"racket {user_input}"
 
@@ -14390,6 +14431,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pc-algol "):
         user_input = user_input[9:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         # Compile the Algol60 source code
         compile_command = "wsl gcc algol60.c -o algol60"
@@ -14414,6 +14456,7 @@ def handle_special_commands(user_input):
 
     if user_input.startswith("pcf "):
         user_input = user_input[4:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         current_dir = Path.cwd().resolve()
 
         command = f"""powershell New-Item -Path "{current_dir}\\{user_input}"  -ItemType File"""
@@ -14539,6 +14582,7 @@ def handle_special_commands(user_input):
     # Beispiel-Aufruf: "pc-postgresql postgresql-x64-15"
     if user_input.startswith("pc-postgresql "):
         service_name = user_input[14:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f'net start "{service_name}"'
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -14557,6 +14601,7 @@ def handle_special_commands(user_input):
     # Beispiel-Aufruf: "pc-mysql MySQL80" oder "pc-mysql MySQL"
     if user_input.startswith("pc-mysql "):
         service_name = user_input[9:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f'net start "{service_name}"'
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -14575,6 +14620,7 @@ def handle_special_commands(user_input):
     # Beispiel-Aufruf: "pc-mongodb MongoDB"
     if user_input.startswith("pc-mongodb "):
         service_name = user_input[11:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f'net start "{service_name}"'
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -14593,6 +14639,7 @@ def handle_special_commands(user_input):
     # Beispiel-Aufruf: "pc-sqlserver MSSQLSERVER"
     if user_input.startswith("pc-sqlserver "):
         service_name = user_input[13:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f'net start "{service_name}"'
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -14611,6 +14658,7 @@ def handle_special_commands(user_input):
     # Beispiel-Aufruf: "pc-service-stop postgresql-x64-15"
     if user_input.startswith("pc-service-stop "):
         service_name = user_input[16:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f'net stop "{service_name}"'
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -14629,6 +14677,7 @@ def handle_special_commands(user_input):
     # Beispiel: "pc-mariadb MariaDB"
     if user_input.startswith("pc-mariadb "):
         service_name = user_input[11:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f'net start "{service_name}"'
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -14647,6 +14696,7 @@ def handle_special_commands(user_input):
     # Beispiel: "pc-redis Redis"
     if user_input.startswith("pc-redis "):
         service_name = user_input[9:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f'net start "{service_name}"'
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -14664,6 +14714,7 @@ def handle_special_commands(user_input):
     # Beispiel: "pc-oracle OracleServiceXE"
     if user_input.startswith("pc-oracle "):
         service_name = user_input[10:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f'net start "{service_name}"'
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -14682,6 +14733,7 @@ def handle_special_commands(user_input):
     # Beispiel: "pc-couchdb ApacheCouchDB"
     if user_input.startswith("pc-couchdb "):
         service_name = user_input[11:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f'net start "{service_name}"'
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -14700,6 +14752,7 @@ def handle_special_commands(user_input):
     # Beispiel: "pc-firebird FirebirdGuardianDefaultInstance"
     if user_input.startswith("pc-firebird "):
         service_name = user_input[12:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f'net start "{service_name}"'
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -14718,6 +14771,7 @@ def handle_special_commands(user_input):
     # Beispiel: "pc-cassandra Apache Cassandra"
     if user_input.startswith("pc-cassandra "):
         service_name = user_input[13:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f'net start "{service_name}"'
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -14735,7 +14789,8 @@ def handle_special_commands(user_input):
     # pc-elasticsearch: startet einen Elasticsearch-Dienst (Service-Name angeben)
     # Beispiel: "pc-elasticsearch elasticsearch-service-x64"
     if user_input.startswith("pc-elasticsearch "):
-        service_name = user_input[16:].strip()
+        service_name = user_input[16:].strip()print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
         command = f'net start "{service_name}"'
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -14754,6 +14809,7 @@ def handle_special_commands(user_input):
     # Beispiel: "pc-neo4j neo4j"
     if user_input.startswith("pc-neo4j "):
         service_name = user_input[9:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f'net start "{service_name}"'
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -31698,8 +31754,9 @@ def main():
 
             elif user_input.startswith("pov "):
                 user_input = user_input[4:]
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
                 print(f"[{timestamp()}] [INFO] Please note that the pov command supports only CMD commands, no PP terminal and the command was specifically developed for managing virtual environments, so not all CMD commands may be compatible.")
-                run_command_ov(user_input)
+                run_command_ov(user_input, shell=True)
 
             elif user_input.startswith("pp-pov "):
                 user_input = user_input[7:]
