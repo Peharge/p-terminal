@@ -33953,9 +33953,7 @@ def main():
                 elif is_pwsh_command(cmd_name):
                     print(f"[{timestamp()}] [WARNING] '{cmd_name}' is a PowerShell 7+ (pwsh) command.")
                 elif is_pp_terminal_command(cmd_name):
-                    print(f"[{timestamp()}] [WARNING] '{cmd_name}' is a PP terminal command (from the JSON).")
-                else:
-                    print(f"[{timestamp()}] [WARNING] '{cmd_name}' is not a known command.")
+                    print(f"[{timestamp()}] [WARNING] '{cmd_name}' is a PP-Terminal command.")
 
                 if cmd_name in commands:
                     print(f"[{timestamp()}] [WARNING] Command '{cmd_name}' already exists.")
@@ -34009,9 +34007,7 @@ def main():
                 elif is_pwsh_command(cmd_name):
                     print(f"[{timestamp()}] [WARNING] '{cmd_name}' is a PowerShell 7+ (pwsh) command.")
                 elif is_pp_terminal_command(cmd_name):
-                    print(f"[{timestamp()}] [WARNING] '{cmd_name}' is a PP terminal command (from the JSON).")
-                else:
-                    print(f"[{timestamp()}] [WARNING] '{cmd_name}' is not a known command.")
+                    print(f"[{timestamp()}] [WARNING] '{cmd_name}' is a PP-Terminal command.")
 
                 if cmd_name in commands:
                     print(f"[{timestamp()}] [WARNING] Command '{cmd_name}' already exists.")
