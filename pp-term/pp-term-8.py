@@ -4082,6 +4082,56 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
         return True
 
+    if user_input.startswith("githubdesktop "):
+        repo_path = user_input[14:].strip()
+
+        if not os.path.isdir(repo_path):
+            print(f"[{timestamp()}] [ERROR] The path '{repo_path}' is not a valid folder.")
+            return False
+
+        if not os.path.isdir(os.path.join(repo_path, ".git")):
+            print(f"[{timestamp()}] [ERROR] The folder '{repo_path}' is not a Git repository (no .git folder found).")
+            return False
+
+        print(f"[{timestamp()}] [INFO] Opening Git repository '{repo_path}' with GitHub Desktop...")
+
+        command = f'github desktop "{repo_path}"'
+
+        try:
+            process = subprocess.Popen(command, shell=True, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, text=True)
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Aborted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error running GitHub Desktop: {e}")
+
+        return True
+
+    if user_input.startswith("ghd "):
+        repo_path = user_input[4:].strip()
+
+        if not os.path.isdir(repo_path):
+            print(f"[{timestamp()}] [ERROR] The path '{repo_path}' is not a valid folder.")
+            return False
+
+        if not os.path.isdir(os.path.join(repo_path, ".git")):
+            print(f"[{timestamp()}] [ERROR] The folder '{repo_path}' is not a Git repository (no .git folder found).")
+            return False
+
+        print(f"[{timestamp()}] [INFO] Opening Git repository '{repo_path}' with GitHub Desktop...")
+
+        command = f'github desktop "{repo_path}"'
+
+        try:
+            process = subprocess.Popen(command, shell=True, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, text=True)
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Aborted by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error running GitHub Desktop: {e}")
+
+        return True
+
     if user_input.startswith("code-lx "):
         user_input = user_input[8:].strip()
         print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
