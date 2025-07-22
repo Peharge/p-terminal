@@ -17286,393 +17286,523 @@ def handle_special_commands(user_input):
             return False
 
     if user_input == "setting":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:", shell=True, check=False)
 
     if user_input == "workplace":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:workplace", shell=True, check=False)
 
     if user_input == "emailandaccounts":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:emailandaccounts", shell=True, check=False)
 
     if user_input == "otherusers":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:otherusers", shell=True, check=False)
 
     if user_input == "assignedaccess":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:assignedaccess", shell=True, check=False)
 
     if user_input == "signinoptions":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:signinoptions", shell=True, check=False)
 
     if user_input == "sync":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:sync", shell=True, check=False)
 
     if user_input == "yourinfo":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:yourinfo", shell=True, check=False)
 
     if user_input == "hello-face":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:signinoptions-launchfaceenrollment", shell=True, check=False)
 
     if user_input == "hello-fingerprint":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:signinoptions-launchfingerprintenrollment", shell=True, check=False)
 
     if user_input == "appsfeatures":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:appsfeatures", shell=True, check=False)
 
     if user_input == "appsfeatures-app":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:appsfeatures-app", shell=True, check=False)
 
     if user_input == "appsforwebsites":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:appsforwebsites", shell=True, check=False)
 
     if user_input == "defaultapps":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:defaultapps", shell=True, check=False)
 
     if user_input == "optionalfeatures":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:optionalfeatures", shell=True, check=False)
 
     if user_input == "maps":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:maps", shell=True, check=False)
 
     if user_input == "startupapps":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:startupapps", shell=True, check=False)
 
     if user_input == "videoplayback":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:videoplayback", shell=True, check=False)
 
     if user_input == "autoplay":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:autoplay", shell=True, check=False)
 
     if user_input == "bluetooth":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:bluetooth", shell=True, check=False)
 
     if user_input == "camera":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:camera", shell=True, check=False)
 
     if user_input == "mousetouchpad":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:mousetouchpad", shell=True, check=False)
 
     if user_input == "pen":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:pen", shell=True, check=False)
 
     if user_input == "printers":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:printers", shell=True, check=False)
 
     if user_input == "usb":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:usb", shell=True, check=False)
 
     if user_input == "display":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:display", shell=True, check=False)
 
     if user_input == "sound":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:sound", shell=True, check=False)
 
     if user_input == "notifications":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:notifications", shell=True, check=False)
 
     if user_input == "power":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:powersleep", shell=True, check=False)
 
     if user_input == "storage":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:storage", shell=True, check=False)
 
     if user_input == "multitasking":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:multitasking", shell=True, check=False)
 
     if user_input == "network-status":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:network-status", shell=True, check=False)
 
     if user_input == "wifi":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:network-wifi", shell=True, check=False)
 
     if user_input == "ethernet":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:network-ethernet", shell=True, check=False)
 
     if user_input == "vpn":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:network-vpn", shell=True, check=False)
 
     if user_input == "datausage":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:datausage", shell=True, check=False)
 
     if user_input == "privacy-microphone":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:privacy-microphone", shell=True, check=False)
 
     if user_input == "privacy-webcam":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:privacy-webcam", shell=True, check=False)
 
     if user_input == "privacy-location":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:privacy-location", shell=True, check=False)
 
     if user_input == "privacy-notifications":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:privacy-notifications", shell=True, check=False)
 
     if user_input == "windowsupdate":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:windowsupdate", shell=True, check=False)
 
     if user_input == "backup":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:backup", shell=True, check=False)
 
     if user_input == "recovery":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:recovery", shell=True, check=False)
 
     if user_input == "activation":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:activation", shell=True, check=False)
 
     if user_input == "fordevelopers":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:developers", shell=True, check=False)
 
     if user_input == "airplanemode":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:airplanemode", shell=True, check=False)
 
     if user_input == "cellular":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:cellular", shell=True, check=False)
 
     if user_input == "cloudstorage":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:cloudstorage", shell=True, check=False)
 
     if user_input == "language":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:language", shell=True, check=False)
 
     if user_input == "location":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:location", shell=True, check=False)
 
     if user_input == "lock":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:lock", shell=True, check=False)
 
     if user_input == "nfctransactions":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:nfctransactions", shell=True, check=False)
 
     if user_input == "proximity":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:privacy-proximity", shell=True, check=False)
 
     if user_input == "mobilehotspot":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:network-mobilehotspot", shell=True, check=False)
 
     if user_input == "proxy":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:network-proxy", shell=True, check=False)
 
     if user_input == "defender":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:windowsdefender", shell=True, check=False)
 
     if user_input == "privacy-contacts":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:privacy-contacts", shell=True, check=False)
 
     if user_input == "privacy-calendar":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:privacy-calendar", shell=True, check=False)
 
     if user_input == "privacy-callhistory":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:privacy-callhistory", shell=True, check=True)
 
     if user_input == "family":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:family", shell=True, check=False)
 
     if user_input == "gaming-gamebar":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:gaming-gamebar", shell=True, check=False)
 
     if user_input == "mixedreality-portal":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:mixedreality-portal", shell=True, check=False)
 
     if user_input == "easeofaccess":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:easeofaccess", shell=True, check=False)
 
     if user_input == "easeofaccess-narrator":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:easeofaccess-narrator", shell=True, check=False)
 
     if user_input == "easeofaccess-magnifier":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:easeofaccess-magnifier", shell=True, check=False)
 
     if user_input == "easeofaccess-closedcaptioning":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:easeofaccess-closedcaptioning", shell=True, check=False)
 
     if user_input == "easeofaccess-highcontrast":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:easeofaccess-highcontrast", shell=True, check=False)
 
     if user_input == "easeofaccess-speechrecognition":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:easeofaccess-speechrecognition", shell=True, check=False)
 
     if user_input == "easeofaccess-keyboard":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:easeofaccess-keyboard", shell=True, check=False)
 
     if user_input == "easeofaccess-mousepointer":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:easeofaccess-mousepointer", shell=True, check=False)
 
     if user_input == "easeofaccess-touch":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:easeofaccess-touch", shell=True, check=False)
 
     if user_input == "wirelessdisplay":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings-connectabledevices:devicediscovery", shell=True, check=False)
 
     if user_input == "project":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:project", shell=True, check=False)
 
     if user_input == "tethering":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:network-tethering", shell=True, check=False)
 
     if user_input == "storagesense":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:storagesense", shell=True, check=False)
 
     if user_input == "batterysaver":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:batterysaver-settings", shell=True, check=False)
 
     if user_input == "autorotate":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:screenrotation", shell=True, check=False)
 
     if user_input == "dateandtime":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:dateandtime", shell=True, check=False)
 
     if user_input == "region":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:region", shell=True, check=False)
 
     if user_input == "speech":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:regionlanguage-speech", shell=True, check=False)
 
     if user_input == "typing":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:typing", shell=True, check=False)
 
     if user_input == "troubleshoot":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:troubleshoot", shell=True, check=False)
 
     if user_input == "recommendedtroubleshoot":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:troubleshoot-recommended", shell=True, check=False)
 
     if user_input == "windowsinsider":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:windowsinsider", shell=True, check=False)
 
     if user_input == "gaming-broadcasting":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:gaming-broadcasting", shell=True, check=False)
 
     if user_input == "gaming-gamedvr":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:gaming-gamedvr", shell=True, check=False)
 
     if user_input == "gaming-xboxnetworking":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:gaming-xboxnetworking", shell=True, check=False)
 
     if user_input == "mixedreality-settings":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:mixedreality-portal", shell=True, check=False)
 
     if user_input == "display-advanced":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:display-advanced", shell=True, check=False)
 
     if user_input == "defaultbrowsersettings":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:defaultbrowsersettings", shell=True, check=False)
 
     if user_input == "maps-downloadmaps":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:maps-downloadmaps", shell=True, check=False)
 
     if user_input == "sound-devices":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:sound-devices", shell=True, check=False)
 
     if user_input == "devices-touch":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:devices-touch", shell=True, check=False)
 
     if user_input == "devices-touchpad":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:devices-touchpad", shell=True, check=False)
 
     if user_input == "devicestyping-hwkbtextsuggestions":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:devicestyping-hwkbtextsuggestions", shell=True, check=False)
 
     if user_input == "privacy-feedback":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:privacy-feedback", shell=True, check=False)
 
     if user_input == "privacy-diagnostics":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:privacy-diagnostics", shell=True, check=False)
 
     if user_input == "cortana":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:cortana", shell=True, check=False)
 
     if user_input == "cortana-permissions":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:cortana-permissions", shell=True, check=False)
 
     if user_input == "cortana-windowssearch":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:cortana-windowssearch", shell=True, check=False)
 
     if user_input == "cortana-moredetails":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:cortana-moredetails", shell=True, check=False)
 
     if user_input == "controlcenter":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:controlcenter", shell=True, check=False)
 
     if user_input == "mobile-devices":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:mobile-devices", shell=True, check=False)
 
     if user_input == "fonts":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:fonts", shell=True, check=False)
 
     if user_input == "wheel":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:wheel", shell=True, check=False)
 
     if user_input == "appsfeatures-app?PFN=<YourAppPFN>":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:appsfeatures-app?PFN=YourAppPFN", shell=True, check=False)
 
     if user_input == "backup-deprecated":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:backup", shell=True, check=False)
 
     if user_input == "provisioning":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:provisioning", shell=True, check=False)
 
     if user_input == "about":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:about", shell=True, check=False)
 
     if user_input == "uninstallupdates":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:uninstallupdates", shell=True, check=False)
 
     if user_input == "manage-restartapps":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:appsforwebsites", shell=True, check=False)
 
     if user_input == "startsettings":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:personalization-start", shell=True, check=False)
 
     if user_input == "taskbar":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:personalization-taskbar", shell=True, check=False)
 
     if user_input == "themes":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:themes", shell=True, check=False)
 
     if user_input == "colors":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:colors", shell=True, check=False)
 
     if user_input == "lockscreen":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:personalization-lockscreen", shell=True, check=False)
 
     if user_input == "background":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:personalization-background", shell=True, check=False)
 
     if user_input == "volume":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:apps-volume", shell=True, check=False)
 
     if user_input == "defaultbrowsersettings":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:defaultbrowsersettings", shell=True, check=False)
 
     if user_input == "firewall":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:windowsdefender-firewall", shell=True, check=False)
 
     if user_input == "securitycenter":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:windowsdefender-securitycenter", shell=True, check=False)
 
     if user_input == "surfacehub":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:surfacehub", shell=True, check=False)
 
     if user_input == "windowsanywhere":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:windowsanywhere", shell=True, check=False)
 
     if user_input == "privacy-accountinfo":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:privacy-accountinfo", shell=True, check=False)
 
     if user_input == "privacy-calendars":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:privacy-calendar", shell=True, check=False)
 
     if user_input == "privacy-radios":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:privacy-radios", shell=True, check=False)
 
     if user_input == "privacy-multimedia":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:privacy-media", shell=True, check=False)
 
     if user_input == "privacy-feedback":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:privacy-feedback", shell=True, check=False)
 
     if user_input == "regionlanguage":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:regionlanguage", shell=True, check=False)
 
     if user_input == "speechtyping":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.run("start ms-settings:privacy-speechtyping", shell=True, check=False)
 
     # Prozessliste
