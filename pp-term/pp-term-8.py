@@ -18930,10 +18930,8 @@ def handle_special_commands(user_input):
         start_ollama()
         check_ollama_update()
 
-        command = f"ollama {user_input}"
-
-        subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
-                                   text=True)
+        command = ["ollama"] + user_input.split()
+        subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, text=True)
 
         return True
 
