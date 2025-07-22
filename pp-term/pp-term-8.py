@@ -34147,6 +34147,9 @@ def main():
                 except Exception as e:
                     print(f"[{timestamp()}] [ERROR] Error while running: {e}")
 
+            if not user_input.strip():
+                print(f"[{timestamp()}] [INFO] PP-Term Kernel has not detected any valid process or instruction. Awaiting input...")
+
             else:
                 print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command with shell=True — this can be insecure!")
                 run_command(user_input, shell=True)
