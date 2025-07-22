@@ -1361,7 +1361,10 @@ def handle_special_commands(user_input):
         "taskmanager": "pp-commands\\bashtop.py",  # new
         "btop": "pp-commands\\btop.py",  # new
         "atop": "pp-commands\\atop.py",  # new
-        "emacs": "pp-commands\\emacs.py",  # new
+        "emacs-lx": "pp-commands\\emacs.py",  # new
+        "pemacs-lx": "pp-commands\\emacs.py",  # new
+        "emacs": "pp-commands\\emacs-win.py",  # new
+        "pemacs": "pp-commands\\emacs-win.py",  # new
         "vim": "pp-commands\\vim.py",  # new
         "nano": "pp-commands\\nano.py",  # new
         "dstat": "pp-commands\\dstat.py",  # new
@@ -1500,7 +1503,10 @@ def handle_special_commands(user_input):
         "install taskmanager": "pp-commands\\bashtop.py",  # new
         "install btop": "pp-commands\\btop.py",  # new
         "install atop": "pp-commands\\atop.py",  # new
-        "install emacs": "pp-commands\\emacs.py",  # new
+        "install emacs-lx": "pp-commands\\emacs.py",  # new
+        "install pemacs-lx": "pp-commands\\emacs.py",  # new
+        "install emacs": "pp-commands\\emacs-win.py",  # new
+        "install pemacs": "pp-commands\\emacs-win.py",  # new
         "install vim": "pp-commands\\vim.py",  # new
         "install nano": "pp-commands\\nano.py",  # new
         "install dstat": "pp-commands\\dstat.py",  # new
@@ -1766,7 +1772,10 @@ def handle_special_commands(user_input):
         "pi taskmanager": "pp-commands\\bashtop.py",  # new
         "pi btop": "pp-commands\\btop.py",  # new
         "pi atop": "pp-commands\\atop.py",  # new
-        "pi emacs": "pp-commands\\emacs.py",  # new
+        "pi emacs-lx": "pp-commands\\emacs.py",  # new
+        "pi pemacs-lx": "pp-commands\\emacs.py",  # new
+        "pi emacs": "pp-commands\\emacs-win.py",  # new
+        "pi pemacs": "pp-commands\\emacs-win.py",  # new
         "pi vim": "pp-commands\\vim.py",  # new
         "pi nano": "pp-commands\\nano.py",  # new
         "pi dstat": "pp-commands\\dstat.py",  # new
@@ -3850,10 +3859,45 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
         return True
 
-    if user_input.startswith("emacs "):
+    if user_input.startswith("emacs-lx "):
+        user_input = user_input[9:].strip()
         print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
-        command = f"wsl {user_input}"
+        command = f"wsl emacs {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
+        return True
+
+    if user_input.startswith("pemacs-lx "):
+        user_input = user_input[9:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
+        command = f"wsl emacs {user_input}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
+                                   text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
+        return True
+
+    if user_input.startswith("pemacs "):
+        user_input = user_input[6:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
+        command = f"emacs {user_input}"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
                                    text=True)
