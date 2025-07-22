@@ -475,8 +475,8 @@ commands = {
         "githubdesktop": "pp-commands\\githubdesktop.py",  # new
         "nvim-lx": "pp-commands\\nvim.py",  # new
         "nvim": "pp-commands\\nvim-win.py",  # new
-        "pvim-lx": "pp-commands\\nvim.py",  # new
-        "pvim": "pp-commands\\nvim-win.py",  # new
+        "pnvim-lx": "pp-commands\\nvim.py",  # new
+        "pnvim": "pp-commands\\nvim-win.py",  # new
         "code-lx": "pp-commands\\code.py",  # new
         "pcode-lx": "pp-commands\\code.py",  # new
         "code": "pp-commands\\code-win.py",  # new
@@ -618,8 +618,8 @@ commands = {
         "install phpstorm": "pp-commands\\phpstorm.py",  # new
         "install nvim-lx": "pp-commands\\nvim.py",  # new
         "install nvim": "pp-commands\\nvim-win.py",  # new
-        "install pvim-lx": "pp-commands\\nvim.py",  # new
-        "install pvim": "pp-commands\\nvim-win.py",  # new
+        "install pnvim-lx": "pp-commands\\nvim.py",  # new
+        "install pnvim": "pp-commands\\nvim-win.py",  # new
         "install code-lx": "pp-commands\\code.py",  # new
         "install pcode-lx": "pp-commands\\code.py",  # new
         "install code": "pp-commands\\code-win.py",  # new
@@ -890,8 +890,8 @@ commands = {
         "pi phpstorm": "pp-commands\\phpstorm.py",  # new
         "pi nvim-lx": "pp-commands\\nvim.py",  # new
         "pi nvim": "pp-commands\\nvim-win.py",  # new
-        "pi pvim-lx": "pp-commands\\nvim.py",  # new
-        "pi pvim": "pp-commands\\nvim-win.py",  # new
+        "pi pnvim-lx": "pp-commands\\nvim.py",  # new
+        "pi pnvim": "pp-commands\\nvim-win.py",  # new
         "pi code-lx": "pp-commands\\code.py",  # new
         "pi pcode-lx": "pp-commands\\code.py",  # new
         "pi code": "pp-commands\\code-win.py",  # new
