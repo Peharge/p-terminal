@@ -1874,24 +1874,34 @@ def handle_special_commands(user_input):
     if user_input in commands:
         # 1) Skript-Pfad ermitteln
         base = Path.home() / "p-terminal" / "pp-term"
-        script_path = base / commands[user_input]
+        script_rel_path = Path(commands[user_input])
+
+        # Sicherheit: Verhindere absolute oder manipulierte Pfade
+        if script_rel_path.is_absolute() or ".." in script_rel_path.parts:
+            logging.error("[SECURITY] Invalid script path (absolute or parent traversal)")
+            return True
+
+        script_path = base / script_rel_path
+        try:
+            # Verhindere Ausbruch aus dem Basisverzeichnis
+            script_path.resolve().relative_to(base.resolve())
+        except ValueError:
+            logging.error("[SECURITY] Script path outside of allowed base directory")
+            return True
+
         if not script_path.exists():
-            logging.error(f"[ERROR] Script not found:{script_path}")
+            logging.error(f"[ERROR] Script not found: {script_path}")
             sys.exit(1)
 
         # 2) Maximale Priorität und CPU-Affinität vorbereiten
         if platform.system() == "Windows":
-            # direkt beim Popen über creationflags setzen
             creationflags = psutil.REALTIME_PRIORITY_CLASS
             logging.info("[INFO] Windows REALTIME_PRIORITY_CLASS selected")
         else:
-            # Unix: nice -20 ergibt höchste Priorität (evtl. Root-Rechte nötig)
-            # Wir setzen hier nur den Wert und übergeben ihn später ans Popen
             nice_value = -20
-            creationflags = 0  # kein Windows-Flag
+            creationflags = 0
             logging.info(f"[INFO] Unix nice value {nice_value} selected")
 
-        # Volle CPU-Affinität auf alle physischen Kerne (oder alle logischen)
         all_cores = list(range(psutil.cpu_count(logical=True)))
         logging.info(f"[INFO] CPU affinity to cores {all_cores}")
 
@@ -1903,9 +1913,8 @@ def handle_special_commands(user_input):
             command = [python_path, str(script_path)]
             logging.info(f"[INFO] Start Python script with {python_path}")
 
-        # 4) Prozess schnell starten
+        # 4) Prozess starten
         try:
-            # Unter Windows mit REALTIME, sonst normal
             proc = subprocess.Popen(
                 command,
                 stdout=subprocess.PIPE,
@@ -1914,29 +1923,34 @@ def handle_special_commands(user_input):
             )
             p = psutil.Process(proc.pid)
 
-            # Unix: nice setzen
             if platform.system() != "Windows":
                 try:
                     p.nice(nice_value)
                     logging.info(f"[INFO] Unix nice set: {nice_value}")
                 except Exception as e:
-                    logging.warning(f"[INFO] CPU affinity set to all cores{e}")
+                    logging.warning(f"[WARNING] Could not set nice value: {e}")
 
-            # CPU-Affinität
             try:
                 p.cpu_affinity(all_cores)
                 logging.info("[INFO] CPU affinity set to all cores")
             except Exception as e:
-                logging.warning(f"[WARING] Could not set CPU affinity:{e}")
+                logging.warning(f"[WARNING] Could not set CPU affinity: {e}")
 
-            # 5) Auf Beendigung warten
-            stdout, stderr = proc.communicate()
+            # 5) Auf Beendigung warten (mit Timeout)
+            try:
+                stdout, stderr = proc.communicate(timeout=60)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+                logging.error("[ERROR] Script timed out and was terminated")
+                return True
+
             if proc.returncode != 0:
                 logging.error(f"[ERROR] Script error {proc.returncode}:\n{stderr.decode().strip()}")
                 return True
             else:
-                logging.info(f"[PASS] Script completed successfully: \n{stdout.decode().strip()}")
+                logging.info(f"[PASS] Script completed successfully:\n{stdout.decode().strip()}")
                 return True
+
         except Exception as e:
             logging.exception(f"[ERROR] Error starting the script: {e}")
             return True
