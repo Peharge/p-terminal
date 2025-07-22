@@ -317,11 +317,13 @@ commands = {
         "install cool pin-22": "pp-commands\\theme-pcc-22.py",  # new
         "install cool pin-23": "pp-commands\\theme-pcc-23.py",  # new
         "run githubdesktop": "pp-commands\\githubdesktop.py",  # new
+        "run ghd": "pp-commands\\githubdesktop.py",  # new
         "run dockerdesktop": "pp-commands\\dockerdesktop.py",  # new
         "run pycharm": "pp-commands\\run-pycharm.py",  # new
         "run vs-code": "pp-commands\\run-vs-code.py",  # new
         "run vs": "pp-commands\\run-vs.py",  # new
         "pr githubdesktop": "pp-commands\\githubdesktop.py",  # new
+        "pr ghd": "pp-commands\\githubdesktop.py",  # new
         "pr dockerdesktop": "pp-commands\\dockerdesktop.py",  # new
         "pr pycharm": "pp-commands\\run-pycharm.py",  # new
         "pr vs-code": "pp-commands\\run-vs-code.py",  # new
@@ -473,6 +475,7 @@ commands = {
         "golab": "pp-commands\\golab.py",  # new
         "phpstorm": "pp-commands\\phpstorm.py",  # new
         "githubdesktop": "pp-commands\\githubdesktop.py",  # new
+        "ghd": "pp-commands\\githubdesktop.py",  # new
         "nvim-lx": "pp-commands\\nvim.py",  # new
         "nvim": "pp-commands\\nvim-win.py",  # new
         "pnvim-lx": "pp-commands\\nvim.py",  # new
@@ -537,6 +540,7 @@ commands = {
         "install pycharm": "run\\pycharm\\install-pycharm.py",  # new
         "install nodejs": "run\\java\\javac\\install-nodejs.py",  # new
         "install githubdesktop": "run\\github\\install-githubdesktop.py",  # new
+        "ghd githubdesktop": "run\\github\\install-githubdesktop.py",  # new
         "install docker": "run\\docker\\install-dockerdesktop.py",  # new
         "install vs-cpp": "run\\cpp\\install-vs-cpp.py",  # new
         "install vs-c": "run\\c\\install-vs-c.py",  # new
@@ -810,6 +814,7 @@ commands = {
         "pi pycharm": "run\\pycharm\\install-pycharm.py",  # new
         "pi nodejs": "run\\java\\javac\\install-nodejs.py",  # new
         "pi githubdesktop": "run\\github\\install-githubdesktop.py",  # new
+        "pi ghd": "run\\github\\install-githubdesktop.py",  # new
         "pi docker": "run\\docker\\install-dockerdesktop.py",  # new
         "pi vs-cpp": "run\\cpp\\install-vs-cpp.py",  # new
         "pi vs-c": "run\\c\\install-vs-c.py",  # new
