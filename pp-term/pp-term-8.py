@@ -2139,6 +2139,17 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing ls command: {e}")
         return True
 
+    if user_input.lower() in ["pdir-4", "pls-4"]:
+        command = "pwsh ls"
+
+        try:
+            run_command(command, shell=True)
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing ls command: {e}")
+        return True
+
     if user_input.startswith("mkdir "):
         os.makedirs(user_input[6:].strip(), exist_ok=True)
         return True
@@ -18235,6 +18246,19 @@ def handle_special_commands(user_input):
     
     if user_input.lower() == "ps-3":
         command = "wsl ps"
+
+        process = run_command(command, shell=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing ls command: {e}")
+        return True
+
+    if user_input.lower() == "ps-4":
+        command = "pwsh ps"
 
         process = run_command(command, shell=True)
 
