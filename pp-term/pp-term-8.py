@@ -1409,8 +1409,8 @@ def handle_special_commands(user_input):
         "githubdesktop": "pp-commands\\githubdesktop.py",  # new
         "nvim-lx": "pp-commands\\nvim.py",  # new
         "nvim": "pp-commands\\nvim-win.py",  # new
-        "pvim-lx": "pp-commands\\nvim.py",  # new
-        "pvim": "pp-commands\\nvim-win.py",  # new
+        "pnvim-lx": "pp-commands\\nvim.py",  # new
+        "pnvim": "pp-commands\\nvim-win.py",  # new
         "code-lx": "pp-commands\\code.py",  # new
         "pcode-lx": "pp-commands\\code.py",  # new
         "code": "pp-commands\\code-win.py",  # new
@@ -1552,8 +1552,8 @@ def handle_special_commands(user_input):
         "install phpstorm": "pp-commands\\phpstorm.py",  # new
         "install nvim-lx": "pp-commands\\nvim.py",  # new
         "install nvim": "pp-commands\\nvim-win.py",  # new
-        "install pvim-lx": "pp-commands\\nvim.py",  # new
-        "install pvim": "pp-commands\\nvim-win.py",  # new
+        "install pnvim-lx": "pp-commands\\nvim.py",  # new
+        "install pnvim": "pp-commands\\nvim-win.py",  # new
         "install code-lx": "pp-commands\\code.py",  # new
         "install pcode-lx": "pp-commands\\code.py",  # new
         "install code": "pp-commands\\code-win.py",  # new
@@ -1824,8 +1824,8 @@ def handle_special_commands(user_input):
         "pi phpstorm": "pp-commands\\phpstorm.py",  # new
         "pi nvim-lx": "pp-commands\\nvim.py",  # new
         "pi nvim": "pp-commands\\nvim-win.py",  # new
-        "pi pvim-lx": "pp-commands\\nvim.py",  # new
-        "pi pvim": "pp-commands\\nvim-win.py",  # new
+        "pi pnvim-lx": "pp-commands\\nvim.py",  # new
+        "pi pnvim": "pp-commands\\nvim-win.py",  # new
         "pi code-lx": "pp-commands\\code.py",  # new
         "pi pcode-lx": "pp-commands\\code.py",  # new
         "pi code": "pp-commands\\code-win.py",  # new
@@ -3989,8 +3989,8 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
         return True
 
-    if user_input.startswith("pvim-lx "):
-        user_input = user_input[8:].strip()
+    if user_input.startswith("pnvim-lx "):
+        user_input = user_input[9:].strip()
         print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"wsl nvim {user_input}"
@@ -4018,8 +4018,8 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
         return True
 
-    if user_input.startswith("pvim "):
-        user_input = user_input[5:].strip()
+    if user_input.startswith("pnvim "):
+        user_input = user_input[6:].strip()
 
         command = f"nvim {user_input}"
 
