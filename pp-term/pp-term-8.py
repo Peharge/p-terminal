@@ -14772,6 +14772,7 @@ def handle_special_commands(user_input):
     # Beispiel: "pc-influxdb influxdb"
     if user_input.startswith("pc-influxdb "):
         service_name = user_input[12:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         command = f'net start "{service_name}"'
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
@@ -31963,15 +31964,26 @@ def main():
                 print(f"[{timestamp()}] [INFO] Please use the pp command or compile the corresponding Rust file yourself with cargo...")
 
             elif user_input.startswith("powershell "):
-                run_command(user_input)
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+                run_command(user_input, shell=True)
 
             elif user_input.startswith("pp-powershell "):
                 user_input = user_input[3:].strip()
                 print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command with shell=True — this can be insecure!")
                 run_command(user_input, shell=True)
 
+            elif user_input.strip() == "powershell":
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+                run_command(user_input, shell=True)
+
+            elif user_input.strip() == "pp-powershell":
+                user_input = user_input[3:].strip()
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command with shell=True — this can be insecure!")
+                run_command(user_input, shell=True)
+
             elif user_input.strip() == "pwsh":
-                run_command(user_input)
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+                run_command(user_input, shell=True)
 
             elif user_input.strip() == "pp-pwsh":
                 user_input = user_input[3:].strip()
@@ -31980,16 +31992,8 @@ def main():
 
             elif user_input.startswith("pwsh "):
                 user_input = user_input[5:].strip()
-                run_command(["pwsh", "-Command", user_input])
-
-            elif user_input.startswith("pp-pwsh "):
-                user_input = user_input[8:].strip()
-                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command with shell=True — this can be insecure!")
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
                 run_command(["pwsh", "-Command", user_input], shell=True)
-
-            elif user_input.startswith("pwsh "):
-                user_input = user_input[5:].strip()
-                run_command(["pwsh", "-Command", user_input])
 
             elif user_input.startswith("pp-pwsh "):
                 user_input = user_input[8:].strip()
@@ -31998,7 +32002,8 @@ def main():
 
             elif user_input.startswith("shell "):
                 user_input = user_input[6:].strip()
-                run_command(user_input)
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+                run_command(user_input, shell=True)
 
             elif user_input.startswith("pp-shell "):
                 user_input = user_input[9:].strip()
@@ -32007,7 +32012,8 @@ def main():
 
             elif user_input.startswith("pps "):
                 user_input = user_input[4:].strip()
-                run_command("powershell " + user_input)
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+                run_command("powershell " + user_input, shell=True)
 
             elif user_input.startswith("pp-pps "):
                 user_input = user_input[7:].strip()
@@ -32016,7 +32022,8 @@ def main():
 
             elif user_input.startswith("cmd "):
                 user_input = user_input[4:].strip()
-                run_command(user_input)
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+                run_command(user_input, shell=True)
 
             elif user_input.startswith("pp-cmd "):
                 user_input = user_input[7:].strip()
