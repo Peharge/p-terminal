@@ -72,6 +72,7 @@ import importlib.util
 import os
 from datetime import datetime
 import io
+import json
 
 def state_info():
     with open(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/state-info.json", "r") as file:
@@ -142,7 +143,6 @@ import time
 import socket
 import subprocess
 import winreg
-import json
 import re
 from typing import Tuple
 
@@ -453,6 +453,7 @@ def gather_info_lines(sys_info: dict, versions: dict) -> list:
     p_compiler_ver       = versions.get("Peharge Compiler Version", "Unbekannt")
     p_cernel_ver    = versions.get("Peharge Kernel Version", "Unbekannt")
     iq_cernel_ver    = versions.get("IQ Kernel Version", "Unbekannt")
+    simon_ver    = versions.get("SIMON Version", "Unbekannt")
     license_info         = versions.get("P-Terminal License",       "Unbekannt")
 
     title = f"PP-Terminal - {os.getlogin()}"
@@ -460,15 +461,15 @@ def gather_info_lines(sys_info: dict, versions: dict) -> list:
 
     # Zeilen hinzufügen
     lines.append("")
-    lines.append("")
     lines.append(f"                                 {title}")
-    lines.append(f"               {line}")
-    lines.append(f"          {main_color}P-Terminal Version{reset}: {p_terminal_ver}")
-    lines.append(f"        {main_color}PP-Terminal Version{reset}: {pp_terminal_ver}")
-    lines.append(f"       {main_color}PP-Terminal Launcher Version{reset}: {launcher_ver}")
-    lines.append(f"      {main_color}Peharge Compiler Version{reset}: {p_compiler_ver}")
+    lines.append(f"                                 {line}")
+    lines.append(f"               {main_color}P-Terminal Version{reset}: {p_terminal_ver}")
+    lines.append(f"          {main_color}PP-Terminal Version{reset}: {pp_terminal_ver}")
+    lines.append(f"        {main_color}PP-Terminal Launcher Version{reset}: {launcher_ver}")
+    lines.append(f"       {main_color}Peharge Compiler Version{reset}: {p_compiler_ver}")
     lines.append(f"      {main_color}Peharge Kernel Version{reset}: {p_cernel_ver}")
     lines.append(f"      {main_color}IQ Kernel Version{reset}: {iq_cernel_ver}")
+    lines.append(f"      {main_color}SIMON Version{reset}: {simon_ver}")
     lines.append(f"      {main_color}P-Terminal License{reset}: {license_info}")
     lines.append(f"      {main_color}MAVIS Version{reset}: 4.3")
     lines.append(f"      {main_color}MAVIS Launcher Version{reset}: 4")

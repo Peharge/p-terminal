@@ -379,6 +379,7 @@ def print_system_info(system_info: dict):
     p_compiler_ver = system_info.get("Peharge Compiler Version", "Unbekannt")
     p_compiler_ver = system_info.get("Peharge Compiler Version", "Unbekannt")
     # iq_compiler_ver = system_info.get("IQ Compiler Version", "Unbekannt")
+    # simon_ver    = versions.get("SIMON Version", "Unbekannt")
     license_info = system_info.get("P-Terminal License", "Unbekannt")
 
     title = f"PP-Terminal - {os.getlogin()}"
