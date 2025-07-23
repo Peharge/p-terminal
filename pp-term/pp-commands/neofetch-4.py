@@ -70,6 +70,7 @@ import importlib.util
 import os
 from datetime import datetime
 import io
+import json
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
@@ -127,7 +128,6 @@ from typing import Tuple
 import pip
 import subprocess
 import winreg
-import json
 import getpass
 
 # Farbcodes definieren
@@ -373,14 +373,14 @@ def print_system_info(system_info: dict):
     """Funktion, um die Systeminformationen im Terminal auszugeben"""
 
     # Werte mit Fallbacks (falls ein Schlüssel fehlt)
-    p_terminal_ver = system_info.get("P-Terminal Version", "Unbekannt")
-    pp_terminal_ver = system_info.get("PP-Terminal Version", "Unbekannt")
-    launcher_ver = system_info.get("PP-Terminal Launcher Version", "Unbekannt")
-    p_compiler_ver = system_info.get("Peharge Compiler Version", "Unbekannt")
-    p_compiler_ver = system_info.get("Peharge Compiler Version", "Unbekannt")
-    # iq_compiler_ver = system_info.get("IQ Compiler Version", "Unbekannt")
-    # simon_ver    = versions.get("SIMON Version", "Unbekannt")
-    license_info = system_info.get("P-Terminal License", "Unbekannt")
+    p_terminal_ver = system_info.get("P-Terminal Version", "unknown")
+    pp_terminal_ver = system_info.get("PP-Terminal Version", "unknown")
+    launcher_ver = system_info.get("PP-Terminal Launcher Version", "unknown")
+    p_compiler_ver = system_info.get("Peharge Compiler Version", "unknown")
+    p_compiler_ver = system_info.get("Peharge Compiler Version", "unknown")
+    # iq_compiler_ver = system_info.get("IQ Compiler Version", "unknown")
+    # simon_ver    = versions.get("SIMON Version", "unknown")
+    license_info = system_info.get("P-Terminal License", "unknown")
 
     title = f"PP-Terminal - {os.getlogin()}"
     line = "-" * len(title)

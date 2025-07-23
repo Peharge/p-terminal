@@ -433,15 +433,15 @@ def gather_info_lines(sys_info: dict, versions: dict) -> list:
     reset = "\033[0m"
     lines = []
 
-    # Versionen aus der JSON-Datei (mit Fallback "Unbekannt")
-    p_terminal_ver       = versions.get("P-Terminal Version",       "Unbekannt")
-    pp_terminal_ver      = versions.get("PP-Terminal Version",      "Unbekannt")
-    launcher_ver         = versions.get("PP-Terminal Launcher Version", "Unbekannt")
-    p_compiler_ver       = versions.get("Peharge Compiler Version", "Unbekannt")
-    p_cernel_ver    = versions.get("Peharge Kernel Version", "Unbekannt")
-    iq_cernel_ver    = versions.get("IQ Kernel Version", "Unbekannt")
-    simon_ver    = versions.get("SIMON Version", "Unbekannt")
-    license_info         = versions.get("P-Terminal License",       "Unbekannt")
+    # Versionen aus der JSON-Datei (mit Fallback "unknown")
+    p_terminal_ver       = versions.get("P-Terminal Version",       "unknown")
+    pp_terminal_ver      = versions.get("PP-Terminal Version",      "unknown")
+    launcher_ver         = versions.get("PP-Terminal Launcher Version", "unknown")
+    p_compiler_ver       = versions.get("Peharge Compiler Version", "unknown")
+    p_cernel_ver    = versions.get("Peharge Kernel Version", "unknown")
+    iq_cernel_ver    = versions.get("IQ Kernel Version", "unknown")
+    simon_ver    = versions.get("SIMON Version", "unknown")
+    license_info         = versions.get("P-Terminal License",       "unknown")
 
     title = f"PP-Terminal - {os.getlogin()}"
     line = "-" * len(title)
@@ -524,7 +524,7 @@ def gather_info_lines(sys_info: dict, versions: dict) -> list:
     try:
         git_ver = subprocess.check_output(['git', '--version'], text=True).strip()
     except Exception:
-        git_ver = "unbekannt"
+        git_ver = "unknown"
     lines.append(f"      {main_color}Git Version{reset}: {git_ver}")
 
     # Windows-spezifische Utilities
@@ -542,7 +542,7 @@ def gather_info_lines(sys_info: dict, versions: dict) -> list:
     try:
         rust_ver = subprocess.check_output(['rustc', '--version'], text=True).strip()
     except Exception:
-        rust_ver = "unbekannt"
+        rust_ver = "unknown"
     lines.append(f"        {main_color}Rust Version{reset}: {rust_ver}")
 
     # Farbpaletten
