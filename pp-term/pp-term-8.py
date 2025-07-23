@@ -19135,8 +19135,8 @@ def handle_special_commands(user_input):
             logging.info(f"[INFO] Starting IQ-QAOA with {n} qubits, {p} layers")
             qubits = cirq.LineQubit.range(n)
             edges = [(qubits[i], qubits[(i + 1) % n]) for i in range(n)]
-            gamma = np.linspace(0.1, np.pi, p)
-            beta = np.linspace(0.1, np.pi / 2, p)
+            gamma = onp.linspace(0.1, onp.pi, p)
+            beta = onp.linspace(0.1, onp.pi / 2, p)
             circuit = cirq.Circuit()
             # initialize in |+>^n
             circuit.append(cirq.H.on_each(*qubits))
@@ -19185,7 +19185,7 @@ def handle_special_commands(user_input):
                 vals = sim.simulate_expectation_values(circuit, [op for _, op in ops])
                 return sum(coeff * val for (coeff, _), val in zip(ops, vals))
 
-            init = np.random.rand(n * depth)
+            init = onp.random.rand(n * depth)
             res = opt.minimize(energy, init, method='COBYLA')
             print(f"[{timestamp()}] [VQE ENERGY] {res.fun}")
             return True
@@ -19273,7 +19273,7 @@ def handle_special_commands(user_input):
                     if b == 'X':
                         c.append(cirq.H(q))
                     elif b == 'Y':
-                        c.append(cirq.rx(np.pi / 2)(q))
+                        c.append(cirq.rx(onp.pi / 2)(q))
                 c.append(cirq.measure(*qubits, key='m'))
                 circuits.append((basis, c))
             sim = cirq.Simulator()
@@ -19322,9 +19322,9 @@ def handle_special_commands(user_input):
             N = int(parts[1])
             logging.info(f"[INFO] Starting IQ-SHOR to factor N={N}")
             # pick random a coprime to N
-            a = np.random.randint(2, N)
+            a = onp.random.randint(2, N)
             while math.gcd(a, N) != 1:
-                a = np.random.randint(2, N)
+                a = onp.random.randint(2, N)
             t = math.ceil(math.log2(N)) * 2
             n = math.ceil(math.log2(N))
             count = cirq.LineQubit.range(t)
@@ -19356,14 +19356,14 @@ def handle_special_commands(user_input):
             circuit.append(cirq.X(b))
             # phase estimation on A = Rz(theta)
             circuit.append([cirq.H(anc),
-                            cirq.CZ(anc, x) ** (theta / np.pi),
+                            cirq.CZ(anc, x) ** (theta / onp.pi),
                             cirq.H(anc)])
             # controlled rotation
-            angle = 2 * np.arccos(1 / np.sqrt(2))
+            angle = 2 * onp.arccos(1 / onp.sqrt(2))
             circuit.append(cirq.Ry(angle)(x).controlled_by(anc))
             # uncompute phase estimation
             circuit.append([cirq.H(anc),
-                            cirq.CZ(anc, x) ** (-theta / np.pi),
+                            cirq.CZ(anc, x) ** (-theta / onp.pi),
                             cirq.H(anc)])
             circuit.append(cirq.measure(x, key='solution'))
             run_circuit(circuit, repetitions=5)
@@ -19380,7 +19380,7 @@ def handle_special_commands(user_input):
             logging.info(f"[INFO] Starting IQ-QSVM with {n} qubits, {shots} shots")
             qubits = cirq.LineQubit.range(n)
             circuit = cirq.Circuit()
-            data = [np.pi / 4, np.pi / 2, 3 * np.pi / 4]
+            data = [onp.pi / 4, onp.pi / 2, 3 * onp.pi / 4]
             for angle in data:
                 for i, q in enumerate(qubits):
                     circuit.append(cirq.rx(angle * (i + 1))(q))
@@ -20889,7 +20889,7 @@ def handle_special_commands(user_input):
                 fig.show()
 
             elif operator == "logret":
-                logret = np.log(close / close.shift(1))
+                logret = onp.log(close / close.shift(1))
                 fig = px.line(x=logret.index, y=logret.values, labels={"x": "Date", "y": "Log Returns"},
                             title=f"{ticker} Log Returns")
                 fig.show()
@@ -20897,7 +20897,7 @@ def handle_special_commands(user_input):
             elif operator == "sharpe":
                 rate = float(args[4]) if len(args) > 4 else 0.01
                 daily_ret = close.pct_change().dropna()
-                sharpe = ((daily_ret.mean() - rate / 252) / daily_ret.std()) * np.sqrt(252)
+                sharpe = ((daily_ret.mean() - rate / 252) / daily_ret.std()) * onp.sqrt(252)
                 print(f"Sharpe Ratio ({ticker}): {sharpe:.4f}")
 
             elif operator == "stats":
