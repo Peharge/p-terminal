@@ -772,6 +772,8 @@ if %ERRORLEVEL% NEQ 0 (
 
 set "USERNAME=%USERNAME%"
 
+all :Log INFO "Please set a Debian-based distribution (e.g. Debian, Ubuntu, Linux Mint) as your main WSL distro, so that the 'apt' package manager (e.g. 'sudo apt install') is available instead of alternatives like 'pacman'."
+
 :: Main Python script for generic WSL installations (fallback)
 set "SCRIPT_install_wsl=C:\Users\%USERNAME%\p-terminal\pp-term\run\wsl\install-wsl.py"
 
