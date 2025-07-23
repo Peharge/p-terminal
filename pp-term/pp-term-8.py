@@ -961,6 +961,10 @@ def handle_special_commands(user_input):
         "fastfetch": "pp-commands\\neofetch.py",  # new
         "screenfetch": "pp-commands\\neofetch.py",  # new
         "pfetch": "pp-commands\\neofetch.py",  # new
+        "neofetch-1": "pp-commands\\neofetch.py",
+        "fastfetch-1": "pp-commands\\neofetch.py",  # new
+        "screenfetch-1": "pp-commands\\neofetch.py",  # new
+        "pfetch-1": "pp-commands\\neofetch.py",  # new
         "neofetch-2": "pp-commands\\neofetch-2.py",  # new
         "fastfetch-2": "pp-commands\\neofetch-2.py",  # new
         "screenfetch-2": "pp-commands\\neofetch-2.py",  # new
@@ -34177,7 +34181,7 @@ def main():
                 print(f"[{timestamp()}] [INFO] PP-Term Kernel has not detected any valid process or instruction. Awaiting input...")
 
             else:
-                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command with shell=True — this can be insecure!")
+                print(f"[{timestamp()}] [INFO] Privileged PP-Terminal Kernel activated — 'shell=True' is required to unleash full EToALTA functionality (note: potential security implications).")
                 run_command(user_input, shell=True)
 
             sys.stdout.flush()
