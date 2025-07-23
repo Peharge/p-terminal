@@ -27,6 +27,10 @@ commands = {
         "fastfetch": "pp-commands\\neofetch.py",  # new
         "screenfetch": "pp-commands\\neofetch.py",  # new
         "pfetch": "pp-commands\\neofetch.py",  # new
+        "neofetch-1": "pp-commands\\neofetch.py",
+        "fastfetch-1": "pp-commands\\neofetch.py",  # new
+        "screenfetch-1": "pp-commands\\neofetch.py",  # new
+        "pfetch-1": "pp-commands\\neofetch.py",  # new
         "neofetch-2": "pp-commands\\neofetch-2.py",  # new
         "fastfetch-2": "pp-commands\\neofetch-2.py",  # new
         "screenfetch-2": "pp-commands\\neofetch-2.py",  # new
