@@ -16538,7 +16538,7 @@ if __name__ == "__main__":
             # Datei anlegen, falls sie nicht existiert
             if not file_path.exists():
                 with open(file_path, "w", encoding="utf-8") as f:
-                        f.write(f"""# -----------------------------------------------------------
+                    f.write(f"""# -----------------------------------------------------------
 # 🐍 Welcome to your new Python file!
 # You have created a new Python file using the PP-Terminal.
 # -----------------------------------------------------------
@@ -16597,7 +16597,7 @@ if __name__ == "__main__":
             # Datei anlegen, falls sie nicht existiert
             if not file_path.exists():
                 with open(file_path, "w", encoding="utf-8") as f:
-                        f.write(f"""# -----------------------------------------------------------
+                    f.write(f"""# -----------------------------------------------------------
 # 🐍 Welcome to your new Python file!
 # You have created a new Python file using the PP-Terminal.
 # -----------------------------------------------------------
