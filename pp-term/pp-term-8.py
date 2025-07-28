@@ -4420,7 +4420,7 @@ def handle_special_commands(user_input):
                 # Neue Datei anlegen, wenn nicht vorhanden
                 if not file_path.exists():
                     with open(file_path, "w", encoding="utf-8") as f:
-                        f.write(f"# You have created a new Python file using the PP-Terminal. The PP-Terminal has given you the current Python interpreter of your .env to Thonny, you just have to activate it at the bottom right.\n")
+                        f.write(f"# You have created a new Python file using the PP-Terminal. The PP-Terminal has given you the Python interpreter of your current .env to Thonny, you just have to activate it at the bottom right.\n")
 
                 # active_env aus JSON laden
                 json_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/current_env.json")
@@ -4525,7 +4525,7 @@ def handle_special_commands(user_input):
                 # Neue Datei anlegen, wenn nicht vorhanden
                 if not file_path.exists():
                     with open(file_path, "w", encoding="utf-8") as f:
-                        f.write(f"# You have created a new Python file using the PP-Terminal. The PP-Terminal has given you the current Python interpreter of your .env to Thonny, you just have to activate it at the bottom right.\n")
+                        f.write(f"# You have created a new Python file using the PP-Terminal. The PP-Terminal has given you the Python interpreter of your current .env to Thonny, you just have to activate it at the bottom right.\n")
 
                 # active_env aus JSON laden
                 json_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/current_env.json")
