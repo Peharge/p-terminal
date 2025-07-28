@@ -4571,7 +4571,7 @@ def handle_special_commands(user_input):
 
                             print(f"[{timestamp()}] [INFO] Updated Thonny settings.json backend.executable to {python_exe}")
 
-                            # .env\.thonny\configuration.ini updaten
+                            # Pfad zur configuration.ini
                             ini_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/.env/.thonny/configuration.ini")
 
                             if ini_path.exists():
@@ -4590,11 +4590,12 @@ def handle_special_commands(user_input):
                                 val = json.dumps(last_configs_obj)
 
                                 config['LocalCPython']['last_configurations'] = val
+                                config['LocalCPython']['executable'] = str(python_exe)  # hier executable setzen
 
                                 with open(ini_path, 'w', encoding='utf-8') as f:
                                     config.write(f)
 
-                                print(f"[{timestamp()}] [INFO] Updated {ini_path} with last_configurations pointing to {python_exe}")
+                                print(f"[{timestamp()}] [INFO] Updated {ini_path} with last_configurations and executable pointing to {python_exe}")
                             else:
                                 print(f"[{timestamp()}] [WARNING] configuration.ini not found at {ini_path}, skipping update.")
 
