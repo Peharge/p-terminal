@@ -290,7 +290,9 @@ commands = {
         "pr 3d-slicer": "run\\simon\\3d-slicer\\run-3d-slicer.py",  # new
         "run 3dslicer": "run\\simon\\3d-slicer\\run-3d-slicer.py",  # new
         "pr 3dslicer": "run\\simon\\3d-slicer\\run-3d-slicer.py",  # new
-        "install simon": "run\\simon\\install-simon-1.py",  # new
+        "install simon": "run\\simon\\install-simon-3.py",  # new
+        "install simo1": "run\\simon\\install-simon-1.py",  # new
+        "install simo3": "run\\simon\\install-simon-3.py",  # new
         "run simon": "mavis-run-jup\\run-jup.py",  # new
         "pr simon": "mavis-run-jup\\run-jup.py",  # new
         "jupyter --version": "pp-commands\\jupyter-version.py",  # new
@@ -742,7 +744,9 @@ commands = {
         "pi deepcoder:14b": "pp-commands\\deepcoder-14b.py",  # new
         "pi mistral-small3.1": "pp-commands\\mistral-small-3-1.py",  # new
         "pi 3d-slicer": "run\\simon\\3d-slicer\\install-3d-slicer.py",  # new
-        "pi simon": "run\\simon\\install-simon-1.py",  # new
+        "pi simon": "run\\simon\\install-simon-3.py",  # new
+        "pi simon1": "run\\simon\\install-simon-1.py",  # new
+        "pi simon3": "run\\simon\\install-simon-3.py",  # new
         "pi fun main": "pp-commands\\fun-install.py",  # new
         "pi fun games main": "pp-commands\\fun-install.py",  # new
         "pi fun calc main": "pp-commands\\fun-install.py",  # new
