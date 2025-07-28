@@ -1603,6 +1603,7 @@ def handle_special_commands(user_input):
         "install lite-xl": "pp-commands\\lite-xl.py",  # new
         "install weather": "pp-commands\\weather.py",  # new
         "install grafana": "mavis-run-grafana\\run-grafana.py",
+        "install carban": "run\\carban\\install-carban.py",  # new
         "update ollama": "pp-commands\\update-ollama.py",  # new
         "update git": "pp-commands\\update-git.py",  # new
         "update visual studio build tools": "pp-commands\\update-vsb.py",  # new
@@ -1876,7 +1877,8 @@ def handle_special_commands(user_input):
         "pi flatpak": "pp-commands\\flatpak.py",  # new
         "pi atom": "pp-commands\\atom.py",  # new
         "pi lite-xl": "pp-commands\\lite-xl.py",  # new
-        "pi weather": "pp-commands\\weather.py"  # new
+        "pi weather": "pp-commands\\weather.py",  # new
+        "pi carban": "run\\carban\\install-carban.py"  # new
     }
 
     # Hier alles in der if-Schleife:
