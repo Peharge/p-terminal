@@ -29869,42 +29869,54 @@ def get_cool_23_pin():
         return f"[{timestamp()}] [ERROR] Error running oh-my-posh:\n{result.stderr}"
 
 
-with open(f"C:/Users/{user_name}/p-terminal/pp-term/autocompletion_commands.json", "r", encoding="utf-8") as file:
+# JSON-Befehle laden
+json_path = f"C:/Users/{user_name}/p-terminal/pp-term/autocompletion_commands.json"
+with open(json_path, "r", encoding="utf-8") as file:
     commands_data = json.load(file)
 
-# COMMANDS aus der JSON-Datei extrahieren
-COMMANDS = commands_data.get("commands", [])
+# Befehle aus JSON extrahieren
+json_commands = commands_data.get("commands", [])
+
+# CMD-kompatible Systembefehle aus PATH sammeln
+def get_cmd_executables():
+    paths = os.environ.get("PATH", "").split(os.pathsep)
+    executables = set()
+
+    for path in paths:
+        if not os.path.isdir(path):
+            continue
+        try:
+            for file in os.listdir(path):
+                if file.endswith((".exe", ".bat", ".cmd")):
+                    executables.add(os.path.splitext(file)[0].lower())
+        except PermissionError:
+            continue
+    return list(executables)
+
+# Kombiniere JSON-Befehle mit Systembefehlen, ohne Duplikate
+COMMANDS = sorted(set(json_commands + get_cmd_executables()))
 
 # Verlauf und Index
 history = []
 history_index = -1
 
-
+# Autovervollständigung einrichten
 def setup_autocomplete(commands=None):
-    """
-    Aktiviert Tab-Autocomplete für eine gegebene Befehlsliste.
-    Nur Befehle, die mit dem bereits getippten Text beginnen, werden vorgeschlagen.
-    """
     if commands is None:
         commands = COMMANDS.copy()
 
-    # Definiere, welche Zeichen als Worttrenner gelten (hier nur Leerzeichen)
     readline.set_completer_delims(' \t\n')
 
     def completer(text, state):
-        # Bei jedem Aufruf filtern wir die Befehle anhand des Präfixes 'text'
-        matches = [cmd for cmd in commands if cmd.startswith(text)]
+        matches = [cmd for cmd in commands if cmd.startswith(text.lower())]
         try:
             return matches[state]
         except IndexError:
             return None
 
-    # Setze den Completer und die Key-Bindings
     readline.set_completer(completer)
     readline.parse_and_bind('tab: complete')
-    # show-all-if-ambiguous = bei mehreren Treffern sofort alle anzeigen
     readline.parse_and_bind('set show-all-if-ambiguous on')
-    # completion-ignore-case = Groß-/Kleinschreibung ignorieren
     readline.parse_and_bind('set completion-ignore-case on')
 
 
