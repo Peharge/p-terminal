@@ -128,6 +128,7 @@ import pythoncom
 import win32com.client
 import glob
 import configparser
+import hashlib
 
 try:
     import ujson as _json
@@ -17616,6 +17617,77 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] executing pcf command: {e}")
         return True
 
+    if user_input.lower() == "pfd":
+        hashes = {}
+        duplicates = {}
+
+        root_dir = "."  # aktuelles Verzeichnis
+
+        for dirpath, dirnames, filenames in os.walk(root_dir):
+            for filename in filenames:
+                filepath = os.path.join(dirpath, filename)
+                try:
+                    with open(filepath, 'rb') as f:
+                        filehash = hashlib.md5(f.read()).hexdigest()
+                except Exception as e:
+                    print(f"[{timestamp()}] [INFO] Could not read file {filepath}: {e}")
+                    continue
+
+                if filehash in hashes:
+                    duplicates.setdefault(filehash, [hashes[filehash]]).append(filepath)
+                else:
+                    hashes[filehash] = filepath
+
+        duplicates = {h: files for h, files in duplicates.items() if len(files) > 1}
+
+        if not duplicates:
+            print(f"[{timestamp()}] [INFO] No duplicates found.")
+            return True
+        else:
+            print(f"[{timestamp()}] [INFO] Found duplicate groups:")
+
+            group_idx = 1
+            group_map = {}
+
+            for filehash, files in duplicates.items():
+                print(f"\n{main_color}[Group {group_idx}]{reset} Duplicate Files:")
+                for i, file in enumerate(files, start=1):
+                    print(f"  {main_color}[{i}]{reset} {file}")
+                group_map[group_idx] = (filehash, files)
+                group_idx += 1
+
+            while True:
+                choice = input(f"\nEnter groups to delete (e.g. 1,3), 'all' to delete all duplicates, or 'none' to skip: ").strip().lower()
+                if choice == "none":
+                    print(f"[{timestamp()}] [INFO] No files deleted.")
+                    return True
+                elif choice == "all":
+                    to_delete = list(group_map.keys())
+                    break
+                else:
+                    try:
+                        to_delete = [int(x.strip()) for x in choice.split(",") if x.strip().isdigit()]
+                        invalid = [x for x in to_delete if x not in group_map]
+                        if invalid:
+                            print(f"[{timestamp()}] [INFO] Invalid group numbers: {invalid}")
+                            continue
+                        break
+                    except Exception:
+                        print(f"[{timestamp()}] [INFO] Invalid input, please try again.")
+
+            for group_number in to_delete:
+                filehash, files = group_map[group_number]
+                files_to_delete = files[1:]
+                for file_path in files_to_delete:
+                    try:
+                        os.remove(file_path)
+                        print(f"[{timestamp()}] [INFO] Deleted {file_path}")
+                    except Exception as e:
+                        print(f"[{timestamp()}] [INFO] Could not delete {file_path}: {e}")
+
+            print(f"[{timestamp()}] [INFO] Deletion process completed.")
+            return True
+
     if user_input.lower() == "whoami":
         print(user_name)
         return True
@@ -33070,7 +33142,7 @@ def main():
 
             elif user_input.startswith("ps "):
                 user_input = user_input[3:].strip()
-                search_websites(user_input)
+                (user_input)
 
             elif user_input.startswith("ps-all "):
                 user_input = user_input[7:].strip()
