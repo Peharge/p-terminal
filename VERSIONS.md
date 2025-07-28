@@ -344,6 +344,7 @@
       - PP-Terminal 8.1.1.11
       - PP-Terminal 8.1.1.13
       - PP-Terminal 8.1.1.14
+      - PP-Terminal 8.1.1.15
 
 ## PP-Terminal Launcher Version
 
