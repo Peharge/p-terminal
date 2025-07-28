@@ -90,6 +90,7 @@ if (!(Test-Path $logDir)) {
 
 try {
     Write-Log INFO "Launching PP-Term 8 script with max CPU affinity, highest priority, and full RAM execution..."
+    Write-Log INFO "If the PP-Terminal fails to start correctly, please execute p-terminal\pp-term\run-pp-term.bat again to ensure the latest dependencies, drivers, and frameworks are installed."
 
     # Check for file existence
     if (!(Test-Path $PythonEnvDir)) {
