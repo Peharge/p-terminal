@@ -93,7 +93,8 @@ if (!(Test-Path $logDir)) {
 
 try {
     # Start-Log
-    Write-Log INFO "Run PP-Term 8 script with maximum CPU affinity..."
+    Write-Log INFO "Initiating PP-Terminal 8 script with high CPU affinity..."
+    Write-Log INFO "If the PP-Terminal fails to start correctly, please execute p-terminal\pp-term\run-pp-term.bat again to ensure the latest dependencies, drivers, and frameworks are installed."
 
     # Existenz prüfen
     if (!(Test-Path $PythonExe)) {
