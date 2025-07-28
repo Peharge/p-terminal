@@ -2279,6 +2279,19 @@ def handle_special_commands(user_input):
         delete_target(target)
         return True
 
+    if user_input.startswith("rm-r "):
+        target = user_input[5:].strip()
+        try:
+            os.remove(target)
+            print(f"File '{target}' was deleted.")
+        except FileNotFoundError:
+            print(f"[{timestamp()}] [ERROR] File '{target}' does not exist.")
+        except PermissionError:
+            print(f"[{timestamp()}] [ERROR] Permission denied when deleting file '{target}'.")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Error deleting file: {e}")
+        return True
+
     if user_input.startswith("prm "):
         target = user_input[4:].strip()
         delete_target(target)
