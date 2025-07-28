@@ -61,6 +61,31 @@
 #
 # Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 
+from datetime import datetime
+
+def timestamp() -> str:
+    """Returns current time formatted with milliseconds"""
+    now = datetime.now()
+    return now.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
+
+print("""
+WARNING: It is recommended to install PHP from the official website:
+https://www.php.net/downloads.php
+
+This script is unofficial and may pose security risks.
+Use at your own risk!
+
+Do you really want to proceed with the installation of PHP? [y/n]:
+""", end='')
+
+choice = input().strip().lower()
+if choice != 'y':
+    print(f"[{timestamp()}] [INFO] Installation aborted by user.")
+    exit(0)
+
+# Hier kann der Installationscode für PHP folgen
+print(f"[{timestamp()}] [INFO] Proceeding with PHP installation...")
+
 import os
 import sys
 import shutil

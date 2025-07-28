@@ -78,6 +78,31 @@ For macOS, it downloads the .dmg file and opens it.
 For Windows, it downloads the system installer (.exe) and launches it.
 """
 
+from datetime import datetime
+
+def timestamp() -> str:
+    """Returns current time formatted with milliseconds"""
+    now = datetime.now()
+    return now.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
+
+print("""
+WARNING: It is recommended to install Visual Studio Code from the official website:
+https://code.visualstudio.com/download
+
+This script is unofficial and may pose security risks.
+Use at your own risk!
+
+Do you really want to proceed with the installation of Visual Studio Code? [y/n]:
+""", end='')
+
+choice = input().strip().lower()
+if choice != 'y':
+    print(f"[{timestamp()}] [INFO] Installation aborted by user.")
+    exit(0)
+
+# Hier kann der Installationscode für Visual Studio Code folgen
+print(f"[{timestamp()}] [INFO] Proceeding with Visual Studio Code installation...")
+
 import argparse
 import logging
 import os

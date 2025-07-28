@@ -61,7 +61,6 @@
 #
 # Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 
-#!/usr/bin/env python3
 """
 This script installs Arch Linux for WSL on Windows.
 It performs the following steps:
@@ -77,6 +76,32 @@ Important:
   - A system restart may be required for the changes (enabled features) to take effect.
   - After installation, you can start Arch Linux with "wsl -d ArchLinux".
 """
+
+from datetime import datetime
+
+def timestamp() -> str:
+    """Returns current time formatted with milliseconds"""
+    now = datetime.now()
+    return now.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
+
+print("""
+WARNING: It is recommended to install WSL Arch Linux using official or trusted community
+methods, such as ArchWSL from GitHub:
+https://github.com/yuk7/ArchWSL
+
+This script is unofficial and may pose security risks.
+Use at your own risk!
+
+Do you really want to proceed with the installation of WSL Arch Linux? [y/n]:
+""", end='')
+
+choice = input().strip().lower()
+if choice != 'y':
+    print(f"[{timestamp()}] [INFO] Installation aborted by user.")
+    exit(0)
+
+# Hier kann der Installationscode für WSL Arch Linux folgen
+print(f"[{timestamp()}] [INFO] Proceeding with WSL Arch Linux installation...")
 
 import os
 import sys

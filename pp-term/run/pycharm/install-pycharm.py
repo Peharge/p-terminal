@@ -72,6 +72,31 @@ Note: For automatic installation, administrator/root privileges or
 OS-specific commands may be required.
 """
 
+from datetime import datetime
+
+def timestamp() -> str:
+    """Returns current time formatted with milliseconds"""
+    now = datetime.now()
+    return now.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
+
+print("""
+WARNING: It is recommended to install PyCharm from the official JetBrains website:
+https://www.jetbrains.com/pycharm/download/
+
+This script is unofficial and may pose security risks.
+Use at your own risk!
+
+Do you really want to proceed with the installation? [y/n]:
+""", end='')
+
+choice = input().strip().lower()
+if choice != 'y':
+    print(f"[{timestamp()}] [INFO] Installation aborted by user.")
+    exit(0)
+
+# Hier kann der Installationscode für PyCharm folgen
+print(f"[{timestamp()}] [INFO] Proceeding with PyCharm installation...")
+
 import argparse
 import logging
 import os

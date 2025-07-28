@@ -77,6 +77,30 @@ Important:
   - After installation, the first Ubuntu session will start in a new window where you will need to set up (username, password).
 """
 
+from datetime import datetime
+
+def timestamp() -> str:
+    """Returns current time formatted with milliseconds"""
+    now = datetime.now()
+    return now.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
+
+print("""
+WARNING: This script is intended for installing or maintaining Ubuntu on WSL.
+
+This script is unofficial and may pose security risks.
+Use at your own risk!
+
+Do you really want to proceed with WSL Ubuntu installation/maintenance? [y/n]:
+""", end='')
+
+choice = input().strip().lower()
+if choice != 'y':
+    print(f"[{timestamp()}] [INFO] Operation aborted by user.")
+    exit(0)
+
+# Hier kann der Installations- oder Wartungscode für WSL Ubuntu folgen
+print(f"[{timestamp()}] [INFO] Proceeding with WSL Ubuntu installation/maintenance...")
+
 import os
 import sys
 import subprocess

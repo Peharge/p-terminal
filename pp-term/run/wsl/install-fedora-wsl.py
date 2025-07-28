@@ -81,6 +81,31 @@ Note:
     You can also install it via command line with `wsl --install -d Fedora` (requires WSL version 2 and Windows 10 21H2 or later).
 """
 
+from datetime import datetime
+
+def timestamp() -> str:
+    """Returns current time formatted with milliseconds"""
+    now = datetime.now()
+    return now.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
+
+print("""
+WARNING: It is recommended to install WSL Fedora from official sources:
+https://docs.fedoraproject.org/en-US/wsl/
+
+This script is unofficial and may pose security risks.
+Use at your own risk!
+
+Do you really want to proceed with the installation of WSL Fedora? [y/n]:
+""", end='')
+
+choice = input().strip().lower()
+if choice != 'y':
+    print(f"[{timestamp()}] [INFO] Installation aborted by user.")
+    exit(0)
+
+# Hier kann der Installationscode für WSL Fedora folgen
+print(f"[{timestamp()}] [INFO] Proceeding with WSL Fedora installation...")
+
 import os
 import sys
 import subprocess

@@ -83,6 +83,30 @@ Note:
   - This script assumes a registered distribution named "LinuxMint" already exists.
 """
 
+from datetime import datetime
+
+def timestamp() -> str:
+    """Returns current time formatted with milliseconds"""
+    now = datetime.now()
+    return now.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
+
+print("""
+WARNING: This script is intended for installing or maintaining Linux Mint on WSL.
+
+This script is unofficial and may pose security risks.
+Use at your own risk!
+
+Do you really want to proceed with WSL Linux Mint installation/maintenance? [y/n]:
+""", end='')
+
+choice = input().strip().lower()
+if choice != 'y':
+    print(f"[{timestamp()}] [INFO] Operation aborted by user.")
+    exit(0)
+
+# Hier kann der Installations- oder Wartungscode für WSL Linux Mint folgen
+print(f"[{timestamp()}] [INFO] Proceeding with WSL Linux Mint installation/maintenance...")
+
 import os
 import sys
 import subprocess

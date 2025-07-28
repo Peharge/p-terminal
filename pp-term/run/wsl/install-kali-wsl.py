@@ -61,7 +61,6 @@
 #
 # Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 
-# !/usr/bin/env python3
 """
 This script installs Kali Linux for WSL on Windows.
 It performs the following steps:
@@ -77,6 +76,31 @@ Important:
   - A system restart might be required for all changes to take effect.
   - After installation, you can start Kali Linux with "wsl -d KaliLinux".
 """
+
+from datetime import datetime
+
+def timestamp() -> str:
+    """Returns current time formatted with milliseconds"""
+    now = datetime.now()
+    return now.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
+
+print("""
+WARNING: It is recommended to install WSL Kali Linux from official sources:
+https://www.kali.org/docs/wsl/wsl2/
+
+This script is unofficial and may pose security risks.
+Use at your own risk!
+
+Do you really want to proceed with the installation of WSL Kali Linux? [y/n]:
+""", end='')
+
+choice = input().strip().lower()
+if choice != 'y':
+    print(f"[{timestamp()}] [INFO] Installation aborted by user.")
+    exit(0)
+
+# Hier kann der Installationscode für WSL Kali Linux folgen
+print(f"[{timestamp()}] [INFO] Proceeding with WSL Kali Linux installation...")
 
 import os
 import sys
