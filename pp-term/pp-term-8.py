@@ -255,7 +255,7 @@ def print_banner():
     remote_total, behind = get_commit_info(local_repo_path)
     remote_total_all = 500 + 971 + remote_total
     if behind != 0:
-        print(f"[{timestamp()}] [INFO] The local repository is {main_color}{behind}{reset} commits behind the remote repository, which contains a total of main {main_color}{remote_total}{reset}/ hole {main_color}{remote_total_all}{reset} commits.")
+        print(f"[{timestamp()}] [INFO] The local repository is {main_color}{behind}{reset} commits behind the remote repository, which contains a total of main {main_color}{remote_total}{reset}/ hole {main_color}{remote_total_all}{reset} commits. You can easily update by running 'update' in the PP-terminal.")
 
     print(f"""
 {main_color}██████╗ ██████╗{reset}{white}    ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗     {reset}
