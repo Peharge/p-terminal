@@ -4404,7 +4404,6 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("thonny-pip "):
-
         if user_input.lower() == "thonny-pip q" or user_input == "thonny-pip \x11":  # 'q' oder Ctrl+Q zum Beenden
             print(f"[{timestamp()}] [INFO] Terminated by exit command")
             shutdown_thonny()
@@ -4509,7 +4508,6 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("prt "):
-
         if user_input.lower() == "prt q" or user_input == "prt \x11":  # 'q' oder Ctrl+Q zum Beenden
             print(f"[{timestamp()}] [INFO] Terminated by exit command")
             shutdown_thonny()
