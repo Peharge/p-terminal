@@ -16566,7 +16566,7 @@ if __name__ == "__main__":
                 shutdown_spy()
                 return True
 
-            print(f"[{timestamp()}] [INFO] Launching Spyder with file:{file_path}")
+            print(f"[{timestamp()}] [INFO] Launching Spyder with file: {file_path}")
             print(f"[{timestamp()}] [INFO] Spyder executable: {spyder_exe}")
 
             # Spyder nur mit Datei starten (kein --python-interpreter)
@@ -16625,7 +16625,7 @@ if __name__ == "__main__":
                 shutdown_spy()
                 return True
 
-            print(f"[{timestamp()}] [INFO] Launching Spyder with file:{file_path}")
+            print(f"[{timestamp()}] [INFO] Launching Spyder with file: {file_path}")
             print(f"[{timestamp()}] [INFO] Spyder executable: {spyder_exe}")
 
             # Spyder nur mit Datei starten (kein --python-interpreter)
@@ -16684,7 +16684,7 @@ if __name__ == "__main__":
                 shutdown_spy()
                 return True
 
-            print(f"[{timestamp()}] [INFO] Launching Spyder with file:{file_path}")
+            print(f"[{timestamp()}] [INFO] Launching Spyder with file: {file_path}")
             print(f"[{timestamp()}] [INFO] Spyder executable: {spyder_exe}")
 
             # Spyder nur mit Datei starten (kein --python-interpreter)
