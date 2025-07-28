@@ -9222,6 +9222,40 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] pd-python-all failed: {e}")
         return True
 
+    if user_input.startswith(("pd-pudb ", "pd-ipdb ")):
+        # pudb oder ipdb debug commands
+        if user_input.startswith("pd-pudb "):
+            user_input = user_input[8:].strip()
+            module = "pudb"
+        else:
+            user_input = user_input[8:].strip()
+            module = "ipdb"
+
+        # Aktive Umgebung laden
+        json_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/current_env.json")
+        if not json_path.exists():
+            print(f"[{timestamp()}] [ERROR] Environment config file not found: {json_path}")
+            shutdown_jupyter_kernel()
+            return True
+        with open(json_path, 'r') as file:
+            data = json.load(file)
+            active_env_path = data.get("active_env")
+
+        if not active_env_path:
+            print(f"[{timestamp()}] [ERROR] No active environment found.")
+            shutdown_jupyter_kernel()
+            return True
+
+        command = f"python -m {module} {user_input}"
+        try:
+            print(f"[{timestamp()}] [INFO] Debugging {user_input} with {module} in env {active_env_path}...\n")
+            run_command(command, shell=True)
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Executing {module} command failed: {e}")
+        return True
+
     if user_input.startswith("go run "):
         user_input = user_input[7:].strip()
         print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
@@ -16437,6 +16471,132 @@ def handle_special_commands(user_input):
 
         return True
 
+    if user_input.startswith("spyder "):
+        file_input = user_input[7:].strip()
+
+        if not file_input:
+            print(f"[{timestamp()}] [ERROR] No file specified.")
+            return True
+
+        try:
+            file_path = Path(file_input).resolve()
+            file_path.parent.mkdir(parents=True, exist_ok=True)
+
+            # Datei anlegen, falls sie nicht existiert
+            if not file_path.exists():
+                with open(file_path, "w", encoding="utf-8") as f:
+                    f.write("# You have created a new Python file using the PP-Terminal.\n")
+
+            # Pfad zu Spyder in der .env
+            current_env = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/.env")
+            spyder_exe = current_env / "Scripts" / "spyder.exe"
+
+            if not spyder_exe.exists():
+                print(f"[{timestamp()}] [ERROR] Spyder not found at: {spyder_exe}")
+                shutdown_spy()
+                return True
+
+            print(f"[{timestamp()}] [INFO] Launching Spyder with file:\n{file_path}")
+            print(f"[{timestamp()}] [INFO] Spyder executable: {spyder_exe}")
+
+            # Spyder nur mit Datei starten (kein --python-interpreter)
+            subprocess.Popen([
+                str(spyder_exe),
+                "--new-instance",
+                str(file_path)
+            ])
+
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Failed to launch Spyder: {e}")
+            shutdown_spy()
+            return True
+
+        return True
+
+    if user_input.startswith("spyder-pip "):
+        file_input = user_input[11:].strip()
+
+        if not file_input:
+            print(f"[{timestamp()}] [ERROR] No file specified.")
+            return True
+
+        try:
+            file_path = Path(file_input).resolve()
+            file_path.parent.mkdir(parents=True, exist_ok=True)
+
+            # Datei anlegen, falls sie nicht existiert
+            if not file_path.exists():
+                with open(file_path, "w", encoding="utf-8") as f:
+                    f.write("# You have created a new Python file using the PP-Terminal.\n")
+
+            # Pfad zu Spyder in der .env
+            current_env = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/.env")
+            spyder_exe = current_env / "Scripts" / "spyder.exe"
+
+            if not spyder_exe.exists():
+                print(f"[{timestamp()}] [ERROR] Spyder not found at: {spyder_exe}")
+                shutdown_spy()
+                return True
+
+            print(f"[{timestamp()}] [INFO] Launching Spyder with file:\n{file_path}")
+            print(f"[{timestamp()}] [INFO] Spyder executable: {spyder_exe}")
+
+            # Spyder nur mit Datei starten (kein --python-interpreter)
+            subprocess.Popen([
+                str(spyder_exe),
+                "--new-instance",
+                str(file_path)
+            ])
+
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Failed to launch Spyder: {e}")
+            shutdown_spy()
+            return True
+
+        return True
+
+    if user_input.startswith("prs "):
+        file_input = user_input[4:].strip()
+
+        if not file_input:
+            print(f"[{timestamp()}] [ERROR] No file specified.")
+            return True
+
+        try:
+            file_path = Path(file_input).resolve()
+            file_path.parent.mkdir(parents=True, exist_ok=True)
+
+            # Datei anlegen, falls sie nicht existiert
+            if not file_path.exists():
+                with open(file_path, "w", encoding="utf-8") as f:
+                    f.write("# You have created a new Python file using the PP-Terminal.\n")
+
+            # Pfad zu Spyder in der .env
+            current_env = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/.env")
+            spyder_exe = current_env / "Scripts" / "spyder.exe"
+
+            if not spyder_exe.exists():
+                print(f"[{timestamp()}] [ERROR] Spyder not found at: {spyder_exe}")
+                shutdown_spy()
+                return True
+
+            print(f"[{timestamp()}] [INFO] Launching Spyder with file:\n{file_path}")
+            print(f"[{timestamp()}] [INFO] Spyder executable: {spyder_exe}")
+
+            # Spyder nur mit Datei starten (kein --python-interpreter)
+            subprocess.Popen([
+                str(spyder_exe),
+                "--new-instance",
+                str(file_path)
+            ])
+
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Failed to launch Spyder: {e}")
+            shutdown_spy()
+            return True
+
+        return True
+
     if user_input.startswith("pff "):
         user_input = user_input[4:].strip()
         current_dir = Path.cwd().resolve()
@@ -23249,6 +23409,10 @@ def shutdown_thonny():
     # Beispiel-Funktion, wie du Thonny beenden willst
     print(f"[{timestamp()}] [INFO] Shutting down Thonny...")
     # Hier deine Logik zum Beenden/Shutdown
+
+
+def shutdown_spy():
+    print(f"[{timestamp()}] [INFO] Shutdown requested.")
 
 
 def handle_vs_c_command(user_input: str) -> bool:
