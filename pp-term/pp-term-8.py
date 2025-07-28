@@ -4426,7 +4426,24 @@ def handle_special_commands(user_input):
                 # Neue Datei anlegen, wenn nicht vorhanden
                 if not file_path.exists():
                     with open(file_path, "w", encoding="utf-8") as f:
-                        f.write(f"# You have created a new Python file using the PP-Terminal. The PP-Terminal has given you the Python interpreter of your current .env to Thonny, you just have to activate it at the bottom right.\n")
+                        f.write(f"""# -----------------------------------------------------------
+# 🐍 Welcome to your new Python file!
+# You have created a new Python file using the PP-Terminal.
+# -----------------------------------------------------------
+#
+# This is a basic starting template to help you get going.
+# Feel free to modify or delete this code and write your own!
+# Happy coding! 🚀
+
+def main():
+  print("👋 Hello, developer!")
+  print("This file was created via the PP-Terminal.")
+  print("Need help? Type 'help()' in the Terminal.")
+
+# Call the main function when this script runs
+if __name__ == "__main__":
+  main()
+""")
 
                 # active_env aus JSON laden
                 json_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/current_env.json")
@@ -4530,7 +4547,24 @@ def handle_special_commands(user_input):
                 # Neue Datei anlegen, wenn nicht vorhanden
                 if not file_path.exists():
                     with open(file_path, "w", encoding="utf-8") as f:
-                        f.write(f"# You have created a new Python file using the PP-Terminal. The PP-Terminal has given you the Python interpreter of your current .env to Thonny, you just have to activate it at the bottom right.\n")
+                        f.write(f"""# -----------------------------------------------------------
+# 🐍 Welcome to your new Python file!
+# You have created a new Python file using the PP-Terminal.
+# -----------------------------------------------------------
+#
+# This is a basic starting template to help you get going.
+# Feel free to modify or delete this code and write your own!
+# Happy coding! 🚀
+
+def main():
+  print("👋 Hello, developer!")
+  print("This file was created via the PP-Terminal.")
+  print("Need help? Type 'help()' in the Terminal.")
+
+# Call the main function when this script runs
+if __name__ == "__main__":
+  main()
+""")
 
                 # active_env aus JSON laden
                 json_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/current_env.json")
@@ -16504,7 +16538,24 @@ def handle_special_commands(user_input):
             # Datei anlegen, falls sie nicht existiert
             if not file_path.exists():
                 with open(file_path, "w", encoding="utf-8") as f:
-                    f.write("# You have created a new Python file using the PP-Terminal.\n")
+                        f.write(f"""# -----------------------------------------------------------
+# 🐍 Welcome to your new Python file!
+# You have created a new Python file using the PP-Terminal.
+# -----------------------------------------------------------
+#
+# This is a basic starting template to help you get going.
+# Feel free to modify or delete this code and write your own!
+# Happy coding! 🚀
+
+def main():
+  print("👋 Hello, developer!")
+  print("This file was created via the PP-Terminal.")
+  print("Need help? Type 'help()' in the Terminal.")
+
+# Call the main function when this script runs
+if __name__ == "__main__":
+  main()
+""")
 
             # Pfad zu Spyder in der .env
             current_env = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/.env")
@@ -16515,7 +16566,7 @@ def handle_special_commands(user_input):
                 shutdown_spy()
                 return True
 
-            print(f"[{timestamp()}] [INFO] Launching Spyder with file:\n{file_path}")
+            print(f"[{timestamp()}] [INFO] Launching Spyder with file:{file_path}")
             print(f"[{timestamp()}] [INFO] Spyder executable: {spyder_exe}")
 
             # Spyder nur mit Datei starten (kein --python-interpreter)
@@ -16546,7 +16597,24 @@ def handle_special_commands(user_input):
             # Datei anlegen, falls sie nicht existiert
             if not file_path.exists():
                 with open(file_path, "w", encoding="utf-8") as f:
-                    f.write("# You have created a new Python file using the PP-Terminal.\n")
+                        f.write(f"""# -----------------------------------------------------------
+# 🐍 Welcome to your new Python file!
+# You have created a new Python file using the PP-Terminal.
+# -----------------------------------------------------------
+#
+# This is a basic starting template to help you get going.
+# Feel free to modify or delete this code and write your own!
+# Happy coding! 🚀
+
+def main():
+  print("👋 Hello, developer!")
+  print("This file was created via the PP-Terminal.")
+  print("Need help? Type 'help()' in the Terminal.")
+
+# Call the main function when this script runs
+if __name__ == "__main__":
+  main()
+""")
 
             # Pfad zu Spyder in der .env
             current_env = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/.env")
@@ -16557,7 +16625,7 @@ def handle_special_commands(user_input):
                 shutdown_spy()
                 return True
 
-            print(f"[{timestamp()}] [INFO] Launching Spyder with file:\n{file_path}")
+            print(f"[{timestamp()}] [INFO] Launching Spyder with file:{file_path}")
             print(f"[{timestamp()}] [INFO] Spyder executable: {spyder_exe}")
 
             # Spyder nur mit Datei starten (kein --python-interpreter)
@@ -16588,7 +16656,24 @@ def handle_special_commands(user_input):
             # Datei anlegen, falls sie nicht existiert
             if not file_path.exists():
                 with open(file_path, "w", encoding="utf-8") as f:
-                    f.write("# You have created a new Python file using the PP-Terminal.\n")
+                    f.write(f"""# -----------------------------------------------------------
+# 🐍 Welcome to your new Python file!
+# You have created a new Python file using the PP-Terminal.
+# -----------------------------------------------------------
+#
+# This is a basic starting template to help you get going.
+# Feel free to modify or delete this code and write your own!
+# Happy coding! 🚀
+
+def main():
+  print("👋 Hello, developer!")
+  print("This file was created via the PP-Terminal.")
+  print("Need help? Type 'help()' in the Terminal.")
+
+# Call the main function when this script runs
+if __name__ == "__main__":
+  main()
+""")
 
             # Pfad zu Spyder in der .env
             current_env = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/.env")
@@ -16599,7 +16684,7 @@ def handle_special_commands(user_input):
                 shutdown_spy()
                 return True
 
-            print(f"[{timestamp()}] [INFO] Launching Spyder with file:\n{file_path}")
+            print(f"[{timestamp()}] [INFO] Launching Spyder with file:{file_path}")
             print(f"[{timestamp()}] [INFO] Spyder executable: {spyder_exe}")
 
             # Spyder nur mit Datei starten (kein --python-interpreter)
