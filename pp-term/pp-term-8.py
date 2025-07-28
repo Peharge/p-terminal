@@ -33142,7 +33142,7 @@ def main():
 
             elif user_input.startswith("ps "):
                 user_input = user_input[3:].strip()
-                (user_input)
+                search_websites(user_input)
 
             elif user_input.startswith("ps-all "):
                 user_input = user_input[7:].strip()
