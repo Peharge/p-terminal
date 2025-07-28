@@ -4386,6 +4386,216 @@ def handle_special_commands(user_input):
 
         return True
 
+    if user_input.startswith("thonny-pip "):
+
+        if user_input.lower() == "thonny-pip q" or user_input == "thonny-pip \x11":  # 'q' oder Ctrl+Q zum Beenden
+            print(f"[{timestamp()}] [INFO] Terminated by exit command")
+            shutdown_thonny()
+        else:
+            try:
+                file_input = user_input[11:].strip()
+
+                # Dateiendung korrigieren
+                if file_input.endswith(".jup") or file_input.endswith(".pj"):
+                    file_input = file_input.rsplit(".", 1)[0] + ".py"
+                elif not file_input.endswith(".py"):
+                    file_input += ".py"
+
+                file_path = Path(file_input).resolve()
+                file_path.parent.mkdir(parents=True, exist_ok=True)
+
+                # Neue Datei anlegen, wenn nicht vorhanden
+                if not file_path.exists():
+                    with open(file_path, "w", encoding="utf-8") as f:
+                        f.write(f"# You have created a new Python file using the PP-Terminal. The PP-Terminal has given you the current Python interpreter of your .env to Thonny, you just have to activate it at the bottom right.\n")
+
+                # active_env aus JSON laden
+                json_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/current_env.json")
+                if not json_path.exists():
+                    print(f"[{timestamp()}] [ERROR] current_env.json not found at {json_path}")
+                    shutdown_thonny()
+                else:
+                    with open(json_path, "r", encoding="utf-8") as f:
+                        data = json.load(f)
+                    active_env_path = data.get("active_env")
+
+                    if not active_env_path:
+                        print(f"[{timestamp()}] [ERROR] 'active_env' key missing in JSON.")
+                        shutdown_thonny()
+                    else:
+                        active_env = Path(active_env_path)
+                        python_exe = active_env / "Scripts" / "python.exe"
+
+                        if not python_exe.exists():
+                            print(f"[{timestamp()}] [ERROR] Python interpreter not found at {python_exe}")
+                            shutdown_thonny()
+                        else:
+                            # Thonny settings.json im Benutzerprofil updaten
+                            thonny_settings_dir = Path.home() / ".thonny"
+                            thonny_settings_dir.mkdir(exist_ok=True)
+                            settings_path = thonny_settings_dir / "settings.json"
+
+                            if settings_path.exists():
+                                with open(settings_path, "r", encoding="utf-8") as f:
+                                    settings = json.load(f)
+                            else:
+                                settings = {}
+
+                            settings["backend.executable"] = str(python_exe)
+
+                            with open(settings_path, "w", encoding="utf-8") as f:
+                                json.dump(settings, f, indent=4)
+
+                            print(f"[{timestamp()}] [INFO] Updated Thonny settings.json backend.executable to {python_exe}")
+
+                            # .env\.thonny\configuration.ini updaten
+                            ini_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/.env/.thonny/configuration.ini")
+
+                            if ini_path.exists():
+                                config = configparser.ConfigParser()
+                                config.optionxform = str  # Groß-/Kleinschreibung erhalten
+                                config.read(ini_path, encoding="utf-8")
+
+                                if 'LocalCPython' not in config.sections():
+                                    config.add_section('LocalCPython')
+
+                                # last_configurations als JSON-String speichern
+                                last_configs_obj = [{
+                                    "run.backend_name": "LocalCPython",
+                                    "LocalCPython.executable": str(python_exe)
+                                }]
+                                val = json.dumps(last_configs_obj)
+
+                                config['LocalCPython']['last_configurations'] = val
+
+                                with open(ini_path, 'w', encoding='utf-8') as f:
+                                    config.write(f)
+
+                                print(f"[{timestamp()}] [INFO] Updated {ini_path} with last_configurations pointing to {python_exe}")
+                            else:
+                                print(f"[{timestamp()}] [WARNING] configuration.ini not found at {ini_path}, skipping update.")
+
+                            # Thonny.exe im .env Ordner starten
+                            fixed_thonny = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/.env/Scripts/thonny.exe")
+
+                            if not fixed_thonny.exists():
+                                print(f"[{timestamp()}] [ERROR] Thonny executable not found at {fixed_thonny}")
+                                shutdown_thonny()
+                            else:
+                                print(f"[{timestamp()}] [INFO] Starting Thonny with file: {file_path}")
+                                subprocess.Popen([str(fixed_thonny), str(file_path)], shell=True)
+
+            except Exception as e:
+                print(f"[{timestamp()}] [ERROR] An error occurred: {e}")
+                shutdown_thonny()
+
+        return True
+
+    if user_input.startswith("prt "):
+
+        if user_input.lower() == "prt q" or user_input == "prt \x11":  # 'q' oder Ctrl+Q zum Beenden
+            print(f"[{timestamp()}] [INFO] Terminated by exit command")
+            shutdown_thonny()
+        else:
+            try:
+                file_input = user_input[4:].strip()
+
+                # Dateiendung korrigieren
+                if file_input.endswith(".jup") or file_input.endswith(".pj"):
+                    file_input = file_input.rsplit(".", 1)[0] + ".py"
+                elif not file_input.endswith(".py"):
+                    file_input += ".py"
+
+                file_path = Path(file_input).resolve()
+                file_path.parent.mkdir(parents=True, exist_ok=True)
+
+                # Neue Datei anlegen, wenn nicht vorhanden
+                if not file_path.exists():
+                    with open(file_path, "w", encoding="utf-8") as f:
+                        f.write(f"# You have created a new Python file using the PP-Terminal. The PP-Terminal has given you the current Python interpreter of your .env to Thonny, you just have to activate it at the bottom right.\n")
+
+                # active_env aus JSON laden
+                json_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/current_env.json")
+                if not json_path.exists():
+                    print(f"[{timestamp()}] [ERROR] current_env.json not found at {json_path}")
+                    shutdown_thonny()
+                else:
+                    with open(json_path, "r", encoding="utf-8") as f:
+                        data = json.load(f)
+                    active_env_path = data.get("active_env")
+
+                    if not active_env_path:
+                        print(f"[{timestamp()}] [ERROR] 'active_env' key missing in JSON.")
+                        shutdown_thonny()
+                    else:
+                        active_env = Path(active_env_path)
+                        python_exe = active_env / "Scripts" / "python.exe"
+
+                        if not python_exe.exists():
+                            print(f"[{timestamp()}] [ERROR] Python interpreter not found at {python_exe}")
+                            shutdown_thonny()
+                        else:
+                            # Thonny settings.json im Benutzerprofil updaten
+                            thonny_settings_dir = Path.home() / ".thonny"
+                            thonny_settings_dir.mkdir(exist_ok=True)
+                            settings_path = thonny_settings_dir / "settings.json"
+
+                            if settings_path.exists():
+                                with open(settings_path, "r", encoding="utf-8") as f:
+                                    settings = json.load(f)
+                            else:
+                                settings = {}
+
+                            settings["backend.executable"] = str(python_exe)
+
+                            with open(settings_path, "w", encoding="utf-8") as f:
+                                json.dump(settings, f, indent=4)
+
+                            print(f"[{timestamp()}] [INFO] Updated Thonny settings.json backend.executable to {python_exe}")
+
+                            # .env\.thonny\configuration.ini updaten
+                            ini_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/.env/.thonny/configuration.ini")
+
+                            if ini_path.exists():
+                                config = configparser.ConfigParser()
+                                config.optionxform = str  # Groß-/Kleinschreibung erhalten
+                                config.read(ini_path, encoding="utf-8")
+
+                                if 'LocalCPython' not in config.sections():
+                                    config.add_section('LocalCPython')
+
+                                # last_configurations als JSON-String speichern
+                                last_configs_obj = [{
+                                    "run.backend_name": "LocalCPython",
+                                    "LocalCPython.executable": str(python_exe)
+                                }]
+                                val = json.dumps(last_configs_obj)
+
+                                config['LocalCPython']['last_configurations'] = val
+
+                                with open(ini_path, 'w', encoding='utf-8') as f:
+                                    config.write(f)
+
+                                print(f"[{timestamp()}] [INFO] Updated {ini_path} with last_configurations pointing to {python_exe}")
+                            else:
+                                print(f"[{timestamp()}] [WARNING] configuration.ini not found at {ini_path}, skipping update.")
+
+                            # Thonny.exe im .env Ordner starten
+                            fixed_thonny = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/.env/Scripts/thonny.exe")
+
+                            if not fixed_thonny.exists():
+                                print(f"[{timestamp()}] [ERROR] Thonny executable not found at {fixed_thonny}")
+                                shutdown_thonny()
+                            else:
+                                print(f"[{timestamp()}] [INFO] Starting Thonny with file: {file_path}")
+                                subprocess.Popen([str(fixed_thonny), str(file_path)], shell=True)
+
+            except Exception as e:
+                print(f"[{timestamp()}] [ERROR] An error occurred: {e}")
+                shutdown_thonny()
+
+        return True
+
     if user_input.startswith("gedit "):
         print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
@@ -23033,6 +23243,12 @@ def handle_vs_cpp_command(user_input: str) -> bool:
     except subprocess.CalledProcessError as e:
         print(f"[{timestamp()}] [ERROR] Compilation failed (Exit {e.returncode}).")
     return True
+
+
+def shutdown_thonny():
+    # Beispiel-Funktion, wie du Thonny beenden willst
+    print(f"[{timestamp()}] [INFO] Shutting down Thonny...")
+    # Hier deine Logik zum Beenden/Shutdown
 
 
 def handle_vs_c_command(user_input: str) -> bool:
