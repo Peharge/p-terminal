@@ -93,7 +93,7 @@ from typing import List
 import getpass
 
 # Logging configuration
-log_path = Path(__file__).parent / "installer.log"
+log_path = Path(__file__).parent / "installer-ibm_db.log"
 logging.basicConfig(
     level=logging.INFO,
     format="[%(asctime)s.%(msecs)03d] [%(levelname)s] %(message)s",
