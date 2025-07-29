@@ -31507,6 +31507,8 @@ def main():
             elif user_input.lower() == "pin cool":
                 state = "cool"
 
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
                 data = {"state": state}
 
                 with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
@@ -31516,6 +31518,8 @@ def main():
 
             elif user_input.lower() == "pin cool-1":
                 state = "cool"
+
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
                 data = {"state": state}
 
@@ -31527,6 +31531,8 @@ def main():
             elif user_input.lower() == "pin cool-2":
                 state = "cool-2"
 
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
                 data = {"state": state}
 
                 with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
@@ -31536,6 +31542,8 @@ def main():
 
             elif user_input.lower() == "pin cool-3":
                 state = "cool-3"
+
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
                 data = {"state": state}
 
@@ -31547,6 +31555,8 @@ def main():
             elif user_input.lower() == "pin cool-4":
                 state = "cool-4"
 
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
                 data = {"state": state}
 
                 with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
@@ -31556,6 +31566,8 @@ def main():
 
             elif user_input.lower() == "pin cool-5":
                 state = "cool-5"
+
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
                 data = {"state": state}
 
@@ -31567,6 +31579,8 @@ def main():
             elif user_input.lower() == "pin cool-6":
                 state = "cool-6"
 
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
                 data = {"state": state}
 
                 with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
@@ -31576,6 +31590,8 @@ def main():
 
             elif user_input.lower() == "pin cool-7":
                 state = "cool-7"
+
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
                 data = {"state": state}
 
@@ -31587,6 +31603,8 @@ def main():
             elif user_input.lower() == "pin cool-8":
                 state = "cool-8"
 
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
                 data = {"state": state}
 
                 with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
@@ -31596,6 +31614,8 @@ def main():
 
             elif user_input.lower() == "pin cool-9":
                 state = "cool-9"
+
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
                 data = {"state": state}
 
@@ -31607,6 +31627,8 @@ def main():
             elif user_input.lower() == "pin cool-10":
                 state = "cool-10"
 
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
                 data = {"state": state}
 
                 with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
@@ -31616,6 +31638,8 @@ def main():
 
             elif user_input.lower() == "pin cool-11":
                 state = "cool_11"
+
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
                 data = {"state": state}
 
@@ -31627,6 +31651,8 @@ def main():
             elif user_input.lower() == "pin cool-12":
                 state = "cool-12"
 
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
                 data = {"state": state}
 
                 with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
@@ -31636,6 +31662,8 @@ def main():
 
             elif user_input.lower() == "pin cool-13":
                 state = "cool-13"
+
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
                 data = {"state": state}
 
@@ -31647,6 +31675,8 @@ def main():
             elif user_input.lower() == "pin cool-14":
                 state = "cool-14"
 
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
                 data = {"state": state}
 
                 with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
@@ -31656,6 +31686,8 @@ def main():
 
             elif user_input.lower() == "pin cool-15":
                 state = "cool-15"
+
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
                 data = {"state": state}
 
@@ -31667,6 +31699,8 @@ def main():
             elif user_input.lower() == "pin cool-16":
                 state = "cool-16"
 
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
                 data = {"state": state}
 
                 with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
@@ -31676,6 +31710,8 @@ def main():
 
             elif user_input.lower() == "pin cool-17":
                 state = "cool-17"
+
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
                 data = {"state": state}
 
@@ -31687,6 +31723,8 @@ def main():
             elif user_input.lower() == "pin cool-18":
                 state = "cool-18"
 
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
                 data = {"state": state}
 
                 with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
@@ -31696,6 +31734,8 @@ def main():
 
             elif user_input.lower() == "pin cool-19":
                 state = "cool-19"
+
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
                 data = {"state": state}
 
@@ -31707,6 +31747,8 @@ def main():
             elif user_input.lower() == "pin cool-20":
                 state = "cool-20"
 
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
                 data = {"state": state}
 
                 with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
@@ -31716,6 +31758,8 @@ def main():
 
             elif user_input.lower() == "pin cool-21":
                 state = "cool-21"
+
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
                 data = {"state": state}
 
@@ -31727,6 +31771,8 @@ def main():
             elif user_input.lower() == "pin cool-22":
                 state = "cool-22"
 
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
                 data = {"state": state}
 
                 with open(f"C:/Users/{user_name}/p-terminal/pp-term/state-info.json", "w") as f:
@@ -31736,6 +31782,8 @@ def main():
 
             elif user_input.lower() == "pin cool-23":
                 state = "cool-23"
+
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
                 data = {"state": state}
 
