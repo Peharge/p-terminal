@@ -92,7 +92,7 @@ from datetime import datetime
 import getpass
 
 # Log setup: timestamp with milliseconds
-log_path = Path(__file__).parent / "installer.log"
+log_path = Path(__file__).parent / "installer-faiss.log"
 logging.basicConfig(
     level=logging.INFO,
     format="[%(asctime)s.%(msecs)03d] %(message)s",
