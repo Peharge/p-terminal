@@ -97,7 +97,7 @@ from pathlib import Path
 from urllib.request import Request, urlopen
 from urllib.error import URLError, HTTPError
 
-# --- Logging konfigurieren ---
+# --- Configure logging ---
 log_path = Path(__file__).parent / "installer.log"
 logging.basicConfig(
     level=logging.INFO,
@@ -109,27 +109,27 @@ logging.basicConfig(
     ]
 )
 
-# --- Konstanten ---
-GITHUB_RELEASES_API = "https://api.github.com/repos/clojure/brew-install/releases/latest"  # CLI releases publiziert hier :contentReference[oaicite:0]{index=0}
+# --- Constants ---
+GITHUB_RELEASES_API = "https://api.github.com/repos/clojure/brew-install/releases/latest"  # CLI releases are published here
 CLI_CMD             = "clojure"
 JAVA_CMD            = "java"
 
 def is_tool_installed(cmd: str) -> bool:
-    """Prüft, ob ein Befehl im PATH verfügbar ist."""
+    """Checks if a command is available in PATH."""
     return shutil.which(cmd) is not None
 
 def fetch_latest_installer_info() -> dict:
     """
-    Holt über die GitHub-API das neueste Release aus clojure/brew-install und
-    sucht nach dem Asset 'win-install.ps1'.
+    Uses the GitHub API to fetch the latest release from clojure/brew-install
+    and looks for the asset 'win-install.ps1'.
     """
-    logging.info("Ermittle neueste Clojure-CLI-Version über GitHub API...")
+    logging.info("Fetching latest Clojure CLI version from GitHub API...")
     req = Request(GITHUB_RELEASES_API, headers={"User-Agent": "Mozilla/5.0"})
     try:
         with urlopen(req) as resp:
             data = json.load(resp)
     except (HTTPError, URLError) as e:
-        logging.error(f"Fehler bei der API-Abfrage: {e}")
+        logging.error(f"API request failed: {e}")
         sys.exit(1)
 
     version = data.get("tag_name", "").lstrip("v")
@@ -140,15 +140,15 @@ def fetch_latest_installer_info() -> dict:
             break
 
     if not version or not asset_url:
-        logging.error("Konnte 'win-install.ps1' im neuesten Release nicht finden.")
+        logging.error("Could not find 'win-install.ps1' in the latest release.")
         sys.exit(1)
 
-    logging.info(f"Gefundene Version: {version}")
+    logging.info(f"Found version: {version}")
     return {"version": version, "url": asset_url}
 
 def download_file(url: str, dest: Path):
-    """Lädt eine Datei herunter und zeigt Fortschritt im Log."""
-    logging.info(f"Download: {url}")
+    """Downloads a file and logs progress."""
+    logging.info(f"Downloading: {url}")
     try:
         req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
         with urlopen(req) as resp, open(dest, "wb") as out:
@@ -163,15 +163,15 @@ def download_file(url: str, dest: Path):
                 downloaded += len(chunk)
                 if total:
                     pct = downloaded * 100 / total
-                    logging.info(f"Fortschritt: {pct:.1f}%")
-        logging.info(f"Gespeichert unter: {dest}")
+                    logging.info(f"Progress: {pct:.1f}%")
+        logging.info(f"Saved to: {dest}")
     except (HTTPError, URLError) as e:
-        logging.error(f"Download-Fehler: {e}")
+        logging.error(f"Download error: {e}")
         sys.exit(1)
 
 def run_powershell_installer(ps1_path: Path):
-    """Führt das heruntergeladene PowerShell-Skript zur Installation aus."""
-    logging.info(f"Starte PowerShell-Installer: {ps1_path}")
+    """Runs the downloaded PowerShell script to perform the installation."""
+    logging.info(f"Starting PowerShell installer: {ps1_path}")
     cmd = [
         "powershell",
         "-NoProfile",
@@ -180,35 +180,35 @@ def run_powershell_installer(ps1_path: Path):
     ]
     try:
         subprocess.run(cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        logging.info("Clojure-CLI wurde erfolgreich installiert.")
+        logging.info("Clojure CLI was installed successfully.")
     except subprocess.CalledProcessError as e:
-        logging.error(f"Installation fehlgeschlagen (Exit-Code {e.returncode}):\n{e.stderr}")
+        logging.error(f"Installation failed (Exit Code {e.returncode}):\n{e.stderr}")
         sys.exit(e.returncode)
 
 def verify_installation():
-    """Prüft die Installation via 'clojure --version'."""
+    """Verifies the installation via 'clojure --version'."""
     try:
         out = subprocess.check_output([CLI_CMD, "--version"], text=True).strip()
-        logging.info(f"Clojure-CLI Version: {out}")
+        logging.info(f"Clojure CLI version: {out}")
     except Exception as e:
-        logging.error(f"Verifikation fehlgeschlagen: {e}")
+        logging.error(f"Verification failed: {e}")
         sys.exit(1)
 
 def main():
-    logging.info("=== Clojure-CLI Installer gestartet ===")
+    logging.info("=== Clojure CLI Installer started ===")
 
     if os.name != "nt":
-        logging.error("Dieses Skript läuft nur unter Windows.")
+        logging.error("This script only runs on Windows.")
         sys.exit(1)
 
     if not is_tool_installed(JAVA_CMD):
-        logging.error("Java nicht gefunden. Bitte installiere eine JDK-Version und setze JAVA_HOME.")
+        logging.error("Java not found. Please install a JDK and set JAVA_HOME.")
         sys.exit(1)
     else:
-        logging.info("Java ist installiert.")
+        logging.info("Java is installed.")
 
     if is_tool_installed(CLI_CMD):
-        logging.info("Clojure-CLI ist bereits installiert. Abbruch.")
+        logging.info("Clojure CLI is already installed. Aborting.")
         return
 
     info = fetch_latest_installer_info()
@@ -218,7 +218,7 @@ def main():
         run_powershell_installer(ps1_file)
 
     verify_installation()
-    logging.info("=== Clojure-CLI Installation abgeschlossen ===")
+    logging.info("=== Clojure CLI installation completed ===")
 
 if __name__ == "__main__":
     main()
