@@ -247,7 +247,36 @@ timeout /t 5 >nul
 python --version >nul 2>&1
 if %errorlevel% neq 0 (
     call :Log ERROR "❌ Python 3.13 is not installed."
-    set /p install_python="Would you like to install Python 3.13? [y/n]: "
+    :: Display professional installation recommendations
+    echo.
+    echo "Recommended Methods for Installing Python 3.13"
+    echo "1. Official Python Website:"
+    echo "   → Download: https://www.python.org/downloads/release/python-3130/"
+    echo "   → Installer file: https://www.python.org/ftp/python/3.13.0/python-3.13.0-amd64.exe"
+    echo.
+    echo "2. Microsoft Store (for Windows 10/11):"
+    echo "   → Open the Microsoft Store and search for: 'Python 3.13'"
+    echo "   → Or use this direct link (in browser):"
+    echo "     https://apps.microsoft.com/detail/9PJPW5LDXLZ5 (example, may change when published)"
+    echo.
+    echo "3. winget (Windows Package Manager):"
+    echo "   → Command:"
+    echo "     winget install Python.Python.3 --version 3.13.0 --accept-source-agreements --accept-package-agreements"
+    echo.
+    echo "4. Chocolatey (if installed):"
+    echo "   → Command:"
+    echo "     choco install python --version=3.13.0"
+    echo.
+    echo "5. Scoop (if installed):"
+    echo "   → First, ensure Scoop is updated:"
+    echo "     scoop update"
+    echo "   → Then install Python:"
+    echo "     scoop install python@3.13.0"
+    echo.
+    echo "You may choose any of the above trusted methods based on your environment and preferences."
+    echo "This script will attempt installation via winget first if not already present."
+    echo.
+    set /p install_python="Would you like to try installing Python 3.13? [y/n]: "
 
     if /i "%install_python%"=="y" (
         call :Log INFO "Downloading Python 3.13 installer..."
@@ -318,7 +347,31 @@ if %errorlevel% neq 0 (
 git --version >nul 2>&1
 if %errorlevel% neq 0 (
     call :Log ERROR "❌ Git is not installed."
-    set /p install_git="Would you like to install Git? [y/n]: "
+    :: Display professional installation recommendations for Git
+    echo.
+    echo "Recommended Methods for Installing Git"
+    echo "1. Official Git Website:"
+    echo "   → Download: https://git-scm.com/downloads"
+    echo "   → Direct Windows installer: https://github.com/git-for-windows/git/releases/latest"
+    echo.
+    echo "2. winget (Windows Package Manager):"
+    echo "   → Command:"
+    echo "     winget install --id Git.Git --source winget --accept-package-agreements --accept-source-agreements"
+    echo.
+    echo "3. Chocolatey (if installed):"
+    echo "   → Command:"
+    echo "     choco install git"
+    echo.
+    echo "4. Scoop (if installed):"
+    echo "   → First, ensure Scoop is updated:"
+    echo "     scoop update"
+    echo "   → Then install Git:"
+    echo "     scoop install git"
+    echo.
+    echo "You may choose any of the above trusted methods based on your environment and preferences."
+    echo "This script will attempt installation via winget first if not already present."
+    echo.
+    set /p install_git="Would you like to try installing Git now? [y/n]: "
 
     if /i "%install_git%"=="y" (
         call :Log INFO "Downloading Git installer..."
@@ -389,7 +442,34 @@ if %errorlevel% neq 0 (
 ollama --version >nul 2>&1
 if %errorlevel% neq 0 (
     call :Log ERROR "❌ Ollama is not installed."
-    set /p install_ollama="Would you like to install Ollama? [y/n]: "
+    :: Display professional installation recommendations for Ollama
+    echo.
+    echo "Recommended Methods for Installing Ollama"
+    echo "1. Official Ollama Website:"
+    echo "   → Download: https://ollama.com/download"
+    echo "   → Direct installer usually found on that page (auto-detects platform)"
+    echo.
+    echo "2. winget (Windows Package Manager):"
+    echo "   → Command:"
+    echo "     winget install Ollama.Ollama --accept-package-agreements --accept-source-agreements"
+    echo.
+    echo "3. Chocolatey (if installed):"
+    echo "   → Command:"
+    echo "     choco install ollama"
+    echo.
+    echo "4. Scoop (if installed):"
+    echo "   → First, ensure Scoop is updated:"
+    echo "     scoop update"
+    echo "   → Then install Ollama:"
+    echo "     scoop install ollama"
+    echo.
+    echo "Note: Scoop support for Ollama may require adding an extra bucket if not found in main:"
+    echo "     scoop bucket add extras"
+    echo.
+    echo "You may choose any of the above trusted methods based on your environment and preferences."
+    echo "This script will attempt installation via winget first if not already present."
+    echo.
+    set /p install_ollama="Would you like to try installing Ollama now? [y/n]: "
 
     if /i "%install_ollama%"=="y" (
         call :Log INFO "Downloading Ollama installer..."
@@ -460,8 +540,33 @@ if %errorlevel% neq 0 (
 ffmpeg -version >nul 2>&1
 if %errorlevel% neq 0 (
     call :Log ERROR "❌ FFmpeg is not installed."
-    call :Log INFO "Installing FFmpeg is not required to run pp-term. However, installing FFmpeg is mandatory for using MAVIS Voice Assistant!"
-    set /p install_ffmpeg="Would you like to install FFmpeg? [y/n]: "
+    :: Display professional installation recommendations for FFmpeg
+    echo.
+    echo "Recommended Methods for Installing FFmpeg"
+    echo "Installing FFmpeg is not required to run pp-term. However, installing FFmpeg is mandatory for using MAVIS Voice Assistant!"
+    echo.
+    echo "1. Official FFmpeg Website:"
+    echo "   → Download: https://ffmpeg.org/download.html"
+    echo "   → Windows builds: https://www.gyan.dev/ffmpeg/builds/"
+    echo.
+    echo "2. winget (Windows Package Manager):"
+    echo "   → Command:"
+    echo "     winget install Gyan.FFmpeg --accept-package-agreements --accept-source-agreements"
+    echo.
+    echo "3. Chocolatey (if installed):"
+    echo "   → Command:"
+    echo "     choco install ffmpeg"
+    echo.
+    echo "4. Scoop (if installed):"
+    echo "   → First, ensure Scoop is updated:"
+    echo "     scoop update"
+    echo "   → Then install FFmpeg:"
+    echo "     scoop install ffmpeg"
+    echo.
+    echo "You may choose any of the above trusted methods based on your environment and preferences."
+    echo "This script will attempt installation via winget first if not already present."
+    echo.
+    set /p install_ffmpeg="Would you like to try installing FFmpeg now? [y/n]: "
 
     if /i "%install_ffmpeg%"=="y" (
         call :Log INFO "Downloading FFmpeg installer..."
@@ -533,7 +638,35 @@ set SCRIPT_install_rustup=C:\Users\%USERNAME%\p-terminal\pp-term\run\rust\instal
 rustup --version >nul 2>&1
 if %errorlevel% neq 0 (
     call :Log ERROR "❌ Rustup is not installed."
-    set /p install_rustup="Would you like to install Rustup? [y/n]: "
+    :: Display professional installation recommendations for Rust (via rustup)
+    echo.
+    echo "Recommended Methods for Installing Rust (via rustup)"
+    echo "1. Official Rust Website:"
+    echo "   → Download: https://www.rust-lang.org/tools/install"
+    echo "   → This uses rustup, the official Rust installer and version manager"
+    echo.
+    echo "2. winget (Windows Package Manager):"
+    echo "   → Command:"
+    echo "     winget install Rustlang.Rustup --accept-package-agreements --accept-source-agreements"
+    echo.
+    echo "3. Chocolatey (if installed):"
+    echo "   → Command:"
+    echo "     choco install rustup.install"
+    echo.
+    echo "4. Scoop (if installed):"
+    echo "   → First, ensure Scoop is updated:"
+    echo "     scoop update"
+    echo "   → Then install Rust:"
+    echo "     scoop install rustup"
+    echo.
+    echo "After installing rustup, run:"
+    echo "     rustup update"
+    echo "to ensure you have the latest stable version of Rust."
+    echo.
+    echo "You may choose any of the above trusted methods based on your environment and preferences."
+    echo "This script will attempt installation via winget first if not already present."
+    echo.
+    set /p install_rustup="Would you like to try installing Rust via rustup now? [y/n]: "
 
     if /i "%install_rustup%"=="y" (
         call :Log INFO "Downloading Rustup installer..."
@@ -604,7 +737,34 @@ if %errorlevel% neq 0 (
 powershell -Command "$PSVersionTable.PSVersion" >nul 2>&1
 if %errorlevel% neq 0 (
     call :Log ERROR "❌ PowerShell 7 is not installed."
-    set /p install_powershell="Would you like to install PowerShell 7? [y/n]: "
+    :: Display professional installation recommendations for PowerShell 7
+    echo.
+    echo "Recommended Methods for Installing PowerShell 7"
+    echo "1. Official PowerShell Website (GitHub Releases):"
+    echo "   → Download: https://github.com/PowerShell/PowerShell/releases/latest"
+    echo "   → Windows MSI installer available under 'Assets'"
+    echo.
+    echo "2. winget (Windows Package Manager):"
+    echo "   → Command:"
+    echo "     winget install --id Microsoft.PowerShell --source winget --accept-package-agreements --accept-source-agreements"
+    echo.
+    echo "3. Chocolatey (if installed):"
+    echo "   → Command:"
+    echo "     choco install powershell --version=7.4.1"
+    echo "     (Or omit --version to install latest)"
+    echo.
+    echo "4. Scoop (if installed):"
+    echo "   → First, ensure Scoop is updated:"
+    echo "     scoop update"
+    echo "   → Then install PowerShell:"
+    echo "     scoop install pwsh"
+    echo.
+    echo "Note: After installation, use 'pwsh' to start PowerShell 7 from any terminal."
+    echo.
+    echo "You may choose any of the above trusted methods based on your environment and preferences."
+    echo "This script will attempt installation via winget first if not already present."
+    echo.
+    set /p install_pwsh="Would you like to try installing PowerShell 7 now? [y/n]: "
 
     if /i "%install_powershell%"=="y" (
         call :Log INFO "Downloading PowerShell 7 installer..."
@@ -658,8 +818,33 @@ if exist "%SLICER_PATH%" (
     "C:\Users\%USERNAME%\AppData\Local\slicer.org\Slicer 5.6.2\Slicer.exe" --version
 ) else (
     call :Log ERROR "❌ 3D Slicer is not installed."
-    call :Log INFO "Installing 3D Slicer isn't required to run pp-term. However, if you plan to use SIMON, installing 3D Slicer is mandatory. If you encounter any problems during installation, simply run the 'Install 3d-slicer' command in the pp terminal. This installation method is significantly more secure!"
-    set /p install_slicer="Would you like to install 3D Slicer? [y/n]: "
+    :: Display professional installation recommendations for 3D Slicer
+    echo.
+    echo "Recommended Methods for Installing 3D Slicer"
+    echo "Installing 3D Slicer isn't required to run pp-term. However, if you plan to use SIMON, installing 3D Slicer is mandatory. If you encounter any problems during installation, simply run the 'Install 3d-slicer' command in the pp terminal. This installation method is significantly more secure!"
+    echo.
+    echo "1. Official 3D Slicer Website:"
+    echo "   → Download: https://www.slicer.org/"
+    echo "   → Direct download for Windows: https://download.slicer.org/"
+    echo.
+    echo "2. winget (Windows Package Manager):"
+    echo "   → Command:"
+    echo "     winget install Kitware.Slicer --accept-package-agreements --accept-source-agreements"
+    echo.
+    echo "3. Chocolatey (if installed):"
+    echo "   → Command:"
+    echo "     choco install slicer"
+    echo.
+    echo "Note: Chocolatey package may be outdated. Prefer official website or winget if possible."
+    echo.
+    echo "4. Scoop:"
+    echo "   → Currently, Scoop does not officially support 3D Slicer."
+    echo "     Please use winget or the official website instead."
+    echo.
+    echo "You may choose any of the above trusted methods based on your environment and preferences."
+    echo "This script will attempt installation via winget first if not already present."
+    echo.
+    set /p install_slicer="Would you like to try installing 3D Slicer now? [y/n]: "
 
     if /i "%install_slicer%"=="y" (
         call :Log INFO "Downloading the 3D Slicer installer..."
@@ -727,7 +912,28 @@ if exist "%SLICER_PATH%" (
 docker --version >nul 2>&1
 if %ERRORLEVEL% NEQ 0 (
     call :Log ERROR "❌ Docker Desktop is not installed."
-    set /p install_docker="Would you like to install Docker Desktop? [y/n]: "
+    :: Display professional installation recommendations for Docker Desktop
+    echo.
+    echo "Recommended Methods for Installing Docker Desktop"
+    echo "1. Official Docker Website:"
+    echo "   → Download: https://www.docker.com/products/docker-desktop"
+    echo "   → Follow the installer instructions for Windows 10/11"
+    echo.
+    echo "2. winget (Windows Package Manager):"
+    echo "   → Command:"
+    echo "     winget install Docker.DockerDesktop --accept-package-agreements --accept-source-agreements"
+    echo.
+    echo "3. Chocolatey (if installed):"
+    echo "   → Command:"
+    echo "     choco install docker-desktop"
+    echo.
+    echo "Note: Docker Desktop requires Windows 10 64-bit: Pro, Enterprise or Education (Build 19041 or later) or Windows 11."
+    echo "      Also, ensure virtualization support is enabled in BIOS."
+    echo.
+    echo "You may choose any of the above trusted methods based on your environment and preferences."
+    echo "This script will attempt installation via winget first if not already present."
+    echo.
+    set /p install_docker="Would you like to try installing Docker Desktop now? [y/n]: "
 
     if /I "%install_docker%"=="y" (
         call :Log INFO "Downloading Docker Desktop installer..."
@@ -796,7 +1002,32 @@ set "SCRIPT_install_wsl_alpine=C:\Users\%USERNAME%\p-terminal\pp-term\run\wsl\in
 wsl --list >nul 2>&1
 if errorlevel 1 (
     all :Log ERROR "❌ WSL is not installed."
-    set /p "install_wsl=Do you want to install WSL? [y/n]: "
+    :: Display professional installation recommendations for WSL (Windows Subsystem for Linux)
+    echo.
+    echo "Recommended Methods for Installing WSL (Windows Subsystem for Linux)"
+    echo "1. Official Microsoft Documentation:"
+    echo "   → https://learn.microsoft.com/en-us/windows/wsl/install"
+    echo.
+    echo "2. Quick installation via command line (PowerShell as Administrator):"
+    echo "   → Command:"
+    echo "     wsl --install"
+    echo "   → This installs the latest WSL version with Ubuntu by default."
+    echo.
+    echo "3. Optional: Install specific Linux distro via Microsoft Store (e.g. Ubuntu, Debian)"
+    echo "   → Open Microsoft Store and search for your preferred distro."
+    echo.
+    echo "4. Manual installation steps for older Windows versions:"
+    echo "   → Enable WSL feature:"
+    echo "     dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart"
+    echo "   → Enable Virtual Machine Platform:"
+    echo "     dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart"
+    echo "   → Restart your machine."
+    echo.
+    echo "You may choose any of the above trusted methods based on your environment and preferences."
+    echo "The script can automatically enable the WSL feature using DISM if desired."
+    echo.
+    set /p install_wsl="Would you like to try installing WSL now? [y/n]: "
+
     if /i "!install_wsl!"=="y" (
         call :Log INFO "Enabling WSL feature..."
         dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart >nul 2>&1
@@ -851,6 +1082,16 @@ if /i "!install_choice!"=="y" (
 )
 
 :SelectDistro
+echo After installing WSL, you can install your preferred Linux distribution by running:
+echo   wsl --install -d ^<DistributionName^>
+echo For example:
+echo   wsl --install -d Ubuntu
+echo You can see available distributions by running:
+echo   wsl --list --online
+echo To change your default distribution, use:
+echo   wsl --set-default ^<DistributionName^>
+echo To install a distribution later, simply run the appropriate 'wsl --install -d' command.
+echo Refer to https://learn.microsoft.com/en-us/windows/wsl/install for detailed instructions.
 echo.
 echo Please select a distribution to install:
 echo   [1] Ubuntu
@@ -862,11 +1103,20 @@ echo   [6] Linux Mint
 echo   [7] Fedora
 echo   [8] Red Hat Enterprise Linux
 echo   [9] SUSE Linux
-echo   [10] Pengwin
-echo   [11] Oracle Linux
-echo   [12] Clear Linux
-echo   [13] Alpine
+echo   [A] Pengwin
+echo   [B] Oracle Linux
+echo   [C] Clear Linux
+echo   [D] Alpine
+
+echo.
+echo Note: Installing via winget or Microsoft Store is generally safer and recommended.
+echo.
+
 choice /c 123456789ABCD /n /m "Your choice: "
+
+echo.
+echo Attempting to install your selected distribution now...
+
 set "choice=%errorlevel%"
 
 :: Map the choice to the appropriate variables
