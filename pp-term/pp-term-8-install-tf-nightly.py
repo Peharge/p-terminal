@@ -70,7 +70,7 @@ from datetime import datetime
 import getpass
 
 # Log setup: timestamp with milliseconds
-log_path = Path(__file__).parent / "installer_tf_nightly.log"
+log_path = Path(__file__).parent / "installer-tf_nightly.log"
 logging.basicConfig(
     level=logging.INFO,
     format="[%(asctime)s.%(msecs)03d] %(message)s",
