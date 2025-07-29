@@ -274,7 +274,7 @@ if %errorlevel% neq 0 (
     echo "     scoop install python@3.13.0"
     echo.
     echo "You may choose any of the above trusted methods based on your environment and preferences."
-    echo "This script will attempt installation via winget first if not already present."
+    echo "This script will attempt silent installation of Python 3.13 via direct download if not already present."
     echo.
     set /p install_python="Would you like to try installing Python 3.13? [y/n]: "
 
@@ -369,7 +369,7 @@ if %errorlevel% neq 0 (
     echo "     scoop install git"
     echo.
     echo "You may choose any of the above trusted methods based on your environment and preferences."
-    echo "This script will attempt installation via winget first if not already present."
+    echo "This script will attempt silent installation of Git via direct download if not already present."
     echo.
     set /p install_git="Would you like to try installing Git now? [y/n]: "
 
@@ -467,7 +467,7 @@ if %errorlevel% neq 0 (
     echo "     scoop bucket add extras"
     echo.
     echo "You may choose any of the above trusted methods based on your environment and preferences."
-    echo "This script will attempt installation via winget first if not already present."
+    echo "This script will attempt silent installation of Ollama via direct download if not already present."
     echo.
     set /p install_ollama="Would you like to try installing Ollama now? [y/n]: "
 
@@ -564,7 +564,7 @@ if %errorlevel% neq 0 (
     echo "     scoop install ffmpeg"
     echo.
     echo "You may choose any of the above trusted methods based on your environment and preferences."
-    echo "This script will attempt installation via winget first if not already present."
+    echo "This script will attempt silent installation of FFmpeg via direct download if not already present."
     echo.
     set /p install_ffmpeg="Would you like to try installing FFmpeg now? [y/n]: "
 
@@ -664,9 +664,9 @@ if %errorlevel% neq 0 (
     echo "to ensure you have the latest stable version of Rust."
     echo.
     echo "You may choose any of the above trusted methods based on your environment and preferences."
-    echo "This script will attempt installation via winget first if not already present."
+    echo "This script will attempt silent installation of Rustup via direct download if not already present."
     echo.
-    set /p install_rustup="Would you like to try installing Rust via rustup now? [y/n]: "
+    set /p install_rustup="Would you like to try installing Rust via Rustup now? [y/n]: "
 
     if /i "%install_rustup%"=="y" (
         call :Log INFO "Downloading Rustup installer..."
@@ -762,7 +762,7 @@ if %errorlevel% neq 0 (
     echo "Note: After installation, use 'pwsh' to start PowerShell 7 from any terminal."
     echo.
     echo "You may choose any of the above trusted methods based on your environment and preferences."
-    echo "This script will attempt installation via winget first if not already present."
+    echo "This script will attempt silent installation of PowerShell 7 via direct download if not already present."
     echo.
     set /p install_pwsh="Would you like to try installing PowerShell 7 now? [y/n]: "
 
@@ -842,7 +842,7 @@ if exist "%SLICER_PATH%" (
     echo "     Please use winget or the official website instead."
     echo.
     echo "You may choose any of the above trusted methods based on your environment and preferences."
-    echo "This script will attempt installation via winget first if not already present."
+    echo "This script will attempt silent installation of 3D Slicer via direct download if not already present."
     echo.
     set /p install_slicer="Would you like to try installing 3D Slicer now? [y/n]: "
 
@@ -931,7 +931,7 @@ if %ERRORLEVEL% NEQ 0 (
     echo "      Also, ensure virtualization support is enabled in BIOS."
     echo.
     echo "You may choose any of the above trusted methods based on your environment and preferences."
-    echo "This script will attempt installation via winget first if not already present."
+    echo "This script will attempt silent installation of Docker Desktop via direct download if not already present."
     echo.
     set /p install_docker="Would you like to try installing Docker Desktop now? [y/n]: "
 
