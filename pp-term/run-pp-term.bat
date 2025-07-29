@@ -235,7 +235,7 @@ call :CheckGPU
 call :CheckSystemHealth
 
 :: Driver Check
-:: call :CheckDrivers
+call :CheckDrivers
 
 :: Final Log Message
 call :Log INFO "✅ Hardware check completed."
