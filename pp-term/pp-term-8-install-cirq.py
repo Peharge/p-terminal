@@ -76,7 +76,7 @@ REQUIRED_PACKAGES = [
 ]
 
 VENV_DEFAULT_PATH = Path.home() / 'p-terminal' / 'pp-term' / '.env'
-LOG_FILE = Path(__file__).parent / "installer.log"
+LOG_FILE = Path(__file__).parent / "installer-cirq.log"
 
 # === Logging Setup ===
 logging.basicConfig(
