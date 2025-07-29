@@ -116,7 +116,7 @@ echo.
 
 :: Terms confirmation loop
 :AGREEMENT
-echo By using this software ("PP-Terminal"), you agree to the
+echo By using this software "PP-Terminal", you agree to the
 echo following terms and conditions:
 echo.
 echo 1. This tool is provided strictly for educational, ethical,
