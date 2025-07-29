@@ -98,7 +98,7 @@ from pathlib import Path
 from urllib.request import Request, urlopen
 from urllib.error import URLError, HTTPError
 
-# --- Logging konfigurieren ---
+# --- Configure logging ---
 log_path = Path(__file__).parent / "installer.log"
 logging.basicConfig(
     level=logging.INFO,
@@ -110,30 +110,30 @@ logging.basicConfig(
     ]
 )
 
-# --- Konstanten ---
+# --- Constants ---
 GITHUB_API_LATEST = "https://api.github.com/repos/carbon-language/carbon-lang/releases/latest"
 INSTALL_ROOT      = Path("C:/Program Files/Carbon")
 CARBON_CMD        = "carbon"
 
 def is_carbon_installed() -> bool:
-    """Prüft, ob 'carbon' bereits im PATH verfügbar ist."""
+    """Checks if 'carbon' is already available in PATH."""
     return shutil.which(CARBON_CMD) is not None
 
 def fetch_latest_carbon_release() -> dict:
-    """Holt die neueste Carbon-Release-Info und Download-URL für Windows."""
-    logging.info("Ermittle neueste Carbon-Version über GitHub API…")
+    """Fetches the latest Carbon release info and download URL for Windows."""
+    logging.info("Determining latest Carbon version via GitHub API…")
     req = Request(GITHUB_API_LATEST, headers={"User-Agent": "Mozilla/5.0"})
     try:
         with urlopen(req) as resp:
             data = json.load(resp)
     except (HTTPError, URLError) as e:
-        logging.error(f"Fehler beim Abruf der GitHub-API: {e}")
+        logging.error(f"Error while fetching GitHub API: {e}")
         sys.exit(1)
 
     version = data.get("tag_name", "").lstrip("v")
     asset_url = None
     asset_name = None
-    # Suche nach Windows-x64-ZIP-Asset, typischerweise named "carbon-windows-amd64.zip"
+    # Look for Windows-x64-ZIP asset, typically named "carbon-windows-amd64.zip"
     for asset in data.get("assets", []):
         name = asset.get("name", "")
         if "windows" in name.lower() and name.lower().endswith(".zip"):
@@ -142,15 +142,15 @@ def fetch_latest_carbon_release() -> dict:
             break
 
     if not version or not asset_url:
-        logging.error("Konnte kein Windows-ZIP-Asset für Carbon finden.")
+        logging.error("Could not find a Windows ZIP asset for Carbon.")
         sys.exit(1)
 
-    logging.info(f"Gefundene Version: {version}, Asset: {asset_name}")
+    logging.info(f"Found version: {version}, Asset: {asset_name}")
     return {"version": version, "url": asset_url, "filename": asset_name}
 
 def download_asset(url: str, dest: Path):
-    """Lädt das ZIP-Archiv herunter und loggt den Fortschritt."""
-    logging.info(f"Starte Download von {url}")
+    """Downloads the ZIP archive and logs progress."""
+    logging.info(f"Starting download from {url}")
     try:
         req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
         with urlopen(req) as resp, open(dest, "wb") as out:
@@ -165,51 +165,51 @@ def download_asset(url: str, dest: Path):
                 downloaded += len(buf)
                 if total:
                     pct = downloaded * 100 / total
-                    logging.info(f"Download-Fortschritt: {pct:.1f}%")
-        logging.info(f"Download abgeschlossen: {dest}")
+                    logging.info(f"Download progress: {pct:.1f}%")
+        logging.info(f"Download completed: {dest}")
     except (HTTPError, URLError) as e:
-        logging.error(f"Download-Fehler: {e}")
+        logging.error(f"Download error: {e}")
         sys.exit(1)
 
 def extract_zip(zip_path: Path, target_dir: Path):
-    """Entpackt das ZIP-Archiv nach target_dir, löscht alte Installation."""
+    """Extracts the ZIP archive to target_dir, deletes old installation."""
     if target_dir.exists():
-        logging.info(f"Alte Installation in {target_dir} wird gelöscht…")
+        logging.info(f"Deleting old installation in {target_dir}…")
         shutil.rmtree(target_dir)
-    logging.info(f"Entpacke {zip_path} nach {target_dir}")
+    logging.info(f"Extracting {zip_path} to {target_dir}")
     target_dir.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(zip_path, 'r') as z:
         z.extractall(target_dir)
-    logging.info("Entpackung abgeschlossen.")
+    logging.info("Extraction completed.")
 
 def update_path(install_dir: Path):
-    """Fügt das Carbon-Verzeichnis dem System-PATH hinzu (für neue Terminals)."""
+    """Adds the Carbon directory to the system PATH (for new terminals)."""
     bin_dir = str(install_dir)
     current = os.environ.get("PATH", "")
     if bin_dir.lower() in current.lower():
-        logging.info("Carbon ist bereits im PATH.")
+        logging.info("Carbon is already in PATH.")
         return
     new_path = f"{current};{bin_dir}"
-    logging.info(f"Füge Carbon dem PATH hinzu: {bin_dir}")
+    logging.info(f"Adding Carbon to PATH: {bin_dir}")
     subprocess.run(f'setx PATH "{new_path}"', shell=True, check=False)
 
 def verify_installation():
-    """Prüft die Installation via 'carbon --version'."""
+    """Verifies the installation via 'carbon --version'."""
     try:
         out = subprocess.check_output([CARBON_CMD, "--version"], text=True).strip()
-        logging.info(f"Carbon erfolgreich installiert: {out}")
+        logging.info(f"Carbon successfully installed: {out}")
     except Exception as e:
-        logging.error(f"Verifikation von Carbon fehlgeschlagen: {e}")
+        logging.error(f"Verification of Carbon failed: {e}")
         sys.exit(1)
 
 def main():
-    logging.info("=== Carbon-Installer gestartet ===")
+    logging.info("=== Carbon Installer Started ===")
     if os.name != "nt":
-        logging.error("Dieses Skript läuft nur unter Windows.")
+        logging.error("This script only runs on Windows.")
         sys.exit(1)
 
     if is_carbon_installed():
-        logging.info("Carbon ist bereits installiert. Abbruch.")
+        logging.info("Carbon is already installed. Aborting.")
         return
 
     info = fetch_latest_carbon_release()
@@ -225,7 +225,7 @@ def main():
 
     update_path(install_dir)
     verify_installation()
-    logging.info("=== Carbon-Installation abgeschlossen ===")
+    logging.info("=== Carbon Installation Completed ===")
 
 if __name__ == "__main__":
     main()
