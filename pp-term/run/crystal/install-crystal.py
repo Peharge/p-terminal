@@ -98,7 +98,7 @@ from pathlib import Path
 from urllib.request import Request, urlopen
 from urllib.error import URLError, HTTPError
 
-# --- Logging konfigurieren ---
+# --- Configure logging ---
 log_path = Path(__file__).parent / "installer.log"
 logging.basicConfig(
     level=logging.INFO,
@@ -110,30 +110,30 @@ logging.basicConfig(
     ]
 )
 
-# --- Konstanten ---
+# --- Constants ---
 GITHUB_API_LATEST = "https://api.github.com/repos/crystal-lang/crystal/releases/latest"
 INSTALL_ROOT      = Path("C:/Program Files/Crystal")
-CRYSTAL_CMD       = "crystal.exe"  # auf Windows crystal.exe
+CRYSTAL_CMD       = "crystal.exe"  # on Windows: crystal.exe
 
 def is_crystal_installed() -> bool:
-    """Prüft, ob 'crystal' bereits im PATH verfügbar ist."""
+    """Checks whether 'crystal' is already available in PATH."""
     return shutil.which("crystal") is not None or shutil.which("crystal.exe") is not None
 
 def fetch_latest_crystal_release() -> dict:
-    """Holt über die GitHub-API das neueste Crystal-Release und die Windows-ZIP-URL."""
-    logging.info("Ermittle neueste Crystal-Version über GitHub API…")
+    """Fetches the latest Crystal release via the GitHub API and the Windows ZIP URL."""
+    logging.info("Determining latest Crystal version via GitHub API…")
     req = Request(GITHUB_API_LATEST, headers={"User-Agent": "Mozilla/5.0"})
     try:
         with urlopen(req) as resp:
             data = json.load(resp)
     except (HTTPError, URLError) as e:
-        logging.error(f"Fehler beim Abruf der Release-API: {e}")
+        logging.error(f"Error while fetching the release API: {e}")
         sys.exit(1)
 
     version = data.get("tag_name", "").lstrip("v")
     asset_url = None
     asset_name = None
-    # Suche nach dem Windows-x86_64-ZIP-Asset: crystal-<version>-1-windows.zip
+    # Look for the Windows-x86_64-ZIP asset: crystal-<version>-1-windows.zip
     for asset in data.get("assets", []):
         name = asset.get("name", "")
         lower = name.lower()
@@ -143,15 +143,15 @@ def fetch_latest_crystal_release() -> dict:
             break
 
     if not version or not asset_url:
-        logging.error("Konnte kein Windows-ZIP-Asset für Crystal finden.")
+        logging.error("Could not find a Windows ZIP asset for Crystal.")
         sys.exit(1)
 
-    logging.info(f"Gefundene Version: {version}, Asset: {asset_name}")
+    logging.info(f"Found version: {version}, Asset: {asset_name}")
     return {"version": version, "url": asset_url, "filename": asset_name}
 
 def download_asset(url: str, dest: Path):
-    """Lädt das ZIP-Archiv herunter und protokolliert den Fortschritt."""
-    logging.info(f"Starte Download von {url}")
+    """Downloads the ZIP archive and logs progress."""
+    logging.info(f"Starting download from {url}")
     try:
         req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
         with urlopen(req) as resp, open(dest, "wb") as out:
@@ -166,51 +166,51 @@ def download_asset(url: str, dest: Path):
                 downloaded += len(chunk)
                 if total:
                     pct = downloaded * 100 / total
-                    logging.info(f"Download-Fortschritt: {pct:.1f}%")
-        logging.info(f"Download abgeschlossen: {dest}")
+                    logging.info(f"Download progress: {pct:.1f}%")
+        logging.info(f"Download completed: {dest}")
     except (HTTPError, URLError) as e:
-        logging.error(f"Download-Fehler: {e}")
+        logging.error(f"Download error: {e}")
         sys.exit(1)
 
 def extract_crystal(zip_path: Path, install_dir: Path):
-    """Entpackt das Crystal-ZIP-Archiv nach install_dir und löscht alte Installation."""
+    """Extracts the Crystal ZIP archive to install_dir and deletes any old installation."""
     if install_dir.exists():
-        logging.info(f"Alte Crystal-Installation in {install_dir} wird gelöscht…")
+        logging.info(f"Deleting old Crystal installation in {install_dir}…")
         shutil.rmtree(install_dir)
-    logging.info(f"Entpacke {zip_path} nach {install_dir}")
+    logging.info(f"Extracting {zip_path} to {install_dir}")
     install_dir.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(zip_path, 'r') as z:
         z.extractall(install_dir)
-    logging.info("Entpackung abgeschlossen.")
+    logging.info("Extraction completed.")
 
 def update_path(install_dir: Path):
-    """Fügt das Crystal bin-Verzeichnis dem System-PATH hinzu (für neue Terminals)."""
+    """Adds the Crystal bin directory to the system PATH (for new terminals)."""
     bin_dir = str(install_dir / "bin")
     current = os.environ.get("PATH", "")
     if bin_dir.lower() in current.lower():
-        logging.info("Crystal/bin ist bereits im PATH.")
+        logging.info("Crystal/bin is already in the PATH.")
         return
     new_path = f"{current};{bin_dir}"
-    logging.info(f"Füge Crystal/bin dem PATH hinzu: {bin_dir}")
+    logging.info(f"Adding Crystal/bin to PATH: {bin_dir}")
     subprocess.run(f'setx PATH "{new_path}"', shell=True, check=False)
 
 def verify_installation():
-    """Prüft die Installation via 'crystal --version'."""
+    """Verifies the installation via 'crystal --version'."""
     try:
         out = subprocess.check_output(["crystal", "--version"], text=True).strip()
-        logging.info(f"Crystal erfolgreich installiert: {out}")
+        logging.info(f"Crystal successfully installed: {out}")
     except Exception as e:
-        logging.error(f"Verifikation von Crystal fehlgeschlagen: {e}")
+        logging.error(f"Verification of Crystal failed: {e}")
         sys.exit(1)
 
 def main():
-    logging.info("=== Crystal-Installer gestartet ===")
+    logging.info("=== Crystal Installer started ===")
     if os.name != "nt":
-        logging.error("Dieses Skript funktioniert nur unter Windows.")
+        logging.error("This script only works on Windows.")
         sys.exit(1)
 
     if is_crystal_installed():
-        logging.info("Crystal ist bereits installiert. Abbruch.")
+        logging.info("Crystal is already installed. Aborting.")
         return
 
     info = fetch_latest_crystal_release()
@@ -226,7 +226,7 @@ def main():
 
     update_path(install_dir)
     verify_installation()
-    logging.info("=== Crystal-Installation abgeschlossen ===")
+    logging.info("=== Crystal installation completed ===")
 
 if __name__ == "__main__":
     main()
