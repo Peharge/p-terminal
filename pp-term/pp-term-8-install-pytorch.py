@@ -71,7 +71,7 @@ import re
 import getpass
 
 # Log setup: timestamp with milliseconds
-log_path = Path(__file__).parent / "installer_pt.log"
+log_path = Path(__file__).parent / "installer-pytorch.log"
 logging.basicConfig(
     level=logging.INFO,
     format="[%(asctime)s.%(msecs)03d] %(message)s",
