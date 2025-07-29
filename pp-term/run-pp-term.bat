@@ -132,7 +132,7 @@ echo    kind, express or implied, including but not limited to the
 echo    warranties of merchantability, fitness for a particular
 echo    purpose and noninfringement.
 echo.
-echo By typing 'Y', you acknowledge that:
+echo By typing 'y', you acknowledge that:
 echo - You have read and understood the above agreement.
 echo - You agree to use this tool responsibly and legally.
 echo - You understand and accept that the developers are not
