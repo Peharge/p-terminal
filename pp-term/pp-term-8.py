@@ -30206,7 +30206,6 @@ json_commands = commands_data.get("commands", [])
 def get_cmd_executables():
     paths = os.environ.get("PATH", "").split(os.pathsep)
     executables = set()
-
     for path in paths:
         if not os.path.isdir(path):
             continue
@@ -30218,7 +30217,7 @@ def get_cmd_executables():
             continue
     return list(executables)
 
-# Kombiniere JSON-Befehle mit Systembefehlen, ohne Duplikate
+# Kombinierte Befehle
 COMMANDS = sorted(set(json_commands + get_cmd_executables()))
 
 # Verlauf und Index
@@ -30230,10 +30229,14 @@ def setup_autocomplete(commands=None):
     if commands is None:
         commands = COMMANDS.copy()
 
-    readline.set_completer_delims(' \t\n')
+    readline.set_completer_delims('\t\n')  # <--- WICHTIG: Leerzeichen nicht mehr als Trenner
 
     def completer(text, state):
-        matches = [cmd for cmd in commands if cmd.startswith(text.lower())]
+        buffer = readline.get_line_buffer()
+        line = buffer.lstrip().lower()  # Ganze Eingabezeile
+
+        matches = [cmd for cmd in commands if cmd.startswith(line)]
+
         try:
             return matches[state]
         except IndexError:
