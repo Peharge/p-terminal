@@ -15417,6 +15417,7 @@ if __name__ == "__main__":
 
     if user_input.startswith("pcfo "):
         user_input = user_input[5:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         current_dir = Path.cwd().resolve()
         folder_path = current_dir / user_input
 
@@ -23725,6 +23726,7 @@ def start_local_server(directory: str,
 def is_cmd_command(cmd_name):
     """Check if it's a CMD internal command"""
     try:
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         subprocess.check_output(f'cmd /c "{cmd_name} /?"', stderr=subprocess.STDOUT, shell=True, text=True)
         return True
     except subprocess.CalledProcessError:
