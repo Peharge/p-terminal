@@ -113,6 +113,9 @@ wmic logicaldisk get name, description, filesystem, size, freespace
 echo Logged in Users:
 query user
 echo.
+
+:: Terms confirmation loop
+:AGREEMENT
 echo By using this software ("PP-Terminal"), you agree to the
 echo following terms and conditions:
 echo.
