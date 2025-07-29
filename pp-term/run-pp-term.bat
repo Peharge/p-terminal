@@ -80,6 +80,9 @@ echo A warm welcome, %BLUE%%USERNAME%%RESET%, to Peharge Python Terminal!
 echo Developed by Peharge and JK (Peharge Projects 2025)
 echo Thank you so much for using PP-Terminal. We truly appreciate your support ❤️
 echo.
+
+cd /d %USERPROFILE%
+
 echo Initiating high-tech installation...
 echo [*] Prepare for the next level...
 echo.
