@@ -71,6 +71,15 @@ powershell -Command "& {Write-Host '██████╗ ██████╗ 
 echo.
 powershell -Command "& {Write-Host '██╗      █████╗ ██╗   ██╗███╗   ██╗ ██████╗██╗  ██╗███████╗██████╗' -ForegroundColor White; Write-Host '██║     ██╔══██╗██║   ██║████╗  ██║██╔════╝██║  ██║██╔════╝██╔══██╗' -ForegroundColor White; Write-Host '██║     ███████║██║   ██║██╔██╗ ██║██║     ███████║█████╗  ██████╔╝' -ForegroundColor White; Write-Host '██║     ██╔══██║██║   ██║██║╚██╗██║██║     ██╔══██║██╔══╝  ██╔══██╗' -ForegroundColor White; Write-Host '███████╗██║  ██║╚██████╔╝██║ ╚████║╚██████╗██║  ██║███████╗██║  ██║' -ForegroundColor White; Write-Host '╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝' -ForegroundColor White;}"
 echo.
+:: Set ANSI Escape Sequences
+set "ESC=\e"
+set "BLUE=[34m"
+set "RESET=[0m"
+
+echo A warm welcome, %BLUE%%USERNAME%%RESET%, to Peharge Python Terminal!
+echo Developed by Peharge and JK (Peharge Projects 2025)
+echo Thank you so much for using PP-Terminal. We truly appreciate your support ❤️
+echo.
 echo Initiating high-tech installation...
 echo [*] Prepare for the next level...
 echo.
