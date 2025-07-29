@@ -4527,6 +4527,127 @@ if __name__ == "__main__":
 
         return True
 
+    if user_input.startswith("pthonny-pip "):
+            if user_input.lower() == "pthonny-pip q" or user_input == "pthonny-pip \x11":  # 'q' oder Ctrl+Q zum Beenden
+                print(f"[{timestamp()}] [INFO] Terminated by exit command")
+                shutdown_thonny()
+            else:
+                try:
+                    file_input = user_input[12:].strip()
+
+                    # Dateiendung korrigieren
+                    if file_input.endswith(".jup") or file_input.endswith(".pj"):
+                        file_input = file_input.rsplit(".", 1)[0] + ".py"
+                    elif not file_input.endswith(".py"):
+                        file_input += ".py"
+
+                    file_path = Path(file_input).resolve()
+                    file_path.parent.mkdir(parents=True, exist_ok=True)
+
+                    # Neue Datei anlegen, wenn nicht vorhanden
+                    if not file_path.exists():
+                        with open(file_path, "w", encoding="utf-8") as f:
+                            f.write(f"""# -----------------------------------------------------------
+    # 🐍 Welcome to your new Python file!
+    # You have created a new Python file using the PP-Terminal.
+    # -----------------------------------------------------------
+    #
+    # This is a basic starting template to help you get going.
+    # Feel free to modify or delete this code and write your own!
+    # Happy coding! 🚀
+
+    def main():
+      print("👋 Hello, developer!")
+      print("This file was created via the PP-Terminal.")
+      print("Need help? Type 'help()' in the Terminal.")
+
+    # Call the main function when this script runs
+    if __name__ == "__main__":
+      main()
+    """)
+
+                    # active_env aus JSON laden
+                    json_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/current_env.json")
+                    if not json_path.exists():
+                        print(f"[{timestamp()}] [ERROR] current_env.json not found at {json_path}")
+                        shutdown_thonny()
+                    else:
+                        with open(json_path, "r", encoding="utf-8") as f:
+                            data = json.load(f)
+                        active_env_path = data.get("active_env")
+
+                        if not active_env_path:
+                            print(f"[{timestamp()}] [ERROR] 'active_env' key missing in JSON.")
+                            shutdown_thonny()
+                        else:
+                            active_env = Path(active_env_path)
+                            python_exe = active_env / "Scripts" / "python.exe"
+
+                            if not python_exe.exists():
+                                print(f"[{timestamp()}] [ERROR] Python interpreter not found at {python_exe}")
+                                shutdown_thonny()
+                            else:
+                                # Thonny settings.json im Benutzerprofil updaten
+                                thonny_settings_dir = Path.home() / ".thonny"
+                                thonny_settings_dir.mkdir(exist_ok=True)
+                                settings_path = thonny_settings_dir / "settings.json"
+
+                                if settings_path.exists():
+                                    with open(settings_path, "r", encoding="utf-8") as f:
+                                        settings = json.load(f)
+                                else:
+                                    settings = {}
+
+                                settings["backend.executable"] = str(python_exe)
+
+                                with open(settings_path, "w", encoding="utf-8") as f:
+                                    json.dump(settings, f, indent=4)
+
+                                print(f"[{timestamp()}] [INFO] Updated Thonny settings.json backend.executable to {python_exe}")
+
+                                # .env\.thonny\configuration.ini updaten
+                                ini_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/.env/.thonny/configuration.ini")
+
+                                if ini_path.exists():
+                                    config = configparser.ConfigParser()
+                                    config.optionxform = str  # Groß-/Kleinschreibung erhalten
+                                    config.read(ini_path, encoding="utf-8")
+
+                                    if 'LocalCPython' not in config.sections():
+                                        config.add_section('LocalCPython')
+
+                                    # last_configurations als JSON-String speichern
+                                    last_configs_obj = [{
+                                        "run.backend_name": "LocalCPython",
+                                        "LocalCPython.executable": str(python_exe)
+                                    }]
+                                    val = json.dumps(last_configs_obj)
+
+                                    config['LocalCPython']['last_configurations'] = val
+
+                                    with open(ini_path, 'w', encoding='utf-8') as f:
+                                        config.write(f)
+
+                                    print(f"[{timestamp()}] [INFO] Updated {ini_path} with last_configurations pointing to {python_exe}")
+                                else:
+                                    print(f"[{timestamp()}] [WARNING] configuration.ini not found at {ini_path}, skipping update.")
+
+                                # Thonny.exe im .env Ordner starten
+                                fixed_thonny = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/.env/Scripts/thonny.exe")
+
+                                if not fixed_thonny.exists():
+                                    print(f"[{timestamp()}] [ERROR] Thonny executable not found at {fixed_thonny}")
+                                    shutdown_thonny()
+                                else:
+                                    print(f"[{timestamp()}] [INFO] Starting Thonny with file: {file_path}")
+                                    subprocess.Popen([str(fixed_thonny), str(file_path)], shell=True)
+
+                except Exception as e:
+                    print(f"[{timestamp()}] [ERROR] An error occurred: {e}")
+                    shutdown_thonny()
+
+            return True
+
     if user_input.startswith("prt "):
         if user_input.lower() == "prt q" or user_input == "prt \x11":  # 'q' oder Ctrl+Q zum Beenden
             print(f"[{timestamp()}] [INFO] Terminated by exit command")
@@ -16583,6 +16704,65 @@ if __name__ == "__main__":
 
         return True
 
+    if user_input.startswith("pspyder "):
+            file_input = user_input[8:].strip()
+
+            if not file_input:
+                print(f"[{timestamp()}] [ERROR] No file specified.")
+                return True
+
+            try:
+                file_path = Path(file_input).resolve()
+                file_path.parent.mkdir(parents=True, exist_ok=True)
+
+                # Datei anlegen, falls sie nicht existiert
+                if not file_path.exists():
+                    with open(file_path, "w", encoding="utf-8") as f:
+                        f.write(f"""# -----------------------------------------------------------
+    # 🐍 Welcome to your new Python file!
+    # You have created a new Python file using the PP-Terminal.
+    # -----------------------------------------------------------
+    #
+    # This is a basic starting template to help you get going.
+    # Feel free to modify or delete this code and write your own!
+    # Happy coding! 🚀
+
+    def main():
+      print("👋 Hello, developer!")
+      print("This file was created via the PP-Terminal.")
+      print("Need help? Type 'help()' in the Terminal.")
+
+    # Call the main function when this script runs
+    if __name__ == "__main__":
+      main()
+    """)
+
+                # Pfad zu Spyder in der .env
+                current_env = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/.env")
+                spyder_exe = current_env / "Scripts" / "spyder.exe"
+
+                if not spyder_exe.exists():
+                    print(f"[{timestamp()}] [ERROR] Spyder not found at: {spyder_exe}")
+                    shutdown_spy()
+                    return True
+
+                print(f"[{timestamp()}] [INFO] Launching Spyder with file: {file_path}")
+                print(f"[{timestamp()}] [INFO] Spyder executable: {spyder_exe}")
+
+                # Spyder nur mit Datei starten (kein --python-interpreter)
+                subprocess.Popen([
+                    str(spyder_exe),
+                    "--new-instance",
+                    str(file_path)
+                ])
+
+            except Exception as e:
+                print(f"[{timestamp()}] [ERROR] Failed to launch Spyder: {e}")
+                shutdown_spy()
+                return True
+
+            return True
+
     if user_input.startswith("spyder-pip "):
         file_input = user_input[11:].strip()
 
@@ -16641,6 +16821,65 @@ if __name__ == "__main__":
             return True
 
         return True
+
+    if user_input.startswith("pspyder-pip "):
+            file_input = user_input[12:].strip()
+
+            if not file_input:
+                print(f"[{timestamp()}] [ERROR] No file specified.")
+                return True
+
+            try:
+                file_path = Path(file_input).resolve()
+                file_path.parent.mkdir(parents=True, exist_ok=True)
+
+                # Datei anlegen, falls sie nicht existiert
+                if not file_path.exists():
+                    with open(file_path, "w", encoding="utf-8") as f:
+                        f.write(f"""# -----------------------------------------------------------
+    # 🐍 Welcome to your new Python file!
+    # You have created a new Python file using the PP-Terminal.
+    # -----------------------------------------------------------
+    #
+    # This is a basic starting template to help you get going.
+    # Feel free to modify or delete this code and write your own!
+    # Happy coding! 🚀
+
+    def main():
+      print("👋 Hello, developer!")
+      print("This file was created via the PP-Terminal.")
+      print("Need help? Type 'help()' in the Terminal.")
+
+    # Call the main function when this script runs
+    if __name__ == "__main__":
+      main()
+    """)
+
+                # Pfad zu Spyder in der .env
+                current_env = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/.env")
+                spyder_exe = current_env / "Scripts" / "spyder.exe"
+
+                if not spyder_exe.exists():
+                    print(f"[{timestamp()}] [ERROR] Spyder not found at: {spyder_exe}")
+                    shutdown_spy()
+                    return True
+
+                print(f"[{timestamp()}] [INFO] Launching Spyder with file: {file_path}")
+                print(f"[{timestamp()}] [INFO] Spyder executable: {spyder_exe}")
+
+                # Spyder nur mit Datei starten (kein --python-interpreter)
+                subprocess.Popen([
+                    str(spyder_exe),
+                    "--new-instance",
+                    str(file_path)
+                ])
+
+            except Exception as e:
+                print(f"[{timestamp()}] [ERROR] Failed to launch Spyder: {e}")
+                shutdown_spy()
+                return True
+
+            return True
 
     if user_input.startswith("prs "):
         file_input = user_input[4:].strip()
