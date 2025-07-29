@@ -127,10 +127,11 @@ echo 3. The developers, contributors, and distributors of this
 echo    software assume NO responsibility or liability for any
 echo    actions taken by users of this software.
 echo.
-echo 4. This software is provided "AS IS", without warranty of any
-echo    kind, express or implied, including but not limited to the
-echo    warranties of merchantability, fitness for a particular
-echo    purpose and noninfringement.
+echo 4. This software is licensed under the MIT License.
+echo    Please refer to the beginning of this Installation process for full licensing details.
+echo    The software is provided "AS IS", without any warranties of any kind, express or implied.
+echo    This includes, but is not limited to, implied warranties of merchantability,
+echo    fitness for a particular purpose, and non-infringement.
 echo.
 echo By typing 'y', you acknowledge that:
 echo - You have read and understood the above agreement.
