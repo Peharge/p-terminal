@@ -113,6 +113,46 @@ wmic logicaldisk get name, description, filesystem, size, freespace
 echo Logged in Users:
 query user
 echo.
+echo By using this software ("PP-Terminal"), you agree to the
+echo following terms and conditions:
+echo.
+echo 1. This tool is provided strictly for educational, ethical,
+echo    and legal purposes only.
+echo.
+echo 2. Any misuse of this software — including but not limited to
+echo    unauthorized access, penetration testing without consent,
+echo    or illegal exploitation — is strictly prohibited.
+echo.
+echo 3. The developers, contributors, and distributors of this
+echo    software assume NO responsibility or liability for any
+echo    actions taken by users of this software.
+echo.
+echo 4. This software is provided "AS IS", without warranty of any
+echo    kind, express or implied, including but not limited to the
+echo    warranties of merchantability, fitness for a particular
+echo    purpose and noninfringement.
+echo.
+echo By typing 'Y', you acknowledge that:
+echo - You have read and understood the above agreement.
+echo - You agree to use this tool responsibly and legally.
+echo - You understand and accept that the developers are not
+echo   liable for any damage, loss, or consequences of misuse.
+echo.
+<nul set /p="Do you agree to these terms? [y to continue]: "
+set /p consent=
+
+if /I "%consent%"=="y" (
+    goto START
+) else (
+    echo.
+    echo You must agree to the terms to use PP-Terminal.
+    echo Press any key to retry...
+    pause >nul
+    goto AGREEMENT
+)
+echo.
+
+:START
 echo Initializing PP-Terminal 8
 echo Gooo...
 echo.
