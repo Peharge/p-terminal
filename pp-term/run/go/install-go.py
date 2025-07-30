@@ -113,6 +113,7 @@ GO_INSTALL_DIR = Path("C:/Go")
 GO_DOWNLOAD_API = "https://go.dev/dl/?mode=json"
 
 def is_go_installed() -> bool:
+    """Checks whether Go is already installed."""
     return shutil.which("go") is not None or (GO_INSTALL_DIR / "bin" / "go.exe").exists()
 
 def get_latest_go_version() -> dict:
@@ -140,7 +141,7 @@ def download_go_zip(info: dict, dest: Path):
     logging.info(f"Download complete: {dest}")
 
 def extract_go(zip_path: Path):
-    """Extracts the ZIP archive to C:/Go"""
+    """Extracts the ZIP archive to C:/Go."""
     if GO_INSTALL_DIR.exists():
         logging.info("Removing old Go installation...")
         shutil.rmtree(GO_INSTALL_DIR)
@@ -150,7 +151,7 @@ def extract_go(zip_path: Path):
     logging.info("Extraction complete.")
 
 def update_path():
-    """Adds Go to the PATH (only effective for future terminals)."""
+    """Adds Go to the PATH (only effective in new terminals)."""
     go_bin = str(GO_INSTALL_DIR / "bin")
     current_path = os.environ.get("PATH", "")
     if go_bin.lower() in current_path.lower():
@@ -160,7 +161,7 @@ def update_path():
     subprocess.run(["setx", "PATH", f"{current_path};{go_bin}"], shell=True)
 
 def verify_installation():
-    """Verifies the Go installation."""
+    """Verifies that Go is working by calling 'go version'."""
     try:
         result = subprocess.run(["go", "version"], capture_output=True, text=True, check=True)
         logging.info(f"Go successfully installed: {result.stdout.strip()}")

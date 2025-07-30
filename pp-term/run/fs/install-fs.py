@@ -96,7 +96,7 @@ from pathlib import Path
 from urllib.request import Request, urlopen
 from urllib.error import URLError, HTTPError
 
-# --- Logging konfigurieren ---
+# --- Configure logging ---
 log_path = Path(__file__).parent / "installer.log"
 logging.basicConfig(
     level=logging.INFO,
@@ -108,23 +108,23 @@ logging.basicConfig(
     ]
 )
 
-# --- Konstanten ---
+# --- Constants ---
 DOTNET_INSTALL_SCRIPT = "https://dot.net/v1/dotnet-install.ps1"
-INSTALL_DIR           = Path("C:/Program Files/dotnet")
-FSI_CMD               = "fsi"          # F# Interactive
-DOTNET_CMD            = "dotnet"
+INSTALL_DIR = Path("C:/Program Files/dotnet")
+FSI_CMD = "fsi"  # F# Interactive
+DOTNET_CMD = "dotnet"
 
 def is_dotnet_installed() -> bool:
-    """Prüft, ob 'dotnet' bereits im PATH verfügbar ist."""
+    """Checks whether 'dotnet' is available in the PATH."""
     return shutil.which(DOTNET_CMD) is not None
 
 def is_fsharp_available() -> bool:
-    """Prüft, ob 'fsi' (F# Interactive) verfügbar ist."""
+    """Checks whether 'fsi' (F# Interactive) is available."""
     return shutil.which(FSI_CMD) is not None
 
 def download_install_script(dest: Path) -> None:
-    """Lädt das offizielle dotnet-install PowerShell-Skript herunter."""
-    logging.info(f"Starte Download des dotnet-install-Skripts von {DOTNET_INSTALL_SCRIPT}")
+    """Downloads the official dotnet-install PowerShell script."""
+    logging.info(f"Downloading dotnet-install script from {DOTNET_INSTALL_SCRIPT}")
     try:
         req = Request(DOTNET_INSTALL_SCRIPT, headers={"User-Agent": "Mozilla/5.0"})
         with urlopen(req) as resp, open(dest, "wb") as out:
@@ -139,17 +139,17 @@ def download_install_script(dest: Path) -> None:
                 downloaded += len(chunk)
                 if total:
                     pct = downloaded * 100 / total
-                    logging.info(f"Download-Fortschritt: {pct:.1f}%")
-        logging.info(f"dotnet-install-Skript gespeichert: {dest}")
+                    logging.info(f"Download progress: {pct:.1f}%")
+        logging.info(f"dotnet-install script saved to: {dest}")
     except (HTTPError, URLError) as e:
-        logging.error(f"Fehler beim Herunterladen: {e}")
+        logging.error(f"Download failed: {e}")
         sys.exit(1)
 
 def run_install_script(script_path: Path) -> None:
     """
-    Führt das PowerShell-Skript aus, um das .NET SDK (LTS) zu installieren.
+    Executes the PowerShell script to install the .NET SDK (LTS version).
     """
-    logging.info(f"Starte Installation des .NET SDK (LTS) in {INSTALL_DIR}")
+    logging.info(f"Starting .NET SDK (LTS) installation into {INSTALL_DIR}")
     ps_command = [
         "powershell",
         "-NoProfile",
@@ -161,47 +161,47 @@ def run_install_script(script_path: Path) -> None:
     ]
     try:
         subprocess.run(ps_command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        logging.info(".NET SDK erfolgreich installiert.")
+        logging.info(".NET SDK installed successfully.")
     except subprocess.CalledProcessError as e:
-        logging.error(f".NET-Installation fehlgeschlagen (Exit-Code {e.returncode}):\n{e.stderr}")
+        logging.error(f".NET installation failed (Exit code {e.returncode}):\n{e.stderr}")
         sys.exit(e.returncode)
 
 def update_path() -> None:
-    """Fügt das dotnet-Install-Verzeichnis dem System-PATH hinzu (für neue Terminals)."""
+    """Adds the dotnet install directory to the system PATH (for new terminals)."""
     dotnet_bin = str(INSTALL_DIR)
     current = os.environ.get("PATH", "")
     if dotnet_bin.lower() in current.lower():
-        logging.info("dotnet ist bereits im PATH.")
+        logging.info("dotnet is already in PATH.")
         return
     new_path = f"{current};{dotnet_bin}"
-    logging.info(f"Füge dotnet-InstallDir dem PATH hinzu: {dotnet_bin}")
+    logging.info(f"Adding dotnet install directory to PATH: {dotnet_bin}")
     subprocess.run(f'setx PATH "{new_path}"', shell=True, check=False)
 
 def verify_installation() -> None:
     """
-    Prüft die Installation via 'dotnet --list-sdks' und 'fsi --version'.
+    Verifies the installation using 'dotnet --list-sdks' and 'fsi --version'.
     """
     try:
         sdks = subprocess.check_output([DOTNET_CMD, "--list-sdks"], text=True).strip()
-        logging.info(f"Installierte .NET SDKs:\n{sdks}")
+        logging.info(f"Installed .NET SDKs:\n{sdks}")
     except Exception as e:
-        logging.error(f"Fehler bei '.NET SDK'-Prüfung: {e}")
+        logging.error(f"Error checking .NET SDKs: {e}")
         sys.exit(1)
 
     try:
         out = subprocess.check_output([FSI_CMD, "--version"], text=True).strip()
-        logging.info(f"F# Interactive (fsi) Version: {out}")
+        logging.info(f"F# Interactive (fsi) version: {out}")
     except Exception as e:
-        logging.error(f"Fehler bei 'fsi'-Prüfung: {e}")
+        logging.error(f"Error checking F# Interactive (fsi): {e}")
         sys.exit(1)
 
 def main():
-    logging.info("=== F# Installer (.NET SDK) gestartet ===")
+    logging.info("=== F# Installer (.NET SDK) started ===")
     if os.name != "nt":
-        logging.error("Dieses Skript funktioniert nur unter Windows.")
+        logging.error("This script only works on Windows.")
         sys.exit(1)
 
-    # .NET SDK installieren, falls nicht vorhanden
+    # Install .NET SDK if not present
     if not is_dotnet_installed():
         with tempfile.TemporaryDirectory() as td:
             script = Path(td) / "dotnet-install.ps1"
@@ -209,17 +209,17 @@ def main():
             run_install_script(script)
         update_path()
     else:
-        logging.info(".NET SDK ist bereits installiert.")
+        logging.info(".NET SDK is already installed.")
 
-    # F# Interactive prüfen
+    # Check if F# Interactive is available
     if is_fsharp_available():
-        logging.info("F# Interactive ist bereits verfügbar.")
+        logging.info("F# Interactive is already available.")
     else:
-        logging.error("F# Interactive (fsi) wurde nicht gefunden.")
+        logging.error("F# Interactive (fsi) was not found.")
         sys.exit(1)
 
     verify_installation()
-    logging.info("=== F# Installation abgeschlossen ===")
+    logging.info("=== F# installation completed ===")
 
 if __name__ == "__main__":
     main()

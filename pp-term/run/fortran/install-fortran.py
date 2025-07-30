@@ -97,7 +97,7 @@ from pathlib import Path
 from urllib.request import Request, urlopen
 from urllib.error import URLError, HTTPError
 
-# --- Logging konfigurieren ---
+# --- Configure logging ---
 log_path = Path(__file__).parent / "installer.log"
 logging.basicConfig(
     level=logging.INFO,
@@ -109,22 +109,22 @@ logging.basicConfig(
     ]
 )
 
-# --- Konstanten ---
+# --- Constants ---
 GITHUB_API_LATEST = "https://api.github.com/repos/LKedward/quickstart-fortran/releases/latest"
 
 def is_gfortran_installed() -> bool:
-    """Prüft, ob 'gfortran' bereits im PATH verfügbar ist."""
+    """Check if 'gfortran' is already available in PATH."""
     return shutil.which("gfortran") is not None
 
 def fetch_latest_release() -> dict:
-    """Holt über die GitHub-API das neueste Release und die Windows-Installer-URL."""
-    logging.info("Ermittle neueste Quickstart-Fortran-Version über GitHub API…")
+    """Fetch the latest release and Windows installer URL via GitHub API."""
+    logging.info("Fetching latest Quickstart Fortran version via GitHub API…")
     req = Request(GITHUB_API_LATEST, headers={"User-Agent": "Mozilla/5.0"})
     try:
         with urlopen(req) as resp:
             data = json.load(resp)
     except (HTTPError, URLError) as e:
-        logging.error(f"Fehler beim Abruf der Release-API: {e}")
+        logging.error(f"Error fetching release API: {e}")
         sys.exit(1)
 
     version = data.get("tag_name", "").lstrip("v")
@@ -138,15 +138,15 @@ def fetch_latest_release() -> dict:
             break
 
     if not version or not asset_url:
-        logging.error("Konnte keinen Windows-Installer für Quickstart-Fortran finden.")
+        logging.error("Could not find a Windows installer for Quickstart Fortran.")
         sys.exit(1)
 
-    logging.info(f"Gefundene Version: {version}, Installer: {asset_name}")
+    logging.info(f"Found version: {version}, Installer: {asset_name}")
     return {"version": version, "url": asset_url, "filename": asset_name}
 
 def download_installer(url: str, dest: Path):
-    """Lädt den Installer herunter und protokolliert den Fortschritt."""
-    logging.info(f"Starte Download von {url}")
+    """Download the installer and log progress."""
+    logging.info(f"Starting download from {url}")
     try:
         req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
         with urlopen(req) as resp, open(dest, "wb") as out:
@@ -161,39 +161,39 @@ def download_installer(url: str, dest: Path):
                 downloaded += len(chunk)
                 if total:
                     pct = downloaded * 100 / total
-                    logging.info(f"Download-Fortschritt: {pct:.1f}%")
-        logging.info(f"Download abgeschlossen: {dest}")
+                    logging.info(f"Download progress: {pct:.1f}%")
+        logging.info(f"Download completed: {dest}")
     except (HTTPError, URLError) as e:
-        logging.error(f"Download-Fehler: {e}")
+        logging.error(f"Download error: {e}")
         sys.exit(1)
 
 def run_installer(installer_path: Path):
-    """Führt den Installer aus."""
-    logging.info(f"Starte Quickstart-Fortran-Installer: {installer_path}")
+    """Run the downloaded installer."""
+    logging.info(f"Launching Quickstart Fortran installer: {installer_path}")
     try:
         subprocess.run([str(installer_path)], check=True)
-        logging.info("Installation abgeschlossen.")
+        logging.info("Installation completed.")
     except subprocess.CalledProcessError as e:
-        logging.error(f"Installation fehlgeschlagen: {e}")
+        logging.error(f"Installation failed: {e}")
         sys.exit(1)
 
 def verify_installation():
-    """Prüft die Installation via 'gfortran --version'."""
+    """Verify the installation by running 'gfortran --version'."""
     try:
         out = subprocess.check_output(["gfortran", "--version"], text=True).strip()
-        logging.info(f"GFortran erfolgreich installiert: {out}")
+        logging.info(f"GFortran successfully installed: {out}")
     except Exception as e:
-        logging.error(f"Verifikation von GFortran fehlgeschlagen: {e}")
+        logging.error(f"GFortran verification failed: {e}")
         sys.exit(1)
 
 def main():
-    logging.info("=== GFortran-Installer gestartet ===")
+    logging.info("=== GFortran Installer started ===")
     if os.name != "nt":
-        logging.error("Dieses Skript funktioniert nur unter Windows.")
+        logging.error("This script only works on Windows.")
         sys.exit(1)
 
     if is_gfortran_installed():
-        logging.info("GFortran ist bereits installiert. Abbruch.")
+        logging.info("GFortran is already installed. Aborting.")
         return
 
     info = fetch_latest_release()
@@ -207,7 +207,7 @@ def main():
         run_installer(installer_path)
 
     verify_installation()
-    logging.info("=== GFortran-Installation abgeschlossen ===")
+    logging.info("=== GFortran installation completed ===")
 
 if __name__ == "__main__":
     main()

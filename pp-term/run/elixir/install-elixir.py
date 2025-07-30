@@ -98,7 +98,7 @@ from pathlib import Path
 from urllib.request import Request, urlopen
 from urllib.error import URLError, HTTPError
 
-# --- Logging konfigurieren ---
+# --- Configure logging ---
 log_path = Path(__file__).parent / "installer.log"
 logging.basicConfig(
     level=logging.INFO,
@@ -110,7 +110,7 @@ logging.basicConfig(
     ]
 )
 
-# --- Konstanten ---
+# --- Constants ---
 GITHUB_API_LATEST     = "https://api.github.com/repos/elixir-lang/elixir/releases/latest"
 INSTALL_ROOT          = Path("C:/Program Files/Elixir")
 ELIXIR_CMD            = "elixir"
@@ -118,21 +118,21 @@ ERLANG_CMD            = "erl"
 BIN_SUBDIR            = "bin"
 
 def is_tool_installed(cmd: str) -> bool:
-    """Prüft, ob ein CLI-Tool im PATH verfügbar ist."""
+    """Checks if a CLI tool is available in the PATH."""
     return shutil.which(cmd) is not None
 
 def fetch_latest_elixir_release() -> dict:
     """
-    Fragt die GitHub-API nach dem neuesten Elixir-Release
-    und sucht nach dem Windows-x64-ZIP-Asset.
+    Queries the GitHub API for the latest Elixir release
+    and looks for the Windows x64 ZIP asset.
     """
-    logging.info("Ermittle neueste Elixir-Version über GitHub API…")
+    logging.info("Fetching latest Elixir version via GitHub API…")
     req = Request(GITHUB_API_LATEST, headers={"User-Agent": "Mozilla/5.0"})
     try:
         with urlopen(req) as resp:
             data = json.load(resp)
     except (HTTPError, URLError) as e:
-        logging.error(f"Fehler bei der GitHub-API-Abfrage: {e}")
+        logging.error(f"Error querying GitHub API: {e}")
         sys.exit(1)
 
     version = data.get("tag_name", "").lstrip("v")
@@ -140,22 +140,22 @@ def fetch_latest_elixir_release() -> dict:
     filename = None
     for asset in data.get("assets", []):
         name = asset.get("name", "")
-        # Wir suchen nach einem ZIP für Windows x64, z.B. enthält "win64" oder "Precompiled"
+        # We're looking for a ZIP for Windows x64, e.g., contains "win64" or "Precompiled"
         if ("win64" in name.lower() or "precompiled" in name.lower()) and name.lower().endswith(".zip"):
             asset_url = asset.get("browser_download_url")
             filename = name
             break
 
     if not version or not asset_url:
-        logging.error("Konnte kein passendes Windows-ZIP-Asset für Elixir finden.")
+        logging.error("Could not find a suitable Windows ZIP asset for Elixir.")
         sys.exit(1)
 
-    logging.info(f"Gefundene Version: {version}, Asset: {filename}")
+    logging.info(f"Found version: {version}, asset: {filename}")
     return {"version": version, "url": asset_url, "filename": filename}
 
 def download_zip(dest: Path, url: str):
-    """Lädt ein ZIP-Archiv von der URL herunter."""
-    logging.info(f"Starte Download: {url}")
+    """Downloads a ZIP archive from the URL."""
+    logging.info(f"Starting download: {url}")
     try:
         req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
         with urlopen(req) as resp, open(dest, "wb") as out:
@@ -170,58 +170,58 @@ def download_zip(dest: Path, url: str):
                 downloaded += len(chunk)
                 if total:
                     pct = downloaded * 100 / total
-                    logging.info(f"Download-Fortschritt: {pct:.1f}%")
-        logging.info(f"Download abgeschlossen: {dest}")
+                    logging.info(f"Download progress: {pct:.1f}%")
+        logging.info(f"Download complete: {dest}")
     except (HTTPError, URLError) as e:
-        logging.error(f"Download-Fehler: {e}")
+        logging.error(f"Download error: {e}")
         sys.exit(1)
 
 def extract_elixir(zip_path: Path, install_dir: Path):
-    """Entpackt das Elixir-ZIP-Archiv nach install_dir."""
+    """Extracts the Elixir ZIP archive to install_dir."""
     if install_dir.exists():
-        logging.info(f"Alte Elixir-Installation in {install_dir} wird gelöscht…")
+        logging.info(f"Old Elixir installation in {install_dir} will be deleted…")
         shutil.rmtree(install_dir)
-    logging.info(f"Entpacke {zip_path} nach {install_dir}")
+    logging.info(f"Extracting {zip_path} to {install_dir}")
     install_dir.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(zip_path, 'r') as z:
         z.extractall(install_dir)
-    logging.info("Entpackung abgeschlossen.")
+    logging.info("Extraction complete.")
 
 def update_path(install_dir: Path):
-    """Fügt das Elixir bin-Verzeichnis dem System-PATH hinzu (für neue Terminals)."""
+    """Adds the Elixir bin directory to the system PATH (for new terminals)."""
     bin_path = str(install_dir / BIN_SUBDIR)
     current = os.environ.get("PATH", "")
     if bin_path.lower() in current.lower():
-        logging.info("Elixir/bin ist bereits im PATH.")
+        logging.info("Elixir/bin is already in PATH.")
         return
     new_path = f"{current};{bin_path}"
-    logging.info(f"Füge Elixir/bin dem PATH hinzu: {bin_path}")
+    logging.info(f"Adding Elixir/bin to PATH: {bin_path}")
     subprocess.run(f'setx PATH "{new_path}"', shell=True, check=False)
 
 def verify_installation():
-    """Prüft die Installation via 'elixir --version'."""
+    """Verifies the installation via 'elixir --version'."""
     try:
         out = subprocess.check_output([ELIXIR_CMD, "--version"], text=True).strip()
-        logging.info(f"Elixir erfolgreich installiert: {out}")
+        logging.info(f"Elixir successfully installed: {out}")
     except Exception as e:
-        logging.error(f"Verifikation fehlgeschlagen: {e}")
+        logging.error(f"Verification failed: {e}")
         sys.exit(1)
 
 def main():
-    logging.info("=== Elixir-Installer gestartet ===")
+    logging.info("=== Elixir Installer Started ===")
 
     if os.name != "nt":
-        logging.error("Dieses Skript läuft nur unter Windows.")
+        logging.error("This script only runs on Windows.")
         sys.exit(1)
 
     if not is_tool_installed(ERLANG_CMD):
-        logging.error("Erlang (erl) nicht gefunden. Bitte installiere zuerst eine Erlang/OTP-Distribution.")
+        logging.error("Erlang (erl) not found. Please install an Erlang/OTP distribution first.")
         sys.exit(1)
     else:
-        logging.info("Erlang ist bereits installiert.")
+        logging.info("Erlang is already installed.")
 
     if is_tool_installed(ELIXIR_CMD):
-        logging.info("Elixir ist bereits installiert. Abbruch.")
+        logging.info("Elixir is already installed. Aborting.")
         return
 
     info = fetch_latest_elixir_release()
@@ -237,7 +237,7 @@ def main():
 
     update_path(install_dir)
     verify_installation()
-    logging.info("=== Elixir-Installation abgeschlossen ===")
+    logging.info("=== Elixir Installation Complete ===")
 
 if __name__ == "__main__":
     main()

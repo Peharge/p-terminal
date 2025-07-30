@@ -98,7 +98,7 @@ from pathlib import Path
 from urllib.request import Request, urlopen
 from urllib.error import URLError, HTTPError
 
-# --- Logging konfigurieren ---
+# --- Configure logging ---
 log_path = Path(__file__).parent / "installer.log"
 logging.basicConfig(
     level=logging.INFO,
@@ -110,7 +110,7 @@ logging.basicConfig(
     ]
 )
 
-# --- Konstanten ---
+# --- Constants ---
 DART_BASE_URL     = "https://storage.googleapis.com/dart-archive/channels/stable/release/latest/version"
 DART_SDK_INDEX    = "https://storage.googleapis.com/dart-archive/channels/stable/release/latest/sdk/dartsdk-windows-x64-release.zip"
 INSTALL_ROOT      = Path("C:/Program Files/Dart")
@@ -119,19 +119,19 @@ BIN_SUBDIR        = "bin"
 DART_CMD          = "dart"
 
 def is_dart_installed() -> bool:
-    """Prüft, ob 'dart' bereits im PATH verfügbar ist."""
+    """Checks if 'dart' is already available in PATH."""
     return shutil.which(DART_CMD) is not None
 
 def get_latest_sdk_url() -> str:
     """
-    Ermittelt die aktuellste Dart-SDK-URL für Windows x64.
-    Die Standard-URL points to 'latest', daher verwenden wir sie direkt.
+    Determines the latest Dart SDK URL for Windows x64.
+    The default URL points to 'latest', so we use it directly.
     """
     return DART_SDK_INDEX
 
 def download_sdk(dest: Path, url: str):
-    """Lädt das Dart SDK als ZIP-Archiv herunter."""
-    logging.info(f"Starte Download des Dart SDK von {url}")
+    """Downloads the Dart SDK as a ZIP archive."""
+    logging.info(f"Starting download of Dart SDK from {url}")
     try:
         req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
         with urlopen(req) as resp, open(dest, "wb") as out:
@@ -146,56 +146,56 @@ def download_sdk(dest: Path, url: str):
                 downloaded += len(chunk)
                 if total:
                     pct = downloaded * 100 / total
-                    logging.info(f"Download-Fortschritt: {pct:.1f}%")
-        logging.info(f"Download abgeschlossen: {dest}")
+                    logging.info(f"Download progress: {pct:.1f}%")
+        logging.info(f"Download complete: {dest}")
     except (HTTPError, URLError) as e:
-        logging.error(f"Fehler beim Download: {e}")
+        logging.error(f"Error during download: {e}")
         sys.exit(1)
 
 def extract_sdk(zip_path: Path, install_root: Path):
     """
-    Entpackt das ZIP-Archiv nach INSTALL_ROOT/dart-sdk
-    und löscht ggf. alte Installation.
+    Extracts the ZIP archive to INSTALL_ROOT/dart-sdk
+    and deletes any existing installation if present.
     """
     sdk_path = install_root / SDK_DIR_NAME
     if sdk_path.exists():
-        logging.info(f"Alte Dart-Installation gefunden ({sdk_path}), wird gelöscht...")
+        logging.info(f"Old Dart installation found ({sdk_path}), deleting...")
         shutil.rmtree(sdk_path)
-    logging.info(f"Entpacke {zip_path} nach {sdk_path}")
+    logging.info(f"Extracting {zip_path} to {sdk_path}")
     install_root.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(zip_path, 'r') as z:
         z.extractall(install_root)
-    logging.info("Entpackung abgeschlossen.")
+    logging.info("Extraction complete.")
     return sdk_path
 
 def update_path(sdk_path: Path):
-    """Fügt das Dart SDK bin-Verzeichnis dem System-PATH hinzu (für neue Terminals)."""
+    """Adds the Dart SDK bin directory to the system PATH (for new terminals)."""
     bin_path = str(sdk_path / BIN_SUBDIR)
     current = os.environ.get("PATH", "")
     if bin_path.lower() in current.lower():
-        logging.info("Dart SDK/bin ist bereits im PATH.")
+        logging.info("Dart SDK/bin is already in PATH.")
         return
     new_path = f"{current};{bin_path}"
-    logging.info(f"Füge Dart SDK/bin zum PATH hinzu: {bin_path}")
+    logging.info(f"Adding Dart SDK/bin to PATH: {bin_path}")
     subprocess.run(f'setx PATH "{new_path}"', shell=True, check=False)
 
 def verify_installation():
-    """Prüft die Installation via 'dart --version'."""
+    """Verifies the installation using 'dart --version'."""
     try:
         out = subprocess.check_output([DART_CMD, "--version"], text=True).strip()
-        logging.info(f"Dart erfolgreich installiert: {out}")
+        logging.info(f"Dart successfully installed: {out}")
     except Exception as e:
-        logging.error(f"Fehler bei der Verifikation von Dart: {e}")
+        logging.error(f"Error verifying Dart installation: {e}")
         sys.exit(1)
 
 def main():
-    logging.info("=== Dart-Installer gestartet ===")
+    logging.info("=== Dart Installer Started ===")
     if os.name != "nt":
-        logging.error("Dieses Skript funktioniert nur unter Windows.")
+        logging.error("This script only works on Windows.")
         sys.exit(1)
 
     if is_dart_installed():
-        logging.info("Dart ist bereits installiert. Abbruch.")
+        logging.info("Dart is already installed. Aborting.")
         return
 
     sdk_url = get_latest_sdk_url()
@@ -207,7 +207,7 @@ def main():
 
     update_path(sdk_path)
     verify_installation()
-    logging.info("=== Dart-Installation abgeschlossen ===")
+    logging.info("=== Dart Installation Complete ===")
 
 if __name__ == "__main__":
     main()

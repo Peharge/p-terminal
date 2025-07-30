@@ -93,7 +93,7 @@ import subprocess
 import logging
 from pathlib import Path
 
-# --- Logging konfigurieren ---
+# --- Configure logging ---
 log_path = Path(__file__).parent / "installer.log"
 logging.basicConfig(
     level=logging.INFO,
@@ -106,21 +106,21 @@ logging.basicConfig(
 )
 
 def is_tool_installed(cmd: str) -> bool:
-    """Prüft, ob ein CLI-Tool im PATH verfügbar ist."""
+    """Checks if a CLI tool is available in the PATH."""
     return shutil.which(cmd) is not None
 
 def install_elm_via_npm():
-    """Installiert Elm global via npm."""
-    logging.info("Installiere Elm global via npm...")
+    """Installs Elm globally via npm."""
+    logging.info("Installing Elm globally via npm...")
     try:
         subprocess.run(["npm", "install", "-g", "elm"], check=True)
-        logging.info("Elm wurde erfolgreich installiert.")
+        logging.info("Elm was installed successfully.")
     except subprocess.CalledProcessError as e:
-        logging.error(f"Fehler bei der Elm-Installation: {e}")
+        logging.error(f"Error during Elm installation: {e}")
         sys.exit(1)
 
 def get_npm_global_prefix() -> str:
-    """Ermittelt das npm-Global-Prefix (Pfad zu globalen Binärdateien)."""
+    """Retrieves the npm global prefix (path to global binaries)."""
     try:
         prefix = subprocess.check_output(
             ["npm", "config", "get", "prefix"],
@@ -128,59 +128,59 @@ def get_npm_global_prefix() -> str:
         ).strip()
         return prefix
     except subprocess.CalledProcessError as e:
-        logging.error(f"Konnte npm prefix nicht ermitteln: {e}")
+        logging.error(f"Could not determine npm prefix: {e}")
         sys.exit(1)
 
 def update_path(npm_prefix: str):
     """
-    Fügt das Verzeichnis mit den globalen npm-Binärdateien dem System-PATH hinzu.
-    Das ist typischerweise das npm_prefix-Verzeichnis selbst unter Windows.
+    Adds the directory with global npm binaries to the system PATH.
+    On Windows, this is typically the npm_prefix directory itself.
     """
     bin_path = npm_prefix
     current = os.environ.get("PATH", "")
     if bin_path.lower() in current.lower():
-        logging.info("npm global prefix ist bereits im PATH.")
+        logging.info("npm global prefix is already in PATH.")
         return
     new_path = f"{current};{bin_path}"
-    logging.info(f"Füge npm global prefix dem PATH hinzu: {bin_path}")
-    # setx schreibt den neuen PATH in die Registry (für neue Terminals)
+    logging.info(f"Adding npm global prefix to PATH: {bin_path}")
+    # setx writes the new PATH to the registry (for new terminals)
     subprocess.run(f'setx PATH "{new_path}"', shell=True, check=False)
 
 def verify_installation():
-    """Prüft die Elm-Installation via 'elm --version'."""
+    """Verifies the Elm installation using 'elm --version'."""
     try:
         out = subprocess.check_output(["elm", "--version"], text=True).strip()
-        logging.info(f"Elm erfolgreich installiert, Version: {out}")
+        logging.info(f"Elm successfully installed, version: {out}")
     except Exception as e:
-        logging.error(f"Verifikation von Elm fehlgeschlagen: {e}")
+        logging.error(f"Verification of Elm failed: {e}")
         sys.exit(1)
 
 def main():
-    logging.info("=== Elm-Installer gestartet ===")
+    logging.info("=== Elm Installer Started ===")
     if os.name != "nt":
-        logging.error("Dieses Skript funktioniert nur unter Windows.")
+        logging.error("This script only works on Windows.")
         sys.exit(1)
 
-    # Prüfe Node.js/npm
+    # Check for Node.js/npm
     if not is_tool_installed("node") or not is_tool_installed("npm"):
-        logging.error("Node.js und npm werden benötigt. Bitte vorher installieren.")
+        logging.error("Node.js and npm are required. Please install them first.")
         sys.exit(1)
     else:
-        logging.info("Node.js und npm sind installiert.")
+        logging.info("Node.js and npm are installed.")
 
-    # Elm installieren, falls nicht vorhanden
+    # Install Elm if not already present
     if is_tool_installed("elm"):
-        logging.info("Elm ist bereits installiert. Abbruch.")
+        logging.info("Elm is already installed. Aborting.")
     else:
         install_elm_via_npm()
 
-    # npm global prefix ermitteln und in PATH aufnehmen
+    # Get npm global prefix and add to PATH
     npm_prefix = get_npm_global_prefix()
     update_path(npm_prefix)
 
-    # Verifikation
+    # Verification
     verify_installation()
-    logging.info("=== Elm-Installation abgeschlossen ===")
+    logging.info("=== Elm Installation Complete ===")
 
 if __name__ == "__main__":
     main()
