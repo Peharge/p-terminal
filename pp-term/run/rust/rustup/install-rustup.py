@@ -96,7 +96,7 @@ from urllib.request import urlopen, Request
 from urllib.error import URLError, HTTPError
 import tempfile
 
-# Logging konfigurieren
+# Configure logging
 log_path = Path(__file__).parent / "installer.log"
 logging.basicConfig(
     level=logging.INFO,
@@ -109,16 +109,16 @@ logging.basicConfig(
 )
 
 def is_rustup_installed() -> bool:
-    """Prüft, ob rustup über den PATH aufgerufen werden kann."""
+    """Checks if rustup can be called from PATH."""
     return shutil.which("rustup") is not None
 
 def download_rustup_installer(dest_path: Path) -> None:
     """
-    Lädt den Windows-Installer von rustup (rustup-init.exe) herunter.
-    Die URL https://win.rustup.rs/ liefert automatisch den aktuellsten Installer.
+    Downloads the Windows installer for rustup (rustup-init.exe).
+    The URL https://win.rustup.rs/ always provides the latest installer.
     """
     url = "https://win.rustup.rs/"
-    logging.info(f"Starte Download des rustup-Installers von {url}")
+    logging.info(f"Starting download of rustup installer from {url}")
     try:
         req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
         with urlopen(req) as response, open(dest_path, "wb") as out_file:
@@ -132,53 +132,53 @@ def download_rustup_installer(dest_path: Path) -> None:
                 out_file.write(chunk)
                 downloaded += len(chunk)
                 percent = downloaded * 100 / total if total else 0
-                logging.info(f"Download-Fortschritt: {percent:.1f}%")
-        logging.info(f"Download abgeschlossen: {dest_path}")
+                logging.info(f"Download progress: {percent:.1f}%")
+        logging.info(f"Download completed: {dest_path}")
     except (HTTPError, URLError) as e:
-        logging.error(f"Fehler beim Download: {e}")
+        logging.error(f"Download error: {e}")
         sys.exit(1)
 
 def run_installer(installer_path: Path) -> None:
     """
-    Führt den heruntergeladenen rustup-Installer im Silent-Modus aus.
+    Runs the downloaded rustup installer in silent mode.
     """
-    logging.info(f"Starte rustup-Installer: {installer_path}")
-    # /VERYSILENT je nach InnoSetup-Version, für rustup reicht `-y`
+    logging.info(f"Launching rustup installer: {installer_path}")
+    # /VERYSILENT depending on InnoSetup version; for rustup `-y` is enough
     cmd = [str(installer_path), "-y"]
     try:
         result = subprocess.run(cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        logging.info("rustup erfolgreich installiert.")
-        logging.debug(f"Installer-Ausgabe:\n{result.stdout}")
+        logging.info("rustup installed successfully.")
+        logging.debug(f"Installer output:\n{result.stdout}")
     except subprocess.CalledProcessError as e:
-        logging.error(f"Installation fehlgeschlagen (Exit-Code {e.returncode}):\n{e.stderr}")
+        logging.error(f"Installation failed (Exit code {e.returncode}):\n{e.stderr}")
         sys.exit(e.returncode)
 
 def ensure_rustup_available():
     """
-    Prüft nach der Installation, ob rustup nun in PATH ist.
+    Verifies after installation that rustup is now in the PATH.
     """
     if is_rustup_installed():
-        logging.info("rustup steht nun zur Verfügung.")
+        logging.info("rustup is now available.")
     else:
-        logging.warning("rustup nicht im PATH gefunden. Bitte Terminal neu starten oder PATH überprüfen.")
+        logging.warning("rustup not found in PATH. Please restart terminal or check environment variables.")
 
 def main():
-    logging.info("=== rustup-Installer gestartet ===")
+    logging.info("=== rustup installer started ===")
     if is_rustup_installed():
-        logging.info("rustup ist bereits installiert. Beende Prozess.")
+        logging.info("rustup is already installed. Exiting.")
         return
 
-    # Temporäres Verzeichnis für den Downloader anlegen
+    # Create temporary directory for the downloader
     with tempfile.TemporaryDirectory() as tmpdir:
         installer_file = Path(tmpdir) / "rustup-init.exe"
         download_rustup_installer(installer_file)
         run_installer(installer_file)
 
     ensure_rustup_available()
-    logging.info("=== Prozess abgeschlossen ===")
+    logging.info("=== Process completed ===")
 
 if __name__ == "__main__":
     if os.name != "nt":
-        logging.error("Dieses Skript läuft nur unter Windows.")
+        logging.error("This script only runs on Windows.")
         sys.exit(1)
     main()

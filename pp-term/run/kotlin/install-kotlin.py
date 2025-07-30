@@ -112,8 +112,8 @@ logging.basicConfig(
 
 # --- Konstanten ---
 GITHUB_API_LATEST = "https://api.github.com/repos/JetBrains/kotlin/releases/latest"
-INSTALL_ROOT      = Path("C:/Program Files/Kotlin")
-KOTLINC_CMD       = "kotlinc"
+INSTALL_ROOT = Path("C:/Program Files/Kotlin")
+KOTLINC_CMD = "kotlinc"
 
 def is_kotlin_installed() -> bool:
     """Prüft, ob 'kotlinc' bereits im PATH verfügbar ist."""
@@ -129,7 +129,9 @@ def get_latest_release_info() -> dict:
     except (HTTPError, URLError) as e:
         logging.error(f"Fehler beim Abruf der GitHub-API: {e}")
         sys.exit(1)
+
     version = data.get("tag_name", "").lstrip("v")
+
     # Suche das ZIP-Asset
     download_url = None
     for asset in data.get("assets", []):
@@ -137,9 +139,11 @@ def get_latest_release_info() -> dict:
         if name.startswith("kotlin-compiler-") and name.endswith(".zip"):
             download_url = asset.get("browser_download_url")
             break
+
     if not download_url or not version:
         logging.error("Konnte Kotlin-Compiler-Asset nicht finden.")
         sys.exit(1)
+
     logging.info(f"Gefundene Version: {version}")
     return {"version": version, "url": download_url}
 
@@ -209,7 +213,7 @@ def main():
 
     info = get_latest_release_info()
     version = info["version"]
-    url     = info["url"]
+    url = info["url"]
     install_dir = INSTALL_ROOT / f"kotlin-compiler-{version}"
 
     with tempfile.TemporaryDirectory() as td:

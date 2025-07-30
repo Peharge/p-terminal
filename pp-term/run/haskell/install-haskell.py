@@ -98,7 +98,7 @@ from pathlib import Path
 from urllib.request import Request, urlopen
 from urllib.error import URLError, HTTPError
 
-# --- Logging konfigurieren ---
+# --- Configure logging ---
 log_path = Path(__file__).parent / "installer.log"
 logging.basicConfig(
     level=logging.INFO,
@@ -110,45 +110,45 @@ logging.basicConfig(
     ]
 )
 
-# --- Konstanten ---
+# --- Constants ---
 GITHUB_API_LATEST = "https://api.github.com/repos/ghc/ghc/releases/latest"
 INSTALL_ROOT      = Path("C:/Program Files/ghc")
 GHC_CMD           = "ghc"
 
 def is_ghc_installed() -> bool:
-    """Prüft, ob 'ghc' bereits im PATH verfügbar ist."""
+    """Checks whether 'ghc' is already available in PATH."""
     return shutil.which(GHC_CMD) is not None
 
 def get_latest_ghc_release() -> dict:
-    """Holt aus der GitHub-API das neueste GHC-Windows-Installer-Asset."""
-    logging.info("Ermittle neueste GHC-Version über GitHub API...")
+    """Fetches the latest GHC Windows installer asset via the GitHub API."""
+    logging.info("Fetching latest GHC version from GitHub API...")
     req = Request(GITHUB_API_LATEST, headers={"User-Agent": "Mozilla/5.0"})
     try:
         with urlopen(req) as resp:
             data = json.load(resp)
     except (HTTPError, URLError) as e:
-        logging.error(f"Fehler beim Abruf der GitHub-API: {e}")
+        logging.error(f"Error fetching GitHub API: {e}")
         sys.exit(1)
 
     version = data.get("tag_name", "").lstrip("ghc-")
     download_url = None
     for asset in data.get("assets", []):
         name = asset.get("name", "")
-        # Wir suchen den Windows x86_64-Installer als .exe
+        # Look for Windows x86_64 installer ending in .exe
         if name.endswith("x86_64-unknown-mingw32.exe"):
             download_url = asset.get("browser_download_url")
             break
 
     if not download_url or not version:
-        logging.error("Konnte GHC-Windows-Installer nicht finden.")
+        logging.error("Could not find GHC Windows installer.")
         sys.exit(1)
 
-    logging.info(f"Gefundene GHC-Version: {version}")
+    logging.info(f"Found GHC version: {version}")
     return {"version": version, "url": download_url}
 
 def download_installer(dest: Path, url: str):
-    """Lädt den GHC-Installer herunter und loggt den Fortschritt."""
-    logging.info(f"Starte Download von GHC-Installer: {url}")
+    """Downloads the GHC installer and logs progress."""
+    logging.info(f"Starting download of GHC installer: {url}")
     try:
         req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
         with urlopen(req) as resp, open(dest, "wb") as out:
@@ -163,53 +163,52 @@ def download_installer(dest: Path, url: str):
                 downloaded += len(chunk)
                 if total:
                     pct = downloaded * 100 / total
-                    logging.info(f"Download-Fortschritt: {pct:.1f}%")
-        logging.info(f"Download abgeschlossen: {dest}")
+                    logging.info(f"Download progress: {pct:.1f}%")
+        logging.info(f"Download complete: {dest}")
     except (HTTPError, URLError) as e:
-        logging.error(f"Fehler beim Download: {e}")
+        logging.error(f"Error during download: {e}")
         sys.exit(1)
 
 def run_installer(installer: Path):
-    """Führt den GHC-Installer im Silent-Modus aus."""
-    logging.info(f"Starte GHC-Installer: {installer}")
-    # NSIS-Parameter für Silent-Installation: /S
+    """Runs the GHC installer in silent mode."""
+    logging.info(f"Launching GHC installer: {installer}")
+    # NSIS parameter for silent install: /S
     try:
         res = subprocess.run([str(installer), "/S"], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        logging.info("GHC erfolgreich installiert.")
-        logging.debug(f"Installer-Ausgabe:\n{res.stdout}")
+        logging.info("GHC successfully installed.")
+        logging.debug(f"Installer output:\n{res.stdout}")
     except subprocess.CalledProcessError as e:
-        logging.error(f"Installation fehlgeschlagen (Exit-Code {e.returncode}): {e.stderr}")
+        logging.error(f"Installation failed (Exit code {e.returncode}): {e.stderr}")
         sys.exit(e.returncode)
 
 def update_path(version: str):
-    """Fügt das GHC bin-Verzeichnis dem System-PATH hinzu (für neue Terminals)."""
+    """Adds the GHC bin directory to the system PATH (for new terminals)."""
     ghc_bin = str(INSTALL_ROOT / version / "bin")
     current = os.environ.get("PATH", "")
     if ghc_bin.lower() in current.lower():
-        logging.info("GHC/bin ist bereits im PATH.")
+        logging.info("GHC/bin is already in PATH.")
         return
     new_path = f"{current};{ghc_bin}"
-    logging.info(f"Füge GHC/bin dem PATH hinzu: {ghc_bin}")
-    # setx schreibt den neuen PATH-Wert in die Registry
+    logging.info(f"Adding GHC/bin to PATH: {ghc_bin}")
     subprocess.run(f'setx PATH "{new_path}"', shell=True, check=False)
 
 def verify_installation():
-    """Validiert die Installation mittels 'ghc --version'."""
+    """Validates installation using 'ghc --version'."""
     try:
         out = subprocess.check_output([GHC_CMD, "--version"], text=True).strip()
-        logging.info(f"GHC-Version: {out}")
+        logging.info(f"GHC version: {out}")
     except Exception as e:
-        logging.error(f"Fehler bei der Verifikation von GHC: {e}")
+        logging.error(f"Verification of GHC failed: {e}")
         sys.exit(1)
 
 def main():
-    logging.info("=== Haskell (GHC) Installer gestartet ===")
+    logging.info("=== Haskell (GHC) installer started ===")
     if os.name != "nt":
-        logging.error("Dieses Skript läuft nur unter Windows.")
+        logging.error("This script only runs on Windows.")
         sys.exit(1)
 
     if is_ghc_installed():
-        logging.info("GHC ist bereits installiert. Abbruch.")
+        logging.info("GHC is already installed. Aborting.")
         return
 
     info = get_latest_ghc_release()
@@ -223,7 +222,7 @@ def main():
 
     update_path(version)
     verify_installation()
-    logging.info("=== Haskell (GHC) Installation abgeschlossen ===")
+    logging.info("=== Haskell (GHC) installation completed ===")
 
 if __name__ == "__main__":
     main()

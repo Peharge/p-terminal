@@ -108,13 +108,13 @@ def is_sbcl_installed() -> bool:
     return shutil.which("sbcl") is not None
 
 def fetch_sbcl_installer_info():
-    version = "2.5.4"  # Aktuelle stabile Version, ggf. manuell anpassen
+    version = "2.5.4"  # Current stable version, adjust manually if needed
     filename = f"sbcl-{version}-x86-64-windows-binary.msi"
     url = f"https://sourceforge.net/projects/sbcl/files/sbcl/{version}/{filename}/download"
     return {"version": version, "filename": filename, "url": url}
 
 def download_installer(url: str, dest: Path):
-    logging.info(f"Starte Download von {url}")
+    logging.info(f"Starting download from {url}")
     req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
     with urlopen(req) as resp, open(dest, "wb") as out:
         total = int(resp.getheader("Content-Length") or 0)
@@ -128,29 +128,29 @@ def download_installer(url: str, dest: Path):
             downloaded += len(chunk)
             if total:
                 pct = downloaded * 100 / total
-                logging.info(f"Download-Fortschritt: {pct:.1f}%")
-    logging.info(f"Download abgeschlossen: {dest}")
+                logging.info(f"Download progress: {pct:.1f}%")
+    logging.info(f"Download completed: {dest}")
 
 def run_installer(installer_path: Path):
-    logging.info(f"Starte SBCL-Installer: {installer_path}")
+    logging.info(f"Starting SBCL installer: {installer_path}")
     subprocess.run(["msiexec", "/i", str(installer_path), "/quiet", "/norestart"], check=True)
-    logging.info("Installation abgeschlossen.")
+    logging.info("Installation completed.")
 
 def verify_installation():
     try:
         out = subprocess.check_output(["sbcl", "--version"], text=True).strip()
-        logging.info(f"SBCL erfolgreich installiert: {out}")
+        logging.info(f"SBCL successfully installed: {out}")
     except Exception as e:
-        logging.error(f"Verifikation fehlgeschlagen: {e}")
+        logging.error(f"Verification failed: {e}")
         sys.exit(1)
 
 def main():
-    logging.info("=== SBCL Installer gestartet ===")
+    logging.info("=== SBCL Installer started ===")
     if os.name != "nt":
-        logging.error("Dieses Skript funktioniert nur unter Windows.")
+        logging.error("This script only works on Windows.")
         sys.exit(1)
     if is_sbcl_installed():
-        logging.info("SBCL ist bereits installiert. Abbruch.")
+        logging.info("SBCL is already installed. Aborting.")
         return
     info = fetch_sbcl_installer_info()
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -158,7 +158,7 @@ def main():
         download_installer(info["url"], installer_path)
         run_installer(installer_path)
     verify_installation()
-    logging.info("=== SBCL Installation abgeschlossen ===")
+    logging.info("=== SBCL installation completed ===")
 
 if __name__ == "__main__":
     main()

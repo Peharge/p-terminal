@@ -97,7 +97,7 @@ from pathlib import Path
 from urllib.request import Request, urlopen
 from urllib.error import URLError, HTTPError
 
-# --- Logging konfigurieren ---
+# --- Configure logging ---
 log_path = Path(__file__).parent / "installer.log"
 logging.basicConfig(
     level=logging.INFO,
@@ -109,22 +109,22 @@ logging.basicConfig(
     ]
 )
 
-# --- Konstanten für die Installation ---
-LUA_VERSION    = "5.4.6"  # Aktuelle stabile Version
+# --- Constants for installation ---
+LUA_VERSION    = "5.4.6"  # Current stable version
 BASE_URL       = "https://downloads.sourceforge.net/project/luabinaries"
 FILENAME       = f"lua-{LUA_VERSION}_Win64_bin.zip"
 DOWNLOAD_URL   = f"{BASE_URL}/{LUA_VERSION}/Windows%20Libraries/{FILENAME}"
 INSTALL_ROOT   = Path("C:/Program Files/Lua")
 INSTALL_DIR    = INSTALL_ROOT / f"Lua-{LUA_VERSION}"
-BIN_DIR        = INSTALL_DIR  # die ZIP enthält direkt die .exe im Wurzelverzeichnis
+BIN_DIR        = INSTALL_DIR  # the ZIP contains the .exe directly in the root directory
 
 def is_lua_installed() -> bool:
-    """Prüft, ob 'lua' bereits im PATH aufrufbar ist."""
+    """Checks if 'lua' is already callable from PATH."""
     return shutil.which("lua") is not None
 
 def download_lua(dest: Path):
-    """Lädt das Lua-Binary-ZIP herunter."""
-    logging.info(f"Starte Download von Lua {LUA_VERSION} von {DOWNLOAD_URL}")
+    """Downloads the Lua binary ZIP."""
+    logging.info(f"Starting download of Lua {LUA_VERSION} from {DOWNLOAD_URL}")
     try:
         req = Request(DOWNLOAD_URL, headers={"User-Agent": "Mozilla/5.0"})
         with urlopen(req) as resp, open(dest, "wb") as out:
@@ -139,58 +139,58 @@ def download_lua(dest: Path):
                 downloaded += len(chunk)
                 if total:
                     pct = downloaded * 100 / total
-                    logging.info(f"Download-Fortschritt: {pct:.1f}%")
-        logging.info(f"Download abgeschlossen: {dest}")
+                    logging.info(f"Download progress: {pct:.1f}%")
+        logging.info(f"Download completed: {dest}")
     except (HTTPError, URLError) as e:
-        logging.error(f"Fehler beim Download: {e}")
+        logging.error(f"Error during download: {e}")
         sys.exit(1)
 
 def extract_lua(zip_path: Path):
     """
-    Entpackt das ZIP-Archiv nach INSTALL_DIR
-    und löscht ggf. alte Installation.
+    Extracts the ZIP archive to INSTALL_DIR
+    and removes old installation if present.
     """
     if INSTALL_DIR.exists():
-        logging.info("Alte Lua-Installation gefunden, wird gelöscht...")
+        logging.info("Old Lua installation found, deleting...")
         shutil.rmtree(INSTALL_DIR)
-    logging.info(f"Entpacke {zip_path} nach {INSTALL_DIR}")
+    logging.info(f"Extracting {zip_path} to {INSTALL_DIR}")
     INSTALL_DIR.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(zip_path, 'r') as z:
         z.extractall(INSTALL_DIR)
-    logging.info("Entpackung abgeschlossen.")
+    logging.info("Extraction completed.")
 
 def update_path():
-    """Fügt Lua-Installationsverzeichnis dem System-PATH hinzu (für neue Terminals)."""
+    """Adds Lua installation directory to the system PATH (for new terminals)."""
     lua_dir = str(BIN_DIR)
     current = os.environ.get("PATH", "")
     if lua_dir.lower() in current.lower():
-        logging.info("Lua ist bereits im PATH.")
+        logging.info("Lua is already in PATH.")
         return
     new_path = f"{current};{lua_dir}"
-    logging.info(f"Füge Lua dem PATH hinzu: {lua_dir}")
-    # setx schreibt den neuen PATH in die Registry
+    logging.info(f"Adding Lua to PATH: {lua_dir}")
+    # setx writes the new PATH to the registry
     subprocess.run(f'setx PATH "{new_path}"', shell=True, check=False)
 
 def verify_installation():
-    """Prüft die Installation via 'lua -v'."""
+    """Verifies installation via 'lua -v'."""
     try:
         result = subprocess.run(["lua", "-v"], capture_output=True, text=True, check=True)
-        logging.info(f"Lua erfolgreich installiert: {result.stdout.strip()}")
+        logging.info(f"Lua successfully installed: {result.stdout.strip()}")
     except subprocess.CalledProcessError as e:
-        logging.error(f"Fehler bei der Verifikation von Lua: {e}")
+        logging.error(f"Error verifying Lua installation: {e}")
         sys.exit(1)
 
 def main():
-    logging.info("=== Lua-Installer gestartet ===")
+    logging.info("=== Lua Installer started ===")
     if os.name != "nt":
-        logging.error("Dieses Skript funktioniert nur unter Windows.")
+        logging.error("This script only works on Windows.")
         sys.exit(1)
 
     if is_lua_installed():
-        logging.info("Lua ist bereits installiert. Abbruch.")
+        logging.info("Lua is already installed. Aborting.")
         return
 
-    # Temporäres Verzeichnis für den Download
+    # Temporary directory for download
     with tempfile.TemporaryDirectory() as td:
         tmp_zip = Path(td) / FILENAME
         download_lua(tmp_zip)
@@ -198,7 +198,7 @@ def main():
 
     update_path()
     verify_installation()
-    logging.info("=== Lua-Installation abgeschlossen ===")
+    logging.info("=== Lua installation completed ===")
 
 if __name__ == "__main__":
     main()

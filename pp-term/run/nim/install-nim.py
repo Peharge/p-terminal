@@ -98,7 +98,7 @@ from pathlib import Path
 from urllib.request import Request, urlopen
 from urllib.error import URLError, HTTPError
 
-# --- Logging konfigurieren ---
+# --- Configure logging ---
 log_path = Path(__file__).parent / "installer.log"
 logging.basicConfig(
     level=logging.INFO,
@@ -110,30 +110,30 @@ logging.basicConfig(
     ]
 )
 
-# --- Konstanten ---
+# --- Constants ---
 GITHUB_API_LATEST = "https://api.github.com/repos/nim-lang/Nim/releases/latest"
 INSTALL_ROOT      = Path("C:/Program Files/Nim")
 NIM_CMD           = "nim"
 
 def is_nim_installed() -> bool:
-    """Prüft, ob 'nim' bereits im PATH verfügbar ist."""
+    """Checks if 'nim' is already available in PATH."""
     return shutil.which(NIM_CMD) is not None
 
 def fetch_latest_nim_release() -> dict:
-    """Holt über die GitHub-API die neueste Nim-Release-Version und passende ZIP-URL."""
-    logging.info("Ermittle neueste Nim-Version über GitHub API…")
+    """Fetches the latest Nim release and appropriate ZIP URL using GitHub API."""
+    logging.info("Retrieving latest Nim version via GitHub API…")
     req = Request(GITHUB_API_LATEST, headers={"User-Agent": "Mozilla/5.0"})
     try:
         with urlopen(req) as resp:
             data = json.load(resp)
     except (HTTPError, URLError) as e:
-        logging.error(f"Fehler beim Abruf der Release-API: {e}")
+        logging.error(f"Error fetching release API: {e}")
         sys.exit(1)
 
     version = data.get("tag_name", "").lstrip("v")
     asset_url = None
     asset_name = None
-    # Suche nach dem Windows-x64-ZIP-Asset, z.B. nim-1.10.4_x64.zip
+    # Search for Windows-x64 ZIP asset, e.g., nim-1.10.4_x64.zip
     for asset in data.get("assets", []):
         name = asset.get("name", "")
         if name.lower().endswith("windows_x64.zip") or ("x64" in name.lower() and name.lower().endswith(".zip")):
@@ -142,15 +142,15 @@ def fetch_latest_nim_release() -> dict:
             break
 
     if not version or not asset_url:
-        logging.error("Konnte kein Windows-x64-ZIP-Asset für Nim finden.")
+        logging.error("Could not find a Windows-x64 ZIP asset for Nim.")
         sys.exit(1)
 
-    logging.info(f"Gefundene Version: {version}, Asset: {asset_name}")
+    logging.info(f"Found version: {version}, asset: {asset_name}")
     return {"version": version, "url": asset_url, "filename": asset_name}
 
 def download_asset(url: str, dest: Path):
-    """Lädt das ZIP-Archiv herunter und protokolliert den Fortschritt."""
-    logging.info(f"Starte Download von {url}")
+    """Downloads the ZIP archive and logs progress."""
+    logging.info(f"Starting download from {url}")
     try:
         req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
         with urlopen(req) as resp, open(dest, "wb") as out:
@@ -165,52 +165,52 @@ def download_asset(url: str, dest: Path):
                 downloaded += len(chunk)
                 if total:
                     pct = downloaded * 100 / total
-                    logging.info(f"Download-Fortschritt: {pct:.1f}%")
-        logging.info(f"Download abgeschlossen: {dest}")
+                    logging.info(f"Download progress: {pct:.1f}%")
+        logging.info(f"Download completed: {dest}")
     except (HTTPError, URLError) as e:
-        logging.error(f"Download-Fehler: {e}")
+        logging.error(f"Download error: {e}")
         sys.exit(1)
 
 def extract_nim(zip_path: Path, install_dir: Path):
-    """Entpackt das Nim-ZIP-Archiv nach install_dir und löscht alte Installation."""
+    """Extracts the Nim ZIP archive to install_dir and deletes old installation."""
     if install_dir.exists():
-        logging.info(f"Alte Nim-Installation in {install_dir} wird gelöscht…")
+        logging.info(f"Old Nim installation found in {install_dir}, deleting…")
         shutil.rmtree(install_dir)
-    logging.info(f"Entpacke {zip_path} nach {install_dir}")
+    logging.info(f"Extracting {zip_path} to {install_dir}")
     install_dir.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(zip_path, 'r') as z:
         z.extractall(install_dir)
-    logging.info("Entpackung abgeschlossen.")
+    logging.info("Extraction completed.")
 
 def update_path(install_dir: Path):
-    """Fügt das Nim bin-Verzeichnis dem System-PATH hinzu (für neue Terminals)."""
-    # In der ZIP liegt <install_dir>\bin\nim.exe
+    """Adds the Nim bin directory to the system PATH (for new terminals)."""
+    # In the ZIP: <install_dir>\bin\nim.exe
     bin_path = str(install_dir / "bin")
     current = os.environ.get("PATH", "")
     if bin_path.lower() in current.lower():
-        logging.info("Nim/bin ist bereits im PATH.")
+        logging.info("Nim/bin is already in PATH.")
         return
     new_path = f"{current};{bin_path}"
-    logging.info(f"Füge Nim/bin dem PATH hinzu: {bin_path}")
+    logging.info(f"Adding Nim/bin to PATH: {bin_path}")
     subprocess.run(f'setx PATH "{new_path}"', shell=True, check=False)
 
 def verify_installation():
-    """Prüft die Installation via 'nim --version'."""
+    """Verifies the installation via 'nim --version'."""
     try:
         out = subprocess.check_output([NIM_CMD, "--version"], text=True).strip()
-        logging.info(f"Nim erfolgreich installiert: {out}")
+        logging.info(f"Nim successfully installed: {out}")
     except Exception as e:
-        logging.error(f"Verifikation von Nim fehlgeschlagen: {e}")
+        logging.error(f"Nim verification failed: {e}")
         sys.exit(1)
 
 def main():
-    logging.info("=== Nim-Installer gestartet ===")
+    logging.info("=== Nim Installer started ===")
     if os.name != "nt":
-        logging.error("Dieses Skript funktioniert nur unter Windows.")
+        logging.error("This script only works on Windows.")
         sys.exit(1)
 
     if is_nim_installed():
-        logging.info("Nim ist bereits installiert. Abbruch.")
+        logging.info("Nim is already installed. Aborting.")
         return
 
     info = fetch_latest_nim_release()
@@ -226,7 +226,7 @@ def main():
 
     update_path(install_dir)
     verify_installation()
-    logging.info("=== Nim-Installation abgeschlossen ===")
+    logging.info("=== Nim installation completed ===")
 
 if __name__ == "__main__":
     main()

@@ -98,7 +98,7 @@ from pathlib import Path
 from urllib.request import urlopen, Request
 from urllib.error import URLError, HTTPError
 
-# --- Logging konfigurieren ---
+# --- Configure logging ---
 log_path = Path(__file__).parent / "installer.log"
 logging.basicConfig(
     level=logging.INFO,
@@ -110,46 +110,46 @@ logging.basicConfig(
     ]
 )
 
-# --- Konstanten ---
+# --- Constants ---
 PHP_INSTALL_DIR = Path("C:/Program Files/PHP")
 PHP_BIN_DIR     = PHP_INSTALL_DIR
 DOWNLOAD_PAGE   = "https://windows.php.net/download"
 BASE_URL        = "https://windows.php.net/downloads/releases/"
 
 def is_php_installed() -> bool:
-    """Prüft, ob 'php' bereits im PATH aufrufbar ist."""
+    """Checks if 'php' is already callable from PATH."""
     return shutil.which("php") is not None
 
 def get_latest_php_release() -> dict:
     """
-    Liest die PHP-Downloadseite aus und ermittelt das aktuellste
-    x64 Thread-Safe CLI-Archiv.
+    Parses the PHP download page and retrieves the latest
+    x64 Thread-Safe CLI archive.
     """
-    logging.info("Ermittle neueste PHP-Version von %s", DOWNLOAD_PAGE)
+    logging.info("Fetching latest PHP version from %s", DOWNLOAD_PAGE)
     try:
         req = Request(DOWNLOAD_PAGE, headers={"User-Agent": "Mozilla/5.0"})
         with urlopen(req) as resp:
             html = resp.read().decode("utf-8")
     except (HTTPError, URLError) as e:
-        logging.error("Fehler beim Abruf der Downloadseite: %s", e)
+        logging.error("Error fetching download page: %s", e)
         sys.exit(1)
 
-    # Suche nach z.B. php-8.3.3-Win32-vs16-x64.zip (Thread Safe)
+    # Search for e.g. php-8.3.3-Win32-vs16-x64.zip (Thread Safe)
     pattern = re.compile(r'href="([^"]*php-([\d\.]+)-Win32-vs16-x64\.zip)"')
     match = pattern.search(html)
     if not match:
-        logging.error("Konnte keine passende PHP-Release-ZIP finden.")
+        logging.error("Could not find a matching PHP release ZIP.")
         sys.exit(1)
 
     filename = match.group(1)
     version  = match.group(2)
     url       = filename if filename.startswith("http") else BASE_URL + filename
-    logging.info("Gefundene Version: %s (%s)", version, url)
+    logging.info("Found version: %s (%s)", version, url)
     return {"version": version, "filename": filename, "url": url}
 
 def download_php(dest: Path, url: str):
-    """Lädt das ZIP-Archiv von url nach dest herunter."""
-    logging.info("Starte Download: %s", url)
+    """Downloads the ZIP archive from url to dest."""
+    logging.info("Starting download: %s", url)
     try:
         req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
         with urlopen(req) as resp, open(dest, "wb") as out:
@@ -164,59 +164,59 @@ def download_php(dest: Path, url: str):
                 downloaded += len(chunk)
                 if total:
                     pct = downloaded * 100 / total
-                    logging.info("Download-Fortschritt: %.1f%%", pct)
-        logging.info("Download abgeschlossen: %s", dest)
+                    logging.info("Download progress: %.1f%%", pct)
+        logging.info("Download completed: %s", dest)
     except (HTTPError, URLError) as e:
-        logging.error("Fehler beim Download: %s", e)
+        logging.error("Download error: %s", e)
         sys.exit(1)
 
 def extract_php(zip_path: Path):
     """
-    Entpackt das ZIP-Archiv nach PHP_INSTALL_DIR
-    und löscht ggf. alte Installation.
+    Extracts the ZIP archive to PHP_INSTALL_DIR
+    and deletes old installation if necessary.
     """
     if PHP_INSTALL_DIR.exists():
-        logging.info("Alte PHP-Installation gefunden, werde sie löschen...")
+        logging.info("Old PHP installation found, deleting it...")
         shutil.rmtree(PHP_INSTALL_DIR)
-    logging.info("Entpacke %s nach %s", zip_path, PHP_INSTALL_DIR)
+    logging.info("Extracting %s to %s", zip_path, PHP_INSTALL_DIR)
     with zipfile.ZipFile(zip_path, 'r') as z:
         z.extractall(PHP_INSTALL_DIR)
-    logging.info("Entpackung abgeschlossen.")
+    logging.info("Extraction completed.")
 
 def update_path():
     """
-    Fügt PHP_INSTALL_DIR dem System-PATH hinzu (für neue Terminals).
+    Adds PHP_INSTALL_DIR to the system PATH (for new terminals).
     """
     php_dir = str(PHP_BIN_DIR)
     current = os.environ.get("PATH", "")
     if php_dir.lower() in current.lower():
-        logging.info("PHP ist bereits im PATH.")
+        logging.info("PHP is already in PATH.")
         return
     new_path = f"{current};{php_dir}"
-    logging.info("Füge PHP dem PATH hinzu: %s", php_dir)
-    # setx schreibt den neuen PATH in die Registry
+    logging.info("Adding PHP to PATH: %s", php_dir)
+    # setx writes the new PATH to the registry
     subprocess.run(f'setx PATH "{new_path}"', shell=True, check=False)
 
 def verify_installation():
-    """Prüft die Installation via 'php --version'."""
+    """Verifies the installation via 'php --version'."""
     try:
         result = subprocess.run(["php", "--version"], capture_output=True, text=True, check=True)
-        logging.info("PHP erfolgreich installiert: %s", result.stdout.splitlines()[0])
+        logging.info("PHP successfully installed: %s", result.stdout.splitlines()[0])
     except subprocess.CalledProcessError as e:
-        logging.error("Fehler bei der Verifikation von PHP: %s", e)
+        logging.error("Error verifying PHP: %s", e)
         sys.exit(1)
 
 def main():
-    logging.info("=== PHP-Installer gestartet ===")
+    logging.info("=== PHP Installer started ===")
     if os.name != "nt":
-        logging.error("Dieses Skript läuft nur unter Windows.")
+        logging.error("This script only runs on Windows.")
         sys.exit(1)
 
     if is_php_installed():
-        logging.info("PHP ist bereits installiert. Abbruch.")
+        logging.info("PHP is already installed. Aborting.")
         return
 
-    # Temporäres Verzeichnis für Download
+    # Temporary directory for download
     with tempfile.TemporaryDirectory() as td:
         tmp = Path(td) / "php.zip"
         info = get_latest_php_release()
@@ -225,7 +225,7 @@ def main():
 
     update_path()
     verify_installation()
-    logging.info("=== PHP-Installation abgeschlossen ===")
+    logging.info("=== PHP installation completed ===")
 
 if __name__ == "__main__":
     main()
