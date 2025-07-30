@@ -98,7 +98,7 @@ from pathlib import Path
 from urllib.request import Request, urlopen
 from urllib.error import URLError, HTTPError
 
-# --- Logging konfigurieren ---
+# --- Configure logging ---
 log_path = Path(__file__).parent / "installer.log"
 logging.basicConfig(
     level=logging.INFO,
@@ -110,39 +110,39 @@ logging.basicConfig(
     ]
 )
 
-# --- Konstanten ---
+# --- Constants ---
 SWIFT_DOWNLOAD_PAGE = "https://swift.org/download/"
 INSTALL_ROOT        = Path("C:/Program Files/Swift")
 BIN_SUBDIR          = "usr\\bin"
 SWIFT_EXE           = "swift.exe"
 
 def is_swift_installed() -> bool:
-    """Prüft, ob Swift bereits im PATH verfügbar ist."""
+    """Checks if Swift is already available in PATH."""
     return shutil.which("swift") is not None or any((INSTALL_ROOT / d / BIN_SUBDIR / SWIFT_EXE).exists()
                                                     for d in os.listdir(INSTALL_ROOT) if (INSTALL_ROOT / d).is_dir())
 
 def find_latest_swift_url(html: str) -> dict:
     """
-    Parst die Download-Seite und findet das erste ZIP für Windows x64.
-    Liefert dict mit 'version', 'url'.
+    Parses the download page and finds the first ZIP for Windows x64.
+    Returns dict with 'version', 'url'.
     """
-    # Beispiel-Link: https://swift.org/builds/swift-5.11.0-release/windows/swift-5.11.0-RELEASE-windows10.zip
+    # Example link: https://swift.org/builds/swift-5.11.0-release/windows/swift-5.11.0-RELEASE-windows10.zip
     pattern = re.compile(
         r'href="(https://swift\.org/builds/swift-([\d\.]+)-release/windows/swift-[\d\.]+-RELEASE-windows10\.zip)"',
         re.IGNORECASE
     )
     match = pattern.search(html)
     if not match:
-        logging.error("Konnte keinen Download-Link für Swift Windows finden.")
+        logging.error("Could not find a download link for Swift Windows.")
         sys.exit(1)
     url = match.group(1)
     version = match.group(2)
-    logging.info(f"Gefundene Swift-Version: {version}")
+    logging.info(f"Found Swift version: {version}")
     return {"version": version, "url": url}
 
 def download_swift(dest: Path, url: str):
-    """Lädt das Swift-ZIP-Archiv herunter."""
-    logging.info(f"Starte Download von Swift: {url}")
+    """Downloads the Swift ZIP archive."""
+    logging.info(f"Starting download of Swift: {url}")
     try:
         req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
         with urlopen(req) as resp, open(dest, "wb") as out:
@@ -157,63 +157,63 @@ def download_swift(dest: Path, url: str):
                 downloaded += len(chunk)
                 if total:
                     pct = downloaded * 100 / total
-                    logging.info(f"Download-Fortschritt: {pct:.1f}%")
-        logging.info(f"Download abgeschlossen: {dest}")
+                    logging.info(f"Download progress: {pct:.1f}%")
+        logging.info(f"Download completed: {dest}")
     except (HTTPError, URLError) as e:
-        logging.error(f"Fehler beim Download: {e}")
+        logging.error(f"Error during download: {e}")
         sys.exit(1)
 
 def extract_swift(zip_path: Path, version: str):
-    """Entpackt das ZIP-Archiv nach INSTALL_ROOT/Swift-<version>."""
+    """Extracts the ZIP archive to INSTALL_ROOT/Swift-<version>."""
     dest_dir = INSTALL_ROOT / f"Swift-{version}"
     if dest_dir.exists():
-        logging.info(f"Alte Swift-Installation {dest_dir} wird gelöscht...")
+        logging.info(f"Removing old Swift installation {dest_dir}...")
         shutil.rmtree(dest_dir)
-    logging.info(f"Entpacke {zip_path} nach {dest_dir}")
+    logging.info(f"Extracting {zip_path} to {dest_dir}")
     dest_dir.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(zip_path, 'r') as zip_ref:
         zip_ref.extractall(dest_dir)
-    logging.info("Entpackung abgeschlossen.")
+    logging.info("Extraction completed.")
     return dest_dir
 
 def update_path(swift_dir: Path):
-    """Fügt das Swift usr\\bin-Verzeichnis dem System-PATH hinzu (für neue Terminals)."""
+    """Adds the Swift usr\\bin directory to the system PATH (for new terminals)."""
     bin_path = str(swift_dir / BIN_SUBDIR)
     current = os.environ.get("PATH", "")
     if bin_path.lower() in current.lower():
-        logging.info("Swift-Bin ist bereits im PATH.")
+        logging.info("Swift bin is already in PATH.")
         return
     new_path = f"{current};{bin_path}"
-    logging.info(f"Füge Swift usr\\bin dem PATH hinzu: {bin_path}")
-    # setx schreibt den neuen PATH in die Registry (wir hängen an)
+    logging.info(f"Adding Swift usr\\bin to PATH: {bin_path}")
+    # setx writes the new PATH to the registry (appends it)
     subprocess.run(f'setx PATH "{new_path}"', shell=True, check=False)
 
 def verify_installation():
-    """Prüft die Installation via 'swift --version'."""
+    """Verifies the installation via 'swift --version'."""
     try:
         out = subprocess.check_output(["swift", "--version"], text=True).strip()
-        logging.info(f"Swift erfolgreich installiert: {out}")
+        logging.info(f"Swift installed successfully: {out}")
     except Exception as e:
-        logging.error(f"Fehler bei der Verifikation von Swift: {e}")
+        logging.error(f"Error verifying Swift: {e}")
         sys.exit(1)
 
 def main():
-    logging.info("=== Swift-Installer gestartet ===")
+    logging.info("=== Swift installer started ===")
     if os.name != "nt":
-        logging.error("Dieses Skript läuft nur unter Windows.")
+        logging.error("This script only runs on Windows.")
         sys.exit(1)
 
     if is_swift_installed():
-        logging.info("Swift ist bereits installiert. Abbruch.")
+        logging.info("Swift is already installed. Aborting.")
         return
 
-    # Download-Seite abrufen
+    # Fetch download page
     try:
         req = Request(SWIFT_DOWNLOAD_PAGE, headers={"User-Agent": "Mozilla/5.0"})
         with urlopen(req) as resp:
             html = resp.read().decode("utf-8")
     except (HTTPError, URLError) as e:
-        logging.error(f"Fehler beim Abruf der Download-Seite: {e}")
+        logging.error(f"Error fetching download page: {e}")
         sys.exit(1)
 
     info = find_latest_swift_url(html)
@@ -227,7 +227,7 @@ def main():
 
     update_path(swift_dir)
     verify_installation()
-    logging.info("=== Swift-Installation abgeschlossen ===")
+    logging.info("=== Swift installation completed ===")
 
 if __name__ == "__main__":
     main()

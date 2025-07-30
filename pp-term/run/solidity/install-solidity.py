@@ -98,7 +98,7 @@ from pathlib import Path
 from urllib.request import Request, urlopen
 from urllib.error import URLError, HTTPError
 
-# --- Logging konfigurieren ---
+# --- Configure logging ---
 log_path = Path(__file__).parent / "installer.log"
 logging.basicConfig(
     level=logging.INFO,
@@ -110,31 +110,31 @@ logging.basicConfig(
     ]
 )
 
-# --- Konstanten ---
+# --- Constants ---
 GITHUB_API_LATEST = "https://api.github.com/repos/ethereum/solidity/releases/latest"
 INSTALL_ROOT      = Path("C:/Program Files/Solidity")
 SOLC_CMD          = "solc.exe"
 
 def is_solc_installed() -> bool:
-    """Prüft, ob 'solc' bereits im PATH verfügbar ist."""
-    # Unter Windows kann auch solc.exe im PATH sein
+    """Checks if 'solc' is already available in PATH."""
+    # On Windows, solc.exe might also be in PATH
     return shutil.which("solc") is not None or shutil.which("solc.exe") is not None
 
 def fetch_latest_solc_release() -> dict:
-    """Holt über die GitHub-API das neueste Solidity-Release und die Windows-ZIP-URL."""
-    logging.info("Ermittle neueste Solidity-Version über GitHub-API…")
+    """Fetches the latest Solidity release and the Windows ZIP URL via GitHub API."""
+    logging.info("Fetching latest Solidity version via GitHub API…")
     req = Request(GITHUB_API_LATEST, headers={"User-Agent": "Mozilla/5.0"})
     try:
         with urlopen(req) as resp:
             data = json.load(resp)
     except (HTTPError, URLError) as e:
-        logging.error(f"Fehler beim Abruf der Release-API: {e}")
+        logging.error(f"Error retrieving release API: {e}")
         sys.exit(1)
 
     version = data.get("tag_name", "").lstrip("v")
     asset_url = None
     asset_name = None
-    # Suche nach dem Windows-x64-ZIP-Asset, typischerweise named "solidity-windows.zip"
+    # Look for the Windows x64 ZIP asset, typically named "solidity-windows.zip"
     for asset in data.get("assets", []):
         name = asset.get("name", "")
         lower = name.lower()
@@ -144,15 +144,15 @@ def fetch_latest_solc_release() -> dict:
             break
 
     if not version or not asset_url:
-        logging.error("Konnte kein Windows-ZIP-Asset für Solidity (solc) finden.")
+        logging.error("Could not find a Windows ZIP asset for Solidity (solc).")
         sys.exit(1)
 
-    logging.info(f"Gefundene Version: {version}, Asset: {asset_name}")
+    logging.info(f"Found version: {version}, Asset: {asset_name}")
     return {"version": version, "url": asset_url, "filename": asset_name}
 
 def download_asset(url: str, dest: Path):
-    """Lädt das ZIP-Archiv herunter und protokolliert den Fortschritt."""
-    logging.info(f"Starte Download von {url}")
+    """Downloads the ZIP archive and logs progress."""
+    logging.info(f"Starting download from {url}")
     try:
         req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
         with urlopen(req) as resp, open(dest, "wb") as out:
@@ -167,52 +167,52 @@ def download_asset(url: str, dest: Path):
                 downloaded += len(chunk)
                 if total:
                     pct = downloaded * 100 / total
-                    logging.info(f"Download-Fortschritt: {pct:.1f}%")
-        logging.info(f"Download abgeschlossen: {dest}")
+                    logging.info(f"Download progress: {pct:.1f}%")
+        logging.info(f"Download completed: {dest}")
     except (HTTPError, URLError) as e:
-        logging.error(f"Download-Fehler: {e}")
+        logging.error(f"Download error: {e}")
         sys.exit(1)
 
 def extract_solc(zip_path: Path, install_dir: Path):
-    """Entpackt das solc-ZIP-Archiv nach install_dir und löscht alte Installation."""
+    """Extracts the solc ZIP archive to install_dir and removes old installation."""
     if install_dir.exists():
-        logging.info(f"Alte Solidity-Installation in {install_dir} wird gelöscht…")
+        logging.info(f"Removing old Solidity installation at {install_dir}…")
         shutil.rmtree(install_dir)
-    logging.info(f"Entpacke {zip_path} nach {install_dir}")
+    logging.info(f"Extracting {zip_path} to {install_dir}")
     install_dir.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(zip_path, 'r') as z:
         z.extractall(install_dir)
-    logging.info("Entpackung abgeschlossen.")
+    logging.info("Extraction completed.")
 
 def update_path(install_dir: Path):
-    """Fügt das Verzeichnis mit solc.exe dem System-PATH hinzu (für neue Terminals)."""
+    """Adds the directory with solc.exe to the system PATH (for new terminals)."""
     bin_dir = str(install_dir)
     current = os.environ.get("PATH", "")
     if bin_dir.lower() in current.lower():
-        logging.info("solc ist bereits im PATH.")
+        logging.info("solc is already in PATH.")
         return
     new_path = f"{current};{bin_dir}"
-    logging.info(f"Füge solc dem PATH hinzu: {bin_dir}")
-    # setx schreibt den neuen PATH in die Registry (wir hängen an)
+    logging.info(f"Adding solc to PATH: {bin_dir}")
+    # setx writes the new PATH to the registry (appends it)
     subprocess.run(f'setx PATH "{new_path}"', shell=True, check=False)
 
 def verify_installation():
-    """Prüft die Installation via 'solc --version'."""
+    """Verifies the installation via 'solc --version'."""
     try:
         out = subprocess.check_output(["solc", "--version"], text=True).strip()
-        logging.info(f"solc erfolgreich installiert: {out.splitlines()[0]}")
+        logging.info(f"solc installed successfully: {out.splitlines()[0]}")
     except Exception as e:
-        logging.error(f"Verifikation von solc fehlgeschlagen: {e}")
+        logging.error(f"Verification of solc failed: {e}")
         sys.exit(1)
 
 def main():
-    logging.info("=== Solidity (solc) Installer gestartet ===")
+    logging.info("=== Solidity (solc) Installer started ===")
     if os.name != "nt":
-        logging.error("Dieses Skript läuft nur unter Windows.")
+        logging.error("This script only runs on Windows.")
         sys.exit(1)
 
     if is_solc_installed():
-        logging.info("solc ist bereits installiert. Abbruch.")
+        logging.info("solc is already installed. Aborting.")
         return
 
     info = fetch_latest_solc_release()
@@ -228,7 +228,7 @@ def main():
 
     update_path(install_dir)
     verify_installation()
-    logging.info("=== Solidity (solc) Installation abgeschlossen ===")
+    logging.info("=== Solidity (solc) installation completed ===")
 
 if __name__ == "__main__":
     main()

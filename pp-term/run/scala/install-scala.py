@@ -98,7 +98,7 @@ from pathlib import Path
 from urllib.request import Request, urlopen
 from urllib.error import URLError, HTTPError
 
-# --- Logging konfigurieren ---
+# --- Configure logging ---
 log_path = Path(__file__).parent / "installer.log"
 logging.basicConfig(
     level=logging.INFO,
@@ -110,30 +110,30 @@ logging.basicConfig(
     ]
 )
 
-# --- Konstanten ---
+# --- Constants ---
 GITHUB_API_LATEST = "https://api.github.com/repos/scala/scala/releases/latest"
 INSTALL_ROOT      = Path("C:/Program Files/Scala")
 SCALA_CMD         = "scala"
 
 def is_scala_installed() -> bool:
-    """Prüft, ob 'scala' bereits im PATH verfügbar ist."""
+    """Checks if 'scala' is already available in PATH."""
     return shutil.which(SCALA_CMD) is not None
 
 def get_latest_scala_release() -> dict:
-    """Ermittelt die neueste Scala-Version und das ZIP-Asset über die GitHub-API."""
-    logging.info("Ermittle neueste Scala-Version über GitHub API…")
+    """Fetches the latest Scala version and ZIP asset via GitHub API."""
+    logging.info("Retrieving latest Scala version via GitHub API…")
     req = Request(GITHUB_API_LATEST, headers={"User-Agent": "Mozilla/5.0"})
     try:
         with urlopen(req) as resp:
             data = json.load(resp)
     except (HTTPError, URLError) as e:
-        logging.error(f"Fehler beim Abruf der GitHub-API: {e}")
+        logging.error(f"Error while fetching GitHub API: {e}")
         sys.exit(1)
 
     version = data.get("tag_name", "").lstrip("v")
     download_url = None
     filename = None
-    # Suche das Asset mit Binär-ZIP
+    # Look for the asset with binary ZIP
     for asset in data.get("assets", []):
         name = asset.get("name", "")
         if name.endswith("-bin.zip"):
@@ -142,15 +142,15 @@ def get_latest_scala_release() -> dict:
             break
 
     if not version or not download_url:
-        logging.error("Konnte Scala-Binär-ZIP nicht finden.")
+        logging.error("Could not find Scala binary ZIP.")
         sys.exit(1)
 
-    logging.info(f"Gefundene Version: {version}, Asset: {filename}")
+    logging.info(f"Found version: {version}, Asset: {filename}")
     return {"version": version, "url": download_url, "filename": filename}
 
 def download_zip(dest: Path, url: str):
-    """Lädt das ZIP-Archiv herunter und protokolliert den Fortschritt."""
-    logging.info(f"Starte Download von {url}")
+    """Downloads the ZIP archive and logs progress."""
+    logging.info(f"Starting download from {url}")
     try:
         req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
         with urlopen(req) as resp, open(dest, "wb") as out:
@@ -165,51 +165,51 @@ def download_zip(dest: Path, url: str):
                 downloaded += len(chunk)
                 if total:
                     pct = downloaded * 100 / total
-                    logging.info(f"Download-Fortschritt: {pct:.1f}%")
-        logging.info(f"Download abgeschlossen: {dest}")
+                    logging.info(f"Download progress: {pct:.1f}%")
+        logging.info(f"Download completed: {dest}")
     except (HTTPError, URLError) as e:
-        logging.error(f"Fehler beim Download: {e}")
+        logging.error(f"Download error: {e}")
         sys.exit(1)
 
 def extract_scala(zip_path: Path, install_dir: Path):
-    """Entpackt das ZIP-Archiv nach install_dir, löscht alte Installation."""
+    """Extracts the ZIP archive to install_dir, deletes old installation if present."""
     if install_dir.exists():
-        logging.info(f"Alte Installation in {install_dir} wird gelöscht…")
+        logging.info(f"Removing old installation at {install_dir}…")
         shutil.rmtree(install_dir)
-    logging.info(f"Entpacke {zip_path} nach {install_dir}")
+    logging.info(f"Extracting {zip_path} to {install_dir}")
     install_dir.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(zip_path, 'r') as z:
         z.extractall(install_dir)
-    logging.info("Entpackung abgeschlossen.")
+    logging.info("Extraction completed.")
 
 def update_path(install_dir: Path):
-    """Fügt install_dir/bin per setx dem System-PATH hinzu (für neue Terminals)."""
+    """Adds install_dir/bin to the system PATH (for new terminals)."""
     bin_path = str(install_dir / "bin")
     current = os.environ.get("PATH", "")
     if bin_path.lower() in current.lower():
-        logging.info("Scala/bin ist bereits im PATH.")
+        logging.info("Scala/bin is already in PATH.")
         return
     new_path = f"{current};{bin_path}"
-    logging.info(f"Füge Scala/bin dem PATH hinzu: {bin_path}")
+    logging.info(f"Adding Scala/bin to PATH: {bin_path}")
     subprocess.run(f'setx PATH "{new_path}"', shell=True, check=False)
 
 def verify_installation():
-    """Prüft die Installation via 'scala -version'."""
+    """Verifies installation by running 'scala -version'."""
     try:
         out = subprocess.check_output([SCALA_CMD, "-version"], text=True).strip()
-        logging.info(f"Scala erfolgreich installiert: {out}")
+        logging.info(f"Scala installed successfully: {out}")
     except Exception as e:
-        logging.error(f"Fehler bei der Verifikation von Scala: {e}")
+        logging.error(f"Error verifying Scala installation: {e}")
         sys.exit(1)
 
 def main():
-    logging.info("=== Scala-Installer gestartet ===")
+    logging.info("=== Scala installer started ===")
     if os.name != "nt":
-        logging.error("Dieses Skript läuft nur unter Windows.")
+        logging.error("This script only runs on Windows.")
         sys.exit(1)
 
     if is_scala_installed():
-        logging.info("Scala ist bereits installiert. Abbruch.")
+        logging.info("Scala is already installed. Aborting.")
         return
 
     info = get_latest_scala_release()
@@ -225,7 +225,7 @@ def main():
 
     update_path(install_dir)
     verify_installation()
-    logging.info("=== Scala-Installation abgeschlossen ===")
+    logging.info("=== Scala installation completed ===")
 
 if __name__ == "__main__":
     main()

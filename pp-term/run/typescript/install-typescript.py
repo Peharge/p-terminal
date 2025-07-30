@@ -97,7 +97,7 @@ from pathlib import Path
 from urllib.request import Request, urlopen
 from urllib.error import URLError, HTTPError
 
-# --- Logging konfigurieren ---
+# --- Configure logging ---
 log_path = Path(__file__).parent / "installer.log"
 logging.basicConfig(
     level=logging.INFO,
@@ -112,38 +112,38 @@ logging.basicConfig(
 NODE_INDEX_JSON = "https://nodejs.org/dist/index.json"
 
 def is_npm_installed() -> bool:
-    """Prüft, ob 'npm' im PATH aufrufbar ist."""
+    """Checks if 'npm' is callable from PATH."""
     return shutil.which("npm") is not None
 
 def get_latest_lts_node() -> dict:
     """
-    Liest die Node.js-Dist-Index.json aus und findet die
-    neueste LTS-Version für Windows x64 (MSI).
+    Reads Node.js dist index.json and finds
+    the latest LTS version for Windows x64 (MSI).
     """
-    logging.info("Frage Node.js-Versionen ab: %s", NODE_INDEX_JSON)
+    logging.info("Fetching Node.js versions from: %s", NODE_INDEX_JSON)
     try:
         req = Request(NODE_INDEX_JSON, headers={"User-Agent": "Mozilla/5.0"})
         with urlopen(req) as resp:
             versions = json.load(resp)
     except (HTTPError, URLError) as e:
-        logging.error("Fehler beim Abruf der Node.js-Versionsliste: %s", e)
+        logging.error("Error fetching Node.js versions list: %s", e)
         sys.exit(1)
 
     for v in versions:
-        # v["lts"] ist False oder ein String mit Codename, z.B. "Gallium"
+        # v["lts"] is either False or a codename string, e.g. "Gallium"
         if v.get("lts"):
-            version = v["version"]          # z.B. "v20.3.1"
+            version = v["version"]          # e.g. "v20.3.1"
             msi_name = f"node-{version}-x64.msi"
             url = f"https://nodejs.org/dist/{version}/{msi_name}"
-            logging.info("Gefundene LTS-Version: %s", version)
+            logging.info("Found LTS version: %s", version)
             return {"version": version, "msi": msi_name, "url": url}
 
-    logging.error("Keine LTS-Version in index.json gefunden.")
+    logging.error("No LTS version found in index.json.")
     sys.exit(1)
 
 def download_file(url: str, dest: Path):
-    """Lädt eine Datei von url nach dest mit Fortschritts-Log."""
-    logging.info("Starte Download: %s", url)
+    """Downloads a file from url to dest with progress logging."""
+    logging.info("Starting download: %s", url)
     try:
         req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
         with urlopen(req) as resp, open(dest, "wb") as out:
@@ -158,68 +158,68 @@ def download_file(url: str, dest: Path):
                 downloaded += len(chunk)
                 if total:
                     pct = downloaded * 100 / total
-                    logging.info("Download-Fortschritt: %.1f%%", pct)
-        logging.info("Download abgeschlossen: %s", dest)
+                    logging.info("Download progress: %.1f%%", pct)
+        logging.info("Download completed: %s", dest)
     except (HTTPError, URLError) as e:
-        logging.error("Download-Fehler: %s", e)
+        logging.error("Download error: %s", e)
         sys.exit(1)
 
 def run_node_installer(msi_path: Path):
-    """Installiert Node.js per MSI-Silent-Mode."""
-    logging.info("Starte Node.js-Installer: %s", msi_path)
-    # /qn = no UI, /norestart = kein automatischer Reboot
+    """Installs Node.js via MSI silent mode."""
+    logging.info("Starting Node.js installer: %s", msi_path)
+    # /qn = no UI, /norestart = no automatic reboot
     cmd = ["msiexec", "/i", str(msi_path), "/qn", "/norestart"]
     try:
         subprocess.run(cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        logging.info("Node.js erfolgreich installiert.")
+        logging.info("Node.js installed successfully.")
     except subprocess.CalledProcessError as e:
-        logging.error("Node.js-Installation fehlgeschlagen (Exit-Code %d)", e.returncode)
+        logging.error("Node.js installation failed (Exit code %d)", e.returncode)
         sys.exit(e.returncode)
 
 def install_typescript():
-    """Installiert TypeScript global via npm."""
-    logging.info("Installiere TypeScript global via npm")
+    """Installs TypeScript globally via npm."""
+    logging.info("Installing TypeScript globally via npm")
     cmd = ["npm", "install", "-g", "typescript"]
     try:
         result = subprocess.run(cmd, check=True, capture_output=True, text=True)
-        logging.info("TypeScript global installiert.")
-        logging.debug("npm-Ausgabe:\n%s", result.stdout)
+        logging.info("TypeScript installed globally.")
+        logging.debug("npm output:\n%s", result.stdout)
     except subprocess.CalledProcessError as e:
-        logging.error("TypeScript-Installation fehlgeschlagen (Exit-Code %d):\n%s", e.returncode, e.stderr)
+        logging.error("TypeScript installation failed (Exit code %d):\n%s", e.returncode, e.stderr)
         sys.exit(e.returncode)
 
 def verify_tsc():
-    """Validiert, dass 'tsc' (TypeScript-Compiler) verfügbar ist."""
+    """Validates that 'tsc' (TypeScript compiler) is available."""
     try:
         result = subprocess.run(["tsc", "--version"], check=True, capture_output=True, text=True)
-        logging.info("tsc gefunden: %s", result.stdout.strip())
+        logging.info("tsc found: %s", result.stdout.strip())
     except Exception as e:
-        logging.error("tsc nicht gefunden oder Fehler: %s", e)
+        logging.error("tsc not found or error: %s", e)
         sys.exit(1)
 
 def main():
-    logging.info("=== TypeScript-Installer gestartet ===")
+    logging.info("=== TypeScript installer started ===")
     if os.name != "nt":
-        logging.error("Dieses Skript läuft nur unter Windows.")
+        logging.error("This script only runs on Windows.")
         sys.exit(1)
 
-    # Schritt 1: npm prüfen
+    # Step 1: Check npm
     if not is_npm_installed():
-        logging.info("npm nicht gefunden. Installiere Node.js LTS...")
+        logging.info("npm not found. Installing Node.js LTS...")
         info = get_latest_lts_node()
         with tempfile.TemporaryDirectory() as td:
             msi_path = Path(td) / info["msi"]
             download_file(info["url"], msi_path)
             run_node_installer(msi_path)
     else:
-        logging.info("npm ist bereits installiert.")
+        logging.info("npm is already installed.")
 
-    # Schritt 2: TypeScript installieren
+    # Step 2: Install TypeScript
     install_typescript()
 
-    # Schritt 3: Verifikation
+    # Step 3: Verification
     verify_tsc()
-    logging.info("=== TypeScript-Installation abgeschlossen ===")
+    logging.info("=== TypeScript installation completed ===")
 
 if __name__ == "__main__":
     main()

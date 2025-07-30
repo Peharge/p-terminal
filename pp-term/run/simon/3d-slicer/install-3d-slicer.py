@@ -69,6 +69,31 @@ By default, version 5.8.1 is installed. It will ask the user whether
 to install the 5.9 EAP version instead.
 """
 
+from datetime import datetime
+
+def timestamp() -> str:
+    """Returns current time formatted with milliseconds"""
+    now = datetime.now()
+    return now.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
+
+print("""
+WARNING: It is recommended to install 3D Slicer from the official website:
+https://www.slicer.org/
+
+This script is unofficial and may pose security risks.
+Use at your own risk!
+
+Do you really want to proceed with the installation of 3D Slicer? [y/n]:
+""", end='')
+
+choice = input().strip().lower()
+if choice != 'y':
+    print(f"[{timestamp()}] [INFO] Installation aborted by user.")
+    exit(0)
+
+# Installation code for 3D Slicer can follow here
+print(f"[{timestamp()}] [INFO] Proceeding with 3D Slicer installation...")
+
 import os
 import sys
 import argparse

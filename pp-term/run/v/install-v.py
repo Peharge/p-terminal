@@ -98,7 +98,7 @@ from pathlib import Path
 from urllib.request import Request, urlopen
 from urllib.error import URLError, HTTPError
 
-# --- Logging konfigurieren ---
+# --- Configure logging ---
 log_path = Path(__file__).parent / "installer.log"
 logging.basicConfig(
     level=logging.INFO,
@@ -110,30 +110,30 @@ logging.basicConfig(
     ]
 )
 
-# --- Konstanten ---
+# --- Constants ---
 GITHUB_API_LATEST  = "https://api.github.com/repos/vlang/v/releases/latest"
 INSTALL_ROOT       = Path("C:/Program Files/V")
 V_CMD              = "v"
 
 def is_v_installed() -> bool:
-    """Prüft, ob 'v' bereits im PATH verfügbar ist."""
+    """Checks if 'v' is already available in PATH."""
     return shutil.which(V_CMD) is not None
 
 def fetch_latest_release() -> dict:
-    """Holt über die GitHub-API die neueste V-Release-Version und Download-URL für Windows."""
-    logging.info("Ermittle neueste V-Version über GitHub-API...")
+    """Fetches the latest V release version and Windows download URL from GitHub API."""
+    logging.info("Fetching latest V version from GitHub API...")
     req = Request(GITHUB_API_LATEST, headers={"User-Agent": "Mozilla/5.0"})
     try:
         with urlopen(req) as resp:
             data = json.load(resp)
     except (HTTPError, URLError) as e:
-        logging.error(f"Fehler beim Abruf der Release-API: {e}")
+        logging.error(f"Error fetching release API: {e}")
         sys.exit(1)
 
     version = data.get("tag_name", "")
     asset_url = None
     asset_name = None
-    # Suche nach dem Windows-x64-ZIP-Asset
+    # Look for Windows x64 ZIP asset
     for asset in data.get("assets", []):
         name = asset.get("name", "")
         if "windows" in name.lower() and name.lower().endswith(".zip"):
@@ -142,15 +142,15 @@ def fetch_latest_release() -> dict:
             break
 
     if not version or not asset_url:
-        logging.error("Konnte kein Windows-ZIP-Asset für V finden.")
+        logging.error("Could not find Windows ZIP asset for V.")
         sys.exit(1)
 
-    logging.info(f"Gefundene Version: {version}, Asset: {asset_name}")
+    logging.info(f"Found version: {version}, asset: {asset_name}")
     return {"version": version, "url": asset_url, "filename": asset_name}
 
 def download_asset(url: str, dest: Path):
-    """Lädt das ZIP-Archiv herunter und zeigt Fortschritt im Log."""
-    logging.info(f"Starte Download von {url}")
+    """Downloads the ZIP archive and logs progress."""
+    logging.info(f"Starting download from {url}")
     try:
         req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
         with urlopen(req) as resp, open(dest, "wb") as out:
@@ -165,51 +165,51 @@ def download_asset(url: str, dest: Path):
                 downloaded += len(chunk)
                 if total:
                     pct = downloaded * 100 / total
-                    logging.info(f"Download-Fortschritt: {pct:.1f}%")
-        logging.info(f"Download abgeschlossen: {dest}")
+                    logging.info(f"Download progress: {pct:.1f}%")
+        logging.info(f"Download completed: {dest}")
     except (HTTPError, URLError) as e:
-        logging.error(f"Download-Fehler: {e}")
+        logging.error(f"Download error: {e}")
         sys.exit(1)
 
 def extract_zip(zip_path: Path, target_dir: Path):
-    """Entpackt das ZIP-Archiv nach target_dir, löscht alte Installation."""
+    """Extracts the ZIP archive to target_dir, removing old installation."""
     if target_dir.exists():
-        logging.info(f"Alte Installation in {target_dir} gefunden, wird gelöscht...")
+        logging.info(f"Old installation found at {target_dir}, removing...")
         shutil.rmtree(target_dir)
-    logging.info(f"Entpacke {zip_path} nach {target_dir}")
+    logging.info(f"Extracting {zip_path} to {target_dir}")
     target_dir.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(zip_path, 'r') as z:
         z.extractall(target_dir)
-    logging.info("Entpackung abgeschlossen.")
+    logging.info("Extraction completed.")
 
 def update_path(install_dir: Path):
-    """Fügt das V-Verzeichnis dem System-PATH hinzu (für neue Terminals)."""
+    """Adds the V directory to system PATH (for new terminals)."""
     bin_dir = str(install_dir)
     current = os.environ.get("PATH", "")
     if bin_dir.lower() in current.lower():
-        logging.info("V ist bereits im PATH.")
+        logging.info("V is already in PATH.")
         return
     new_path = f"{current};{bin_dir}"
-    logging.info(f"Füge V dem PATH hinzu: {bin_dir}")
+    logging.info(f"Adding V to PATH: {bin_dir}")
     subprocess.run(f'setx PATH "{new_path}"', shell=True, check=False)
 
 def verify_installation():
-    """Prüft die Installation via 'v version'."""
+    """Verifies the installation by running 'v version'."""
     try:
         out = subprocess.check_output([V_CMD, "version"], text=True).strip()
-        logging.info(f"V erfolgreich installiert: {out}")
+        logging.info(f"V successfully installed: {out}")
     except Exception as e:
-        logging.error(f"Verifikation von V fehlgeschlagen: {e}")
+        logging.error(f"Verification of V failed: {e}")
         sys.exit(1)
 
 def main():
-    logging.info("=== V-Installer gestartet ===")
+    logging.info("=== V installer started ===")
     if os.name != "nt":
-        logging.error("Dieses Skript funktioniert nur unter Windows.")
+        logging.error("This script only works on Windows.")
         sys.exit(1)
 
     if is_v_installed():
-        logging.info("V ist bereits installiert. Abbruch.")
+        logging.info("V is already installed. Exiting.")
         return
 
     info = fetch_latest_release()
@@ -225,7 +225,7 @@ def main():
 
     update_path(install_dir)
     verify_installation()
-    logging.info("=== V-Installation abgeschlossen ===")
+    logging.info("=== V installation completed ===")
 
 if __name__ == "__main__":
     main()
