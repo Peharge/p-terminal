@@ -34,10 +34,10 @@
 
 <div align="center">
 
-"The coolest terminal in the world"<br>
+"The coolest Terminal in the world"<br>
 A warm welcome, to P-Term (C/C++/Rust) and PP-Term (Python) ❤️<br>
 100% Free. 100% Open Source.<br><br>
-I would use the PP-Terminal on Windows, if I were you ;-) - not P-Terminal. <br>If you don't know how to clone this repo, you probably shouldn't use this terminal! <br>If you cloned it: Run pp-term\run-pp-term.bat on your Windows PC – and you're good to go.<br><br>
+I would use the PP-Terminal on Windows, if I were you ;-) - not P-Terminal. <br>If you don't know how to clone this repo, you probably shouldn't use this Terminal! <br>If you cloned it: Run pp-term\run-pp-term.bat on your Windows PC – and you're good to go.<br><br>
 [`P-Terminal.com`](https://github.com/Peharge/peharge-web) [`Download P-Term (SOON) [Windows]`](https://github.com/Peharge/p-terminal/blob/main/p-term/run-p-term.bat) [`Download PP-Term [Windows]`](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) [`LICENSE`](LICENSE)<br>[`P-Terminal-old (ord Repo.)`](https://github.com/Peharge/p-terminal-old) [`PP-Term Documentation`](https://github.com/Peharge/p-terminal/wiki/Documentation) [`VERSIONS`](VERSIONS.md)<br><br>
 Peharge Projects 2025<br>
 
@@ -82,7 +82,7 @@ Peharge Projects 2025<br>
 
 # **_PP-Terminal 6_**
 
-Why show the standard? The PP Terminal does it all<br>
+Why show the standard? The PP-Terminal does it all<br>
 — but we show you what sets it apart.<br><br>[`Download PP-Term [Windows]`](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) [`PP-Term Commands`](https://github.com/Peharge/peharge-web/blob/main/commands-pp-term.html) [`Learn PP-Term`](https://github.com/Peharge/p-terminal/wiki/Documentation)<br><br>
 <img width="1500" src="https://github.com/Peharge/p-terminal-images/raw/main/images/pp-term-banner-8.png" alt="pp-term"/><br><br>
 </div>
@@ -90,7 +90,7 @@ Why show the standard? The PP Terminal does it all<br>
 <table>
   <tr>
     <td width="50%" valign="top">
-      <strong>What can the PP terminal do?</strong><br><br>PP-Terminal isn't just another terminal—it's a powerful all-in-one tool that brings together system monitoring, game fun, and cutting-edge AI interaction. With PP-Terminal, you don’t just get the basics; you get seamless access to Linux tools on Windows, instant AI model queries like Qwen 3, and much more. Experience the ultimate flexibility, all in one terminal. Why settle for less when you can have it all?
+      <strong>What can the PP-Terminal do?</strong><br><br>PP-Terminal isn't just another Terminal—it's a powerful all-in-one tool that brings together system monitoring, game fun, and cutting-edge AI interaction. With PP-Terminal, you don’t just get the basics; you get seamless access to Linux tools on Windows, instant AI model queries like Qwen 3, and much more. Experience the ultimate flexibility, all in one Terminal. Why settle for less when you can have it all?
 	        </td>
     <td width="50%" valign="top" align="center">
       <img src="https://raw.githubusercontent.com/Peharge/peharge-web/main/images/pp-term-img.png" width="100%">
@@ -101,7 +101,7 @@ Why show the standard? The PP Terminal does it all<br>
 <table>
   <tr>
     <td width="50%" valign="top">
-      <strong>PP-Terminal Design</strong><br><br>PP-Terminal blends sleek, modern design with powerful, intelligent performance to create a seamless, future-ready experience. Whether you're an individual user or a business, PP-Terminal elevates your workflow with unmatched efficiency and versatility. Step into the future of terminal technology — where every command counts.                                                                                                                                                                        </td>
+      <strong>PP-Terminal Design</strong><br><br>PP-Terminal blends sleek, modern design with powerful, intelligent performance to create a seamless, future-ready experience. Whether you're an individual user or a business, PP-Terminal elevates your workflow with unmatched efficiency and versatility. Step into the future of Terminal technology — where every command counts.                                                                                                                                                                        </td>
     <td width="50%" valign="top" align="center">
       <img src="https://raw.githubusercontent.com/Peharge/peharge-web/main/images/pp-term-ads-3.png" width="100%">
     </td>
@@ -145,7 +145,7 @@ Why show the standard? The PP Terminal does it all<br>
 <table>
   <tr>
     <td width="50%" valign="top">
-      <strong>Search</strong><br><br>But that's not all. With PP-Terminal, you can also search websites directly from the terminal. Use the ps command followed by a keyword to search for processes, or go further with commands like ps-github, ps-huggingface, or ps-arxiv to search directly on these platforms' websites. This makes it easier than ever to find exactly what you're looking for while working in your terminal.                                                                                                                         </td>
+      <strong>Search</strong><br><br>But that's not all. With PP-Terminal, you can also search websites directly from the Terminal. Use the ps command followed by a keyword to search for processes, or go further with commands like ps-github, ps-huggingface, or ps-arxiv to search directly on these platforms' websites. This makes it easier than ever to find exactly what you're looking for while working in your Terminal.                                                                                                                         </td>
     <td width="50%" valign="top" align="center">
       <img src="https://raw.githubusercontent.com/Peharge/peharge-web/main/images/pp-term-ads-5.png" width="100%">
     </td>
@@ -155,7 +155,7 @@ Why show the standard? The PP Terminal does it all<br>
 <table>
   <tr>
     <td width="50%" valign="top">
-      <strong>Peharge AI</strong><br><br>PP-Terminal goes beyond traditional system tools—it's also your gateway to powerful AI models. With simple commands like 'pa [promt]', 'pa qwen3:30b' or 'pa llama4:maverick', you can access advanced AI models and start interacting right from your terminal                                                                                                                                                                                                                                                           </td>
+      <strong>Peharge AI</strong><br><br>PP-Terminal goes beyond traditional system tools—it's also your gateway to powerful AI models. With simple commands like 'pa [promt]', 'pa qwen3:30b' or 'pa llama4:maverick', you can access advanced AI models and start interacting right from your Terminal                                                                                                                                                                                                                                                           </td>
     <td width="50%" valign="top" align="center">
       <img src="https://raw.githubusercontent.com/Peharge/peharge-web/main/images/pp-term-ads-6.png" width="100%">
     </td>
@@ -165,7 +165,7 @@ Why show the standard? The PP Terminal does it all<br>
 <table>
   <tr>
     <td width="50%" valign="top">
-      <strong>GIT</strong><br><br>PP-Terminal not only offers powerful terminal commands but also integrates Git seamlessly with a range of commands like 'p git', 'git ls all', 'gitk' and more. Whether you’re managing code repositories or visualizing your Git history, PP-Terminal makes it effortless.                                                                                                                                                                                                                                                </td>
+      <strong>GIT</strong><br><br>PP-Terminal not only offers powerful Terminal commands but also integrates Git seamlessly with a range of commands like 'p git', 'git ls all', 'gitk' and more. Whether you’re managing code repositories or visualizing your Git history, PP-Terminal makes it effortless.                                                                                                                                                                                                                                                </td>
     <td width="50%" valign="top" align="center">
       <img src="https://raw.githubusercontent.com/Peharge/peharge-web/main/images/pp-term-ads-8.png" width="100%">
     </td>
@@ -185,7 +185,7 @@ Why show the standard? The PP Terminal does it all<br>
 <table>
   <tr>
     <td width="50%" valign="top">
-      <strong>File administration</strong><br><br>PP-Terminal makes managing your files a breeze with commands like 'p ls', 'p ls [project]', 'nano [filename]', 'vim [filename]' and 'eamcs [filename]'. Navigate your directories, edit files, and manage projects with ease, all from the power of one terminal.
+      <strong>File administration</strong><br><br>PP-Terminal makes managing your files a breeze with commands like 'p ls', 'p ls [project]', 'nano [filename]', 'vim [filename]' and 'eamcs [filename]'. Navigate your directories, edit files, and manage projects with ease, all from the power of one Terminal.
 </td>
     <td width="50%" valign="top" align="center">
       <img src="https://raw.githubusercontent.com/Peharge/peharge-web/main/images/pp-term-ads-10.png" width="100%">
@@ -206,7 +206,7 @@ Why show the standard? The PP Terminal does it all<br>
 <table>
   <tr>
     <td width="50%" valign="top">
-      <strong>Framework administration</strong><br><br>PP-Terminal simplifies managing frameworks and packages directly from the terminal with commands like 'p pip' for Python package management, and more. Whether you're installing dependencies, updating frameworks, or managing environments, PP-Terminal provides a seamless and efficient experience.                                                                                                                                                                                                      </td>
+      <strong>Framework administration</strong><br><br>PP-Terminal simplifies managing frameworks and packages directly from the Terminal with commands like 'p pip' for Python package management, and more. Whether you're installing dependencies, updating frameworks, or managing environments, PP-Terminal provides a seamless and efficient experience.                                                                                                                                                                                                      </td>
     <td width="50%" valign="top" align="center">
       <img src="https://raw.githubusercontent.com/Peharge/peharge-web/main/images/pp-term-ads-13.png" width="100%">
     </td>
@@ -227,7 +227,7 @@ Why show the standard? The PP Terminal does it all<br>
 <table>
   <tr>
     <td width="50%" valign="top">
-      <strong>Command Reference – Executing & Compiling Source Code</strong><br><br>pp-terminal lets you compile, run, and debug code in over 50 programming languages — with full support for C++, C, C#, Python, Java and Rust. Its streamlined command interface uses consistent prefixes to simplify your workflow across languages. The placeholder <code>{user_input}</code> represents the filename or code to be processed.
+      <strong>Command Reference – Executing & Compiling Source Code</strong><br><br>PP-Terminal lets you compile, run, and debug code in over 50 programming languages — with full support for C++, C, C#, Python, Java and Rust. Its streamlined command interface uses consistent prefixes to simplify your workflow across languages. The placeholder <code>{user_input}</code> represents the filename or code to be processed.
     </td>
     <td width="50%" valign="top" align="center">
       <img src="https://raw.githubusercontent.com/Peharge/p-terminal-images/main/images/pc-3.png" width="100%">
@@ -248,7 +248,7 @@ Why show the standard? The PP Terminal does it all<br>
 <table>
   <tr>
     <td width="50%" valign="top">
-      <strong>Games</strong><br><br>PP-Terminal isn't just about powerful system tools—it also adds a bit of fun to your command line experience. Take a break with classic games and playful features that will make your terminal sessions even more enjoyable. You can play classic games like Tetris, Pacman, or even Chess —all directly in the terminal window! Plus, enjoy fun animations, like watching a train pass by for a cool, retro vibe. PP-Terminal brings a little bit of play into your productivity. After all, why not have fun while you're working?
+      <strong>Games</strong><br><br>PP-Terminal isn't just about powerful system tools—it also adds a bit of fun to your command line experience. Take a break with classic games and playful features that will make your Terminal sessions even more enjoyable. You can play classic games like Tetris, Pacman, or even Chess —all directly in the Terminal window! Plus, enjoy fun animations, like watching a train pass by for a cool, retro vibe. PP-Terminal brings a little bit of play into your productivity. After all, why not have fun while you're working?
 </td>
     <td width="50%" valign="top" align="center">
       <img src="https://raw.githubusercontent.com/Peharge/peharge-web/main/images/pp-term-ads-15.png" width="100%">
@@ -269,7 +269,7 @@ Why show the standard? The PP Terminal does it all<br>
 <table>
   <tr>
     <td width="50%" valign="top">
-      <strong>More Linux tools</strong><br><br>PP-Terminal brings the full range of advanced Linux command-line tools to your Windows machine, without compromise. With support for essential utilities like htop, btop, atop, glances, ncdu, fzf, bat, gitui, lazygit, starship, and more, PP-Terminal gives you everything you need for system monitoring, file management, and Git workflow—all in one sleek, native terminal experience.                                                                                                                       </td>
+      <strong>More Linux tools</strong><br><br>PP-Terminal brings the full range of advanced Linux command-line tools to your Windows machine, without compromise. With support for essential utilities like htop, btop, atop, glances, ncdu, fzf, bat, gitui, lazygit, starship, and more, PP-Terminal gives you everything you need for system monitoring, file management, and Git workflow—all in one sleek, native Terminal experience.                                                                                                                       </td>
     <td width="50%" valign="top" align="center">
       <img src="https://raw.githubusercontent.com/Peharge/peharge-web/main/images/pp-term-ads-19.png" width="100%">
     </td>
@@ -292,13 +292,13 @@ You can't ask for more!!!<br><br>
  <img width="600" src="https://github.com/Peharge/p-terminal-images/raw/main/images/p-term-demo-5.png" alt="peharge"/>
 </p>
 
-Download the [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) file and double-click it. You're ready to go! Have fun with pp-terminal and you can always start it with `pp-term/run-pp-term.bat` (ca. 5 min) / `pp-term/run-pp-term-fast.bat` (ca. 3-5 sek) after installation. If you want, you can further enhance your terminal with PP Terminal Themes/Pins: [PP Terminal Themes/Pins](./pp-term/THEMES.md)
+Download the [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) file and double-click it. You're ready to go! Have fun with PP-Terminal and you can always start it with `pp-term/run-pp-term.bat` (ca. 5 min) / `pp-term/run-pp-term-fast.bat` (ca. 3-5 sek) after installation. If you want, you can further enhance your Terminal with PP-Terminal Themes/Pins: [PP Terminal Themes/Pins](./pp-term/THEMES.md)
 <details>
   <summary>Problems installing the PP-Terminal</summary>
 
 ## Problems installing the PP-Terminal
 
-The PP Terminal should normally be installed automatically. However, problems may arise during installation that require you to install certain dependencies manually.
+The PP-Terminal should normally be installed automatically. However, problems may arise during installation that require you to install certain dependencies manually.
 
 Usually, all required dependencies are included in the automatic installation. However, if a dependency was not installed correctly, only those specific dependencies need to be installed subsequently.
 
@@ -314,12 +314,12 @@ It is recommended to use Python 3.12 (Python 3.11 is also supported, but not Pyt
 
 ### 3. **Ollama**
 
-Ollama is a necessary tool for the PP Terminal.  
+Ollama is a necessary tool for the PP-Terminal.  
 [Download Ollama](https://ollama.com/download)
 
 ### 4. **FFmpeg**
 
-FFmpeg is another important dependency for the PP Terminal.  
+FFmpeg is another important dependency for the PP-Terminal.  
 [Visit the official FFmpeg website](https://ffmpeg.org/)
 
 ### 5. **Rustup**
@@ -330,17 +330,17 @@ Rustup is required to install Rust and related tools.
 ### 6. **3D Slicer**
 
 Installing 3D Slicer is not required to run PP-Term. However, it is mandatory if you plan to use SIMON.  
-If installation fails, you can run the `Install 3d-slicer` command in the PP Terminal for a safer setup.  
+If installation fails, you can run the `Install 3d-slicer` command in the PP-Terminal for a safer setup.  
 Otherwise, install it manually: [Download 3D Slicer](https://download.slicer.org)
 
 ### 7. **PowerShell 7**
 
-PowerShell 7 is recommended for use with the PP Terminal.  
+PowerShell 7 is recommended for use with the PP-Terminal.  
 [Download PowerShell 7](https://github.com/PowerShell/PowerShell/releases)
 
 ### 8. **Windows Subsystem for Linux (WSL)**
 
-To make optimal use of the PP Terminal, you need WSL. Supported distributions:
+To make optimal use of the PP-Terminal, you need WSL. Supported distributions:
 
 - **Ubuntu**  
   [Microsoft Store Link](https://aka.ms/wslubuntu)
@@ -415,14 +415,14 @@ To make optimal use of the PP Terminal, you need WSL. Supported distributions:
 For more information on WSL:  
 [Installing WSL – Microsoft Docs](https://docs.microsoft.com/en-us/windows/wsl/install)
 
-### 9. **PP Terminal Repository**
+### 9. **PP-Terminal Repository**
 
 Clone the repository from GitHub:  
-[PP Terminal GitHub Repository](https://github.com/Peharge/P-Terminal)
+[PP-Terminal GitHub Repository](https://github.com/Peharge/P-Terminal)
 
 ### 10. **C++ Extensions for Desktop Development**
 
-To develop and run the PP Terminal, you also need the C++ extensions for Visual Studio.  
+To develop and run the PP-Terminal, you also need the C++ extensions for Visual Studio.  
 [Download C++ Extensions](https://visualstudio.microsoft.com/de/downloads/)
 
 </details>
