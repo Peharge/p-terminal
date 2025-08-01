@@ -15808,21 +15808,47 @@ if __name__ == "__main__":
 
     if user_input.startswith("pcf "):
         user_input = user_input[4:].strip()
-        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+        if not user_input:
+            print(f"[{timestamp()}] [ERROR] No name specified.")
+            return True
+
         current_dir = Path.cwd().resolve()
-
-        command = f"""powershell New-Item -Path "{current_dir}\\{user_input}"  -ItemType File"""
-
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
-                                   text=True)
+        target_path = current_dir / user_input
 
         try:
-            print(f"[{timestamp()}] [INFO] File created: {current_dir}\\{user_input}")
+            if target_path.exists():
+                print(f"[{timestamp()}] [WARNING] File or directory already exists: {target_path}")
+                return True
+
+            # Decide whether to create file or directory:
+            # If there's a suffix (extension), create a file; else, create directory
+            if target_path.suffix:
+                # Create parent dirs if needed
+                target_path.parent.mkdir(parents=True, exist_ok=True)
+
+                command = f'powershell -Command "New-Item -Path \'{target_path}\' -ItemType File -Force"'
+                print(f"[{timestamp()}] [INFO] Creating file: {target_path}")
+            else:
+                # Create directory (including parents)
+                command = f'powershell -Command "New-Item -Path \'{target_path}\' -ItemType Directory -Force"'
+                print(f"[{timestamp()}] [INFO] Creating directory: {target_path}")
+
+            process = subprocess.Popen(command, shell=True, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, text=True)
             process.wait()
+
+            if process.returncode == 0:
+                if target_path.suffix:
+                    print(f"[{timestamp()}] [INFO] File successfully created: {target_path}")
+                else:
+                    print(f"[{timestamp()}] [INFO] Directory successfully created: {target_path}")
+            else:
+                print(f"[{timestamp()}] [ERROR] Failed to create {'file' if target_path.suffix else 'directory'} (Exit code {process.returncode})")
+
         except KeyboardInterrupt:
-            print(f"[{timestamp()}] [INFO] Cancellation by user.")
-        except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing pcf command: {e}")
+            print(f"[{timestamp()}] [INFO] Operation cancelled by user.")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Exception while executing pcf command: {e}")
+
         return True
 
     if user_input.startswith("pcfo "):
