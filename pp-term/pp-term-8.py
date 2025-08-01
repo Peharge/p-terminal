@@ -32566,6 +32566,74 @@ def main():
                     except Exception as e:
                         print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
 
+            elif user_input.startswith("pcfo&pcd&pcv "):
+                folder_name = user_input[13:].strip()
+                current_dir = Path.cwd().resolve()
+                new_folder_path = current_dir / folder_name
+
+                # Ordner erstellen, falls er nicht existiert
+                if new_folder_path.exists():
+                    print(f"[{timestamp()}] [INFO] Folder already exists: {new_folder_path}")
+                else:
+                    try:
+                        new_folder_path.mkdir(parents=True, exist_ok=False)
+                        print(f"[{timestamp()}] [INFO] Folder created: {new_folder_path}")
+                    except Exception as e:
+                        print(f"[{timestamp()}] [ERROR] Could not create folder: {e}")
+                        return
+
+                # In den Ordner wechseln
+                try:
+                    change_directory(new_folder_path)
+                    print(f"[{timestamp()}] [INFO] Changed directory to: {new_folder_path}")
+                except Exception as e:
+                    print(f"[{timestamp()}] [ERROR] Error changing directory: {e}")
+                    return
+
+                # Virtuelle Umgebung .env erstellen oder aktivieren
+                env_path = new_folder_path / ".env"
+
+                if (env_path / "pyvenv.cfg").exists():
+                    print(f"[{timestamp()}] [INFO] The virtual environment '.env' already exists at {env_path}.")
+                    try:
+                        active = find_active_env(str(env_path))
+                        set_python_path(active)
+                        print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                    except Exception as e:
+                        print(f"[{timestamp()}] [ERROR] Failed to activate existing venv: {e}")
+                else:
+                    try:
+                        subprocess.run(
+                            ["python", "-m", "venv", str(env_path)],
+                            check=True,
+                            text=True,
+                            stdin=sys.stdin,
+                            stdout=sys.stdout,
+                            stderr=sys.stderr
+                        )
+                        print(f"[{timestamp()}] [INFO] The virtual environment '.env' was created at {env_path}.")
+
+                        try:
+                            active = find_active_env(str(env_path))
+                            set_python_path(active)
+                            print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                        except Exception as e:
+                            print(f"[{timestamp()}] [ERROR] Failed to set active environment: {e}")
+
+                        # Weitere venvs im Ordner anzeigen
+                        existing_venvs = find_existing_venvs(new_folder_path)
+                        other_venvs = [name for name in existing_venvs if name != ".env"]
+
+                        if other_venvs:
+                            print(f"[{timestamp()}] [INFO] Other virtual environments found in this directory: {', '.join(other_venvs)}")
+
+                    except subprocess.CalledProcessError as e:
+                        print(f"[{timestamp()}] [ERROR] Failed to create venv '.env': {e}")
+                    except KeyboardInterrupt:
+                        print(f"[{timestamp()}] [INFO] Cancelled by user.")
+                    except Exception as e:
+                        print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
+
             elif user_input.startswith("pcvf "):
                 def find_existing_venvs(directory: Path):
                     venvs = []
