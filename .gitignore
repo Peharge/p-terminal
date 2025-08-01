@@ -1,0 +1,42 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment variables files
+.env
+
+# Logs
+*.log
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Python virtual environments
+.env/
+venv/
+ENV/
+env/
+
+# IDEs and editors
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Rust / Cargo (wegen p-term/Cargo.lock)
+target/
+Cargo.lock
+
+# Executables (z.B. aus deinen pp-commands)
+*.exe
+
+# Miscellaneous
+*.obj
