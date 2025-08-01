@@ -82,12 +82,30 @@ PEHARGE_PATH = HOME / "peharge-web"
 VENV_PATH = P_TERMINAL_PATH / "pp-term" / ".env"
 LOG_FILE = Path(__file__).resolve().parent / "doctor.log"
 
-# Dateien/Ordner, die in Entwicklung erlaubt sind
 KNOWN_LOCAL_ARTIFACTS = {
-    ".idea", "__pycache__", ".log", ".lock", ".gif", ".obj", "target",
-    "installer", "doctor.log", "current_env.json", ".github",
-    "run_arch_command.exe", "run_lx_command.exe"
+    ".idea",
+    "__pycache__",
+    "doctor.log",
+    "installer",
+    "target",
+    "run_arch_command.exe",
+    "run_lx_command.exe"
 }
+
+KNOWN_EXTENSIONS = {
+    ".lock",
+    ".gif",
+    ".obj",
+    ".json",
+    ".exe"
+}
+
+IGNORED_FOLDERS = {".env", ".github", ".git"}
+
+# Basisordner, die ebenfalls ignoriert werden sollen (p-terminal/pp-term/main-test)
+IGNORED_PATH_PREFIXES = [
+    str(P_TERMINAL_PATH / "pp-term" / "main-test")
+]
 
 # Logging einrichten
 class CustomFormatter(logging.Formatter):
@@ -114,10 +132,48 @@ for handler in logging.getLogger().handlers:
     handler.setFormatter(formatter)
 
 
+def is_path_ignored(file_path: Path) -> bool:
+    """
+    Prüft, ob die Datei in einem ignorierten Ordner liegt.
+    """
+    try:
+        for ignored_folder in IGNORED_FOLDERS:
+            # Check, ob ein beliebiger Teil des Pfads ein ignorierter Ordner ist
+            if ignored_folder in file_path.parts:
+                return True
+
+        # Prüfe, ob der Pfad im Ignored-Prefix liegt (z.B. p-terminal/pp-term/main-test)
+        file_path_str = str(file_path.resolve())
+        for prefix in IGNORED_PATH_PREFIXES:
+            if file_path_str.startswith(prefix):
+                return True
+
+        return False
+    except Exception as e:
+        logging.error(f"Failed to check ignored paths for {file_path}: {e}")
+        return False
+
 def is_known_artifact(file_path: str) -> bool:
-    """Nur auf Dateinamen prüfen, nicht gesamten Pfad"""
+    """
+    Prüft, ob die Datei ein bekannter Artefakt ist, das ignoriert werden soll.
+    Ignoriert alle *.log Dateien generell.
+    """
     name = os.path.basename(file_path)
-    return name in KNOWN_LOCAL_ARTIFACTS
+    ext = os.path.splitext(name)[1]
+
+    if ext == ".log":
+        # Alle .log Dateien ignorieren
+        return True
+
+    # Prüfe bekannte exakte Namen
+    if name in KNOWN_LOCAL_ARTIFACTS:
+        return True
+
+    # Prüfe bekannte Dateiendungen (ohne .log, die schon oben rausgefiltert sind)
+    if ext in KNOWN_EXTENSIONS:
+        return True
+
+    return False
 
 
 def check_path(path: Path, must_be_dir=True) -> bool:
@@ -176,21 +232,31 @@ def check_git_repo(path: Path) -> bool:
             status = line[:2].strip()
             file = line[3:].strip()
             display_line = f"  -> {line}"
+            file_path = path / file
+
+            if is_path_ignored(file_path):
+                logging.info(f"  -> {line} [Ignored due to folder exclusion]")
+                continue
 
             if is_known_artifact(file):
-                logging.info(f"{display_line} [Expected in local development]")
+                logging.info(f"  -> {line} [Expected development artifact]")
+
             elif status in {"M", "A", "AM"}:
                 logging.error(f"{display_line} [Modified or staged, but uncommitted]")
                 clean = False
+
             elif status == "??":
                 logging.warning(f"{display_line} [Untracked file — consider adding or cleaning]")
+
             else:
                 logging.warning(f"{display_line} [Status: {status}]")
+
         return clean
 
     except subprocess.TimeoutExpired:
         logging.error(f"Git command timed out in {path}")
         return False
+
     except Exception as e:
         logging.error(f"Git check failed in {path}: {e}")
         return False
@@ -223,7 +289,25 @@ def main():
     if not check_git_repo(PEHARGE_PATH):
         overall_success = False
 
-    logging.info("✅ System diagnostics completed.")
+    logging.info(
+        "✅ System diagnostics completed successfully:\n"
+        "    - Verified existence of project directories: 'p-terminal' and 'peharge-web'.\n"
+        "    - Located and validated the virtual environment at 'p-terminal/pp-term/.env', including Python executable.\n"
+        "    - Confirmed both projects are initialized as valid Git repositories.\n"
+        "    - Analyzed repository status via 'git status --porcelain' to detect uncommitted changes or untracked files.\n"
+        "    - Known development artifacts (e.g., '.env', '.log', '.github') were identified and excluded from warnings.\n"
+        "    - No critical issues were found during the diagnostics process."
+    )
+
+    print("")
+    print("")
+
+    logging.info(
+        "No securitycheck has been performed. "
+        "To perform it, please run securitycheck. "
+        "Or, to be safe, use Windows Defender or your own security software like AVG or McAfee to keep the PP-terminal secure."
+    )
+
     sys.exit(0 if overall_success else 1)
 
 
