@@ -2170,153 +2170,207 @@ def handle_special_commands(user_input):
 
     if user_input in ["dir /q", "ls -l"]:
         cmd = "dir /Q" if os.name == "nt" else "ls -l"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["dir /a", "ls -a"]:
         cmd = "dir /A" if os.name == "nt" else "ls -a"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
-    if user_input in "ls -lh":
+    if user_input.lower() == "ls -lh":
         # Bei Windows gibt's kein genaues Pendant zu ls -lh, wir nehmen /Q als Beispiel
         cmd = "dir /Q" if os.name == "nt" else "ls -lh"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["dir /a /s", "ls -laR"]:
         cmd = "dir /A /S" if os.name == "nt" else "ls -laR"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["dir /o-d", "ls -lt"]:
         cmd = "dir /O-D" if os.name == "nt" else "ls -lt"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["dir /o-d /t:c", "ls -ltr"]:
         cmd = "dir /O-D /T:C" if os.name == "nt" else "ls -ltr"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["dir /o:s", "ls -lS"]:
         cmd = "dir /O:S" if os.name == "nt" else "ls -lS"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["dir /s", "ls -lR"]:
         cmd = "dir /S" if os.name == "nt" else "ls -lR"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["dir /ld", "ls -ld"]:
         # Windows hat keinen direkten 'dir /ld' Parameter, wir simulieren mit 'dir /A:D' (nur Verzeichnisse)
         cmd = "dir /A:D" if os.name == "nt" else "ls -ld"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["dir /1", "ls -1"]:
         # Windows dir listet standardmäßig eine Spalte, kein Parameter nötig
         cmd = "dir /B" if os.name == "nt" else "ls -1"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["dir /f", "ls -F"]:
         # Windows 'dir /F' gibt Pfadnamen aus, für ls -F (zeigt Dateityp-Suffixe) gibt's kein direktes Pendant,
         # wir nehmen einfach 'dir' als Ersatz
         cmd = "dir" if os.name == "nt" else "ls -F"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["dir /h", "ls -h"]:
         # Windows 'dir /h' zeigt versteckte Dateien, ls -h macht Größe "human readable"
         # Für versteckte Dateien: 'dir /A:H', aber ls -h ist was anderes — hier nehmen wir 'dir /A' als Kompromiss
         cmd = "dir /A" if os.name == "nt" else "ls -h"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["dir /a /f", "ls -aF"]:
         # 'dir /A' zeigt versteckte Dateien, /F ignorieren wir (kein Pendant)
         cmd = "dir /A" if os.name == "nt" else "ls -aF"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["dir /alh", "ls -alh"]:
         cmd = "dir /A /Q" if os.name == "nt" else "ls -alh"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["dir /al", "ls -al"]:
         cmd = "dir /A" if os.name == "nt" else "ls -al"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["dir /a", "ls -a"]:
         cmd = "dir /A" if os.name == "nt" else "ls -a"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["dir /s", "ls -R"]:
         cmd = "dir /S" if os.name == "nt" else "ls -R"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["dir /os", "ls -S"]:
         cmd = "dir /O:S" if os.name == "nt" else "ls -S"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["dir /ot", "ls -t"]:
         cmd = "dir /O:D" if os.name == "nt" else "ls -t"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["dir /o-r", "ls -r"]:
         cmd = "dir /O:-D" if os.name == "nt" else "ls -r"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["dir /ad", "ls -d */"]:
         cmd = "dir /AD" if os.name == "nt" else "ls -d */"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
-    if user_input in ["ls -Z"]:
+    if user_input.lower() == "ls -Z":
         # SELinux Kontext, Linux-spezifisch, kein Windows Pendant
         if os.name != "nt":
             cmd = "ls -Z"
+            print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
             print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
             run_command(cmd, shell=True)
+            return True
 
-    if user_input in ["ls --color=auto"]:
+    if user_input.lower() == "ls --color=auto":
         # Farbige Ausgabe, meist Linux/macOS, Windows cmd unterstützt das nicht standardmäßig
         if os.name != "nt":
             cmd = "ls --color=auto"
+            print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
             print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
             run_command(cmd, shell=True)
+            return True
 
     if user_input in ["dir /q /os", "ls -lhS"]:
         cmd = "dir /Q /O:S" if os.name == "nt" else "ls -lhS"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["dir /ot /u", "ls -ltu"]:
         # Windows hat kein direktes Pendant für Zugriffszeit sortiert, wir nehmen Änderungszeit
         cmd = "dir /O:D" if os.name == "nt" else "ls -ltu"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["dir /ot /c", "ls -ltc"]:
         # Windows dir zeigt Änderungszeit standardmäßig, wir nehmen das so
         cmd = "dir /O:D" if os.name == "nt" else "ls -ltc"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["dir /a /b", "ls -1a"]:
         # Windows /b listet nur Dateinamen (ähnlich -1), mit /a für alle Dateien
         cmd = "dir /A /B" if os.name == "nt" else "ls -1a"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input.lower() in ["pdir", "pls"]:
         print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
@@ -2325,153 +2379,207 @@ def handle_special_commands(user_input):
 
     if user_input in ["pdir /q", "pls -l"]:
         cmd = "dir /Q" if os.name == "nt" else "ls -l"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["pdir /a", "pls -a"]:
         cmd = "dir /A" if os.name == "nt" else "ls -a"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
-    if user_input in "pls -lh":
+    if user_input.lower() == "pls -lh":
         # Bei Windows gibt's kein genaues Pendant zu ls -lh, wir nehmen /Q als Beispiel
         cmd = "dir /Q" if os.name == "nt" else "ls -lh"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["pdir /a /s", "pls -laR"]:
         cmd = "dir /A /S" if os.name == "nt" else "ls -laR"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["pdir /o-d", "pls -lt"]:
         cmd = "dir /O-D" if os.name == "nt" else "ls -lt"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["pdir /o-d /t:c", "pls -ltr"]:
         cmd = "dir /O-D /T:C" if os.name == "nt" else "ls -ltr"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["pdir /o:s", "pls -lS"]:
         cmd = "dir /O:S" if os.name == "nt" else "ls -lS"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["pdir /s", "pls -lR"]:
         cmd = "dir /S" if os.name == "nt" else "ls -lR"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["pdir /ld", "pls -ld"]:
         # Windows hat keinen direkten 'dir /ld' Parameter, wir simulieren mit 'dir /A:D' (nur Verzeichnisse)
         cmd = "dir /A:D" if os.name == "nt" else "ls -ld"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["pdir /1", "pls -1"]:
         # Windows dir listet standardmäßig eine Spalte, kein Parameter nötig
         cmd = "dir /B" if os.name == "nt" else "ls -1"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["pdir /f", "pls -F"]:
         # Windows 'dir /F' gibt Pfadnamen aus, für ls -F (zeigt Dateityp-Suffixe) gibt's kein direktes Pendant,
         # wir nehmen einfach 'dir' als Ersatz
         cmd = "dir" if os.name == "nt" else "ls -F"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["pdir /h", "pls -h"]:
         # Windows 'dir /h' zeigt versteckte Dateien, ls -h macht Größe "human readable"
         # Für versteckte Dateien: 'dir /A:H', aber ls -h ist was anderes — hier nehmen wir 'dir /A' als Kompromiss
         cmd = "dir /A" if os.name == "nt" else "ls -h"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["pdir /a /f", "pls -aF"]:
         # 'dir /A' zeigt versteckte Dateien, /F ignorieren wir (kein Pendant)
         cmd = "dir /A" if os.name == "nt" else "ls -aF"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["pdir /alh", "pls -alh"]:
         cmd = "dir /A /Q" if os.name == "nt" else "ls -alh"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["pdir /al", "pls -al"]:
         cmd = "dir /A" if os.name == "nt" else "ls -al"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["pdir /a", "pls -a"]:
         cmd = "dir /A" if os.name == "nt" else "ls -a"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["pdir /s", "pls -R"]:
         cmd = "dir /S" if os.name == "nt" else "ls -R"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["pdir /os", "pls -S"]:
         cmd = "dir /O:S" if os.name == "nt" else "ls -S"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["pdir /ot", "pls -t"]:
         cmd = "dir /O:D" if os.name == "nt" else "ls -t"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["pdir /o-r", "ls -r"]:
         cmd = "dir /O:-D" if os.name == "nt" else "ls -r"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["pdir /ad", "ls -d */"]:
         cmd = "dir /AD" if os.name == "nt" else "ls -d */"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
-    if user_input in ["pls -Z"]:
+    if user_input.lower() == "pls -Z":
         # SELinux Kontext, Linux-spezifisch, kein Windows Pendant
         if os.name != "nt":
             cmd = "ls -Z"
+            print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
             print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
             run_command(cmd, shell=True)
+            return True
 
-    if user_input in ["pls --color=auto"]:
+    if user_input.lower() == "pls --color=auto":
         # Farbige Ausgabe, meist Linux/macOS, Windows cmd unterstützt das nicht standardmäßig
         if os.name != "nt":
             cmd = "ls --color=auto"
+            print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
             print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
             run_command(cmd, shell=True)
+            return True
 
     if user_input in ["pdir /q /os", "pls -lhS"]:
         cmd = "dir /Q /O:S" if os.name == "nt" else "ls -lhS"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["pdir /ot /u", "pls -ltu"]:
         # Windows hat kein direktes Pendant für Zugriffszeit sortiert, wir nehmen Änderungszeit
         cmd = "dir /O:D" if os.name == "nt" else "ls -ltu"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["pdir /ot /c", "pls -ltc"]:
         # Windows dir zeigt Änderungszeit standardmäßig, wir nehmen das so
         cmd = "dir /O:D" if os.name == "nt" else "ls -ltc"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input in ["pdir /a /b", "pls -1a"]:
         # Windows /b listet nur Dateinamen (ähnlich -1), mit /a für alle Dateien
         cmd = "dir /A /B" if os.name == "nt" else "ls -1a"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Executing command: {cmd}")
         run_command(cmd, shell=True)
+        return True
 
     if user_input.lower() in ["dir-2", "ls-2"]:
         command = "powershell ls"
