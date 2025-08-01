@@ -30955,7 +30955,20 @@ def handle_history_command():
     return True
 
 
+def check_internet_connection(url='https://www.google.com', timeout=5):
+    try:
+        requests.get(url, timeout=timeout)
+        return True
+    except requests.RequestException:
+        return False
+
+
 def main():
+
+    if not check_internet_connection():
+        print(f"[{timestamp()}] [INFO] No stable internet connection detected. Please check your network.")
+        return
+
     state = state_info()
 
     active = Path(find_active_env()).resolve()
