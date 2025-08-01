@@ -19840,6 +19840,126 @@ if __name__ == "__main__":
         print_tree(os.getcwd())
         return True
 
+    if user_input.lower() == "tree-u":
+        def format_permissions(mode):
+            is_dir = 'd' if stat.S_ISDIR(mode) else '-'
+            perms = ''
+            mapping = [(stat.S_IRUSR, 'r'), (stat.S_IWUSR, 'w'), (stat.S_IXUSR, 'x'),
+                       (stat.S_IRGRP, 'r'), (stat.S_IWGRP, 'w'), (stat.S_IXGRP, 'x'),
+                       (stat.S_IROTH, 'r'), (stat.S_IWOTH, 'w'), (stat.S_IXOTH, 'x')]
+            for perm, char in mapping:
+                perms += char if (mode & perm) else '-'
+            return is_dir + perms
+
+        def human_readable_size(size, decimal_places=2):
+            for unit in ['B','KB','MB','GB','TB']:
+                if size < 1024.0:
+                    return f"{size:.{decimal_places}f} {unit}"
+                size /= 1024.0
+            return f"{size:.{decimal_places}f} PB"
+
+        def print_tree(startpath, prefix=""):
+            try:
+                entries = sorted(os.listdir(startpath))
+            except PermissionError:
+                print(prefix + "⚠️ [Permission Denied]")
+                return
+            total = len(entries)
+            for index, item in enumerate(entries):
+                path = os.path.join(startpath, item)
+                connector = "└── " if index == total - 1 else "├── "
+
+                try:
+                    stat_info = os.stat(path)
+                    perms = format_permissions(stat_info.st_mode)
+                    size = human_readable_size(stat_info.st_size)
+                    mtime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(stat_info.st_mtime))
+                    ctime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(stat_info.st_ctime))
+                except Exception:
+                    perms = size = mtime = ctime = "N/A"
+
+                if os.path.isdir(path):
+                    print(f"{prefix}{connector}📁 {item}/ [{perms}] (modified: {mtime}) (created: {ctime})")
+                    extension = "    " if index == total - 1 else "│   "
+                    print_tree(path, prefix + extension)
+                else:
+                    ext = os.path.splitext(item)[1].lower()
+                    icon = "📄"
+                    if ext in ['.py', '.js', '.html', '.css', '.java', '.c', '.cpp', '.sh']:
+                        icon = "📜"
+                    elif ext in ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.svg']:
+                        icon = "🖼️"
+                    elif ext in ['.exe', '.bin', '.app']:
+                        icon = "⚙️"
+                    elif ext in ['.zip', '.tar', '.gz', '.rar', '.7z']:
+                        icon = "📦"
+
+                    print(f"{prefix}{connector}{icon} {item} [{perms}] Size: {size} (modified: {mtime}) (created: {ctime})")
+
+        print(f"[{timestamp()}] [INFO] Directory tree for: {os.getcwd()}\n")
+        print_tree(os.getcwd())
+        return True
+
+    if user_input.lower() == "ptree-u":
+        def format_permissions(mode):
+            is_dir = 'd' if stat.S_ISDIR(mode) else '-'
+            perms = ''
+            mapping = [(stat.S_IRUSR, 'r'), (stat.S_IWUSR, 'w'), (stat.S_IXUSR, 'x'),
+                       (stat.S_IRGRP, 'r'), (stat.S_IWGRP, 'w'), (stat.S_IXGRP, 'x'),
+                       (stat.S_IROTH, 'r'), (stat.S_IWOTH, 'w'), (stat.S_IXOTH, 'x')]
+            for perm, char in mapping:
+                perms += char if (mode & perm) else '-'
+            return is_dir + perms
+
+        def human_readable_size(size, decimal_places=2):
+            for unit in ['B','KB','MB','GB','TB']:
+                if size < 1024.0:
+                    return f"{size:.{decimal_places}f} {unit}"
+                size /= 1024.0
+            return f"{size:.{decimal_places}f} PB"
+
+        def print_tree(startpath, prefix=""):
+            try:
+                entries = sorted(os.listdir(startpath))
+            except PermissionError:
+                print(prefix + "⚠️ [Permission Denied]")
+                return
+            total = len(entries)
+            for index, item in enumerate(entries):
+                path = os.path.join(startpath, item)
+                connector = "└── " if index == total - 1 else "├── "
+
+                try:
+                    stat_info = os.stat(path)
+                    perms = format_permissions(stat_info.st_mode)
+                    size = human_readable_size(stat_info.st_size)
+                    mtime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(stat_info.st_mtime))
+                    ctime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(stat_info.st_ctime))
+                except Exception:
+                    perms = size = mtime = ctime = "N/A"
+
+                if os.path.isdir(path):
+                    print(f"{prefix}{connector}📁 {item}/ [{perms}] (modified: {mtime}) (created: {ctime})")
+                    extension = "    " if index == total - 1 else "│   "
+                    print_tree(path, prefix + extension)
+                else:
+                    ext = os.path.splitext(item)[1].lower()
+                    icon = "📄"
+                    if ext in ['.py', '.js', '.html', '.css', '.java', '.c', '.cpp', '.sh']:
+                        icon = "📜"
+                    elif ext in ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.svg']:
+                        icon = "🖼️"
+                    elif ext in ['.exe', '.bin', '.app']:
+                        icon = "⚙️"
+                    elif ext in ['.zip', '.tar', '.gz', '.rar', '.7z']:
+                        icon = "📦"
+
+                    print(f"{prefix}{connector}{icon} {item} [{perms}] Size: {size} (modified: {mtime}) (created: {ctime})")
+
+        print(f"[{timestamp()}] [INFO] Directory tree for: {os.getcwd()}\n")
+        print_tree(os.getcwd())
+        return True
+
     # Python REPL starten
     if user_input.strip().lower() == "py":
         import code as code_module
