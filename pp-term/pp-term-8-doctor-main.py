@@ -294,12 +294,12 @@ def main():
 
     logging.info(
         "✅ System diagnostics completed successfully:\n"
-        "    - Verified existence of project directories: 'p-terminal' and 'peharge-web'.\n"
-        "    - Located and validated the virtual environment at 'p-terminal/pp-term/.env', including Python executable.\n"
-        "    - Confirmed both projects are initialized as valid Git repositories.\n"
-        "    - Analyzed repository status via 'git status --porcelain' to detect uncommitted changes or untracked files.\n"
-        "    - Known development artifacts (e.g., '.env', '.log', '.github') were identified and excluded from warnings.\n"
-        "    - No critical issues were found during the diagnostics process."
+        " - Verified existence of project directories: 'p-terminal' and 'peharge-web'.\n"
+        " - Located and validated the virtual environment at 'p-terminal/pp-term/.env', including Python executable.\n"
+        " - Confirmed both projects are initialized as valid Git repositories.\n"
+        " - Analyzed repository status via 'git status --porcelain' to detect uncommitted changes or untracked files.\n"
+        " - Known development artifacts (e.g., '.env', '.log', '.github') were identified and excluded from warnings.\n"
+        " - No critical issues were found during the diagnostics process."
     )
 
     print("")
