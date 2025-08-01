@@ -19828,6 +19828,18 @@ if __name__ == "__main__":
         print_tree(os.getcwd())
         return True
 
+    # Directory Baumansicht
+    if user_input.lower() == "ptree":
+        def print_tree(startpath, prefix=""):
+            for item in os.listdir(startpath):
+                path = os.path.join(startpath, item)
+                print(prefix + "|-- " + item)
+                if os.path.isdir(path):
+                    print_tree(path, prefix + "|   ")
+
+        print_tree(os.getcwd())
+        return True
+
     # Python REPL starten
     if user_input.strip().lower() == "py":
         import code as code_module
@@ -19835,7 +19847,11 @@ if __name__ == "__main__":
         load_dotenv()
 
         APP_NAME = os.getenv("APP_NAME", "p-terminal/pp-term").replace("\\", "/")
-        USER_NAME = os.getenv("USER_NAME", os.getlogin())
+        try:
+            USER_NAME = os.getenv("USER_NAME") or os.getlogin()
+        except OSError:
+            USER_NAME = "default"
+
         STATE_FILE = Path(f"C:/Users/{USER_NAME}/{APP_NAME}/current_env.json")
 
         print(f"[{timestamp()}] [INFO] Initializing Python REPL startup sequence...")
@@ -19848,7 +19864,7 @@ if __name__ == "__main__":
             print(f"[{timestamp()}] [INFO] Active environment successfully located.")
         except Exception as e:
             print(f"[{timestamp()}] [ERROR] Failed to find active environment: {e}")
-            traceback.print_exc()
+            traceback.print_exc(file=sys.__stderr__)
         else:
             print(f"[{timestamp()}] [INFO] Launching interactive Python REPL.")
             print(f"[{timestamp()}] [INFO] Type 'exit()' or press Ctrl-D to quit.")
@@ -19859,21 +19875,33 @@ if __name__ == "__main__":
                 else:
                     try:
                         local_ns = vars(active)
-                    except TypeError:
-                        print(f"[{timestamp()}] [WARNING] Could not extract vars() from active object; using empty namespace.")
+                    except Exception as e:
+                        print(f"[{timestamp()}] [WARNING] Could not extract vars() from active object; using empty namespace. ({e})")
                         local_ns = {}
 
                 local_ns['STATE_FILE'] = STATE_FILE
 
+                # Überschreibe exit() mit eigener Funktion
+                local_ns['exit'] = my_exit_py
+
+                print(f"[{timestamp()}] [DEBUG] Entering code.interact with namespace keys: {list(local_ns.keys())}")
                 code_module.interact(local=local_ns)
 
+            except EOFError:
+                print(f"[{timestamp()}] [INFO] REPL terminated by simulated Ctrl+D (EOF).")
             except SystemExit:
-                print(f"[{timestamp()}] [INFO] Exiting REPL via SystemExit.")
+                print(f"[{timestamp()}] [INFO] REPL was terminated by SystemExit.")
             except Exception as e:
                 print(f"[{timestamp()}] [ERROR] Unhandled exception during REPL session: {e}")
-                traceback.print_exc()
+                traceback.print_exc(file=sys.__stderr__)
             finally:
                 print(f"[{timestamp()}] [INFO] Python REPL session terminated.")
+
+        try:
+            print(f"[{timestamp()}] [DEBUG] REPL block exited cleanly.")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Output failed after REPL: {e}")
+            traceback.print_exc(file=sys.__stderr__)
 
         return True
 
@@ -19885,7 +19913,11 @@ if __name__ == "__main__":
         load_dotenv()
 
         APP_NAME = os.getenv("APP_NAME", "p-terminal/pp-term").replace("\\", "/")
-        USER_NAME = os.getenv("USER_NAME", os.getlogin())
+        try:
+            USER_NAME = os.getenv("USER_NAME") or os.getlogin()
+        except OSError:
+            USER_NAME = "default"
+
         STATE_FILE = Path(f"C:/Users/{USER_NAME}/{APP_NAME}/current_env.json")
 
         print(f"[{timestamp()}] [INFO] Initializing Python REPL startup sequence...")
@@ -19898,7 +19930,7 @@ if __name__ == "__main__":
             print(f"[{timestamp()}] [INFO] Active environment successfully located.")
         except Exception as e:
             print(f"[{timestamp()}] [ERROR] Failed to find active environment: {e}")
-            traceback.print_exc()
+            traceback.print_exc(file=sys.__stderr__)
         else:
             print(f"[{timestamp()}] [INFO] Launching interactive Python REPL.")
             print(f"[{timestamp()}] [INFO] Type 'exit()' or press Ctrl-D to quit.")
@@ -19909,21 +19941,33 @@ if __name__ == "__main__":
                 else:
                     try:
                         local_ns = vars(active)
-                    except TypeError:
-                        print(f"[{timestamp()}] [WARNING] Could not extract vars() from active object; using empty namespace.")
+                    except Exception as e:
+                        print(f"[{timestamp()}] [WARNING] Could not extract vars() from active object; using empty namespace. ({e})")
                         local_ns = {}
 
                 local_ns['STATE_FILE'] = STATE_FILE
 
+                # Überschreibe exit() mit eigener Funktion
+                local_ns['exit'] = my_exit_py
+
+                print(f"[{timestamp()}] [DEBUG] Entering code.interact with namespace keys: {list(local_ns.keys())}")
                 code_module.interact(local=local_ns)
 
+            except EOFError:
+                print(f"[{timestamp()}] [INFO] REPL terminated by simulated Ctrl+D (EOF).")
             except SystemExit:
-                print(f"[{timestamp()}] [INFO] Exiting REPL via SystemExit.")
+                print(f"[{timestamp()}] [INFO] REPL was terminated by SystemExit.")
             except Exception as e:
                 print(f"[{timestamp()}] [ERROR] Unhandled exception during REPL session: {e}")
-                traceback.print_exc()
+                traceback.print_exc(file=sys.__stderr__)
             finally:
                 print(f"[{timestamp()}] [INFO] Python REPL session terminated.")
+
+        try:
+            print(f"[{timestamp()}] [DEBUG] REPL block exited cleanly.")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Output failed after REPL: {e}")
+            traceback.print_exc(file=sys.__stderr__)
 
         return True
 
@@ -24044,6 +24088,11 @@ def switch_theme(user_input: str) -> bool:
         print(f"[{timestamp()}] [ERROR] Failed to apply theme '{choice}': {e}")
 
     return True
+
+
+def my_exit_py():
+    print(f"[{timestamp()}] [INFO] exit() called - exit REPL via SystemExit.")
+    raise SystemExit
 
 
 def run_circuit(circuit: cirq.Circuit, repetitions: int = 1):
