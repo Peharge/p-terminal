@@ -329,6 +329,7 @@
       - PP-Terminal 6.4.1.14
       - PP-Terminal 6.4.1.15
       - PP-Terminal 6.4.1.16
+      - PP-Terminal 6.4.1.18
 
 - PP-Terminal 8
   - PP-Terminal 8.1
