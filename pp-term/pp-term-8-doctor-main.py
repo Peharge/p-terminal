@@ -107,8 +107,7 @@ IGNORED_FOLDERS = {".env", ".github", ".git"}
 IGNORED_PATH_PREFIXES = [
     str(P_TERMINAL_PATH / "pp-term" / "main-test"),
     str(P_TERMINAL_PATH / "peharge-c-compiler"),
-    str(P_TERMINAL_PATH / "peharge-cpp-compiler"),
-
+    str(P_TERMINAL_PATH / "peharge-cpp-compiler")
 ]
 
 # Logging einrichten
