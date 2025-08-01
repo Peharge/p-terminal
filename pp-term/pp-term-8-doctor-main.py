@@ -89,7 +89,8 @@ KNOWN_LOCAL_ARTIFACTS = {
     "installer",
     "target",
     "run_arch_command.exe",
-    "run_lx_command.exe"
+    "run_lx_command.exe",
+    "iq-main.py"
 }
 
 KNOWN_EXTENSIONS = {
@@ -102,9 +103,12 @@ KNOWN_EXTENSIONS = {
 
 IGNORED_FOLDERS = {".env", ".github", ".git"}
 
-# Basisordner, die ebenfalls ignoriert werden sollen (p-terminal/pp-term/main-test)
+# Basisordner, die ebenfalls ignoriert werden sollen (p-terminal/pp-term/main-test, peharge-c-compiler)
 IGNORED_PATH_PREFIXES = [
-    str(P_TERMINAL_PATH / "pp-term" / "main-test")
+    str(P_TERMINAL_PATH / "pp-term" / "main-test"),
+    str(P_TERMINAL_PATH / "peharge-c-compiler"),
+    str(P_TERMINAL_PATH / "peharge-cpp-compiler"),
+
 ]
 
 # Logging einrichten
