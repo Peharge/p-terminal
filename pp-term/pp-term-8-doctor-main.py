@@ -103,11 +103,11 @@ KNOWN_EXTENSIONS = {
 
 IGNORED_FOLDERS = {".env", ".github", ".git"}
 
-# Basisordner, die ebenfalls ignoriert werden sollen (p-terminal/pp-term/main-test, peharge-c-compiler)
+# Basisordner, die ebenfalls ignoriert werden sollen (p-terminal/pp-term/main-test, p-terminal/pp-term/peharge-c-compiler, p-terminal/pp-term/peharge-cpp-compiler)
 IGNORED_PATH_PREFIXES = [
     str(P_TERMINAL_PATH / "pp-term" / "main-test"),
-    str(P_TERMINAL_PATH / "peharge-c-compiler"),
-    str(P_TERMINAL_PATH / "peharge-cpp-compiler")
+    str(P_TERMINAL_PATH / "pp-term" / "peharge-c-compiler"),
+    str(P_TERMINAL_PATH / "pp-term" / "peharge-cpp-compiler")
 ]
 
 # Logging einrichten
