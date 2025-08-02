@@ -1,4 +1,4 @@
-    commands = {
+commands = {
         "peharge": "pp-commands\\peharge.py",
         "pp-term": "pp-commands\\pp-term.py",
         "p jk": "pp-commands\\jk-p.py",
@@ -496,6 +496,7 @@
         "pthonny-lx": "pp-commands\\thonny.py",  # new
         "thonny": "pp-commands\\thonny-win.py",  # new
         "pthonny": "pp-commands\\thonny-win.py",  # new
+        "notepad++": "pp-commands\\notepadpp.py",  # new
         "micro": "pp-commands\\micro.py",  # new
         "gedit": "pp-commands\\gedit.py",  # new
         "update": "pp-commands\\update.py",  # new
@@ -640,6 +641,7 @@
         "install pthonny-lx": "pp-commands\\thonny.py",  # new
         "install thonny": "pp-commands\\thonny-win.py",  # new
         "install pthonny": "pp-commands\\thonny-win.py",  # new
+        "install notepad++": "pp-commands\\notepadpp.py",  # new
         "install micro": "pp-commands\\micro.py",  # new
         "install gedit": "pp-commands\\gedit.py",  # new
         "install update": "pp-commands\\update.py",  # new
@@ -916,6 +918,7 @@
         "pi pthonny-lx": "pp-commands\\thonny.py",  # new
         "pi thonny": "pp-commands\\thonny-win.py",  # new
         "pi pthonny": "pp-commands\\thonny-win.py",  # new
+        "pi notepad++": "pp-commands\\notepadpp.py",  # new
         "pi micro": "pp-commands\\micro.py",  # new
         "pi gedit": "pp-commands\\gedit.py",  # new
         "pi update": "pp-commands\\update.py",  # new
