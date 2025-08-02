@@ -5214,6 +5214,72 @@ if __name__ == "__main__":
 
         return True
 
+    if user_input.startswith("prn++ "):
+        NOTEPADPP_PATHS = [
+            r"C:\Program Files\Notepad++\notepad++.exe",
+            r"C:\Program Files (x86)\Notepad++\notepad++.exe",
+        ]
+
+        def find_notepadpp():
+            for path in NOTEPADPP_PATHS:
+                if os.path.isfile(path):
+                    return path
+            return None
+
+        notepadpp_path = find_notepadpp()
+
+        if not notepadpp_path:
+            print("[ERROR] Notepad++ executable not found. Please install or add it to PATH.")
+            return True
+
+        args = user_input[len("prn++ "):]
+        args_list = args.split()
+
+        # Prüfen, ob mindestens ein Argument (Dateipfad) übergeben wurde
+        if len(args_list) == 0:
+            print("[ERROR] Kein Dateipfad angegeben.")
+            return True
+
+        filepath = args_list[0]
+
+        # Wenn Datei neu und endet auf .py, dann Template reinschreiben
+        if filepath.endswith(".py") and not os.path.exists(filepath):
+            try:
+                with open(filepath, "w", encoding="utf-8") as f:
+                    f.write(f"""# -----------------------------------------------------------
+# 🐍 Welcome to your new Python file!
+# You have created a new Python file using the PP-Terminal.
+# -----------------------------------------------------------
+#
+# This is a basic starting template to help you get going.
+# Feel free to modify or delete this code and write your own!
+# Happy coding! 🚀
+
+def main():
+  print("👋 Hello, developer!")
+  print("This file was created via the PP-Terminal.")
+  print("Need help? Type 'help()' in the Terminal.")
+
+# Call the main function when this script runs
+if __name__ == "__main__":
+  main()
+""")
+                print(f"[{timestamp()}] [INFO] Neue Python-Datei mit Template erstellt: {filepath}")
+            except Exception as e:
+                print(f"[ERROR] Fehler beim Erstellen der Datei: {e}")
+                return True
+
+        print(f"[{timestamp()}] [INFO] Executing Notepad++ command with full path...")
+
+        try:
+            subprocess.run([notepadpp_path] + args_list, check=True)
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error executing Notepad++ command: {e}")
+
+        return True
+
     if user_input.startswith("gedit "):
         print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
