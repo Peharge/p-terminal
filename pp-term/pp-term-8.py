@@ -5237,7 +5237,7 @@ if __name__ == "__main__":
 
         # Prüfen, ob mindestens ein Argument (Dateipfad) übergeben wurde
         if len(args_list) == 0:
-            print("[ERROR] Kein Dateipfad angegeben.")
+            print("[ERROR] No file path specified.")
             return True
 
         filepath = args_list[0]
@@ -5264,9 +5264,9 @@ def main():
 if __name__ == "__main__":
   main()
 """)
-                print(f"[{timestamp()}] [INFO] Neue Python-Datei mit Template erstellt: {filepath}")
+                print(f"[{timestamp()}] [INFO] New Python file created with template: {filepath}")
             except Exception as e:
-                print(f"[ERROR] Fehler beim Erstellen der Datei: {e}")
+                print(f"[ERROR] Error creating file: {e}")
                 return True
 
         print(f"[{timestamp()}] [INFO] Executing Notepad++ command with full path...")
