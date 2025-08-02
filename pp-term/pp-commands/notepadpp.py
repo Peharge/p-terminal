@@ -80,34 +80,35 @@ logging.basicConfig(
 )
 
 def is_npp_installed():
-    """Checks if Notepad++ is installed and available in PATH."""
+    """Check if Notepad++ is installed and available in PATH."""
     return shutil.which("notepad++") is not None
 
 def install_npp():
-    """Installs Notepad++ using winget."""
-    logging.info("[INFO] Notepad++ ist nicht installiert. Versuche Installation via winget...")
+    """Install Notepad++ using winget."""
+    logging.info("[INFO] Notepad++ is not installed. Attempting installation via winget...")
     try:
         subprocess.run(
-            ["winget", "install", "-e", "--id", "Notepad++.Notepad++", "--accept-package-agreements", "--accept-source-agreements"],
+            ["winget", "install", "-e", "--id", "Notepad++.Notepad++",
+             "--accept-package-agreements", "--accept-source-agreements"],
             check=True
         )
-        logging.info("[INFO] Notepad++ wurde erfolgreich installiert.")
+        logging.info("[INFO] Notepad++ was successfully installed.")
     except subprocess.CalledProcessError as e:
-        logging.error(f"[ERROR] Installation fehlgeschlagen mit Exit-Code {e.returncode}")
+        logging.error(f"[ERROR] Installation failed with exit code {e.returncode}")
         sys.exit(e.returncode)
 
 def run_npp():
-    """Runs Notepad++."""
-    logging.info("[INFO] Starte Notepad++...")
+    """Launch Notepad++."""
+    logging.info("[INFO] Launching Notepad++...")
     try:
         subprocess.run(["notepad++"], check=True)
     except FileNotFoundError:
-        logging.error("[ERROR] Notepad++ konnte nicht gefunden werden.")
+        logging.error("[ERROR] Notepad++ could not be found.")
     except subprocess.CalledProcessError as e:
-        logging.error(f"[ERROR] Notepad++ wurde mit Fehlercode {e.returncode} beendet")
+        logging.error(f"[ERROR] Notepad++ exited with error code {e.returncode}")
 
 def main():
-    """Main function to ensure Notepad++ is installed and run it."""
+    """Ensure Notepad++ is installed, then launch it."""
     if not is_npp_installed():
         install_npp()
     run_npp()
