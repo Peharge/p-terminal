@@ -5184,14 +5184,34 @@ if __name__ == "__main__":
         return True
 
     if user_input.startswith("notepad++ "):
-        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+        NOTEPADPP_PATHS = [
+            r"C:\Program Files\Notepad++\notepad++.exe",
+            r"C:\Program Files (x86)\Notepad++\notepad++.exe",
+        ]
+
+        def find_notepadpp():
+            for path in NOTEPADPP_PATHS:
+                if os.path.isfile(path):
+                    return path
+            return None
+
+        notepadpp_path = find_notepadpp()
+
+        if not notepadpp_path:
+            print("[ERROR] Notepad++ executable not found. Please install or add it to PATH.")
+            return True
+
+        args = user_input[len("notepad++ "):]
+
+        print(f"[{timestamp()}] [INFO] Executing Notepad++ command with full path...")
 
         try:
-            run_command(user_input, shell=True)
+            subprocess.run([notepadpp_path] + args.split(), check=True)
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] Error executing Notepad++ command: {e}")
+
         return True
 
     if user_input.startswith("gedit "):
