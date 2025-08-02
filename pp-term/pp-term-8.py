@@ -32571,6 +32571,13 @@ def main():
                 current_dir = Path.cwd().resolve()
                 new_folder_path = current_dir / folder_name
 
+                def find_existing_venvs(directory: Path):
+                    venvs = []
+                    for item in directory.iterdir():
+                        if item.is_dir() and (item / "pyvenv.cfg").exists():
+                            venvs.append(item.name)
+                    return venvs
+
                 # Ordner erstellen, falls er nicht existiert
                 if new_folder_path.exists():
                     print(f"[{timestamp()}] [INFO] Folder already exists: {new_folder_path}")
