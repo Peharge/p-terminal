@@ -1431,6 +1431,7 @@ def handle_special_commands(user_input):
         "pthonny-lx": "pp-commands\\thonny.py",  # new
         "thonny": "pp-commands\\thonny-win.py",  # new
         "pthonny": "pp-commands\\thonny-win.py",  # new
+        "notepad++": "pp-commands\\notepadpp.py",  # new
         "micro": "pp-commands\\micro.py",  # new
         "gedit": "pp-commands\\gedit.py",  # new
         "update": "pp-commands\\update.py",  # new
@@ -1575,6 +1576,7 @@ def handle_special_commands(user_input):
         "install pthonny-lx": "pp-commands\\thonny.py",  # new
         "install thonny": "pp-commands\\thonny-win.py",  # new
         "install pthonny": "pp-commands\\thonny-win.py",  # new
+        "install notepad++": "pp-commands\\notepadpp.py",  # new
         "install micro": "pp-commands\\micro.py",  # new
         "install gedit": "pp-commands\\gedit.py",  # new
         "install update": "pp-commands\\update.py",  # new
@@ -1851,6 +1853,7 @@ def handle_special_commands(user_input):
         "pi pthonny-lx": "pp-commands\\thonny.py",  # new
         "pi thonny": "pp-commands\\thonny-win.py",  # new
         "pi pthonny": "pp-commands\\thonny-win.py",  # new
+        "pi notepad++": "pp-commands\\notepadpp.py",  # new
         "pi micro": "pp-commands\\micro.py",  # new
         "pi gedit": "pp-commands\\gedit.py",  # new
         "pi update": "pp-commands\\update.py",  # new
@@ -5178,6 +5181,17 @@ if __name__ == "__main__":
                 print(f"[{timestamp()}] [ERROR] An error occurred: {e}")
                 shutdown_thonny()
 
+        return True
+
+    if user_input.startswith("notepad++ "):
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
+        try:
+            run_command(user_input, shell=True)
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error executing Notepad++ command: {e}")
         return True
 
     if user_input.startswith("gedit "):
