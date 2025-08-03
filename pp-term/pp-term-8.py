@@ -4679,6 +4679,26 @@ def handle_special_commands(user_input):
 # This is a basic starting template to help you get going.
 # Feel free to modify or delete this code and write your own!
 # Happy coding! 🚀
+#
+# 💡 Note about using your virtual environment (venv) in VS Code:
+#
+# This tool automatically sets your active venv path in
+# .vscode/settings.json (e.g. "python.defaultInterpreterPath").
+#
+# However, when debugging, VS Code may still use the default
+# system Python interpreter if the debug configuration isn't set up properly.
+#
+# To ensure your venv is used during debugging:
+# 1. Open the Command Palette (Ctrl+Shift+P / Cmd+Shift+P).
+# 2. Run 'Python: Select Interpreter' and choose your venv interpreter.
+# 3. Check your launch.json (under .vscode/) debug configuration:
+#    Make sure the "python" path points to your venv's python.exe.
+#
+# Alternatively, delete and re-create your debug configuration
+# after selecting the correct interpreter, so VS Code picks it up.
+#
+# This ensures both running and debugging use the correct Python environment.
+#
 
 def main():
     print("👋 Hello, developer!")
@@ -4688,6 +4708,7 @@ def main():
 if __name__ == "__main__":
     main()
 """)
+
                 print(f"[{timestamp()}] [INFO] Created new Python file: {filepath}")
             else:
                 print(f"[{timestamp()}] [INFO] File already exists: {filepath}")
@@ -4700,12 +4721,14 @@ if __name__ == "__main__":
                 try:
                     with open(json_path, "r", encoding="utf-8") as jf:
                         data = json.load(jf)
-                        interpreter_path = data.get("active_env", "").strip()
-                        if not interpreter_path:
+                        base_env_path = data.get("active_env", "").strip()
+                        if not base_env_path:
                             print(f"[{timestamp()}] [WARNING] 'active_env' is empty or missing in JSON file.")
                             interpreter_path = None
                         else:
-                            print(f"[{timestamp()}] [INFO] Loaded interpreter from JSON: {interpreter_path}")
+                            # Interpreter-Pfad zusammenbauen, indem "\Scripts\python.exe" angehängt wird
+                            interpreter_path = os.path.join(base_env_path, "Scripts", "python.exe")
+                            print(f"[{timestamp()}] [INFO] Constructed interpreter path: {interpreter_path}")
                 except json.JSONDecodeError:
                     print(f"[{timestamp()}] [ERROR] Invalid JSON in interpreter config file.")
                 except Exception as e:
