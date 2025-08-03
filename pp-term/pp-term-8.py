@@ -4736,35 +4736,45 @@ if __name__ == "__main__":
             else:
                 print(f"[{timestamp()}] [WARNING] Interpreter config file not found: {json_path}")
 
-            # 3. .vscode/settings.json im Dateiverzeichnis setzen
+            # 3. .vscode/settings.json im Dateiverzeichnis setzen,
+            #    aber nur wenn die Datei im Workspace-Root liegt (nicht tief verschachtelt)
             if interpreter_path:
                 try:
-                    vscode_folder = os.path.join(os.path.dirname(filepath), ".vscode")
-                    settings_path = os.path.join(vscode_folder, "settings.json")
-                    os.makedirs(vscode_folder, exist_ok=True)
+                    folder_of_file = os.path.dirname(filepath)
+                    abs_folder = os.path.abspath(folder_of_file)
 
-                    settings_data = {
-                        "python.defaultInterpreterPath": interpreter_path
-                    }
+                    # Nur wenn Datei direkt im Ordner liegt, der als Workspace dienen kann
+                    if os.path.samefile(folder_of_file, abs_folder):
+                        vscode_folder = os.path.join(folder_of_file, ".vscode")
+                        settings_path = os.path.join(vscode_folder, "settings.json")
+                        os.makedirs(vscode_folder, exist_ok=True)
 
-                    with open(settings_path, "w", encoding="utf-8") as sf:
-                        json.dump(settings_data, sf, indent=2)
+                        settings_data = {
+                            "python.defaultInterpreterPath": interpreter_path
+                        }
 
-                    print(f"[{timestamp()}] [INFO] VS Code interpreter set in: {settings_path}")
+                        with open(settings_path, "w", encoding="utf-8") as sf:
+                            json.dump(settings_data, sf, indent=2)
+
+                        print(f"[{timestamp()}] [INFO] VS Code interpreter set in: {settings_path}")
+                    else:
+                        print(f"[{timestamp()}] [INFO] Skipped VS Code settings: file not in workspace root directory.")
                 except Exception as e:
                     print(f"[{timestamp()}] [ERROR] Failed to write VS Code settings: {e}")
             else:
                 print(f"[{timestamp()}] [INFO] Skipping VS Code interpreter setup (no path available).")
 
-            # 4. Datei in VS Code öffnen (ohne shell=True)
+            # 4. Ordner als Workspace in VS Code öffnen (nicht nur Datei)
             try:
-                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
-                command = f"code {filepath}"
+                folder_to_open = os.path.dirname(filepath)
+                print(f"[{timestamp()}] [INFO] Launching VS Code workspace at: {folder_to_open}")
+
+                command = f'code "{folder_to_open}" "{filepath}"'  # Öffnet Workspace-Ordner + fokussiert die Datei im Editor
                 process = subprocess.Popen(command, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
                                            stderr=subprocess.DEVNULL, shell=True, text=True)
 
                 process.wait()
-                print(f"[{timestamp()}] [INFO] VS Code launched successfully.")
+                print(f"[{timestamp()}] [INFO] VS Code launched successfully as workspace.")
             except Exception as e:
                 print(f"[{timestamp()}] [ERROR] Failed to launch VS Code: {e}")
 
