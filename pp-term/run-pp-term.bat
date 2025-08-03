@@ -66,18 +66,67 @@ REM Veuillez lire l'intégralité des termes et conditions de la licence MIT pou
 setlocal EnableExtensions EnableDelayedExpansion
 chcp 65001
 
+:: === ANSI Farbdefinitionen ===
+set "ESC="
+set "RED=%ESC%[91m"
+set "GREEN=%ESC%[92m"
+set "YELLOW=%ESC%[93m"
+set "BLUE=%ESC%[94m"
+set "MAGENTA=%ESC%[95m"
+set "CYAN=%ESC%[96m"
+set "WHITE=%ESC%[97m"
+set "RESET=%ESC%[0m"
+
+:: === Standardfarben setzen ===
+set "main_color=%BLUE%"         :: Für ANSI Echo
+set "main_color_ps=Blue"        :: Für PowerShell Write-Host
+
+:: === JSON-Datei festlegen ===
+set "json_file=C:\Users\%USERNAME%\p-terminal\pp-term\state-info.json"
+
+:: === Prüfen, ob Datei existiert ===
+if not exist "%json_file%" (
+    echo %RED%[Fehler]%RESET% JSON-Datei nicht gefunden: "%json_file%"
+    goto :eof
+)
+
+:: === State aus JSON extrahieren ===
+set "state="
+
+for /f "usebackq tokens=*" %%A in ("%json_file%") do (
+    set "line=%%A"
+    echo !line! | findstr /i "\"state\"" >nul
+    if !errorlevel! == 0 (
+        for /f "tokens=2 delims=:" %%B in ("!line!") do (
+            set "state_raw=%%B"
+            set "state=!state_raw:"=!"
+            set "state=!state: =!"
+        )
+    )
+)
+
+:: === Farbe anhand des Status festlegen ===
+if defined state (
+    echo !state! | findstr /i "adv" >nul && (
+        set "main_color=%GREEN%"
+        set "main_color_ps=Green"
+    )
+    echo !state! | findstr /i "evil" >nul && (
+        set "main_color=%RED%"
+        set "main_color_ps=Red"
+    )
+)
+
+:: === Logo anzeigen mit dynamischer Farbe in PowerShell ===
 echo.
-powershell -Command "& {Write-Host '██████╗ ██████╗    ' -ForegroundColor Blue -NoNewline; Write-Host '████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗' -ForegroundColor White; Write-Host '██╔══██╗██╔══██╗   ' -ForegroundColor Blue -NoNewline; Write-Host '╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║' -ForegroundColor White; Write-Host '██████╔╝██████╔╝' -ForegroundColor Blue -NoNewline; Write-Host '█████╗██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║' -ForegroundColor White; Write-Host '██╔═══╝ ██╔═══╝ ' -ForegroundColor Blue -NoNewline; Write-Host '╚════╝██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║██║' -ForegroundColor White; Write-Host '██║     ██║           ' -ForegroundColor Blue -NoNewline; Write-Host '██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗' -ForegroundColor White; Write-Host '╚═╝     ╚═╝           ' -ForegroundColor Blue -NoNewline; Write-Host '╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝' -ForegroundColor White;}"
+powershell -Command "& {Write-Host '██████╗ ██████╗    ' -ForegroundColor %main_color_ps% -NoNewline; Write-Host '████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗' -ForegroundColor White; Write-Host '██╔══██╗██╔══██╗   ' -ForegroundColor %main_color_ps% -NoNewline; Write-Host '╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║' -ForegroundColor White; Write-Host '██████╔╝██████╔╝' -ForegroundColor %main_color_ps% -NoNewline; Write-Host '█████╗██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║' -ForegroundColor White; Write-Host '██╔═══╝ ██╔═══╝ ' -ForegroundColor %main_color_ps% -NoNewline; Write-Host '╚════╝██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║██║' -ForegroundColor White; Write-Host '██║     ██║           ' -ForegroundColor %main_color_ps% -NoNewline; Write-Host '██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗' -ForegroundColor White; Write-Host '╚═╝     ╚═╝           ' -ForegroundColor %main_color_ps% -NoNewline; Write-Host '╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝' -ForegroundColor White;}"
 echo.
 powershell -Command "& {Write-Host '██╗      █████╗ ██╗   ██╗███╗   ██╗ ██████╗██╗  ██╗███████╗██████╗' -ForegroundColor White; Write-Host '██║     ██╔══██╗██║   ██║████╗  ██║██╔════╝██║  ██║██╔════╝██╔══██╗' -ForegroundColor White; Write-Host '██║     ███████║██║   ██║██╔██╗ ██║██║     ███████║█████╗  ██████╔╝' -ForegroundColor White; Write-Host '██║     ██╔══██║██║   ██║██║╚██╗██║██║     ██╔══██║██╔══╝  ██╔══██╗' -ForegroundColor White; Write-Host '███████╗██║  ██║╚██████╔╝██║ ╚████║╚██████╗██║  ██║███████╗██║  ██║' -ForegroundColor White; Write-Host '╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝' -ForegroundColor White;}"
 echo.
 
-:: Set ANSI Escape Sequences
-set "ESC=\e"
-set "BLUE=[94m"
-set "RESET=[0m"
-
-echo A warm welcome, %BLUE%%USERNAME%%RESET%, to Peharge Python Terminal!
+:: === Benutzerbegrüßung mit ANSI-Farben ===
+echo.
+echo A warm welcome, %main_color%%USERNAME%%RESET%, to Peharge Python Terminal!
 echo Developed by Peharge and JK (Peharge Projects 2025)
 echo Thank you so much for using PP-Terminal. We truly appreciate your support ❤️
 echo.
@@ -170,7 +219,8 @@ if /I "%consent%"=="y" (
 echo.
 
 :START
-echo Initializing PP-Terminal 8
+echo.
+echo Initializing %main_color%PP-Terminal 8%RESET%
 echo Gooo...
 echo.
 
