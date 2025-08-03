@@ -4672,22 +4672,22 @@ def handle_special_commands(user_input):
             if not os.path.exists(filepath):
                 with open(filepath, "w", encoding="utf-8") as f:
                     f.write("""# -----------------------------------------------------------
-    # 🐍 Welcome to your new Python file!
-    # You have created a new Python file using the PP-Terminal.
-    # -----------------------------------------------------------
-    #
-    # This is a basic starting template to help you get going.
-    # Feel free to modify or delete this code and write your own!
-    # Happy coding! 🚀
+# 🐍 Welcome to your new Python file!
+# You have created a new Python file using the PP-Terminal.
+# -----------------------------------------------------------
+#
+# This is a basic starting template to help you get going.
+# Feel free to modify or delete this code and write your own!
+# Happy coding! 🚀
 
-    def main():
-        print("👋 Hello, developer!")
-        print("This file was created via the PP-Terminal.")
-        print("Need help? Type 'help()' in the Terminal.")
+def main():
+    print("👋 Hello, developer!")
+    print("This file was created via the PP-Terminal.")
+    print("Need help? Type 'help()' in the Terminal.")
 
-    if __name__ == "__main__":
-        main()
-    """)
+if __name__ == "__main__":
+    main()
+""")
                 print(f"[{timestamp()}] [INFO] Created new Python file: {filepath}")
             else:
                 print(f"[{timestamp()}] [INFO] File already exists: {filepath}")
