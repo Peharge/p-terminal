@@ -89,7 +89,31 @@ if (!(Test-Path $logDir)) {
 }
 
 try {
-    Write-Log INFO "Launching PP-Term 8 script with max CPU affinity, highest priority, and full RAM execution..."
+    # Start-Log
+    function Get-StateInfo {
+        $jsonPath = "C:/Users/$env:USERNAME/p-terminal/pp-term/state-info.json"
+        $json = Get-Content -Raw -Path $jsonPath | ConvertFrom-Json
+        return $json.state
+    }
+
+    $state = Get-StateInfo
+
+    # Farbe wählen (PowerShell-Farben)
+    if ($state -like "*adv*") {
+        $color = "Green"
+    } elseif ($state -like "*evil*") {
+        $color = "Red"
+    } else {
+        $color = "Blue"
+    }
+
+    $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss.fff"
+    $logLevel = "[INFO]"
+
+    # Für Konsole farbig ausgeben
+    Write-Host "[$timestamp] $logLevel Launching " -NoNewline
+    Write-Host "PP-Terminal 8" -ForegroundColor $color -NoNewline
+    Write-Host " script with max CPU affinity, highest priority, and full RAM execution..."
     Write-Log INFO "If the PP-Terminal fails to start correctly, please execute p-terminal\pp-term\run-pp-term.bat again to ensure the latest dependencies, drivers, and frameworks are installed."
 
     # Check for file existence
