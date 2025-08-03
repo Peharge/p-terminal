@@ -4653,6 +4653,110 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
         return True
 
+    if user_input.startswith("prcode "):
+        user_input_path = user_input[7:].strip()
+        filepath = os.path.abspath(user_input_path)
+
+        # Sicherer Basisordner (bitte an dein System anpassen)
+        safe_base_dir = f"C:/Users/{os.getlogin()}/projects"
+
+        # Pfad-Sicherheit prüfen: Datei muss im safe_base_dir liegen
+        if not os.path.commonpath([safe_base_dir]) == os.path.commonpath([safe_base_dir, filepath]):
+            print(f"[{timestamp()}] [ERROR] Unsafe file path detected: {filepath}")
+            return False
+
+        print(f"[{timestamp()}] [INFO] Starting 'prcode' operation for file: {filepath}")
+
+        try:
+            # 1. Python-Datei erstellen, falls sie nicht existiert
+            if not os.path.exists(filepath):
+                with open(filepath, "w", encoding="utf-8") as f:
+                    f.write("""# -----------------------------------------------------------
+    # 🐍 Welcome to your new Python file!
+    # You have created a new Python file using the PP-Terminal.
+    # -----------------------------------------------------------
+    #
+    # This is a basic starting template to help you get going.
+    # Feel free to modify or delete this code and write your own!
+    # Happy coding! 🚀
+
+    def main():
+        print("👋 Hello, developer!")
+        print("This file was created via the PP-Terminal.")
+        print("Need help? Type 'help()' in the Terminal.")
+
+    if __name__ == "__main__":
+        main()
+    """)
+                print(f"[{timestamp()}] [INFO] Created new Python file: {filepath}")
+            else:
+                print(f"[{timestamp()}] [INFO] File already exists: {filepath}")
+
+            # 2. JSON-Konfiguration mit Interpreterpfad einlesen
+            json_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/current_env.json")
+            interpreter_path = None
+
+            if json_path.exists():
+                try:
+                    with open(json_path, "r", encoding="utf-8") as jf:
+                        data = json.load(jf)
+                        interpreter_path = data.get("active_env", "").strip()
+                        if not interpreter_path:
+                            print(f"[{timestamp()}] [WARNING] 'active_env' is empty or missing in JSON file.")
+                            interpreter_path = None
+                        else:
+                            print(f"[{timestamp()}] [INFO] Loaded interpreter from JSON: {interpreter_path}")
+                except json.JSONDecodeError:
+                    print(f"[{timestamp()}] [ERROR] Invalid JSON in interpreter config file.")
+                except Exception as e:
+                    print(f"[{timestamp()}] [ERROR] Failed to read interpreter config: {e}")
+            else:
+                print(f"[{timestamp()}] [WARNING] Interpreter config file not found: {json_path}")
+
+            # 3. .vscode/settings.json im Dateiverzeichnis setzen
+            if interpreter_path:
+                try:
+                    vscode_folder = os.path.join(os.path.dirname(filepath), ".vscode")
+                    settings_path = os.path.join(vscode_folder, "settings.json")
+                    os.makedirs(vscode_folder, exist_ok=True)
+
+                    settings_data = {
+                        "python.defaultInterpreterPath": interpreter_path
+                    }
+
+                    with open(settings_path, "w", encoding="utf-8") as sf:
+                        json.dump(settings_data, sf, indent=2)
+
+                    print(f"[{timestamp()}] [INFO] VS Code interpreter set in: {settings_path}")
+                except Exception as e:
+                    print(f"[{timestamp()}] [ERROR] Failed to write VS Code settings: {e}")
+            else:
+                print(f"[{timestamp()}] [INFO] Skipping VS Code interpreter setup (no path available).")
+
+            # 4. Datei in VS Code öffnen (ohne shell=True)
+            try:
+                process = subprocess.Popen(
+                    ["code", filepath],
+                    stdin=subprocess.DEVNULL,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                    shell=False,
+                    text=True
+                )
+                process.wait()
+                print(f"[{timestamp()}] [INFO] VS Code launched successfully.")
+            except Exception as e:
+                print(f"[{timestamp()}] [ERROR] Failed to launch VS Code: {e}")
+
+            return_value = True
+
+        except Exception as e:
+            print(f"[{timestamp()}] [FATAL] Unexpected error during 'prcode': {e}")
+            return_value = False
+
+        print(f"[{timestamp()}] [INFO] 'prcode' operation complete.")
+        return return_value
+
     if user_input.startswith("thonny-lx "):
         user_input = user_input[10:].strip()
         print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
