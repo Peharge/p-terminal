@@ -268,7 +268,7 @@ REM Überprüfen, ob das Skript im Windows Terminal läuft
 if defined WT_SESSION (
     call :Log PASS "✅ The script is executed in the Windows Terminal."
 ) else (
-    call :Log ERROR "❌ Please use Windows Terminal to run this script, not Kitty or any other type of terminal."
+    call :Log ERROR "❌ Please use Windows Terminal to run this script, not Kitty or any other type of Terminal."
     pause
     exit /b 1
 )
@@ -277,7 +277,7 @@ if defined WT_SESSION (
 systeminfo | findstr /i "Virtual" "VMware" "Hyper-V" "VirtualBox" >nul
 if !errorlevel! equ 0 (
     call :Log ERROR "❌ Virtual Machine or Hypervisor detected!"
-    echo The terminal will be closed for security reasons.
+    echo The Terminal will be closed for security reasons.
     exit
 ) else (
     call :Log PASS "✅ No Virtual Machine detected."
@@ -831,7 +831,7 @@ if %errorlevel% neq 0 (
                             exit /B 1
                         )
 
-                        call :Log INFO "It may be that the .env has not yet been created under P-Terminal..."
+                        call :Log INFO "It may be that the .env has not yet been created under p-terminal\pp-term\..."
 
                         "%PYTHON_PATH%" "%SCRIPT_install_rustup%"
 
@@ -884,7 +884,7 @@ if %errorlevel% neq 0 (
     echo    - Then install PowerShell
     echo      scoop install pwsh
     echo.
-    echo Note After installation, use pwsh to start PowerShell 7 from any terminal.
+    echo Note After installation, use pwsh to start PowerShell 7 from any Terminal.
     echo.
     echo You may choose any of the above trusted methods based on your environment and preferences.
     echo This script will attempt silent installation of PowerShell 7 via direct download if not already present.
@@ -947,7 +947,7 @@ if exist "%SLICER_PATH%" (
 
     echo.
     echo Recommended Methods for Installing 3D Slicer
-    echo Installing 3D Slicer isn't required to run PP-Terminal. However, if you plan to use SIMON, installing 3D Slicer is mandatory. If you encounter any problems during installation, simply run the Install 3d-slicer command in the pp terminal. This installation method is significantly more secure!
+    echo Installing 3D Slicer isn't required to run PP-Terminal. However, if you plan to use SIMON, installing 3D Slicer is mandatory. If you encounter any problems during installation, simply run the Install 3d-slicer command in the PP-Terminal. This installation method is significantly more secure!
     echo.
     echo 1. Official 3D Slicer Website
     echo    - Download
