@@ -4672,38 +4672,40 @@ def handle_special_commands(user_input):
             if not os.path.exists(filepath):
                 with open(filepath, "w", encoding="utf-8") as f:
                     f.write("""# -----------------------------------------------------------
-# 🐍 Welcome to your new Python file!
-# You have created a new Python file using the PP-Terminal.
+# 🐍 Python File Generated Automatically by PP-Terminal
 # -----------------------------------------------------------
 #
-# This is a basic starting template to help you get going.
-# Feel free to modify or delete this code and write your own!
+# This Python script was created through a series of automated
+# steps performed by the PP-Terminal tool to facilitate your
+# development workflow.
+#
+# Summary of operations performed prior to file creation:
+# 1. Validation of the provided file path to ensure it resides
+#    within the authorized user directory for security purposes.
+# 2. Creation of a new Python source file at the specified location,
+#    since it did not previously exist.
+# 3. Loading and parsing of the environment configuration from a JSON
+#    file to determine the active Python interpreter.
+# 4. Construction and verification of the absolute path to the Python
+#    interpreter associated with the active environment.
+# 5. Configuration of Visual Studio Code workspace settings to specify
+#    the default interpreter path, enabling seamless IDE integration.
+# 6. Launching Visual Studio Code with the project folder opened as
+#    a workspace, with focus on the newly created Python file.
+#
+# This automated process is designed to provide you with a ready-to-use
+# Python file and development environment configured according to your
+# current settings.
+#
+# You are encouraged to modify this template as needed to fit your
+# project requirements.
+#
 # Happy coding! 🚀
-#
-# 💡 Note about using your virtual environment (venv) in VS Code:
-#
-# This tool automatically sets your active venv path in
-# .vscode/settings.json (e.g. "python.defaultInterpreterPath").
-#
-# However, when debugging, VS Code may still use the default
-# system Python interpreter if the debug configuration isn't set up properly.
-#
-# To ensure your venv is used during debugging:
-# 1. Open the Command Palette (Ctrl+Shift+P / Cmd+Shift+P).
-# 2. Run 'Python: Select Interpreter' and choose your venv interpreter.
-# 3. Check your launch.json (under .vscode/) debug configuration:
-#    Make sure the "python" path points to your venv's python.exe.
-#
-# Alternatively, delete and re-create your debug configuration
-# after selecting the correct interpreter, so VS Code picks it up.
-#
-# This ensures both running and debugging use the correct Python environment.
-#
 
 def main():
     print("👋 Hello, developer!")
-    print("This file was created via the PP-Terminal.")
-    print("Need help? Type 'help()' in the Terminal.")
+    print("This file was generated automatically by PP-Terminal.")
+    print("For assistance, type 'help()' in the Terminal.")
 
 if __name__ == "__main__":
     main()
