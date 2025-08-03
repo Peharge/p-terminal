@@ -4658,14 +4658,14 @@ def handle_special_commands(user_input):
         filepath = os.path.abspath(user_input_path)
 
         # Sicherer Basisordner (bitte an dein System anpassen)
-        safe_base_dir = f"C:/Users/{os.getlogin()}/projects"
+        safe_base_dir = f"C:/Users/{os.getlogin()}"
 
         # Pfad-Sicherheit prüfen: Datei muss im safe_base_dir liegen
         if not os.path.commonpath([safe_base_dir]) == os.path.commonpath([safe_base_dir, filepath]):
             print(f"[{timestamp()}] [ERROR] Unsafe file path detected: {filepath}")
-            return False
+            return True
 
-        print(f"[{timestamp()}] [INFO] Starting 'prcode' operation for file: {filepath}")
+        print(f"[{timestamp()}] [INFO] Starting 'vs code' operation for file: {filepath}")
 
         try:
             # 1. Python-Datei erstellen, falls sie nicht existiert
@@ -4735,27 +4735,21 @@ if __name__ == "__main__":
 
             # 4. Datei in VS Code öffnen (ohne shell=True)
             try:
-                process = subprocess.Popen(
-                    ["code", filepath],
-                    stdin=subprocess.DEVNULL,
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL,
-                    shell=False,
-                    text=True
-                )
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+                command = f"code {filepath}"
+                process = subprocess.Popen(command, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
+                                           stderr=subprocess.DEVNULL, shell=True, text=True)
+
                 process.wait()
                 print(f"[{timestamp()}] [INFO] VS Code launched successfully.")
             except Exception as e:
                 print(f"[{timestamp()}] [ERROR] Failed to launch VS Code: {e}")
 
-            return_value = True
-
         except Exception as e:
-            print(f"[{timestamp()}] [FATAL] Unexpected error during 'prcode': {e}")
-            return_value = False
+            print(f"[{timestamp()}] [FATAL] Unexpected error during 'vs code': {e}")
 
-        print(f"[{timestamp()}] [INFO] 'prcode' operation complete.")
-        return return_value
+        print(f"[{timestamp()}] [INFO] 'vs code' operation complete.")
+        return True
 
     if user_input.startswith("thonny-lx "):
         user_input = user_input[10:].strip()
