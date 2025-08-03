@@ -256,7 +256,7 @@ def print_banner():
     remote_total, behind = get_commit_info(local_repo_path)
     remote_total_all = 500 + 971 + remote_total
     if behind != 0:
-        print(f"[{timestamp()}] [INFO] The local repository is {main_color}{behind}{reset} commits behind the remote repository, which contains a total of main {main_color}{remote_total}{reset}/ hole {main_color}{remote_total_all}{reset} commits. You can easily update by running 'update' in the PP-terminal.")
+        print(f"[{timestamp()}] [INFO] The local repository is {main_color}{behind}{reset} commits behind the remote repository, which contains a total of main {main_color}{remote_total}{reset}/ hole {main_color}{remote_total_all}{reset} commits. You can easily update by running 'update' in the PP-Terminal.")
 
     print(f"""
 {main_color}██████╗ ██████╗{reset}{white}    ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗     {reset}
@@ -34126,13 +34126,13 @@ def main():
             elif user_input.startswith("pov "):
                 user_input = user_input[4:]
                 print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
-                print(f"[{timestamp()}] [INFO] Please note that the pov command supports only CMD commands, no PP terminal and the command was specifically developed for managing virtual environments, so not all CMD commands may be compatible.")
+                print(f"[{timestamp()}] [INFO] Please note that the pov command supports only CMD commands, no PP-Terminal and the command was specifically developed for managing virtual environments, so not all CMD commands may be compatible.")
                 run_command_ov(user_input, shell=True)
 
             elif user_input.startswith("pp-pov "):
                 user_input = user_input[7:]
                 print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command with shell=True — this can be insecure!")
-                print(f"[{timestamp()}] [INFO] Please note that the pov command supports only CMD commands, no PP terminal and the command was specifically developed for managing virtual environments, so not all CMD commands may be compatible.")
+                print(f"[{timestamp()}] [INFO] Please note that the pov command supports only CMD commands, no PP-Terminal and the command was specifically developed for managing virtual environments, so not all CMD commands may be compatible.")
                 run_command_ov(user_input, shell=True)
 
             elif user_input.startswith("pp "):
