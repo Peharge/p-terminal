@@ -221,7 +221,26 @@ echo.
 :START
 echo.
 echo Initializing %main_color%PP-Terminal 8%RESET%
-echo Gooo...
+
+:: Pause in ms for points (333 ms ~ 1/3 sec)
+set pointWait=333
+
+:: Now the numbers with 1 second waiting each + then 3 points with pauses
+for /L %%i in (1,1,5) do (
+
+    for %%p in (1 2 3) do (
+        <nul set /p=.
+        ping localhost -n 1 -w %pointWait% >nul
+    )
+
+    <nul set /p=%%i
+    timeout /t 1 >nul
+)
+
+echo  - Gooo...
+
+timeout /t 1 >nul
+
 echo.
 
 set USERNAME=%USERNAME%
