@@ -5072,24 +5072,24 @@ if __name__ == "__main__":
 
             # Titel und Fußzeile hinzufügen
             html_template = f"""<!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="UTF-8">
-            <title>PP-Terminal</title>
-            <style>
-                body {{ font-family: sans-serif; margin: 2em; }}
-                .header {{ font-size: 12px; text-align: left; color: gray; margin-bottom: 10px; }}
-                .footer {{ font-size: 10px; text-align: right; color: gray; margin-top: 40px; }}
-                {formatter.get_style_defs('.highlight')}
-            </style>
-        </head>
-        <body>
-            <div class="header">PP-Terminal</div>
-            <div class="highlight">{highlighted_code}</div>
-            <div class="footer">Original path: {hole_file_path}</div>
-        </body>
-        </html>
-        """
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>PP-Terminal</title>
+    <style>
+        body {{ font-family: sans-serif; margin: 2em; }}
+        .header {{ font-size: 12px; text-align: left; color: gray; margin-bottom: 10px; }}
+        .footer {{ font-size: 10px; text-align: right; color: gray; margin-top: 40px; }}
+        {formatter.get_style_defs('.highlight')}
+    </style>
+</head>
+<body>
+    <div class="header">PP-Terminal</div>
+    <div class="highlight">{highlighted_code}</div>
+    <div class="footer">Original path: {hole_file_path}</div>
+</body>
+</html>
+"""
 
             # HTML-Datei speichern
             html_path = os.path.join(temp_folder, "print_temp.html")
@@ -5183,24 +5183,24 @@ if __name__ == "__main__":
 
             # Titel und Fußzeile hinzufügen
             html_template = f"""<!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="UTF-8">
-            <title>PP-Terminal</title>
-            <style>
-                body {{ font-family: sans-serif; margin: 2em; }}
-                .header {{ font-size: 12px; text-align: left; color: gray; margin-bottom: 10px; }}
-                .footer {{ font-size: 10px; text-align: right; color: gray; margin-top: 40px; }}
-                {formatter.get_style_defs('.highlight')}
-            </style>
-        </head>
-        <body>
-            <div class="header">PP-Terminal</div>
-            <div class="highlight">{highlighted_code}</div>
-            <div class="footer">Original path: {hole_file_path}</div>
-        </body>
-        </html>
-        """
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>PP-Terminal</title>
+    <style>
+        body {{ font-family: sans-serif; margin: 2em; }}
+        .header {{ font-size: 12px; text-align: left; color: gray; margin-bottom: 10px; }}
+        .footer {{ font-size: 10px; text-align: right; color: gray; margin-top: 40px; }}
+        {formatter.get_style_defs('.highlight')}
+    </style>
+</head>
+<body>
+    <div class="header">PP-Terminal</div>
+    <div class="highlight">{highlighted_code}</div>
+    <div class="footer">Original path: {hole_file_path}</div>
+</body>
+</html>
+"""
 
             # HTML-Datei speichern
             html_path = os.path.join(temp_folder, "print_temp.html")
