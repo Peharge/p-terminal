@@ -34482,7 +34482,7 @@ def main():
                         # Kein Interpreter → keine venv
                         print(f"[{timestamp()}] [INFO] This is not a venv for Python.")
 
-                        user_confirm = input("Do you want to run the .bat normally? [y/n]: ").strip().lower()
+                        user_confirm = input("Would you like to run Activate.bat normally? [y/n]: ").strip().lower()
                         if user_confirm == "y":
                             subprocess.run([str(activate_path)], check=True)
                         else:
@@ -34516,7 +34516,7 @@ def main():
                         print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
                     else:
                         print(f"[{timestamp()}] [INFO] This is not a venv for Python.")
-                        user_confirm = input("Do you want to run the Activate.ps1 normally? [y/n]: ").strip().lower()
+                        user_confirm = input("Would you like to run Activate.ps1 normally? [y/n]: ").strip().lower()
                         if user_confirm == "y":
                             # PowerShell Skript ausführen
                             subprocess.run(["powershell", "-ExecutionPolicy", "Bypass", "-File", str(activate_path)], check=True)
