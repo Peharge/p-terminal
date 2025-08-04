@@ -228,6 +228,7 @@ if not exist "%SCRIPT_PATH_DOCTOR_MAIN%" (
 call :Log INFO "Next time, you can also run pp-term/run-pp-term-fast.bat to start PP-Terminal within 3-5 seconds without going through the installation process via pp-term/run-pp-term.bat."
 call :Log INFO "If you want to update the PP-Terminal, just run the ‘update’ command in the PP-Terminal."
 call :Log INFO "If you need help, you can find an overview of the commands at https://github.com/Peharge/p-terminal/wiki. If you have any questions, you can contact the community at https://github.com/Peharge/p-terminal/discussions, and the best way to report problems is at https://github.com/Peharge/p-terminal/issues."
+echo.
 
 REM Verzeichnis dieser .bat-Datei ermitteln
 set SCRIPT_DIR=%~dp0
