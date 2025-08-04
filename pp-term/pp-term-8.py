@@ -5060,27 +5060,50 @@ if __name__ == "__main__":
         try:
             os.makedirs(temp_folder, exist_ok=True)
 
+            # Read the code
             with open(file_path, "r", encoding="utf-8") as f:
                 code = f.read()
-            lexer = guess_lexer_for_filename(file_path, code)
-            formatter = HtmlFormatter(full=True, style="colorful")
-            html_code = highlight(code, lexer, formatter)
 
+            # Prepare highlighting
+            lexer = guess_lexer_for_filename(file_path, code)
+            formatter = HtmlFormatter(style="colorful", full=False)
+            highlighted_code = highlight(code, lexer, formatter)
+
+            # Add title and footer
+            html_template = f"""<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>PP-Terminal</title>
+            <style>
+                body {{ font-family: sans-serif; margin: 2em; }}
+                .header {{ font-size: 12px; text-align: left; color: gray; margin-bottom: 10px; }}
+                .footer {{ font-size: 10px; text-align: right; color: gray; margin-top: 40px; }}
+                {formatter.get_style_defs('.highlight')}
+            </style>
+        </head>
+        <body>
+            <div class="header">PP-Terminal</div>
+            <div class="highlight">{highlighted_code}</div>
+            <div class="footer">Original path: {file_path}</div>
+        </body>
+        </html>
+        """
+
+            # Save HTML file
             html_path = os.path.join(temp_folder, "print_temp.html")
             with open(html_path, "w", encoding="utf-8") as f:
-                f.write(html_code)
+                f.write(html_template)
 
+            # Define PDF output path
             pdf_path = os.path.join(temp_folder, "print_temp.pdf")
 
+            # Locate Edge
             edge_paths = [
                 r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
                 r"C:\Program Files\Microsoft\Edge\Application\msedge.exe"
             ]
-            edge_path = None
-            for path in edge_paths:
-                if os.path.isfile(path):
-                    edge_path = path
-                    break
+            edge_path = next((p for p in edge_paths if os.path.isfile(p)), None)
 
             if edge_path is None:
                 print(f"[{timestamp()}] [ERROR] Microsoft Edge not found. Printing original file without highlighting.")
@@ -5096,9 +5119,10 @@ if __name__ == "__main__":
 
                 time.sleep(3)
 
-                # Convert Windows path to file URL for Edge
+                # Pfad in URL konvertieren
                 pdf_path_obj = pathlib.Path(pdf_path).absolute()
                 pdf_file_url = urllib.parse.urljoin('file:', urllib.request.pathname2url(str(pdf_path_obj)))
+                print(f"[{timestamp()}] [INFO] PDF generated: {pdf_file_url}")
 
                 # Dann beim subprocess.run den file URL benutzen:
 
@@ -5146,27 +5170,50 @@ if __name__ == "__main__":
         try:
             os.makedirs(temp_folder, exist_ok=True)
 
+            # Read the code
             with open(file_path, "r", encoding="utf-8") as f:
                 code = f.read()
-            lexer = guess_lexer_for_filename(file_path, code)
-            formatter = HtmlFormatter(full=True, style="colorful")
-            html_code = highlight(code, lexer, formatter)
 
+            # Prepare highlighting
+            lexer = guess_lexer_for_filename(file_path, code)
+            formatter = HtmlFormatter(style="colorful", full=False)
+            highlighted_code = highlight(code, lexer, formatter)
+
+            # Add title and footer
+            html_template = f"""<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>PP-Terminal</title>
+            <style>
+                body {{ font-family: sans-serif; margin: 2em; }}
+                .header {{ font-size: 12px; text-align: left; color: gray; margin-bottom: 10px; }}
+                .footer {{ font-size: 10px; text-align: right; color: gray; margin-top: 40px; }}
+                {formatter.get_style_defs('.highlight')}
+            </style>
+        </head>
+        <body>
+            <div class="header">PP-Terminal</div>
+            <div class="highlight">{highlighted_code}</div>
+            <div class="footer">Original path: {file_path}</div>
+        </body>
+        </html>
+        """
+
+            # Save HTML file
             html_path = os.path.join(temp_folder, "print_temp.html")
             with open(html_path, "w", encoding="utf-8") as f:
-                f.write(html_code)
+                f.write(html_template)
 
+            # Define PDF output path
             pdf_path = os.path.join(temp_folder, "print_temp.pdf")
 
+            # Locate Edge
             edge_paths = [
                 r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
                 r"C:\Program Files\Microsoft\Edge\Application\msedge.exe"
             ]
-            edge_path = None
-            for path in edge_paths:
-                if os.path.isfile(path):
-                    edge_path = path
-                    break
+            edge_path = next((p for p in edge_paths if os.path.isfile(p)), None)
 
             if edge_path is None:
                 print(f"[{timestamp()}] [ERROR] Microsoft Edge not found. Printing original file without highlighting.")
@@ -5182,9 +5229,10 @@ if __name__ == "__main__":
 
                 time.sleep(3)
 
-                # Convert Windows path to file URL for Edge
+                # Pfad in URL konvertieren
                 pdf_path_obj = pathlib.Path(pdf_path).absolute()
                 pdf_file_url = urllib.parse.urljoin('file:', urllib.request.pathname2url(str(pdf_path_obj)))
+                print(f"[{timestamp()}] [INFO] PDF generated: {pdf_file_url}")
 
                 # Dann beim subprocess.run den file URL benutzen:
 
