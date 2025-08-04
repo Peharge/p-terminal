@@ -16620,6 +16620,58 @@ if __name__ == "__main__":
 
         return False
 
+    if user_input.startswith("pcfo-x"):
+        rest = user_input[6:].strip()  # nach "pcfo-x"
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+        parts = rest.split(maxsplit=1)
+
+        if len(parts) == 0:
+            print(f"[{timestamp()}] [INFO] No number provided after 'pcfo-x'.")
+            return True
+
+        zahl_str = parts[0]
+        if not zahl_str.isdigit():
+            print(f"[{timestamp()}] [INFO] Invalid number after 'pcfo-x'.")
+            return True
+        anzahl = int(zahl_str)
+
+        basisname = parts[1] if len(parts) > 1 else "folder"
+
+        current_dir = Path.cwd().resolve()
+
+        for i in range(1, anzahl + 1):
+            folder_name = f"{basisname}-{i}"
+            folder_path = current_dir / folder_name
+
+            if folder_path.exists():
+                print(f"[{timestamp()}] [INFO] Folder already exists: {folder_path}")
+                continue
+
+            command = f'mkdir "{folder_name}"'
+            try:
+                process = subprocess.Popen(
+                    command,
+                    stdin=sys.stdin,
+                    stdout=sys.stdout,
+                    stderr=sys.stderr,
+                    shell=True,
+                    text=True
+                )
+                process.wait()
+
+                if folder_path.exists():
+                    print(f"[{timestamp()}] [INFO] Folder created: {folder_path}")
+                else:
+                    print(f"[{timestamp()}] [INFO] Failed to create folder: {folder_path}")
+            except KeyboardInterrupt:
+                print(f"[{timestamp()}] [INFO] Operation cancelled by user.")
+                return True
+            except subprocess.CalledProcessError as e:
+                print(f"[{timestamp()}] [INFO] Error executing mkdir command: {e}")
+                return True
+
+        return True
+
     # pc-postgresql: startet einen PostgreSQL-Dienst (Service-Name muss als Argument angegeben werden)
     # Beispiel-Aufruf: "pc-postgresql postgresql-x64-15"
     if user_input.startswith("pc-postgresql "):
