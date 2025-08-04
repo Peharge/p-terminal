@@ -5391,7 +5391,7 @@ if __name__ == "__main__":
 def main():
   print("👋 Hello, developer!")
   print("This file was created via the PP-Terminal.")
-  print("Need help? Type 'help()' in the Terminal.")
+  print("Need help? Open a terminal, start Python by typing 'python', then type 'help()'.")
 
 # Call the main function when this script runs
 if __name__ == "__main__":
