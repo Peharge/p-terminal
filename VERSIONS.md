@@ -427,6 +427,9 @@
       - PP-Terminal Launcher 8.3.1.14
       - PP-Terminal Launcher 8.3.1.15
       - PP-Terminal Launcher 8.3.1.16
+    - PP-Terminal Launcher 8.3.3
+      - PP-Terminal Launcher 8.3.3.1
+      - PP-Terminal Launcher 8.3.3.3
 
 ## Peharge Compiler Version
 
