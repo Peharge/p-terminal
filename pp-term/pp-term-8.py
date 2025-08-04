@@ -4640,14 +4640,37 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
         return True
 
-    if user_input.startswith("pcode "):
-        user_input = user_input[6:].strip()
+    if user_input.startswith("code "):
+        user_input = user_input[5:].strip()
         print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
-        command = f"code {user_input}"
+        # Ordner- und Dateipfad herausfinden
+        folder = os.path.dirname(user_input)
+        file = user_input
 
-        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True,
-                                   text=True)
+        # Ordner erstellen, falls nicht existierend
+        if folder and not os.path.exists(folder):
+            try:
+                os.makedirs(folder)
+                print(f"[{timestamp()}] [INFO] Folder '{folder}' created.")
+            except Exception as e:
+                print(f"[{timestamp()}] [ERROR] Could not create folder '{folder}': {e}")
+                return False
+
+        # Datei erstellen, falls nicht vorhanden
+        if not os.path.exists(file):
+            try:
+                with open(file, 'w') as f:
+                    pass  # leere Datei anlegen
+                print(f"[{timestamp()}] [INFO] File '{file}' created.")
+            except Exception as e:
+                print(f"[{timestamp()}] [ERROR] Could not create file '{file}': {e}")
+                return False
+
+        # VS Code Befehl ausführen
+        command = f"code {file}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
         try:
             process.wait()
@@ -4655,6 +4678,48 @@ def handle_special_commands(user_input):
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
+
+        return True
+
+    if user_input.startswith("pcode "):
+        user_input = user_input[6:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+
+        # Ordner- und Dateipfad herausfinden
+        folder = os.path.dirname(user_input)
+        file = user_input
+
+        # Ordner erstellen, falls nicht existierend
+        if folder and not os.path.exists(folder):
+            try:
+                os.makedirs(folder)
+                print(f"[{timestamp()}] [INFO] Folder '{folder}' created.")
+            except Exception as e:
+                print(f"[{timestamp()}] [ERROR] Could not create folder '{folder}': {e}")
+                return False
+
+        # Datei erstellen, falls nicht vorhanden
+        if not os.path.exists(file):
+            try:
+                with open(file, 'w') as f:
+                    pass  # leere Datei anlegen
+                print(f"[{timestamp()}] [INFO] File '{file}' created.")
+            except Exception as e:
+                print(f"[{timestamp()}] [ERROR] Could not create file '{file}': {e}")
+                return False
+
+        # VS Code Befehl ausführen
+        command = f"code {file}"
+
+        process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
+
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Error executing WSL command: {e}")
+
         return True
 
     if user_input.startswith("prcode "):
@@ -34384,6 +34449,57 @@ def main():
                 set_python_path(active)
 
                 print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+
+            if "activate.bat" in user_input.lower():
+                parts = user_input.strip().split()
+                activate_path = None
+                for part in parts:
+                    if "activate.bat" in part.lower():
+                        activate_path = Path(part).resolve()
+                        break
+
+                if activate_path is None:
+                    print(f"[{timestamp()}] [ERROR] No valid path to activate.bat found.")
+                elif not activate_path.exists():
+                    print(f"[{timestamp()}] [ERROR] File {activate_path} does not exist.")
+                else:
+                    env_path = activate_path.parent.parent  # .env folder
+                    print(f"[{timestamp()}] [INFO] Environment directory detected: {env_path}")
+
+                    if not env_path.exists():
+                        print(f"[{timestamp()}] [INFO] Environment directory does not exist: {env_path}")
+                        user_confirm = input("Do you want to create this virtual environment? [y/n]: ").strip().lower()
+                        if user_confirm == 'y':
+                            command = ["python", "-m", "venv", str(env_path)]
+                            try:
+                                subprocess.run(command, check=True, text=True,
+                                               stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                                print(f"[{timestamp()}] [INFO] The virtual environment was created at {env_path}.")
+                            except subprocess.CalledProcessError as e:
+                                print(f"[{timestamp()}] [ERROR] Failed to create virtual environment: {e}")
+                                sys.exit(1)
+                        else:
+                            print(f"[{timestamp()}] [INFO] Activation cancelled.")
+                            sys.exit(0)
+
+                    # Determine python interpreter path depending on OS
+                    if os.name == "nt":
+                        python_exe = env_path / "Scripts" / "python.exe"
+                    else:
+                        python_exe = env_path / "bin" / "python"
+
+                    if not python_exe.exists():
+                        print(f"[{timestamp()}] [INFO] No Python interpreter found at '{python_exe}'.")
+                        user_confirm = input("Do you still want to activate this environment? [y/N]: ").strip().lower()
+                        if user_confirm != 'y':
+                            print(f"[{timestamp()}] [INFO] Activation cancelled.")
+                            sys.exit(0)
+
+                    # This means it’s a Python env, do your activation logic:
+                    active = find_active_env(env_path)
+                    set_python_path(active)
+
+                    print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
 
             elif user_input.strip() == "psv":
                 # Suche nach dem ersten venv im gesamten Verzeichnisbaum ab current_dir
