@@ -4790,8 +4790,8 @@ if __name__ == "__main__":
         print(f"[{timestamp()}] [INFO] 'vs code' operation complete.")
         return True
 
-    if user_input.startswith("pcpf "):
-        folder_name = user_input[5:].strip()
+    if user_input.startswith("pcpfo "):
+        folder_name = user_input[6:].strip()
         current_dir = Path.cwd().resolve()
         new_folder_path = current_dir / folder_name
 
