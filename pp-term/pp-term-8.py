@@ -3645,7 +3645,6 @@ def handle_special_commands(user_input):
 
         return True
 
-
     if user_input.startswith("pcoc "):  # pcoc = clean cache
         user_input = "clean " + user_input[5:].strip()
 
