@@ -16514,6 +16514,42 @@ if __name__ == "__main__":
 
         return True
 
+    if user_input.startswith("pcf-x"):
+        rest = user_input[5:].strip()
+        print(f"[{timestamp()}] [INFO] Creating files directly without shell commands.")
+
+        parts = rest.split(maxsplit=1)
+        if len(parts) < 2:
+            print(f"[{timestamp()}] [INFO] Invalid input. Usage: pcf-x<zahl> <filename>")
+            return True
+
+        zahl_str, dateiname = parts
+        if not zahl_str.isdigit():
+            print(f"[{timestamp()}] [INFO] Invalid number after 'pcf-x'.")
+            return True
+
+        anzahl = int(zahl_str)
+        stem = Path(dateiname).stem
+        suffix = Path(dateiname).suffix
+
+        current_dir = Path.cwd().resolve()
+
+        for i in range(1, anzahl + 1):
+            new_filename = f"{stem}-{i}{suffix}"
+            file_path = current_dir / new_filename
+
+            if file_path.exists():
+                print(f"[{timestamp()}] [INFO] File already exists: {file_path}")
+                continue
+
+            try:
+                file_path.touch(exist_ok=False)
+                print(f"[{timestamp()}] [INFO] File created: {file_path}")
+            except Exception as e:
+                print(f"[{timestamp()}] [INFO] Failed to create file {file_path}: {e}")
+
+        return True
+
     if user_input.startswith("pcfo "):
         user_input = user_input[5:].strip()
         print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
@@ -16621,7 +16657,7 @@ if __name__ == "__main__":
         return False
 
     if user_input.startswith("pcfo-x"):
-        rest = user_input[6:].strip()  # nach "pcfo-x"
+        rest = user_input[6:].strip()
         print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         parts = rest.split(maxsplit=1)
 
