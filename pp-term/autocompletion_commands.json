@@ -612,6 +612,7 @@
     "pc-racket ",
     "pc-algol ",
     "pcf ",
+    "pcf-x",
     "pcfo ",
     "pcfo&cd ",
     "pcfo&pcd ",
