@@ -5046,6 +5046,7 @@ if __name__ == "__main__":
 
     if user_input.lower().startswith("print "):
         file_path = user_input[6:].strip()
+        hole_file_path = os.path.abspath(file_path)
 
         if not file_path:
             print(f"[{timestamp()}] [WARNING] No filename provided.")
@@ -5060,16 +5061,16 @@ if __name__ == "__main__":
         try:
             os.makedirs(temp_folder, exist_ok=True)
 
-            # Read the code
+            # Lesen Sie den Code
             with open(file_path, "r", encoding="utf-8") as f:
                 code = f.read()
 
-            # Prepare highlighting
+            # Hervorhebung vorbereiten
             lexer = guess_lexer_for_filename(file_path, code)
             formatter = HtmlFormatter(style="colorful", full=False)
             highlighted_code = highlight(code, lexer, formatter)
 
-            # Add title and footer
+            # Titel und Fußzeile hinzufügen
             html_template = f"""<!DOCTYPE html>
         <html>
         <head>
@@ -5085,20 +5086,20 @@ if __name__ == "__main__":
         <body>
             <div class="header">PP-Terminal</div>
             <div class="highlight">{highlighted_code}</div>
-            <div class="footer">Original path: {file_path}</div>
+            <div class="footer">Original path: {hole_file_path}</div>
         </body>
         </html>
         """
 
-            # Save HTML file
+            # HTML-Datei speichern
             html_path = os.path.join(temp_folder, "print_temp.html")
             with open(html_path, "w", encoding="utf-8") as f:
                 f.write(html_template)
 
-            # Define PDF output path
+            # Definieren Sie den PDF-Ausgabepfad
             pdf_path = os.path.join(temp_folder, "print_temp.pdf")
 
-            # Locate Edge
+            # Suchen Sie Edge
             edge_paths = [
                 r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
                 r"C:\Program Files\Microsoft\Edge\Application\msedge.exe"
@@ -5156,6 +5157,7 @@ if __name__ == "__main__":
 
     if user_input.lower().startswith("pprint "):
         file_path = user_input[7:].strip()
+        hole_file_path = os.path.abspath(file_path)
 
         if not file_path:
             print(f"[{timestamp()}] [WARNING] No filename provided.")
@@ -5170,16 +5172,16 @@ if __name__ == "__main__":
         try:
             os.makedirs(temp_folder, exist_ok=True)
 
-            # Read the code
+            # Lesen Sie den Code
             with open(file_path, "r", encoding="utf-8") as f:
                 code = f.read()
 
-            # Prepare highlighting
+            # Hervorhebung vorbereiten
             lexer = guess_lexer_for_filename(file_path, code)
             formatter = HtmlFormatter(style="colorful", full=False)
             highlighted_code = highlight(code, lexer, formatter)
 
-            # Add title and footer
+            # Titel und Fußzeile hinzufügen
             html_template = f"""<!DOCTYPE html>
         <html>
         <head>
@@ -5195,20 +5197,20 @@ if __name__ == "__main__":
         <body>
             <div class="header">PP-Terminal</div>
             <div class="highlight">{highlighted_code}</div>
-            <div class="footer">Original path: {file_path}</div>
+            <div class="footer">Original path: {hole_file_path}</div>
         </body>
         </html>
         """
 
-            # Save HTML file
+            # HTML-Datei speichern
             html_path = os.path.join(temp_folder, "print_temp.html")
             with open(html_path, "w", encoding="utf-8") as f:
                 f.write(html_template)
 
-            # Define PDF output path
+            # Definieren Sie den PDF-Ausgabepfad
             pdf_path = os.path.join(temp_folder, "print_temp.pdf")
 
-            # Locate Edge
+            # Suchen Sie Edge
             edge_paths = [
                 r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
                 r"C:\Program Files\Microsoft\Edge\Application\msedge.exe"
