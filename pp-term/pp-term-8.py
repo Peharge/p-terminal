@@ -34463,43 +34463,65 @@ def main():
                 elif not activate_path.exists():
                     print(f"[{timestamp()}] [ERROR] File {activate_path} does not exist.")
                 else:
-                    env_path = activate_path.parent.parent  # .env folder
+                    env_path = activate_path.parent.parent  # .venv folder vermutet
+
                     print(f"[{timestamp()}] [INFO] Environment directory detected: {env_path}")
 
-                    if not env_path.exists():
-                        print(f"[{timestamp()}] [INFO] Environment directory does not exist: {env_path}")
-                        user_confirm = input("Do you want to create this virtual environment? [y/n]: ").strip().lower()
-                        if user_confirm == 'y':
-                            command = ["python", "-m", "venv", str(env_path)]
-                            try:
-                                subprocess.run(command, check=True, text=True,
-                                               stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
-                                print(f"[{timestamp()}] [INFO] The virtual environment was created at {env_path}.")
-                            except subprocess.CalledProcessError as e:
-                                print(f"[{timestamp()}] [ERROR] Failed to create virtual environment: {e}")
-                                sys.exit(1)
-                        else:
-                            print(f"[{timestamp()}] [INFO] Activation cancelled.")
-                            sys.exit(0)
-
-                    # Determine python interpreter path depending on OS
+                    # Prüfe Python Interpreter im env_path
                     if os.name == "nt":
                         python_exe = env_path / "Scripts" / "python.exe"
                     else:
                         python_exe = env_path / "bin" / "python"
 
-                    if not python_exe.exists():
-                        print(f"[{timestamp()}] [INFO] No Python interpreter found at '{python_exe}'.")
-                        user_confirm = input("Do you still want to activate this environment? [y/N]: ").strip().lower()
-                        if user_confirm != 'y':
-                            print(f"[{timestamp()}] [INFO] Activation cancelled.")
-                            sys.exit(0)
+                    if python_exe.exists():
+                        # Interpreter vorhanden → venv aktivieren
+                        active = find_active_env(env_path)
+                        set_python_path(active)
+                        print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                    else:
+                        # Kein Interpreter → keine venv
+                        print(f"[{timestamp()}] [INFO] This is not a venv for Python.")
 
-                    # This means it’s a Python env, do your activation logic:
-                    active = find_active_env(env_path)
-                    set_python_path(active)
+                        user_confirm = input("Do you want to run the .bat normally? [y/n]: ").strip().lower()
+                        if user_confirm == "y":
+                            subprocess.run([str(activate_path)], check=True)
+                        else:
+                            print(f"[{timestamp()}] [INFO] Execution of the .bat aborted.")
 
-                    print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+            if "activate.ps1" in user_input.lower():
+                parts = user_input.strip().split()
+                activate_path = None
+                for part in parts:
+                    if "activate.ps1" in part.lower():
+                        activate_path = Path(part).resolve()
+                        break
+
+                if activate_path is None:
+                    print(f"[{timestamp()}] [ERROR] No valid path to Activate.ps1 found.")
+                elif not activate_path.exists():
+                    print(f"[{timestamp()}] [ERROR] File {activate_path} does not exist.")
+                else:
+                    env_path = activate_path.parent.parent  # .venv Ordner vermutet
+
+                    print(f"[{timestamp()}] [INFO] Environment directory detected: {env_path}")
+
+                    if os.name == "nt":
+                        python_exe = env_path / "Scripts" / "python.exe"
+                    else:
+                        python_exe = env_path / "bin" / "python"
+
+                    if python_exe.exists():
+                        active = find_active_env(env_path)
+                        set_python_path(active)
+                        print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                    else:
+                        print(f"[{timestamp()}] [INFO] This is not a venv for Python.")
+                        user_confirm = input("Do you want to run the Activate.ps1 normally? [y/n]: ").strip().lower()
+                        if user_confirm == "y":
+                            # PowerShell Skript ausführen
+                            subprocess.run(["powershell", "-ExecutionPolicy", "Bypass", "-File", str(activate_path)], check=True)
+                        else:
+                            print(f"[{timestamp()}] [INFO] Execution of Activate.ps1 aborted.")
 
             elif user_input.strip() == "psv":
                 # Suche nach dem ersten venv im gesamten Verzeichnisbaum ab current_dir
