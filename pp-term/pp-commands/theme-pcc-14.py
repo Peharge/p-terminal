@@ -61,6 +61,35 @@
 #
 # Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 
+from datetime import datetime
+
+def log_time() -> str:
+    """Returns current time formatted with milliseconds"""
+    now = datetime.now()
+    return now.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
+
+# Sicherheitshinweis & Benutzerabfrage
+print("""
+WARNING: This script modifies system files and installs software components.
+
+It is strongly recommended to review the code and only run it if you trust the source.
+Make sure you understand the changes it will make, including:
+- Installing fonts into the Windows system directory
+- Modifying Windows Terminal configuration
+- Installing software via winget and running PowerShell commands
+
+USE AT YOUR OWN RISK.
+
+Do you really want to proceed with the setup? [y/n]:
+""", end='')
+
+choice = input().strip().lower()
+if choice != 'y':
+    print(f"[{log_time()}] [INFO] Setup aborted by user.")
+    exit(0)
+
+print(f"[{log_time()}] [INFO] Proceeding with system modifications...\n")
+
 import os
 import sys
 import json
@@ -71,7 +100,6 @@ import zipfile
 import ctypes
 from pathlib import Path
 from io import BytesIO
-from datetime import datetime
 
 def timestamp() -> str:
     """Returns current time formatted with milliseconds"""
