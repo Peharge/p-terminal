@@ -558,7 +558,7 @@ packages = [
     "redis", "pymongo", "bson", "cassandra-driver", "python-arango", "neo4j", "pyorient",
     "ravendb", "boto3", "yfinance", "monai", "nibabel", "monailabel", "monai-deploy-app-sdk",
     "scikit-image", "pydicom", "SimpleITK",
-    "jupyter", "bpython", "ptpython", "pywin32", "thonny", "spyder", "pudb", "ipdb"
+    "jupyter", "bpython", "ptpython", "pywin32", "thonny", "spyder", "pudb", "ipdb", "pygments"
 ]
 
 process_packages(packages)
