@@ -14,10 +14,10 @@
 
 Hey ;-) [`Install PP-Terminal`](https://github.com/Peharge/p-terminal?tab=readme-ov-file#install-pp-terminal) [`Download PP-Term [Windows]`](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) [`PP-Term Commands`](https://github.com/Peharge/peharge-web/blob/main/commands-pp-term.html) [`Learn PP-Term`](https://github.com/Peharge/p-terminal/wiki/Documentation)
 
-## Code (17.07.2025)
+## Code (04.08.2025)
 
-P-Terminal size GitHub: 238 MB <br>
-P-Terminal hole size: 5700 MB (Without LLm model, Linux OS or additional apps...) <br>
+P-Terminal size GitHub: 271 MB and 13,5 MB on GitHub<br>
+P-Terminal hole size: 6270 MB (Without LLm model, Linux OS or additional apps...) <br>
 
 ### Code-Statistik (17.07.2025) - cloc .
 
