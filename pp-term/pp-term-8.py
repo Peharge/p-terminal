@@ -4722,6 +4722,344 @@ def handle_special_commands(user_input):
 
         return True
 
+    if user_input.startswith("code-exec "):
+        user_input = user_input[10:].strip()
+        print(f"[{timestamp()}] [INFO] code-exec triggered for: '{user_input}'")
+
+        # Nur Python-Dateien zulassen
+        if not user_input.endswith(".py"):
+            print(f"[{timestamp()}] [ERROR] 'code-exec' only supports Python (.py) files.")
+            return False
+
+        folder = os.path.dirname(user_input)
+        file = user_input
+
+        # Ordner erstellen, wenn nötig
+        if folder and not os.path.exists(folder):
+            try:
+                os.makedirs(folder)
+                print(f"[{timestamp()}] [INFO] Folder '{folder}' created.")
+            except Exception as e:
+                print(f"[{timestamp()}] [ERROR] Could not create folder '{folder}': {e}")
+                return False
+
+        # Datei anlegen, falls sie nicht existiert
+        if not os.path.exists(file):
+            try:
+                with open(file, 'w') as f:
+                    f.write("#!/usr/bin/env python3\n\n")
+                print(f"[{timestamp()}] [INFO] File '{file}' created.")
+            except Exception as e:
+                print(f"[{timestamp()}] [ERROR] Could not create file '{file}': {e}")
+                return False
+
+        # 1. Interpreter aus JSON-Konfiguration laden
+        interpreter_path = None
+        try:
+            json_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/current_env.json")
+            if json_path.exists():
+                with open(json_path, "r", encoding="utf-8") as jf:
+                    data = json.load(jf)
+                    base_env_path = data.get("active_env", "").strip()
+                    if not base_env_path:
+                        print(f"[{timestamp()}] [WARNING] 'active_env' is empty or missing in JSON file.")
+                    else:
+                        interpreter_path = os.path.join(base_env_path, "Scripts", "python.exe")
+                        print(f"[{timestamp()}] [INFO] Using virtual environment interpreter: {interpreter_path}")
+            else:
+                print(f"[{timestamp()}] [WARNING] Interpreter config file not found: {json_path}")
+        except json.JSONDecodeError:
+            print(f"[{timestamp()}] [ERROR] Invalid JSON in interpreter config file.")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Failed to read interpreter config: {e}")
+
+        # Fallback auf Standard-Interpreter
+        if not interpreter_path or not os.path.exists(interpreter_path):
+            print(f"[{timestamp()}] [WARNING] Falling back to system Python interpreter.")
+            interpreter_path = sys.executable
+
+        # 2. Datei in VS Code öffnen (warte, bis Editor geschlossen ist)
+        try:
+            subprocess.run(["code", "-w", file], check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] VS Code exited with error: {e}")
+            return False
+
+        # 3. Datei ausführen mit ausgewähltem Interpreter
+        print(f"[{timestamp()}] [INFO] Executing '{file}' using interpreter '{interpreter_path}' ...")
+        try:
+            subprocess.run([interpreter_path, file], check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Python execution failed: {e}")
+            return False
+
+        print(f"[{timestamp()}] [INFO] Execution completed successfully.")
+        return True
+
+    if user_input.startswith("pcode-exec "):
+        user_input = user_input[11:].strip()
+        print(f"[{timestamp()}] [INFO] pcode-exec triggered for: '{user_input}'")
+
+        # Nur Python-Dateien zulassen
+        if not user_input.endswith(".py"):
+            print(f"[{timestamp()}] [ERROR] 'pcode-exec' only supports Python (.py) files.")
+            return False
+
+        folder = os.path.dirname(user_input)
+        file = user_input
+
+        # Ordner erstellen, wenn nötig
+        if folder and not os.path.exists(folder):
+            try:
+                os.makedirs(folder)
+                print(f"[{timestamp()}] [INFO] Folder '{folder}' created.")
+            except Exception as e:
+                print(f"[{timestamp()}] [ERROR] Could not create folder '{folder}': {e}")
+                return False
+
+        # Datei anlegen, falls sie nicht existiert
+        if not os.path.exists(file):
+            try:
+                with open(file, 'w') as f:
+                    f.write("#!/usr/bin/env python3\n\n")
+                print(f"[{timestamp()}] [INFO] File '{file}' created.")
+            except Exception as e:
+                print(f"[{timestamp()}] [ERROR] Could not create file '{file}': {e}")
+                return False
+
+        # 1. Interpreter aus JSON-Konfiguration laden
+        interpreter_path = None
+        try:
+            json_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/current_env.json")
+            if json_path.exists():
+                with open(json_path, "r", encoding="utf-8") as jf:
+                    data = json.load(jf)
+                    base_env_path = data.get("active_env", "").strip()
+                    if not base_env_path:
+                        print(f"[{timestamp()}] [WARNING] 'active_env' is empty or missing in JSON file.")
+                    else:
+                        interpreter_path = os.path.join(base_env_path, "Scripts", "python.exe")
+                        print(f"[{timestamp()}] [INFO] Using virtual environment interpreter: {interpreter_path}")
+            else:
+                print(f"[{timestamp()}] [WARNING] Interpreter config file not found: {json_path}")
+        except json.JSONDecodeError:
+            print(f"[{timestamp()}] [ERROR] Invalid JSON in interpreter config file.")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Failed to read interpreter config: {e}")
+
+        # Fallback auf Standard-Interpreter
+        if not interpreter_path or not os.path.exists(interpreter_path):
+            print(f"[{timestamp()}] [WARNING] Falling back to system Python interpreter.")
+            interpreter_path = sys.executable
+
+        # 2. Datei in VS Code öffnen (warte, bis Editor geschlossen ist)
+        try:
+            subprocess.run(["code", "-w", file], check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] VS Code exited with error: {e}")
+            return False
+
+        # 3. Datei ausführen mit ausgewähltem Interpreter
+        print(f"[{timestamp()}] [INFO] Executing '{file}' using interpreter '{interpreter_path}' ...")
+        try:
+            subprocess.run([interpreter_path, file], check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] Python execution failed: {e}")
+            return False
+
+        print(f"[{timestamp()}] [INFO] Execution completed successfully.")
+        return True
+
+    if user_input.startswith("code-dbg "):
+        user_input = user_input[9:].strip()
+        print(f"[{timestamp()}] [INFO] code-dbg triggered for: '{user_input}'")
+
+        # Nur Python-Dateien erlauben
+        if not user_input.endswith(".py"):
+            print(f"[{timestamp()}] [ERROR] 'code-dbg' only supports Python (.py) files.")
+            return False
+
+        folder = os.path.dirname(user_input)
+        file = user_input
+
+        # Ordner erstellen falls nicht vorhanden
+        if folder and not os.path.exists(folder):
+            try:
+                os.makedirs(folder)
+                print(f"[{timestamp()}] [INFO] Folder '{folder}' created.")
+            except Exception as e:
+                print(f"[{timestamp()}] [ERROR] Could not create folder '{folder}': {e}")
+                return False
+
+        # Datei erstellen falls nicht vorhanden
+        if not os.path.exists(file):
+            try:
+                with open(file, 'w') as f:
+                    f.write("# Debuggable Python script\n\n")
+                print(f"[{timestamp()}] [INFO] File '{file}' created.")
+            except Exception as e:
+                print(f"[{timestamp()}] [ERROR] Could not create file '{file}': {e}")
+                return False
+
+        # JSON-Konfigurationspfad
+        interpreter_path = None
+        env_vars = {}
+
+        try:
+            json_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/current_env.json")
+            if json_path.exists():
+                with open(json_path, "r", encoding="utf-8") as jf:
+                    data = json.load(jf)
+                    base_env_path = data.get("active_env", "").strip()
+                    env_vars = data.get("env_vars", {})  # Optional
+                    if not base_env_path:
+                        print(f"[{timestamp()}] [WARNING] 'active_env' missing or empty in JSON.")
+                    else:
+                        interpreter_path = os.path.join(base_env_path, "Scripts", "python.exe")
+                        print(f"[{timestamp()}] [INFO] Using interpreter: {interpreter_path}")
+            else:
+                print(f"[{timestamp()}] [WARNING] Config file not found: {json_path}")
+        except json.JSONDecodeError:
+            print(f"[{timestamp()}] [ERROR] Invalid JSON in config file.")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Failed reading config: {e}")
+
+        # Fallback auf System-Python, falls Interpreter-Pfad ungültig ist
+        if not interpreter_path or not os.path.exists(interpreter_path):
+            print(f"[{timestamp()}] [WARNING] Falling back to system Python interpreter.")
+            interpreter_path = sys.executable
+
+        # VS Code öffnen (blockierend, mit --wait)
+        try:
+            subprocess.run(["code", "-w", file], check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] VS Code exited with error: {e}")
+            return False
+
+        # Debug-Logfile Pfad
+        log_file = f"{file}.debug.log"
+        print(f"[{timestamp()}] [INFO] Starting debug execution of '{file}'. Logfile: '{log_file}'")
+
+        try:
+            with open(log_file, "w", encoding="utf-8") as logf:
+                # Env-Variablen für Subprozess zusammenstellen
+                env = os.environ.copy()
+                if isinstance(env_vars, dict):
+                    env.update({str(k): str(v) for k,v in env_vars.items()})
+
+                proc = subprocess.Popen(
+                    [interpreter_path, file],
+                    stdout=logf,
+                    stderr=subprocess.STDOUT,
+                    env=env,
+                    text=True
+                )
+                proc.wait()
+                if proc.returncode != 0:
+                    print(f"[{timestamp()}] [ERROR] Debug execution failed. Check '{log_file}'.")
+                    return False
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Exception during debug run: {e}")
+            return False
+
+        print(f"[{timestamp()}] [INFO] Debug execution completed successfully. Logs saved in '{log_file}'.")
+        return True
+
+    if user_input.startswith("pcode-dbg "):
+        user_input = user_input[10:].strip()
+        print(f"[{timestamp()}] [INFO] pcode-dbg triggered for: '{user_input}'")
+
+        # Nur Python-Dateien erlauben
+        if not user_input.endswith(".py"):
+            print(f"[{timestamp()}] [ERROR] 'pcode-dbg' only supports Python (.py) files.")
+            return False
+
+        folder = os.path.dirname(user_input)
+        file = user_input
+
+        # Ordner erstellen falls nicht vorhanden
+        if folder and not os.path.exists(folder):
+            try:
+                os.makedirs(folder)
+                print(f"[{timestamp()}] [INFO] Folder '{folder}' created.")
+            except Exception as e:
+                print(f"[{timestamp()}] [ERROR] Could not create folder '{folder}': {e}")
+                return False
+
+        # Datei erstellen falls nicht vorhanden
+        if not os.path.exists(file):
+            try:
+                with open(file, 'w') as f:
+                    f.write("# Debuggable Python script\n\n")
+                print(f"[{timestamp()}] [INFO] File '{file}' created.")
+            except Exception as e:
+                print(f"[{timestamp()}] [ERROR] Could not create file '{file}': {e}")
+                return False
+
+        # JSON-Konfigurationspfad
+        interpreter_path = None
+        env_vars = {}
+
+        try:
+            json_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/current_env.json")
+            if json_path.exists():
+                with open(json_path, "r", encoding="utf-8") as jf:
+                    data = json.load(jf)
+                    base_env_path = data.get("active_env", "").strip()
+                    env_vars = data.get("env_vars", {})  # Optional
+                    if not base_env_path:
+                        print(f"[{timestamp()}] [WARNING] 'active_env' missing or empty in JSON.")
+                    else:
+                        interpreter_path = os.path.join(base_env_path, "Scripts", "python.exe")
+                        print(f"[{timestamp()}] [INFO] Using interpreter: {interpreter_path}")
+            else:
+                print(f"[{timestamp()}] [WARNING] Config file not found: {json_path}")
+        except json.JSONDecodeError:
+            print(f"[{timestamp()}] [ERROR] Invalid JSON in config file.")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Failed reading config: {e}")
+
+        # Fallback auf System-Python, falls Interpreter-Pfad ungültig ist
+        if not interpreter_path or not os.path.exists(interpreter_path):
+            print(f"[{timestamp()}] [WARNING] Falling back to system Python interpreter.")
+            interpreter_path = sys.executable
+
+        # VS Code öffnen (blockierend, mit --wait)
+        try:
+            subprocess.run(["code", "-w", file], check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] VS Code exited with error: {e}")
+            return False
+
+        # Debug-Logfile Pfad
+        log_file = f"{file}.debug.log"
+        print(f"[{timestamp()}] [INFO] Starting debug execution of '{file}'. Logfile: '{log_file}'")
+
+        try:
+            with open(log_file, "w", encoding="utf-8") as logf:
+                # Env-Variablen für Subprozess zusammenstellen
+                env = os.environ.copy()
+                if isinstance(env_vars, dict):
+                    env.update({str(k): str(v) for k,v in env_vars.items()})
+
+                proc = subprocess.Popen(
+                    [interpreter_path, file],
+                    stdout=logf,
+                    stderr=subprocess.STDOUT,
+                    env=env,
+                    text=True
+                )
+                proc.wait()
+                if proc.returncode != 0:
+                    print(f"[{timestamp()}] [ERROR] Debug execution failed. Check '{log_file}'.")
+                    return False
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Exception during debug run: {e}")
+            return False
+
+        print(f"[{timestamp()}] [INFO] Debug execution completed successfully. Logs saved in '{log_file}'.")
+        return True
+
     if user_input.startswith("prcode "):
         user_input_path = user_input[7:].strip()
         filepath = os.path.abspath(user_input_path)
