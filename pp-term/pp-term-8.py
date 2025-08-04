@@ -129,6 +129,10 @@ import win32com.client
 import glob
 import configparser
 import hashlib
+from pygments import highlight
+from pygments.lexers import guess_lexer_for_filename
+from pygments.formatters import HtmlFormatter
+import pathlib
 
 try:
     import ujson as _json
@@ -4784,6 +4788,367 @@ if __name__ == "__main__":
             print(f"[{timestamp()}] [FATAL] Unexpected error during 'vs code': {e}")
 
         print(f"[{timestamp()}] [INFO] 'vs code' operation complete.")
+        return True
+
+    if user_input.startswith("pcpf "):
+        folder_name = user_input[5:].strip()
+        current_dir = Path.cwd().resolve()
+        new_folder_path = current_dir / folder_name
+
+        def find_existing_venvs(directory: Path):
+            venvs = []
+            for item in directory.iterdir():
+                if item.is_dir() and (item / "pyvenv.cfg").exists():
+                    venvs.append(item.name)
+            return venvs
+
+        def write_main_py(path):
+            try:
+                with open(path, "w", encoding="utf-8") as f:
+                    f.write("""# -----------------------------------------------------------
+# 🐍 Python File Generated Automatically by PP-Terminal
+# -----------------------------------------------------------
+#
+# This Python script was created through a series of automated
+# steps performed by the PP-Terminal tool to facilitate your
+# development workflow.
+#
+# Summary of operations performed prior to file creation:
+# 1. Validation of the provided file path to ensure it resides
+#    within the authorized user directory for security purposes.
+# 2. Creation of a new Python source file at the specified location,
+#    since it did not previously exist.
+# 3. Loading and parsing of the environment configuration from a JSON
+#    file to determine the active Python interpreter.
+# 4. Construction and verification of the absolute path to the Python
+#    interpreter associated with the active environment.
+# 5. Configuration of Visual Studio Code workspace settings to specify
+#    the default interpreter path, enabling seamless IDE integration.
+# 6. Launching Visual Studio Code with the project folder opened as
+#    a workspace, with focus on the newly created Python file.
+#
+# This automated process is designed to provide you with a ready-to-use
+# Python file and development environment configured according to your
+# current settings.
+#
+# You are encouraged to modify this template as needed to fit your
+# project requirements.
+#
+# Happy coding! 🚀
+
+def main():
+    print("👋 Hello, developer!")
+    print("This file was generated automatically by PP-Terminal.")
+    print("For assistance, type 'help()' in the Terminal.")
+
+if __name__ == "__main__":
+    main()
+""")
+                print(f"[{timestamp()}] [INFO] Created new Python file: {path}")
+            except Exception as e:
+                print(f"[{timestamp()}] [ERROR] Could not create main.py: {e}")
+
+        # Ordner erstellen, falls er nicht existiert
+        if new_folder_path.exists():
+            print(f"[{timestamp()}] [INFO] Folder already exists: {new_folder_path}")
+        else:
+            try:
+                new_folder_path.mkdir(parents=True, exist_ok=False)
+                print(f"[{timestamp()}] [INFO] Folder created: {new_folder_path}")
+            except Exception as e:
+                print(f"[{timestamp()}] [ERROR] Could not create folder: {e}")
+                return
+
+        # In den Ordner wechseln
+        try:
+            change_directory(new_folder_path)
+            print(f"[{timestamp()}] [INFO] Changed directory to: {new_folder_path}")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Error changing directory: {e}")
+            return
+
+        # Virtuelle Umgebung .env erstellen oder aktivieren
+        env_path = new_folder_path / ".env"
+
+        if (env_path / "pyvenv.cfg").exists():
+            print(f"[{timestamp()}] [INFO] The virtual environment '.env' already exists at {env_path}.")
+            try:
+                active = find_active_env(str(env_path))
+                set_python_path(active)
+                print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+            except Exception as e:
+                print(f"[{timestamp()}] [ERROR] Failed to activate existing venv: {e}")
+        else:
+            try:
+                subprocess.run(
+                    ["python", "-m", "venv", str(env_path)],
+                    check=True,
+                    text=True,
+                    stdin=sys.stdin,
+                    stdout=sys.stdout,
+                    stderr=sys.stderr
+                )
+                print(f"[{timestamp()}] [INFO] The virtual environment '.env' was created at {env_path}.")
+
+                try:
+                    active = find_active_env(str(env_path))
+                    set_python_path(active)
+                    print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                except Exception as e:
+                    print(f"[{timestamp()}] [ERROR] Failed to set active environment: {e}")
+
+                # Weitere venvs im Ordner anzeigen
+                existing_venvs = find_existing_venvs(new_folder_path)
+                other_venvs = [name for name in existing_venvs if name != ".env"]
+
+                if other_venvs:
+                    print(f"[{timestamp()}] [INFO] Other virtual environments found in this directory: {', '.join(other_venvs)}")
+
+            except subprocess.CalledProcessError as e:
+                print(f"[{timestamp()}] [ERROR] Failed to create venv '.env': {e}")
+                return
+            except KeyboardInterrupt:
+                print(f"[{timestamp()}] [INFO] Cancelled by user.")
+                return
+            except Exception as e:
+                print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
+                return
+
+        # main.py erstellen
+        main_py_path = new_folder_path / "main.py"
+        if not main_py_path.exists():
+            write_main_py(main_py_path)
+        else:
+            print(f"[{timestamp()}] [INFO] File already exists: {main_py_path}")
+
+        # VS Code vorbereiten
+        try:
+            json_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/current_env.json")
+            interpreter_path = None
+
+            if json_path.exists():
+                try:
+                    with open(json_path, "r", encoding="utf-8") as jf:
+                        data = json.load(jf)
+                        base_env_path = data.get("active_env", "").strip()
+                        if not base_env_path:
+                            print(f"[{timestamp()}] [WARNING] 'active_env' is empty or missing in JSON file.")
+                        else:
+                            interpreter_path = os.path.join(base_env_path, "Scripts", "python.exe")
+                            print(f"[{timestamp()}] [INFO] Constructed interpreter path: {interpreter_path}")
+                except json.JSONDecodeError:
+                    print(f"[{timestamp()}] [ERROR] Invalid JSON in interpreter config file.")
+                except Exception as e:
+                    print(f"[{timestamp()}] [ERROR] Failed to read interpreter config: {e}")
+            else:
+                print(f"[{timestamp()}] [WARNING] Interpreter config file not found: {json_path}")
+
+            # settings.json schreiben
+            if interpreter_path:
+                try:
+                    vscode_folder = os.path.join(str(new_folder_path), ".vscode")
+                    settings_path = os.path.join(vscode_folder, "settings.json")
+                    os.makedirs(vscode_folder, exist_ok=True)
+
+                    settings_data = {
+                        "python.defaultInterpreterPath": interpreter_path
+                    }
+
+                    with open(settings_path, "w", encoding="utf-8") as sf:
+                        json.dump(settings_data, sf, indent=2)
+
+                    print(f"[{timestamp()}] [INFO] VS Code interpreter set in: {settings_path}")
+                except Exception as e:
+                    print(f"[{timestamp()}] [ERROR] Failed to write VS Code settings: {e}")
+            else:
+                print(f"[{timestamp()}] [INFO] Skipping VS Code interpreter setup (no path available).")
+
+            # VS Code starten
+            try:
+                folder_to_open = str(new_folder_path)
+                command = f'code "{folder_to_open}" "{main_py_path}"'
+                process = subprocess.Popen(command, stdin=subprocess.DEVNULL,
+                                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                                           shell=True, text=True)
+                process.wait()
+                print(f"[{timestamp()}] [INFO] VS Code launched successfully as workspace.")
+            except Exception as e:
+                print(f"[{timestamp()}] [ERROR] Failed to launch VS Code: {e}")
+
+        except Exception as e:
+            print(f"[{timestamp()}] [FATAL] Unexpected error during VS Code setup: {e}")
+        return True
+
+    if user_input.lower().startswith("print "):
+        file_path = user_input[6:].strip()
+
+        if not file_path:
+            print(f"[{timestamp()}] [WARNING] No filename provided.")
+            return True
+        if not os.path.isfile(file_path):
+            print(f"[{timestamp()}] [ERROR] File not found: {file_path}")
+            return True
+
+        print(f"[{timestamp()}] [INFO] Sending file to printer: {file_path}")
+
+        temp_folder = os.path.join(os.path.dirname(os.path.abspath(file_path)), "print_temp")
+        try:
+            os.makedirs(temp_folder, exist_ok=True)
+
+            with open(file_path, "r", encoding="utf-8") as f:
+                code = f.read()
+            lexer = guess_lexer_for_filename(file_path, code)
+            formatter = HtmlFormatter(full=True, style="colorful")
+            html_code = highlight(code, lexer, formatter)
+
+            html_path = os.path.join(temp_folder, "print_temp.html")
+            with open(html_path, "w", encoding="utf-8") as f:
+                f.write(html_code)
+
+            pdf_path = os.path.join(temp_folder, "print_temp.pdf")
+
+            edge_paths = [
+                r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
+                r"C:\Program Files\Microsoft\Edge\Application\msedge.exe"
+            ]
+            edge_path = None
+            for path in edge_paths:
+                if os.path.isfile(path):
+                    edge_path = path
+                    break
+
+            if edge_path is None:
+                print(f"[{timestamp()}] [ERROR] Microsoft Edge not found. Printing original file without highlighting.")
+                os.startfile(file_path, "print")
+            else:
+                subprocess.run([
+                    edge_path,
+                    "--headless",
+                    "--disable-gpu",
+                    f"--print-to-pdf={pdf_path}",
+                    html_path
+                ], check=True)
+
+                time.sleep(3)
+
+                # Convert Windows path to file URL for Edge
+                pdf_path_obj = pathlib.Path(pdf_path).absolute()
+                pdf_file_url = urllib.parse.urljoin('file:', urllib.request.pathname2url(str(pdf_path_obj)))
+
+                # Dann beim subprocess.run den file URL benutzen:
+
+                subprocess.run([
+                    edge_path,
+                    "--kiosk-printing",
+                    pdf_path
+                ])
+
+                print(f"[{timestamp()}] [INFO] PDF print job sent.")
+
+                os.startfile(pdf_path)
+                print(f"[{timestamp()}] [INFO] PDF opened in default browser.")
+
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Error while printing: {e}")
+
+        finally:
+            if os.path.isdir(temp_folder):
+                user_input_confirm = input("Do you want to end the print process and delete temporary files? [y/n]: ").strip().lower()
+                if user_input_confirm == "y":
+                    try:
+                        shutil.rmtree(temp_folder)
+                        print(f"[{timestamp()}] [INFO] Temporary folder '{temp_folder}' deleted.")
+                    except Exception as e:
+                        print(f"[{timestamp()}] [WARNING] Could not delete temporary folder: {e}")
+                else:
+                    print(f"[{timestamp()}] [INFO] Temporary folder '{temp_folder}' retained.")
+
+        return True
+
+    if user_input.lower().startswith("pprint "):
+        file_path = user_input[7:].strip()
+
+        if not file_path:
+            print(f"[{timestamp()}] [WARNING] No filename provided.")
+            return True
+        if not os.path.isfile(file_path):
+            print(f"[{timestamp()}] [ERROR] File not found: {file_path}")
+            return True
+
+        print(f"[{timestamp()}] [INFO] Sending file to printer: {file_path}")
+
+        temp_folder = os.path.join(os.path.dirname(os.path.abspath(file_path)), "print_temp")
+        try:
+            os.makedirs(temp_folder, exist_ok=True)
+
+            with open(file_path, "r", encoding="utf-8") as f:
+                code = f.read()
+            lexer = guess_lexer_for_filename(file_path, code)
+            formatter = HtmlFormatter(full=True, style="colorful")
+            html_code = highlight(code, lexer, formatter)
+
+            html_path = os.path.join(temp_folder, "print_temp.html")
+            with open(html_path, "w", encoding="utf-8") as f:
+                f.write(html_code)
+
+            pdf_path = os.path.join(temp_folder, "print_temp.pdf")
+
+            edge_paths = [
+                r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
+                r"C:\Program Files\Microsoft\Edge\Application\msedge.exe"
+            ]
+            edge_path = None
+            for path in edge_paths:
+                if os.path.isfile(path):
+                    edge_path = path
+                    break
+
+            if edge_path is None:
+                print(f"[{timestamp()}] [ERROR] Microsoft Edge not found. Printing original file without highlighting.")
+                os.startfile(file_path, "print")
+            else:
+                subprocess.run([
+                    edge_path,
+                    "--headless",
+                    "--disable-gpu",
+                    f"--print-to-pdf={pdf_path}",
+                    html_path
+                ], check=True)
+
+                time.sleep(3)
+
+                # Convert Windows path to file URL for Edge
+                pdf_path_obj = pathlib.Path(pdf_path).absolute()
+                pdf_file_url = urllib.parse.urljoin('file:', urllib.request.pathname2url(str(pdf_path_obj)))
+
+                # Dann beim subprocess.run den file URL benutzen:
+
+                subprocess.run([
+                    edge_path,
+                    "--kiosk-printing",
+                    pdf_path
+                ])
+
+                print(f"[{timestamp()}] [INFO] PDF print job sent.")
+
+                os.startfile(pdf_path)
+                print(f"[{timestamp()}] [INFO] PDF opened in default browser.")
+
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Error while printing: {e}")
+
+        finally:
+            if os.path.isdir(temp_folder):
+                user_input_confirm = input("Do you want to end the print process and delete temporary files? [y/n]: ").strip().lower()
+                if user_input_confirm == "y":
+                    try:
+                        shutil.rmtree(temp_folder)
+                        print(f"[{timestamp()}] [INFO] Temporary folder '{temp_folder}' deleted.")
+                    except Exception as e:
+                        print(f"[{timestamp()}] [WARNING] Could not delete temporary folder: {e}")
+                else:
+                    print(f"[{timestamp()}] [INFO] Temporary folder '{temp_folder}' retained.")
+
         return True
 
     if user_input.startswith("thonny-lx "):
