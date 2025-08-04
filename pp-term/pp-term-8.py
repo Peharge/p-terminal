@@ -4643,31 +4643,36 @@ def handle_special_commands(user_input):
         user_input = user_input[5:].strip()
         print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
-        # Ordner- und Dateipfad herausfinden
+        # Erkennen, ob user_input eine Datei ist (z.B. wenn ein Pfad oder Dateiname enthalten ist)
+        # Wir nehmen an, dass eine Datei erkannt wird, wenn der Pfad ein Verzeichnis oder eine Dateiendung enthält.
         folder = os.path.dirname(user_input)
         file = user_input
 
-        # Ordner erstellen, falls nicht existierend
-        if folder and not os.path.exists(folder):
-            try:
-                os.makedirs(folder)
-                print(f"[{timestamp()}] [INFO] Folder '{folder}' created.")
-            except Exception as e:
-                print(f"[{timestamp()}] [ERROR] Could not create folder '{folder}': {e}")
-                return False
+        if folder or os.path.splitext(file)[1]:  # Wenn Verzeichnis vorhanden oder Dateiendung (z.B. .txt, .py)
+            # Ordner erstellen, falls nicht existierend
+            if folder and not os.path.exists(folder):
+                try:
+                    os.makedirs(folder)
+                    print(f"[{timestamp()}] [INFO] Folder '{folder}' created.")
+                except Exception as e:
+                    print(f"[{timestamp()}] [ERROR] Could not create folder '{folder}': {e}")
+                    return False
 
-        # Datei erstellen, falls nicht vorhanden
-        if not os.path.exists(file):
-            try:
-                with open(file, 'w') as f:
-                    pass  # leere Datei anlegen
-                print(f"[{timestamp()}] [INFO] File '{file}' created.")
-            except Exception as e:
-                print(f"[{timestamp()}] [ERROR] Could not create file '{file}': {e}")
-                return False
+            # Datei erstellen, falls nicht vorhanden
+            if not os.path.exists(file):
+                try:
+                    with open(file, 'w') as f:
+                        pass  # leere Datei anlegen
+                    print(f"[{timestamp()}] [INFO] File '{file}' created.")
+                except Exception as e:
+                    print(f"[{timestamp()}] [ERROR] Could not create file '{file}': {e}")
+                    return False
 
-        # VS Code Befehl ausführen
-        command = f"code {file}"
+            # VS Code Befehl ausführen
+            command = f"code {file}"
+        else:
+            # Kein Datei- oder Pfad erkannt, Befehl normal ausführen
+            command = f"code {user_input}"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
@@ -4684,31 +4689,36 @@ def handle_special_commands(user_input):
         user_input = user_input[6:].strip()
         print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
-        # Ordner- und Dateipfad herausfinden
+        # Erkennen, ob user_input eine Datei ist (z.B. wenn ein Pfad oder Dateiname enthalten ist)
+        # Wir nehmen an, dass eine Datei erkannt wird, wenn der Pfad ein Verzeichnis oder eine Dateiendung enthält.
         folder = os.path.dirname(user_input)
         file = user_input
 
-        # Ordner erstellen, falls nicht existierend
-        if folder and not os.path.exists(folder):
-            try:
-                os.makedirs(folder)
-                print(f"[{timestamp()}] [INFO] Folder '{folder}' created.")
-            except Exception as e:
-                print(f"[{timestamp()}] [ERROR] Could not create folder '{folder}': {e}")
-                return False
+        if folder or os.path.splitext(file)[1]:  # Wenn Verzeichnis vorhanden oder Dateiendung (z.B. .txt, .py)
+            # Ordner erstellen, falls nicht existierend
+            if folder and not os.path.exists(folder):
+                try:
+                    os.makedirs(folder)
+                    print(f"[{timestamp()}] [INFO] Folder '{folder}' created.")
+                except Exception as e:
+                    print(f"[{timestamp()}] [ERROR] Could not create folder '{folder}': {e}")
+                    return False
 
-        # Datei erstellen, falls nicht vorhanden
-        if not os.path.exists(file):
-            try:
-                with open(file, 'w') as f:
-                    pass  # leere Datei anlegen
-                print(f"[{timestamp()}] [INFO] File '{file}' created.")
-            except Exception as e:
-                print(f"[{timestamp()}] [ERROR] Could not create file '{file}': {e}")
-                return False
+            # Datei erstellen, falls nicht vorhanden
+            if not os.path.exists(file):
+                try:
+                    with open(file, 'w') as f:
+                        pass  # leere Datei anlegen
+                    print(f"[{timestamp()}] [INFO] File '{file}' created.")
+                except Exception as e:
+                    print(f"[{timestamp()}] [ERROR] Could not create file '{file}': {e}")
+                    return False
 
-        # VS Code Befehl ausführen
-        command = f"code {file}"
+            # VS Code Befehl ausführen
+            command = f"code {file}"
+        else:
+            # Kein Datei- oder Pfad erkannt, Befehl normal ausführen
+            command = f"code {user_input}"
 
         process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True, text=True)
 
