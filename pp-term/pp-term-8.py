@@ -32225,7 +32225,7 @@ def handle_history_command():
 def save_history_as_pdf():
     global history  # Greife auf die globale Variable zu
 
-    print("[{timestamp()}] [INFO] Starting to print the history.")
+    print(f"[{timestamp()}] [INFO] Starting to print the history.")
 
     if not history:
         print(f"[{timestamp()}] [WARNING] No history found.")
