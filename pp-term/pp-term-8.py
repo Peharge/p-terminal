@@ -5393,6 +5393,10 @@ if __name__ == "__main__":
             print(f"[{timestamp()}] [FATAL] Unexpected error during VS Code setup: {e}")
         return True
 
+    if user_input.lower() == "print":
+        save_history_as_pdf()
+        return True
+
     if user_input.lower().startswith("print "):
         file_path = user_input[6:].strip()
         hole_file_path = os.path.abspath(file_path)
@@ -32215,6 +32219,81 @@ def handle_history_command():
         print(f"[{timestamp()}] [INFO] Previous commands:\n")
         for idx, cmd in enumerate(history, start=1):
             print(f"  {main_color}[{idx}]{reset} {cmd}")
+    return True
+
+
+def save_history_as_pdf():
+    global history  # Greife auf die globale Variable zu
+
+    print("[{timestamp()}] [INFO] Starting to print the history.")
+
+    if not history:
+        print(f"[{timestamp()}] [WARNING] No history found.")
+        return False
+
+    history_lines = [f"[{timestamp()}] [INFO] Previous commands:\n"]
+    for idx, cmd in enumerate(history, start=1):
+        history_lines.append(f"  [{idx}] {cmd}")
+
+    temp_folder = os.path.join(os.getcwd(), "print_temp")
+    os.makedirs(temp_folder, exist_ok=True)
+
+    html_path = os.path.join(temp_folder, "terminal_history.html")
+    pdf_path = os.path.join(temp_folder, "terminal_history.pdf")
+
+    escaped_text = "<br>\n".join(html.escape(line) for line in history_lines)
+
+    html_template = f"""<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>PP-Terminal Print</title>
+<style>
+  body {{ font-family: monospace; white-space: pre-wrap; margin: 2em; background: #fff; color: #000; }}
+  .header {{ font-size: 12px; color: gray; margin-bottom: 1em; }}
+  .footer {{ font-size: 10px; text-align: right; color: gray; margin-top: 2em; }}
+</style>
+</head>
+<body>
+  <div class="header">PP-Terminal History</div>
+  <div class="content">{escaped_text}</div>
+  <div class="footer">Erstellt am {timestamp()}</div>
+</body>
+</html>"""
+
+    with open(html_path, "w", encoding="utf-8") as f:
+        f.write(html_template)
+
+    try:
+        edge_path = find_edge_path()
+        subprocess.run([
+            edge_path,
+            "--headless",
+            "--disable-gpu",
+            f"--print-to-pdf={pdf_path}",
+            html_path
+        ], check=True)
+        print(f"[{timestamp()}] [INFO] PDF was created: {pdf_path}")
+    except Exception as e:
+        print(f"[{timestamp()}] [ERROR] PDF creation with Edge failed: {e}")
+        return False
+
+    try:
+        subprocess.Popen([edge_path, pdf_path])
+        print(f"[{timestamp()}] [INFO] PDF was opened in Edge.")
+    except Exception as e:
+        print(f"[{timestamp()}] [ERROR] PDF could not be opened in Edge: {e}")
+
+    user_input_confirm = input("Delete temporary files? [y/n]: ").strip().lower()
+    if user_input_confirm == "y":
+        try:
+            shutil.rmtree(temp_folder)
+            print(f"[{timestamp()}] [INFO] Temporary folder deleted.")
+        except Exception as e:
+            print(f"[{timestamp()}] [WARNING] Temporary folder could not be deleted: {e}")
+    else:
+        print(f"[{timestamp()}] [INFO] Temporary folder remains: {temp_folder}")
+
     return True
 
 
