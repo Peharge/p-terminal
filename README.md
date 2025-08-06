@@ -61,22 +61,25 @@ Peharge Projects 2025<br>
 **[16.05.2025]** PP-Term 4 release<br>
 **[18.05.2025]** PP-Term 4.3 EAP release<br>
 **[21.05.2025]** PP-Term 4.3 release<br>
-**[23.05.2025]** PP-Term 5 EAP release<br>
-**[27.05.2025]** PP-Term 5 release<br>
+**[23.05.2025]** PP-Term 5.1 EAP release<br>
+**[27.05.2025]** PP-Term 5.1 release<br>
 **[28.05.2025]** PP-Term 5.3 EAP release<br>
 **[29.05.2025]** PP-Term 5.3 release<br>
 **[31.05.2025]** PP-Term 5.3.1.55 runs with Python 3.13<br>
 **[03.06.2025]** Development start of P-Terminal<br>
 **[05.06.2025]** PP-Term 5.4 EAP release<br>
 **[12.06.2025]** PP-Term 5.4 release<br>
+**[27.05.2025]** PP-Term 5 release<br>
 **[12.06.2025]** PP-Term 6 (SOON) on Windows and Linux (with P Wine)<br>
 **[14.06.2025 -> 04.07.2025]** Development stop<br>- Im Sorry ;-) -> 01.08.2025 PP-Terminal 6 Release!!!<br>
-**[05.07.2025]** PP-Term 6 EAP release<br>
+**[05.07.2025]** PP-Term 6.1 EAP release<br>
 **[08.07.2025]** PP-Term 6.1 release<br>
 **[10.07.2025]** PP-Term 6.3 release<br>
 **[19.07.2025]** PP-Term 6.4 release<br>
 **[19.07.2025]** PP-Term 6 release<br>
-**[23.07.2025]** PP-Term 8 EAP release
+**[23.07.2025]** PP-Term 8.1 EAP release<br>
+**[06.08.2025]** PP-Term 8.1 release<br>
+**[06.08.2025]** PP-Term 8.3 EAP release<br>
 
 </div>
 
