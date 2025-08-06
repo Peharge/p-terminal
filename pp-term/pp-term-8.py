@@ -115,10 +115,10 @@ import contextlib
 from IPython import get_ipython
 import urllib.request
 import urllib.error
+import urllib.parse
 import nbformat
 import cirq
 import sqlite3
-import urllib.parse
 import html
 import faiss
 import pandas as pd
@@ -133,6 +133,8 @@ from pygments import highlight
 from pygments.lexers import guess_lexer_for_filename
 from pygments.formatters import HtmlFormatter
 import pathlib
+from markdown2 import markdown
+from docx import Document
 
 try:
     import ujson as _json
@@ -5402,30 +5404,78 @@ if __name__ == "__main__":
             print(f"[{timestamp()}] [ERROR] File not found: {file_path}")
             return True
 
-        print(f"[{timestamp()}] [INFO] Sending file to printer: {file_path}")
+        print(f"[{timestamp()}] [INFO] Preparing to print: {file_path}")
 
-        temp_folder = os.path.join(os.path.dirname(os.path.abspath(file_path)), "print_temp")
+        temp_folder = os.path.join(os.path.dirname(hole_file_path), "print_temp")
+        os.makedirs(temp_folder, exist_ok=True)
+        pdf_path = os.path.join(temp_folder, "print_temp.pdf")
+
         try:
-            os.makedirs(temp_folder, exist_ok=True)
+            ext = os.path.splitext(file_path)[1].lower()
 
-            # Lesen Sie den Code
-            with open(file_path, "r", encoding="utf-8") as f:
-                code = f.read()
+            # 1. Bilder
+            if is_image_file(file_path):
+                print(f"[{timestamp()}] [INFO] Detected image. Converting to PDF.")
+                img = Image.open(file_path)
+                img.convert("RGB").save(pdf_path)
 
-            # Hervorhebung vorbereiten
-            lexer = guess_lexer_for_filename(file_path, code)
-            formatter = HtmlFormatter(style="colorful", full=False)
-            highlighted_code = highlight(code, lexer, formatter)
+            # 2. Bereits PDF
+            elif is_pdf_file(file_path):
+                print(f"[{timestamp()}] [INFO] File is already PDF. Copying.")
+                shutil.copy(file_path, pdf_path)
 
-            # Titel und Fußzeile hinzufügen
-            html_template = f"""<!DOCTYPE html>
+            # 3. Markdown
+            elif is_markdown_file(file_path):
+                print(f"[{timestamp()}] [INFO] Detected Markdown. Converting to HTML.")
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    md_content = f.read()
+                html_body = markdown(md_content)
+
+                html_template = f"""<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>PP-Terminal Markdown Print</title></head>
+<body style="font-family:sans-serif; margin:2em;">
+{html_body}
+</body></html>"""
+
+                html_path = os.path.join(temp_folder, "temp.html")
+                with open(html_path, "w", encoding="utf-8") as f:
+                    f.write(html_template)
+
+                pdf_path = os.path.join(temp_folder, "print_temp.pdf")
+                edge_path = find_edge_path()
+                subprocess.run([
+                    edge_path,
+                    "--headless",
+                    "--disable-gpu",
+                    f"--print-to-pdf={pdf_path}",
+                    html_path
+                ], check=True)
+
+            # 4. Word, Excel, PowerPoint (via LibreOffice)
+            elif is_word_file(file_path) or is_excel_file(file_path) or is_powerpoint_file(file_path):
+                print(f"[{timestamp()}] [INFO] Detected Office file. Converting to PDF.")
+                if not convert_office_to_pdf(file_path, pdf_path):
+                    print(f"[{timestamp()}] [ERROR] Office conversion failed. Aborting.")
+                    return True
+
+            # 5. Text/Code-Dateien
+            else:
+                print(f"[{timestamp()}] [INFO] Treating as text/code file with syntax highlighting.")
+                with open(file_path, "r", encoding="utf-8") as f:
+                    code = f.read()
+
+                lexer = guess_lexer_for_filename(file_path, code)
+                formatter = HtmlFormatter(style="colorful", full=False)
+                highlighted_code = highlight(code, lexer, formatter)
+
+                html_template = f"""<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>PP-Terminal</title>
+    <title>PP-Terminal Print</title>
     <style>
         body {{ font-family: sans-serif; margin: 2em; }}
-        .header {{ font-size: 12px; text-align: left; color: gray; margin-bottom: 10px; }}
+        .header {{ font-size: 12px; color: gray; }}
         .footer {{ font-size: 10px; text-align: right; color: gray; margin-top: 40px; }}
         {formatter.get_style_defs('.highlight')}
     </style>
@@ -5437,26 +5487,11 @@ if __name__ == "__main__":
 </body>
 </html>
 """
+                html_path = os.path.join(temp_folder, "temp.html")
+                with open(html_path, "w", encoding="utf-8") as f:
+                    f.write(html_template)
 
-            # HTML-Datei speichern
-            html_path = os.path.join(temp_folder, "print_temp.html")
-            with open(html_path, "w", encoding="utf-8") as f:
-                f.write(html_template)
-
-            # Definieren Sie den PDF-Ausgabepfad
-            pdf_path = os.path.join(temp_folder, "print_temp.pdf")
-
-            # Suchen Sie Edge
-            edge_paths = [
-                r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
-                r"C:\Program Files\Microsoft\Edge\Application\msedge.exe"
-            ]
-            edge_path = next((p for p in edge_paths if os.path.isfile(p)), None)
-
-            if edge_path is None:
-                print(f"[{timestamp()}] [ERROR] Microsoft Edge not found. Printing original file without highlighting.")
-                os.startfile(file_path, "print")
-            else:
+                edge_path = find_edge_path()
                 subprocess.run([
                     edge_path,
                     "--headless",
@@ -5465,40 +5500,35 @@ if __name__ == "__main__":
                     html_path
                 ], check=True)
 
-                time.sleep(3)
+            # Drucke das PDF
+            print(f"[{timestamp()}] [INFO] Sending PDF to printer...")
+            edge_path = find_edge_path()
+            subprocess.run([
+                edge_path,
+                "--kiosk-printing",
+                pdf_path
+            ], check=True)
+            print(f"[{timestamp()}] [INFO] Print job sent via Edge.")
 
-                # Pfad in URL konvertieren
-                pdf_path_obj = pathlib.Path(pdf_path).absolute()
-                pdf_file_url = urllib.parse.urljoin('file:', urllib.request.pathname2url(str(pdf_path_obj)))
-                print(f"[{timestamp()}] [INFO] PDF generated: {pdf_file_url}")
-
-                # Dann beim subprocess.run den file URL benutzen:
-
-                subprocess.run([
-                    edge_path,
-                    "--kiosk-printing",
-                    pdf_path
-                ])
-
-                print(f"[{timestamp()}] [INFO] PDF print job sent.")
-
-                os.startfile(pdf_path)
-                print(f"[{timestamp()}] [INFO] PDF opened in default browser.")
+            # Öffne PDF zur Kontrolle
+            time.sleep(1)
+            os.startfile(pdf_path)
+            print(f"[{timestamp()}] [INFO] PDF opened in default viewer.")
 
         except Exception as e:
-            print(f"[{timestamp()}] [ERROR] Error while printing: {e}")
+            print(f"[{timestamp()}] [ERROR] Failed during print process: {e}")
 
         finally:
             if os.path.isdir(temp_folder):
-                user_input_confirm = input("Do you want to end the print process and delete temporary files? [y/n]: ").strip().lower()
+                user_input_confirm = input("Delete temporary files? [y/n]: ").strip().lower()
                 if user_input_confirm == "y":
                     try:
                         shutil.rmtree(temp_folder)
-                        print(f"[{timestamp()}] [INFO] Temporary folder '{temp_folder}' deleted.")
+                        print(f"[{timestamp()}] [INFO] Temporary folder deleted.")
                     except Exception as e:
                         print(f"[{timestamp()}] [WARNING] Could not delete temporary folder: {e}")
                 else:
-                    print(f"[{timestamp()}] [INFO] Temporary folder '{temp_folder}' retained.")
+                    print(f"[{timestamp()}] [INFO] Temporary folder retained.")
 
         return True
 
@@ -5513,30 +5543,78 @@ if __name__ == "__main__":
             print(f"[{timestamp()}] [ERROR] File not found: {file_path}")
             return True
 
-        print(f"[{timestamp()}] [INFO] Sending file to printer: {file_path}")
+        print(f"[{timestamp()}] [INFO] Preparing to print: {file_path}")
 
-        temp_folder = os.path.join(os.path.dirname(os.path.abspath(file_path)), "print_temp")
+        temp_folder = os.path.join(os.path.dirname(hole_file_path), "print_temp")
+        os.makedirs(temp_folder, exist_ok=True)
+        pdf_path = os.path.join(temp_folder, "print_temp.pdf")
+
         try:
-            os.makedirs(temp_folder, exist_ok=True)
+            ext = os.path.splitext(file_path)[1].lower()
 
-            # Lesen Sie den Code
-            with open(file_path, "r", encoding="utf-8") as f:
-                code = f.read()
+            # 1. Bilder
+            if is_image_file(file_path):
+                print(f"[{timestamp()}] [INFO] Detected image. Converting to PDF.")
+                img = Image.open(file_path)
+                img.convert("RGB").save(pdf_path)
 
-            # Hervorhebung vorbereiten
-            lexer = guess_lexer_for_filename(file_path, code)
-            formatter = HtmlFormatter(style="colorful", full=False)
-            highlighted_code = highlight(code, lexer, formatter)
+            # 2. Bereits PDF
+            elif is_pdf_file(file_path):
+                print(f"[{timestamp()}] [INFO] File is already PDF. Copying.")
+                shutil.copy(file_path, pdf_path)
 
-            # Titel und Fußzeile hinzufügen
-            html_template = f"""<!DOCTYPE html>
+            # 3. Markdown
+            elif is_markdown_file(file_path):
+                print(f"[{timestamp()}] [INFO] Detected Markdown. Converting to HTML.")
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    md_content = f.read()
+                html_body = markdown(md_content)
+
+                html_template = f"""<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>PP-Terminal Markdown Print</title></head>
+<body style="font-family:sans-serif; margin:2em;">
+{html_body}
+</body></html>"""
+
+                html_path = os.path.join(temp_folder, "temp.html")
+                with open(html_path, "w", encoding="utf-8") as f:
+                    f.write(html_template)
+
+                pdf_path = os.path.join(temp_folder, "print_temp.pdf")
+                edge_path = find_edge_path()
+                subprocess.run([
+                    edge_path,
+                    "--headless",
+                    "--disable-gpu",
+                    f"--print-to-pdf={pdf_path}",
+                    html_path
+                ], check=True)
+
+            # 4. Word, Excel, PowerPoint (via LibreOffice)
+            elif is_word_file(file_path) or is_excel_file(file_path) or is_powerpoint_file(file_path):
+                print(f"[{timestamp()}] [INFO] Detected Office file. Converting to PDF.")
+                if not convert_office_to_pdf(file_path, pdf_path):
+                    print(f"[{timestamp()}] [ERROR] Office conversion failed. Aborting.")
+                    return True
+
+            # 5. Text/Code-Dateien
+            else:
+                print(f"[{timestamp()}] [INFO] Treating as text/code file with syntax highlighting.")
+                with open(file_path, "r", encoding="utf-8") as f:
+                    code = f.read()
+
+                lexer = guess_lexer_for_filename(file_path, code)
+                formatter = HtmlFormatter(style="colorful", full=False)
+                highlighted_code = highlight(code, lexer, formatter)
+
+                html_template = f"""<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>PP-Terminal</title>
+    <title>PP-Terminal Print</title>
     <style>
         body {{ font-family: sans-serif; margin: 2em; }}
-        .header {{ font-size: 12px; text-align: left; color: gray; margin-bottom: 10px; }}
+        .header {{ font-size: 12px; color: gray; }}
         .footer {{ font-size: 10px; text-align: right; color: gray; margin-top: 40px; }}
         {formatter.get_style_defs('.highlight')}
     </style>
@@ -5548,26 +5626,11 @@ if __name__ == "__main__":
 </body>
 </html>
 """
+                html_path = os.path.join(temp_folder, "temp.html")
+                with open(html_path, "w", encoding="utf-8") as f:
+                    f.write(html_template)
 
-            # HTML-Datei speichern
-            html_path = os.path.join(temp_folder, "print_temp.html")
-            with open(html_path, "w", encoding="utf-8") as f:
-                f.write(html_template)
-
-            # Definieren Sie den PDF-Ausgabepfad
-            pdf_path = os.path.join(temp_folder, "print_temp.pdf")
-
-            # Suchen Sie Edge
-            edge_paths = [
-                r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
-                r"C:\Program Files\Microsoft\Edge\Application\msedge.exe"
-            ]
-            edge_path = next((p for p in edge_paths if os.path.isfile(p)), None)
-
-            if edge_path is None:
-                print(f"[{timestamp()}] [ERROR] Microsoft Edge not found. Printing original file without highlighting.")
-                os.startfile(file_path, "print")
-            else:
+                edge_path = find_edge_path()
                 subprocess.run([
                     edge_path,
                     "--headless",
@@ -5576,40 +5639,35 @@ if __name__ == "__main__":
                     html_path
                 ], check=True)
 
-                time.sleep(3)
+            # Drucke das PDF
+            print(f"[{timestamp()}] [INFO] Sending PDF to printer...")
+            edge_path = find_edge_path()
+            subprocess.run([
+                edge_path,
+                "--kiosk-printing",
+                pdf_path
+            ], check=True)
+            print(f"[{timestamp()}] [INFO] Print job sent via Edge.")
 
-                # Pfad in URL konvertieren
-                pdf_path_obj = pathlib.Path(pdf_path).absolute()
-                pdf_file_url = urllib.parse.urljoin('file:', urllib.request.pathname2url(str(pdf_path_obj)))
-                print(f"[{timestamp()}] [INFO] PDF generated: {pdf_file_url}")
-
-                # Dann beim subprocess.run den file URL benutzen:
-
-                subprocess.run([
-                    edge_path,
-                    "--kiosk-printing",
-                    pdf_path
-                ])
-
-                print(f"[{timestamp()}] [INFO] PDF print job sent.")
-
-                os.startfile(pdf_path)
-                print(f"[{timestamp()}] [INFO] PDF opened in default browser.")
+            # Öffne PDF zur Kontrolle
+            time.sleep(1)
+            os.startfile(pdf_path)
+            print(f"[{timestamp()}] [INFO] PDF opened in default viewer.")
 
         except Exception as e:
-            print(f"[{timestamp()}] [ERROR] Error while printing: {e}")
+            print(f"[{timestamp()}] [ERROR] Failed during print process: {e}")
 
         finally:
             if os.path.isdir(temp_folder):
-                user_input_confirm = input("Do you want to end the print process and delete temporary files? [y/n]: ").strip().lower()
+                user_input_confirm = input("Delete temporary files? [y/n]: ").strip().lower()
                 if user_input_confirm == "y":
                     try:
                         shutil.rmtree(temp_folder)
-                        print(f"[{timestamp()}] [INFO] Temporary folder '{temp_folder}' deleted.")
+                        print(f"[{timestamp()}] [INFO] Temporary folder deleted.")
                     except Exception as e:
                         print(f"[{timestamp()}] [WARNING] Could not delete temporary folder: {e}")
                 else:
-                    print(f"[{timestamp()}] [INFO] Temporary folder '{temp_folder}' retained.")
+                    print(f"[{timestamp()}] [INFO] Temporary folder retained.")
 
         return True
 
@@ -25382,6 +25440,63 @@ def switch_theme(user_input: str) -> bool:
         print(f"[{timestamp()}] [ERROR] Failed to apply theme '{choice}': {e}")
 
     return True
+
+
+def is_image_file(file_path):
+    return os.path.splitext(file_path)[1].lower() in [".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tiff", ".webp"]
+
+
+def is_pdf_file(file_path):
+    return file_path.lower().endswith(".pdf")
+
+
+def is_markdown_file(file_path):
+    return file_path.lower().endswith(".md")
+
+
+def is_word_file(file_path):
+    return file_path.lower().endswith(".docx")
+
+
+def is_excel_file(file_path):
+    return file_path.lower().endswith(".xlsx")
+
+
+def is_powerpoint_file(file_path):
+    return file_path.lower().endswith(".pptx")
+
+
+def convert_office_to_pdf(file_path, output_path):
+    try:
+        print(f"[{timestamp()}] [INFO] Trying LibreOffice conversion...")
+        subprocess.run([
+            "soffice",
+            "--headless",
+            "--convert-to", "pdf",
+            "--outdir", os.path.dirname(output_path),
+            file_path
+        ], check=True)
+        generated_pdf = os.path.join(os.path.dirname(output_path), os.path.splitext(os.path.basename(file_path))[0] + ".pdf")
+        if os.path.exists(generated_pdf):
+            shutil.move(generated_pdf, output_path)
+            print(f"[{timestamp()}] [INFO] LibreOffice converted to: {output_path}")
+            return True
+        else:
+            raise Exception("LibreOffice did not generate output.")
+    except Exception as e:
+        print(f"[{timestamp()}] [ERROR] LibreOffice conversion failed: {e}")
+        return False
+
+
+def find_edge_path():
+    edge_paths = [
+        r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
+        r"C:\Program Files\Microsoft\Edge\Application\msedge.exe"
+    ]
+    for path in edge_paths:
+        if os.path.isfile(path):
+            return path
+    raise FileNotFoundError("Microsoft Edge not found.")
 
 
 def my_exit_py():
