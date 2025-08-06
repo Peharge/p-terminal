@@ -115,7 +115,8 @@ REQUIRED_PACKAGES = [
     "markdown", "cirq", "mysql-connector-python", "psycopg2-binary", "cx_Oracle", "pyodbc",
     "redis", "pymongo", "bson", "cassandra-driver", "python-arango", "neo4j",
     "pyorient", "ravendb", "boto3", "yfinance", "monai", "nibabel", "monailabel", "monai-deploy-app-sdk",
-    "scikit-image", "pydicom", "SimpleITK", "pywin32", "thonny", "spyder", "pudb", "ipdb", "pygments"
+    "scikit-image", "pydicom", "SimpleITK", "pywin32", "thonny", "spyder", "pudb", "ipdb", "pygments",
+    "markdown2", "python-docx"
 ]
 
 
