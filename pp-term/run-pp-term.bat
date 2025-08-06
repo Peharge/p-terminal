@@ -375,6 +375,8 @@ if %errorlevel% neq 0 (
     call :Log ERROR "❌ Python 3.13 is not installed."
 
     echo.
+    echo Note: Python 3.13 is strictly required for proper functionality of the PP-Terminal.
+    echo.
     echo Recommended Methods for Installing Python 3.13
     echo.
     echo 1. Official Python Website
@@ -479,6 +481,8 @@ if %errorlevel% neq 0 (
     call :Log ERROR "❌ Git is not installed."
 
     echo.
+    echo Note: Git must be installed to enable repository cloning and basic version control operations.
+    echo.
     echo Recommended Methods for Installing Git
     echo 1. Official Git Website
     echo    - Download
@@ -576,6 +580,8 @@ ollama --version >nul 2>&1
 if %errorlevel% neq 0 (
     call :Log ERROR "❌ Ollama is not installed."
 
+    echo.
+    echo Note: Ollama is optional and only required if you intend to use AI assistants or MAVIS features.
     echo.
     echo Recommended Methods for Installing Ollama
     echo.
@@ -678,8 +684,9 @@ if %errorlevel% neq 0 (
     call :Log ERROR "❌ FFmpeg is not installed."
 
     echo.
+    echo Note: FFmpeg is not required to run PP-Terminal. However, it is mandatory for using the MAVIS Voice Assistant."
+    echo.
     echo Recommended Methods for Installing FFmpeg
-    echo Installing FFmpeg is not required to run pp-term. However, installing FFmpeg is mandatory for using MAVIS Voice Assistant!
     echo.
     echo 1. Official FFmpeg Website
     echo    - Download
@@ -778,6 +785,8 @@ rustup --version >nul 2>&1
 if %errorlevel% neq 0 (
     call :Log ERROR "❌ Rustup is not installed."
 
+    echo.
+    echo Note: Rustup is not required by default. However, it is recommended if you plan to run Rust code in PP-Term or use WSL with Rust.
     echo.
     echo Recommended Methods for Installing Rust
     echo.
@@ -881,6 +890,8 @@ if %errorlevel% neq 0 (
     call :Log ERROR "❌ PowerShell 7 is not installed."
 
     echo.
+    echo Installing PowerShell 7 is recommended, as some commands rely on it. While PP-Terminal can run without it, certain features may be limited.
+    echo.
     echo Recommended Methods for Installing PowerShell 7
     echo.
     echo 1. Official PowerShell Website
@@ -965,9 +976,9 @@ if exist "%SLICER_PATH%" (
     call :Log ERROR "❌ 3D Slicer is not installed."
 
     echo.
-    echo Recommended Methods for Installing 3D Slicer
     echo Installing 3D Slicer isn't required to run PP-Terminal. However, if you plan to use SIMON, installing 3D Slicer is mandatory. If you encounter any problems during installation, simply run the Install 3d-slicer command in the PP-Terminal. This installation method is significantly more secure!
     echo.
+    echo Recommended Methods for Installing 3D Slicer    echo.
     echo 1. Official 3D Slicer Website
     echo    - Download
     echo      https://www.slicer.org/
@@ -1062,6 +1073,8 @@ if %ERRORLEVEL% NEQ 0 (
     call :Log ERROR "❌ Docker Desktop is not installed."
 
     echo.
+    echo Note: Docker Desktop is not required unless you specifically plan to use container-based development features.
+    echo.
     echo Recommended Methods for Installing Docker Desktop
     echo.
     echo 1. Official Docker Website
@@ -1153,6 +1166,8 @@ wsl --list >nul 2>&1
 if errorlevel 1 (
     all :Log ERROR "❌ WSL is not installed."
 
+    echo.
+    echo Note: Installing WSL is strongly recommended, as it unlocks many useful features and is used by several IDEs for enhanced development workflows.
     echo.
     echo Recommended Methods for Installing WSL
     echo.
