@@ -32257,7 +32257,7 @@ def save_history_as_pdf():
 <body>
   <div class="header">PP-Terminal History</div>
   <div class="content">{escaped_text}</div>
-  <div class="footer">Erstellt am {timestamp()}</div>
+  <div class="footer">Created on {timestamp()}</div>
 </body>
 </html>"""
 
