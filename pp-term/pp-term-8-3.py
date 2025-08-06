@@ -35167,7 +35167,7 @@ def main():
 
                 print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
 
-            if "activate.bat" in user_input.lower():
+            elif "activate.bat" in user_input.lower():
                 parts = user_input.strip().split()
                 activate_path = None
                 for part in parts:
@@ -35205,7 +35205,7 @@ def main():
                         else:
                             print(f"[{timestamp()}] [INFO] Execution of the .bat aborted.")
 
-            if "activate.ps1" in user_input.lower():
+            elif "activate.ps1" in user_input.lower():
                 parts = user_input.strip().split()
                 activate_path = None
                 for part in parts:
