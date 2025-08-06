@@ -35293,7 +35293,6 @@ def main():
                         else:
                             print(f"[{timestamp()}] [INFO] Execution of the .fish aborted.")
 
-
             elif "activate.nu" in user_input.lower():
                 parts = user_input.strip().split()
                 activate_path = None
