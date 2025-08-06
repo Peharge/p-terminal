@@ -86,8 +86,8 @@ def activate_virtualenv(venv_path: Path):
         exec(f.read(), {'__file__': str(activate_script)})
 
 
-def start_mavis():
-    """Runs required scripts for MAVIS setup."""
+def start_term():
+    """Runs required scripts for pp-term setup."""
     base_path = Path.home() / 'p-terminal' / 'pp-term' / 'pp-commands'
 
     update_script = base_path / 'update-repository-windows.py'
@@ -99,9 +99,11 @@ def start_mavis():
     print(f"[{timestamp()}] [INFO] Running install script...")
     subprocess.run([sys.executable, str(install_script)], check=True)
 
+    print(f"[{timestamp()}] [INFO] To use the new PP-Terminal, please run the restart command or simply restart the terminal to be sure.")
+
 
 if __name__ == "__main__":
     venv_path = Path(os.getenv('VENV_PATH', Path.home() / 'p-terminal' / 'pp-term' / '.env'))
     print(f"[{timestamp()}] [INFO] Starting virtual environment activation...")
     activate_virtualenv(venv_path)
-    start_mavis()
+    start_term()
