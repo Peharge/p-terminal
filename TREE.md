@@ -3650,6 +3650,8 @@
 |   |   |   |-- pycharm
 |   |   |   |   |-- install-pycharm.py
 |   |   |   |   |-- run-pycharm.py
+|   |   |   |-- racket
+|   |   |   |   |-- install-racket.py
 |   |   |   |-- rscript
 |   |   |   |   |-- install-rscript.py
 |   |   |   |-- ruby
