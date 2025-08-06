@@ -9,6 +9,7 @@
 ```bash
 
 |-- p-terminal
+|   |-- .gitignore
 |   |-- CODE_OF_CONDUCT.md
 |   |-- CONTRIBUTING.md
 |   |-- icons
@@ -34,7 +35,11 @@
 |   |   |-- p-term-logo-6.png
 |   |   |-- p-term-logo-8.png
 |   |   |-- peharge-banner-3.svg
+|   |   |-- peharge-compiler-banner-3.svg
+|   |   |-- peharge-kernel-banner-3.svg
 |   |   |-- pp-term-banner-3.svg
+|   |   |-- pp-terminal-launcher-banner-3.svg
+|   |   |-- simon-banner-3.svg
 |   |-- INFO.md
 |   |-- IQ
 |   |   |-- README.md
@@ -663,6 +668,7 @@
 |   |-- p-wine
 |   |   |-- README.md
 |   |-- pp-term
+|   |   |-- autocompletion_commands.json
 |   |   |-- current_env.json
 |   |   |-- icons
 |   |   |   |-- MAVIS-3-logo-1.ico
@@ -1183,6 +1189,45 @@
 |   |   |   |   |-- pp-term-6-install-pytorch.py
 |   |   |   |   |-- pp-term-6-install-tensorflow.py
 |   |   |   |   |-- pp-term-6-install-tf-nightly.py
+|   |   |   |-- launcher-8
+|   |   |   |   |-- pp-term-8-doctor-main.py
+|   |   |   |   |-- pp-term-8-doctor.py
+|   |   |   |   |-- pp-term-8-install-cirq.py
+|   |   |   |   |-- pp-term-8-install-faiss.py
+|   |   |   |   |-- pp-term-8-install-jax.py
+|   |   |   |   |-- pp-term-8-install-main.py
+|   |   |   |   |-- pp-term-8-install-pytorch.py
+|   |   |   |   |-- pp-term-8-install-tensorflow.py
+|   |   |   |   |-- pp-term-8-install-tf-nightly.py
+|   |   |   |-- launcher-8-3
+|   |   |   |   |-- pp-term-8-doctor-main.py
+|   |   |   |   |-- pp-term-8-doctor.py
+|   |   |   |   |-- pp-term-8-install-cirq.py
+|   |   |   |   |-- pp-term-8-install-faiss.py
+|   |   |   |   |-- pp-term-8-install-ibm_db.py
+|   |   |   |   |-- pp-term-8-install-jax.py
+|   |   |   |   |-- pp-term-8-install-main.py
+|   |   |   |   |-- pp-term-8-install-pytorch.py
+|   |   |   |   |-- pp-term-8-install-tensorflow.py
+|   |   |   |   |-- pp-term-8-install-tf-nightly.py
+|   |   |   |-- launcher-8-3-3
+|   |   |   |   |-- p-start-u.ps1
+|   |   |   |   |-- p-start.ps1
+|   |   |   |   |-- pp-term-8-doctor-main.py
+|   |   |   |   |-- pp-term-8-doctor.py
+|   |   |   |   |-- pp-term-8-install-cirq.py
+|   |   |   |   |-- pp-term-8-install-faiss.py
+|   |   |   |   |-- pp-term-8-install-ibm_db.py
+|   |   |   |   |-- pp-term-8-install-jax.py
+|   |   |   |   |-- pp-term-8-install-main.py
+|   |   |   |   |-- pp-term-8-install-pytorch.py
+|   |   |   |   |-- pp-term-8-install-tensorflow.py
+|   |   |   |   |-- pp-term-8-install-tf-nightly.py
+|   |   |   |   |-- pp-term.bat
+|   |   |   |   |-- run-pp-term-fast-u.bat
+|   |   |   |   |-- run-pp-term-fast.bat
+|   |   |   |   |-- run-pp-term.bat
+|   |   |   |   |-- update-pp-term-venv.py
 |   |   |   |-- MAVIS
 |   |   |   |   |-- mavis-4-3-main.py
 |   |   |   |   |-- mavis-4-main.py
@@ -2820,12 +2865,39 @@
 |   |   |   |   |-- pp-term-6-3-1-9.py
 |   |   |   |-- pp-term-6-4
 |   |   |   |   |-- pp-term-6-4-1-1.py
+|   |   |   |   |-- pp-term-6-4-1-10.py
+|   |   |   |   |-- pp-term-6-4-1-11.py
+|   |   |   |   |-- pp-term-6-4-1-13.py
+|   |   |   |   |-- pp-term-6-4-1-14.py
+|   |   |   |   |-- pp-term-6-4-1-15.py
+|   |   |   |   |-- pp-term-6-4-1-16.py
+|   |   |   |   |-- pp-term-6-4-1-18.py
 |   |   |   |   |-- pp-term-6-4-1-3.py
 |   |   |   |   |-- pp-term-6-4-1-4.py
 |   |   |   |   |-- pp-term-6-4-1-5.py
 |   |   |   |   |-- pp-term-6-4-1-6.py
 |   |   |   |   |-- pp-term-6-4-1-8.py
 |   |   |   |   |-- pp-term-6-4-1-9.py
+|   |   |   |-- pp-term-8
+|   |   |   |   |-- pp-term-8-1-1-1.py
+|   |   |   |   |-- pp-term-8-1-1-10.py
+|   |   |   |   |-- pp-term-8-1-1-11.py
+|   |   |   |   |-- pp-term-8-1-1-13.py
+|   |   |   |   |-- pp-term-8-1-1-14.py
+|   |   |   |   |-- pp-term-8-1-1-15.py
+|   |   |   |   |-- pp-term-8-1-1-16.py
+|   |   |   |   |-- pp-term-8-1-1-18.py
+|   |   |   |   |-- pp-term-8-1-1-19.py
+|   |   |   |   |-- pp-term-8-1-1-3.py
+|   |   |   |   |-- pp-term-8-1-1-30.py
+|   |   |   |   |-- pp-term-8-1-1-31.py
+|   |   |   |   |-- pp-term-8-1-1-33.py
+|   |   |   |   |-- pp-term-8-1-1-34.py
+|   |   |   |   |-- pp-term-8-1-1-4.py
+|   |   |   |   |-- pp-term-8-1-1-5.py
+|   |   |   |   |-- pp-term-8-1-1-6.py
+|   |   |   |   |-- pp-term-8-1-1-8.py
+|   |   |   |   |-- pp-term-8-1-1-9.py
 |   |   |   |-- run
 |   |   |   |   |-- c
 |   |   |   |   |   |-- install-gcc.py
@@ -3068,6 +3140,7 @@
 |   |   |   |-- bpytop.py
 |   |   |   |-- btop.py
 |   |   |   |-- clion.py
+|   |   |   |-- code-win.py
 |   |   |   |-- code.py
 |   |   |   |-- command-a.py
 |   |   |   |-- commands
@@ -3088,6 +3161,7 @@
 |   |   |   |-- doctor.py
 |   |   |   |-- dstat.py
 |   |   |   |-- duf.py
+|   |   |   |-- eamcs-win.py
 |   |   |   |-- emacs.py
 |   |   |   |-- entr.py
 |   |   |   |-- espanso.py
@@ -3160,6 +3234,7 @@
 |   |   |   |-- iotop.py
 |   |   |   |-- iperf3.py
 |   |   |   |-- jed.py
+|   |   |   |-- jk-p.py
 |   |   |   |-- joe.py
 |   |   |   |-- jupyter-version.py
 |   |   |   |-- kakoune.py
@@ -3181,6 +3256,7 @@
 |   |   |   |-- llama-4-scout-17b-ollama.py
 |   |   |   |-- llama-4-scout-17b.py
 |   |   |   |-- lsblk.py
+|   |   |   |-- mg-p.py
 |   |   |   |-- mg.py
 |   |   |   |-- micro.py
 |   |   |   |-- mistral-large.py
@@ -3202,12 +3278,15 @@
 |   |   |   |-- nethogs.py
 |   |   |   |-- nmap.py
 |   |   |   |-- nmon.py
+|   |   |   |-- notepadpp.py
+|   |   |   |-- nvim-win.py
 |   |   |   |-- nvim.py
 |   |   |   |-- p-3dslicer-git.py
 |   |   |   |-- p-3dslicer-web.py
 |   |   |   |-- p-arch.py
 |   |   |   |-- p-chatgpt.py
 |   |   |   |-- p-claude.py
+|   |   |   |-- p-compiler.py
 |   |   |   |-- p-copy.py
 |   |   |   |-- p-debian.py
 |   |   |   |-- p-deepseek-r1.py
@@ -3300,10 +3379,12 @@
 |   |   |   |-- p-wsl.py
 |   |   |   |-- p-you.py
 |   |   |   |-- p-youtube.py
+|   |   |   |-- peharge.py
 |   |   |   |-- phi-4-mini.py
 |   |   |   |-- phi-4.py
 |   |   |   |-- phpstorm.py
 |   |   |   |-- plasma-workspace.py
+|   |   |   |-- pp-term.py
 |   |   |   |-- pycharm.py
 |   |   |   |-- qvq-72b.py
 |   |   |   |-- qwen-2-5-0-5b.py
@@ -3445,6 +3526,8 @@
 |   |   |   |-- theme-pcc-8.py
 |   |   |   |-- theme-pcc-9.py
 |   |   |   |-- theme-pcc.py
+|   |   |   |-- thonny-win.py
+|   |   |   |-- thonny.py
 |   |   |   |-- tldr.py
 |   |   |   |-- tmux.py
 |   |   |   |-- update-docker.py
@@ -3459,6 +3542,7 @@
 |   |   |   |-- update-vsb.py
 |   |   |   |-- update-wsl.py
 |   |   |   |-- update.py
+|   |   |   |-- vim-win.py
 |   |   |   |-- vim.py
 |   |   |   |-- vs-code.py
 |   |   |   |-- wan-2-1-t2v-14b.py
@@ -3489,6 +3573,17 @@
 |   |   |-- pp-term-6-install-tensorflow.py
 |   |   |-- pp-term-6-install-tf-nightly.py
 |   |   |-- pp-term-6.py
+|   |   |-- pp-term-8-doctor-main.py
+|   |   |-- pp-term-8-doctor.py
+|   |   |-- pp-term-8-install-cirq.py
+|   |   |-- pp-term-8-install-faiss.py
+|   |   |-- pp-term-8-install-ibm_db.py
+|   |   |-- pp-term-8-install-jax.py
+|   |   |-- pp-term-8-install-main.py
+|   |   |-- pp-term-8-install-pytorch.py
+|   |   |-- pp-term-8-install-tensorflow.py
+|   |   |-- pp-term-8-install-tf-nightly.py
+|   |   |-- pp-term-8.py
 |   |   |-- pp-term-versions.json
 |   |   |-- pp-term.bat
 |   |   |-- pp-term.py
@@ -3555,8 +3650,6 @@
 |   |   |   |-- pycharm
 |   |   |   |   |-- install-pycharm.py
 |   |   |   |   |-- run-pycharm.py
-|   |   |   |-- racket
-|   |   |   |   |-- racket.py
 |   |   |   |-- rscript
 |   |   |   |   |-- install-rscript.py
 |   |   |   |-- ruby
@@ -3571,6 +3664,7 @@
 |   |   |   |   |   |-- install-3d-slicer.py
 |   |   |   |   |   |-- run-3d-slicer.py
 |   |   |   |   |-- install-simon-1.py
+|   |   |   |   |-- install-simon-3.py
 |   |   |   |-- solidity
 |   |   |   |   |-- install-solidity.py
 |   |   |   |-- swift
