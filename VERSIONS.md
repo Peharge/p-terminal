@@ -432,6 +432,7 @@
     - PP-Terminal Launcher 8.3.3
       - PP-Terminal Launcher 8.3.3.1
       - PP-Terminal Launcher 8.3.3.3
+      - PP-Terminal Launcher 8.3.3.4
       - PP-Terminal Launcher 8.3.3.5
       - PP-Terminal Launcher 8.3.3.6
 
