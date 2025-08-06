@@ -69,7 +69,7 @@ Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vo
 #>
 
 param (
-    [string]$ScriptPath = "$PSScriptRoot\pp-term-8.py",
+    [string]$ScriptPath = "$PSScriptRoot\pp-term-8-3.py",
     [string]$PythonEnvDir = "$PSScriptRoot\.env",
     [string]$LogFile    = "$HOME\p-terminal\pp-term\PP_Terminal_Diagnostics.log"
 )
@@ -152,10 +152,10 @@ try {
 
             # Copy Python environment and script into RAM disk
             Copy-Item $PythonEnvDir "$ramDiskPath\.env" -Recurse -Force
-            Copy-Item $ScriptPath "$ramDiskPath\pp-term-8.py" -Force
+            Copy-Item $ScriptPath "$ramDiskPath\pp-term-8-3.py" -Force
 
             $PythonExe = "$ramDiskPath\.env\Scripts\python.exe"
-            $ScriptPath = "$ramDiskPath\pp-term-8.py"
+            $ScriptPath = "$ramDiskPath\pp-term-8-3.py"
             Push-Location $ramDiskPath
             $ramDisk = $true
         } catch {
