@@ -2013,6 +2013,44 @@ def handle_special_commands(user_input):
         else:
             return saved if saved else str(Path(DEFAULT_ENV_DIR).resolve())
 
+    if "cd " in user_input.lower():
+        lower_input = user_input.lower()
+        idx = lower_input.index("cd ")
+        path_str = user_input[idx + 3:].strip()
+
+        print(f"[{timestamp()}] [INFO] Attempting to change directory to '{path_str}'...")
+
+        path = Path(path_str).expanduser().resolve()
+
+        if not path.is_dir():
+            print(f"[{timestamp()}] [INFO] Path '{path}' is not a valid directory.")
+            return
+
+        try:
+            change_directory(path)
+            print(f"[{timestamp()}] [INFO] Successfully changed directory to '{path}'.")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Error while changing directory: {e}")
+            return
+
+        try:
+            found = find_env_in_current_dir()
+            saved = load_saved_env()
+
+            if found:
+                if found != saved:
+                    save_current_env(found)
+                return found
+            else:
+                return saved if saved else str(Path(DEFAULT_ENV_DIR).resolve())
+
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Operation cancelled by user.")
+        except FileNotFoundError as e:
+            print(f"[{timestamp()}] [ERROR] File not found: {e}")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Unexpected error while loading/saving environment: {e}")
+
     if user_input.startswith("pcd "):
         path = user_input[4:].strip()
         try:
