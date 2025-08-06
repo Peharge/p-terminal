@@ -557,8 +557,8 @@ packages = [
     "mysql-connector-python", "psycopg2-binary", "cx_Oracle", "pyodbc", "ibm_db", "ibm_db_dbi",
     "redis", "pymongo", "bson", "cassandra-driver", "python-arango", "neo4j", "pyorient",
     "ravendb", "boto3", "yfinance", "monai", "nibabel", "monailabel", "monai-deploy-app-sdk",
-    "scikit-image", "pydicom", "SimpleITK",
-    "jupyter", "bpython", "ptpython", "pywin32", "thonny", "spyder", "pudb", "ipdb", "pygments"
+    "scikit-image", "pydicom", "SimpleITK", "jupyter", "bpython", "ptpython", "pywin32", "thonny",
+    "spyder", "pudb", "ipdb", "pygments", "markdown2", "python-docx"
 ]
 
 process_packages(packages)
