@@ -35167,56 +35167,6 @@ def main():
 
                 print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
 
-            elif "activate" in user_input.lower():
-                parts = user_input.strip().split()
-                activate_path = None
-                for part in parts:
-                    if part.lower() == "activate":
-                        activate_path = Path(part).resolve()
-                        break
-
-                if activate_path is None:
-                    print(f"[{timestamp()}] [ERROR] No valid path to activate found.")
-                elif not activate_path.exists():
-                    print(f"[{timestamp()}] [ERROR] File {activate_path} does not exist.")
-                else:
-                    env_path = activate_path.parent.parent  # .venv folder vermutet
-
-                    print(f"[{timestamp()}] [INFO] Environment directory detected: {env_path}")
-
-                    # Prüfe Python Interpreter im env_path
-                    if os.name == "nt":
-                        python_exe = env_path / "Scripts" / "python.exe"
-                    else:
-                        python_exe = env_path / "bin" / "python"
-
-                    if python_exe.exists():
-                        # Interpreter vorhanden → venv aktivieren
-                        active = find_active_env(env_path)
-                        set_python_path(active)
-                        print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
-                    else:
-                        # Kein Interpreter → keine venv
-                        print(f"[{timestamp()}] [INFO] This is not a venv for Python.")
-
-                        user_confirm = input("Would you like to run the command normally via shell? [y/n]: ").strip().lower()
-                        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
-                        if user_confirm == "y":
-                            try:
-                                process = subprocess.Popen(
-                                    user_input,
-                                    stdin=sys.stdin,
-                                    stdout=sys.stdout,
-                                    stderr=sys.stderr,
-                                    shell=True,
-                                    text=True
-                                )
-                                process.communicate()  # Warten bis der Prozess fertig ist
-                            except Exception as e:
-                                print(f"[{timestamp()}] [ERROR] Failed to run command normally: {e}")
-                        else:
-                            print(f"[{timestamp()}] [INFO] Execution of activate aborted.")
-
             elif "activate.bat" in user_input.lower():
                 parts = user_input.strip().split()
                 activate_path = None
@@ -35292,6 +35242,7 @@ def main():
                             subprocess.run([str(activate_path)], check=True)
                         else:
                             print(f"[{timestamp()}] [INFO] Execution of the .fish aborted.")
+
 
             elif "activate.nu" in user_input.lower():
                 parts = user_input.strip().split()
