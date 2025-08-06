@@ -2001,7 +2001,7 @@ def handle_special_commands(user_input):
             change_directory(path)
         except Exception as e:
             print(f"[{timestamp()}] [ERROR] Error changing directory: {e}")
-            return False
+            return True
 
         found = find_env_in_current_dir()
         saved = load_saved_env()
@@ -2019,7 +2019,7 @@ def handle_special_commands(user_input):
             change_directory(path)
         except Exception as e:
             print(f"[{timestamp()}] [ERROR] Error changing directory: {e}")
-            return False
+            return True
 
         found = find_env_in_current_dir()
         saved = load_saved_env()
@@ -4562,11 +4562,11 @@ def handle_special_commands(user_input):
 
         if not os.path.isdir(repo_path):
             print(f"[{timestamp()}] [ERROR] The path '{repo_path}' is not a valid folder.")
-            return False
+            return True
 
         if not os.path.isdir(os.path.join(repo_path, ".git")):
             print(f"[{timestamp()}] [ERROR] The folder '{repo_path}' is not a Git repository (no .git folder found).")
-            return False
+            return True
 
         print(f"[{timestamp()}] [INFO] Opening Git repository '{repo_path}' with GitHub Desktop...")
 
@@ -4587,11 +4587,11 @@ def handle_special_commands(user_input):
 
         if not os.path.isdir(repo_path):
             print(f"[{timestamp()}] [ERROR] The path '{repo_path}' is not a valid folder.")
-            return False
+            return True
 
         if not os.path.isdir(os.path.join(repo_path, ".git")):
             print(f"[{timestamp()}] [ERROR] The folder '{repo_path}' is not a Git repository (no .git folder found).")
-            return False
+            return True
 
         print(f"[{timestamp()}] [INFO] Opening Git repository '{repo_path}' with GitHub Desktop...")
 
@@ -4658,7 +4658,7 @@ def handle_special_commands(user_input):
                     print(f"[{timestamp()}] [INFO] Folder '{folder}' created.")
                 except Exception as e:
                     print(f"[{timestamp()}] [ERROR] Could not create folder '{folder}': {e}")
-                    return False
+                    return True
 
             # Datei erstellen, falls nicht vorhanden
             if not os.path.exists(file):
@@ -4668,7 +4668,7 @@ def handle_special_commands(user_input):
                     print(f"[{timestamp()}] [INFO] File '{file}' created.")
                 except Exception as e:
                     print(f"[{timestamp()}] [ERROR] Could not create file '{file}': {e}")
-                    return False
+                    return True
 
             # VS Code Befehl ausführen
             command = f"code {file}"
@@ -4704,7 +4704,7 @@ def handle_special_commands(user_input):
                     print(f"[{timestamp()}] [INFO] Folder '{folder}' created.")
                 except Exception as e:
                     print(f"[{timestamp()}] [ERROR] Could not create folder '{folder}': {e}")
-                    return False
+                    return True
 
             # Datei erstellen, falls nicht vorhanden
             if not os.path.exists(file):
@@ -4714,7 +4714,7 @@ def handle_special_commands(user_input):
                     print(f"[{timestamp()}] [INFO] File '{file}' created.")
                 except Exception as e:
                     print(f"[{timestamp()}] [ERROR] Could not create file '{file}': {e}")
-                    return False
+                    return True
 
             # VS Code Befehl ausführen
             command = f"code {file}"
@@ -4740,7 +4740,7 @@ def handle_special_commands(user_input):
         # Nur Python-Dateien zulassen
         if not user_input.endswith(".py"):
             print(f"[{timestamp()}] [ERROR] 'code-exec' only supports Python (.py) files.")
-            return False
+            return True
 
         folder = os.path.dirname(user_input)
         file = user_input
@@ -4752,7 +4752,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] Folder '{folder}' created.")
             except Exception as e:
                 print(f"[{timestamp()}] [ERROR] Could not create folder '{folder}': {e}")
-                return False
+                return True
 
         # Datei anlegen, falls sie nicht existiert
         if not os.path.exists(file):
@@ -4762,7 +4762,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] File '{file}' created.")
             except Exception as e:
                 print(f"[{timestamp()}] [ERROR] Could not create file '{file}': {e}")
-                return False
+                return True
 
         # 1. Interpreter aus JSON-Konfiguration laden
         interpreter_path = None
@@ -4794,7 +4794,7 @@ def handle_special_commands(user_input):
             subprocess.run(["code", "-w", file], check=True)
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] VS Code exited with error: {e}")
-            return False
+            return True
 
         # 3. Datei ausführen mit ausgewähltem Interpreter
         print(f"[{timestamp()}] [INFO] Executing '{file}' using interpreter '{interpreter_path}' ...")
@@ -4802,7 +4802,7 @@ def handle_special_commands(user_input):
             subprocess.run([interpreter_path, file], check=True)
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] Python execution failed: {e}")
-            return False
+            return True
 
         print(f"[{timestamp()}] [INFO] Execution completed successfully.")
         return True
@@ -4814,7 +4814,7 @@ def handle_special_commands(user_input):
         # Nur Python-Dateien zulassen
         if not user_input.endswith(".py"):
             print(f"[{timestamp()}] [ERROR] 'pcode-exec' only supports Python (.py) files.")
-            return False
+            return True
 
         folder = os.path.dirname(user_input)
         file = user_input
@@ -4826,7 +4826,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] Folder '{folder}' created.")
             except Exception as e:
                 print(f"[{timestamp()}] [ERROR] Could not create folder '{folder}': {e}")
-                return False
+                return True
 
         # Datei anlegen, falls sie nicht existiert
         if not os.path.exists(file):
@@ -4836,7 +4836,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] File '{file}' created.")
             except Exception as e:
                 print(f"[{timestamp()}] [ERROR] Could not create file '{file}': {e}")
-                return False
+                return True
 
         # 1. Interpreter aus JSON-Konfiguration laden
         interpreter_path = None
@@ -4868,7 +4868,7 @@ def handle_special_commands(user_input):
             subprocess.run(["code", "-w", file], check=True)
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] VS Code exited with error: {e}")
-            return False
+            return True
 
         # 3. Datei ausführen mit ausgewähltem Interpreter
         print(f"[{timestamp()}] [INFO] Executing '{file}' using interpreter '{interpreter_path}' ...")
@@ -4876,7 +4876,7 @@ def handle_special_commands(user_input):
             subprocess.run([interpreter_path, file], check=True)
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] Python execution failed: {e}")
-            return False
+            return True
 
         print(f"[{timestamp()}] [INFO] Execution completed successfully.")
         return True
@@ -4888,7 +4888,7 @@ def handle_special_commands(user_input):
         # Nur Python-Dateien erlauben
         if not user_input.endswith(".py"):
             print(f"[{timestamp()}] [ERROR] 'code-dbg' only supports Python (.py) files.")
-            return False
+            return True
 
         folder = os.path.dirname(user_input)
         file = user_input
@@ -4900,7 +4900,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] Folder '{folder}' created.")
             except Exception as e:
                 print(f"[{timestamp()}] [ERROR] Could not create folder '{folder}': {e}")
-                return False
+                return True
 
         # Datei erstellen falls nicht vorhanden
         if not os.path.exists(file):
@@ -4910,7 +4910,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] File '{file}' created.")
             except Exception as e:
                 print(f"[{timestamp()}] [ERROR] Could not create file '{file}': {e}")
-                return False
+                return True
 
         # JSON-Konfigurationspfad
         interpreter_path = None
@@ -4945,7 +4945,7 @@ def handle_special_commands(user_input):
             subprocess.run(["code", "-w", file], check=True)
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] VS Code exited with error: {e}")
-            return False
+            return True
 
         # Debug-Logfile Pfad
         log_file = f"{file}.debug.log"
@@ -4968,10 +4968,10 @@ def handle_special_commands(user_input):
                 proc.wait()
                 if proc.returncode != 0:
                     print(f"[{timestamp()}] [ERROR] Debug execution failed. Check '{log_file}'.")
-                    return False
+                    return True
         except Exception as e:
             print(f"[{timestamp()}] [ERROR] Exception during debug run: {e}")
-            return False
+            return True
 
         print(f"[{timestamp()}] [INFO] Debug execution completed successfully. Logs saved in '{log_file}'.")
         return True
@@ -4983,7 +4983,7 @@ def handle_special_commands(user_input):
         # Nur Python-Dateien erlauben
         if not user_input.endswith(".py"):
             print(f"[{timestamp()}] [ERROR] 'pcode-dbg' only supports Python (.py) files.")
-            return False
+            return True
 
         folder = os.path.dirname(user_input)
         file = user_input
@@ -4995,7 +4995,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] Folder '{folder}' created.")
             except Exception as e:
                 print(f"[{timestamp()}] [ERROR] Could not create folder '{folder}': {e}")
-                return False
+                return True
 
         # Datei erstellen falls nicht vorhanden
         if not os.path.exists(file):
@@ -5005,7 +5005,7 @@ def handle_special_commands(user_input):
                 print(f"[{timestamp()}] [INFO] File '{file}' created.")
             except Exception as e:
                 print(f"[{timestamp()}] [ERROR] Could not create file '{file}': {e}")
-                return False
+                return True
 
         # JSON-Konfigurationspfad
         interpreter_path = None
@@ -5040,7 +5040,7 @@ def handle_special_commands(user_input):
             subprocess.run(["code", "-w", file], check=True)
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] VS Code exited with error: {e}")
-            return False
+            return True
 
         # Debug-Logfile Pfad
         log_file = f"{file}.debug.log"
@@ -5063,10 +5063,10 @@ def handle_special_commands(user_input):
                 proc.wait()
                 if proc.returncode != 0:
                     print(f"[{timestamp()}] [ERROR] Debug execution failed. Check '{log_file}'.")
-                    return False
+                    return True
         except Exception as e:
             print(f"[{timestamp()}] [ERROR] Exception during debug run: {e}")
-            return False
+            return True
 
         print(f"[{timestamp()}] [INFO] Debug execution completed successfully. Logs saved in '{log_file}'.")
         return True
@@ -7908,18 +7908,18 @@ if __name__ == "__main__":
         args = shlex.split(user_input[7:].strip())
         if len(args) != 2:
             print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file.")
-            return False
+            return True
 
         source_file, output_file = args
 
         if not os.path.isfile(source_file):
             print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
-            return False
+            return True
 
         vcvarsall_path = r'C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat'
         if not os.path.isfile(vcvarsall_path):
             print(f"[{timestamp()}] [ERROR] vcvarsall.bat not found at path: {vcvarsall_path}")
-            return False
+            return True
 
         compile_command = f'"{vcvarsall_path}" x64 && cl /Zi /Od /EHsc "{source_file}" /Fe:"{output_file}"'
         full_command = f'cmd /c "{compile_command}"'
@@ -7949,12 +7949,12 @@ if __name__ == "__main__":
         args = shlex.split(user_input)
         if len(args) != 2:
             print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file.")
-            return False
+            return True
 
         source_file, output_file = args
         if not os.path.isfile(source_file):
             print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
-            return False
+            return True
 
         # 1. Compile with -g for debug symbols
         compile_cmd = f"wsl g++ -g \"{source_file}\" -o \"{output_file}\""
@@ -7981,12 +7981,12 @@ if __name__ == "__main__":
         args = shlex.split(user_input)
         if len(args) != 2:
             print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file.")
-            return False
+            return True
 
         source_file, output_file = args
         if not os.path.isfile(source_file):
             print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
-            return False
+            return True
 
         # Clang with all warnings and debug symbols
         compile_cmd = f'wsl clang++ -Wall -Wextra -Wpedantic -g "{source_file}" -o "{output_file}"'
@@ -8009,12 +8009,12 @@ if __name__ == "__main__":
         args = shlex.split(user_input)
         if len(args) != 2:
             print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file (without .asm).")
-            return False
+            return True
 
         source_file, asm_file = args
         if not os.path.isfile(source_file):
             print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
-            return False
+            return True
 
         # MSVC: /Fa generates assembler code
         compile_cmd = msvc_env_cmd() + f'cl /nologo /c /Fa"{asm_file}.asm" "{source_file}"'
@@ -8037,12 +8037,12 @@ if __name__ == "__main__":
         args = shlex.split(user_input)
         if len(args) != 2:
             print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file.")
-            return False
+            return True
 
         source_file, output_file = args
         if not os.path.isfile(source_file):
             print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
-            return False
+            return True
 
         # MSVC: /O2 for optimization, /Fe for output file
         compile_cmd = msvc_env_cmd() + f'cl /nologo /O2 "{source_file}" /Fe"{output_file}"'
@@ -8072,7 +8072,7 @@ if __name__ == "__main__":
             binary += ".exe"
         if not os.path.isfile(binary):
             print(f"[{timestamp()}] [ERROR] Executable '{binary}' not found.")
-            return False
+            return True
         run_cmd = f'"{binary}"'
         print(f"[{timestamp()}] [INFO] Starting executable '{binary}' ...")
         try:
@@ -8088,12 +8088,12 @@ if __name__ == "__main__":
         args = shlex.split(user_input)
         if len(args) != 2:
             print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file.")
-            return False
+            return True
 
         source_file, output_file = args
         if not os.path.isfile(source_file):
             print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
-            return False
+            return True
 
         # MSVC warning flags: /W4 (all warnings), /WX (treat warnings as errors)
         compile_cmd = msvc_env_cmd() + f'cl /nologo /W4 /WX "{source_file}" /Fe"{output_file}"'
@@ -8116,12 +8116,12 @@ if __name__ == "__main__":
         args = shlex.split(user_input)
         if len(args) != 3:
             print(f"[{timestamp()}] [ERROR] Please provide three arguments: source file, output file, and C++ standard (e.g., c++17).")
-            return False
+            return True
 
         source_file, output_file, std_flag = args
         if not os.path.isfile(source_file):
             print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
-            return False
+            return True
 
         # MSVC: /std:c++17 etc. (c++14/c++17/c++20/c++latest)
         compile_cmd = msvc_env_cmd() + f'cl /nologo /std:{std_flag} /W4 "{source_file}" /Fe"{output_file}"'
@@ -8207,18 +8207,18 @@ if __name__ == "__main__":
         args = shlex.split(user_input[5:].strip())
         if len(args) != 2:
             print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file.")
-            return False
+            return True
 
         source_file, output_file = args
 
         if not os.path.isfile(source_file):
             print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
-            return False
+            return True
 
         vcvarsall_path = r'C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat'
         if not os.path.isfile(vcvarsall_path):
             print(f"[{timestamp()}] [ERROR] vcvarsall.bat not found at path: {vcvarsall_path}")
-            return False
+            return True
 
         compile_command = f'"{vcvarsall_path}" x64 && cl /Zi /Od /EHsc "{source_file}" /Fe:"{output_file}"'
         full_command = f'cmd /c "{compile_command}"'
@@ -8249,16 +8249,16 @@ if __name__ == "__main__":
         VCVARSALL = r"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat"
         if len(args) != 2:
             print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file.")
-            return False
+            return True
 
         source_file, output_file = args
         if not os.path.isfile(source_file):
             print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
-            return False
+            return True
 
         if not os.path.isfile(VCVARSALL):
             print(f"[{timestamp()}] [ERROR] vcvarsall.bat not found: {VCVARSALL}")
-            return False
+            return True
 
         # /Zi: debug info in PDB, /Z7: legacy format, /Od: no optimization
         compile_command = (
@@ -8287,16 +8287,16 @@ if __name__ == "__main__":
 
         if len(args) != 2:
             print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file.")
-            return False
+            return True
 
         source_file, output_file = args
         if not os.path.isfile(source_file):
             print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
-            return False
+            return True
 
         if not os.path.isfile(VCVARSALL):
             print(f"[{timestamp()}] [ERROR] vcvarsall.bat not found: {VCVARSALL}")
-            return False
+            return True
 
         # /O2: maximum optimization, /DNDEBUG: disables assert, /TC: C mode
         compile_command = (
@@ -8325,16 +8325,16 @@ if __name__ == "__main__":
 
         if len(args) != 2:
             print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file.")
-            return False
+            return True
 
         source_file, output_file = args
         if not os.path.isfile(source_file):
             print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
-            return False
+            return True
 
         if not os.path.isfile(VCVARSALL):
             print(f"[{timestamp()}] [ERROR] vcvarsall.bat not found: {VCVARSALL}")
-            return False
+            return True
 
         # /W4: highest warning level, /WX: treat warnings as errors, /Zi: debug info
         compile_command = (
@@ -8364,20 +8364,20 @@ if __name__ == "__main__":
 
         if len(args) != 3:
             print(f"[{timestamp()}] [ERROR] Please provide three arguments: source file, output file, and C standard (c11 or c17).")
-            return False
+            return True
 
         source_file, output_file, std_flag = args
         if not os.path.isfile(source_file):
             print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
-            return False
+            return True
 
         if std_flag.lower() not in ("c11", "c17"):
             print(f"[{timestamp()}] [ERROR] Invalid C standard: '{std_flag}'. Allowed: c11 or c17.")
-            return False
+            return True
 
         if not os.path.isfile(VCVARSALL):
             print(f"[{timestamp()}] [ERROR] vcvarsall.bat not found: {VCVARSALL}")
-            return False
+            return True
 
         # /std:c11 or /std:c17
         compile_command = (
@@ -8404,7 +8404,7 @@ if __name__ == "__main__":
         executable = user_input
         if not os.path.isfile(executable):
             print(f"[{timestamp()}] [ERROR] Executable '{executable}' not found.")
-            return False
+            return True
 
         run_cmd = f'"{executable}"'
         print(f"[{timestamp()}] [INFO] Starting executable '{executable}' ...")
@@ -8510,13 +8510,13 @@ if __name__ == "__main__":
         args = shlex.split(user_input[6:].strip())
         if len(args) != 2:
             print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file.")
-            return False
+            return True
 
         source_file, output_file = args
 
         if not os.path.isfile(source_file):
             print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
-            return False
+            return True
 
         # Finde den C#-Compiler (csc.exe)
         csc_paths = [
@@ -8530,7 +8530,7 @@ if __name__ == "__main__":
 
         if not csc_path:
             print(f"[{timestamp()}] [ERROR] csc.exe not found. Please ensure .NET SDK or Visual Studio is installed.")
-            return False
+            return True
 
         compile_command = f'"{csc_path}" /debug /out:"{output_file}" "{source_file}"'
         print(f"[{timestamp()}] [INFO] Starting C# compilation...")
@@ -8575,17 +8575,17 @@ if __name__ == "__main__":
         args = shlex.split(user_input)
         if len(args) != 2:
             print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file.")
-            return False
+            return True
 
         source_file, output_file = args
         if not os.path.isfile(source_file):
             print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
-            return False
+            return True
 
         csc_path = find_csc()
         if not csc_path:
             print(f"[{timestamp()}] [ERROR] csc.exe not found. Please ensure .NET SDK or Visual Studio is installed.")
-            return False
+            return True
 
         # /debug: PDB erzeugen; /optimize- deaktiviert Optimierung
         compile_command = f'"{csc_path}" /debug+ /optimize- /out:"{output_file}" "{source_file}"'
@@ -8611,17 +8611,17 @@ if __name__ == "__main__":
         args = shlex.split(user_input)
         if len(args) != 2:
             print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file.")
-            return False
+            return True
 
         source_file, output_file = args
         if not os.path.isfile(source_file):
             print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
-            return False
+            return True
 
         csc_path = find_csc()
         if not csc_path:
             print(f"[{timestamp()}] [ERROR] csc.exe not found. Please ensure .NET SDK or Visual Studio is installed.")
-            return False
+            return True
 
         # /debug+: Debug-Symbole in PDB, /optimize-: keine Optimierung
         compile_command = f'"{csc_path}" /debug+ /optimize- /langversion:latest /out:"{output_file}" "{source_file}"'
@@ -8645,17 +8645,17 @@ if __name__ == "__main__":
         args = shlex.split(user_input)
         if len(args) != 2:
             print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file.")
-            return False
+            return True
 
         source_file, output_file = args
         if not os.path.isfile(source_file):
             print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
-            return False
+            return True
 
         csc_path = find_csc()
         if not csc_path:
             print(f"[{timestamp()}] [ERROR] csc.exe not found. Please ensure .NET SDK or Visual Studio is installed.")
-            return False
+            return True
 
         # /optimize+: Aktiviert Optimierung, /define:RELEASE: Symbol für bedingte Kompilierung
         compile_command = f'"{csc_path}" /optimize+ /define:RELEASE /out:"{output_file}" "{source_file}"'
@@ -8679,17 +8679,17 @@ if __name__ == "__main__":
         args = shlex.split(user_input)
         if len(args) != 2:
             print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: source file and output file.")
-            return False
+            return True
 
         source_file, output_file = args
         if not os.path.isfile(source_file):
             print(f"[{timestamp()}] [ERROR] Source file '{source_file}' not found.")
-            return False
+            return True
 
         csc_path = find_csc()
         if not csc_path:
             print(f"[{timestamp()}] [ERROR] csc.exe not found. Please ensure .NET SDK or Visual Studio is installed.")
-            return False
+            return True
 
         # /warn:4: höchste Warnungsstufe, /warnaserror+: behandelt alle Warnungen als Fehler
         compile_command = f'"{csc_path}" /warn:4 /warnaserror+ /out:"{output_file}" "{source_file}"'
@@ -8713,7 +8713,7 @@ if __name__ == "__main__":
         executable = user_input
         if not os.path.isfile(executable):
             print(f"[{timestamp()}] [ERROR] Executable '{executable}' not found.")
-            return False
+            return True
 
         run_cmd = f'"{executable}"'
         print(f"[{timestamp()}] [INFO] Running executable '{executable}' (pd-cs-run)...")
@@ -8742,18 +8742,18 @@ if __name__ == "__main__":
         args = shlex.split(user_input)
         if len(args) != 1:
             print(f"[{timestamp()}] [ERROR] Please provide exactly one argument: path to .csproj or .sln.")
-            return False
+            return True
 
         project_path = args[0]
         if not os.path.isfile(project_path):
             print(f"[{timestamp()}] [ERROR] Project file '{project_path}' not found.")
-            return False
+            return True
 
         # MSBuild via Developer Command Prompt aufrufen
         msbuild_path = r'C:\Program Files\Microsoft Visual Studio\2022\Community\Msbuild\Current\Bin\MSBuild.exe'
         if not os.path.isfile(msbuild_path):
             print(f"[{timestamp()}] [ERROR] MSBuild.exe not found: {msbuild_path}")
-            return False
+            return True
 
         # /p:Configuration=Release Bauen im Release-Modus; /m: paralleles Bauen
         build_cmd = f'"{msbuild_path}" "{project_path}" /t:Build /p:Configuration=Release /m'
@@ -8777,13 +8777,13 @@ if __name__ == "__main__":
         args = shlex.split(user_input)
         if len(args) != 1:
             print(f"[{timestamp()}] [ERROR] Please provide exactly one argument: path to project folder containing .csproj.")
-            return False
+            return True
 
         project_dir = args[0]
         csproj_files = [f for f in os.listdir(project_dir) if f.endswith(".csproj")]
         if not csproj_files:
             print(f"[{timestamp()}] [ERROR] No .csproj file found in directory '{project_dir}'.")
-            return False
+            return True
 
         # dotnet CLI verwenden
         run_cmd = f'dotnet run --project "{os.path.join(project_dir, csproj_files[0])}"'
@@ -8803,13 +8803,13 @@ if __name__ == "__main__":
         args = shlex.split(user_input)
         if len(args) != 2:
             print(f"[{timestamp()}] [ERROR] Please provide two arguments: path to project folder and output folder for publish.")
-            return False
+            return True
 
         project_dir, publish_dir = args
         csproj_files = [f for f in os.listdir(project_dir) if f.endswith(".csproj")]
         if not csproj_files:
             print(f"[{timestamp()}] [ERROR] No .csproj file found in directory '{project_dir}'.")
-            return False
+            return True
 
         publish_cmd = f'dotnet publish "{os.path.join(project_dir, csproj_files[0])}" -c Release -o "{publish_dir}"'
         print(f"[{timestamp()}] [INFO] Publishing project (pd-cs-publish-project) to '{publish_dir}'...")
@@ -8832,12 +8832,12 @@ if __name__ == "__main__":
         args = shlex.split(user_input)
         if len(args) != 1:
             print(f"[{timestamp()}] [ERROR] Please provide exactly one argument: path to solution or project to test.")
-            return False
+            return True
 
         test_path = args[0]
         if not os.path.exists(test_path):
             print(f"[{timestamp()}] [ERROR] Path '{test_path}' not found.")
-            return False
+            return True
 
         test_cmd = f'dotnet test "{test_path}" --configuration Release'
         print(f"[{timestamp()}] [INFO] Running 'dotnet test' (pd-cs-test) on '{test_path}'...")
@@ -9894,7 +9894,7 @@ if __name__ == "__main__":
         parts = shlex.split(user_input)
         if len(parts) < 1:
             print(f"[{timestamp()}] [ERROR] Please provide at least a class name to run.")
-            return False
+            return True
 
         class_name = parts[0][:-5] if parts[0].endswith(".java") else parts[0]
         java_file = f"{class_name}.java"
@@ -9902,7 +9902,7 @@ if __name__ == "__main__":
 
         if not os.path.isfile(java_file):
             print(f"[{timestamp()}] [ERROR] Source file '{java_file}' not found.")
-            return False
+            return True
 
         # Compile
         compile_cmd = f"javac \"{java_file}\""
@@ -9929,7 +9929,7 @@ if __name__ == "__main__":
         args = shlex.split(user_input)
         if len(args) != 2:
             print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: class name and output JAR file.")
-            return False
+            return True
 
         class_name, output_jar = args
         java_file = f"{class_name}.java"
@@ -9937,7 +9937,7 @@ if __name__ == "__main__":
 
         if not os.path.isfile(java_file):
             print(f"[{timestamp()}] [ERROR] Source file '{java_file}' not found.")
-            return False
+            return True
 
         # Compile
         compile_cmd = f"javac \"{java_file}\""
@@ -9968,13 +9968,13 @@ if __name__ == "__main__":
         parts = shlex.split(user_input)
         if len(parts) < 1 or len(parts) > 2:
             print(f"[{timestamp()}] [ERROR] Provide a source file or package path, optionally an output directory.")
-            return False
+            return True
 
         target = parts[0]
         output_dir = parts[1] if len(parts) == 2 else "doc"
         if not os.path.exists(target):
             print(f"[{timestamp()}] [ERROR] Path '{target}' not found.")
-            return False
+            return True
 
         cmd = f"javadoc -d \"{output_dir}\" \"{target}\""
         print(f"[{timestamp()}] [INFO] Generating Javadoc for '{target}' into '{output_dir}'...")
@@ -9995,7 +9995,7 @@ if __name__ == "__main__":
         target_dir = parts[0] if parts else "."
         if not os.path.isdir(target_dir):
             print(f"[{timestamp()}] [ERROR] Directory '{target_dir}' not found.")
-            return False
+            return True
 
         # Delete all .class and .jar in target_dir
         print(f"[{timestamp()}] [INFO] Cleaning .class and .jar files in '{target_dir}'...")
@@ -10015,7 +10015,7 @@ if __name__ == "__main__":
         source_dir = user_input
         if not os.path.isdir(source_dir):
             print(f"[{timestamp()}] [ERROR] Directory '{source_dir}' not found.")
-            return False
+            return True
 
         # Find all .java files
         java_files = []
@@ -10048,12 +10048,12 @@ if __name__ == "__main__":
         args = shlex.split(user_input)
         if len(args) != 2:
             print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: package directory and class name pattern.")
-            return False
+            return True
 
         package_dir, pattern = args
         if not os.path.isdir(package_dir):
             print(f"[{timestamp()}] [ERROR] Directory '{package_dir}' not found.")
-            return False
+            return True
 
         # Convert directory to classpath root and find matching .class files
         class_files = []
@@ -10085,12 +10085,12 @@ if __name__ == "__main__":
         args = shlex.split(user_input)
         if len(args) != 3:
             print(f"[{timestamp()}] [ERROR] Provide three arguments: project directory, main class, and output JAR.")
-            return False
+            return True
 
         project_dir, main_class, output_jar = args
         if not os.path.isdir(project_dir):
             print(f"[{timestamp()}] [ERROR] Directory '{project_dir}' not found.")
-            return False
+            return True
 
         # 1. Clean
         print(f"[{timestamp()}] [INFO] Cleaning project directory '{project_dir}'...")
@@ -10154,7 +10154,7 @@ if __name__ == "__main__":
         project_dir = user_input
         if not os.path.isdir(project_dir):
             print(f"[{timestamp()}] [ERROR] Directory '{project_dir}' not found.")
-            return False
+            return True
 
         patterns = ["*.log", ".classpath", ".project", ".settings", "target", "bin"]
         print(f"[{timestamp()}] [INFO] Cleaning IDE artifacts and logs from '{project_dir}'...")
@@ -10582,7 +10582,7 @@ if __name__ == "__main__":
         args = parts[1:]
         if not os.path.isfile(script):
             print(f"[{timestamp()}] [ERROR] Script '{script}' not found.")
-            return False
+            return True
 
         cmd = f"python \"{script}\" " + " ".join(f"\"{arg}\"" for arg in args)
         try:
@@ -10599,7 +10599,7 @@ if __name__ == "__main__":
         venv_name = user_input
         if os.path.isdir(venv_name):
             print(f"[{timestamp()}] [ERROR] Virtual environment folder '{venv_name}' already exists.")
-            return False
+            return True
 
         cmd_create = f"python -m venv \"{venv_name}\""
         cmd_activate = f"call \"{venv_name}\\Scripts\\activate.bat\""
@@ -10625,15 +10625,15 @@ if __name__ == "__main__":
         args = shlex.split(user_input)
         if len(args) != 2:
             print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: venv folder and requirements file.")
-            return False
+            return True
 
         venv_name, req_file = args
         if not os.path.isdir(venv_name):
             print(f"[{timestamp()}] [ERROR] Virtual environment '{venv_name}' not found.")
-            return False
+            return True
         if not os.path.isfile(req_file):
             print(f"[{timestamp()}] [ERROR] Requirements file '{req_file}' not found.")
-            return False
+            return True
 
         cmd_activate = f"call \"{venv_name}\\Scripts\\activate.bat\""
         cmd_install = f"pip install -r \"{req_file}\""
@@ -10658,7 +10658,7 @@ if __name__ == "__main__":
         target = user_input
         if not os.path.exists(target):
             print(f"[{timestamp()}] [ERROR] Path '{target}' not found.")
-            return False
+            return True
 
         cmd = f"black \"{target}\""
         try:
@@ -10679,7 +10679,7 @@ if __name__ == "__main__":
         target = user_input
         if not os.path.exists(target):
             print(f"[{timestamp()}] [ERROR] Path '{target}' not found.")
-            return False
+            return True
 
         cmd = f"flake8 \"{target}\""
         try:
@@ -10700,7 +10700,7 @@ if __name__ == "__main__":
         target = user_input
         if not os.path.exists(target):
             print(f"[{timestamp()}] [ERROR] Path '{target}' not found.")
-            return False
+            return True
 
         cmd = f"mypy \"{target}\""
         try:
@@ -10721,7 +10721,7 @@ if __name__ == "__main__":
         target = user_input if user_input else "."
         if not os.path.exists(target):
             print(f"[{timestamp()}] [ERROR] Path '{target}' not found.")
-            return False
+            return True
 
         cmd = f"pytest \"{target}\""
         try:
@@ -10742,14 +10742,14 @@ if __name__ == "__main__":
         parts = shlex.split(user_input)
         if len(parts) == 0:
             print(f"[{timestamp()}] [ERROR] Please provide a script or test path.")
-            return False
+            return True
 
         target = parts[0]
         html_flag = "--html" in parts
 
         if not os.path.exists(target):
             print(f"[{timestamp()}] [ERROR] Path '{target}' not found.")
-            return False
+            return True
 
         cmd_run = f"coverage run -m pytest \"{target}\"" if os.path.isdir(target) or target.endswith("_test.py") else f"coverage run \"{target}\""
         cmd_report = "coverage report"
@@ -10782,7 +10782,7 @@ if __name__ == "__main__":
         target = user_input
         if not os.path.exists(target):
             print(f"[{timestamp()}] [ERROR] Path '{target}' not found.")
-            return False
+            return True
 
         # If it's a directory with pyproject.toml or setup.py
         if os.path.isdir(target):
@@ -10793,7 +10793,7 @@ if __name__ == "__main__":
                 cmd = f"cd \"{target}\" && python setup.py bdist_wheel"
             else:
                 print(f"[{timestamp()}] [ERROR] No setup.py or pyproject.toml found in '{target}'.")
-                return False
+                return True
         else:
             # If directly a setup.py file
             if target.endswith("setup.py"):
@@ -10801,7 +10801,7 @@ if __name__ == "__main__":
                 cmd = f"cd \"{dirpath}\" && python setup.py bdist_wheel"
             else:
                 print(f"[{timestamp()}] [ERROR] '{target}' is not a recognized package entry point.")
-                return False
+                return True
 
         try:
             print(f"[{timestamp()}] [INFO] Building wheel for '{target}'...")
@@ -10821,7 +10821,7 @@ if __name__ == "__main__":
         docs_dir = user_input
         if not os.path.isdir(docs_dir):
             print(f"[{timestamp()}] [ERROR] Directory '{docs_dir}' not found.")
-            return False
+            return True
 
         # Build HTML docs
         cmd = f"cd \"{docs_dir}\" && sphinx-build -b html \"{docs_dir}\" \"{os.path.join(docs_dir, '_build')}\""
@@ -10845,7 +10845,7 @@ if __name__ == "__main__":
         target_dir = args[0] if args else "."
         if not os.path.isdir(target_dir):
             print(f"[{timestamp()}] [ERROR] Directory '{target_dir}' not found.")
-            return False
+            return True
 
         # Remove .pyc files, __pycache__ folders, build/ and dist/ if present
         cmd_clean_pyc = f"for /r \"{target_dir}\" %f in (*.pyc) do del \"%f\""
@@ -10871,7 +10871,7 @@ if __name__ == "__main__":
         project_dir = user_input
         if not os.path.isdir(project_dir):
             print(f"[{timestamp()}] [ERROR] Directory '{project_dir}' not found.")
-            return False
+            return True
 
         # 1. Format
         cmd_fmt = f"black \"{project_dir}\""
@@ -17052,7 +17052,7 @@ if __name__ == "__main__":
                 print(f"[{timestamp()}] [INFO] Folder created: {new_folder_path}")
             except Exception as e:
                 print(f"[{timestamp()}] [ERROR] Could not create folder: {e}")
-                return False
+                return True
 
         # Change directory
         try:
@@ -17060,7 +17060,7 @@ if __name__ == "__main__":
             print(f"[{timestamp()}] [INFO] Changed directory to: {new_folder_path}")
         except Exception as e:
             print(f"[{timestamp()}] [ERROR] Error changing directory: {e}")
-            return False
+            return True
 
         # Environment handling
         found = find_env_in_current_dir()
@@ -17073,7 +17073,7 @@ if __name__ == "__main__":
         else:
             return saved if saved else str(Path(DEFAULT_ENV_DIR).resolve())
 
-        return False
+        return True
 
     if user_input.startswith("pcfo&pcd "):
         folder_name = user_input[8:].strip()
@@ -17088,7 +17088,7 @@ if __name__ == "__main__":
                 print(f"[{timestamp()}] [INFO] Folder created: {new_folder_path}")
             except Exception as e:
                 print(f"[{timestamp()}] [ERROR] Could not create folder: {e}")
-                return False
+                return True
 
         # Change directory
         try:
@@ -17096,7 +17096,7 @@ if __name__ == "__main__":
             print(f"[{timestamp()}] [INFO] Changed directory to: {new_folder_path}")
         except Exception as e:
             print(f"[{timestamp()}] [ERROR] Error changing directory: {e}")
-            return False
+            return True
 
         # Environment handling
         found = find_env_in_current_dir()
@@ -17109,7 +17109,7 @@ if __name__ == "__main__":
         else:
             return saved if saved else str(Path(DEFAULT_ENV_DIR).resolve())
 
-        return False
+        return True
 
     if user_input.startswith("pcfo-x"):
         rest = user_input[6:].strip()
@@ -19697,7 +19697,7 @@ if __name__ == "__main__":
             parts = shlex.split(user_input, posix=not sys.platform.startswith("win"))
             if len(parts) < 2:
                 print(f"[{timestamp()}] [ERROR] No destination specified.")
-                return False
+                return True
             else:
                 target = parts[1]
                 target_expanded = os.path.expandvars(os.path.expanduser(target))
@@ -19710,12 +19710,12 @@ if __name__ == "__main__":
                         return True
                     except Exception as e:
                         print(f"[{timestamp()}] [ERROR] URL could not be opened: {e}")
-                        return False
+                        return True
                 else:
                     # Prüfe Existenz im Dateisystem
                     if not os.path.exists(target_expanded):
                         print(f"[{timestamp()}] [ERROR] Not found: {target_expanded}")
-                        return False
+                        return True
                     else:
                         try:
                             if sys.platform.startswith("win"):
@@ -19729,10 +19729,10 @@ if __name__ == "__main__":
                             return True
                         except Exception as e:
                             print(f"[{timestamp()}] [ERROR] Open failed: {e}")
-                            return False
+                            return True
         except ValueError as e:
             print(f"[{timestamp()}] [ERROR] Parse error: {e}")
-            return False
+            return True
 
     if user_input.lower().startswith("3dslicer "):
         # Datei relativ zum aktuellen Verzeichnis interpretieren
@@ -20187,7 +20187,7 @@ if __name__ == "__main__":
         # Leere Eingabe abfangen
         if not command_str:
             logging.error("[ERROR] No program specified after 'launch'.")
-            return False  # Frühzeitige Rückgabe, falls kein Programmname angegeben wurde
+            return True  # Frühzeitige Rückgabe, falls kein Programmname angegeben wurde
 
         try:
             # Platform-spezifische Befehlsausführung
@@ -20208,7 +20208,7 @@ if __name__ == "__main__":
         except Exception as e:
             logging.exception("[ERROR] Error launching %s: %s", command_str, str(e))
 
-        return False
+        return True
 
     if user_input.startswith("pr-app "):
         user_input = user_input[7:].strip()
@@ -20217,7 +20217,7 @@ if __name__ == "__main__":
         # Leere Eingabe abfangen
         if not command_str:
             logging.error("[ERROR] No program specified after 'launch'.")
-            return False  # Frühzeitige Rückgabe, falls kein Programmname angegeben wurde
+            return True  # Frühzeitige Rückgabe, falls kein Programmname angegeben wurde
 
         try:
             # Platform-spezifische Befehlsausführung
@@ -20238,7 +20238,7 @@ if __name__ == "__main__":
         except Exception as e:
             logging.exception("[ERROR] Error launching %s: %s", command_str, str(e))
 
-        return False
+        return True
 
     if user_input.startswith("run-app "):
         user_input = user_input[8:].strip()
@@ -20247,7 +20247,7 @@ if __name__ == "__main__":
         # Leere Eingabe abfangen
         if not command_str:
             logging.error("[ERROR] No program specified after 'launch'.")
-            return False  # Frühzeitige Rückgabe, falls kein Programmname angegeben wurde
+            return True  # Frühzeitige Rückgabe, falls kein Programmname angegeben wurde
 
         try:
             # Platform-spezifische Befehlsausführung
@@ -20268,7 +20268,7 @@ if __name__ == "__main__":
         except Exception as e:
             logging.exception("[ERROR] Error launching %s: %s", command_str, str(e))
 
-        return False
+        return True
 
     if user_input.startswith("pr-file "):
         user_input = user_input[8:].strip()
@@ -20277,7 +20277,7 @@ if __name__ == "__main__":
             parts = shlex.split(user_input, posix=not sys.platform.startswith("win"))
             if len(parts) < 2:
                 print(f"[{timestamp()}] [ERROR] No destination specified.")
-                return False
+                return True
             else:
                 target = parts[1]
                 target_expanded = os.path.expandvars(os.path.expanduser(target))
@@ -20290,12 +20290,12 @@ if __name__ == "__main__":
                         return True
                     except Exception as e:
                         print(f"[{timestamp()}] [ERROR] URL could not be opened: {e}")
-                        return False
+                        return True
                 else:
                     # Prüfe Existenz im Dateisystem
                     if not os.path.exists(target_expanded):
                         print(f"[{timestamp()}] [ERROR] Not found: {target_expanded}")
-                        return False
+                        return True
                     else:
                         try:
                             if sys.platform.startswith("win"):
@@ -20309,10 +20309,10 @@ if __name__ == "__main__":
                             return True
                         except Exception as e:
                             print(f"[{timestamp()}] [ERROR] Open failed: {e}")
-                            return False
+                            return True
         except ValueError as e:
             print(f"[{timestamp()}] [ERROR] Parse error: {e}")
-            return False
+            return True
 
     # Speedtest
     if user_input.lower() == "speedtest":
@@ -20340,7 +20340,7 @@ if __name__ == "__main__":
         except Exception as e:
             # Wenn etwas schief geht, zeigen Sie den Fehler
             print(f"[{timestamp()}] [ERROR] Whoops, something went wrong with the speedtest: {e}")
-            return False
+            return True
 
     if user_input == "setting":
         print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
