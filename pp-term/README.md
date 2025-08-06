@@ -14,77 +14,97 @@
 
 Hey ;-) [`Install PP-Terminal`](https://github.com/Peharge/p-terminal?tab=readme-ov-file#install-pp-terminal) [`Download PP-Term [Windows]`](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) [`PP-Term Commands`](https://github.com/Peharge/peharge-web/blob/main/commands-pp-term.html) [`Learn PP-Term`](https://github.com/Peharge/p-terminal/wiki/Documentation)
 
-## Code (04.08.2025)
+## Code of (04.08.2025)
+
+> P-Terminal Version: 1.1.1.1 EAP<br>
+> PP-Terminal Version: 8.1.1.34<br>
+> PP-Terminal Launcher Version: 8.3.3.6<br>
+> Peharge Compiler Version: 8.1.1.6<br>
+> Peharge Kernel Version: 8.1.1.9<br>
+> IQ Kernel Version: 4.1.1.3<br>
+> SIMON Version: 3.1.1.1
 
 P-Terminal size GitHub: 271 MB and 13,5 MB on GitHub<br>
 P-Terminal hole size: 6270 MB (Without LLm model, Linux OS or additional apps...) <br>
 
-### Code-Statistik (17.07.2025) - cloc .
+### Code-Statistik – `cloc .`
 
-| Language                 | Files   | Empty lines  | Comment lines    | Code lines   |
-|--------------------------|---------|--------------|------------------|--------------|
-| Python                   | 38,202  | 2,186,448    | 2,842,548        | 8,715,675    |
-| C/C++ Header             | 15.816  | 351.792      | 605.501          | 1.788.989    |
-| JavaScript               | 536     | 48.957       | 120.020          | 550.279      |
-| Pascal                   | 198     | 216.402      | 916.360          | 314.758      |
-| C                        | 164     | 24.059       | 78.637           | 310.069      |
-| JSON                     | 601     | 236          | 0                | 78.558       |
-| Cython                   | 262     | 13.797       | 13.731           | 57.806       |
-| CSV                      | 103     | 0            | 0                | 55.040       |
-| DOS Batch                | 53      | 8.057        | 9.116            | 36.018       |
-| SVG                      | 35      | 151          | 15               | 25.284       |
-| Text                     | 375     | 3.685        | 0                | 23.810       |
-| HTML                     | 61      | 2.183        | 98               | 19.361       |
-| CUDA                     | 69      | 2.833        | 1.833            | 18.786       |
-| YAML                     | 17      | 3.433        | 1.023            | 17.123       |
-| XSLT                     | 11      | 1.314        | 1.599            | 9.896        |
-| C++                      | 114     | 2.228        | 2.654            | 8.977        |
-| Markdown                 | 51      | 847          | 39               | 8.234        |
-| TableGen                 | 1       | 1.076        | 435              | 5.738        |
-| PHP                      | 1       | 1.110        | 1.186            | 5.693        |
-| Protocol Buffers         | 157     | 2.412        | 10.570           | 5.357        |
-| Rust                     | 26      | 880          | 1.760            | 4.169        |
-| CMake                    | 30      | 905          | 1.715            | 4.100        |
-| D                        | 138     | 387          | 0                | 2.021        |
-| XML                      | 12      | 4            | 28               | 1.769        |
-| SQL                      | 4       | 0            | 0                | 1.398        |
-| TOML                     | 48      | 122          | 167              | 1.023        |
-| SWIG                     | 1       | 283          | 99               | 934          |
-| Fortran 90               | 55      | 126          | 86               | 924          |
-| PO File                  | 3       | 270          | 288              | 666          |
-| Jupyter Notebook         | 7       | 0            | 27.756           | 629          |
-| INI                      | 13      | 26           | 0                | 624          |
-| Windows Module Definition| 5       | 60           | 0                | 448          |
-| reStructuredText         | 10      | 129          | 1                | 406          |
-| Perl                     | 16      | 54           | 0                | 383          |
-| Fortran 77               | 21      | 26           | 50               | 382          |
-| PowerShell               | 6       | 143          | 265              | 339          |
-| ANTLR Grammar            | 2       | 84           | 11               | 335          |
-| Thrift                   | 1       | 58           | 2                | 301          |
-| C#                       | 2       | 56           | 128              | 214          |
-| Meson                    | 6       | 43           | 9                | 187          |
-| Fish Shell               | 2       | 38           | 28               | 140          |
-| Windows Resource File    | 1       | 35           | 45               | 135          |
-| Bourne Shell             | 7       | 35           | 81               | 125          |
-| ASP                      | 5       | 22           | 0                | 68           |
-| IDL                      | 1       | 4            | 0                | 62           |
-| LLVM IR                  | 2       | 9            | 8                | 52           |
-| C Shell                  | 1       | 13           | 7                | 35           |
-| VBScript                 | 3       | 7            | 4                | 31           |
-| Makefile                 | 1       | 3            | 2                | 19           |
-| Starlark                 | 2       | 1            | 0                | 17           |
-| GLSL                     | 2       | 0            | 0                | 7            |
-| Fortran 95               | 1       | 0            | 1                | 4            |
-| Linker Script            | 1       | 0            | 5                | 3            |
-| Lua                      | 1       | 0            | 1                | 2            |
-| Unity-Prefab             | 1       | 0            | 0                | 2            |
+| Language                  | Files  | Empty lines | Comment lines | Code lines |
+| ------------------------- | ------ | ----------- | ------------- | ---------- |
+| Python                    | 46,043 | 2,691,148   | 3,429,962     | 10,873,463 |
+| C/C++ Header              | 17,155 | 379,612     | 651,517       | 2,070,951  |
+| JavaScript                | 1,677  | 52,474      | 139,253       | 579,286    |
+| C                         | 187    | 25,292      | 79,648        | 319,464    |
+| PO File                   | 378    | 102,743     | 107,824       | 265,645    |
+| JSON                      | 1,273  | 464         | 0             | 240,859    |
+| Text                      | 633    | 6,522       | 0             | 179,897    |
+| QML                       | 1,517  | 21,504      | 40,607        | 110,041    |
+| XML                       | 60     | 11          | 199           | 100,616    |
+| Cython                    | 289    | 14,411      | 14,167        | 60,197     |
+| CSV                       | 103    | 0           | 0             | 55,040     |
+| DOS Batch                 | 61     | 8,682       | 9,708         | 38,949     |
+| SVG                       | 188    | 230         | 38            | 29,670     |
+| CSS                       | 60     | 2,398       | 2,281         | 23,490     |
+| HTML                      | 101    | 2,370       | 132           | 20,833     |
+| CUDA                      | 71     | 2,978       | 1,864         | 19,270     |
+| YAML                      | 17     | 3,433       | 1,023         | 17,123     |
+| Markdown                  | 59     | 1,506       | 39            | 14,085     |
+| C++                       | 131    | 2,769       | 3,812         | 11,901     |
+| XSLT                      | 13     | 1,324       | 1,602         | 10,064     |
+| Qt                        | 11     | 0           | 0             | 7,230      |
+| Jinja Template            | 40     | 1,362       | 0             | 6,235      |
+| TableGen                  | 1      | 1,076       | 435           | 5,825      |
+| PHP                       | 1      | 1,110       | 1,186         | 5,695      |
+| Protocol Buffers          | 158    | 2,413       | 10,570        | 5,393      |
+| Rust                      | 26     | 880         | 1,760         | 4,169      |
+| CMake                     | 30     | 905         | 1,715         | 4,100      |
+| TeX                       | 27     | 307         | 2,781         | 4,054      |
+| reStructuredText          | 97     | 1,546       | 471           | 3,263      |
+| D                         | 138    | 387         | 0             | 2,021      |
+| SCSS                      | 5      | 452         | 226           | 1,721      |
+| SQL                       | 4      | 0           | 0             | 1,398      |
+| TOML                      | 96     | 169         | 202           | 1,322      |
+| SWIG                      | 1      | 283         | 99            | 934        |
+| Fortran 90                | 55     | 126         | 86            | 924        |
+| INI                       | 24     | 37          | 6             | 760        |
+| Jupyter Notebook          | 7      | 0           | 27,756        | 629        |
+| Windows Module Definition | 5      | 60          | 0             | 448        |
+| Perl                      | 16     | 54          | 0             | 383        |
+| Fortran 77                | 21     | 26          | 50            | 382        |
+| PowerShell                | 6      | 152         | 270           | 375        |
+| ANTLR Grammar             | 2      | 84          | 11            | 335        |
+| Thrift                    | 1      | 58          | 2             | 301        |
+| XSD                       | 2      | 0           | 3             | 263        |
+| C#                        | 2      | 56          | 128           | 214        |
+| Bourne Shell              | 9      | 54          | 88            | 204        |
+| Meson                     | 6      | 43          | 9             | 187        |
+| Fish Shell                | 2      | 38          | 28            | 140        |
+| Windows Resource File     | 1      | 35          | 45            | 135        |
+| diff                      | 1      | 26          | 100           | 133        |
+| Assembly                  | 2      | 30          | 14            | 120        |
+| Makefile                  | 3      | 18          | 3             | 71         |
+| ASP                       | 5      | 22          | 0             | 68         |
+| IDL                       | 1      | 4           | 0             | 62         |
+| LLVM IR                   | 2      | 9           | 8             | 52         |
+| MATLAB                    | 2      | 2           | 28            | 46         |
+| C Shell                   | 1      | 13          | 7             | 35         |
+| VBScript                  | 4      | 9           | 6             | 34         |
+| Starlark                  | 2      | 1           | 0             | 17         |
+| Bourne Again Shell        | 1      | 1           | 3             | 10         |
+| GLSL                      | 2      | 0           | 0             | 7          |
+| zsh                       | 1      | 1           | 6             | 7          |
+| Fortran 95                | 1      | 0           | 1             | 4          |
+| Linker Script             | 1      | 0           | 5             | 3          |
+| Lua                       | 1      | 0           | 1             | 2          |
+| Unity-Prefab              | 1      | 0           | 0             | 2          |
 
-**Total:**  
-- **Files:** 58.095
-- **Blank Lines:** 2.888.247
-- **Comment Lines:** 4.643.897 
-- **Code Lines:** 12.164.874
-- **Total:** 19.697.018
+**Total:**
+
+* **Files:** 71.043
+* **Blank Lines:** 3.550.141
+* **Comment Lines:** 5.458.263
+* **Code Lines:** 15.417.335
+* **Gesamtzeilen:** 24.425.739
 
 ## Tree (17.07.2025)
 
