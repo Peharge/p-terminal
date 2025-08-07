@@ -10664,6 +10664,21 @@ if __name__ == "__main__":
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
+    if user_input.lower() == "where prp":
+        user_input = user_input[4:].strip()
+
+        command = f"where python"
+
+        try:
+            print(f"[{timestamp()}] [INFO] Run {user_input} with Python:\n")
+            run_command(command, shell=True)
+            print("")
+        except KeyboardInterrupt:
+            print(f"[{timestamp()}] [INFO] Cancellation by user.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+        return True
+
     if user_input.startswith("pr-p "):
         user_input = user_input[5:].strip()
 
