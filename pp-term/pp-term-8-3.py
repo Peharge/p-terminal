@@ -6047,7 +6047,10 @@ if __name__ == "__main__":
                         shutdown_thonny()
                     else:
                         active_env = Path(active_env_path)
-                        python_exe = active_env / "Scripts" / "python.exe"
+                        if (active_env / "conda-meta").is_dir():
+                            python_exe = active_env / ("python.exe" if os.name == "nt" else "bin/python")
+                        else:
+                            python_exe = active_env / ("Scripts" if os.name == "nt" else "bin") / ("python.exe" if os.name == "nt" else "python")
 
                         if not python_exe.exists():
                             print(f"[{timestamp()}] [ERROR] Python interpreter not found at {python_exe}")
@@ -6071,7 +6074,7 @@ if __name__ == "__main__":
 
                             print(f"[{timestamp()}] [INFO] Updated Thonny settings.json backend.executable to {python_exe}")
 
-                            # .env\.thonny\configuration.ini updaten
+                            # Pfad zur configuration.ini
                             ini_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/.env/.thonny/configuration.ini")
 
                             if ini_path.exists():
@@ -6090,11 +6093,12 @@ if __name__ == "__main__":
                                 val = json.dumps(last_configs_obj)
 
                                 config['LocalCPython']['last_configurations'] = val
+                                config['LocalCPython']['executable'] = str(python_exe)  # hier executable setzen
 
                                 with open(ini_path, 'w', encoding='utf-8') as f:
                                     config.write(f)
 
-                                print(f"[{timestamp()}] [INFO] Updated {ini_path} with last_configurations pointing to {python_exe}")
+                                print(f"[{timestamp()}] [INFO] Updated {ini_path} with last_configurations and executable pointing to {python_exe}")
                             else:
                                 print(f"[{timestamp()}] [WARNING] configuration.ini not found at {ini_path}, skipping update.")
 
@@ -6168,7 +6172,10 @@ if __name__ == "__main__":
                             shutdown_thonny()
                         else:
                             active_env = Path(active_env_path)
-                            python_exe = active_env / "Scripts" / "python.exe"
+                            if (active_env / "conda-meta").is_dir():
+                                python_exe = active_env / ("python.exe" if os.name == "nt" else "bin/python")
+                            else:
+                                python_exe = active_env / ("Scripts" if os.name == "nt" else "bin") / ("python.exe" if os.name == "nt" else "python")
 
                             if not python_exe.exists():
                                 print(f"[{timestamp()}] [ERROR] Python interpreter not found at {python_exe}")
@@ -6192,7 +6199,7 @@ if __name__ == "__main__":
 
                                 print(f"[{timestamp()}] [INFO] Updated Thonny settings.json backend.executable to {python_exe}")
 
-                                # .env\.thonny\configuration.ini updaten
+                                # Pfad zur configuration.ini
                                 ini_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/.env/.thonny/configuration.ini")
 
                                 if ini_path.exists():
@@ -6211,11 +6218,12 @@ if __name__ == "__main__":
                                     val = json.dumps(last_configs_obj)
 
                                     config['LocalCPython']['last_configurations'] = val
+                                    config['LocalCPython']['executable'] = str(python_exe)  # hier executable setzen
 
                                     with open(ini_path, 'w', encoding='utf-8') as f:
                                         config.write(f)
 
-                                    print(f"[{timestamp()}] [INFO] Updated {ini_path} with last_configurations pointing to {python_exe}")
+                                    print(f"[{timestamp()}] [INFO] Updated {ini_path} with last_configurations and executable pointing to {python_exe}")
                                 else:
                                     print(f"[{timestamp()}] [WARNING] configuration.ini not found at {ini_path}, skipping update.")
 
@@ -6289,7 +6297,10 @@ if __name__ == "__main__":
                         shutdown_thonny()
                     else:
                         active_env = Path(active_env_path)
-                        python_exe = active_env / "Scripts" / "python.exe"
+                        if (active_env / "conda-meta").is_dir():
+                            python_exe = active_env / ("python.exe" if os.name == "nt" else "bin/python")
+                        else:
+                            python_exe = active_env / ("Scripts" if os.name == "nt" else "bin") / ("python.exe" if os.name == "nt" else "python")
 
                         if not python_exe.exists():
                             print(f"[{timestamp()}] [ERROR] Python interpreter not found at {python_exe}")
