@@ -10651,6 +10651,7 @@ if __name__ == "__main__":
 
     if user_input.startswith("prp "):
         user_input = user_input[4:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"python {user_input}"
 
@@ -10664,23 +10665,37 @@ if __name__ == "__main__":
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
-    if user_input.lower() == "where prp":
-        user_input = user_input[4:].strip()
-
-        command = f"where python"
-
+    if  if user_input.lower() == "where prp":
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+        print(f"[{timestamp()}] [INFO] Run 'where python' to find Python executable:\n")
         try:
-            print(f"[{timestamp()}] [INFO] Run {user_input} with Python:\n")
-            run_command(command, shell=True)
-            print("")
+            # Windows-Befehl um Python Interpreter(s) zu finden
+            run_command("where python", shell=True)
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
+            print(f"[{timestamp()}] [ERROR] executing command: {e.stderr.strip()}")
+
+        # Zusätzlich Conda-Info anzeigen, falls conda vorhanden ist
+        try:
+            print(f"\n[{timestamp()}] [INFO] Check active Conda environment:\n")
+            run_command("conda info --envs", shell=True)
+            # Pfad zur aktiven Conda-Umgebung auslesen in Python (optional)
+            conda_prefix = os.environ.get('CONDA_PREFIX')
+            if conda_prefix:
+                print(f"\n[{timestamp()}] [INFO] Active Conda environment path: {conda_prefix}")
+            else:
+                print(f"\n[{timestamp()}] [INFO] No active Conda environment detected.")
+        except FileNotFoundError:
+            # conda nicht installiert oder nicht im PATH
+            print(f"[{timestamp()}] [WARN] Conda command not found.")
+        except subprocess.CalledProcessError as e:
+            print(f"[{timestamp()}] [ERROR] executing conda command: {e.stderr.strip()}")
         return True
 
     if user_input.startswith("pr-p "):
         user_input = user_input[5:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"python {user_input}"
 
@@ -10695,6 +10710,7 @@ if __name__ == "__main__":
 
     if user_input.startswith("pc-p "):
         user_input = user_input[5:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"python {user_input}"
 
@@ -10727,6 +10743,7 @@ if __name__ == "__main__":
 
     if user_input.startswith("pdp "):
         user_input = user_input[4:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"python -m pdb {user_input}"
 
@@ -10741,6 +10758,7 @@ if __name__ == "__main__":
 
     if user_input.startswith("pd-p "):
         user_input = user_input[5:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"python -m pdb {user_input}"
 
@@ -10755,6 +10773,7 @@ if __name__ == "__main__":
 
     if user_input.startswith("pd-python "):
         user_input = user_input[10:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         command = f"python -m pdb {user_input}"
 
@@ -10788,6 +10807,7 @@ if __name__ == "__main__":
 
     if user_input.startswith("pd-python-run "):
         user_input = user_input[14:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         parts = shlex.split(user_input)
         script = parts[0]
         args = parts[1:]
@@ -10807,6 +10827,7 @@ if __name__ == "__main__":
 
     if user_input.startswith("pd-python-venv "):
         user_input = user_input[16:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         venv_name = user_input
         if os.path.isdir(venv_name):
             print(f"[{timestamp()}] [ERROR] Virtual environment folder '{venv_name}' already exists.")
@@ -10833,6 +10854,7 @@ if __name__ == "__main__":
 
     if user_input.startswith("pd-python-install "):
         user_input = user_input[18:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         args = shlex.split(user_input)
         if len(args) != 2:
             print(f"[{timestamp()}] [ERROR] Please provide exactly two arguments: venv folder and requirements file.")
@@ -10866,6 +10888,7 @@ if __name__ == "__main__":
 
     if user_input.startswith("pd-python-format "):
         user_input = user_input[17:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         target = user_input
         if not os.path.exists(target):
             print(f"[{timestamp()}] [ERROR] Path '{target}' not found.")
@@ -10887,6 +10910,7 @@ if __name__ == "__main__":
 
     if user_input.startswith("pd-python-lint "):
         user_input = user_input[16:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         target = user_input
         if not os.path.exists(target):
             print(f"[{timestamp()}] [ERROR] Path '{target}' not found.")
@@ -10908,6 +10932,7 @@ if __name__ == "__main__":
 
     if user_input.startswith("pd-python-typecheck "):
         user_input = user_input[19:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         target = user_input
         if not os.path.exists(target):
             print(f"[{timestamp()}] [ERROR] Path '{target}' not found.")
@@ -10929,6 +10954,7 @@ if __name__ == "__main__":
 
     if user_input.startswith("pd-python-test "):
         user_input = user_input[15:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         target = user_input if user_input else "."
         if not os.path.exists(target):
             print(f"[{timestamp()}] [ERROR] Path '{target}' not found.")
@@ -10950,6 +10976,7 @@ if __name__ == "__main__":
 
     if user_input.startswith("pd-python-coverage "):
         user_input = user_input[19:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         parts = shlex.split(user_input)
         if len(parts) == 0:
             print(f"[{timestamp()}] [ERROR] Please provide a script or test path.")
@@ -10990,6 +11017,7 @@ if __name__ == "__main__":
 
     if user_input.startswith("pd-python-pack "):
         user_input = user_input[16:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         target = user_input
         if not os.path.exists(target):
             print(f"[{timestamp()}] [ERROR] Path '{target}' not found.")
@@ -11029,6 +11057,7 @@ if __name__ == "__main__":
 
     if user_input.startswith("pd-python-docs "):
         user_input = user_input[16:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         docs_dir = user_input
         if not os.path.isdir(docs_dir):
             print(f"[{timestamp()}] [ERROR] Directory '{docs_dir}' not found.")
@@ -11053,6 +11082,7 @@ if __name__ == "__main__":
     if user_input.startswith("pd-python-clean"):
         # Accept optional directory argument, default to current directory
         args = shlex.split(user_input[15:].strip())
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         target_dir = args[0] if args else "."
         if not os.path.isdir(target_dir):
             print(f"[{timestamp()}] [ERROR] Directory '{target_dir}' not found.")
@@ -11079,6 +11109,7 @@ if __name__ == "__main__":
 
     if user_input.startswith("pd-python-all "):
         user_input = user_input[14:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         project_dir = user_input
         if not os.path.isdir(project_dir):
             print(f"[{timestamp()}] [ERROR] Directory '{project_dir}' not found.")
@@ -11143,6 +11174,8 @@ if __name__ == "__main__":
         else:
             user_input = user_input[8:].strip()
             module = "ipdb"
+
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
 
         # Aktive Umgebung laden
         json_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/current_env.json")
