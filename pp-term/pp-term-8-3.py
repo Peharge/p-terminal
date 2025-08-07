@@ -3522,150 +3522,6 @@ def handle_special_commands(user_input):
 
         return True
 
-    if user_input.startswith("pcoav "):  # pcoav = activate
-        env_name = user_input[6:].strip()
-        current_dir = Path.cwd()  # Oder ein spezieller Pfad, falls nötig
-        env_path = (current_dir / env_name).resolve()
-
-        def set_active_conda_env_in_json(env_path_str: str):
-            json_path = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/current_env.json")
-            data = {}
-            if json_path.exists():
-                try:
-                    with open(json_path, "r") as f:
-                        data = json.load(f)
-                except json.JSONDecodeError:
-                    print(f"[{timestamp()}] [ERROR] JSON could not be loaded. Overwrite...")
-
-            data["active_env"] = env_path_str
-            try:
-                with open(json_path, "w") as f:
-                    json.dump(data, f, indent=4)
-                print(f"[{timestamp()}] [INFO] Active Environment saved in JSON: {env_path_str}")
-            except Exception as e:
-                print(f"[{timestamp()}] [ERROR] Failed to save JSON: {e}")
-
-        if not env_path.exists():
-            print(f"[{timestamp()}] [INFO] Environment '{env_name}' does not exist under '{env_path}'.")
-            user_confirm = input("Do you want to create this virtual environment? [y/n]: ").strip().lower()
-            if user_confirm == 'y':
-                command = ["python", "-m", "venv", str(env_path)]
-                try:
-                    subprocess.run(command, check=True, text=True,
-                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=False)
-                    print(f"[{timestamp()}] [INFO] The venv '{env_name}' was created under {env_path}.")
-                except subprocess.CalledProcessError as e:
-                    print(f"[{timestamp()}] [ERROR] Error creating the venv: {e}")
-            else:
-                print(f"[{timestamp()}] [INFO] Activation canceled.")
-                # return True
-
-        if os.name == "nt":
-            python_exe = env_path / "Scripts" / "python.exe"
-        else:
-            print(f"[{timestamp()}] [INFO] Activation aborted: The specified interpreter '{python_exe}' is incompatible. PP-Terminal supports environment creation only with Windows-style paths.")
-            python_exe = env_path / "bin" / "python"
-
-        if not python_exe.exists():
-            print(f"[{timestamp()}] [INFO] No Python interpreter found in '{python_exe}'.")
-            user_confirm = input("Activate anyway? [y/n]: ").strip().lower()
-            if user_confirm != 'y':
-                print(f"[{timestamp()}] [INFO] Activation canceled.")
-                # return True
-
-        active = find_active_env(env_path)
-        set_active_conda_env_in_json(active)
-
-        print(f"[{timestamp()}] [INFO] Active environment set on '{active}'.")
-        return True
-
-    if user_input.startswith("pp-pcoav "):  # pcoav = activate
-            env_name = user_input[9:].strip()
-            current_dir = Path.cwd()  # Oder ein spezieller Pfad, falls nötig
-            env_path = (current_dir / env_name).resolve()
-
-            def set_active_conda_env_in_json(env_path_str: str):
-                json_path = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/current_env.json")
-                data = {}
-                if json_path.exists():
-                    try:
-                        with open(json_path, "r") as f:
-                            data = json.load(f)
-                    except json.JSONDecodeError:
-                        print(f"[{timestamp()}] [ERROR] JSON could not be loaded. Overwrite...")
-
-                data["active_env"] = env_path_str
-                try:
-                    with open(json_path, "w") as f:
-                        json.dump(data, f, indent=4)
-                    print(f"[{timestamp()}] [INFO] Active Environment saved in JSON: {env_path_str}")
-                except Exception as e:
-                    print(f"[{timestamp()}] [ERROR] Failed to save JSON: {e}")
-
-            if not env_path.exists():
-                print(f"[{timestamp()}] [INFO] Environment '{env_name}' does not exist under '{env_path}'.")
-                user_confirm = input("Do you want to create this virtual environment? [y/n]: ").strip().lower()
-                if user_confirm == 'y':
-                    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command with shell=True — this can be insecure!")
-                    command = f'python -m venv "{env_path}"'
-                    try:
-                        subprocess.run(command, shell=True, check=True, text=True,
-                                       stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
-                        print(f"[{timestamp()}] [INFO] The venv '{env_name}' was created under {env_path}.")
-                    except subprocess.CalledProcessError as e:
-                        print(f"[{timestamp()}] [ERROR] Error creating the venv: {e}")
-                else:
-                    print(f"[{timestamp()}] [INFO] Activation canceled.")
-                    # return True
-
-            if os.name == "nt":
-                python_exe = env_path / "Scripts" / "python.exe"
-            else:
-                print(f"[{timestamp()}] [INFO] Activation aborted: The specified interpreter '{python_exe}' is incompatible. PP-Terminal supports environment creation only with Windows-style paths.")
-                python_exe = env_path / "bin" / "python"
-
-            if not python_exe.exists():
-                print(f"[{timestamp()}] [INFO] No Python interpreter found in '{python_exe}'.")
-                user_confirm = input("Activate anyway? [y/n]: ").strip().lower()
-                if user_confirm != 'y':
-                    print(f"[{timestamp()}] [INFO] Activation canceled.")
-                    # return True
-
-            active = find_active_env(env_path)
-            set_active_conda_env_in_json(active)
-
-            print(f"[{timestamp()}] [INFO] Active environment set on '{active}'.")
-            return True
-
-    if user_input.startswith("pcodv "):  # pcodv = deactivate
-        # Normalerweise braucht deactivate keinen Env-Namen, aber falls übergeben:
-        env_name = user_input[6:].strip()
-
-        def set_active_conda_env_in_json(env_path_str):
-            json_path = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/current_env.json")
-            data = {}
-            if json_path.exists():
-                try:
-                    with open(json_path, "r") as f:
-                        data = json.load(f)
-                except json.JSONDecodeError:
-                    print(f"[{timestamp()}] [ERROR] JSON konnte nicht geladen werden. Überschreibe...")
-
-            # Für deactivate setzen wir active_env auf None oder leeren String
-            data["active_env"] = None
-            try:
-                with open(json_path, "w") as f:
-                    json.dump(data, f, indent=4)
-                print(f"[{timestamp()}] [INFO] Environment deaktiviert, active_env auf None gesetzt.")
-            except Exception as e:
-                print(f"[{timestamp()}] [ERROR] JSON konnte nicht gespeichert werden: {e}")
-
-        # Deaktivieren heißt hier nur den aktiven Env-Eintrag löschen/setzen
-        set_active_conda_env_in_json(None)
-
-        print(f"[{timestamp()}] [INFO] Environment wurde deaktiviert.")
-        return True
-
     if user_input.startswith("pcos "):  # pcos = search packages
         user_input = "search " + user_input[5:].strip()
 
@@ -35237,6 +35093,274 @@ def main():
 
             elif user_input.startswith("pdav "):
                 env_name = user_input[5:].strip()
+                env_path = (current_dir / env_name).resolve()
+
+                if not env_path.exists():
+                    print(f"[{timestamp()}] [ERROR] Environment path {env_path} does not exist.")
+                else:
+                    if STATE_FILE.exists():
+                        try:
+                            with open(STATE_FILE, "r") as f:
+                                data = json.load(f)
+
+                            active_env = data.get("active_env", "").strip()
+
+                            if Path(active_env) == env_path:
+                                # Deaktivieren, wenn aktiv
+                                data["active_env"] = ""
+                                with open(STATE_FILE, "w") as f:
+                                    json.dump(data, f, indent=4)
+
+                                print(f"[{timestamp()}] [INFO] Environment '{env_name}' deactivated successfully.")
+                                set_python_path(" ")  # Pfad zurücksetzen
+
+                            else:
+                                print(f"[{timestamp()}] [INFO] Environment '{env_name}' is not currently active.")
+                                # Optional: hier kann man nachfragen, ob trotzdem deaktiviert werden soll
+
+                        except Exception as e:
+                            print(f"[{timestamp()}] [ERROR] Failed to read or update state file: {e}")
+                    else:
+                        print(f"[{timestamp()}] [WARN] State file does not exist. Creating new state file with no active env.")
+                        try:
+                            with open(STATE_FILE, "w") as f:
+                                json.dump({"active_env": ""}, f, indent=4)
+                            set_python_path(" ")
+                            print(f"[{timestamp()}] [INFO] Environment '{env_name}' deactivated (state file created).")
+                        except Exception as e:
+                            print(f"[{timestamp()}] [ERROR] Failed to create state file: {e}")
+
+            elif user_input.startswith("pcoav "):  # pcoav = activate
+                env_name = user_input[6:].strip()
+                env_path = (current_dir / env_name).resolve()
+
+                if not env_path.exists():
+                    print(f"[{timestamp()}] [INFO] Environment '{env_name}' does not exist at '{env_path}'.")
+                    user_confirm = input("Do you want to create this virtual environment? [y/n]: ").strip().lower()
+                    if user_confirm == 'y':
+                        command = ["python", "-m", "venv", str(env_path)]
+                        try:
+                            subprocess.run(command, check=True, text=True,
+                                           stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                            print(f"[{timestamp()}] [INFO] The '{env_name}' venv was created at {env_path}.")
+                        except subprocess.CalledProcessError as e:
+                            print(f"[{timestamp()}] [ERROR] Failed to create venv: {e}")
+                            continue
+                    else:
+                        print(f"[{timestamp()}] [INFO] Activation cancelled.")
+                        continue
+
+                if os.name == "nt":
+                    # Windows: Erkenne Conda env (python.exe im env root) oder venv (Scripts/python.exe)
+                    if (env_path / "conda-meta").is_dir():
+                        python_exe = env_path / "python.exe"
+                    else:
+                        python_exe = env_path / "Scripts" / "python.exe"
+                else:
+                    print(f"[{timestamp()}] [INFO] Activation aborted: The specified interpreter '{python_exe}' is incompatible. PP-Terminal supports environment creation only with Windows-style paths.")
+                    # Unix: Erkenne Conda env (bin/python) oder venv/env (bin/python)
+                    if (env_path / "conda-meta").is_dir():
+                        python_exe = env_path / "bin" / "python"
+                    else:
+                        python_exe = env_path / "bin" / "python"
+
+                if not python_exe.exists():
+                    print(f"[{timestamp()}] [INFO] No Python interpreter found at '{python_exe}'.")
+                    user_confirm = input("Do you still want to activate this environment? [y/n]: ").strip().lower()
+                    if user_confirm != 'y':
+                        print(f"[{timestamp()}] [INFO] Activation cancelled.")
+                        continue
+
+                # setzt und speichert das aktive Env
+                active = find_active_env(env_path)
+                set_python_path(active)
+
+                print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+
+            elif user_input.startswith("conda activate "):
+                env_name = user_input[15:].strip()
+                env_path = (current_dir / env_name).resolve()
+
+                if not env_path.exists():
+                    print(f"[{timestamp()}] [INFO] Environment '{env_name}' does not exist at '{env_path}'.")
+                    user_confirm = input("Do you want to create this virtual environment? [y/n]: ").strip().lower()
+                    if user_confirm == 'y':
+                        command = ["python", "-m", "venv", str(env_path)]
+                        try:
+                            subprocess.run(command, check=True, text=True,
+                                           stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                            print(f"[{timestamp()}] [INFO] The '{env_name}' venv was created at {env_path}.")
+                        except subprocess.CalledProcessError as e:
+                            print(f"[{timestamp()}] [ERROR] Failed to create venv: {e}")
+                            continue
+                    else:
+                        print(f"[{timestamp()}] [INFO] Activation cancelled.")
+                        continue
+
+                if os.name == "nt":
+                    # Windows: Erkenne Conda env (python.exe im env root) oder venv (Scripts/python.exe)
+                    if (env_path / "conda-meta").is_dir():
+                        python_exe = env_path / "python.exe"
+                    else:
+                        python_exe = env_path / "Scripts" / "python.exe"
+                else:
+                    print(f"[{timestamp()}] [INFO] Activation aborted: The specified interpreter '{python_exe}' is incompatible. PP-Terminal supports environment creation only with Windows-style paths.")
+                    # Unix: Erkenne Conda env (bin/python) oder venv/env (bin/python)
+                    if (env_path / "conda-meta").is_dir():
+                        python_exe = env_path / "bin" / "python"
+                    else:
+                        python_exe = env_path / "bin" / "python"
+
+                if not python_exe.exists():
+                    print(f"[{timestamp()}] [INFO] No Python interpreter found at '{python_exe}'.")
+                    user_confirm = input("Do you still want to activate this environment? [y/n]: ").strip().lower()
+                    if user_confirm != 'y':
+                        print(f"[{timestamp()}] [INFO] Activation cancelled.")
+                        continue
+
+                # setzt und speichert das aktive Env
+                active = find_active_env(env_path)
+                set_python_path(active)
+
+                print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+
+            elif user_input.startswith("pp-pcoav "):  # pcoav = activate
+                env_name = user_input[7:].strip()
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command with shell=True — this can be insecure!")
+                env_path = (current_dir / env_name).resolve()
+
+                if not env_path.exists():
+                    print(f"[{timestamp()}] [INFO] Environment '{env_name}' does not exist at '{env_path}'.")
+                    user_confirm = input("Do you want to create this virtual environment? [y/n]: ").strip().lower()
+                    if user_confirm == 'y':
+                        command = f'python -m venv "{env_path}"'
+                        try:
+                            subprocess.run(command, shell=True, check=True, text=True,
+                                           stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                            print(f"[{timestamp()}] [INFO] The '{env_name}' venv was created at {env_path}.")
+                        except subprocess.CalledProcessError as e:
+                            print(f"[{timestamp()}] [ERROR] Failed to create venv: {e}")
+                            continue
+                    else:
+                        print(f"[{timestamp()}] [INFO] Activation cancelled.")
+                        continue
+
+                if os.name == "nt":
+                    # Windows: Erkenne Conda env (python.exe im env root) oder venv (Scripts/python.exe)
+                    if (env_path / "conda-meta").is_dir():
+                        python_exe = env_path / "python.exe"
+                    else:
+                        python_exe = env_path / "Scripts" / "python.exe"
+                else:
+                    print(f"[{timestamp()}] [INFO] Activation aborted: The specified interpreter '{python_exe}' is incompatible. PP-Terminal supports environment creation only with Windows-style paths.")
+                    # Unix: Erkenne Conda env (bin/python) oder venv/env (bin/python)
+                    if (env_path / "conda-meta").is_dir():
+                        python_exe = env_path / "bin" / "python"
+                    else:
+                        python_exe = env_path / "bin" / "python"
+
+                if not python_exe.exists():
+                    print(f"[{timestamp()}] [INFO] No Python interpreter found at '{python_exe}'.")
+                    user_confirm = input("Do you still want to activate this environment? [y/n]: ").strip().lower()
+                    if user_confirm != 'y':
+                        print(f"[{timestamp()}] [INFO] Activation cancelled.")
+                        continue
+
+                # setzt und speichert das aktive Env
+                active = find_active_env(env_path)
+                set_python_path(active)
+
+                print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+
+            elif user_input.startswith("pp-conda activate "):
+                env_name = user_input[18:].strip()
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command with shell=True — this can be insecure!")
+                env_path = (current_dir / env_name).resolve()
+
+                if not env_path.exists():
+                    print(f"[{timestamp()}] [INFO] Environment '{env_name}' does not exist at '{env_path}'.")
+                    user_confirm = input("Do you want to create this virtual environment? [y/n]: ").strip().lower()
+                    if user_confirm == 'y':
+                        command = f'python -m venv "{env_path}"'
+                        try:
+                            subprocess.run(command, shell=True, check=True, text=True,
+                                           stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                            print(f"[{timestamp()}] [INFO] The '{env_name}' venv was created at {env_path}.")
+                        except subprocess.CalledProcessError as e:
+                            print(f"[{timestamp()}] [ERROR] Failed to create venv: {e}")
+                            continue
+                    else:
+                        print(f"[{timestamp()}] [INFO] Activation cancelled.")
+                        continue
+
+                if os.name == "nt":
+                    # Windows: Erkenne Conda env (python.exe im env root) oder venv (Scripts/python.exe)
+                    if (env_path / "conda-meta").is_dir():
+                        python_exe = env_path / "python.exe"
+                    else:
+                        python_exe = env_path / "Scripts" / "python.exe"
+                else:
+                    print(f"[{timestamp()}] [INFO] Activation aborted: The specified interpreter '{python_exe}' is incompatible. PP-Terminal supports environment creation only with Windows-style paths.")
+                    # Unix: Erkenne Conda env (bin/python) oder venv/env (bin/python)
+                    if (env_path / "conda-meta").is_dir():
+                        python_exe = env_path / "bin" / "python"
+                    else:
+                        python_exe = env_path / "bin" / "python"
+
+                if not python_exe.exists():
+                    print(f"[{timestamp()}] [INFO] No Python interpreter found at '{python_exe}'.")
+                    user_confirm = input("Do you still want to activate this environment? [y/n]: ").strip().lower()
+                    if user_confirm != 'y':
+                        print(f"[{timestamp()}] [INFO] Activation cancelled.")
+                        continue
+
+                # setzt und speichert das aktive Env
+                active = find_active_env(env_path)
+                set_python_path(active)
+
+                print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+
+            elif user_input.startswith("pcodv "):  # pcodv = deactivate
+                env_name = user_input[6:].strip()
+                env_path = (current_dir / env_name).resolve()
+
+                if not env_path.exists():
+                    print(f"[{timestamp()}] [ERROR] Environment path {env_path} does not exist.")
+                else:
+                    if STATE_FILE.exists():
+                        try:
+                            with open(STATE_FILE, "r") as f:
+                                data = json.load(f)
+
+                            active_env = data.get("active_env", "").strip()
+
+                            if Path(active_env) == env_path:
+                                # Deaktivieren, wenn aktiv
+                                data["active_env"] = ""
+                                with open(STATE_FILE, "w") as f:
+                                    json.dump(data, f, indent=4)
+
+                                print(f"[{timestamp()}] [INFO] Environment '{env_name}' deactivated successfully.")
+                                set_python_path(" ")  # Pfad zurücksetzen
+
+                            else:
+                                print(f"[{timestamp()}] [INFO] Environment '{env_name}' is not currently active.")
+                                # Optional: hier kann man nachfragen, ob trotzdem deaktiviert werden soll
+
+                        except Exception as e:
+                            print(f"[{timestamp()}] [ERROR] Failed to read or update state file: {e}")
+                    else:
+                        print(f"[{timestamp()}] [WARN] State file does not exist. Creating new state file with no active env.")
+                        try:
+                            with open(STATE_FILE, "w") as f:
+                                json.dump({"active_env": ""}, f, indent=4)
+                            set_python_path(" ")
+                            print(f"[{timestamp()}] [INFO] Environment '{env_name}' deactivated (state file created).")
+                        except Exception as e:
+                            print(f"[{timestamp()}] [ERROR] Failed to create state file: {e}")
+
+            elif user_input.startswith("conda deactivate "):
+                env_name = user_input[17:].strip()
                 env_path = (current_dir / env_name).resolve()
 
                 if not env_path.exists():
