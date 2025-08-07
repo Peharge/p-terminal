@@ -135,6 +135,7 @@ from pygments.formatters import HtmlFormatter
 import pathlib
 from markdown2 import markdown
 from docx import Document
+from typing import Optional
 
 try:
     import ujson as _json
@@ -328,11 +329,12 @@ def set_kernel_in_notebook(notebook_path, kernel_name, display_name):
         nbformat.write(nb, f)
 
 
-def set_python_path(user_input: Optional[str] = None) -> None:
-    """
-    Setzt PYTHON_PATH basierend auf dem gefundenen Environment.
-    Wenn `user_input` gesetzt und != "cd"/"pcd", wird es priorisiert.
-    """
+"""
+
+def set_python_path(user_input: Optional[str] = None) -> None
+    # Setzt PYTHON_PATH basierend auf dem gefundenen Environment.
+    # Wenn `user_input` gesetzt und != "cd"/"pcd", wird es priorisiert.
+
     active_env = find_active_env(user_input)
 
     python_executable = os.path.join(active_env, "Scripts", "python.exe")
@@ -341,6 +343,33 @@ def set_python_path(user_input: Optional[str] = None) -> None:
         python_executable = os.path.abspath(DEFAULT_PYTHON_EXECUTABLE)
 
     os.environ["PYTHON_PATH"] = python_executable
+
+"""
+
+def set_python_path(user_input: Optional[str] = None) -> None:
+    """
+    Setzt PYTHON_PATH basierend auf dem gefundenen Environment.
+    Wenn `user_input` gesetzt und != "cd"/"pcd", wird es priorisiert.
+    """
+    active_env = find_active_env(user_input)
+    if not active_env:
+        # print(f"[{timestamp()}] [ERROR] No active environment found.")
+        return # ?
+
+    active_env = Path(active_env)
+
+    # Conda-Umgebung prüfen
+    if (active_env / "conda-meta").is_dir():
+        python_executable = active_env / ("python.exe" if os.name == "nt" else "bin/python")
+    else:
+        python_executable = active_env / ("Scripts" if os.name == "nt" else "bin") / ("python.exe" if os.name == "nt" else "python")
+
+    if not python_executable.exists():
+        # print(f"[{timestamp()}] [WARNING] Python interpreter not found at {python_executable}, use default: {DEFAULT_PYTHON_EXECUTABLE}")
+        python_executable = Path(DEFAULT_PYTHON_EXECUTABLE)
+
+    os.environ["PYTHON_PATH"] = str(python_executable)
+    # print(f"[{timestamp()}] [INFO] PYTHON_PATH set to: {os.environ['PYTHON_PATH']}")
 
 
 def ensure_state_dir_exists():
@@ -17639,7 +17668,10 @@ if __name__ == "__main__":
                 return True
 
             active_env = Path(active_env_path)
-            python_exe = active_env / "Scripts" / "python.exe"
+            if (active_env / "conda-meta").is_dir():
+                python_exe = active_env / ("python.exe" if os.name == "nt" else "bin/python")
+            else:
+                python_exe = active_env / ("Scripts" if os.name == "nt" else "bin") / ("python.exe" if os.name == "nt" else "python")
 
             fixed_python = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/.env/Scripts/python.exe")
             if not fixed_python.exists():
@@ -17738,7 +17770,10 @@ if __name__ == "__main__":
                 return True
 
             active_env = Path(active_env_path)
-            python_exe = active_env / "Scripts" / "python.exe"
+            if (active_env / "conda-meta").is_dir():
+                python_exe = active_env / ("python.exe" if os.name == "nt" else "bin/python")
+            else:
+                python_exe = active_env / ("Scripts" if os.name == "nt" else "bin") / ("python.exe" if os.name == "nt" else "python")
 
             fixed_python = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/.env/Scripts/python.exe")
             if not fixed_python.exists():
@@ -17834,7 +17869,10 @@ if __name__ == "__main__":
                 return True
 
             active_env = Path(active_env_path)
-            python_exe = active_env / "Scripts" / "python.exe"
+            if (active_env / "conda-meta").is_dir():
+                python_exe = active_env / ("python.exe" if os.name == "nt" else "bin/python")
+            else:
+                python_exe = active_env / ("Scripts" if os.name == "nt" else "bin") / ("python.exe" if os.name == "nt" else "python")
 
             fixed_python = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/.env/Scripts/python.exe")
             if not fixed_python.exists():
@@ -17928,7 +17966,10 @@ if __name__ == "__main__":
                 return True
 
             active_env = Path(active_env_path)
-            python_exe = active_env / "Scripts" / "python.exe"
+            if (active_env / "conda-meta").is_dir():
+                python_exe = active_env / ("python.exe" if os.name == "nt" else "bin/python")
+            else:
+                python_exe = active_env / ("Scripts" if os.name == "nt" else "bin") / ("python.exe" if os.name == "nt" else "python")
 
             fixed_python = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/.env/Scripts/python.exe")
             if not fixed_python.exists():
@@ -18022,7 +18063,10 @@ if __name__ == "__main__":
                 return True
 
             active_env = Path(active_env_path)
-            python_exe = active_env / "Scripts" / "python.exe"
+            if (active_env / "conda-meta").is_dir():
+                python_exe = active_env / ("python.exe" if os.name == "nt" else "bin/python")
+            else:
+                python_exe = active_env / ("Scripts" if os.name == "nt" else "bin") / ("python.exe" if os.name == "nt" else "python")
 
             # Fixed python interpreter to start Jupyter Notebook
             fixed_python = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/.env/Scripts/python.exe")
