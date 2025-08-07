@@ -527,6 +527,8 @@ def run_command(command, shell=False, cwd=None, extra_env=None):
 
     # command in Liste umwandeln (nur wenn shell=False und command ist str)
     if isinstance(command, str) and not shell:
+        print(f"[{timestamp()}] [INFO] General shell commands are not supported in this PP-Terminal.")
+        print(f"[{timestamp()}] [INFO] Please use PWsl commands like 'lx ...', 'pl ...', 'ubuntu ...', 'arch ...' etc.")
         command = shlex.split(command, posix=(os.name != "nt"))
 
     # pip- und python-Wrapper
@@ -786,6 +788,8 @@ def run_command_ov(command, shell=False, cwd=None, extra_env=None):
     info_data = load_json(info_main_path)
 
     if isinstance(command, str) and not shell:
+        print(f"[{timestamp()}] [INFO] General shell commands are not supported in this PP-Terminal.")
+        print(f"[{timestamp()}] [INFO] Please use PWsl commands like 'lx ...', 'pl ...', 'ubuntu ...', 'arch ...' etc.")
         cmd_list = shlex.split(command, posix=(os.name != "nt"))
     elif isinstance(command, list):
         cmd_list = command
@@ -2881,6 +2885,8 @@ def handle_special_commands(user_input):
         if os.name == 'nt':  # Windows
             os.system("shutdown /s /t 0")
         elif os.name == 'posix':  # Linux / macOS
+            print(f"[{timestamp()}] [INFO] General shell commands are not supported in this PP-Terminal.")
+            print(f"[{timestamp()}] [INFO] Please use PWSL commands like 'lx ...', 'pl ...', 'ubuntu ...', 'arch ...' etc.")
             os.system("sudo shutdown -h now")
         else:
             print(f"[{timestamp()}] [ERROR] Unknown operating system – shutdown not possible.")
@@ -3541,6 +3547,7 @@ def handle_special_commands(user_input):
         if os.name == "nt":
             python_exe = env_path / "Scripts" / "python.exe"
         else:
+            print(f"[{timestamp()}] [INFO] Activation aborted: The specified interpreter '{python_exe}' is incompatible. PP-Terminal supports environment creation only with Windows-style paths.")
             python_exe = env_path / "bin" / "python"
 
         if not python_exe.exists():
@@ -3598,6 +3605,7 @@ def handle_special_commands(user_input):
             if os.name == "nt":
                 python_exe = env_path / "Scripts" / "python.exe"
             else:
+                print(f"[{timestamp()}] [INFO] Activation aborted: The specified interpreter '{python_exe}' is incompatible. PP-Terminal supports environment creation only with Windows-style paths.")
                 python_exe = env_path / "bin" / "python"
 
             if not python_exe.exists():
@@ -16769,6 +16777,8 @@ if __name__ == "__main__":
         if os.name == "nt":
             executable_path = os.path.join("bin", base_name + ".exe")
         else:
+            print(f"[{timestamp()}] [INFO] General shell commands are not supported in this PP-Terminal.")
+            print(f"[{timestamp()}] [INFO] Please use PWSL commands like 'lx ...', 'pl ...', 'ubuntu ...', 'arch ...' etc.")
             executable_path = os.path.join("bin", base_name)
 
         if not os.path.isfile(executable_path):
@@ -20121,6 +20131,8 @@ if __name__ == "__main__":
                 cp = ctypes.windll.kernel32.GetConsoleOutputCP()
                 encoding = f"cp{cp}"
             else:
+                print(f"[{timestamp()}] [INFO] General shell commands are not supported in this PP-Terminal.")
+                print(f"[{timestamp()}] [INFO] Please use PWSL commands like 'lx ...', 'pl ...', 'ubuntu ...', 'arch ...' etc.")
                 encoding = "utf-8"
 
             # Subprozess starten, Ausgabe als Bytes
@@ -20164,6 +20176,8 @@ if __name__ == "__main__":
                 cp = ctypes.windll.kernel32.GetConsoleOutputCP()
                 encoding = f"cp{cp}"
             else:
+                print(f"[{timestamp()}] [INFO] General shell commands are not supported in this PP-Terminal.")
+                print(f"[{timestamp()}] [INFO] Please use PWSL commands like 'lx ...', 'pl ...', 'ubuntu ...', 'arch ...' etc.")
                 encoding = "utf-8"
 
             # Subprozess starten, Ausgabe als Bytes
@@ -25888,6 +25902,8 @@ def ensure_admin():
     """
     if os.name == 'posix':
         if os.geteuid() != 0:
+            print(f"[{timestamp()}] [INFO] Note: This PP-Terminal does not support general shell commands at this point!")
+            print(f"[{timestamp()}] [INFO] Only PP-Terminal WSL commands like 'lx ...', 'pl ...', 'ubuntu ...', 'arch ...' etc. are supported!")
             print(f"[{timestamp()}] [INFO] Restarting with root privileges...", file=sys.stderr)
             args = ['sudo', sys.executable] + sys.argv
             os.execvp('sudo', args)
@@ -35036,6 +35052,7 @@ def main():
                 if os.name == "nt":
                     python_exe = env_path / "Scripts" / "python.exe"
                 else:
+                    print(f"[{timestamp()}] [INFO] Activation aborted: The specified interpreter '{python_exe}' is incompatible. PP-Terminal supports environment creation only with Windows-style paths.")
                     python_exe = env_path / "bin" / "python"
 
                 if not python_exe.exists():
@@ -35075,6 +35092,7 @@ def main():
                 if os.name == "nt":
                     python_exe = env_path / "Scripts" / "python.exe"
                 else:
+                    print(f"[{timestamp()}] [INFO] Activation aborted: The specified interpreter '{python_exe}' is incompatible. PP-Terminal supports environment creation only with Windows-style paths.")
                     python_exe = env_path / "bin" / "python"
 
                 if not python_exe.exists():
@@ -35113,6 +35131,7 @@ def main():
                 if os.name == "nt":
                     python_exe = env_path / "Scripts" / "python.exe"
                 else:
+                    print(f"[{timestamp()}] [INFO] Activation aborted: The specified interpreter '{python_exe}' is incompatible. PP-Terminal supports environment creation only with Windows-style paths.")
                     python_exe = env_path / "bin" / "python"
 
                 if not python_exe.exists():
@@ -35152,6 +35171,7 @@ def main():
                 if os.name == "nt":
                     python_exe = env_path / "Scripts" / "python.exe"
                 else:
+                    print(f"[{timestamp()}] [INFO] Activation aborted: The specified interpreter '{python_exe}' is incompatible. PP-Terminal supports environment creation only with Windows-style paths.")
                     python_exe = env_path / "bin" / "python"
 
                 if not python_exe.exists():
@@ -35166,6 +35186,55 @@ def main():
                 set_python_path(active)
 
                 print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+
+            elif "deactivate.bat" in user_input.lower():
+                parts = user_input.strip().split()
+                deactivate_path = None
+                for part in parts:
+                    if "deactivate.bat" in part.lower():
+                        deactivate_path = Path(part).resolve()
+                        break
+
+                if deactivate_path is None:
+                    print(f"[{timestamp()}] [ERROR] No valid path to deactivate.bat found.")
+                elif not deactivate_path.exists():
+                    print(f"[{timestamp()}] [ERROR] File {deactivate_path} does not exist.")
+                else:
+                    env_path = deactivate_path.parent.parent  # Vermute .venv-Ordner
+
+                    if STATE_FILE.exists():
+                        try:
+                            with open(STATE_FILE, "r") as f:
+                                data = json.load(f)
+
+                            active_env = data.get("active_env", "").strip()
+
+                            if active_env and Path(active_env) == env_path:
+                                # Environment stimmt überein → deaktivieren
+                                data["active_env"] = ""
+                                with open(STATE_FILE, "w") as f:
+                                    json.dump(data, f, indent=4)
+
+                                print(f"[{timestamp()}] [INFO] Environment deactivated successfully.")
+                                # KEINE Rückfrage, KEIN Aufruf der .bat
+                            else:
+                                # Kein bekanntes aktives Environment → evtl. fremde Datei
+                                print(f"[{timestamp()}] [INFO] No matching active environment found.")
+                                user_confirm = input("Would you like to run Deactivate.bat normally? [y/n]: ").strip().lower()
+                                if user_confirm == "y":
+                                    subprocess.run([str(deactivate_path)], check=True)
+                                else:
+                                    print(f"[{timestamp()}] [INFO] Execution of the .bat aborted.")
+
+                        except Exception as e:
+                            print(f"[{timestamp()}] [ERROR] Failed to deactivate environment: {e}")
+                    else:
+                        print(f"[{timestamp()}] [INFO] State file not found. Nothing to deactivate.")
+                        user_confirm = input("Would you like to run Deactivate.bat normally? [y/n]: ").strip().lower()
+                        if user_confirm == "y":
+                            subprocess.run([str(deactivate_path)], check=True)
+                        else:
+                            print(f"[{timestamp()}] [INFO] Execution of the .bat aborted.")
 
             elif "activate.bat" in user_input.lower():
                 parts = user_input.strip().split()
@@ -35188,6 +35257,7 @@ def main():
                     if os.name == "nt":
                         python_exe = env_path / "Scripts" / "python.exe"
                     else:
+                        print(f"[{timestamp()}] [INFO] Activation aborted: The specified interpreter '{python_exe}' is incompatible. PP-Terminal supports environment creation only with Windows-style paths.")
                         python_exe = env_path / "bin" / "python"
 
                     if python_exe.exists():
@@ -35226,6 +35296,7 @@ def main():
                     if os.name == "nt":
                         python_exe = env_path / "Scripts" / "python.exe"
                     else:
+                        print(f"[{timestamp()}] [INFO] Activation aborted: The specified interpreter '{python_exe}' is incompatible. PP-Terminal supports environment creation only with Windows-style paths.")
                         python_exe = env_path / "bin" / "python"
 
                     if python_exe.exists():
@@ -35264,6 +35335,7 @@ def main():
                     if os.name == "nt":
                         python_exe = env_path / "Scripts" / "python.exe"
                     else:
+                        print(f"[{timestamp()}] [INFO] Activation aborted: The specified interpreter '{python_exe}' is incompatible. PP-Terminal supports environment creation only with Windows-style paths.")
                         python_exe = env_path / "bin" / "python"
 
                     if python_exe.exists():
@@ -35301,6 +35373,7 @@ def main():
                     if os.name == "nt":
                         python_exe = env_path / "Scripts" / "python.exe"
                     else:
+                        print(f"[{timestamp()}] [INFO] Activation aborted: The specified interpreter '{python_exe}' is incompatible. PP-Terminal supports environment creation only with Windows-style paths.")
                         python_exe = env_path / "bin" / "python"
 
                     if python_exe.exists():
