@@ -35234,6 +35234,10 @@ def main():
                                 print(f"[{timestamp()}] [INFO] Environment deactivated successfully.")
                             else:
                                 print(f"[{timestamp()}] [INFO] No matching environment found, but state has been reset.")
+
+                            # NEU: Zustand aktualisieren
+                            none = " "
+                            set_python_path(none)
                             # Keine Rückfrage, kein .bat-Aufruf
 
                         except Exception as e:
