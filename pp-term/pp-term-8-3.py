@@ -34123,6 +34123,88 @@ def main():
                     except Exception as e:
                         print(f"[{timestamp()}] [ERROR] Unexpected error: {e}")
 
+            elif user_input.startswith("pcocv "):
+                def find_conda_executable():
+                    """Find the conda executable from PATH or standard install locations."""
+                    conda_in_path = shutil.which("conda")
+                    if conda_in_path:
+                        return conda_in_path
+
+                    home = Path.home()
+                    possible_paths = []
+
+                    if os.name == "nt":  # Windows
+                        possible_paths = [
+                            home / "Miniconda3" / "Scripts" / "conda.exe",
+                            home / "Anaconda3" / "Scripts" / "conda.exe",
+                        ]
+                    else:  # Linux/macOS
+                        possible_paths = [
+                            home / "miniconda3" / "bin" / "conda",
+                            home / "anaconda3" / "bin" / "conda",
+                        ]
+
+                    for path in possible_paths:
+                        if path.exists() and path.is_file():
+                            return str(path)
+
+                    return None
+
+                def find_existing_venvs(directory: Path):
+                    """Check for other environments in this directory."""
+                    venvs = []
+                    for item in directory.iterdir():
+                        if item.is_dir() and (item / "conda-meta").exists():
+                            venvs.append(item.name)
+                    return venvs
+
+                user_input = user_input[6:].strip()
+                current_dir = Path.cwd()
+                env_path = (current_dir / user_input).resolve()
+                conda_exec = find_conda_executable()
+
+                if not conda_exec:
+                    print(f"[{timestamp()}] [ERROR] No Conda or Miniconda installation found.")
+                else:
+                    try:
+                        if (env_path / "conda-meta").exists():
+                            print(f"[{timestamp()}] [INFO] The Conda environment '{user_input}' already exists at {env_path}.")
+                            try:
+                                active = find_active_env(str(env_path))
+                                set_python_path(active)
+                                print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                            except Exception as e:
+                                print(f"[{timestamp()}] [ERROR] Failed to set active environment: {e}")
+                        else:
+                            command = [conda_exec, "create", "--prefix", str(env_path), "python=3.12", "-y"]
+                            print(f"[{timestamp()}] [INFO] Creating Conda environment '{user_input}' at {env_path} using {conda_exec}...")
+
+                            try:
+                                subprocess.run(command, check=True, text=True,
+                                               stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                                print(f"[{timestamp()}] [INFO] Conda environment '{user_input}' created successfully at {env_path}.")
+
+                                try:
+                                    active = find_active_env(str(env_path))
+                                    set_python_path(active)
+                                    print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
+                                except Exception as e:
+                                    print(f"[{timestamp()}] [ERROR] Failed to set active environment: {e}")
+
+                                existing_venvs = find_existing_venvs(current_dir)
+                                other_venvs = [name for name in existing_venvs if name != user_input]
+                                if other_venvs:
+                                    print(f"[{timestamp()}] [INFO] Other Conda environments found here: {', '.join(other_venvs)}")
+
+                            except subprocess.CalledProcessError as e:
+                                print(f"[{timestamp()}] [ERROR] Failed to create Conda environment: {e}")
+                            except KeyboardInterrupt:
+                                print(f"[{timestamp()}] [INFO] Operation cancelled by user.")
+                            except Exception as e:
+                                print(f"[{timestamp()}] [ERROR] Unexpected error while creating environment: {e}")
+                    except Exception as e:
+                        print(f"[{timestamp()}] [ERROR] Unexpected failure: {e}")
+
             elif user_input.startswith("pcfo&pcd&pcv "):
                 folder_name = user_input[13:].strip()
                 current_dir = Path.cwd().resolve()
