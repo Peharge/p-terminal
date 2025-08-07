@@ -357,6 +357,8 @@
       - PP-Terminal 8.3.1.1
       - PP-Terminal 8.3.1.3
       - PP-Terminal 8.3.1.4
+      - PP-Terminal 8.3.1.5
+      - PP-Terminal 8.3.1.6
 
 ## PP-Terminal Launcher Version
 
@@ -563,6 +565,10 @@
       - Peharge Kernel 8.1.1.6
       - Peharge Kernel 8.1.1.8
       - Peharge Kernel 8.1.1.9
+  - Peharge Kernel 8.3
+    - Peharge Kernel 8.3.1
+      - Peharge Kernel 8.3.1.1
+      - Peharge Kernel 8.3.1.3
 
 ## IQ Kernel Version
 
