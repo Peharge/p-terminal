@@ -35066,17 +35066,24 @@ def main():
                         continue
 
                 if os.name == "nt":
-                    python_exe = env_path / "Scripts" / "python.exe"
-                else:
-                    print(f"[{timestamp()}] [INFO] Activation aborted: The specified interpreter '{python_exe}' is incompatible. PP-Terminal supports environment creation only with Windows-style paths.")
-                    python_exe = env_path / "bin" / "python"
+                        # Windows: Erkenne Conda env (python.exe im env root) oder venv (Scripts/python.exe)
+                        if (env_path / "conda-meta").is_dir():
+                            python_exe = env_path / "python.exe"
+                        else:
+                            python_exe = env_path / "Scripts" / "python.exe"
+                    else:
+                        # Unix: Erkenne Conda env (bin/python) oder venv/env (bin/python)
+                        if (env_path / "conda-meta").is_dir():
+                            python_exe = env_path / "bin" / "python"
+                        else:
+                            python_exe = env_path / "bin" / "python"
 
-                if not python_exe.exists():
-                    print(f"[{timestamp()}] [INFO] No Python interpreter found in '{python_exe}'.")
-                    user_confirm = input("Do you still want to activate this environment? [y/N)] ").strip().lower()
-                    if user_confirm != 'y':
-                        print(f"[{timestamp()}] [INFO] Activation cancelled.")
-                        continue
+                    if not python_exe.exists():
+                        print(f"[{timestamp()}] [INFO] No Python interpreter found at '{python_exe}'.")
+                        user_confirm = input("Do you still want to activate this environment? [y/n]: ").strip().lower()
+                        if user_confirm != 'y':
+                            print(f"[{timestamp()}] [INFO] Activation cancelled.")
+                            continue
 
                 # setzt und speichert das aktive Env
                 active = find_active_env(env_path)
@@ -35106,14 +35113,22 @@ def main():
                         continue
 
                 if os.name == "nt":
-                    python_exe = env_path / "Scripts" / "python.exe"
+                    # Windows: Erkenne Conda env (python.exe im env root) oder venv (Scripts/python.exe)
+                    if (env_path / "conda-meta").is_dir():
+                        python_exe = env_path / "python.exe"
+                    else:
+                        python_exe = env_path / "Scripts" / "python.exe"
                 else:
                     print(f"[{timestamp()}] [INFO] Activation aborted: The specified interpreter '{python_exe}' is incompatible. PP-Terminal supports environment creation only with Windows-style paths.")
-                    python_exe = env_path / "bin" / "python"
+                    # Unix: Erkenne Conda env (bin/python) oder venv/env (bin/python)
+                    if (env_path / "conda-meta").is_dir():
+                        python_exe = env_path / "bin" / "python"
+                    else:
+                        python_exe = env_path / "bin" / "python"
 
                 if not python_exe.exists():
-                    print(f"[{timestamp()}] [INFO] No Python interpreter found in '{python_exe}'.")
-                    user_confirm = input("Do you still want to activate this environment? [y/N)] ").strip().lower()
+                    print(f"[{timestamp()}] [INFO] No Python interpreter found at '{python_exe}'.")
+                    user_confirm = input("Do you still want to activate this environment? [y/n]: ").strip().lower()
                     if user_confirm != 'y':
                         print(f"[{timestamp()}] [INFO] Activation cancelled.")
                         continue
@@ -35145,14 +35160,22 @@ def main():
                         continue
 
                 if os.name == "nt":
-                    python_exe = env_path / "Scripts" / "python.exe"
+                    # Windows: Erkenne Conda env (python.exe im env root) oder venv (Scripts/python.exe)
+                    if (env_path / "conda-meta").is_dir():
+                        python_exe = env_path / "python.exe"
+                    else:
+                        python_exe = env_path / "Scripts" / "python.exe"
                 else:
                     print(f"[{timestamp()}] [INFO] Activation aborted: The specified interpreter '{python_exe}' is incompatible. PP-Terminal supports environment creation only with Windows-style paths.")
-                    python_exe = env_path / "bin" / "python"
+                    # Unix: Erkenne Conda env (bin/python) oder venv/env (bin/python)
+                    if (env_path / "conda-meta").is_dir():
+                        python_exe = env_path / "bin" / "python"
+                    else:
+                        python_exe = env_path / "bin" / "python"
 
                 if not python_exe.exists():
-                    print(f"[{timestamp()}] [INFO] No Python interpreter found in '{python_exe}'.")
-                    user_confirm = input("Do you still want to activate this environment? [y/N)] ").strip().lower()
+                    print(f"[{timestamp()}] [INFO] No Python interpreter found at '{python_exe}'.")
+                    user_confirm = input("Do you still want to activate this environment? [y/n]: ").strip().lower()
                     if user_confirm != 'y':
                         print(f"[{timestamp()}] [INFO] Activation cancelled.")
                         continue
@@ -35185,14 +35208,22 @@ def main():
                         continue
 
                 if os.name == "nt":
-                    python_exe = env_path / "Scripts" / "python.exe"
+                    # Windows: Erkenne Conda env (python.exe im env root) oder venv (Scripts/python.exe)
+                    if (env_path / "conda-meta").is_dir():
+                        python_exe = env_path / "python.exe"
+                    else:
+                        python_exe = env_path / "Scripts" / "python.exe"
                 else:
                     print(f"[{timestamp()}] [INFO] Activation aborted: The specified interpreter '{python_exe}' is incompatible. PP-Terminal supports environment creation only with Windows-style paths.")
-                    python_exe = env_path / "bin" / "python"
+                    # Unix: Erkenne Conda env (bin/python) oder venv/env (bin/python)
+                    if (env_path / "conda-meta").is_dir():
+                        python_exe = env_path / "bin" / "python"
+                    else:
+                        python_exe = env_path / "bin" / "python"
 
                 if not python_exe.exists():
-                    print(f"[{timestamp()}] [INFO] No Python interpreter found in '{python_exe}'.")
-                    user_confirm = input("Do you still want to activate this environment? [y/N)] ").strip().lower()
+                    print(f"[{timestamp()}] [INFO] No Python interpreter found at '{python_exe}'.")
+                    user_confirm = input("Do you still want to activate this environment? [y/n]: ").strip().lower()
                     if user_confirm != 'y':
                         print(f"[{timestamp()}] [INFO] Activation cancelled.")
                         continue
