@@ -35203,6 +35203,45 @@ def main():
 
                 print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
 
+            elif user_input.startswith("pdav "):
+                env_name = user_input[5:].strip()
+                env_path = (current_dir / env_name).resolve()
+
+                if not env_path.exists():
+                    print(f"[{timestamp()}] [ERROR] Environment path {env_path} does not exist.")
+                else:
+                    if STATE_FILE.exists():
+                        try:
+                            with open(STATE_FILE, "r") as f:
+                                data = json.load(f)
+
+                            active_env = data.get("active_env", "").strip()
+
+                            if Path(active_env) == env_path:
+                                # Deaktivieren, wenn aktiv
+                                data["active_env"] = ""
+                                with open(STATE_FILE, "w") as f:
+                                    json.dump(data, f, indent=4)
+
+                                print(f"[{timestamp()}] [INFO] Environment '{env_name}' deactivated successfully.")
+                                set_python_path(" ")  # Pfad zurücksetzen
+
+                            else:
+                                print(f"[{timestamp()}] [INFO] Environment '{env_name}' is not currently active.")
+                                # Optional: hier kann man nachfragen, ob trotzdem deaktiviert werden soll
+
+                        except Exception as e:
+                            print(f"[{timestamp()}] [ERROR] Failed to read or update state file: {e}")
+                    else:
+                        print(f"[{timestamp()}] [WARN] State file does not exist. Creating new state file with no active env.")
+                        try:
+                            with open(STATE_FILE, "w") as f:
+                                json.dump({"active_env": ""}, f, indent=4)
+                            set_python_path(" ")
+                            print(f"[{timestamp()}] [INFO] Environment '{env_name}' deactivated (state file created).")
+                        except Exception as e:
+                            print(f"[{timestamp()}] [ERROR] Failed to create state file: {e}")
+
             elif "deactivate.bat" in user_input.lower():
                 parts = user_input.strip().split()
                 deactivate_path = None
@@ -35225,31 +35264,49 @@ def main():
 
                             active_env = data.get("active_env", "").strip()
 
-                            # --- Egal ob es übereinstimmt oder nicht: Deaktivieren ---
-                            data["active_env"] = ""
-                            with open(STATE_FILE, "w") as f:
-                                json.dump(data, f, indent=4)
-
                             if Path(active_env) == env_path:
-                                print(f"[{timestamp()}] [INFO] Environment deactivated successfully.")
-                            else:
-                                print(f"[{timestamp()}] [INFO] No matching environment found, but state has been reset.")
+                                # Match: Deaktivieren
+                                data["active_env"] = ""
+                                with open(STATE_FILE, "w") as f:
+                                    json.dump(data, f, indent=4)
 
-                            # NEU: Zustand aktualisieren
-                            none = " "
-                            set_python_path(none)
-                            # Keine Rückfrage, kein .bat-Aufruf
+                                print(f"[{timestamp()}] [INFO] Environment deactivated successfully.")
+
+                                # Zustand aktualisieren
+                                set_python_path(" ")
+
+                            else:
+                                # Kein Match: Nachfragen und ggf. normal ausführen
+                                print(f"[{timestamp()}] [INFO] No matching environment found in state file.")
+
+                                user_confirm = input("No matching venv found. Would you like to run deactivate.bat normally? [y/n]: ").strip().lower()
+                                if user_confirm == "y":
+                                    subprocess.run([str(deactivate_path)], check=True)
+                                    # Zustand trotzdem zurücksetzen
+                                    data["active_env"] = ""
+                                    with open(STATE_FILE, "w") as f:
+                                        json.dump(data, f, indent=4)
+                                    set_python_path(" ")
+                                else:
+                                    print(f"[{timestamp()}] [INFO] Execution of deactivate.bat aborted.")
 
                         except Exception as e:
                             print(f"[{timestamp()}] [ERROR] Failed to update state file: {e}")
+
                     else:
-                        # Kein STATE_FILE vorhanden, trotzdem deaktivieren
-                        try:
-                            with open(STATE_FILE, "w") as f:
-                                json.dump({"active_env": ""}, f, indent=4)
-                            print(f"[{timestamp()}] [INFO] State file created and environment deactivated.")
-                        except Exception as e:
-                            print(f"[{timestamp()}] [ERROR] Failed to create state file: {e}")
+                        # Kein STATE_FILE vorhanden - Nachfragen und ggf. normal ausführen
+                        user_confirm = input("State file missing. Would you like to run deactivate.bat normally? [y/n]: ").strip().lower()
+                        if user_confirm == "y":
+                            try:
+                                subprocess.run([str(deactivate_path)], check=True)
+                                with open(STATE_FILE, "w") as f:
+                                    json.dump({"active_env": ""}, f, indent=4)
+                                set_python_path(" ")
+                                print(f"[{timestamp()}] [INFO] State file created and environment deactivated.")
+                            except Exception as e:
+                                print(f"[{timestamp()}] [ERROR] Failed to create state file or run deactivate.bat: {e}")
+                        else:
+                            print(f"[{timestamp()}] [INFO] Execution of deactivate.bat aborted.")
 
             elif "activate.bat" in user_input.lower():
                 parts = user_input.strip().split()
@@ -35284,7 +35341,7 @@ def main():
                         # Kein Interpreter → keine venv
                         print(f"[{timestamp()}] [INFO] This is not a venv for Python.")
 
-                        user_confirm = input("Would you like to run Activate.bat normally? [y/n]: ").strip().lower()
+                        user_confirm = input("State file missing. Would you like to run Activate.bat normally? [y/n]: ").strip().lower()
                         if user_confirm == "y":
                             subprocess.run([str(activate_path)], check=True)
                         else:
@@ -35323,7 +35380,7 @@ def main():
                         # Kein Interpreter → keine venv
                         print(f"[{timestamp()}] [INFO] This is not a venv for Python.")
 
-                        user_confirm = input("Would you like to run activate.fish normally? [y/n]: ").strip().lower()
+                        user_confirm = input("State file missing. Would you like to run activate.fish normally? [y/n]: ").strip().lower()
                         if user_confirm == "y":
                             subprocess.run([str(activate_path)], check=True)
                         else:
@@ -35362,7 +35419,7 @@ def main():
                         # Kein Interpreter → keine venv
                         print(f"[{timestamp()}] [INFO] This is not a venv for Python.")
 
-                        user_confirm = input("Would you like to run activate.nu normally? [y/n]: ").strip().lower()
+                        user_confirm = input("State file missing. Would you like to run activate.nu normally? [y/n]: ").strip().lower()
                         if user_confirm == "y":
                             subprocess.run([str(activate_path)], check=True)
                         else:
@@ -35397,7 +35454,7 @@ def main():
                         print(f"[{timestamp()}] [INFO] Active environment set to '{active}'.")
                     else:
                         print(f"[{timestamp()}] [INFO] This is not a venv for Python.")
-                        user_confirm = input("Would you like to run Activate.ps1 normally? [y/n]: ").strip().lower()
+                        user_confirm = input("State file missing. Would you like to run Activate.ps1 normally? [y/n]: ").strip().lower()
                         if user_confirm == "y":
                             # PowerShell Skript ausführen
                             subprocess.run(["powershell", "-ExecutionPolicy", "Bypass", "-File", str(activate_path)], check=True)
