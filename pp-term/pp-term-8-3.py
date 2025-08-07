@@ -4730,7 +4730,23 @@ def handle_special_commands(user_input):
         if not os.path.exists(file):
             try:
                 with open(file, 'w') as f:
-                    f.write("#!/usr/bin/env python3\n\n")
+                    f.write("""# -----------------------------------------------------------
+# Welcome to your new Python file!
+# You have created a new Python file using the PP-Terminal.
+# -----------------------------------------------------------
+#
+# This is a basic starting template to help you get going.
+# Feel free to modify or delete this code and write your own!
+# Happy coding!
+
+def main():
+ print("Hello, developer!")
+ print("This file was created via the PP-Terminal.")
+
+# Call the main function when this script runs
+if __name__ == "__main__":
+ main()
+""")
                 print(f"[{timestamp()}] [INFO] File '{file}' created.")
             except Exception as e:
                 print(f"[{timestamp()}] [ERROR] Could not create file '{file}': {e}")
@@ -4747,8 +4763,24 @@ def handle_special_commands(user_input):
                     if not base_env_path:
                         print(f"[{timestamp()}] [WARNING] 'active_env' is empty or missing in JSON file.")
                     else:
-                        interpreter_path = os.path.join(base_env_path, "Scripts", "python.exe")
+                        if (Path(base_env_path) / "conda-meta").is_dir():
+                            # Conda-Umgebung
+                            if os.name == "nt":
+                                interpreter_path = str(Path(base_env_path) / "python.exe")
+                            else:
+                                interpreter_path = str(Path(base_env_path) / "bin" / "python")
+                        else:
+                            # Normales venv
+                            if os.name == "nt":
+                                interpreter_path = str(Path(base_env_path) / "Scripts" / "python.exe")
+                            else:
+                                interpreter_path = str(Path(base_env_path) / "bin" / "python")
+
                         print(f"[{timestamp()}] [INFO] Using virtual environment interpreter: {interpreter_path}")
+                        print(f"[{timestamp()}] [DEBUG] interpreter_path exists: {os.path.exists(interpreter_path)}")
+                        print(f"[{timestamp()}] [DEBUG] interpreter_path is file: {os.path.isfile(interpreter_path)}")
+                        print(f"[{timestamp()}] [DEBUG] interpreter_path repr: {repr(interpreter_path)}")
+
             else:
                 print(f"[{timestamp()}] [WARNING] Interpreter config file not found: {json_path}")
         except json.JSONDecodeError:
@@ -4763,7 +4795,9 @@ def handle_special_commands(user_input):
 
         # 2. Datei in VS Code öffnen (warte, bis Editor geschlossen ist)
         try:
-            subprocess.run(["code", "-w", file], check=True)
+            print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+            cmd = f'code -w "{file}"'
+            run_command(cmd, shell=True)
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] VS Code exited with error: {e}")
             return True
@@ -4804,7 +4838,23 @@ def handle_special_commands(user_input):
         if not os.path.exists(file):
             try:
                 with open(file, 'w') as f:
-                    f.write("#!/usr/bin/env python3\n\n")
+                    f.write("""# -----------------------------------------------------------
+# Welcome to your new Python file!
+# You have created a new Python file using the PP-Terminal.
+# -----------------------------------------------------------
+#
+# This is a basic starting template to help you get going.
+# Feel free to modify or delete this code and write your own!
+# Happy coding!
+
+def main():
+ print("Hello, developer!")
+ print("This file was created via the PP-Terminal.")
+
+# Call the main function when this script runs
+if __name__ == "__main__":
+ main()
+""")
                 print(f"[{timestamp()}] [INFO] File '{file}' created.")
             except Exception as e:
                 print(f"[{timestamp()}] [ERROR] Could not create file '{file}': {e}")
@@ -4821,8 +4871,24 @@ def handle_special_commands(user_input):
                     if not base_env_path:
                         print(f"[{timestamp()}] [WARNING] 'active_env' is empty or missing in JSON file.")
                     else:
-                        interpreter_path = os.path.join(base_env_path, "Scripts", "python.exe")
+                        if (Path(base_env_path) / "conda-meta").is_dir():
+                            # Conda-Umgebung
+                            if os.name == "nt":
+                                interpreter_path = str(Path(base_env_path) / "python.exe")
+                            else:
+                                interpreter_path = str(Path(base_env_path) / "bin" / "python")
+                        else:
+                            # Normales venv
+                            if os.name == "nt":
+                                interpreter_path = str(Path(base_env_path) / "Scripts" / "python.exe")
+                            else:
+                                interpreter_path = str(Path(base_env_path) / "bin" / "python")
+
                         print(f"[{timestamp()}] [INFO] Using virtual environment interpreter: {interpreter_path}")
+                        print(f"[{timestamp()}] [DEBUG] interpreter_path exists: {os.path.exists(interpreter_path)}")
+                        print(f"[{timestamp()}] [DEBUG] interpreter_path is file: {os.path.isfile(interpreter_path)}")
+                        print(f"[{timestamp()}] [DEBUG] interpreter_path repr: {repr(interpreter_path)}")
+
             else:
                 print(f"[{timestamp()}] [WARNING] Interpreter config file not found: {json_path}")
         except json.JSONDecodeError:
@@ -4837,7 +4903,9 @@ def handle_special_commands(user_input):
 
         # 2. Datei in VS Code öffnen (warte, bis Editor geschlossen ist)
         try:
-            subprocess.run(["code", "-w", file], check=True)
+            print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+            cmd = f'code -w "{file}"'
+            run_command(cmd, shell=True)
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] VS Code exited with error: {e}")
             return True
@@ -4878,7 +4946,23 @@ def handle_special_commands(user_input):
         if not os.path.exists(file):
             try:
                 with open(file, 'w') as f:
-                    f.write("# Debuggable Python script\n\n")
+                    f.write("""# -----------------------------------------------------------
+# Welcome to your new Python file!
+# You have created a new Python file using the PP-Terminal.
+# -----------------------------------------------------------
+#
+# This is a basic starting template to help you get going.
+# Feel free to modify or delete this code and write your own!
+# Happy coding!
+
+def main():
+ print("Hello, developer!")
+ print("This file was created via the PP-Terminal.")
+
+# Call the main function when this script runs
+if __name__ == "__main__":
+ main()
+""")
                 print(f"[{timestamp()}] [INFO] File '{file}' created.")
             except Exception as e:
                 print(f"[{timestamp()}] [ERROR] Could not create file '{file}': {e}")
@@ -4898,8 +4982,24 @@ def handle_special_commands(user_input):
                     if not base_env_path:
                         print(f"[{timestamp()}] [WARNING] 'active_env' missing or empty in JSON.")
                     else:
-                        interpreter_path = os.path.join(base_env_path, "Scripts", "python.exe")
-                        print(f"[{timestamp()}] [INFO] Using interpreter: {interpreter_path}")
+                        if (Path(base_env_path) / "conda-meta").is_dir():
+                            # Conda-Umgebung
+                            if os.name == "nt":
+                                interpreter_path = str(Path(base_env_path) / "python.exe")
+                            else:
+                                interpreter_path = str(Path(base_env_path) / "bin" / "python")
+                        else:
+                            # Normales venv
+                            if os.name == "nt":
+                                interpreter_path = str(Path(base_env_path) / "Scripts" / "python.exe")
+                            else:
+                                interpreter_path = str(Path(base_env_path) / "bin" / "python")
+
+                        print(f"[{timestamp()}] [INFO] Using virtual environment interpreter: {interpreter_path}")
+                        print(f"[{timestamp()}] [DEBUG] interpreter_path exists: {os.path.exists(interpreter_path)}")
+                        print(f"[{timestamp()}] [DEBUG] interpreter_path is file: {os.path.isfile(interpreter_path)}")
+                        print(f"[{timestamp()}] [DEBUG] interpreter_path repr: {repr(interpreter_path)}")
+
             else:
                 print(f"[{timestamp()}] [WARNING] Config file not found: {json_path}")
         except json.JSONDecodeError:
@@ -4914,7 +5014,9 @@ def handle_special_commands(user_input):
 
         # VS Code öffnen (blockierend, mit --wait)
         try:
-            subprocess.run(["code", "-w", file], check=True)
+            print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+            cmd = f'code -w "{file}"'
+            run_command(cmd, shell=True)
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] VS Code exited with error: {e}")
             return True
@@ -4973,7 +5075,23 @@ def handle_special_commands(user_input):
         if not os.path.exists(file):
             try:
                 with open(file, 'w') as f:
-                    f.write("# Debuggable Python script\n\n")
+                    f.write("""# -----------------------------------------------------------
+# Welcome to your new Python file!
+# You have created a new Python file using the PP-Terminal.
+# -----------------------------------------------------------
+#
+# This is a basic starting template to help you get going.
+# Feel free to modify or delete this code and write your own!
+# Happy coding!
+
+def main():
+ print("Hello, developer!")
+ print("This file was created via the PP-Terminal.")
+
+# Call the main function when this script runs
+if __name__ == "__main__":
+ main()
+""")
                 print(f"[{timestamp()}] [INFO] File '{file}' created.")
             except Exception as e:
                 print(f"[{timestamp()}] [ERROR] Could not create file '{file}': {e}")
@@ -4993,8 +5111,24 @@ def handle_special_commands(user_input):
                     if not base_env_path:
                         print(f"[{timestamp()}] [WARNING] 'active_env' missing or empty in JSON.")
                     else:
-                        interpreter_path = os.path.join(base_env_path, "Scripts", "python.exe")
-                        print(f"[{timestamp()}] [INFO] Using interpreter: {interpreter_path}")
+                        if (Path(base_env_path) / "conda-meta").is_dir():
+                            # Conda-Umgebung
+                            if os.name == "nt":
+                                interpreter_path = str(Path(base_env_path) / "python.exe")
+                            else:
+                                interpreter_path = str(Path(base_env_path) / "bin" / "python")
+                        else:
+                            # Normales venv
+                            if os.name == "nt":
+                                interpreter_path = str(Path(base_env_path) / "Scripts" / "python.exe")
+                            else:
+                                interpreter_path = str(Path(base_env_path) / "bin" / "python")
+
+                        print(f"[{timestamp()}] [INFO] Using virtual environment interpreter: {interpreter_path}")
+                        print(f"[{timestamp()}] [DEBUG] interpreter_path exists: {os.path.exists(interpreter_path)}")
+                        print(f"[{timestamp()}] [DEBUG] interpreter_path is file: {os.path.isfile(interpreter_path)}")
+                        print(f"[{timestamp()}] [DEBUG] interpreter_path repr: {repr(interpreter_path)}")
+
             else:
                 print(f"[{timestamp()}] [WARNING] Config file not found: {json_path}")
         except json.JSONDecodeError:
@@ -5009,7 +5143,9 @@ def handle_special_commands(user_input):
 
         # VS Code öffnen (blockierend, mit --wait)
         try:
-            subprocess.run(["code", "-w", file], check=True)
+            print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+            cmd = f'code -w "{file}"'
+            run_command(cmd, shell=True)
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] VS Code exited with error: {e}")
             return True
@@ -5118,9 +5254,24 @@ if __name__ == "__main__":
                             print(f"[{timestamp()}] [WARNING] 'active_env' is empty or missing in JSON file.")
                             interpreter_path = None
                         else:
-                            # Interpreter-Pfad zusammenbauen, indem "\Scripts\python.exe" angehängt wird
-                            interpreter_path = os.path.join(base_env_path, "Scripts", "python.exe")
-                            print(f"[{timestamp()}] [INFO] Constructed interpreter path: {interpreter_path}")
+                            if (Path(base_env_path) / "conda-meta").is_dir():
+                                # Conda-Umgebung
+                                if os.name == "nt":
+                                    interpreter_path = str(Path(base_env_path) / "python.exe")
+                                else:
+                                    interpreter_path = str(Path(base_env_path) / "bin" / "python")
+                            else:
+                                # Normales venv
+                                if os.name == "nt":
+                                    interpreter_path = str(Path(base_env_path) / "Scripts" / "python.exe")
+                                else:
+                                    interpreter_path = str(Path(base_env_path) / "bin" / "python")
+
+                            print(f"[{timestamp()}] [INFO] Using virtual environment interpreter: {interpreter_path}")
+                            print(f"[{timestamp()}] [DEBUG] interpreter_path exists: {os.path.exists(interpreter_path)}")
+                            print(f"[{timestamp()}] [DEBUG] interpreter_path is file: {os.path.isfile(interpreter_path)}")
+                            print(f"[{timestamp()}] [DEBUG] interpreter_path repr: {repr(interpreter_path)}")
+
                 except json.JSONDecodeError:
                     print(f"[{timestamp()}] [ERROR] Invalid JSON in interpreter config file.")
                 except Exception as e:
@@ -5161,9 +5312,9 @@ if __name__ == "__main__":
                 folder_to_open = os.path.dirname(filepath)
                 print(f"[{timestamp()}] [INFO] Launching VS Code workspace at: {folder_to_open}")
 
-                command = f'code "{folder_to_open}" "{filepath}"'  # Öffnet Workspace-Ordner + fokussiert die Datei im Editor
-                process = subprocess.Popen(command, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
-                                           stderr=subprocess.DEVNULL, shell=True, text=True)
+                command = f'code "{folder_to_open}" "{filepath}"'
+                run_command(command, shell=True)
+                # process = subprocess.Popen(command, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True, text=True)
 
                 process.wait()
                 print(f"[{timestamp()}] [INFO] VS Code launched successfully as workspace.")
@@ -5320,8 +5471,24 @@ if __name__ == "__main__":
                         if not base_env_path:
                             print(f"[{timestamp()}] [WARNING] 'active_env' is empty or missing in JSON file.")
                         else:
-                            interpreter_path = os.path.join(base_env_path, "Scripts", "python.exe")
-                            print(f"[{timestamp()}] [INFO] Constructed interpreter path: {interpreter_path}")
+                            if (Path(base_env_path) / "conda-meta").is_dir():
+                                # Conda-Umgebung
+                                if os.name == "nt":
+                                    interpreter_path = str(Path(base_env_path) / "python.exe")
+                                else:
+                                    interpreter_path = str(Path(base_env_path) / "bin" / "python")
+                            else:
+                                # Normales venv
+                                if os.name == "nt":
+                                    interpreter_path = str(Path(base_env_path) / "Scripts" / "python.exe")
+                                else:
+                                    interpreter_path = str(Path(base_env_path) / "bin" / "python")
+
+                            print(f"[{timestamp()}] [INFO] Using virtual environment interpreter: {interpreter_path}")
+                            print(f"[{timestamp()}] [DEBUG] interpreter_path exists: {os.path.exists(interpreter_path)}")
+                            print(f"[{timestamp()}] [DEBUG] interpreter_path is file: {os.path.isfile(interpreter_path)}")
+                            print(f"[{timestamp()}] [DEBUG] interpreter_path repr: {repr(interpreter_path)}")
+
                 except json.JSONDecodeError:
                     print(f"[{timestamp()}] [ERROR] Invalid JSON in interpreter config file.")
                 except Exception as e:
@@ -5353,10 +5520,9 @@ if __name__ == "__main__":
             try:
                 folder_to_open = str(new_folder_path)
                 command = f'code "{folder_to_open}" "{main_py_path}"'
-                process = subprocess.Popen(command, stdin=subprocess.DEVNULL,
-                                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-                                           shell=True, text=True)
-                process.wait()
+                run_command(command, shell=True)
+                # process = subprocess.Popen(command, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True, text=True)
+                # process.wait()
                 print(f"[{timestamp()}] [INFO] VS Code launched successfully as workspace.")
             except Exception as e:
                 print(f"[{timestamp()}] [ERROR] Failed to launch VS Code: {e}")
@@ -5693,16 +5859,24 @@ if __name__ == "__main__":
         try:
             with open(json_path, "r", encoding="utf-8") as f:
                 data = json.load(f)
-                venv_path = data.get("active_env")
+                venv_path_str = data.get("active_env")
         except Exception as e:
             print(f"[{timestamp()}] [ERROR] Error reading current_env.json: {e}")
             return True
 
-        if not venv_path:
+        if not venv_path_str:
             print(f"[{timestamp()}] [ERROR] No virtual environment path found in current_env.json.")
             return True
 
-        python_executable = Path(venv_path) / "Scripts" / "python.exe"
+        venv_path = Path(venv_path_str)  # <-- Hier Umwandeln in Path
+
+        if (venv_path / "conda-meta").is_dir():
+            # Conda-Env erkannt
+            python_executable = venv_path / ("python.exe" if os.name == "nt" else "bin/python")
+        else:
+            # normales venv
+            python_executable = venv_path / ("Scripts" if os.name == "nt" else "bin") / ("python.exe" if os.name == "nt" else "python")
+
         if not python_executable.exists():
             print(f"[{timestamp()}] [ERROR] Python interpreter not found: {python_executable}")
             return True
@@ -5720,8 +5894,7 @@ if __name__ == "__main__":
             if config_path.exists():
                 config.read(config_path, encoding='utf-8')
             else:
-                if not config_dir.exists():
-                    config_dir.mkdir(parents=True)
+                config_dir.mkdir(parents=True, exist_ok=True)
                 config['Interpreter'] = {}
 
             if 'Interpreter' not in config:
@@ -5759,16 +5932,24 @@ if __name__ == "__main__":
         try:
             with open(json_path, "r", encoding="utf-8") as f:
                 data = json.load(f)
-                venv_path = data.get("active_env")
+                venv_path_str = data.get("active_env")
         except Exception as e:
             print(f"[{timestamp()}] [ERROR] Error reading current_env.json: {e}")
             return True
 
-        if not venv_path:
+        if not venv_path_str:
             print(f"[{timestamp()}] [ERROR] No virtual environment path found in current_env.json.")
             return True
 
-        python_executable = Path(venv_path) / "Scripts" / "python.exe"
+        venv_path = Path(venv_path_str)  # <-- Hier Umwandeln in Path
+
+        if (venv_path / "conda-meta").is_dir():
+            # Conda-Env erkannt
+            python_executable = venv_path / ("python.exe" if os.name == "nt" else "bin/python")
+        else:
+            # normales venv
+            python_executable = venv_path / ("Scripts" if os.name == "nt" else "bin") / ("python.exe" if os.name == "nt" else "python")
+
         if not python_executable.exists():
             print(f"[{timestamp()}] [ERROR] Python interpreter not found: {python_executable}")
             return True
@@ -5786,8 +5967,7 @@ if __name__ == "__main__":
             if config_path.exists():
                 config.read(config_path, encoding='utf-8')
             else:
-                if not config_dir.exists():
-                    config_dir.mkdir(parents=True)
+                config_dir.mkdir(parents=True, exist_ok=True)
                 config['Interpreter'] = {}
 
             if 'Interpreter' not in config:
