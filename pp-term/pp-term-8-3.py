@@ -3279,15 +3279,22 @@ def handle_special_commands(user_input):
                 return True
 
             active_env_path = Path(active)
-            python_exe = active_env_path / "Scripts" / "python.exe"
-            conda_bat = active_env_path / "condabin" / "conda.bat"
             conda_meta = active_env_path / "conda-meta"
+            conda_bat = active_env_path / "condabin" / "conda.bat"
 
-            if not python_exe.exists():
+            # Python executable
+            if conda_meta.is_dir():
+                # Conda-Env erkannt
+                python_exe_path = active_env_path / ("python.exe" if os.name == "nt" else "bin/python")
+            else:
+                # Normales venv
+                python_exe_path = active_env_path / ("Scripts" if os.name == "nt" else "bin") / ("python.exe" if os.name == "nt" else "python")
+
+            if not python_exe_path.exists():
                 print(f"[{timestamp()}] [ERROR] Python executable not found in active environment.")
                 return True
 
-            # Check if it's a Conda environment (two checks)
+            # Check if it's a Conda environment (zwei Prüfungen)
             is_conda = conda_bat.exists() or conda_meta.exists()
 
             if not is_conda:
@@ -3296,8 +3303,6 @@ def handle_special_commands(user_input):
 
             # Build and run the Conda command
             command = f'"{conda_bat}" {user_input}'
-            # print(f"[{timestamp()}] [INFO] Running: conda {user_input}")
-
             subprocess.run(command, shell=True)
 
         except FileNotFoundError:
@@ -3312,7 +3317,7 @@ def handle_special_commands(user_input):
     if user_input.startswith("pcoi "):  # pcoi = install
         user_input = "install " + user_input[5:].strip()
 
-        # Load JSON
+        # JSON-Pfad zum aktiven Environment
         json_path = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/current_env.json")
 
         try:
@@ -3322,26 +3327,33 @@ def handle_special_commands(user_input):
 
             if not active:
                 print(f"[{timestamp()}] [ERROR] Key 'active_env' not found in JSON.")
-                # hier ggf. return oder weiter
-                # return True
+                return True  # Fehlerhaftes JSON → abbrechen
 
             active_env_path = Path(active)
-            python_exe = active_env_path / "Scripts" / "python.exe"
-            conda_bat = active_env_path / "condabin" / "conda.bat"
             conda_meta = active_env_path / "conda-meta"
+            conda_bat = active_env_path / "condabin" / "conda.bat"
 
-            if not python_exe.exists():
+            # Python-Pfad abhängig vom Typ des Environments
+            if conda_meta.is_dir():
+                # Conda-Environment erkannt
+                python_exe_path = active_env_path / ("python.exe" if os.name == "nt" else "bin/python")
+            else:
+                # Normales venv
+                python_exe_path = active_env_path / ("Scripts" if os.name == "nt" else "bin") / ("python.exe" if os.name == "nt" else "python")
+
+            if not python_exe_path.exists():
                 print(f"[{timestamp()}] [ERROR] Python executable not found in active environment.")
-                # return True
+                return True  # Interpreter fehlt → abbrechen
 
+            # Prüfen, ob es wirklich ein Conda-Environment ist
             is_conda = conda_bat.exists() or conda_meta.exists()
-
             if not is_conda:
                 print(f"[{timestamp()}] [ERROR] Active environment is not a Conda environment.")
-                # return True
+                return True  # Kein Conda → abbrechen
 
+            # Conda-Kommando ausführen
             command = f'"{conda_bat}" {user_input}'
-            # print(f"[{timestamp()}] [INFO] Running: conda {user_input}")
+            print(f"[{timestamp()}] [INFO] Running Conda command: {command}")  # Optional
 
             subprocess.run(command, shell=True)
 
@@ -3357,7 +3369,7 @@ def handle_special_commands(user_input):
     if user_input.startswith("pcou "):  # pcou = update
         user_input = "update " + user_input[5:].strip()
 
-        # Load JSON
+        # JSON-Pfad zur aktiven Umgebung
         json_path = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/current_env.json")
 
         try:
@@ -3367,25 +3379,31 @@ def handle_special_commands(user_input):
 
             if not active:
                 print(f"[{timestamp()}] [ERROR] Key 'active_env' not found in JSON.")
-                # return True
+                return True
 
             active_env_path = Path(active)
-            python_exe = active_env_path / "Scripts" / "python.exe"
-            conda_bat = active_env_path / "condabin" / "conda.bat"
             conda_meta = active_env_path / "conda-meta"
+            conda_bat = active_env_path / "condabin" / "conda.bat"
 
-            if not python_exe.exists():
+            # Python-Executable je nach Typ
+            if conda_meta.is_dir():
+                python_exe_path = active_env_path / ("python.exe" if os.name == "nt" else "bin/python")
+            else:
+                python_exe_path = active_env_path / ("Scripts" if os.name == "nt" else "bin") / ("python.exe" if os.name == "nt" else "python")
+
+            if not python_exe_path.exists():
                 print(f"[{timestamp()}] [ERROR] Python executable not found in active environment.")
-                # return True
+                return True
 
+            # Conda-Umgebung prüfen
             is_conda = conda_bat.exists() or conda_meta.exists()
-
             if not is_conda:
                 print(f"[{timestamp()}] [ERROR] Active environment is not a Conda environment.")
-                # return True
+                return True
 
+            # Conda-Kommando bauen und ausführen
             command = f'"{conda_bat}" {user_input}'
-            # print(f"[{timestamp()}] [INFO] Running: conda {user_input}")
+            print(f"[{timestamp()}] [INFO] Running Conda command: {command}")  # Optional
 
             subprocess.run(command, shell=True)
 
@@ -3401,6 +3419,7 @@ def handle_special_commands(user_input):
     if user_input.startswith("pcor "):  # pcor = remove
         user_input = "remove " + user_input[5:].strip()
 
+        # JSON-Pfad zur aktiven Umgebung
         json_path = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/current_env.json")
 
         try:
@@ -3413,21 +3432,29 @@ def handle_special_commands(user_input):
                 return True
 
             active_env_path = Path(active)
-            python_exe = active_env_path / "Scripts" / "python.exe"
-            conda_bat = active_env_path / "condabin" / "conda.bat"
             conda_meta = active_env_path / "conda-meta"
+            conda_bat = active_env_path / "condabin" / "conda.bat"
 
-            if not python_exe.exists():
+            # Python-Executable je nach Typ
+            if conda_meta.is_dir():
+                python_exe_path = active_env_path / ("python.exe" if os.name == "nt" else "bin/python")
+            else:
+                python_exe_path = active_env_path / ("Scripts" if os.name == "nt" else "bin") / ("python.exe" if os.name == "nt" else "python")
+
+            if not python_exe_path.exists():
                 print(f"[{timestamp()}] [ERROR] Python executable not found in active environment.")
                 return True
 
+            # Conda-Umgebung prüfen
             is_conda = conda_bat.exists() or conda_meta.exists()
-
             if not is_conda:
                 print(f"[{timestamp()}] [ERROR] Active environment is not a Conda environment.")
                 return True
 
+            # Conda-Kommando bauen und ausführen
             command = f'"{conda_bat}" {user_input}'
+            print(f"[{timestamp()}] [INFO] Running Conda command: {command}")  # Optional
+
             subprocess.run(command, shell=True)
 
         except FileNotFoundError:
@@ -3442,6 +3469,7 @@ def handle_special_commands(user_input):
     if user_input.startswith("pcol "):  # pcol = list
         user_input = "list " + user_input[5:].strip()
 
+        # JSON-Pfad zur aktiven Umgebung
         json_path = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/current_env.json")
 
         try:
@@ -3454,21 +3482,29 @@ def handle_special_commands(user_input):
                 return True
 
             active_env_path = Path(active)
-            python_exe = active_env_path / "Scripts" / "python.exe"
-            conda_bat = active_env_path / "condabin" / "conda.bat"
             conda_meta = active_env_path / "conda-meta"
+            conda_bat = active_env_path / "condabin" / "conda.bat"
 
-            if not python_exe.exists():
+            # Python-Executable je nach Typ
+            if conda_meta.is_dir():
+                python_exe_path = active_env_path / ("python.exe" if os.name == "nt" else "bin/python")
+            else:
+                python_exe_path = active_env_path / ("Scripts" if os.name == "nt" else "bin") / ("python.exe" if os.name == "nt" else "python")
+
+            if not python_exe_path.exists():
                 print(f"[{timestamp()}] [ERROR] Python executable not found in active environment.")
                 return True
 
+            # Conda-Umgebung prüfen
             is_conda = conda_bat.exists() or conda_meta.exists()
-
             if not is_conda:
                 print(f"[{timestamp()}] [ERROR] Active environment is not a Conda environment.")
                 return True
 
+            # Conda-Kommando bauen und ausführen
             command = f'"{conda_bat}" {user_input}'
+            print(f"[{timestamp()}] [INFO] Running Conda command: {command}")  # Optional
+
             subprocess.run(command, shell=True)
 
         except FileNotFoundError:
@@ -3481,9 +3517,9 @@ def handle_special_commands(user_input):
         return True
 
     if user_input.startswith("pcoh "):  # pcoh = help/info
-        # Hier als Beispiel führen wir 'conda info' aus, oder du kannst eigene Hilfe anzeigen
         user_input = "info " + user_input[5:].strip()
 
+        # JSON-Pfad zur aktiven Umgebung
         json_path = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/current_env.json")
 
         try:
@@ -3496,21 +3532,29 @@ def handle_special_commands(user_input):
                 return True
 
             active_env_path = Path(active)
-            python_exe = active_env_path / "Scripts" / "python.exe"
-            conda_bat = active_env_path / "condabin" / "conda.bat"
             conda_meta = active_env_path / "conda-meta"
+            conda_bat = active_env_path / "condabin" / "conda.bat"
 
-            if not python_exe.exists():
+            # Python-Executable je nach Typ
+            if conda_meta.is_dir():
+                python_exe_path = active_env_path / ("python.exe" if os.name == "nt" else "bin/python")
+            else:
+                python_exe_path = active_env_path / ("Scripts" if os.name == "nt" else "bin") / ("python.exe" if os.name == "nt" else "python")
+
+            if not python_exe_path.exists():
                 print(f"[{timestamp()}] [ERROR] Python executable not found in active environment.")
                 return True
 
+            # Conda-Umgebung prüfen
             is_conda = conda_bat.exists() or conda_meta.exists()
-
             if not is_conda:
                 print(f"[{timestamp()}] [ERROR] Active environment is not a Conda environment.")
                 return True
 
+            # Conda-Kommando bauen und ausführen
             command = f'"{conda_bat}" {user_input}'
+            print(f"[{timestamp()}] [INFO] Running Conda command: {command}")  # Optional
+
             subprocess.run(command, shell=True)
 
         except FileNotFoundError:
@@ -3525,6 +3569,7 @@ def handle_special_commands(user_input):
     if user_input.startswith("pcos "):  # pcos = search packages
         user_input = "search " + user_input[5:].strip()
 
+        # JSON-Pfad zur aktiven Umgebung
         json_path = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/current_env.json")
 
         try:
@@ -3534,26 +3579,31 @@ def handle_special_commands(user_input):
 
             if not active:
                 print(f"[{timestamp()}] [ERROR] Key 'active_env' not found in JSON.")
-                # return True
+                return True
 
             active_env_path = Path(active)
-            python_exe = active_env_path / "Scripts" / "python.exe"
+
+            # Python executable plattformunabhängig bestimmen
+            if os.name == "nt":
+                python_exe = active_env_path / "Scripts" / "python.exe"
+            else:
+                python_exe = active_env_path / "bin" / "python"
+
             conda_bat = active_env_path / "condabin" / "conda.bat"
             conda_meta = active_env_path / "conda-meta"
 
             if not python_exe.exists():
                 print(f"[{timestamp()}] [ERROR] Python executable not found in active environment.")
-                # return True
+                return True
 
-            is_conda = conda_bat.exists() or conda_meta.exists()
+            is_conda = conda_bat.exists() or conda_meta.is_dir()
 
             if not is_conda:
                 print(f"[{timestamp()}] [ERROR] Active environment is not a Conda environment.")
-                # return True
+                return True
 
-            command = f'"{conda_bat}" {user_input}'
-            # print(f"[{timestamp()}] [INFO] Running: conda {user_input}")
-
+            # subprocess.run mit Liste statt String (sicherer)
+            command = [str(conda_bat)] + user_input.split()
             subprocess.run(command, shell=True)
 
         except FileNotFoundError:
@@ -3568,6 +3618,7 @@ def handle_special_commands(user_input):
     if user_input.startswith("pcoc "):  # pcoc = clean cache
         user_input = "clean " + user_input[5:].strip()
 
+        # JSON-Pfad zur aktiven Umgebung
         json_path = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/current_env.json")
 
         try:
@@ -3577,26 +3628,29 @@ def handle_special_commands(user_input):
 
             if not active:
                 print(f"[{timestamp()}] [ERROR] Key 'active_env' not found in JSON.")
-                # return True
+                return True
 
             active_env_path = Path(active)
-            python_exe = active_env_path / "Scripts" / "python.exe"
+
+            if os.name == "nt":
+                python_exe = active_env_path / "Scripts" / "python.exe"
+            else:
+                python_exe = active_env_path / "bin" / "python"
+
             conda_bat = active_env_path / "condabin" / "conda.bat"
             conda_meta = active_env_path / "conda-meta"
 
             if not python_exe.exists():
                 print(f"[{timestamp()}] [ERROR] Python executable not found in active environment.")
-                # return True
+                return True
 
-            is_conda = conda_bat.exists() or conda_meta.exists()
+            is_conda = conda_bat.exists() or conda_meta.is_dir()
 
             if not is_conda:
                 print(f"[{timestamp()}] [ERROR] Active environment is not a Conda environment.")
-                # return True
+                return True
 
-            command = f'"{conda_bat}" {user_input}'
-            # print(f"[{timestamp()}] [INFO] Running: conda {user_input}")
-
+            command = [str(conda_bat)] + user_input.split()
             subprocess.run(command, shell=True)
 
         except FileNotFoundError:
