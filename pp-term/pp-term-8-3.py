@@ -495,8 +495,11 @@ def run_command(command, shell=False, cwd=None, extra_env=None):
         if active:
             active_env_path = Path(active)  # Convert to Path object
 
-            # Example usage
-            python_exe = active_env_path / "Scripts" / "python.exe"
+            # Hier die Prüfung für Conda-Env und setzen von python_exe
+            if (active_env_path / "conda-meta").is_dir():
+                python_exe = active_env_path / "python.exe" if os.name == "nt" else active_env_path / "bin" / "python"
+            else:
+                python_exe = active_env_path / ("Scripts" if os.name == "nt" else "bin") / ("python.exe" if os.name == "nt" else "python")
 
             if python_exe.exists():
                 pass
@@ -687,11 +690,13 @@ def run_quantum_command(
     if not active_env:
         active_env = os.getcwd()
 
-    python_exe = os.path.join(
-        active_env,
-        "Scripts" if os.name=='nt' else "bin",
-        "python.exe" if os.name=='nt' else "python"
-    )
+    active_env_path = Path(active_env)
+    if (active_env_path / "conda-meta").is_dir():
+        # Conda-Env erkannt
+        python_exe = str(active_env_path / "python.exe") if os.name == "nt" else str(active_env_path / "bin" / "python")
+    else:
+        # normales venv
+        python_exe = str(active_env_path / ("Scripts" if os.name == "nt" else "bin") / ("python.exe" if os.name == "nt" else "python"))
 
     # Kommando anpassen
     if isinstance(command, str) and not shell:
@@ -807,13 +812,24 @@ def run_command_ov(command, shell=False, cwd=None, extra_env=None):
             is_env_command = True
             # Aktiviere Umgebung
             display = f"({tool}-v{version})"
-            bin_path = f"C:/Users/{user_name}/.virtualenvs/{tool}/{version}/bin"  # Beispielpfad
+            # Vollständiger Env-Pfad (z. B. von Conda oder venv)
+            env_root = Path(f"C:/Users/{user_name}/.virtualenvs/{tool}/{version}")
+
+            env_root = Path(f"C:/Users/{user_name}/.virtualenvs/{tool}/{version}")
+            if (env_root / "conda-meta").is_dir():
+                # Conda: Root enthält python.exe
+                bin_path = str(env_root)
+            else:
+                # venv oder andere
+                bin_path = str(env_root / ("Scripts" if os.name == "nt" else "bin"))
+
             info_data[tool] = {
                 "version": version,
                 "display": display,
                 "bin_path": bin_path,
                 "activated_at": timestamp()
             }
+
             current_env["active_env"] = current_env.get("active_env", {})
             current_env["active_env"][tool] = version
             save_json(info_main_path, info_data)
@@ -32390,9 +32406,9 @@ def main():
                     # python_exe = active_env_path / "Scripts" / "python.exe"
 
             except FileNotFoundError:
-                print(f"File not found: {json_path}")
+                print(f"[{timestamp()}] [INFO] File not found: {json_path}")
             except json.JSONDecodeError:
-                print(f"Error decoding JSON file: {json_path}")
+                print(f"[{timestamp()}] [ERROR] Error decoding JSON file: {json_path}")
 
             # Prüfe python.exe an typischen Stellen
             env_active = (
@@ -35200,7 +35216,7 @@ def main():
                 elif not deactivate_path.exists():
                     print(f"[{timestamp()}] [ERROR] File {deactivate_path} does not exist.")
                 else:
-                    env_path = deactivate_path.parent.parent  # Vermute .venv-Ordner
+                    env_path = deactivate_path.parent.parent  # .venv folder vermutet
 
                     if STATE_FILE.exists():
                         try:
@@ -35209,32 +35225,27 @@ def main():
 
                             active_env = data.get("active_env", "").strip()
 
-                            if active_env and Path(active_env) == env_path:
-                                # Environment stimmt überein → deaktivieren
-                                data["active_env"] = ""
-                                with open(STATE_FILE, "w") as f:
-                                    json.dump(data, f, indent=4)
+                            # --- Egal ob es übereinstimmt oder nicht: Deaktivieren ---
+                            data["active_env"] = ""
+                            with open(STATE_FILE, "w") as f:
+                                json.dump(data, f, indent=4)
 
+                            if Path(active_env) == env_path:
                                 print(f"[{timestamp()}] [INFO] Environment deactivated successfully.")
-                                # KEINE Rückfrage, KEIN Aufruf der .bat
                             else:
-                                # Kein bekanntes aktives Environment → evtl. fremde Datei
-                                print(f"[{timestamp()}] [INFO] No matching active environment found.")
-                                user_confirm = input("Would you like to run Deactivate.bat normally? [y/n]: ").strip().lower()
-                                if user_confirm == "y":
-                                    subprocess.run([str(deactivate_path)], check=True)
-                                else:
-                                    print(f"[{timestamp()}] [INFO] Execution of the .bat aborted.")
+                                print(f"[{timestamp()}] [INFO] No matching environment found, but state has been reset.")
+                            # Keine Rückfrage, kein .bat-Aufruf
 
                         except Exception as e:
-                            print(f"[{timestamp()}] [ERROR] Failed to deactivate environment: {e}")
+                            print(f"[{timestamp()}] [ERROR] Failed to update state file: {e}")
                     else:
-                        print(f"[{timestamp()}] [INFO] State file not found. Nothing to deactivate.")
-                        user_confirm = input("Would you like to run Deactivate.bat normally? [y/n]: ").strip().lower()
-                        if user_confirm == "y":
-                            subprocess.run([str(deactivate_path)], check=True)
-                        else:
-                            print(f"[{timestamp()}] [INFO] Execution of the .bat aborted.")
+                        # Kein STATE_FILE vorhanden, trotzdem deaktivieren
+                        try:
+                            with open(STATE_FILE, "w") as f:
+                                json.dump({"active_env": ""}, f, indent=4)
+                            print(f"[{timestamp()}] [INFO] State file created and environment deactivated.")
+                        except Exception as e:
+                            print(f"[{timestamp()}] [ERROR] Failed to create state file: {e}")
 
             elif "activate.bat" in user_input.lower():
                 parts = user_input.strip().split()
