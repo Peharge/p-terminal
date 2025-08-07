@@ -34369,7 +34369,7 @@ def main():
                     except Exception as e:
                         print(f"[{timestamp()}] [ERROR] Unexpected failure: {e}")
 
-            elif user_input.startswith("pcocv-p311 "):
+            elif user_input.startswith("pcocv-p310 "):
                 def find_conda_executable():
                     """Find the conda executable from PATH or standard install locations."""
                     conda_in_path = shutil.which("conda")
