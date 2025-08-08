@@ -2065,6 +2065,7 @@ def handle_special_commands(user_input):
             return saved if saved else str(Path(DEFAULT_ENV_DIR).resolve())
 
     if "cd " in user_input.lower() and not user_input.lower().startswith("pcfo&"):
+        print(f"[{timestamp()}] [INFO] Peharge Kernel detected a request to change directory.")
         lower_input = user_input.lower()
         idx = lower_input.index("cd ")
         path_str = user_input[idx + 3:].strip()
@@ -36311,6 +36312,7 @@ def main():
                             print(f"[{timestamp()}] [ERROR] Failed to create state file: {e}")
 
             elif "deactivate.bat" in user_input.lower():
+                print(f"[{timestamp()}] [INFO] Peharge Kernel detected a request to deactivate a virtual environment.")
                 parts = user_input.strip().split()
                 deactivate_path = None
                 for part in parts:
@@ -36377,6 +36379,7 @@ def main():
                             print(f"[{timestamp()}] [INFO] Execution of deactivate.bat aborted.")
 
             elif "activate.bat" in user_input.lower():
+                print(f"[{timestamp()}] [INFO] Peharge Kernel detected a request to activate a virtual environment.")
                 parts = user_input.strip().split()
                 activate_path = None
                 for part in parts:
@@ -36416,6 +36419,7 @@ def main():
                             print(f"[{timestamp()}] [INFO] Execution of the .bat aborted.")
 
             elif "activate.fish" in user_input.lower():
+                print(f"[{timestamp()}] [INFO] Peharge Kernel detected a request to activate a virtual environment.")
                 parts = user_input.strip().split()
                 activate_path = None
                 for part in parts:
@@ -36455,6 +36459,7 @@ def main():
                             print(f"[{timestamp()}] [INFO] Execution of the .fish aborted.")
 
             elif "activate.nu" in user_input.lower():
+                print(f"[{timestamp()}] [INFO] Peharge Kernel detected a request to activate a virtual environment.")
                 parts = user_input.strip().split()
                 activate_path = None
                 for part in parts:
@@ -36494,6 +36499,7 @@ def main():
                             print(f"[{timestamp()}] [INFO] Execution of the .nu aborted.")
 
             elif "activate.ps1" in user_input.lower():
+                print(f"[{timestamp()}] [INFO] Peharge Kernel detected a request to activate a virtual environment.")
                 parts = user_input.strip().split()
                 activate_path = None
                 for part in parts:
@@ -38475,7 +38481,7 @@ def main():
                     print(f"[{timestamp()}] [ERROR] Error while running: {e}")
 
             elif not user_input.strip():
-                print(f"[{timestamp()}] [INFO] PP-Term Kernel has not detected any valid process or instruction. Awaiting input...")
+                print(f"[{timestamp()}] [INFO] Peharge Kernel has not detected any valid process or instruction. Awaiting input...")
 
             else:
                 print(f"[{timestamp()}] [INFO] Privileged PP-Terminal Kernel activated — 'shell=True' is required to unleash full EToALTA functionality (note: potential security implications).")
