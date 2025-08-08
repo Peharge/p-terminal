@@ -3333,6 +3333,7 @@ def handle_special_commands(user_input):
             # Build and run the Conda command
             command = f'"{conda_bat}" {user_input}'
             # subprocess.run(command, shell=True)
+            print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
             run_command(command, shell=True)
 
         except FileNotFoundError:
