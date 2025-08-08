@@ -34303,7 +34303,8 @@ def main():
                             except Exception as e:
                                 print(f"[{timestamp()}] [ERROR] Failed to set active environment: {e}")
                         else:
-                            command = [conda_exec, "create", "--prefix", str(env_path), "python=3.12", "-y"]
+                            # command = [conda_exec, "create", "--prefix", str(env_path), "python=3.12", "-y"]
+                            command = [conda_exec, "create", "--prefix", str(env_path), "python=3.12", "pip", "conda", "-y"]
                             print(f"[{timestamp()}] [INFO] Creating Conda environment '{user_input}' at {env_path} using {conda_exec}...")
 
                             try:
@@ -34385,7 +34386,8 @@ def main():
                             except Exception as e:
                                 print(f"[{timestamp()}] [ERROR] Failed to set active environment: {e}")
                         else:
-                            command = [conda_exec, "create", "--prefix", str(env_path), "python=3.12", "-y"]
+                            # command = [conda_exec, "create", "--prefix", str(env_path), "python=3.12", "-y"]
+                            command = [conda_exec, "create", "--prefix", str(env_path), "python=3.12", "pip", "conda", "-y"]
                             print(f"[{timestamp()}] [INFO] Creating Conda environment '{user_input}' at {env_path} using {conda_exec}...")
 
                             try:
@@ -34467,7 +34469,8 @@ def main():
                             except Exception as e:
                                 print(f"[{timestamp()}] [ERROR] Failed to set active environment: {e}")
                         else:
-                            command = [conda_exec, "create", "--prefix", str(env_path), "python=3.11", "-y"]
+                            # command = [conda_exec, "create", "--prefix", str(env_path), "python=3.11", "-y"]
+                            command = [conda_exec, "create", "--prefix", str(env_path), "python=3.11", "pip", "conda", "-y"]
                             print(f"[{timestamp()}] [INFO] Creating Conda environment '{user_input}' at {env_path} using {conda_exec}...")
 
                             try:
@@ -34549,7 +34552,8 @@ def main():
                             except Exception as e:
                                 print(f"[{timestamp()}] [ERROR] Failed to set active environment: {e}")
                         else:
-                            command = [conda_exec, "create", "--prefix", str(env_path), "python=3.10", "-y"]
+                            # command = [conda_exec, "create", "--prefix", str(env_path), "python=3.10", "-y"]
+                            command = [conda_exec, "create", "--prefix", str(env_path), "python=3.10", "pip", "conda", "-y"]
                             print(f"[{timestamp()}] [INFO] Creating Conda environment '{user_input}' at {env_path} using {conda_exec}...")
 
                             try:
@@ -34631,7 +34635,8 @@ def main():
                             except Exception as e:
                                 print(f"[{timestamp()}] [ERROR] Failed to set active environment: {e}")
                         else:
-                            command = [conda_exec, "create", "--prefix", str(env_path), "python=3.9", "-y"]
+                            # command = [conda_exec, "create", "--prefix", str(env_path), "python=3.9", "-y"]
+                            command = [conda_exec, "create", "--prefix", str(env_path), "python=3.9", "pip", "conda", "-y"]
                             print(f"[{timestamp()}] [INFO] Creating Conda environment '{user_input}' at {env_path} using {conda_exec}...")
 
                             try:
@@ -36012,7 +36017,8 @@ def main():
                     if user_confirm == 'y':
                         # command = ["python", "-m", "venv", str(env_path)]
                         # command = f'{shlex.quote(str(conda_exec))} create --prefix {shlex.quote(str(env_path))} python=3.12 -y'
-                        command = [conda_exec, "create", "--prefix", str(env_path), "python=3.12", "-y"]
+                        # command = [conda_exec, "create", "--prefix", str(env_path), "python=3.12", "-y"]
+                        command = [conda_exec, "create", "--prefix", str(env_path), "python=3.12", "pip", "conda", "-y"]
 
                         try:
                             subprocess.run(command, check=True, text=True, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
@@ -36099,7 +36105,8 @@ def main():
                     if user_confirm == 'y':
                         # command = ["python", "-m", "venv", str(env_path)]
                         # command = f'{shlex.quote(str(conda_exec))} create --prefix {shlex.quote(str(env_path))} python=3.12 -y'
-                        command = [conda_exec, "create", "--prefix", str(env_path), "python=3.12", "-y"]
+                        # command = [conda_exec, "create", "--prefix", str(env_path), "python=3.12", "-y"]
+                        command = [conda_exec, "create", "--prefix", str(env_path), "python=3.12", "pip", "conda", "-y"]
 
                         try:
                             subprocess.run(command, check=True, text=True, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
