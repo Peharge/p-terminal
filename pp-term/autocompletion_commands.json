@@ -453,6 +453,7 @@
     "pyinstaller --onefile ",
     "pythonc ",
     "prp ",
+    "pf-prp",
     "pr-p ",
     "pc-p ",
     "pc-python ",
