@@ -35789,7 +35789,6 @@ def main():
 
             elif user_input.startswith("pp-p-venv "):
                 env_name = user_input[10:].strip()
-                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command with shell=True — this can be insecure!")
                 env_path = (current_dir / env_name).resolve()
 
                 if not env_path.exists():
@@ -35798,6 +35797,7 @@ def main():
                     if user_confirm == 'y':
                         command = f'python -m venv "{env_path}"'
                         try:
+                            print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command with shell=True — this can be insecure!")
                             subprocess.run(command, shell=True, check=True, text=True,
                                            stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
                             print(f"[{timestamp()}] [INFO] The '{env_name}' venv was created at {env_path}.")
@@ -35887,7 +35887,6 @@ def main():
 
             elif user_input.startswith("pp-pav "):
                 env_name = user_input[7:].strip()
-                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command with shell=True — this can be insecure!")
                 env_path = (current_dir / env_name).resolve()
 
                 if not env_path.exists():
@@ -35896,6 +35895,7 @@ def main():
                     if user_confirm == 'y':
                         command = f'python -m venv "{env_path}"'
                         try:
+                            print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command with shell=True — this can be insecure!")
                             subprocess.run(command, shell=True, check=True, text=True,
                                            stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
                             print(f"[{timestamp()}] [INFO] The '{env_name}' venv was created at {env_path}.")
