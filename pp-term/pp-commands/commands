@@ -194,11 +194,12 @@ commands = {
         "run mavis": "mavis-installer-3-main-windows.py",
         "pr mavis": "mavis-installer-3-main-windows.py",
         "pmr run all": "pp-commands\\p-run-all.py",  # new
-        "pmr htop": "pp-commands\\p-htop.py",  # new
+        # "pmr htop": "pp-commands\\p-htop.py",  # new - ?
         "pmr run gemma3": "pp-commands\\p-gemma-3.py",  # new
         "pmr run deepseek-r1": "pp-commands\\p-deepseek-r1.py",  # new
         "pmr run qwen2.5": "pp-commands\\p-qwen-2-5.py",  # new
         "pmr run qwen2.5-coder": "pp-commands\\p-qwen-2-5-coder.py",  # new
+        "p htop": "pp-commands\\p-htop.py",  # new
         "p python frameworks": "pp-commands\\p-python-frameworks.py",  # new
         "p pip list": "pp-commands\\p-python-frameworks.py",  # new
         "p pip ls": "pp-commands\\p-python-frameworks.py",  # new
