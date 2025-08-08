@@ -6,6 +6,14 @@
     <img src="./icons/peharge-banner-3.svg" alt="peharge"/>
 </p>
 
+# PP-Terminal 8
+
+<p align="center">
+ <img width="800" src="https://github.com/Peharge/p-terminal-images/raw/main/images/themes.png" alt="peharge"/>
+</p>
+
+## PP-Terminal 4
+
 ## Theme Main
 
 ```bash 
