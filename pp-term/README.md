@@ -17,7 +17,7 @@
     <img src="./icons/MAVIS-terminal-icon-banner-3.svg" alt="mavis-terminal">
 </p>
 
-Hey ;-) [`Install PP-Terminal`](https://github.com/Peharge/p-terminal?tab=readme-ov-file#install-pp-terminal) [`Download PP-Term [Windows]`](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) [`PP-Term Commands`](https://github.com/Peharge/peharge-web/blob/main/commands-pp-term.html) [`Learn PP-Term`](https://github.com/Peharge/p-terminal/wiki/Documentation)
+Hey ;-) [`Install PP-Terminal`](https://github.com/Peharge/p-terminal?tab=readme-ov-file#install-pp-terminal) [`Download PP-Term [Windows]`](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) [`PP-Term Commands`](https://github.com/Peharge/peharge-web/blob/main/commands-pp-term.html) [`Learn PP-Term`](https://github.com/Peharge/p-terminal/wiki/Documentation) [`THEMES.md`](THEMES.md)
 
 ## Code of (04.08.2025)
 
