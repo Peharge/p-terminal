@@ -332,36 +332,49 @@ Git is required to clone code and track changes.
 
 ### 2. **Python**
 
-It is recommended to use Python 3.12 (Python 3.11 is also supported, but not Python 3.13).  
+It is recommended to use Python 3.13 (Python 3.12 is also supported, but not Python 3.14).  
 [Download Python](https://www.python.org/downloads/) or install via the Microsoft Store.
 
 ### 3. **Ollama**
 
-Ollama is a necessary tool for the PP-Terminal.  
+Ollama is optional and only required if you intend to use AI assistants or MAVIS features.  
 [Download Ollama](https://ollama.com/download)
 
 ### 4. **FFmpeg**
 
-FFmpeg is another important dependency for the PP-Terminal.  
+FFmpeg is not required to run PP-Terminal. However, it is mandatory for using the MAVIS Voice Assistant."  
 [Visit the official FFmpeg website](https://ffmpeg.org/)
 
 ### 5. **Rustup**
 
-Rustup is required to install Rust and related tools.  
+Rustup is not required by default. However, it is recommended if you plan to run Rust code in PP-Term or use WSL with Rust.  
 [Download Rustup](https://rustup.rs/)
 
 ### 6. **3D Slicer**
 
-Installing 3D Slicer is not required to run PP-Term. However, it is mandatory if you plan to use SIMON.  
-If installation fails, you can run the `Install 3d-slicer` command in the PP-Terminal for a safer setup.  
+Installing 3D Slicer isn't required to run PP-Terminal. However, if you plan to use SIMON, installing 3D Slicer is mandatory. If you encounter any problems during installation, simply run the Install 3d-slicer command in the PP-Terminal. This installation method is significantly more secure!  
 Otherwise, install it manually: [Download 3D Slicer](https://download.slicer.org)
 
 ### 7. **PowerShell 7**
 
-PowerShell 7 is recommended for use with the PP-Terminal.  
+nstalling PowerShell 7 is recommended, as some commands rely on it. While PP-Terminal can run without it, certain features may be limited.  
 [Download PowerShell 7](https://github.com/PowerShell/PowerShell/releases)
 
-### 8. **Windows Subsystem for Linux (WSL)**
+### 8. **Docker**
+
+Docker Desktop is not required unless you specifically plan to use container-based development features.  
+[Download Docker Desktop](https://www.docker.com/products/docker-desktop)
+
+### 9. **Windows Subsystem for Linux (WSL)**
+
+Installing WSL is strongly recommended, as it unlocks many useful features and is used by several IDEs for enhanced development workflows.
+
+Install WSL: 
+
+```powershell
+wsl --install
+```
+
 
 To make optimal use of the PP-Terminal, you need WSL. Supported distributions:
 
@@ -438,12 +451,12 @@ To make optimal use of the PP-Terminal, you need WSL. Supported distributions:
 For more information on WSL:  
 [Installing WSL – Microsoft Docs](https://docs.microsoft.com/en-us/windows/wsl/install)
 
-### 9. **PP-Terminal Repository**
+### 10. **PP-Terminal Repository**
 
 Clone the repository from GitHub:  
 [PP-Terminal GitHub Repository](https://github.com/Peharge/P-Terminal)
 
-### 10. **C++ Extensions for Desktop Development**
+### 11. **C++ Extensions for Desktop Development**
 
 To develop and run the PP-Terminal, you also need the C++ extensions for Visual Studio.  
 [Download C++ Extensions](https://visualstudio.microsoft.com/de/downloads/)
