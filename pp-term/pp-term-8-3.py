@@ -10681,7 +10681,7 @@ if __name__ == "__main__":
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
-    if  if user_input.lower() == "where prp":
+    if  user_input.lower() == "where prp":
         print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Run 'where python' to find Python executable:\n")
         try:
