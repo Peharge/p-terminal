@@ -2062,7 +2062,7 @@ def handle_special_commands(user_input):
         else:
             return saved if saved else str(Path(DEFAULT_ENV_DIR).resolve())
 
-    if "cd " in user_input.lower():
+    if "cd " in user_input.lower() and not user_input.lower().startswith("pcfo&"):
         lower_input = user_input.lower()
         idx = lower_input.index("cd ")
         path_str = user_input[idx + 3:].strip()
@@ -17397,7 +17397,7 @@ if __name__ == "__main__":
         return True
 
     if user_input.startswith("pcfo&pcd "):
-        folder_name = user_input[8:].strip()
+        folder_name = user_input[9:].strip()
         current_dir = Path.cwd().resolve()
         new_folder_path = current_dir / folder_name
 
