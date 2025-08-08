@@ -1258,6 +1258,12 @@ def handle_special_commands(user_input):
         "p simon": "pp-commands\\p-simon.py",  # new
         "p simon.com": "pp-commands\\p-simon-git.py",  # new
         "wsl info": "pp-commands\\wsl-info.py",  # new
+        "wsl update": "pp-commands\\wsl-update.py",  # new
+        "update wsl": "pp-commands\\wsl-update.py",  # new
+        "lx update": "pp-commands\\wsl-update.py",  # new
+        "update lx": "pp-commands\\wsl-update.py",  # new
+        "pl update": "pp-commands\\wsl-update.py",  # new
+        "update pl": "pp-commands\\wsl-update.py",  # new
         "p wsl": "pp-commands\\p-wsl.py",  # new
         "p pip": "pp-commands\\p-pip.py",  # new
         "p ubuntu": "pp-commands\\p-wsl-ubuntu.py",  # new
