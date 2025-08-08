@@ -306,13 +306,13 @@ These commands work only on Windows and require either Command Prompt or PowerSh
 ### For Command Prompt (CMD)
 
 ```cmd
-git clone https://github.com/Peharge/p-terminal && cd p-terminal && pp-term\run-pp-term.bat
+git clone https://github.com/Peharge/p-terminal.git && cd p-terminal && pp-term\run-pp-term.bat
 ```
 
 ### For PowerShell
 
 ```powershell
-git clone https://github.com/Peharge/p-terminal && cd p-terminal && pp-term\run-pp-term.ps1
+git clone https://github.com/Peharge/p-terminal.git && cd p-terminal && pp-term\run-pp-term.ps1
 ```
 
 Alternatively, you can download the [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat) file and double-click it. You're ready to go! Have fun with PP-Terminal and you can always start it with `pp-term/run-pp-term.bat` (ca. 5 min) / `pp-term/run-pp-term-fast.bat` (ca. 3-5 sek) after installation. If you want, you can further enhance your Terminal with PP-Terminal Themes/Pins: [PP Terminal Themes/Pins](./pp-term/THEMES.md)
