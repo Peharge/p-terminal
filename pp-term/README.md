@@ -6,6 +6,11 @@
 
 <p align="left">
     <img src="./icons/pp-term-banner-3.svg" alt="peharge"/>
+    <img src="./icons/pp-terminal-launcher-banner-3.svg" alt="peharge"/>
+    <img src="./icons/peharge-compiler-banner-3.svg" alt="peharge"/>
+    <img src="./icons/peharge-kernel-banner-3.svg" alt="peharge"/>
+    <img src="./icons/iq-banner-3.svg" alt="peharge"/><br>
+    <img src="./icons/simon-banner-3.svg" alt="peharge"/>
     <img src="./icons/peharge-banner-3.svg" alt="peharge"/>
     <img src="./icons/MAVIS-icon-banner-3.svg" alt="mavis">
     <img src="./icons/MAVIS-launcher-icon-banner-3.svg" alt="mavis-launcher">
