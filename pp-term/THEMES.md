@@ -8,11 +8,17 @@
 
 # PP-Terminal 8
 
+## Pin ADV / Pin MAIN / Pin EVIL
+
+```bash 
+pin main or pin evil or pin adv
+```
+
 <p align="center">
  <img width="800" src="https://github.com/Peharge/p-terminal-images/raw/main/images/themes.png" alt="peharge"/>
 </p>
 
-## PP-Terminal 4
+# PP-Terminal 4
 
 ## Theme Main
 
