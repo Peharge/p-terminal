@@ -34039,11 +34039,13 @@ def main():
                 user_input = user_input[9:].strip()
                 current_dir = Path.cwd()
                 env_path = (current_dir / user_input).resolve()
-                command = ["python", "-m", "venv", str(env_path)]
+                # command = ["python", "-m", "venv", str(env_path)]
+                command = f"python -m venv {str(env_path)}"
 
                 try:
-                    subprocess.run(command, check=True, text=True,
-                                   stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                    # subprocess.run(command, check=True, text=True, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                    print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+                    run_command(command, shell=True)
 
                     print(f"[{timestamp()}] [INFO] The '{user_input}' venv was created at {env_path}.")
 
@@ -34107,10 +34109,12 @@ def main():
                         print(f"[{timestamp()}] [ERROR] Failed to activate existing venv: {e}")
                 else:
                     # venv erstellen
-                    command = ["python", "-m", "venv", str(env_path)]
+                    # command = ["python", "-m", "venv", str(env_path)]
+                    command = f"python -m venv {str(env_path)}"
                     try:
-                        subprocess.run(command, check=True, text=True,
-                                       stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                        # subprocess.run(command, check=True, text=True, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+                        run_command(command, shell=True)
 
                         print(f"[{timestamp()}] [INFO] The virtual environment '{user_input}' was created at {env_path}.")
 
@@ -34695,10 +34699,12 @@ def main():
                         print(f"[{timestamp()}] [ERROR] Failed to activate existing venv: {e}")
                 else:
                     # venv erstellen
-                    command = ["python", "-m", "venv", str(env_path)]
+                    # command = ["python", "-m", "venv", str(env_path)]
+                    command = f"python -m venv {str(env_path)}"
                     try:
-                        subprocess.run(command, check=True, text=True,
-                                       stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                        # subprocess.run(command, check=True, text=True, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+                        run_command(command, shell=True)
 
                         print(f"[{timestamp()}] [INFO] The virtual environment '{user_input}' was created at {env_path}.")
 
@@ -35584,10 +35590,12 @@ def main():
                         print(f"[{timestamp()}] [ERROR] Failed to activate existing venv: {e}")
                 else:
                     # venv erstellen
-                    command = ["python", "-m", "venv", str(env_path)]
+                    # command = ["python", "-m", "venv", str(env_path)]
+                    command = f"python -m venv {str(env_path)}"
                     try:
-                        subprocess.run(command, check=True, text=True,
-                                       stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                        # subprocess.run(command, check=True, text=True, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+                        run_command(command, shell=True)
 
                         print(f"[{timestamp()}] [INFO] The virtual environment '{user_input}' was created at {env_path}.")
 
@@ -35672,10 +35680,13 @@ def main():
                     print(f"[{timestamp()}] [INFO] Environment '{env_name}' does not exist at '{env_path}'.")
                     user_confirm = input("Do you want to create this virtual environment? [y/n]: ").strip().lower()
                     if user_confirm == 'y':
-                        command = ["python", "-m", "venv", str(env_path)]
+                        # command = ["python", "-m", "venv", str(env_path)]
+                        command = f"python -m venv {str(env_path)}"
                         try:
-                            subprocess.run(command, check=True, text=True,
-                                           stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                            subprocess.run(command, check=True, text=True, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                            print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+                            run_command(command, shell=True)
+
                             print(f"[{timestamp()}] [INFO] The '{env_name}' venv was created at {env_path}.")
                         except subprocess.CalledProcessError as e:
                             print(f"[{timestamp()}] [ERROR] Failed to create venv: {e}")
@@ -35767,10 +35778,13 @@ def main():
                     print(f"[{timestamp()}] [INFO] Environment '{env_name}' does not exist at '{env_path}'.")
                     user_confirm = input("Do you want to create this virtual environment? [y/n]: ").strip().lower()
                     if user_confirm == 'y':
-                        command = ["python", "-m", "venv", str(env_path)]
+                        # command = ["python", "-m", "venv", str(env_path)]
+                        command = f"python -m venv {str(env_path)}"
                         try:
-                            subprocess.run(command, check=True, text=True,
-                                           stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                            # subprocess.run(command, check=True, text=True, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                            print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+                            run_command(command, shell=True)
+
                             print(f"[{timestamp()}] [INFO] The '{env_name}' venv was created at {env_path}.")
                         except subprocess.CalledProcessError as e:
                             print(f"[{timestamp()}] [ERROR] Failed to create venv: {e}")
@@ -35901,10 +35915,12 @@ def main():
                     print(f"[{timestamp()}] [INFO] Environment '{env_name}' does not exist at '{env_path}'.")
                     user_confirm = input("Do you want to create this virtual environment? [y/n]: ").strip().lower()
                     if user_confirm == 'y':
-                        command = ["python", "-m", "venv", str(env_path)]
+                        # command = ["python", "-m", "venv", str(env_path)]
+                        command = f"python -m venv {str(env_path)}"
                         try:
-                            subprocess.run(command, check=True, text=True,
-                                           stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                            # subprocess.run(command, check=True, text=True, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                            print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+                            run_command(command, shell=True)
                             print(f"[{timestamp()}] [INFO] The '{env_name}' venv was created at {env_path}.")
                         except subprocess.CalledProcessError as e:
                             print(f"[{timestamp()}] [ERROR] Failed to create venv: {e}")
@@ -35948,10 +35964,12 @@ def main():
                     print(f"[{timestamp()}] [INFO] Environment '{env_name}' does not exist at '{env_path}'.")
                     user_confirm = input("Do you want to create this virtual environment? [y/n]: ").strip().lower()
                     if user_confirm == 'y':
-                        command = ["python", "-m", "venv", str(env_path)]
+                        # command = ["python", "-m", "venv", str(env_path)]
+                        command = f"python -m venv {str(env_path)}"
                         try:
-                            subprocess.run(command, check=True, text=True,
-                                           stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                            # subprocess.run(command, check=True, text=True, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                            print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+                            run_command(command, shell=True)
                             print(f"[{timestamp()}] [INFO] The '{env_name}' venv was created at {env_path}.")
                         except subprocess.CalledProcessError as e:
                             print(f"[{timestamp()}] [ERROR] Failed to create venv: {e}")
