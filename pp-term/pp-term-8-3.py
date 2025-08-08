@@ -989,6 +989,7 @@ def handle_special_commands(user_input):
 
     # Spezielle Scripts
     commands = {
+        "p": "pp-commands\\peharge.py",
         "peharge": "pp-commands\\peharge.py",
         "pp-term": "pp-commands\\pp-term.py",
         "p jk": "pp-commands\\jk-p.py",
