@@ -35955,7 +35955,7 @@ def main():
                         # command = f'{shlex.quote(str(conda_exec))} create --prefix {shlex.quote(str(env_path))} python=3.12 -y'
                         command = [conda_exec, "create", "--prefix", str(env_path), "python=3.12", "-y"]
 
-                        try:conda
+                        try:
                             subprocess.run(command, check=True, text=True, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
                             # print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
                             # run_command(command, shell=True)
@@ -36006,7 +36006,7 @@ def main():
                         # command = f'{shlex.quote(str(conda_exec))} create --prefix {shlex.quote(str(env_path))} python=3.12 -y'
                         command = [conda_exec, "create", "--prefix", str(env_path), "python=3.12", "-y"]
 
-                        try:conda
+                        try:
                             subprocess.run(command, check=True, text=True, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
                             # print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
                             # run_command(command, shell=True)
