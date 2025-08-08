@@ -35916,7 +35916,7 @@ def main():
                     user_confirm = input("Do you want to create this virtual environment? [y/n]: ").strip().lower()
                     if user_confirm == 'y':
                         # command = ["python", "-m", "venv", str(env_path)]
-                        command = f"python -m venv {str(env_path)}"
+                        command = f'{shlex.quote(str(conda_exec))} create --prefix {shlex.quote(str(env_path))} python=3.12 -y'
                         try:
                             # subprocess.run(command, check=True, text=True, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
                             print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
@@ -35965,7 +35965,7 @@ def main():
                     user_confirm = input("Do you want to create this virtual environment? [y/n]: ").strip().lower()
                     if user_confirm == 'y':
                         # command = ["python", "-m", "venv", str(env_path)]
-                        command = f"python -m venv {str(env_path)}"
+                        command = f'{shlex.quote(str(conda_exec))} create --prefix {shlex.quote(str(env_path))} python=3.12 -y'
                         try:
                             # subprocess.run(command, check=True, text=True, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
                             print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
@@ -36014,10 +36014,12 @@ def main():
                     print(f"[{timestamp()}] [INFO] Environment '{env_name}' does not exist at '{env_path}'.")
                     user_confirm = input("Do you want to create this virtual environment? [y/n]: ").strip().lower()
                     if user_confirm == 'y':
-                        command = f'python -m venv "{env_path}"'
+                        # command = f'python -m venv "{env_path}"'
+                        command = f'{shlex.quote(str(conda_exec))} create --prefix {shlex.quote(str(env_path))} python=3.12 -y'
                         try:
-                            subprocess.run(command, shell=True, check=True, text=True,
-                                           stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                            # subprocess.run(command, shell=True, check=True, text=True, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                            run_command(command, shell=True)
+
                             print(f"[{timestamp()}] [INFO] The '{env_name}' venv was created at {env_path}.")
                         except subprocess.CalledProcessError as e:
                             print(f"[{timestamp()}] [ERROR] Failed to create venv: {e}")
@@ -36062,10 +36064,12 @@ def main():
                     print(f"[{timestamp()}] [INFO] Environment '{env_name}' does not exist at '{env_path}'.")
                     user_confirm = input("Do you want to create this virtual environment? [y/n]: ").strip().lower()
                     if user_confirm == 'y':
-                        command = f'python -m venv "{env_path}"'
+                        # command = f'python -m venv "{env_path}"'
+                        command = f'{shlex.quote(str(conda_exec))} create --prefix {shlex.quote(str(env_path))} python=3.12 -y'
                         try:
-                            subprocess.run(command, shell=True, check=True, text=True,
-                                           stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                            # subprocess.run(command, shell=True, check=True, text=True, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+                            run_command(command, shell=True)
+
                             print(f"[{timestamp()}] [INFO] The '{env_name}' venv was created at {env_path}.")
                         except subprocess.CalledProcessError as e:
                             print(f"[{timestamp()}] [ERROR] Failed to create venv: {e}")
