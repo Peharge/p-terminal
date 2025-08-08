@@ -10681,32 +10681,91 @@ if __name__ == "__main__":
             print(f"[{timestamp()}] [ERROR] executing pc command: {e}")
         return True
 
-    if  user_input.lower() == "where prp":
+    if user_input.lower() == "pf-prp":
+        def find_conda_executable():
+            """Find the conda executable from PATH or standard install locations."""
+            conda_in_path = shutil.which("conda")
+            if conda_in_path:
+                return conda_in_path
+
+            home = Path.home()
+            possible_paths = []
+
+            if os.name == "nt":  # Windows
+                possible_paths = [
+                    home / "Miniconda3" / "Scripts" / "conda.exe",
+                    home / "Anaconda3" / "Scripts" / "conda.exe",
+                ]
+            else:  # Linux/macOS
+                possible_paths = [
+                    home / "miniconda3" / "bin" / "conda",
+                    home / "anaconda3" / "bin" / "conda",
+                ]
+
+            for path in possible_paths:
+                if path.exists() and path.is_file():
+                    return str(path)
+
+            return None
+
+        def find_existing_venvs(directory: Path):
+            """Check for other environments in this directory."""
+            venvs = []
+            for item in directory.iterdir():
+                if item.is_dir() and (item / "conda-meta").exists():
+                    venvs.append(item.name)
+            return venvs
+
         print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
         print(f"[{timestamp()}] [INFO] Run 'where python' to find Python executable:\n")
         try:
-            # Windows-Befehl um Python Interpreter(s) zu finden
+            # Windows-Befehl um Python-Interpreter(s) zu finden
             run_command("where python", shell=True)
         except KeyboardInterrupt:
             print(f"[{timestamp()}] [INFO] Cancellation by user.")
         except subprocess.CalledProcessError as e:
             print(f"[{timestamp()}] [ERROR] executing command: {e.stderr.strip()}")
 
-        # Zusätzlich Conda-Info anzeigen, falls conda vorhanden ist
+        print(f"\n[{timestamp()}] [INFO] Checking active Python virtual environment:\n")
         try:
-            print(f"\n[{timestamp()}] [INFO] Check active Conda environment:\n")
-            run_command("conda info --envs", shell=True)
-            # Pfad zur aktiven Conda-Umgebung auslesen in Python (optional)
-            conda_prefix = os.environ.get('CONDA_PREFIX')
-            if conda_prefix:
-                print(f"\n[{timestamp()}] [INFO] Active Conda environment path: {conda_prefix}")
+            venv_detected = False
+
+            # Methode 1: Standard-Erkennung über sys.prefix
+            if hasattr(sys, 'real_prefix') or sys.prefix != sys.base_prefix:
+                print(f"[{timestamp()}] [INFO] Virtualenv is active (sys.prefix): {sys.prefix}")
+                venv_detected = True
+
+            # Methode 2: Erkennung über Umgebungsvariable
+            venv_env = os.environ.get('VIRTUAL_ENV')
+            if venv_env:
+                print(f"[{timestamp()}] [INFO] Virtualenv detected via $VIRTUAL_ENV: {venv_env}")
+                venv_detected = True
+
+            if not venv_detected:
+                print(f"[{timestamp()}] [INFO] No active Python virtual environment detected.")
+
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Error while checking virtual environment: {str(e)}")
+
+        print(f"\n[{timestamp()}] [INFO] Checking Conda installation and active environment:\n")
+        try:
+            conda_path = find_conda_executable()
+            if conda_path:
+                print(f"[{timestamp()}] [INFO] Conda executable found at: {conda_path}")
+                try:
+                    run_command(f'"{conda_path}" info --envs', shell=True)
+                    conda_prefix = os.environ.get('CONDA_PREFIX')
+                    if conda_prefix:
+                        print(f"\n[{timestamp()}] [INFO] Active Conda environment path: {conda_prefix}")
+                    else:
+                        print(f"\n[{timestamp()}] [INFO] No active Conda environment detected.")
+                except subprocess.CalledProcessError as e:
+                    print(f"[{timestamp()}] [ERROR] executing conda command: {e.stderr.strip()}")
             else:
-                print(f"\n[{timestamp()}] [INFO] No active Conda environment detected.")
-        except FileNotFoundError:
-            # conda nicht installiert oder nicht im PATH
-            print(f"[{timestamp()}] [WARN] Conda command not found.")
-        except subprocess.CalledProcessError as e:
-            print(f"[{timestamp()}] [ERROR] executing conda command: {e.stderr.strip()}")
+                print(f"[{timestamp()}] [WARN] Conda not found in PATH or standard locations.")
+        except Exception as e:
+            print(f"[{timestamp()}] [ERROR] Error while checking Conda environment: {str(e)}")
+
         return True
 
     if user_input.startswith("pr-p "):
