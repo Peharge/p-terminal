@@ -1259,7 +1259,7 @@ echo   wsl --set-default DistributionName
 echo To install a distribution later, simply run the appropriate 'wsl --install -d' command.
 echo Refer to https://learn.microsoft.com/en-us/windows/wsl/install for detailed instructions.
 echo.
-echo Please select a distribution to install
+echo Please select a distribution to install. Note: Installing the WSL distribution using this method is experimental, and its security cannot be guaranteed.
 echo   [1] Ubuntu
 echo   [2] Debian
 echo   [3] Kali Linux
