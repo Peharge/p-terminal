@@ -21870,6 +21870,7 @@ if __name__ == "__main__":
 
     if user_input.startswith("pp-po "):
         user_input = user_input[6:].strip()
+        print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command with shell=True — this can be insecure!")
         ollama_installed = check_command_installed("ollama")
         if ollama_installed:
             print(f"[{timestamp()}] [INFO] Ollama is installed.")
