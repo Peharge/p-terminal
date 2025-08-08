@@ -6193,23 +6193,23 @@ if __name__ == "__main__":
                     if not file_path.exists():
                         with open(file_path, "w", encoding="utf-8") as f:
                             f.write(f"""# -----------------------------------------------------------
-    # 🐍 Welcome to your new Python file!
-    # You have created a new Python file using the PP-Terminal.
-    # -----------------------------------------------------------
-    #
-    # This is a basic starting template to help you get going.
-    # Feel free to modify or delete this code and write your own!
-    # Happy coding! 🚀
+# 🐍 Welcome to your new Python file!
+# You have created a new Python file using the PP-Terminal.
+# -----------------------------------------------------------
+#
+# This is a basic starting template to help you get going.
+# Feel free to modify or delete this code and write your own!
+# Happy coding! 🚀
 
-    def main():
-      print("👋 Hello, developer!")
-      print("This file was created via the PP-Terminal.")
-      print("Need help? Type 'help()' in the Terminal.")
+def main():
+  print("👋 Hello, developer!")
+  print("This file was created via the PP-Terminal.")
+  print("Need help? Type 'help()' in the Terminal.")
 
-    # Call the main function when this script runs
-    if __name__ == "__main__":
-      main()
-    """)
+# Call the main function when this script runs
+if __name__ == "__main__":
+  main()
+""")
 
                     # active_env aus JSON laden
                     json_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/current_env.json")
@@ -14634,21 +14634,21 @@ if __name__ == "__main__":
                             )
 
                             full_html = f"""<!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>{filename}</title>
-        <style>
-            body {{ font-family: Arial, sans-serif; margin: 40px; }}
-            pre code {{ background-color: #f4f4f4; padding: 10px; display: block; white-space: pre-wrap; }}
-            code {{ font-family: monospace; }}
-            h1, h2, h3 {{ border-bottom: 1px solid #ddd; }}
-        </style>
-    </head>
-    <body>
-    {html}
-    </body>
-    </html>"""
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{filename}</title>
+    <style>
+        body {{ font-family: Arial, sans-serif; margin: 40px; }}
+        pre code {{ background-color: #f4f4f4; padding: 10px; display: block; white-space: pre-wrap; }}
+        code {{ font-family: monospace; }}
+        h1, h2, h3 {{ border-bottom: 1px solid #ddd; }}
+    </style>
+</head>
+<body>
+{html}
+</body>
+</html>"""
 
                             self.send_response(200)
                             self.send_header("Content-Type", "text/html; charset=utf-8")
@@ -17983,11 +17983,11 @@ if __name__ == "__main__":
             if not file_path.exists():
                 with open(file_path, "w", encoding="utf-8") as f:
                     f.write("""{
-             "cells": [],
-             "metadata": {},
-             "nbformat": 4,
-             "nbformat_minor": 2
-            }""")
+ "cells": [],
+ "metadata": {},
+ "nbformat": 4,
+ "nbformat_minor": 2
+}""")
 
             # Aktive Umgebung laden
             json_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/current_env.json")
@@ -18080,11 +18080,11 @@ if __name__ == "__main__":
             if not file_path.exists():
                 with open(file_path, "w", encoding="utf-8") as f:
                     f.write("""{
-             "cells": [],
-             "metadata": {},
-             "nbformat": 4,
-             "nbformat_minor": 2
-            }""")
+ "cells": [],
+ "metadata": {},
+ "nbformat": 4,
+ "nbformat_minor": 2
+}""")
 
             # Aktive Umgebung laden
             json_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/current_env.json")
@@ -18177,11 +18177,11 @@ if __name__ == "__main__":
             if not file_path.exists():
                 with open(file_path, "w", encoding="utf-8") as f:
                     f.write("""{
-         "cells": [],
-         "metadata": {},
-         "nbformat": 4,
-         "nbformat_minor": 2
-        }""")
+ "cells": [],
+ "metadata": {},
+ "nbformat": 4,
+ "nbformat_minor": 2
+}""")
 
             # Load active venv path from JSON
             json_path = Path(f"C:/Users/{os.getlogin()}/p-terminal/pp-term/current_env.json")
@@ -18284,23 +18284,23 @@ if __name__ == "__main__":
             if not file_path.exists():
                 with open(file_path, "w", encoding="utf-8") as f:
                     f.write("""{
-          "cells": [],
-          "metadata": {
-            "kernelspec": {
-              "display_name": "Julia",
-              "language": "julia",
-              "name": "julia-1.9"
-            },
-            "language_info": {
-              "file_extension": ".jl",
-              "mimetype": "application/julia",
-              "name": "julia",
-              "version": "1.9"
-            }
-          },
-          "nbformat": 4,
-          "nbformat_minor": 2
-        }""")
+"cells": [],
+"metadata": {
+"kernelspec": {
+  "display_name": "Julia",
+  "language": "julia",
+  "name": "julia-1.9"
+},
+"language_info": {
+  "file_extension": ".jl",
+  "mimetype": "application/julia",
+  "name": "julia",
+  "version": "1.9"
+}
+},
+"nbformat": 4,
+"nbformat_minor": 2
+}""")
                     # Hinweis: kernelspec.name sollte der tatsächlichen Julia-Version entsprechen,
                     # z. B. "julia-1.9" oder was IJulia registriert.
 
@@ -18433,24 +18433,24 @@ if __name__ == "__main__":
             if not file_path.exists():
                 with open(file_path, "w", encoding="utf-8") as f:
                     f.write("""{
-          "cells": [],
-          "metadata": {
-            "kernelspec": {
-              "display_name": "R",
-              "language": "R",
-              "name": "ir"
-            },
-            "language_info": {
-              "codemirror_mode": "r",
-              "file_extension": ".r",
-              "mimetype": "text/x-r-source",
-              "name": "R",
-              "pygments_lexer": "r"
-            }
-          },
-          "nbformat": 4,
-          "nbformat_minor": 2
-        }""")
+"cells": [],
+"metadata": {
+"kernelspec": {
+  "display_name": "R",
+  "language": "R",
+  "name": "ir"
+},
+"language_info": {
+  "codemirror_mode": "r",
+  "file_extension": ".r",
+  "mimetype": "text/x-r-source",
+  "name": "R",
+  "pygments_lexer": "r"
+}
+},
+"nbformat": 4,
+"nbformat_minor": 2
+}""")
                     # Hinweis: Metadata enthält schon R-Kernel-Definition
 
             # 1) Rscript finden
@@ -18707,23 +18707,23 @@ if __name__ == "__main__":
                 if not file_path.exists():
                     with open(file_path, "w", encoding="utf-8") as f:
                         f.write(f"""# -----------------------------------------------------------
-    # 🐍 Welcome to your new Python file!
-    # You have created a new Python file using the PP-Terminal.
-    # -----------------------------------------------------------
-    #
-    # This is a basic starting template to help you get going.
-    # Feel free to modify or delete this code and write your own!
-    # Happy coding! 🚀
+# 🐍 Welcome to your new Python file!
+# You have created a new Python file using the PP-Terminal.
+# -----------------------------------------------------------
+#
+# This is a basic starting template to help you get going.
+# Feel free to modify or delete this code and write your own!
+# Happy coding! 🚀
 
-    def main():
-      print("👋 Hello, developer!")
-      print("This file was created via the PP-Terminal.")
-      print("Need help? Type 'help()' in the Terminal.")
+def main():
+  print("👋 Hello, developer!")
+  print("This file was created via the PP-Terminal.")
+  print("Need help? Type 'help()' in the Terminal.")
 
-    # Call the main function when this script runs
-    if __name__ == "__main__":
-      main()
-    """)
+# Call the main function when this script runs
+if __name__ == "__main__":
+  main()
+""")
 
                 # Pfad zu Spyder in der .env
                 current_env = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/.env")
@@ -18825,23 +18825,23 @@ if __name__ == "__main__":
                 if not file_path.exists():
                     with open(file_path, "w", encoding="utf-8") as f:
                         f.write(f"""# -----------------------------------------------------------
-    # 🐍 Welcome to your new Python file!
-    # You have created a new Python file using the PP-Terminal.
-    # -----------------------------------------------------------
-    #
-    # This is a basic starting template to help you get going.
-    # Feel free to modify or delete this code and write your own!
-    # Happy coding! 🚀
+# 🐍 Welcome to your new Python file!
+# You have created a new Python file using the PP-Terminal.
+# -----------------------------------------------------------
+#
+# This is a basic starting template to help you get going.
+# Feel free to modify or delete this code and write your own!
+# Happy coding! 🚀
 
-    def main():
-      print("👋 Hello, developer!")
-      print("This file was created via the PP-Terminal.")
-      print("Need help? Type 'help()' in the Terminal.")
+def main():
+  print("👋 Hello, developer!")
+  print("This file was created via the PP-Terminal.")
+  print("Need help? Type 'help()' in the Terminal.")
 
-    # Call the main function when this script runs
-    if __name__ == "__main__":
-      main()
-    """)
+# Call the main function when this script runs
+if __name__ == "__main__":
+  main()
+""")
 
                 # Pfad zu Spyder in der .env
                 current_env = Path(f"C:/Users/{getpass.getuser()}/p-terminal/pp-term/.env")
