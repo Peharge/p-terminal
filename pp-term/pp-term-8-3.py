@@ -3332,7 +3332,8 @@ def handle_special_commands(user_input):
 
             # Build and run the Conda command
             command = f'"{conda_bat}" {user_input}'
-            subprocess.run(command, shell=True)
+            # subprocess.run(command, shell=True)
+            run_command(command, shell=True)
 
         except FileNotFoundError:
             print(f"[{timestamp()}] [ERROR] File not found: {json_path}")
@@ -3384,7 +3385,9 @@ def handle_special_commands(user_input):
             command = f'"{conda_bat}" {user_input}'
             print(f"[{timestamp()}] [INFO] Running Conda command: {command}")  # Optional
 
-            subprocess.run(command, shell=True)
+            # subprocess.run(command, shell=True)
+            print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+            run_command(command, shell=True)
 
         except FileNotFoundError:
             print(f"[{timestamp()}] [ERROR] File not found: {json_path}")
@@ -3434,7 +3437,9 @@ def handle_special_commands(user_input):
             command = f'"{conda_bat}" {user_input}'
             print(f"[{timestamp()}] [INFO] Running Conda command: {command}")  # Optional
 
-            subprocess.run(command, shell=True)
+            # subprocess.run(command, shell=True)
+            print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+            run_command(command, shell=True)
 
         except FileNotFoundError:
             print(f"[{timestamp()}] [ERROR] File not found: {json_path}")
@@ -3484,7 +3489,9 @@ def handle_special_commands(user_input):
             command = f'"{conda_bat}" {user_input}'
             print(f"[{timestamp()}] [INFO] Running Conda command: {command}")  # Optional
 
-            subprocess.run(command, shell=True)
+            # subprocess.run(command, shell=True)
+            print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+            run_command(command, shell=True)
 
         except FileNotFoundError:
             print(f"[{timestamp()}] [ERROR] File not found: {json_path}")
@@ -3534,7 +3541,9 @@ def handle_special_commands(user_input):
             command = f'"{conda_bat}" {user_input}'
             print(f"[{timestamp()}] [INFO] Running Conda command: {command}")  # Optional
 
-            subprocess.run(command, shell=True)
+            # subprocess.run(command, shell=True)
+            print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+            run_command(command, shell=True)
 
         except FileNotFoundError:
             print(f"[{timestamp()}] [ERROR] File not found: {json_path}")
@@ -3584,7 +3593,9 @@ def handle_special_commands(user_input):
             command = f'"{conda_bat}" {user_input}'
             print(f"[{timestamp()}] [INFO] Running Conda command: {command}")  # Optional
 
-            subprocess.run(command, shell=True)
+            # subprocess.run(command, shell=True)
+            print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+            run_command(command, shell=True)
 
         except FileNotFoundError:
             print(f"[{timestamp()}] [ERROR] File not found: {json_path}")
@@ -3633,7 +3644,9 @@ def handle_special_commands(user_input):
 
             # subprocess.run mit Liste statt String (sicherer)
             command = [str(conda_bat)] + user_input.split()
-            subprocess.run(command, shell=True)
+            # subprocess.run(command, shell=True)
+            print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+            run_command(command, shell=True)
 
         except FileNotFoundError:
             print(f"[{timestamp()}] [ERROR] File not found: {json_path}")
@@ -3680,7 +3693,9 @@ def handle_special_commands(user_input):
                 return True
 
             command = [str(conda_bat)] + user_input.split()
-            subprocess.run(command, shell=True)
+            # subprocess.run(command, shell=True)
+            print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+            run_command(command, shell=True)
 
         except FileNotFoundError:
             print(f"[{timestamp()}] [ERROR] File not found: {json_path}")
