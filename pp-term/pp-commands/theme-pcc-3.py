@@ -72,11 +72,28 @@ def log_time() -> str:
 print("""
 WARNING: This script modifies system files and installs software components.
 
-It is strongly recommended to review the code and only run it if you trust the source.
-Make sure you understand the changes it will make, including:
+It is strongly recommended to carefully review the code and only run it if you trust the source.
+You should fully understand the changes it will make, including:
 - Installing fonts into the Windows system directory
 - Modifying Windows Terminal configuration
 - Installing software via winget and running PowerShell commands
+
+**IMPORTANT: This code is NOT safe and can potentially harm your system!**
+
+Installing Oh My Posh and Nerd Fonts via winget is generally safe when done properly, as winget is Microsoft's official package manager.
+Typical winget install commands are:
+
+- To install Oh My Posh:
+  winget install JanDeDobbeleer.OhMyPosh
+
+- To install FiraCode Nerd Font:
+  winget install NerdFonts.FiraCode
+
+You can find all resources here:
+- Oh My Posh: https://github.com/JanDeDobbeleer/oh-my-posh
+- Nerd Fonts (GitHub): https://github.com/ryanoasis/nerd-fonts/
+- Nerd Fonts (Official website): https://www.nerdfonts.com/font-downloads
+- To install fonts manually, open Explorer and run: shell:fonts
 
 USE AT YOUR OWN RISK.
 
