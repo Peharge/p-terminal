@@ -198,6 +198,11 @@ echo    The software is provided "AS IS", without any warranties of any kind, ex
 echo    This includes, but is not limited to, implied warranties of merchantability,
 echo    fitness for a particular purpose, and non-infringement.
 echo.
+echo 5. If prompted to install additional software, it is strongly recommended
+echo    to do so via "winget" or from the official website for security reasons.
+echo    The built-in installation option is experimental and intended only for
+echo    specific purposes. In such cases, it is safer to answer "n".
+echo.
 echo By typing 'y', you acknowledge that:
 echo - You have read and understood the above agreement.
 echo - You agree to use this tool responsibly and legally.
