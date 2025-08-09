@@ -68,7 +68,7 @@ $batFilePath = "C:\Users\$username\p-terminal\pp-term\run-pp-term.bat"
 
 if (Test-Path -Path $batFilePath) {
     try {
-        Start-Process -FilePath $batFilePath -Wait
+        & $batFilePath
     }
     catch {
         Write-Error $_
