@@ -61,6 +61,10 @@
 #
 # Veuillez lire l'intégralité des termes et conditions de la licence MIT pour vous familiariser avec vos droits et responsabilités.
 
+# pp-term-8-3.py – Hauptdatei des PP Terminals Version 8.3.
+# Dieses Skript enthält die zentrale Steuerung des Programms: Alle Hauptfunktionen sowie Weiterleitungen zu anderen Modulen
+# und Code-Bestandteilen sind hier zusammengefasst.
+
 import sys
 import getpass
 import subprocess
