@@ -996,7 +996,8 @@ if exist "%SLICER_PATH%" (
     echo.
     echo Installing 3D Slicer isn't required to run PP-Terminal. However, if you plan to use SIMON, installing 3D Slicer is mandatory. If you encounter any problems during installation, simply run the Install 3d-slicer command in the PP-Terminal. This installation method is significantly more secure!
     echo.
-    echo Recommended Methods for Installing 3D Slicer    echo.
+    echo Recommended Methods for Installing 3D Slicer
+    echo.
     echo 1. Official 3D Slicer Website
     echo    - Download
     echo      https://www.slicer.org/
