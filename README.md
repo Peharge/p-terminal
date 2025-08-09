@@ -53,8 +53,17 @@ Peharge Projects 2025<br>
 
 # **_Tables of contents_**
 
-- [PP-Terminal 6](#pp-terminal-6)
-
+[NEWS](#news)<br>
+[PP-Terminal 6](#pp-terminal-6)<br>
+[PP-Terminal 8](#pp-terminal-8)<br>
+[Install PP-Terminal](#install-pp-terminal)<br>
+[PP-Terminal Commands](#pp-terminal-commands)<br>
+[P-Terminal](#p-terminal)<br>
+[Install P-Terminal](#install-p-terminal)<br>
+[P-Terminal Commands](#p-terminal-commands)<br>
+[Peharge Terminal Community](#peharge-terminal-community)<br>
+[Contributing to Peharge Terminal](#contributing-to-p-term)<br>
+[Problems](#problems)
 
 </div>
 
@@ -62,7 +71,7 @@ Peharge Projects 2025<br>
 
 <div align="center">
 
-# **_NEWS_**
+# <a id="news"></a>**_NEWS_**
 
 **[23.04.2025]** Development start of PP-Terminal<br>
 **[24.04.2025]** PP-Term EAP release: [pp-term.bat](https://github.com/Peharge/p-terminal/blob/main/pp-term/run-pp-term.bat)<br>
@@ -298,13 +307,13 @@ And much more...
 
 <div align="center">
 
-# **_PP-Terminal 8 - SOON_**
+# <a id="pp-terminal-8"></a>**_PP-Terminal 8 - SOON_**
 You can't ask for more!!!<br><br>
 <img width="1500" src="https://github.com/Peharge/p-terminal-images/raw/main/images/cpu-ppt-4.png" alt="pp-term"/><br><br>
 
 </div>
 
-# **_Install PP-Terminal_**
+# <a id="install-pp-terminal"></a>**_Install PP-Terminal_**
 
 <p align="center">
  <img width="600" src="https://github.com/Peharge/p-terminal-images/raw/main/images/p-term-demo-5.png" alt="peharge"/>
@@ -509,7 +518,7 @@ To develop and run the PP-Terminal, you also need the C++ extensions for Visual 
 
 </details>
 
-# **_PP-Term Commands_**
+# <a id="pp-terminal-commands"></a>**_PP-Terminal Commands_**
 
 - `p` - Peharge command
     - `p git` - Peharge git command - Opens a P-Term Commit Explorer
@@ -3158,16 +3167,16 @@ etc.
 
 <div align="center">
 
-# **_P-Terminal 1 (SOON)_**<br>
+# <a id="p-terminal"></a>**_P-Terminal 1 (SOON)_**<br>
 [`Download P-Term (SOON) [Windows]`](https://github.com/Peharge/p-terminal/blob/main/p-term/run-p-term.bat) [`P-Term Commands`](https://github.com/Peharge/peharge-web/blob/main/commands-p-term.html)<br><br>
 <img width="600" src="https://raw.githubusercontent.com/Peharge/peharge-web/main/images/p-term-img.png" alt="pp-term"/><br><br>
 </div>
 
-# **_Install P-Terminal_**
+# <a id="install-p-terminal"></a>**_Install P-Terminal_**
 
 soon
 
-# **_P-Term Commands_**
+# <a id="pp-terminal-commands"></a>**_P-Term Commands_**
 
 - `p` - Peharge command
 
@@ -3175,7 +3184,7 @@ soon more
 
 <div align="center">
 
-# **_Peharge Terminal Community_**<br>
+# <a id="peharge-terminal-community"></a>**_Peharge Terminal Community_**<br>
 <img width="400" src="https://github.com/Peharge/p-terminal-images/blob/main/images/banner-3.png" alt="pp-term"/><br><br>
 [`P-Terminal Discussions`](https://github.com/Peharge/p-terminal/discussions) [`P-Term Discussions`](https://github.com/Peharge/p-terminal/discussions/2)<br><br>[`PP-Term Discussions`](https://github.com/Peharge/p-terminal/discussions/3) [`P-Terminal Issues`](https://github.com/Peharge/p-terminal/issues) [`P-Terminal Pulls`](https://github.com/Peharge/p-terminal/pulls)<br><br>
 
@@ -3187,7 +3196,7 @@ Have you discovered a bug or have questions about the P-Terminal or PP-Terminal?
 
 <div align="center">
 
-# Contributing to P-Terminal
+# <a id="contributing-to-p-term"></a>Contributing to P-Terminal
 
 <img width="500" src="https://github.com/Peharge/p-terminal-images/blob/main/images/community-pp-term-1.png" alt="pp-term"/><br><br>
 
@@ -3205,7 +3214,7 @@ Thank you for helping make P-Terminal better for researchers worldwide!
 
 <br>
 
-# Problems
+# <a id="problems"></a>Problems
 
 | **Terminal** | **Problem description**      | **Cause**                                                                          | **Solution** | **Status** |
 |--------------|------------------------------|------------------------------------------------------------------------------------|--------------|------------|
