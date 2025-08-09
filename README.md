@@ -306,10 +306,22 @@ These commands work only on Windows and require either Command Prompt or PowerSh
 ### For Command Prompt (CMD)
 
 ```cmd
-git clone https://github.com/Peharge/p-terminal.git && cd p-terminal && pp-term\run-pp-term.bat
+winget install --id Git.Git -e & git clone https://github.com/Peharge/p-terminal.git & cd p-terminal & pp-term\run-pp-term.bat
+```
+
+Have you already installed GIT and is it on the latest version:
+
+```cmd
+git clone https://github.com/Peharge/p-terminal.git & cd p-terminal & pp-term\run-pp-term.bat
 ```
 
 ### For PowerShell
+
+```powershell
+winget install --id Git.Git -e && git clone https://github.com/Peharge/p-terminal.git && cd p-terminal && pp-term\run-pp-term.ps1
+```
+
+Have you already installed GIT and is it on the latest version:
 
 ```powershell
 git clone https://github.com/Peharge/p-terminal.git && cd p-terminal && pp-term\run-pp-term.ps1
