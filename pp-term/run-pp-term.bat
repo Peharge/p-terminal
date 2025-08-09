@@ -398,6 +398,8 @@ if %errorlevel% neq 0 (
     echo 3. Windows Package Manager
     echo    - Command
     echo      winget install Python.Python.3 --version 3.13.0 --accept-source-agreements --accept-package-agreements
+    echo      or
+    echo      winget install -e --id Python.Python.3.13
     echo.
     echo 4. Chocolatey
     echo    - Command
@@ -498,6 +500,8 @@ if %errorlevel% neq 0 (
     echo 2. winget
     echo    - Command
     echo      winget install --id Git.Git --source winget --accept-package-agreements --accept-source-agreements
+    echo      or
+    echo      winget install -e --id Git.Git
     echo.
     echo 3. Chocolatey
     echo    - Command
@@ -598,6 +602,8 @@ if %errorlevel% neq 0 (
     echo 2. winget
     echo    - Command
     echo      winget install Ollama.Ollama --accept-package-agreements --accept-source-agreements
+    echo      or
+    echo      winget install -e --id Ollama.Ollama
     echo.
     echo 3. Chocolatey
     echo    - Command
@@ -702,6 +708,8 @@ if %errorlevel% neq 0 (
     echo 2. winget
     echo    - Command
     echo      winget install Gyan.FFmpeg --accept-package-agreements --accept-source-agreements
+    echo      or
+    echo      winget install -e --id Gyan.FFmpeg
     echo.
     echo 3. Chocolatey
     echo    - Command
@@ -803,6 +811,8 @@ if %errorlevel% neq 0 (
     echo 2. winget
     echo    - Command
     echo      winget install Rustlang.Rustup --accept-package-agreements --accept-source-agreements
+    echo      or
+    echo      winget install -e --id Rustlang.Rustup
     echo.
     echo 3. Chocolatey
     echo    - Command
@@ -907,11 +917,14 @@ if %errorlevel% neq 0 (
     echo 2. winget
     echo    - Command
     echo      winget install --id Microsoft.PowerShell --source winget --accept-package-agreements --accept-source-agreements
+    echo      or
+    echo      winget install -e --id Microsoft.PowerShell
     echo.
     echo 3. Chocolatey
     echo    - Command
     echo      choco install powershell --version=7.4.1
-    echo      Or omit --version to install latest
+    echo      or
+    echo      omit --version to install latest
     echo.
     echo 4. Scoop
     echo    - First, ensure Scoop is updated
@@ -993,6 +1006,8 @@ if exist "%SLICER_PATH%" (
     echo 2. winget
     echo    - Command
     echo      winget install Kitware.Slicer --accept-package-agreements --accept-source-agreements
+    echo      or
+    echo      winget install -e --id Kitware.Slicer
     echo.
     echo 3. Chocolatey
     echo    - Command
@@ -1090,6 +1105,8 @@ if %ERRORLEVEL% NEQ 0 (
     echo 2. winget
     echo    - Command
     echo      winget install Docker.DockerDesktop --accept-package-agreements --accept-source-agreements
+    echo      or
+    echo      winget install -e --id Docker.DockerDesktop
     echo.
     echo 3. Chocolatey
     echo    - Command
@@ -1281,9 +1298,10 @@ echo   [D] Alpine
 
 echo.
 echo Note: Installing via winget or Microsoft Store is generally safer and recommended.
+echo Note: After the installation finishes, you MUST restart this script to continue — even if you used "wsl --install -d". So close the Terminal and run cd p-terminal & pp-term\run-pp-term.bat or cd p-terminal && pp-term\run-pp-term.ps1
 echo.
 
-choice /c 123456789ABCD /n /m "Your choice: "
+choice /c 123456789ABCD /n /m "Attempting to install the WSL distro using pre-existing Python code. This method is again insecure and may not cover all necessary steps. Manual verification or installation via official sources is recommended. Your choice [1–D]: "
 
 echo.
 echo Attempting to install your selected distribution now...
