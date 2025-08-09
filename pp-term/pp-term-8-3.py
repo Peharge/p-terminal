@@ -37073,6 +37073,11 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on Linux: {user_input}")
                     run_linux_command(user_input)
 
+            elif user_input.lower() == "pl":
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+                command = "wsl"
+                run_command(command, shell=True)
+
             elif user_input.startswith("lx-cpp "):
                 user_input = user_input[7:].strip()
                 if not is_wsl_installed():
@@ -37240,6 +37245,11 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on Ubuntu: {user_input}")
                     run_ubuntu_command(user_input)
 
+            elif user_input.lower() == "pl-u":
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+                command = "ubuntu"
+                run_command(command, shell=True)
+
             elif user_input.startswith("pl-ubuntu "):
                 user_input = user_input[10:].strip()
                 if not is_wsl_installed():
@@ -37248,6 +37258,11 @@ def main():
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Ubuntu: {user_input}")
                     run_ubuntu_command(user_input)
+
+            elif user_input.lower() == "pl-ubuntu":
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+                command = "ubuntu"
+                run_command(command, shell=True)
 
             elif user_input.startswith("ubuntu-rust "):
                 user_input = user_input[12:].strip()
@@ -37346,6 +37361,11 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on Debian: {user_input}")
                     run_debian_command(user_input)
 
+            elif user_input.lower() == "pl-d":
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+                command = "debian"
+                run_command(command, shell=True)
+
             elif user_input.startswith("pl-debian "):
                 user_input = user_input[10:].strip()  # Remove the "pl-debian " prefix
                 if not is_wsl_installed():
@@ -37354,6 +37374,11 @@ def main():
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Debian: {user_input}")
                     run_debian_command(user_input)
+
+            elif user_input.lower() == "pl-debian":
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+                command = "debian"
+                run_command(command, shell=True)
 
             elif user_input.startswith("debian-rust "):
                 user_input = user_input[12:].strip()
@@ -37451,6 +37476,11 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on Kali: {user_input}")
                     run_kali_command(user_input)
 
+            elif user_input.lower() == "pl-k":
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+                command = "kali"
+                run_command(command, shell=True)
+
             elif user_input.startswith("pl-kali "):
                 user_input = user_input[8:].strip()  # Remove the "pl-kali " prefix
                 if not is_wsl_installed():
@@ -37459,6 +37489,11 @@ def main():
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Kali: {user_input}")
                     run_kali_command(user_input)
+
+            elif user_input.lower() == "pl-kali":
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+                command = "kali"
+                run_command(command, shell=True)
 
             elif user_input.startswith("kali-rust "):
                 user_input = user_input[10:].strip()
@@ -37568,6 +37603,11 @@ def main():
                     print(f"[{timestamp()}] [INFO] Executing the following command on Arch: {user_input}")
                     run_arch_command(user_input)
 
+            elif user_input.lower() == "pl-a":
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+                command = "arch"
+                run_command(command, shell=True)
+
             elif user_input.startswith("pl-arch "):
                 user_input = user_input[8:].strip()  # Remove the "pl-arch " prefix
                 if not is_wsl_installed():
@@ -37576,6 +37616,11 @@ def main():
                 else:
                     print(f"[{timestamp()}] [INFO] Executing the following command on Arch: {user_input}")
                     run_arch_command(user_input)
+
+            elif user_input.lower() == "pl-arch":
+                print(f"[{timestamp()}] [INFO] Executing a privileged (pp) command using shell=True — necessary at this point, but potentially insecure.")
+                command = "arch"
+                run_command(command, shell=True)
 
             elif user_input.startswith("arch-rust "):
                 user_input = user_input[10:].strip()
