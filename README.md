@@ -309,6 +309,29 @@ These commands work only on Windows and require either Command Prompt or PowerSh
 winget install --id Git.Git -e & git clone https://github.com/Peharge/p-terminal.git & cd p-terminal & pp-term\run-pp-term.bat
 ```
 
+<details>
+  <summary>Start PP-Terminal and install everything you need in advance to make everything safe</summary>
+
+```cmd
+winget install -e --id Git.Git & winget install -e --id Python.Python.3.13 & winget install -e --id Ollama.Ollama & winget install -e --id Gyan.FFmpeg & winget install -e --id Rustlang.Rustup & winget install -e --id Microsoft.PowerShell & winget install -e --id Kitware.Slicer & winget install -e --id Docker.DockerDesktop
+```
+
+```cmd
+wsl --install 
+```
+
+```cmd
+wsl --install -d Ubuntu
+```
+
+```cmd
+git clone https://github.com/Peharge/p-terminal.git & cd p-terminal & pp-term\run-pp-term.bat
+```
+
+---
+
+</details>
+
 Have you already installed GIT and is it on the latest version:
 
 ```cmd
