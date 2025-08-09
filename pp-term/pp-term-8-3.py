@@ -1425,6 +1425,10 @@ def handle_special_commands(user_input):
         "install fun aquarium": "pp-commands\\fun-asciiquarium.py",  # new
         "install fun aqua": "pp-commands\\fun-asciiquarium.py",  # new
         "install fun bb": "pp-commands\\fun-bb.py",  # new
+        "install anaconda": "run\\conda\\install-anaconda.py",  # new
+        "install anaconda3": "run\\conda\\install-anaconda.py",  # new
+        "install miniconda": "run\\conda\\install-miniconda.py",  # new
+        "install miniconda3": "run\\conda\\install-miniconda.py",  # new
         "jupyter": "mavis-run-jup\\run-jup.py",
         "run jupyter": "mavis-run-jup\\run-jup.py",
         "pr jup": "mavis-run-jup\\run-jup.py",  # new
@@ -1782,6 +1786,10 @@ def handle_special_commands(user_input):
         "pi fun aquarium": "pp-commands\\fun-asciiquarium.py",  # new
         "pi fun aqua": "pp-commands\\fun-asciiquarium.py",  # new
         "pi fun bb": "pp-commands\\fun-bb.py",  # new
+        "pi anaconda": "run\\conda\\install-anaconda.py",  # new
+        "pi anaconda3": "run\\conda\\install-anaconda.py",  # new
+        "pi miniconda": "run\\conda\\install-miniconda.py",  # new
+        "pi miniconda3": "run\\conda\\install-miniconda.py",  # new
         "pi cool pin": "pp-commands\\theme-pcc.py",  # new
         "pi cool pin-2": "pp-commands\\theme-pcc-2.py",  # new
         "pi cool pin-3": "pp-commands\\theme-pcc-3.py",  # new
