@@ -3176,7 +3176,7 @@ etc.
 
 soon
 
-# <a id="pp-terminal-commands"></a>**_P-Term Commands_**
+# <a id="p-terminal-commands"></a>**_P-Term Commands_**
 
 - `p` - Peharge command
 
