@@ -3202,7 +3202,7 @@ Have you discovered a bug or have questions about the P-Terminal or PP-Terminal?
 
 [`LICENSE`](LICENSE) [`SECURITY`](SECURITY.md) [`PULL_REQUEST_TEMPLATE`](PULL_REQUEST_TEMPLATE.md) [`CONTRIBUTING`](CONTRIBUTING.md) [`CODE_OF_CONDUCT`](CODE_OF_CONDUCT.md) [`TREE`](TREE.md) [`VERSIONS`](VERSIONS.md)
 	
-Thank you for your interest in P-Terminal! While we are not accepting code contributions at this time, your feedback and support are vital for improving the project.
+Thank you for your interest in Peharge Terminal! While we are not accepting code contributions at this time, your feedback and support are vital for improving the project.
 Please share your experience, report bugs, or suggest features by opening an issue on GitHub. Include a clear title, detailed description, and any relevant screenshots or logs.
 If you find P-Terminal helpful, we appreciate reviews or feedback to help us reach more researchers.
 Feel free to tell colleagues and share your experiences on social media or blogs to help grow our community.
