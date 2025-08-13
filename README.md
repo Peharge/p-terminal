@@ -1,4 +1,6 @@
 This is a school project created purely for practice purposes – there is no professional or commercial intention behind it.
+This project is no longer being developed, as the school project has ended. Additional repositories containing images and web assistants (instructions) have now been set to private – sorry for the inconvenience!
+The latest and final version is PP-Terminal 8.3.1.14 (09.08.2025)
 
 <p align="center">
  <img width="350" src="./icons/p-term-icon-3.png" alt="p-terminal"/>
