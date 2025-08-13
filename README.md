@@ -1,3 +1,5 @@
+This is a school project created purely for practice purposes – there is no professional or commercial intention behind it.
+
 <p align="center">
  <img width="350" src="./icons/p-term-icon-3.png" alt="p-terminal"/>
 </p>
